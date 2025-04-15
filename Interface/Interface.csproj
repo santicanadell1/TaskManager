@@ -11,4 +11,12 @@
       <PackageReference Include="Syncfusion.Blazor" Version="29.1.37" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\img\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\styles\styleLoginRegister.css" />
+    </ItemGroup>
+
 </Project>

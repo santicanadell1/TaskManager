@@ -1,51 +1,67 @@
-﻿@page "/login"
+﻿@page "/signup"
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager Navigation
 
-<div class="login-container">
-    <h3 class="login-title">Login</h3>
 
-    <EditForm Model="loginModel" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
 
-        <!-- UserName Input -->
-        <div class="form-group">
-            <label for="userName">Username:</label>
-            <!-- Explicitly set binding to the model -->
-            <InputText id="userName" class="form-control mt-1" @bind-Value="loginModel.UserName" />
+<h3 class="login-title">Register</h3>
+
+<EditForm Model="loginModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <!-- UserName Input -->
+    <div class="form-group">
+        <label for="userName">Username:</label>
+        <!-- Explicitly set binding to the model -->
+        <InputText id="userName" class="form-control mt-1" @bind-Value="loginModel.UserName"/>
+    </div>
+
+    <!-- Password Input -->
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <div class="input-password-wrapper">
+            <!-- Bind password with model -->
+            <InputText id="password"
+                       type="@passwordInputType"
+                       class="form-control mt-1"
+                       @bind-Value="loginModel.Password"/>
+            <!-- Toggle Button -->
+            <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
+                <i class="@passwordEyeIcon"></i>
+            </button>
         </div>
+    </div>
 
-        <!-- Password Input -->
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <div class="input-password-wrapper">
-                <!-- Bind password with model -->
-                <InputText id="password"
-                           type="@passwordInputType"
-                           class="form-control mt-1"
-                           @bind-Value="loginModel.Password" />
-                <!-- Toggle Button -->
-                <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
-                    <i class="@passwordEyeIcon"></i>
-                </button>
-            </div>
+    <div class="form-group">
+        <label for="password">Confirm Password:</label>
+        <div class="input-password-wrapper">
+            <!-- Bind password with model -->
+            <InputText id="password"
+                       type="@passwordInputType"
+                       class="form-control mt-1"
+                       @bind-Value="loginModel.Password"/>
+            <!-- Toggle Button -->
+            <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
+                <i class="@passwordEyeIcon"></i>
+            </button>
         </div>
+    </div>
 
-        <!-- Submit Button -->
-        <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary">Login</button>
+    <!-- Submit Button -->
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+    
+    <!-- Error Message -->
+    @if (loginError != null)
+    {
+        <div class="alert alert-danger mt-3" role="alert">
+            @loginError
         </div>
+    }
+</EditForm>
 
-        <!-- Error Message -->
-        @if (loginError != null)
-        {
-            <div class="alert alert-danger mt-3" role="alert">
-                @loginError
-            </div>
-        }
-    </EditForm>
-</div>
 
 @code {
     private LoginModel loginModel = new LoginModel(); // Instantiate the model
@@ -61,7 +77,7 @@
         new User { UserName = "admin", Password = "Admin123!", Role = "adminSystem" },
     };
 
-  
+
     private void TogglePasswordVisibility()
     {
         if (passwordInputType == "password")
@@ -75,7 +91,7 @@
             passwordEyeIcon = "fas fa-eye-slash";
         }
     }
-    
+
     private void HandleValidSubmit()
     {
         var user = users.FirstOrDefault(u => u.UserName == loginModel.UserName && u.Password == loginModel.Password);
@@ -98,8 +114,7 @@
 
     private class LoginModel
     {
-        [Required]
-        public string UserName { get; set; } = string.Empty;
+        [Required] public string UserName { get; set; } = string.Empty;
 
         [Required]
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
@@ -112,4 +127,5 @@
         public string Password { get; set; }
         public string Role { get; set; }
     }
+
 }

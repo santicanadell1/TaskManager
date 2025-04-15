@@ -21,6 +21,14 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\img\\taskLogo.webp",
+      "PackagePath": "staticwebassets\\img\\taskLogo.webp"
+    },
+    {
+      "Id": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleLoginRegister.css",
+      "PackagePath": "staticwebassets\\styles\\styleLoginRegister.css"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Interface.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

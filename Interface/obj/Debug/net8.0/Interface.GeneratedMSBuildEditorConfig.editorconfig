@@ -37,12 +37,32 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXExvZ2luLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/SingUp.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXFNpbmdVcC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/_imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXF9pbXBvcnRzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Weather.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/CenterLoginLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcQ2VudGVyTG9naW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/LoginLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcTG9naW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/_Imports.razor]
@@ -56,7 +76,3 @@ build_metadata.AdditionalFiles.CssScope = b-2ut1cqmr4y
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-dnvo0xl2lx
-
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Login.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-jkc2lmpg15
