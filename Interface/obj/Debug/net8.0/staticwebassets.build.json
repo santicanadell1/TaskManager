@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "UjnbktTkc2HWcKRnLjET5W25uwdF08ECigyghvUoKJU=",
+  "Hash": "HUO4SH2okOqKpUGJlQW+X47QLd6T8+za+CkUhD+3pm4=",
   "Source": "Interface",
   "BasePath": "_content/Interface",
   "Mode": "Default",
@@ -10,12 +10,50 @@
     {
       "Name": "Interface\\wwwroot",
       "Source": "Interface",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\wwwroot\\",
+      "ContentRoot": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "Pattern": "**"
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\mudblazor\\8.5.1\\staticwebassets\\MudBlazor.min.css",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\mudblazor\\8.5.1\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\mudblazor\\8.5.1\\staticwebassets\\MudBlazor.min.css"
+    },
+    {
+      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\mudblazor\\8.5.1\\staticwebassets\\MudBlazor.min.js",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\mudblazor\\8.5.1\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\mudblazor\\8.5.1\\staticwebassets\\MudBlazor.min.js"
+    },
     {
       "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\data.min.js",
       "SourceId": "Syncfusion.Blazor",
@@ -2620,10 +2658,10 @@
       "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Interface.styles.css",
+      "Identity": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Interface.styles.css",
       "SourceId": "Interface",
       "SourceType": "Computed",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
+      "ContentRoot": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
       "BasePath": "_content/Interface",
       "RelativePath": "Interface.styles.css",
       "AssetKind": "All",
@@ -2636,13 +2674,13 @@
       "AssetTraitValue": "ApplicationBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Interface.styles.css"
+      "OriginalItemSpec": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Interface.styles.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Interface.bundle.scp.css",
+      "Identity": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Interface.bundle.scp.css",
       "SourceId": "Interface",
       "SourceType": "Computed",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
+      "ContentRoot": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
       "BasePath": "_content/Interface",
       "RelativePath": "Interface.bundle.scp.css",
       "AssetKind": "All",
@@ -2655,13 +2693,13 @@
       "AssetTraitValue": "ProjectBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Interface.bundle.scp.css"
+      "OriginalItemSpec": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Interface.bundle.scp.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\wwwroot\\app.css",
+      "Identity": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\wwwroot\\app.css",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\wwwroot\\",
+      "ContentRoot": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "app.css",
       "AssetKind": "All",
@@ -2677,10 +2715,10 @@
       "OriginalItemSpec": "wwwroot\\app.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "Identity": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\wwwroot\\",
+      "ContentRoot": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "bootstrap/bootstrap.min.css",
       "AssetKind": "All",
@@ -2696,10 +2734,10 @@
       "OriginalItemSpec": "wwwroot\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "Identity": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css.map",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\wwwroot\\",
+      "ContentRoot": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "bootstrap/bootstrap.min.css.map",
       "AssetKind": "All",
@@ -2715,10 +2753,10 @@
       "OriginalItemSpec": "wwwroot\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\wwwroot\\favicon.png",
+      "Identity": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\wwwroot\\favicon.png",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\wwwroot\\",
+      "ContentRoot": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "favicon.png",
       "AssetKind": "All",

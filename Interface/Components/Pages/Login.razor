@@ -1,0 +1,57 @@
+﻿@page  "/login"
+@using Newtonsoft.Json
+@using System.Security.Claims
+@inject NavigationManager NavigationManager
+
+<EditForm Model="@user" OnValidSubmit="@ValidateUser">
+    <div>
+        <br /><br /><br /><br /><br />
+    </div>
+    <div>
+        <h3 style="font-weight:bold; color:purple">TaskTrackPro</h3>
+    </div>
+    <div>
+        <br />
+    </div>
+    <div class="col-12 row">
+        <input class="form-control col-12" @bind="user.EmailAddress" placeholder="email address" />
+    </div>
+    <br />
+    <div class="col-12 row">
+        <input type="password" class="form-control col-12" @bind="user.Password" placeholder="password" />
+    </div>
+    <br />
+    <div class="col-12 row">
+        <span class="col-12"></span>
+        <input type="submit" class="form-control col-6 btn btn-primary" value="Login" />
+        <a href="/signup" class="col-3">Sign up</a>
+    </div>
+    <br />
+    <div class="col-12 row" style="text-align:left; font-weight:bold">
+        <span class="col-12">@LoginMesssage</span>
+    </div>
+</EditForm>
+
+@code {
+
+    public class User
+    {
+        public string EmailAddress { get; set; }
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
+        public string Source { get; set; } // Usado para identificar el origen, como "APPC" o "WEB"
+    }
+    
+    private User user = new User();
+    public string LoginMesssage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = new User();
+    }
+
+    private async void ValidateUser()
+    {
+        return;
+    }
+}

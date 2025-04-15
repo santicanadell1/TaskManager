@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\Interface.csproj": {}
+    "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\Interface.csproj": {}
   },
   "projects": {
-    "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\Interface.csproj": {
+    "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\Interface.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\Interface.csproj",
+        "projectUniqueName": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\Interface.csproj",
         "projectName": "Interface",
-        "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\Interface.csproj",
+        "projectPath": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\Interface.csproj",
         "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-        "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Interface\\obj\\",
+        "outputPath": "D:\\facultad\\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\\Semestre_5\\DA1\\305108_282542_281987\\Interface\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "MudBlazor": {
+              "target": "Package",
+              "version": "[8.5.1, )"
+            },
             "Syncfusion.Blazor": {
               "target": "Package",
               "version": "[29.1.37, )"
