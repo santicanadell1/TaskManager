@@ -1,57 +1,115 @@
-﻿@page  "/login"
-@using Newtonsoft.Json
-@using System.Security.Claims
-@inject NavigationManager NavigationManager
+﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager Navigation
 
-<EditForm Model="@user" OnValidSubmit="@ValidateUser">
-    <div>
-        <br /><br /><br /><br /><br />
-    </div>
-    <div>
-        <h3 style="font-weight:bold; color:purple">TaskTrackPro</h3>
-    </div>
-    <div>
-        <br />
-    </div>
-    <div class="col-12 row">
-        <input class="form-control col-12" @bind="user.EmailAddress" placeholder="email address" />
-    </div>
-    <br />
-    <div class="col-12 row">
-        <input type="password" class="form-control col-12" @bind="user.Password" placeholder="password" />
-    </div>
-    <br />
-    <div class="col-12 row">
-        <span class="col-12"></span>
-        <input type="submit" class="form-control col-6 btn btn-primary" value="Login" />
-        <a href="/signup" class="col-3">Sign up</a>
-    </div>
-    <br />
-    <div class="col-12 row" style="text-align:left; font-weight:bold">
-        <span class="col-12">@LoginMesssage</span>
-    </div>
-</EditForm>
+<div class="login-container">
+    <h3 class="login-title">Login</h3>
+
+    <EditForm Model="loginModel" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <!-- UserName Input -->
+        <div class="form-group">
+            <label for="userName">Username:</label>
+            <!-- Explicitly set binding to the model -->
+            <InputText id="userName" class="form-control mt-1" @bind-Value="loginModel.UserName" />
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <div class="input-password-wrapper">
+                <!-- Bind password with model -->
+                <InputText id="password"
+                           type="@passwordInputType"
+                           class="form-control mt-1"
+                           @bind-Value="loginModel.Password" />
+                <!-- Toggle Button -->
+                <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
+                    <i class="@passwordEyeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+
+        <!-- Error Message -->
+        @if (loginError != null)
+        {
+            <div class="alert alert-danger mt-3" role="alert">
+                @loginError
+            </div>
+        }
+    </EditForm>
+</div>
 
 @code {
+    private LoginModel loginModel = new LoginModel(); // Instantiate the model
+    private string loginError;
 
-    public class User
+    // Password visibility toggle
+    private string passwordInputType = "password"; // Default: password element type
+    private string passwordEyeIcon = "fas fa-eye-slash"; // Default: closed eye
+
+    // Users list for testing
+    private readonly List<User> users = new List<User>
     {
-        public string EmailAddress { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
-        public string Source { get; set; } // Usado para identificar el origen, como "APPC" o "WEB"
+        new User { UserName = "admin", Password = "Admin123!", Role = "adminSystem" },
+    };
+
+  
+    private void TogglePasswordVisibility()
+    {
+        if (passwordInputType == "password")
+        {
+            passwordInputType = "text";
+            passwordEyeIcon = "fas fa-eye";
+        }
+        else
+        {
+            passwordInputType = "password";
+            passwordEyeIcon = "fas fa-eye-slash";
+        }
     }
     
-    private User user = new User();
-    public string LoginMesssage { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    private void HandleValidSubmit()
     {
-        user = new User();
+        var user = users.FirstOrDefault(u => u.UserName == loginModel.UserName && u.Password == loginModel.Password);
+
+        if (user != null)
+        {
+            // Navigate based on role
+            if (user.Role == "adminProyect")
+                Navigation.NavigateTo("/admin-project");
+            else if (user.Role == "adminSystem")
+                Navigation.NavigateTo("/admin-system");
+            else if (user.Role == "user")
+                Navigation.NavigateTo("/user");
+        }
+        else
+        {
+            loginError = "Invalid username or password. Please try again.";
+        }
     }
 
-    private async void ValidateUser()
+    private class LoginModel
     {
-        return;
+        [Required]
+        public string UserName { get; set; } = string.Empty;
+
+        [Required]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
+        public string Password { get; set; } = string.Empty;
+    }
+
+    private class User
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Role { get; set; }
     }
 }

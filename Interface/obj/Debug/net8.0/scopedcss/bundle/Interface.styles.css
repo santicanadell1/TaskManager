@@ -201,3 +201,107 @@ main[b-2ut1cqmr4y] {
         overflow-y: auto;
     }
 }
+/* _content/Interface/Components/Pages/Login.razor.rz.scp.css */
+/* General container for login form */
+.login-container[b-jkc2lmpg15] {
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for title */
+.login-title[b-jkc2lmpg15] {
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Styling for input labels */
+.form-group label[b-jkc2lmpg15] {
+    font-weight: bold;
+}
+
+/* Styling for input fields */
+.form-control[b-jkc2lmpg15] {
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+}
+
+/* Adds spacing between the label and input */
+.form-control.mt-1[b-jkc2lmpg15] {
+    margin-top: 5px;
+}
+
+.form-group.mt-3[b-jkc2lmpg15] {
+    margin-top: 20px;
+}
+
+/* Password input wrapper for icon positioning */
+.input-password-wrapper[b-jkc2lmpg15] {
+    position: relative;
+}
+
+/* Button for toggling password visibility */
+.input-password-wrapper .btn-eye[b-jkc2lmpg15] {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    font-size: 18px;
+    color: #007bff; /* Change this to make the eye icon blue */
+    padding: 0;
+    line-height: 1;
+}
+
+/* Change button color on hover */
+.input-password-wrapper .btn-eye:hover[b-jkc2lmpg15] {
+    color: #0056b3;
+}
+
+/* Styling for the submit button */
+.btn-primary[b-jkc2lmpg15] {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover[b-jkc2lmpg15] {
+    background-color: #0056b3;
+}
+
+/* Styling for error messages */
+.alert-danger[b-jkc2lmpg15] {
+    font-weight: bold;
+    color: #a94442;
+    background-color: #f2dede;
+    border: 1px solid #ebcccc;
+    margin-top: 15px;
+    padding: 10px;
+}
+
+.fa[b-jkc2lmpg15] {
+    font-size: 16px;
+    color: #767676;
+}
+.btn-eye:hover .fa[b-jkc2lmpg15] {
+    color: #333;
+}
+
+.input-password-wrapper .btn-eye i[b-jkc2lmpg15] {
+    font-size: 20px;
+    color: #007bff;
+}
