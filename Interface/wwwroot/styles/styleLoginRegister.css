@@ -1,103 +1,198 @@
-﻿/* General container for login form */
+﻿/* Container */
 .login-container {
-    max-width: 400px;
-    margin: 50px auto;
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 60px auto;
+    background-color: #ffffff;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
-/* Styling for title */
+.login-container:hover {
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Title */
 .login-title {
     text-align: center;
-    font-weight: bold;
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 20px;
+    font-size: 30px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
 }
 
-/* Styling for input labels */
+.login-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #3498db;
+    border-radius: 3px;
+}
+
+/* Labels */
 .form-group label {
-    font-weight: bold;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 15px;
 }
 
-/* Styling for input fields */
+/* Inputs */
 .form-control {
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ddd;
+    border: 2px solid #e6e6e6;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 16px;
+    transition: all 0.25s ease-in-out;
+    width: 100%;
+    background-color: #f8f9fa;
+    color: #333;
 }
 
-/* Adds spacing between the label and input */
-.form-control.mt-1 {
-    margin-top: 5px;
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.35);
+    outline: none;
+    background-color: #fff;
+}
+
+.form-group {
+    margin-bottom: 15px;
 }
 
 .form-group.mt-3 {
     margin-top: 20px;
 }
 
-/* Password input wrapper for icon positioning */
+/* Row layout for side-by-side fields */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -10px;
+    margin-left: -10px;
+}
+
+.col-md-6 {
+    position: relative;
+    width: 50%;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+@media (max-width: 768px) {
+    .col-md-6 {
+        width: 100%;
+    }
+}
+
+/* Password visibility */
 .input-password-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
-/* Button for toggling password visibility */
-.input-password-wrapper .btn-eye {
+.input-password-wrapper input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.btn-eye {
     position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
+    right: 15px;
     background: none;
     border: none;
+    color: #7f8c8d;
+    font-size: 1.1em;
     cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 5px;
+    z-index: 5;
+}
+
+.btn-eye:hover {
+    color: #3498db;
+    transform: scale(1.1);
+}
+
+.btn-eye:focus {
     outline: none;
-    font-size: 18px;
-    color: #007bff; /* Change this to make the eye icon blue */
-    padding: 0;
-    line-height: 1;
 }
 
-/* Change button color on hover */
-.input-password-wrapper .btn-eye:hover {
-    color: #0056b3;
-}
-
-/* Styling for the submit button */
-.btn-primary {
+/* Buttons */
+button.btn {
     width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
     font-size: 16px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #007bff;
+    background-color: #3498db;
     border: none;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
+button.btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
 }
 
-/* Styling for error messages */
-.alert-danger {
-    font-weight: bold;
-    color: #a94442;
-    background-color: #f2dede;
-    border: 1px solid #ebcccc;
+button.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(41, 128, 185, 0.4);
+}
+
+/* Links */
+a {
+    display: block;
+    text-align: center;
     margin-top: 15px;
-    padding: 10px;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
-.fa {
-    font-size: 16px;s
-    color: #767676;
-}
-.btn-eye:hover .fa {
-    color: #333;
+a:hover {
+    color: #2980b9;
+    text-decoration: underline;
 }
 
-.input-password-wrapper .btn-eye i {
-    font-size: 20px;
-    color: #007bff;
+/* Error Message */
+.alert-danger {
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #ff6b6b;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border-left: 4px solid #e74c3c;
+}
+
+/* Validation */
+.validation-message {
+    color: #e74c3c;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-3 {
+    margin-top: 20px;
 }

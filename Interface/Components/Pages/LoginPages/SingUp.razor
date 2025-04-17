@@ -1,131 +1,139 @@
 ﻿@page "/signup"
-@using System.ComponentModel.DataAnnotations
 @inject NavigationManager Navigation
 
+<div class="login-container">
+    <h3 class="login-title">Sign Up</h3>
 
+    <EditForm Model="registerModel" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-<h3 class="login-title">Register</h3>
-
-<EditForm Model="loginModel" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator/>
-    <ValidationSummary/>
-
-    <!-- UserName Input -->
-    <div class="form-group">
-        <label for="userName">Username:</label>
-        <!-- Explicitly set binding to the model -->
-        <InputText id="userName" class="form-control mt-1" @bind-Value="loginModel.UserName"/>
-    </div>
-
-    <!-- Password Input -->
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <div class="input-password-wrapper">
-            <!-- Bind password with model -->
-            <InputText id="password"
-                       type="@passwordInputType"
-                       class="form-control mt-1"
-                       @bind-Value="loginModel.Password"/>
-            <!-- Toggle Button -->
-            <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
-                <i class="@passwordEyeIcon"></i>
-            </button>
+        <!-- First Name -->
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <InputText id="firstName" class="form-control mt-1" @bind-Value="registerModel.FirstName" />
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="password">Confirm Password:</label>
-        <div class="input-password-wrapper">
-            <!-- Bind password with model -->
-            <InputText id="password"
-                       type="@passwordInputType"
-                       class="form-control mt-1"
-                       @bind-Value="loginModel.Password"/>
-            <!-- Toggle Button -->
-            <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
-                <i class="@passwordEyeIcon"></i>
-            </button>
+        <!-- Last Name -->
+        <div class="form-group mt-3">
+            <label for="lastName">Last Name</label>
+            <InputText id="lastName" class="form-control mt-1" @bind-Value="registerModel.LastName" />
         </div>
-    </div>
 
-    <!-- Submit Button -->
-    <div class="form-group mt-3">
-        <button type="submit" class="btn btn-primary">Register</button>
-    </div>
-    
-    <!-- Error Message -->
-    @if (loginError != null)
-    {
-        <div class="alert alert-danger mt-3" role="alert">
-            @loginError
+        <!-- Email -->
+        <div class="form-group mt-3">
+            <label for="email">Email</label>
+            <InputText id="email" class="form-control mt-1" @bind-Value="registerModel.Email" />
         </div>
-    }
-</EditForm>
+
+        <!-- Date of Birth -->
+        <div class="form-group mt-3">
+            <label for="dob">Date of Birth</label>
+            <InputDate id="dob" class="form-control mt-1" @bind-Value="registerModel.BirthDate" />
+        </div>
+
+        <!-- Password -->
+        <div class="form-group mt-3">
+            <label for="password">Password</label>
+            <div class="input-password-wrapper">
+                <InputText id="password"
+                           type="@passwordInputType"
+                           class="form-control mt-1"
+                           @bind-Value="registerModel.Password" />
+                <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility" aria-label="Toggle password visibility">
+                    <i class="@passwordEyeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group mt-3">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="input-password-wrapper">
+                <InputText id="confirmPassword"
+                           type="@confirmPasswordInputType"
+                           class="form-control mt-1"
+                           @bind-Value="registerModel.ConfirmPassword" />
+                <button type="button" class="btn-eye" @onclick="ToggleConfirmPasswordVisibility" aria-label="Toggle password visibility">
+                    <i class="@confirmPasswordEyeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+
+        <!-- Link to login -->
+        <div class="form-group">
+            <a href="/login">Already have an account? Log in</a>
+        </div>
+
+        @if (registerError != null)
+        {
+            <div class="alert alert-danger">@registerError</div>
+        }
+    </EditForm>
+</div>
+
+<p>@logMessage</p> <!-- Mostrar el mensaje en la página -->
 
 
 @code {
-    private LoginModel loginModel = new LoginModel(); // Instantiate the model
-    private string loginError;
+    
+    private string logMessage;
 
-    // Password visibility toggle
-    private string passwordInputType = "password"; // Default: password element type
-    private string passwordEyeIcon = "fas fa-eye-slash"; // Default: closed eye
-
-    // Users list for testing
-    private readonly List<User> users = new List<User>
+    private void LogMessage()
     {
-        new User { UserName = "admin", Password = "Admin123!", Role = "adminSystem" },
-    };
+        logMessage = "¡TogglePasswordVisibility fue ejecutado!";
+    }
 
+    
+
+    private RegisterModel registerModel = new();
+    private string registerError;
+
+    // Variables for password visibility
+    private string passwordInputType = "password";
+    private string passwordEyeIcon = "fas fa-eye-slash";
+
+    private string confirmPasswordInputType = "password";
+    private string confirmPasswordEyeIcon = "fas fa-eye-slash";
 
     private void TogglePasswordVisibility()
     {
-        if (passwordInputType == "password")
-        {
-            passwordInputType = "text";
-            passwordEyeIcon = "fas fa-eye";
-        }
-        else
-        {
-            passwordInputType = "password";
-            passwordEyeIcon = "fas fa-eye-slash";
-        }
+        passwordInputType = passwordInputType == "password" ? "text" : "password";
+        passwordEyeIcon = passwordInputType == "text" ? "fas fa-eye" : "fas fa-eye-slash";
     }
+
+    private void ToggleConfirmPasswordVisibility()
+    {
+        
+        confirmPasswordInputType = confirmPasswordInputType == "password" ? "text" : "password";
+        confirmPasswordEyeIcon = confirmPasswordInputType == "text" ? "fas fa-eye" : "fas fa-eye-slash";
+        StateHasChanged();
+    }
+    
+    
 
     private void HandleValidSubmit()
     {
-        var user = users.FirstOrDefault(u => u.UserName == loginModel.UserName && u.Password == loginModel.Password);
-
-        if (user != null)
-        {
-            // Navigate based on role
-            if (user.Role == "adminProyect")
-                Navigation.NavigateTo("/admin-project");
-            else if (user.Role == "adminSystem")
-                Navigation.NavigateTo("/admin-system");
-            else if (user.Role == "user")
-                Navigation.NavigateTo("/user");
-        }
-        else
-        {
-            loginError = "Invalid username or password. Please try again.";
-        }
+        // Registration logic goes here
     }
 
-    private class LoginModel
+    private class RegisterModel
     {
-        [Required] public string UserName { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
 
-        [Required]
-        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
+        public string LastName { get; set; } = string.Empty;
+
+        public string Email { get; set; } = string.Empty;
+
+        public DateTime? BirthDate { get; set; }
+
         public string Password { get; set; } = string.Empty;
-    }
 
-    private class User
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
+        public string ConfirmPassword { get; set; } = string.Empty;
     }
-
 }

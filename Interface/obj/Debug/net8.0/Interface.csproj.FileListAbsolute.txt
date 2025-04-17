@@ -150,3 +150,4 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\n
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.csproj.Up2Date
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.genruntimeconfig.cache
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\ref\Interface.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\System.Text.Json.dll

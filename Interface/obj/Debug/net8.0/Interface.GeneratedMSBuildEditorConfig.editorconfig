@@ -25,10 +25,6 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -49,16 +45,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXF9pbXBvcnRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/CenterLoginLayout.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcQ2VudGVyTG9naW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/LoginLayout.razor]

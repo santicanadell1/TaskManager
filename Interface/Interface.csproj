@@ -12,7 +12,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\img\" />
+      <Content Update="Components\Shared\styleLoginRegisteaar.css">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <DependentUpon>LoginLayout.razor</DependentUpon>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
