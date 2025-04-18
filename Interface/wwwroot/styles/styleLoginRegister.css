@@ -1,12 +1,13 @@
-﻿/* Container */
+﻿/* Container for Login and SignUp Pages */
 .login-container {
-    max-width: 500px;
+    max-width: 600px;
     margin: 60px auto;
     background-color: #ffffff;
     padding: 35px;
     border-radius: 16px;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    text-align: center;
 }
 
 .login-container:hover {
@@ -14,15 +15,14 @@
     transform: translateY(-5px);
 }
 
-/* Title */
+/* Title Styles */
 .login-title {
-    text-align: center;
     font-size: 30px;
     font-weight: 700;
     color: #2c3e50;
     margin-bottom: 30px;
-    position: relative;
     padding-bottom: 15px;
+    position: relative;
 }
 
 .login-title::after {
@@ -37,16 +37,7 @@
     border-radius: 3px;
 }
 
-/* Labels */
-.form-group label {
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 8px;
-    display: block;
-    font-size: 15px;
-}
-
-/* Inputs */
+/* Form Inputs */
 .form-control {
     border: 2px solid #e6e6e6;
     border-radius: 12px;
@@ -65,36 +56,7 @@
     background-color: #fff;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group.mt-3 {
-    margin-top: 20px;
-}
-
-/* Row layout for side-by-side fields */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -10px;
-    margin-left: -10px;
-}
-
-.col-md-6 {
-    position: relative;
-    width: 50%;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-
-@media (max-width: 768px) {
-    .col-md-6 {
-        width: 100%;
-    }
-}
-
-/* Password visibility */
+/* Password Visibility Button */
 .input-password-wrapper {
     position: relative;
     display: flex;
@@ -116,7 +78,6 @@
     cursor: pointer;
     transition: all 0.2s ease;
     padding: 5px;
-    z-index: 5;
 }
 
 .btn-eye:hover {
@@ -140,8 +101,6 @@ button.btn {
     color: white;
     transition: all 0.3s ease;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
 }
 
 button.btn:hover {
@@ -182,17 +141,76 @@ a:hover {
     border-left: 4px solid #e74c3c;
 }
 
-/* Validation */
-.validation-message {
-    color: #e74c3c;
-    font-size: 13px;
-    margin-top: 5px;
+/* Full Page Center for the Layout */
+.full-page-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-.text-center {
-    text-align: center;
+/* Image Container */
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    max-width: 100%;
+    flex: 1 1 220px;
 }
 
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: 8px;
+}
+
+/* General Spacing */
 .mt-3 {
     margin-top: 20px;
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 25px;
+        margin: 40px auto;
+    }
+
+    .image-container img {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Login Page */
+.card-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+/* Columns for larger screens */
+.col-12.col-md-4 {
+    flex: 0 0 40%;
+}
+
+.col-12.col-md-8 {
+    flex: 0 0 60%;
+}
+
+/* Ensuring the image and form stack properly on smaller screens */
+@media (max-width: 768px) {
+    .col-12.col-md-4 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 }
