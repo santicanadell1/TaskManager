@@ -40,7 +40,7 @@
                            type="@passwordInputType"
                            class="form-control mt-1"
                            @bind-Value="registerModel.Password" />
-                <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility" aria-label="Toggle password visibility">
+                <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
                     <i class="@passwordEyeIcon"></i>
                 </button>
             </div>
@@ -54,18 +54,16 @@
                            type="@confirmPasswordInputType"
                            class="form-control mt-1"
                            @bind-Value="registerModel.ConfirmPassword" />
-                <button type="button" class="btn-eye" @onclick="ToggleConfirmPasswordVisibility" aria-label="Toggle password visibility">
+                <button type="button" class="btn-eye" @onclick="ToggleConfirmPasswordVisibility">
                     <i class="@confirmPasswordEyeIcon"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Submit Button -->
         <div class="form-group mt-3">
             <button type="submit" class="btn btn-primary">Sign Up</button>
         </div>
 
-        <!-- Link to login -->
         <div class="form-group">
             <a href="/login">Already have an account? Log in</a>
         </div>
@@ -76,18 +74,12 @@
         }
     </EditForm>
 </div>
-
-<p>@logMessage</p> <!-- Mostrar el mensaje en la página -->
-
-
+    
 @code {
     
     private string logMessage;
 
-    private void LogMessage()
-    {
-        logMessage = "¡TogglePasswordVisibility fue ejecutado!";
-    }
+  
 
     
 
