@@ -1,0 +1,69 @@
+﻿@rendermode InteractiveServer
+
+<div class="nav-item px-3">
+    <!-- Admin System (Nivel principal) -->
+    <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center" @onclick="ToggleAdmin">
+        <span>
+            <i class="bi bi-person-gear"></i> Admin System
+        </span>
+        <i class="bi @(showAdmin ? "bi-chevron-down" : "bi-chevron-right")"></i>
+    </button>
+
+    @if (showAdmin)
+    {
+        <!-- USERS Section -->
+        <div class="nav-item mt-1 ms-3">
+            <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center" @onclick="ToggleUsers">
+                <span>
+                    <i class="bi bi-people"></i> Users
+                </span>
+                <i class="bi @(showUsers ? "bi-chevron-down" : "bi-chevron-right")"></i>
+            </button>
+            @if (showUsers)
+            {
+                <div class="ms-3">
+                    <NavLink class="nav-link" href="/users">
+                        <i class="bi bi-list"></i> User List
+                    </NavLink>
+                    <NavLink class="nav-link" href="/users/create">
+                        <i class="bi bi-person-plus"></i> Add User
+                    </NavLink>
+                    <NavLink class="nav-link" href="/users/roles">
+                        <i class="bi bi-shield-lock"></i> Assign Roles
+                    </NavLink>
+                </div>
+            }
+        </div>
+
+        <!-- SYSTEM Section -->
+        <div class="nav-item mt-1 ms-3">
+            <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center" @onclick="ToggleSystem">
+                <span>
+                    <i class="bi bi-gear"></i> System
+                </span>
+                <i class="bi @(showSystem ? "bi-chevron-down" : "bi-chevron-right")"></i>
+            </button>
+            @if (showSystem)
+            {
+                <div class="ms-3">
+                    <NavLink class="nav-link" href="/audit-log">
+                        <i class="bi bi-file-earmark-text"></i> Audit Log
+                    </NavLink>
+                    <NavLink class="nav-link" href="/settings">
+                        <i class="bi bi-sliders"></i> Settings
+                    </NavLink>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool showAdmin = false;
+    private bool showUsers = false;
+    private bool showSystem = false;
+
+    private void ToggleAdmin() => showAdmin = !showAdmin;
+    private void ToggleUsers() => showUsers = !showUsers;
+    private void ToggleSystem() => showSystem = !showSystem;
+}
