@@ -1,0 +1,127 @@
+﻿@page "/signup"
+@inject NavigationManager Navigation
+
+<div class="login-container">
+    <h3 class="login-title">Sign Up</h3>
+
+    <EditForm Model="registerModel" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+
+        <!-- First Name -->
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <InputText id="firstName" class="form-control mt-1" @bind-Value="registerModel.FirstName"/>
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group mt-3">
+            <label for="lastName">Last Name</label>
+            <InputText id="lastName" class="form-control mt-1" @bind-Value="registerModel.LastName"/>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group mt-3">
+            <label for="email">Email</label>
+            <InputText id="email" class="form-control mt-1" @bind-Value="registerModel.Email"/>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="form-group mt-3">
+            <label for="dob">Date of Birth</label>
+            <InputDate id="dob" class="form-control mt-1" @bind-Value="registerModel.BirthDate"/>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group mt-3">
+            <label for="password">Password</label>
+            <div class="input-password-wrapper">
+                <InputText id="password"
+                           type="@passwordInputType"
+                           class="form-control mt-1"
+                           @bind-Value="registerModel.Password"/>
+                <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
+                    <i class="@passwordEyeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group mt-3">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="input-password-wrapper">
+                <InputText id="confirmPassword"
+                           type="@confirmPasswordInputType"
+                           class="form-control mt-1"
+                           @bind-Value="registerModel.ConfirmPassword"/>
+                <button type="button" class="btn-eye" @onclick="ToggleConfirmPasswordVisibility">
+                    <i class="@confirmPasswordEyeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+
+        <div class="form-group">
+            <a href="/login">Already have an account? Log in</a>
+        </div>
+
+        @if (registerError != null)
+        {
+            <div class="alert alert-danger">@registerError</div>
+        }
+    </EditForm>
+</div>
+
+@code {
+
+    private string logMessage;
+
+
+    private readonly RegisterModel registerModel = new();
+    private string registerError;
+
+    // Variables for password visibility
+    private string passwordInputType = "password";
+    private string passwordEyeIcon = "fas fa-eye-slash";
+
+    private string confirmPasswordInputType = "password";
+    private string confirmPasswordEyeIcon = "fas fa-eye-slash";
+
+    private void TogglePasswordVisibility()
+    {
+        passwordInputType = passwordInputType == "password" ? "text" : "password";
+        passwordEyeIcon = passwordInputType == "text" ? "fas fa-eye" : "fas fa-eye-slash";
+    }
+
+    private void ToggleConfirmPasswordVisibility()
+    {
+        confirmPasswordInputType = confirmPasswordInputType == "password" ? "text" : "password";
+        confirmPasswordEyeIcon = confirmPasswordInputType == "text" ? "fas fa-eye" : "fas fa-eye-slash";
+        StateHasChanged();
+    }
+
+
+    private void HandleValidSubmit()
+    {
+        // Registration logic goes here
+    }
+
+    private class RegisterModel
+    {
+        public string FirstName { get; set; } = string.Empty;
+
+        public string LastName { get; set; } = string.Empty;
+
+        public string Email { get; set; } = string.Empty;
+
+        public DateTime? BirthDate { get; set; }
+
+        public string Password { get; set; } = string.Empty;
+
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
+
+}

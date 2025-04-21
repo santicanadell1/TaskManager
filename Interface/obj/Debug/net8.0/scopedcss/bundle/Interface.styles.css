@@ -22,20 +22,20 @@ main[b-2ut1cqmr4y] {
     align-items: center;
 }
 
-    .top-row[b-2ut1cqmr4y]  a, .top-row[b-2ut1cqmr4y]  .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+.top-row[b-2ut1cqmr4y]  a, .top-row[b-2ut1cqmr4y]  .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+    text-decoration: none;
+}
 
-    .top-row[b-2ut1cqmr4y]  a:hover, .top-row[b-2ut1cqmr4y]  .btn-link:hover {
-        text-decoration: underline;
-    }
+.top-row[b-2ut1cqmr4y]  a:hover, .top-row[b-2ut1cqmr4y]  .btn-link:hover {
+    text-decoration: underline;
+}
 
-    .top-row[b-2ut1cqmr4y]  a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.top-row[b-2ut1cqmr4y]  a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 @media (max-width: 640.98px) {
     .top-row[b-2ut1cqmr4y] {
@@ -89,12 +89,12 @@ main[b-2ut1cqmr4y] {
     z-index: 1000;
 }
 
-    #blazor-error-ui .dismiss[b-2ut1cqmr4y] {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
+#blazor-error-ui .dismiss[b-2ut1cqmr4y] {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
 /* _content/Interface/Components/Layout/NavMenu.razor.rz.scp.css */
 .navbar-toggler[b-dnvo0xl2lx] {
     appearance: none;
@@ -115,7 +115,7 @@ main[b-2ut1cqmr4y] {
 
 .top-row[b-dnvo0xl2lx] {
     height: 3.5rem;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .navbar-brand[b-dnvo0xl2lx] {
@@ -149,33 +149,33 @@ main[b-2ut1cqmr4y] {
     padding-bottom: 0.5rem;
 }
 
-    .nav-item:first-of-type[b-dnvo0xl2lx] {
-        padding-top: 1rem;
-    }
+.nav-item:first-of-type[b-dnvo0xl2lx] {
+    padding-top: 1rem;
+}
 
-    .nav-item:last-of-type[b-dnvo0xl2lx] {
-        padding-bottom: 1rem;
-    }
+.nav-item:last-of-type[b-dnvo0xl2lx] {
+    padding-bottom: 1rem;
+}
 
-    .nav-item[b-dnvo0xl2lx]  .nav-link {
-        color: #d7d7d7;
-        background: none;
-        border: none;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-        width: 100%;
-    }
+.nav-item[b-dnvo0xl2lx]  .nav-link {
+    color: #d7d7d7;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+    width: 100%;
+}
 
 .nav-item[b-dnvo0xl2lx]  a.active {
-    background-color: rgba(255,255,255,0.37);
+    background-color: rgba(255, 255, 255, 0.37);
     color: white;
 }
 
 .nav-item[b-dnvo0xl2lx]  .nav-link:hover {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     color: white;
 }
 

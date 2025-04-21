@@ -1,0 +1,215 @@
+﻿/* Container for Login and SignUp Pages */
+.login-container {
+    max-width: 600px;
+    margin: 60px auto;
+    background-color: #ffffff;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.login-container:hover {
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Title Styles */
+.login-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.login-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #3498db;
+    border-radius: 3px;
+}
+
+/* Form Inputs */
+.form-control {
+    border: 2px solid #e6e6e6;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 16px;
+    transition: all 0.25s ease-in-out;
+    width: 100%;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.35);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Password Visibility Button */
+.input-password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-password-wrapper input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.btn-eye {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #7f8c8d;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 5px;
+}
+
+.btn-eye:hover {
+    color: #3498db;
+    transform: scale(1.1);
+}
+
+.btn-eye:focus {
+    outline: none;
+}
+
+/* Buttons */
+button.btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    background-color: #3498db;
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+button.btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
+}
+
+button.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(41, 128, 185, 0.4);
+}
+
+/* Links */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* Error Message */
+.alert-danger {
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #ff6b6b;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border-left: 4px solid #e74c3c;
+}
+
+/* Full Page Center for the Layout */
+.full-page-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Image Container */
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    max-width: 100%;
+    flex: 1 1 220px;
+}
+
+.image-container img {
+    border-radius: 8px;
+    width: 500px;
+    height: auto;
+}
+
+/* General Spacing */
+.mt-3 {
+    margin-top: 20px;
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 25px;
+        margin: 40px auto;
+    }
+
+    .image-container img {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Login Page */
+.card-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+/* Columns for larger screens */
+.col-12.col-md-4 {
+    flex: 0 0 40%;
+}
+
+.col-12.col-md-8 {
+    flex: 0 0 60%;
+}
+
+/* Ensuring the image and form stack properly on smaller screens */
+@media (max-width: 768px) {
+    .col-12.col-md-4 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+}

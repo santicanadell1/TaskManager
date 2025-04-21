@@ -22,10 +22,6 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -34,12 +30,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXExvZ2luLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/SingUp.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXFNpbmdVcC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/_imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXF9pbXBvcnRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/LoginLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcTG9naW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/_Imports.razor]
