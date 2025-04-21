@@ -5,31 +5,31 @@
     <h3 class="login-title">Sign Up</h3>
 
     <EditForm Model="registerModel" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
 
         <!-- First Name -->
         <div class="form-group">
             <label for="firstName">First Name</label>
-            <InputText id="firstName" class="form-control mt-1" @bind-Value="registerModel.FirstName" />
+            <InputText id="firstName" class="form-control mt-1" @bind-Value="registerModel.FirstName"/>
         </div>
 
         <!-- Last Name -->
         <div class="form-group mt-3">
             <label for="lastName">Last Name</label>
-            <InputText id="lastName" class="form-control mt-1" @bind-Value="registerModel.LastName" />
+            <InputText id="lastName" class="form-control mt-1" @bind-Value="registerModel.LastName"/>
         </div>
 
         <!-- Email -->
         <div class="form-group mt-3">
             <label for="email">Email</label>
-            <InputText id="email" class="form-control mt-1" @bind-Value="registerModel.Email" />
+            <InputText id="email" class="form-control mt-1" @bind-Value="registerModel.Email"/>
         </div>
 
         <!-- Date of Birth -->
         <div class="form-group mt-3">
             <label for="dob">Date of Birth</label>
-            <InputDate id="dob" class="form-control mt-1" @bind-Value="registerModel.BirthDate" />
+            <InputDate id="dob" class="form-control mt-1" @bind-Value="registerModel.BirthDate"/>
         </div>
 
         <!-- Password -->
@@ -39,7 +39,7 @@
                 <InputText id="password"
                            type="@passwordInputType"
                            class="form-control mt-1"
-                           @bind-Value="registerModel.Password" />
+                           @bind-Value="registerModel.Password"/>
                 <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
                     <i class="@passwordEyeIcon"></i>
                 </button>
@@ -53,7 +53,7 @@
                 <InputText id="confirmPassword"
                            type="@confirmPasswordInputType"
                            class="form-control mt-1"
-                           @bind-Value="registerModel.ConfirmPassword" />
+                           @bind-Value="registerModel.ConfirmPassword"/>
                 <button type="button" class="btn-eye" @onclick="ToggleConfirmPasswordVisibility">
                     <i class="@confirmPasswordEyeIcon"></i>
                 </button>
@@ -74,16 +74,13 @@
         }
     </EditForm>
 </div>
-    
+
 @code {
-    
+
     private string logMessage;
 
-  
 
-    
-
-    private RegisterModel registerModel = new();
+    private readonly RegisterModel registerModel = new();
     private string registerError;
 
     // Variables for password visibility
@@ -101,13 +98,11 @@
 
     private void ToggleConfirmPasswordVisibility()
     {
-        
         confirmPasswordInputType = confirmPasswordInputType == "password" ? "text" : "password";
         confirmPasswordEyeIcon = confirmPasswordInputType == "text" ? "fas fa-eye" : "fas fa-eye-slash";
         StateHasChanged();
     }
-    
-    
+
 
     private void HandleValidSubmit()
     {
@@ -128,4 +123,5 @@
 
         public string ConfirmPassword { get; set; } = string.Empty;
     }
+
 }

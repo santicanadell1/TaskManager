@@ -161,10 +161,9 @@ a:hover {
 }
 
 .image-container img {
-    max-width: 100%;
-    height: auto;
-    max-height: 300px;
     border-radius: 8px;
+    width: 500px;
+    height: auto;
 }
 
 /* General Spacing */

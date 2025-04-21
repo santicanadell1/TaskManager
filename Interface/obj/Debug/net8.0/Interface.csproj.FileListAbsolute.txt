@@ -123,12 +123,9 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\n
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Microsoft.AspNetCore.Metadata.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Microsoft.Extensions.Localization.dll
-D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Microsoft.Extensions.Localization.Abstractions.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Microsoft.JSInterop.dll
-D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\MudBlazor.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Syncfusion.Blazor.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Syncfusion.Compression.Portable.dll

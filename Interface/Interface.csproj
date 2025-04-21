@@ -7,20 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MudBlazor" Version="8.5.1" />
-      <PackageReference Include="Syncfusion.Blazor" Version="29.1.37" />
+        <PackageReference Include="Syncfusion.Blazor" Version="29.1.37"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="Components\Shared\styleLoginRegisteaar.css">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        <DependentUpon>LoginLayout.razor</DependentUpon>
-      </Content>
+        <Content Update="Components\Shared\styleLoginRegisteaar.css">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <DependentUpon>LoginLayout.razor</DependentUpon>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="wwwroot\styles\styleLoginRegister.css" />
+        <None Include="wwwroot\styles\styleLoginRegister.css"/>
     </ItemGroup>
 
 </Project>

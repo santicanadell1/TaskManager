@@ -45,10 +45,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "MudBlazor": {
-              "target": "Package",
-              "version": "[8.5.1, )"
-            },
             "Syncfusion.Blazor": {
               "target": "Package",
               "version": "[29.1.37, )"
