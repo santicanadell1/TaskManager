@@ -26,6 +26,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcX2ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/AdminProyectPages/CreateProject.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblByb3llY3RQYWdlc1xDcmVhdGVQcm9qZWN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/AdminProyectPages/Modals/AddMember.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblByb3llY3RQYWdlc1xNb2RhbHNcQWRkTWVtYmVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/AdminProyectPages/Modals/AddTask.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblByb3llY3RQYWdlc1xNb2RhbHNcQWRkVGFzay5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/AdminProyectPages/Modals/AssignMtoT.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblByb3llY3RQYWdlc1xNb2RhbHNcQXNzaWduTXRvVC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/AdminProyectPages/ProjectList.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblByb3llY3RQYWdlc1xQcm9qZWN0TGlzdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -50,8 +70,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/AdminNav.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcQWRtaW5OYXYucmF6b3I=
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/AdminPNav.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcQWRtaW5QTmF2LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/AdminSNav.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcQWRtaW5TTmF2LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/LoginLayout.razor]

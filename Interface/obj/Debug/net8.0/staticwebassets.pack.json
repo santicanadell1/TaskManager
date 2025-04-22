@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets\\img\\taskLogo.webp"
     },
     {
+      "Id": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleCreateProject.css",
+      "PackagePath": "staticwebassets\\styles\\styleCreateProject.css"
+    },
+    {
       "Id": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleLoginRegister.css",
       "PackagePath": "staticwebassets\\styles\\styleLoginRegister.css"
     },

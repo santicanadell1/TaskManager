@@ -1,0 +1,102 @@
+﻿@inject NavigationManager Navigation
+@namespace ModalsProject
+<!-- Modal -->
+@if (IsVisible)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="assignTaskToMemberModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assign Tasks to Member</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Select Member</h6>
+                    <select id="memberSelection" class="form-control" @bind="selectedMemberId">
+                        <option value="">-- Select a Member --</option>
+                        @foreach (var member in membersList)
+                        {
+                            <option value="@member.Id">@member.Name</option>
+                        }
+                    </select>
+
+                    <h6 class="mt-3">Select Tasks</h6>
+                    <div>
+                        @foreach (var task in tasksList)
+                        {
+                            <div class="form-check">
+                                <InputCheckbox id="@task.Id" class="form-check-input" @bind-Value="task.IsSelected" />
+                                <label class="form-check-label" for="@task.Id">
+                                    @task.Title
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                    <button type="button" class="btn btn-primary" @onclick="AssignTasksToMember">Assign Tasks</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+    [Parameter] public bool IsVisible { get; set; }
+
+    private int? selectedMemberId;
+    private List<Member> membersList = new List<Member>
+    {
+        new Member { Id = 1, Name = "John Doe" },
+        new Member { Id = 2, Name = "Jane Smith" },
+        new Member { Id = 3, Name = "Michael Brown" },
+        new Member { Id = 4, Name = "Lisa White" }
+    };
+
+    private List<Task> tasksList = new List<Task>
+    {
+        new Task { Id = 1, Title = "Task 1" },
+        new Task { Id = 2, Title = "Task 2" },
+        new Task { Id = 3, Title = "Task 3" }
+    };
+
+    private void CloseModal()
+    {
+        OnClose.InvokeAsync(false);  // Close the modal
+    }
+
+    private void AssignTasksToMember()
+    {
+        // Logic to handle assigning tasks to the member
+        var selectedTasks = tasksList.Where(t => t.IsSelected).ToList();
+        var selectedMember = membersList.FirstOrDefault(m => m.Id == selectedMemberId);
+
+        if (selectedMember != null && selectedTasks.Any())
+        {
+            Console.WriteLine($"Assigned Tasks to {selectedMember.Name}: {string.Join(", ", selectedTasks.Select(t => t.Title))}");
+            // Perform the assignment logic (e.g., save the assignment in the database)
+        }
+        else
+        {
+            Console.WriteLine("No tasks selected or no member selected.");
+        }
+
+        // Close the modal after assigning tasks
+        CloseModal();
+    }
+
+    public class Member
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class Task
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public bool IsSelected { get; set; } // Track whether the task is selected
+    }
+}
