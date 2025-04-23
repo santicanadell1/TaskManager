@@ -38,6 +38,16 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="resource" class="form-label">Select Resources</label>
+                            <select id="resources" class="form-control" @bind="newTask.PreviousTaskId">
+                                <option value="">-- Select a Resource --</option>
+                                @foreach (var task in taskList)
+                                {
+                                    <option value="@task.Id">@task.Title</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="previousTasks" class="form-label">Select Previous Task</label>
                             <select id="previousTasks" class="form-control" @bind="newTask.PreviousTaskId">
                                 <option value="">-- Select a Task --</option>
