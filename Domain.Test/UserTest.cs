@@ -72,7 +72,7 @@ public class UserTest
     {
         //arrange
         User user ;
-        DateTime birthday = DateTime.Parse("20/07/2006");
+        DateTime birthday = DateTime.Parse("20/07/2026");
         //act
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
     }

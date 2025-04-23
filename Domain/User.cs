@@ -42,7 +42,15 @@ public class User
         }
     }
 
-    public DateTime Birthday { get => birthday; set => birthday = value; }
+    public DateTime Birthday
+    {
+        get => birthday;
+        set
+        {
+            birthday = DateTime.Today < value ? throw new ArgumentException("The date is invalid"): value;
+        }
+    }
+
     private string Password { get => password; set => password = value; }
 
     public User(string firstName, string lastName, string email, DateTime birthday, string password)
