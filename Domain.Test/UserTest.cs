@@ -17,7 +17,7 @@ public class UserTest
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenFirstNameIsNull_ThenThrowArgumentNullException()
+    public void NewUser_WhenFirstNameIsNull_ThenThrowArgumentException()
     {
         //arrange
         User user ;
@@ -27,7 +27,7 @@ public class UserTest
     }
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenLastNameIsNull_ThenThrowArgumentNullException()
+    public void NewUser_WhenLastNameIsNull_ThenThrowArgumentException()
     {
         //arrange
         User user ;
@@ -37,7 +37,7 @@ public class UserTest
     }
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenEmailIsNull_ThenThrowArgumentNullException()
+    public void NewUser_WhenEmailIsNull_ThenThrowArgumentException()
     {
         //arrange
         User user ;
@@ -47,7 +47,7 @@ public class UserTest
     }
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenEmailHasAnInvalidFormat_ThenThrowArgumentNullException()
+    public void NewUser_WhenEmailHasAnInvalidFormat_ThenThrowArgumentException()
     {
         //arrange
         User user ;
@@ -68,7 +68,7 @@ public class UserTest
     }
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenDateIsAfterToday_ThenThrowArgumentNullException()
+    public void NewUser_WhenDateIsAfterToday_ThenThrowArgumentException()
     {
         //arrange
         User user ;
@@ -78,7 +78,7 @@ public class UserTest
     }
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenPasswordIsNull_ThenThrowArgumentNullException()
+    public void NewUser_WhenPasswordIsNull_ThenThrowArgumentException()
     {
         //arrange
         User user ;
