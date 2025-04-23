@@ -24,7 +24,16 @@ public class User
             lastName = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("User last name can not be empty") : value;
         }
     }
-    public string Email { get => email; set => email = value; }
+
+    public string Email
+    {
+        get => email;
+        set
+        {
+            email = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("User email can not be empty") : value;
+        }
+    }
+
     public DateTime Birthday { get => birthday; set => birthday = value; }
     private string Password { get => password; set => password = value; }
 
