@@ -13,7 +13,7 @@ public class User
         get => firstName;
         set
         {
-            firstName = string.IsNullOrEmpty(value) ? throw new ArgumentException("User name can not be empty") : value;
+            firstName = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("User name can not be empty") : value;
         }
     }
 
