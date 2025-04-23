@@ -45,5 +45,14 @@ public class UserTest
         //act
         user = new User("First Name", "Last Name", "", birthday, "Password");
     }
-    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void NewUser_WhenEmailHasAnInvalidFormat_ThenThrowArgumentNullException()
+    {
+        //arrange
+        User user ;
+        DateTime birthday = DateTime.Parse("10/05/2005");
+        //act
+        user = new User("First Name", "Last Name", "email", birthday, "Password");
+    }
 }
