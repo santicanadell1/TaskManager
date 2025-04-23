@@ -41,6 +41,11 @@ public static class PasswordManager
         }
     }
     
-    
+    public static bool VerifyPassword(string plainPassword, string storedHash)
+    {
+        // Hash the provided password and compare it with the stored hash
+        string hashedPassword = HashPassword(plainPassword);
+        return hashedPassword == storedHash;
+    }
 
 }
