@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "R1N7kyR59NF3Ws0jD6qPWRNF7j7HMAtmvpctZXXl8tQ=",
+  "Hash": "pX4LZs09zuoFHYVwgEDPIE6kwQpsLSVNJ3/iA3oGstM=",
   "Source": "Interface",
   "BasePath": "_content/Interface",
   "Mode": "Default",
@@ -2770,6 +2770,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\styles\\styleLoginRegister.css"
+    },
+    {
+      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleModalsAdminProject.css",
+      "SourceId": "Interface",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "BasePath": "_content/Interface",
+      "RelativePath": "styles/styleModalsAdminProject.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\styles\\styleModalsAdminProject.css"
     }
   ]
 }
