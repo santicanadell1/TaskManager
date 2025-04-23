@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "jyeGFxnElO9KW4V3BvjbuZhdVuHEVuHZ9IP8ioIIrpw=",
+  "Hash": "aKCZ2UBsvzJBVnkEVWe+aVMhYoYApLc0zlXWPHZgovs=",
   "Source": "Interface",
   "BasePath": "_content/Interface",
   "Mode": "Default",
@@ -2751,6 +2751,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\styles\\styleLoginRegister.css"
+    },
+    {
+      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleResourceCreate.css",
+      "SourceId": "Interface",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "BasePath": "_content/Interface",
+      "RelativePath": "styles/styleResourceCreate.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\styles\\styleResourceCreate.css"
     }
   ]
 }
