@@ -8,6 +8,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a0834ee3_002D3eae_002D421f_002D991b_002D0e36c50afc63/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="DefaultPassword_ShouldBeValid #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;MSTest::524475FF-8829-40CA-83E0-436891584683::net8.0::Service.Test.PasswordMTest.DefaultPassword_ShouldBeValid&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::524475FF-8829-40CA-83E0-436891584683::net8.0::Service.Test.PasswordMTest.HashPassword_ShouldReturnSameHashForSamePassword&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fe45efaa_002D585f_002D439d_002Db7b0_002Da24670cafe09/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="DefaultPassword_ShouldBeValid #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
