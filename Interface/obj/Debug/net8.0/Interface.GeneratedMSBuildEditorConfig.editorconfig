@@ -9,79 +9,79 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Interface
 build_property.RootNamespace = Interface
-build_property.ProjectDir = D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\
+build_property.ProjectDir = C:\Users\Nicob\OneDrive\Desktop\305108_282542_281987\Interface\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface
+build_property.MSBuildProjectDirectory = C:\Users\Nicob\OneDrive\Desktop\305108_282542_281987\Interface
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/App.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/App.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Layout/_imports.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Layout/_imports.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcX2ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Error.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Home.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/Login.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXExvZ2luLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/SingUp.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/SingUp.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXFNpbmdVcC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/_imports.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/LoginPages/_imports.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpblBhZ2VzXF9pbXBvcnRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/ResourcesPages/CreateResource.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/ResourcesPages/CreateResource.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZXNvdXJjZXNQYWdlc1xDcmVhdGVSZXNvdXJjZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/ResourcesPages/DeleteResource.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/ResourcesPages/DeleteResource.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZXNvdXJjZXNQYWdlc1xEZWxldGVSZXNvdXJjZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/ResourcesPages/ResourceManage.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/ResourcesPages/ResourceManage.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZXNvdXJjZXNQYWdlc1xSZXNvdXJjZU1hbmFnZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Routes.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/AdminNav.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/AdminNav.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcQWRtaW5OYXYucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/LoginLayout.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/LoginLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcTG9naW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/ResourcesNav.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Shared/ResourcesNav.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcUmVzb3VyY2VzTmF2LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/_Imports.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Layout/MainLayout.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-2ut1cqmr4y
 
-[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Layout/NavMenu.razor]
+[C:/Users/Nicob/OneDrive/Desktop/305108_282542_281987/Interface/Components/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-dnvo0xl2lx
