@@ -62,7 +62,7 @@ public class UserTest
         User user;
         DateTime birthday = DateTime.Parse("10/05/2005");
         //act
-        user = new User("First Name", "Last Name", "email", birthday, "Password");
+        user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
         //assert
         Assert.IsNotNull(user);
     }
