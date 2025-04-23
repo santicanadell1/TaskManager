@@ -66,4 +66,14 @@ public class UserTest
         //assert
         Assert.IsNotNull(user);
     }
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void NewUser_WhenDateIsAfterToday_ThenThrowArgumentNullException()
+    {
+        //arrange
+        User user ;
+        DateTime birthday = DateTime.Parse("20/07/2006");
+        //act
+        user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
+    }
 }
