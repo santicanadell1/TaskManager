@@ -51,7 +51,14 @@ public class User
         }
     }
 
-    private string Password { get => password; set => password = value; }
+    private string Password
+    {
+        get => password;
+        set
+        {
+            password = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Password can not be empty") : value;
+        }
+    }
 
     public User(string firstName, string lastName, string email, DateTime birthday, string password)
     {
