@@ -2,6 +2,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ae720ecc_002De621_002D45eb_002Db8f3_002D914193886086/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;MSTest::CA3A818C-362F-4F7F-B2F9-972E0CAF5127::net8.0::Domain.Test.UserTest.NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::CA3A818C-362F-4F7F-B2F9-972E0CAF5127::net8.0::Domain.Test.UserTest.NewUser_WhenFirstNameIsNull_ThenThrowArgumentNullException&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f6c72e08_002D30d1_002D4086_002Db54a_002D794188fa367a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
