@@ -21,6 +21,22 @@
       "PackagePath": "staticwebassets\\img\\taskLogo.webp"
     },
     {
+      "Id": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleAddUser.css",
+      "PackagePath": "staticwebassets\\styles\\styleAddUser.css"
+    },
+    {
+      "Id": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleAssignRol.css",
+      "PackagePath": "staticwebassets\\styles\\styleAssignRol.css"
+    },
+    {
+      "Id": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleChangePassword.css",
+      "PackagePath": "staticwebassets\\styles\\styleChangePassword.css"
+    },
+    {
+      "Id": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleDeleteUser.css",
+      "PackagePath": "staticwebassets\\styles\\styleDeleteUser.css"
+    },
+    {
       "Id": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleLoginRegister.css",
       "PackagePath": "staticwebassets\\styles\\styleLoginRegister.css"
     },

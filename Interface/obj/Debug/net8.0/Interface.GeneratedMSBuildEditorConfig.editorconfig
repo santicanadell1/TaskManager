@@ -26,6 +26,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcX2ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/AdminSPages/AddUser.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblNQYWdlc1xBZGRVc2VyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/AdminSPages/AssignRol.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblNQYWdlc1xBc3NpZ25Sb2wucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/AdminSPages/ChangePassword.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblNQYWdlc1xDaGFuZ2VQYXNzd29yZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/AdminSPages/DeleteUser.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblNQYWdlc1xEZWxldGVVc2VyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Interface/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

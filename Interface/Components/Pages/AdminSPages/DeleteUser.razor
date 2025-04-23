@@ -1,0 +1,82 @@
+﻿@page "/users/delete"
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<link href="styles/styleDeleteUser.css" rel="stylesheet"/>
+<div class="delete-user-container">
+    <h3>Delete User</h3>
+
+    <!-- Dropdown or List of Users -->
+    <div class="form-group">
+        <label for="userSelect">Select a User to Delete</label>
+        <select id="userSelect" class="form-control mt-1" @bind="selectedUserId">
+            <option value="">-- Select a User --</option>
+            @foreach (var user in usersList)
+            {
+                <option value="@user.Id">@user.FirstName @user.LastName</option>
+            }
+        </select>
+    </div>
+
+    <!-- Delete Button -->
+    <div class="form-group mt-3">
+        <button type="button" class="btn btn-danger" @onclick="DeleteUsers" disabled="@(!selectedUserId.HasValue)">
+            Delete User
+        </button>
+    </div>
+
+    <!-- Display Error or Success Messages -->
+    @if (deleteError != null)
+    {
+        <div class="alert alert-danger">@deleteError</div>
+    }
+    @if (deleteSuccess != null)
+    {
+        <div class="alert alert-success">@deleteSuccess</div>
+    }
+</div>
+
+@code {
+
+    private List<User> usersList = new()
+    {
+        new User { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" },
+        new User { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com" },
+        new User { Id = 3, FirstName = "Michael", LastName = "Brown", Email = "michael.brown@example.com" }
+    };
+
+    private int? selectedUserId;
+    private string deleteError;
+    private string deleteSuccess;
+
+    private void DeleteUsers()
+    {
+        var userToDelete = usersList.FirstOrDefault(u => u.Id == selectedUserId);
+
+        if (userToDelete != null)
+        {
+            // Simulate deleting user
+            usersList.Remove(userToDelete);
+            deleteSuccess = $"User {userToDelete.FirstName} {userToDelete.LastName} has been deleted successfully.";
+
+            // Clear selection
+            selectedUserId = null;
+
+            // Optionally, redirect to another page after deletion
+            // Navigation.NavigateTo("/users");
+        }
+        else
+        {
+            deleteError = "User not found.";
+        }
+    }
+
+    public class User
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+    }
+
+}
