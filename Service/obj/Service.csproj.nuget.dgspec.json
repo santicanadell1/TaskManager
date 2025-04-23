@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\Service.csproj": {}
+    "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Service\\Service.csproj": {}
   },
   "projects": {
-    "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\Service.csproj": {
+    "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Service\\Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\Service.csproj",
+        "projectUniqueName": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Service\\Service.csproj",
         "projectName": "Service",
-        "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\Service.csproj",
-        "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-        "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\obj\\",
+        "projectPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Service\\Service.csproj",
+        "packagesPath": "C:\\Users\\felid\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Service\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\felid\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -58,7 +58,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\SALCHIPAPA\\.dotnet\\sdk\\8.0.406/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\felid\\.dotnet\\sdk\\8.0.406/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

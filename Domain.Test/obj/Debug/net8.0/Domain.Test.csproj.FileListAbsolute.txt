@@ -1,0 +1,7 @@
+C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\bin\Debug\net8.0\CoverletSourceRootsMapping_Domain.Test
+C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.csproj.AssemblyReference.cache
+C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.AssemblyInfoInputs.cache
+C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.AssemblyInfo.cs
+C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.csproj.CoreCompileInputs.cache
+C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.sourcelink.json
