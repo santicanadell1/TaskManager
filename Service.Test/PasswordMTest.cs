@@ -1,4 +1,5 @@
-﻿namespace Service.Test;
+﻿using Service.Passsword;
+namespace Service.Test;
 
 [TestClass]
 public class PasswordMTest
@@ -6,11 +7,8 @@ public class PasswordMTest
     [TestMethod]
     public void DefaultPassword_ShouldBeValid()
     {
-        // Arrange
-        PasswordManager passwordManager = new PasswordManager();  // default password is set in the constructor
-
         // Act
-        bool isValid = passwordManager.IsValidPassword(passwordManager.Password);
+        bool isValid = PasswordManager.IsValidPassword(PasswordManager.getDefaultPassword());
 
         // Assert
         Assert.IsTrue(isValid, "The default password should be valid.");

@@ -110,3 +110,6 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debu
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.pdb
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.genruntimeconfig.cache
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debug\net8.0\ref\Service.Test.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\CoverletSourceRootsMapping_Service.Test
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\Service.pdb
