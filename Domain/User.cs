@@ -1,4 +1,6 @@
-﻿namespace Domain;
+﻿using System.Text.RegularExpressions;
+
+namespace Domain;
 
 public class User
 {
@@ -21,7 +23,9 @@ public class User
         get => lastName;
         set
         {
-            lastName = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("User last name can not be empty") : value;
+            lastName = string.IsNullOrWhiteSpace(value)
+                ? throw new ArgumentException("User last name can not be empty")
+                : value;
         }
     }
 
@@ -30,7 +34,11 @@ public class User
         get => email;
         set
         {
-            email = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("User email can not be empty") : value;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException("User email can not be empty");
+            }
+            email = IsValidEmail(value) ? value : throw new ArgumentException("Invalid email format");
         }
     }
 
@@ -44,5 +52,11 @@ public class User
         this.Email = email;
         this.Birthday = birthday;
         this.Password = password;
+    }
+
+    private bool IsValidEmail(string email)
+    {
+        string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
+        return Regex.IsMatch(email, emailPattern);
     }
 }
