@@ -23,7 +23,7 @@ public class UserTest
         User user ;
         DateTime birthday = DateTime.Parse("10/05/2005");
         //act
-        user = new User("  ", "Last Name", "Email", birthday, "Password");
+        user = new User("  ", "Last Name", "Email@email.com", birthday, "Password");
     }
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
@@ -33,7 +33,7 @@ public class UserTest
         User user ;
         DateTime birthday = DateTime.Parse("10/05/2005");
         //act
-        user = new User("First Name", "", "Email", birthday, "Password");
+        user = new User("First Name", "", "Email@email.com", birthday, "Password");
     }
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
@@ -75,5 +75,15 @@ public class UserTest
         DateTime birthday = DateTime.Parse("20/07/2026");
         //act
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
+    }
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void NewUser_WhenPasswordIsNull_ThenThrowArgumentNullException()
+    {
+        //arrange
+        User user ;
+        DateTime birthday = DateTime.Parse("10/05/2005");
+        //act
+        user = new User("First Name", "Last Name", "Email@email.com", birthday, "");
     }
 }
