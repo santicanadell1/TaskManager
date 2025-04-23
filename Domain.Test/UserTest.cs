@@ -24,6 +24,5 @@ public class UserTest
         DateTime birthday = DateTime.Parse("10/05/2005");
         //act
         user = new User("", "Last Name", "Email", birthday, "Password");
-        
     }
 }
