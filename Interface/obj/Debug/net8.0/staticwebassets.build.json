@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "aKCZ2UBsvzJBVnkEVWe+aVMhYoYApLc0zlXWPHZgovs=",
+  "Hash": "Pv2GKmQ0tuxR7HjQTQS3kXB9IzzTN1BsLDXRwJMGeMk=",
   "Source": "Interface",
   "BasePath": "_content/Interface",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "Interface\\wwwroot",
       "Source": "Interface",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\data.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\data.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/data.min.js",
       "AssetKind": "All",
@@ -33,13 +33,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\data.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\data.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\navigationsbase.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\navigationsbase.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/navigationsbase.min.js",
       "AssetKind": "All",
@@ -52,13 +52,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\navigationsbase.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\navigationsbase.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\popup.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\popup.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/popup.min.js",
       "AssetKind": "All",
@@ -71,13 +71,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\popup.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\popup.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\popupsbase.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\popupsbase.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/popupsbase.min.js",
       "AssetKind": "All",
@@ -90,13 +90,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\popupsbase.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\popupsbase.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-accordion.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-accordion.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-accordion.min.js",
       "AssetKind": "All",
@@ -109,13 +109,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-accordion.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-accordion.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-accumulation-chart.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-accumulation-chart.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-accumulation-chart.min.js",
       "AssetKind": "All",
@@ -128,13 +128,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-accumulation-chart.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-accumulation-chart.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-ai-assistview.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-ai-assistview.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-ai-assistview.min.js",
       "AssetKind": "All",
@@ -147,13 +147,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-ai-assistview.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-ai-assistview.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-barcode.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-barcode.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-barcode.min.js",
       "AssetKind": "All",
@@ -166,13 +166,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-barcode.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-barcode.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-breadcrumb.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-breadcrumb.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-breadcrumb.min.js",
       "AssetKind": "All",
@@ -185,13 +185,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-breadcrumb.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-breadcrumb.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-bullet-chart.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-bullet-chart.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-bullet-chart.min.js",
       "AssetKind": "All",
@@ -204,13 +204,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-bullet-chart.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-bullet-chart.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-calendar.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-calendar.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-calendar.min.js",
       "AssetKind": "All",
@@ -223,13 +223,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-calendar.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-calendar.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-carousel.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-carousel.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-carousel.min.js",
       "AssetKind": "All",
@@ -242,13 +242,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-carousel.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-carousel.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chart.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chart.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-chart.min.js",
       "AssetKind": "All",
@@ -261,13 +261,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chart.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chart.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chart3D.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chart3D.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-chart3D.min.js",
       "AssetKind": "All",
@@ -280,13 +280,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chart3D.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chart3D.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chat-ui.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chat-ui.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-chat-ui.min.js",
       "AssetKind": "All",
@@ -299,13 +299,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chat-ui.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-chat-ui.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-circulargauge.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-circulargauge.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-circulargauge.min.js",
       "AssetKind": "All",
@@ -318,13 +318,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-circulargauge.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-circulargauge.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-colorpicker.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-colorpicker.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-colorpicker.min.js",
       "AssetKind": "All",
@@ -337,13 +337,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-colorpicker.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-colorpicker.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-contextmenu.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-contextmenu.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-contextmenu.min.js",
       "AssetKind": "All",
@@ -356,13 +356,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-contextmenu.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-contextmenu.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dashboard-layout.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dashboard-layout.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-dashboard-layout.min.js",
       "AssetKind": "All",
@@ -375,13 +375,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dashboard-layout.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dashboard-layout.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-datepicker.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-datepicker.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-datepicker.min.js",
       "AssetKind": "All",
@@ -394,13 +394,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-datepicker.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-datepicker.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-daterangepicker.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-daterangepicker.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-daterangepicker.min.js",
       "AssetKind": "All",
@@ -413,13 +413,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-daterangepicker.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-daterangepicker.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-diagramcomponent.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-diagramcomponent.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-diagramcomponent.min.js",
       "AssetKind": "All",
@@ -432,13 +432,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-diagramcomponent.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-diagramcomponent.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dialog.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dialog.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-dialog.min.js",
       "AssetKind": "All",
@@ -451,13 +451,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dialog.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dialog.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-drop-down-button.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-drop-down-button.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-drop-down-button.min.js",
       "AssetKind": "All",
@@ -470,13 +470,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-drop-down-button.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-drop-down-button.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dropdownlist.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dropdownlist.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-dropdownlist.min.js",
       "AssetKind": "All",
@@ -489,13 +489,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dropdownlist.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dropdownlist.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dropdowntree.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dropdowntree.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-dropdowntree.min.js",
       "AssetKind": "All",
@@ -508,13 +508,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dropdowntree.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-dropdowntree.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-filemanager.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-filemanager.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-filemanager.min.js",
       "AssetKind": "All",
@@ -527,13 +527,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-filemanager.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-filemanager.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-floating-action-button.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-floating-action-button.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-floating-action-button.min.js",
       "AssetKind": "All",
@@ -546,13 +546,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-floating-action-button.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-floating-action-button.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-gantt.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-gantt.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-gantt.min.js",
       "AssetKind": "All",
@@ -565,13 +565,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-gantt.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-gantt.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-grid.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-grid.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-grid.min.js",
       "AssetKind": "All",
@@ -584,13 +584,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-grid.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-grid.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-heatmap.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-heatmap.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-heatmap.min.js",
       "AssetKind": "All",
@@ -603,13 +603,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-heatmap.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-heatmap.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-image-editor.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-image-editor.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-image-editor.min.js",
       "AssetKind": "All",
@@ -622,13 +622,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-image-editor.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-image-editor.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-inplaceeditor.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-inplaceeditor.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-inplaceeditor.min.js",
       "AssetKind": "All",
@@ -641,13 +641,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-inplaceeditor.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-inplaceeditor.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-kanban.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-kanban.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-kanban.min.js",
       "AssetKind": "All",
@@ -660,13 +660,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-kanban.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-kanban.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-lineargauge.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-lineargauge.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-lineargauge.min.js",
       "AssetKind": "All",
@@ -679,13 +679,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-lineargauge.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-lineargauge.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-listbox.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-listbox.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-listbox.min.js",
       "AssetKind": "All",
@@ -698,13 +698,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-listbox.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-listbox.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-listview.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-listview.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-listview.min.js",
       "AssetKind": "All",
@@ -717,13 +717,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-listview.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-listview.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-maps.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-maps.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-maps.min.js",
       "AssetKind": "All",
@@ -736,13 +736,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-maps.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-maps.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-maskedtextbox.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-maskedtextbox.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-maskedtextbox.min.js",
       "AssetKind": "All",
@@ -755,13 +755,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-maskedtextbox.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-maskedtextbox.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-mention.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-mention.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-mention.min.js",
       "AssetKind": "All",
@@ -774,13 +774,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-mention.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-mention.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-menu.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-menu.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-menu.min.js",
       "AssetKind": "All",
@@ -793,13 +793,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-menu.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-menu.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-multicolumncombobox.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-multicolumncombobox.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-multicolumncombobox.min.js",
       "AssetKind": "All",
@@ -812,13 +812,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-multicolumncombobox.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-multicolumncombobox.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-multiselect.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-multiselect.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-multiselect.min.js",
       "AssetKind": "All",
@@ -831,13 +831,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-multiselect.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-multiselect.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-numerictextbox.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-numerictextbox.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-numerictextbox.min.js",
       "AssetKind": "All",
@@ -850,13 +850,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-numerictextbox.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-numerictextbox.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-otp-input.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-otp-input.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-otp-input.min.js",
       "AssetKind": "All",
@@ -869,13 +869,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-otp-input.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-otp-input.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-pager.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-pager.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-pager.min.js",
       "AssetKind": "All",
@@ -888,13 +888,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-pager.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-pager.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-pivotview.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-pivotview.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-pivotview.min.js",
       "AssetKind": "All",
@@ -907,13 +907,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-pivotview.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-pivotview.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-progressbar.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-progressbar.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-progressbar.min.js",
       "AssetKind": "All",
@@ -926,13 +926,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-progressbar.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-progressbar.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-range-navigator.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-range-navigator.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-range-navigator.min.js",
       "AssetKind": "All",
@@ -945,13 +945,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-range-navigator.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-range-navigator.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-rating.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-rating.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-rating.min.js",
       "AssetKind": "All",
@@ -964,13 +964,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-rating.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-rating.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-ribbon.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-ribbon.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-ribbon.min.js",
       "AssetKind": "All",
@@ -983,13 +983,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-ribbon.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-ribbon.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-richtexteditor.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-richtexteditor.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-richtexteditor.min.js",
       "AssetKind": "All",
@@ -1002,13 +1002,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-richtexteditor.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-richtexteditor.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sankey.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sankey.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-sankey.min.js",
       "AssetKind": "All",
@@ -1021,13 +1021,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sankey.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sankey.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-schedule.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-schedule.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-schedule.min.js",
       "AssetKind": "All",
@@ -1040,13 +1040,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-schedule.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-schedule.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sidebar.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sidebar.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-sidebar.min.js",
       "AssetKind": "All",
@@ -1059,13 +1059,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sidebar.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sidebar.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-signature.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-signature.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-signature.min.js",
       "AssetKind": "All",
@@ -1078,13 +1078,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-signature.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-signature.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-slider.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-slider.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-slider.min.js",
       "AssetKind": "All",
@@ -1097,13 +1097,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-slider.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-slider.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-smith-chart.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-smith-chart.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-smith-chart.min.js",
       "AssetKind": "All",
@@ -1116,13 +1116,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-smith-chart.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-smith-chart.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sparkline.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sparkline.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-sparkline.min.js",
       "AssetKind": "All",
@@ -1135,13 +1135,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sparkline.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-sparkline.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-speechtotext.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-speechtotext.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-speechtotext.min.js",
       "AssetKind": "All",
@@ -1154,13 +1154,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-speechtotext.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-speechtotext.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-speeddial.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-speeddial.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-speeddial.min.js",
       "AssetKind": "All",
@@ -1173,13 +1173,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-speeddial.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-speeddial.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-spinner.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-spinner.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-spinner.min.js",
       "AssetKind": "All",
@@ -1192,13 +1192,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-spinner.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-spinner.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-splitter.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-splitter.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-splitter.min.js",
       "AssetKind": "All",
@@ -1211,13 +1211,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-splitter.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-splitter.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-stepper.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-stepper.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-stepper.min.js",
       "AssetKind": "All",
@@ -1230,13 +1230,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-stepper.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-stepper.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-stock-chart.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-stock-chart.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-stock-chart.min.js",
       "AssetKind": "All",
@@ -1249,13 +1249,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-stock-chart.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-stock-chart.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-svg-export.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-svg-export.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-svg-export.min.js",
       "AssetKind": "All",
@@ -1268,13 +1268,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-svg-export.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-svg-export.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-tab.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-tab.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-tab.min.js",
       "AssetKind": "All",
@@ -1287,13 +1287,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-tab.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-tab.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-textarea.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-textarea.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-textarea.min.js",
       "AssetKind": "All",
@@ -1306,13 +1306,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-textarea.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-textarea.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-textbox.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-textbox.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-textbox.min.js",
       "AssetKind": "All",
@@ -1325,13 +1325,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-textbox.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-textbox.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-timepicker.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-timepicker.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-timepicker.min.js",
       "AssetKind": "All",
@@ -1344,13 +1344,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-timepicker.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-timepicker.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-toast.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-toast.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-toast.min.js",
       "AssetKind": "All",
@@ -1363,13 +1363,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-toast.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-toast.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-toolbar.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-toolbar.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-toolbar.min.js",
       "AssetKind": "All",
@@ -1382,13 +1382,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-toolbar.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-toolbar.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-tooltip.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-tooltip.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-tooltip.min.js",
       "AssetKind": "All",
@@ -1401,13 +1401,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-tooltip.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-tooltip.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treegrid.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treegrid.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-treegrid.min.js",
       "AssetKind": "All",
@@ -1420,13 +1420,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treegrid.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treegrid.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treemap.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treemap.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-treemap.min.js",
       "AssetKind": "All",
@@ -1439,13 +1439,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treemap.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treemap.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treeview.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treeview.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-treeview.min.js",
       "AssetKind": "All",
@@ -1458,13 +1458,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treeview.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-treeview.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-uploader.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-uploader.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sf-uploader.min.js",
       "AssetKind": "All",
@@ -1477,13 +1477,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-uploader.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sf-uploader.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sortable.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sortable.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/sortable.min.js",
       "AssetKind": "All",
@@ -1496,13 +1496,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sortable.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\sortable.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\spinner.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\spinner.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/spinner.min.js",
       "AssetKind": "All",
@@ -1515,13 +1515,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\spinner.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\spinner.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\splitbuttonsbase.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\splitbuttonsbase.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/splitbuttonsbase.min.js",
       "AssetKind": "All",
@@ -1534,13 +1534,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\splitbuttonsbase.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\splitbuttonsbase.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\svgbase.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\svgbase.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/svgbase.min.js",
       "AssetKind": "All",
@@ -1553,13 +1553,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\svgbase.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\svgbase.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\syncfusion-blazor-base.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\syncfusion-blazor-base.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/syncfusion-blazor-base.min.js",
       "AssetKind": "All",
@@ -1572,13 +1572,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\syncfusion-blazor-base.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\syncfusion-blazor-base.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\syncfusion-blazor.min.js",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\syncfusion-blazor.min.js",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "scripts/syncfusion-blazor.min.js",
       "AssetKind": "All",
@@ -1591,13 +1591,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\syncfusion-blazor.min.js"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\scripts\\syncfusion-blazor.min.js"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bds-dark-lite.css",
       "AssetKind": "All",
@@ -1610,13 +1610,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bds-dark.css",
       "AssetKind": "All",
@@ -1629,13 +1629,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bds-lite.css",
       "AssetKind": "All",
@@ -1648,13 +1648,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bds.css",
       "AssetKind": "All",
@@ -1667,13 +1667,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bds.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap-dark-lite.css",
       "AssetKind": "All",
@@ -1686,13 +1686,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap-dark.css",
       "AssetKind": "All",
@@ -1705,13 +1705,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap-lite.css",
       "AssetKind": "All",
@@ -1724,13 +1724,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap.css",
       "AssetKind": "All",
@@ -1743,13 +1743,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap4-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap4-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap4-lite.css",
       "AssetKind": "All",
@@ -1762,13 +1762,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap4-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap4-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap4.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap4.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap4.css",
       "AssetKind": "All",
@@ -1781,13 +1781,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap4.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap4.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap5-dark-lite.css",
       "AssetKind": "All",
@@ -1800,13 +1800,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap5-dark.css",
       "AssetKind": "All",
@@ -1819,13 +1819,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap5-lite.css",
       "AssetKind": "All",
@@ -1838,13 +1838,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap5.3-dark-lite.css",
       "AssetKind": "All",
@@ -1857,13 +1857,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap5.3-dark.css",
       "AssetKind": "All",
@@ -1876,13 +1876,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap5.3-lite.css",
       "AssetKind": "All",
@@ -1895,13 +1895,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap5.3.css",
       "AssetKind": "All",
@@ -1914,13 +1914,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.3.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/bootstrap5.css",
       "AssetKind": "All",
@@ -1933,13 +1933,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\bootstrap5.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\material-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\material-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/customized/material-dark.css",
       "AssetKind": "All",
@@ -1952,13 +1952,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\material-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\material-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\material.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\material.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/customized/material.css",
       "AssetKind": "All",
@@ -1971,13 +1971,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\material.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\material.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\tailwind-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\tailwind-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/customized/tailwind-dark.css",
       "AssetKind": "All",
@@ -1990,13 +1990,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\tailwind-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\tailwind-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\tailwind.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\tailwind.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/customized/tailwind.css",
       "AssetKind": "All",
@@ -2009,13 +2009,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\tailwind.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\customized\\tailwind.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fabric-dark-lite.css",
       "AssetKind": "All",
@@ -2028,13 +2028,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fabric-dark.css",
       "AssetKind": "All",
@@ -2047,13 +2047,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fabric-lite.css",
       "AssetKind": "All",
@@ -2066,13 +2066,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fabric.css",
       "AssetKind": "All",
@@ -2085,13 +2085,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fabric.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent-dark-lite.css",
       "AssetKind": "All",
@@ -2104,13 +2104,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent-dark.css",
       "AssetKind": "All",
@@ -2123,13 +2123,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent-lite.css",
       "AssetKind": "All",
@@ -2142,13 +2142,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent.css",
       "AssetKind": "All",
@@ -2161,13 +2161,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent2-dark-lite.css",
       "AssetKind": "All",
@@ -2180,13 +2180,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent2-dark.css",
       "AssetKind": "All",
@@ -2199,13 +2199,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-highcontrast-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-highcontrast-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent2-highcontrast-lite.css",
       "AssetKind": "All",
@@ -2218,13 +2218,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-highcontrast-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-highcontrast-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-highcontrast.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-highcontrast.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent2-highcontrast.css",
       "AssetKind": "All",
@@ -2237,13 +2237,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-highcontrast.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-highcontrast.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent2-lite.css",
       "AssetKind": "All",
@@ -2256,13 +2256,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/fluent2.css",
       "AssetKind": "All",
@@ -2275,13 +2275,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\fluent2.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\highcontrast-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\highcontrast-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/highcontrast-lite.css",
       "AssetKind": "All",
@@ -2294,13 +2294,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\highcontrast-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\highcontrast-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\highcontrast.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\highcontrast.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/highcontrast.css",
       "AssetKind": "All",
@@ -2313,13 +2313,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\highcontrast.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\highcontrast.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/material-dark-lite.css",
       "AssetKind": "All",
@@ -2332,13 +2332,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/material-dark.css",
       "AssetKind": "All",
@@ -2351,13 +2351,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/material-lite.css",
       "AssetKind": "All",
@@ -2370,13 +2370,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/material.css",
       "AssetKind": "All",
@@ -2389,13 +2389,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/material3-dark-lite.css",
       "AssetKind": "All",
@@ -2408,13 +2408,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/material3-dark.css",
       "AssetKind": "All",
@@ -2427,13 +2427,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/material3-lite.css",
       "AssetKind": "All",
@@ -2446,13 +2446,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/material3.css",
       "AssetKind": "All",
@@ -2465,13 +2465,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\material3.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/tailwind-dark-lite.css",
       "AssetKind": "All",
@@ -2484,13 +2484,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/tailwind-dark.css",
       "AssetKind": "All",
@@ -2503,13 +2503,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/tailwind-lite.css",
       "AssetKind": "All",
@@ -2522,13 +2522,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/tailwind.css",
       "AssetKind": "All",
@@ -2541,13 +2541,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-dark-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-dark-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/tailwind3-dark-lite.css",
       "AssetKind": "All",
@@ -2560,13 +2560,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-dark-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-dark-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-dark.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-dark.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/tailwind3-dark.css",
       "AssetKind": "All",
@@ -2579,13 +2579,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-dark.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-dark.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-lite.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-lite.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/tailwind3-lite.css",
       "AssetKind": "All",
@@ -2598,13 +2598,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-lite.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3-lite.css"
     },
     {
-      "Identity": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3.css",
+      "Identity": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3.css",
       "SourceId": "Syncfusion.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\",
       "BasePath": "_content/Syncfusion.Blazor",
       "RelativePath": "styles/tailwind3.css",
       "AssetKind": "All",
@@ -2617,13 +2617,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\.nuget\\packages\\syncfusion.blazor\\29.1.37\\staticwebassets\\styles\\tailwind3.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Interface.styles.css",
+      "Identity": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Interface.styles.css",
       "SourceId": "Interface",
       "SourceType": "Computed",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
+      "ContentRoot": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
       "BasePath": "_content/Interface",
       "RelativePath": "Interface.styles.css",
       "AssetKind": "All",
@@ -2636,13 +2636,13 @@
       "AssetTraitValue": "ApplicationBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Interface.styles.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Interface.styles.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Interface.bundle.scp.css",
+      "Identity": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Interface.bundle.scp.css",
       "SourceId": "Interface",
       "SourceType": "Computed",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
+      "ContentRoot": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
       "BasePath": "_content/Interface",
       "RelativePath": "Interface.bundle.scp.css",
       "AssetKind": "All",
@@ -2655,13 +2655,13 @@
       "AssetTraitValue": "ProjectBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Interface.bundle.scp.css"
+      "OriginalItemSpec": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Interface.bundle.scp.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "Identity": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "bootstrap/bootstrap.min.css",
       "AssetKind": "All",
@@ -2677,10 +2677,10 @@
       "OriginalItemSpec": "wwwroot\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "Identity": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css.map",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "bootstrap/bootstrap.min.css.map",
       "AssetKind": "All",
@@ -2696,10 +2696,10 @@
       "OriginalItemSpec": "wwwroot\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\favicon.png",
+      "Identity": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\favicon.png",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "favicon.png",
       "AssetKind": "All",
@@ -2715,10 +2715,10 @@
       "OriginalItemSpec": "wwwroot\\favicon.png"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\img\\taskLogo.webp",
+      "Identity": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\img\\taskLogo.webp",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "img/taskLogo.webp",
       "AssetKind": "All",
@@ -2734,10 +2734,10 @@
       "OriginalItemSpec": "wwwroot\\img\\taskLogo.webp"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleLoginRegister.css",
+      "Identity": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleLoginRegister.css",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "styles/styleLoginRegister.css",
       "AssetKind": "All",
@@ -2753,10 +2753,10 @@
       "OriginalItemSpec": "wwwroot\\styles\\styleLoginRegister.css"
     },
     {
-      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleResourceCreate.css",
+      "Identity": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\styles\\styleResourceCreate.css",
       "SourceId": "Interface",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\santi\\OneDrive\\Escritorio\\Obl Dis\\305108_282542_281987\\Interface\\wwwroot\\",
       "BasePath": "_content/Interface",
       "RelativePath": "styles/styleResourceCreate.css",
       "AssetKind": "All",

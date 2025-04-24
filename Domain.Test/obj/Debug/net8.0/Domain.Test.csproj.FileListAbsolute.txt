@@ -110,3 +110,12 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.pdb
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.genruntimeconfig.cache
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\ref\Domain.Test.dll
+C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.csproj.AssemblyReference.cache
+C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.AssemblyInfoInputs.cache
+C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.AssemblyInfo.cs
+C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.csproj.CoreCompileInputs.cache
+C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.sourcelink.json
+C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.dll
+C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Domain.Test\obj\Debug\net8.0\refint\Domain.Test.dll
+C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.pdb
