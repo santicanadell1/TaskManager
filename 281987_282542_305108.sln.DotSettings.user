@@ -1,8 +1,11 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AExceptionDispatchInfo_002Ecs_002Fl_003AC_0021_003FUsers_003FSALCHIPAPA_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003Fbd1d5c50194fea68ff3559c160230b0ab50f5acf4ce3061bffd6d62958e2182_003FExceptionDispatchInfo_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=04c042b7_002D8073_002D418c_002Db026_002Dcf189dac901f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="NewResource_WhenNameIsEmpty_ThenThrowException" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fd6acb48_002D9de9_002D48a5_002Da5bf_002D86655c35c680/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NewResource_WhenNameIsEmpty_ThenThrowException" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;MSTest::CA3A818C-362F-4F7F-B2F9-972E0CAF5127::net8.0::Domain.Test.ResourceTest.NewResource_WhenNameIsEmpty_ThenThrowException&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	
+	
+	
 	</wpf:ResourceDictionary>

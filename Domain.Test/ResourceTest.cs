@@ -4,13 +4,13 @@ namespace Domain.Test;
 public class ResourceTest
 {
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
     public void NewResource_WhenNameIsEmpty_ThenThrowException()
     {
         //Arrange
         Resource res;
         //Act
         res = new Resource("","type","description");
-        //Assert
-        Assert.IsNull(res);
+        
     }
 }
