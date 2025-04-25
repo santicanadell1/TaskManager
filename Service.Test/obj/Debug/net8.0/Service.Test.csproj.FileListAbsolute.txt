@@ -1,3 +1,4 @@
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\CoverletSourceRootsMapping_Service.Test
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\testhost.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\testhost.exe
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
@@ -97,6 +98,8 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debu
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\zh-Hans\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\Service.pdb
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.csproj.AssemblyReference.cache
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.GeneratedMSBuildEditorConfig.editorconfig
@@ -110,6 +113,3 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debu
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.pdb
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.genruntimeconfig.cache
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\obj\Debug\net8.0\ref\Service.Test.dll
-D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\CoverletSourceRootsMapping_Service.Test
-D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\Service.dll
-D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service.Test\bin\Debug\net8.0\Service.pdb

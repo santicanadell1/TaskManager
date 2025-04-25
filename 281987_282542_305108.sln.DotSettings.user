@@ -1,0 +1,26 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1007d37d_002D6976_002D40bb_002D963e_002Db24db7c71d61/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="PasswordMTest #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::524475FF-8829-40CA-83E0-436891584683::net8.0::Service.Test.PasswordMTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=46429c19_002D5cc4_002D40d9_002D83fd_002D6d7014d920f6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="PasswordMTest #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::524475FF-8829-40CA-83E0-436891584683::net8.0::Service.Test.PasswordMTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=75184c3f_002Dea5f_002D448d_002D98b6_002D8f8f8bd2c0e7/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="DefaultPassword_ShouldBeValid" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::524475FF-8829-40CA-83E0-436891584683::net8.0::Service.Test.PasswordMTest.DefaultPassword_ShouldBeValid&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b6d08d24_002Dcd07_002D43be_002Dbdea_002Dc709a5c0c6d1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="PasswordMTest #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::524475FF-8829-40CA-83E0-436891584683::net8.0::Service.Test.PasswordMTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c4a42db8_002D8894_002D4873_002Db259_002Da4efd840621d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="PasswordMTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::524475FF-8829-40CA-83E0-436891584683::net8.0::Service.Test.PasswordMTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
