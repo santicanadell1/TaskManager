@@ -1,0 +1,132 @@
+﻿/* General Page Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Light gray background */
+    margin: 0;
+    padding: 0;
+}
+
+h3.login-title {
+    text-align: center;
+    color: #343a40; /* Dark gray */
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Form styles */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #fff; /* White background for the form */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Input field styles */
+input[type="text"],
+input[type="password"],
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #0056b3; /* Blue border focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle glow effect */
+}
+
+/* Submit button */
+button[type="submit"] {
+    background-color: #007bff; /* Bootstrap primary blue */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Register link section */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Error message styles */
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    border-radius: 5px;
+    padding: 0.8rem;
+}
+
+/* Password input and eye button wrapper */
+.input-password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Custom input styles for the password field */
+.input-password-wrapper .form-control {
+    padding-right: 40px; /* Reserve space for the eye button */
+}
+
+/* Styling for the eye toggle button inside the password field */
+.btn-eye {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: #6c757d; /* Gray icon color */
+    font-size: 1.2rem; /* Larger icon for better visibility */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Hover effect for the toggle button */
+.btn-eye:focus,
+.btn-eye:hover {
+    color: #000; /* Change to black on hover */
+}
+
+/* Align the eye button vertically in very small input fields */
+.input-password-wrapper .btn-eye {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Form group spacing */
+.form-group {
+    margin-bottom: 1.5rem; /* Space between fields */
+}
+
+/* Links and registration section */
+.form-group a {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}

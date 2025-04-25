@@ -1,0 +1,196 @@
+﻿/* Full Page Center for the Layout */
+.full-page-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px; /* Add padding around the page */
+    box-sizing: border-box;
+    background-color: #f4f6f9; /* Light background color */
+}
+
+/* Wrapper for both the image and form */
+.card-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    width: 100%;
+    max-width: 900px; /* Max width to prevent stretching */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-radius: 12px; /* Smooth rounded corners for the wrapper */
+    background-color: #ffffff;
+}
+
+/* Image container */
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px; /* Space between image and form */
+    width: 220px;
+}
+
+/* Adjust the logo image size */
+.logo-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 160px; /* Limit image height */
+    border-radius: 8px;
+}
+
+/* Form container */
+.login-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Card styles for the form */
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    width: 400px; /* Fixed width for form */
+    margin-left: 20px; /* Space between image and form */
+    flex-grow: 1;
+}
+
+/* Title for Login */
+.login-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Input fields styling */
+.form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 16px;
+    width: 100%;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 15px;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.35);
+    outline: none;
+}
+
+/* Password visibility toggle */
+.input-password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-password-wrapper input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.btn-eye {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #7f8c8d;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-eye:hover {
+    color: #3498db;
+    transform: scale(1.1);
+}
+
+.btn-eye:focus {
+    outline: none;
+}
+
+/* Submit Button */
+button.btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    background-color: #3498db;
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+button.btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
+}
+
+button.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(41, 128, 185, 0.4);
+}
+
+/* Links */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* Error Message */
+.alert-danger {
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #ff6b6b;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border-left: 4px solid #e74c3c;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .card-wrapper {
+        flex-direction: column; /* Stack image and form vertically */
+        align-items: center;
+    }
+
+    .image-container {
+        margin-bottom: 20px; /* Add space below image when stacked */
+    }
+
+    .card {
+        width: 90%; /* Make form take more width in small screens */
+        margin-left: 0;
+    }
+
+    .logo-image {
+        max-height: 120px; /* Smaller logo on small screens */
+    }
+}

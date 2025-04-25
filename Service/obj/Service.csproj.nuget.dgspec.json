@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\Service.csproj": {}
+    "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Service\\Service.csproj": {}
   },
   "projects": {
-    "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\Service.csproj": {
+    "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Service\\Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\Service.csproj",
+        "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Service\\Service.csproj",
         "projectName": "Service",
-        "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\Service.csproj",
+        "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Service\\Service.csproj",
         "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-        "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\Service\\obj\\",
+        "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Service\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -58,7 +60,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\SALCHIPAPA\\.dotnet\\sdk\\8.0.406/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
