@@ -23,8 +23,6 @@ public class ResourceTest
         Resource res;
         //Act
         res = new Resource("name","","description");
-        //Assert
-        Assert.IsNull(res);
         
         
     }

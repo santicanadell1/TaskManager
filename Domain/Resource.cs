@@ -10,7 +10,9 @@ public class Resource
     public string Name {get => name;
                         set {name = string.IsNullOrEmpty(value) ? throw new ArgumentException("the resource name can not be empty"): value; }
     }
-    public string Type {get ; set; }
+    public string Type {get => type ;
+        set { type = string.IsNullOrEmpty(value) ? throw new ArgumentException("the resource type can not be empty"): value; }
+    }
     public string Description {get; set;}
 
     
