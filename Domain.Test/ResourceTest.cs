@@ -53,9 +53,10 @@ public class ResourceTest
         // Act
         res.Name = "New Name";
 
-        // Assert 
-        Assert.AreEqual("Wrong Name", res.Name);
+        // Assert
+        Assert.AreEqual("New Name", res.Name);
     }
+
 
     
 }
