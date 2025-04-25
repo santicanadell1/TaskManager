@@ -44,4 +44,18 @@ public class ResourceTest
         Assert.AreEqual(description, res.Description);
     }
     
+    [TestMethod]
+    public void UpdateResourceName_ShouldChangeNameSuccessfully()
+    {
+        // Arrange
+        var res = new Resource("Old Name", "Humano", "Some description");
+
+        // Act
+        res.Name = "New Name";
+
+        // Assert 
+        Assert.AreEqual("Wrong Name", res.Name);
+    }
+
+    
 }
