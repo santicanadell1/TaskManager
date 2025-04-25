@@ -3,6 +3,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fd6acb48_002D9de9_002D48a5_002Da5bf_002D86655c35c680/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NewResource_WhenNameIsEmpty_ThenThrowException" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;MSTest::CA3A818C-362F-4F7F-B2F9-972E0CAF5127::net8.0::Domain.Test.ResourceTest.NewResource_WhenNameIsEmpty_ThenThrowException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::CA3A818C-362F-4F7F-B2F9-972E0CAF5127::net8.0::Domain.Test.ResourceTest.NewResource_WhenTypeIsEmpty_ThenThrowException&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
