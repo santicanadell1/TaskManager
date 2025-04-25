@@ -38,10 +38,10 @@ public class ResourceTest
         // Act
         var res = new Resource(name, type, description);
 
-        // Assert (forzamos un fallo esperando otro valor)
-        Assert.AreEqual("OtherName", res.Name);
+        // Assert
+        Assert.AreEqual(name, res.Name);
+        Assert.AreEqual(type, res.Type);
+        Assert.AreEqual(description, res.Description);
     }
-
-    
     
 }
