@@ -77,25 +77,25 @@ public class ProjectTest
         // Assert
         CollectionAssert.AreEqual(expectedTasks, actualTasks); 
     }
-    
+
     [TestMethod]
     public void GivenProject_WhenAdminProjectIsSet_ThenAdminProjectShouldBeCorrect()
     {
         // Arrange
         var project = new Project();
         var adminUser = new User();
-        adminUser.AddRol(Rol.AdminProject);
+    
+        adminUser.Roles = new List<Rol>(); 
+    
+        adminUser.AddRol(Rol.AdminProject);  
 
         // Act
-        project.AdminProject = adminUser;  
-        var actualAdminProject = project.AdminProject;  
+        project.AdminProject = adminUser;
+        var actualAdminProject = project.AdminProject;
 
         // Assert
-        Assert.AreEqual(adminUser.Name, actualAdminProject.Name);  
-        Assert.AreEqual(adminUser.Role, actualAdminProject.Role);  
+        Assert.IsTrue(actualAdminProject.Roles.Contains(Rol.AdminProject)); 
     }
 
-    
-    
     
 }
