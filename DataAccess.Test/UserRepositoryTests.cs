@@ -22,9 +22,9 @@ public class UserRepositoryTests
         UserRepository userRepository = new UserRepository();
         User user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Parse("20/12/12"), "Password");
         // Act
-        userRepository.addUser(user);
+        userRepository.AddUser(user);
         // Assert
-        userRepository.getAll.contains(user);
+        userRepository.GetAll().Contains(user);
     }
     
 }

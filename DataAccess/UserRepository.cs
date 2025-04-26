@@ -9,4 +9,12 @@ public class UserRepository
     {
         _users = new List<User>();
     }
+    public List<User> GetAll()
+    {
+        return _users;
+    }
+    public void AddUser(User user)
+    {
+        _users.Add(user);
+    }
 }
