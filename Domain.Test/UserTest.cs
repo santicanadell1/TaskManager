@@ -86,4 +86,68 @@ public class UserTest
         //act
         user = new User("First Name", "Last Name", "Email@email.com", birthday, "");
     }
+    
+    [TestMethod]
+    public void AddRol_WhenRoleIsAdded_ThenRoleIsInList()
+    {
+        // Arrange
+        var roles = new List<Rol> { Rol.AdminSystem };
+        User user;
+        DateTime birthday = DateTime.Parse("10/05/2005");
+        user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
+
+        // Act
+        user.Roles = roles;
+        user.AddRol(Rol.ProjectMember);
+
+        // Assert
+        Assert.AreEqual(2, user.Roles.Count);
+        Assert.IsTrue(user.Roles.Contains(Rol.ProjectMember));
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void AddRol_WhenRoleAlreadyExists_ThenThrowInvalidOperationException()
+    {
+        // Arrange
+        var roles = new List<Rol> { Rol.AdminSystem };
+        User user;
+        DateTime birthday = DateTime.Parse("10/05/2005");
+        user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
+
+        // Act
+        user.Roles = roles;
+        user.AddRol(Rol.AdminSystem); 
+
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void RemoveRol_WhenRoleDoesNotExist_ThenThrowInvalidOperationException()
+    {
+        // Arrange: 
+        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject};
+        User user;
+        DateTime birthday = DateTime.Parse("10/05/2005");
+        user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
+        
+        // Act: 
+        user.Roles = roles;
+        user.RemoveRol(Rol.AdminProject);
+        user.RemoveRol(Rol.ProjectMember);
+
+    }
+    
+    [TestMethod]
+    public void User_WhenInitializedWithEmptyConstructor_ThenPropertiesAreInitializedWithDefaultValues()
+    {
+        // Arrange
+        User user;
+
+        // Act
+        user = new User();
+        
+    }
+    
+    
 }
