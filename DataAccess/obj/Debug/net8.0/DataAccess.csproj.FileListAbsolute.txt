@@ -10,3 +10,7 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess\obj\Debug\
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess\obj\Debug\net8.0\refint\DataAccess.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess\obj\Debug\net8.0\DataAccess.pdb
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess\obj\Debug\net8.0\ref\DataAccess.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess\bin\Debug\net8.0\Domain.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess\bin\Debug\net8.0\Domain.pdb
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess\obj\Debug\net8.0\DataAccess.csproj.AssemblyReference.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess\obj\Debug\net8.0\DataAccess.csproj.Up2Date
