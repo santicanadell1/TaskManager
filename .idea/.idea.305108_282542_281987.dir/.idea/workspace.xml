@@ -10,7 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c5b2b86-f0c8-46e1-9135-805a24273fe7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Domain.Test/UserTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain.Test/UserTest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Domain/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/User.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -97,7 +96,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1745678200119</updated>
-      <workItem from="1745678201662" duration="1075000" />
+      <workItem from="1745678201662" duration="1120000" />
     </task>
     <servers />
   </component>
