@@ -9,7 +9,7 @@ public class User
     private string email;
     private DateTime birthday;
     private string password;
-    
+    private List<Rol> roles;
     public string FirstName
     {
         get => firstName;
@@ -51,13 +51,19 @@ public class User
         }
     }
 
-    private string Password
+    public string Password
     {
         get => password;
         set
         {
             password = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Password can not be empty") : value;
         }
+    }
+    
+    public List<Rol> Roles
+    {
+        get => roles;
+        set => roles = value ?? throw new ArgumentNullException(nameof(value), "Roles cannot be null");
     }
 
     public User(string firstName, string lastName, string email, DateTime birthday, string password)
@@ -73,5 +79,25 @@ public class User
     {
         string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
         return Regex.IsMatch(email, emailPattern);
+    }
+    
+    public void AddRol(Rol rol)
+    {
+        if (roles.Contains(rol))
+        {
+            throw new InvalidOperationException($"Role '{rol}' already exists for this user.");
+        }
+
+        roles.Add(rol);
+    }
+
+    public void RemoveRol(Rol rol)
+    {
+        if (!roles.Contains(rol))
+        {
+            throw new InvalidOperationException($"Role '{rol}' does not exist for this user.");
+        }
+
+        roles.Remove(rol);
     }
 }
