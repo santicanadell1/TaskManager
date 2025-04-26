@@ -32,7 +32,18 @@ public class Project
             description = value;
         }
     }
-    public DateTime StartDate{get;set;}
+    public DateTime StartDate
+    {
+        get => startDate;
+        set
+        {
+            if (value == default(DateTime)) 
+            {
+                throw new ArgumentException("Project start date cannot be the default value.");
+            }
+            startDate = value;
+        }
+    }
     public List<User> Members{get;set;}
     public List<Task> Tasks{get;set;}
     public User AdminProject{get;set;}

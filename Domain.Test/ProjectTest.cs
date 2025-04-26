@@ -120,15 +120,17 @@ public class ProjectTest
     }
     
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public void GivenProject_WhenAdminProjectIsNull_ThenArgumentNullExceptionShouldBeThrown()
+    [ExpectedException(typeof(ArgumentException))]
+    public void GivenProject_WhenStartDateIsDefault_ThenArgumentExceptionShouldBeThrown()
     {
         // Arrange
         var project = new Project();
     
         // Act
-        project.AdminProject = null; 
+        project.StartDate = default(DateTime);  
     }
+    
+  
 
     
 
