@@ -52,7 +52,18 @@ public class Task
     public DateTime ExpectedEndDate { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public int Duration { get; set; }
+    public int Duration
+    {
+        get => duration;
+        set
+        {
+            if (value <= 0)
+            {
+                throw new ArgumentException("Duration cannot be zero or negative");
+            }
+            duration = value;
+        }
+    }
     public List<Task> PreviousTasks { get; set; }
     public State State { get; set; }
 
