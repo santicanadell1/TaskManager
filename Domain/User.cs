@@ -51,7 +51,7 @@ public class User
         }
     }
 
-    private string Password
+    public string Password
     {
         get => password;
         set
