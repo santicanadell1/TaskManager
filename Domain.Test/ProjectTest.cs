@@ -62,6 +62,21 @@ public class ProjectTest
         // Assert
         CollectionAssert.AreEqual(expectedMembers, actualMembers);
     }
+    
+    [TestMethod]
+    public void GivenTaskList_WhenTasksAreAdded_ThenTaskListShouldContainCorrectTasks()
+    {
+        // Arrange
+        var project = new Project();
+        var expectedTasks = new List<Task>();
+
+        // Act
+        project.Tasks = expectedTasks; 
+        var actualTasks = project.Tasks; 
+
+        // Assert
+        CollectionAssert.AreEqual(expectedTasks, actualTasks); 
+    }
 
     
     
