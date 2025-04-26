@@ -1,0 +1,116 @@
+﻿@page "/resources/manage"
+@rendermode InteractiveServer
+<h3>Manage Resources</h3>
+
+<p>Click on a resource to edit or delete:</p>
+
+<!-- List of Resources -->
+<div>
+    @foreach (var resource in resourcesList)
+    {
+        <div class="resource-item d-flex justify-content-between align-items-center">
+            <span>@resource.Name (@resource.Type)</span>
+            <div>
+                <button class="btn btn-warning btn-sm" @onclick="() => EditResource(resource)">Edit</button>
+                <button class="btn btn-danger btn-sm" @onclick="() => DeleteResource(resource.Id)">Delete</button>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Edit Resource Modal -->
+@if (showEditModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="editResourceModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Resource</h5>
+                    <button type="button" class="btn-close" @onclick="CloseEditModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@editingResource" OnValidSubmit="HandleEditSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="mb-3">
+                            <label for="resourceName" class="form-label">Name</label>
+                            <InputText id="resourceName" class="form-control" @bind-Value="editingResource.Name" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="resourceType" class="form-label">Type</label>
+                            <InputText id="resourceType" class="form-control" @bind-Value="editingResource.Type" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="resourceDescription" class="form-label">Description</label>
+                            <InputTextArea id="resourceDescription" class="form-control" @bind-Value="editingResource.Description" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Resource> resourcesList = new List<Resource>
+    {
+        new Resource { Id = 1, Name = "AWS Server 1", Type = "Infrastructure", Description = "A powerful AWS server." },
+        new Resource { Id = 2, Name = "Senior Analyst", Type = "Human", Description = "An experienced senior analyst." },
+        new Resource { Id = 3, Name = "Software License X", Type = "Software", Description = "License for Software X." }
+    };
+
+    private Resource editingResource;
+    private bool showEditModal = false;
+
+    // Open the modal with the selected resource's data
+    private void EditResource(Resource resource)
+    {
+        editingResource = new Resource { Id = resource.Id, Name = resource.Name, Type = resource.Type, Description = resource.Description };
+        showEditModal = true;
+    }
+
+    // Handle the form submission for editing a resource
+    private void HandleEditSubmit()
+    {
+        var resource = resourcesList.FirstOrDefault(r => r.Id == editingResource.Id);
+        if (resource != null)
+        {
+            resource.Name = editingResource.Name;
+            resource.Type = editingResource.Type;
+            resource.Description = editingResource.Description;
+            Console.WriteLine($"Resource Updated: {resource.Name}");
+        }
+        CloseEditModal();
+    }
+
+    // Delete a resource by ID
+    private void DeleteResource(int id)
+    {
+        var resourceToDelete = resourcesList.FirstOrDefault(r => r.Id == id);
+        if (resourceToDelete != null)
+        {
+            resourcesList.Remove(resourceToDelete);
+            Console.WriteLine($"Resource Deleted: {resourceToDelete.Name}");
+        }
+    }
+
+    // Close the edit modal
+    private void CloseEditModal()
+    {
+        showEditModal = false;
+        editingResource = null;
+    }
+
+    public class Resource
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string Description { get; set; }
+    }
+}
