@@ -118,6 +118,17 @@ public class ProjectTest
         // Act
         project.Description = "";  
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void GivenProject_WhenAdminProjectIsNull_ThenArgumentNullExceptionShouldBeThrown()
+    {
+        // Arrange
+        var project = new Project();
+    
+        // Act
+        project.AdminProject = null; 
+    }
 
     
 
