@@ -18,6 +18,7 @@ public class Notification
             }
         }
     }
+    
 
     public Notification(bool read, string description)
     {

@@ -16,5 +16,21 @@ public class NotificationTest
         //Act
         not = new Notification(false, "");
     }
+    
+    
+    [TestMethod]
+    public void MarkRead_ShouldSetReadToTrue()
+    {
+        // Arrange
+        Notification not;
+        not = new Notification(false, "Some description");
+    
+        // Act
+        not.MarkRead();
+    
+        // Assert
+        Assert.IsTrue(not.Read);
+    }
+
 }
  
