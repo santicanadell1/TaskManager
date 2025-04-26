@@ -46,6 +46,22 @@ public class ProjectTest
         // Assert
         Assert.AreEqual(expectedStartDate, actualStartDate);
     }
+    
+    
+    [TestMethod]
+    public void GivenProject_WhenMembersAreSet_ThenMembersShouldBeCorrect()
+    {
+        // Arrange
+        var project = new Project();
+        var expectedMembers = new List<User>();
+            
+        // Act
+        project.Members = expectedMembers;
+        List<User> actualMembers = project.Members;
+
+        // Assert
+        CollectionAssert.AreEqual(expectedMembers, actualMembers);
+    }
 
     
     
