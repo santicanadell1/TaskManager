@@ -31,6 +31,21 @@ public class ProjectTest
         // Assert
         Assert.AreEqual(expectedDescription, actualDescription);
     }
+    
+    [TestMethod]
+    public void GivenProject_WhenStartDateIsSet_ThenStartDateShouldBeCorrect()
+    {
+        // Arrange
+        var project = new Project();
+        DateTime expectedStartDate = new DateTime(2025, 5, 1);
+            
+        // Act
+        project.StartDate = expectedStartDate;
+        DateTime actualStartDate = project.StartDate;
+
+        // Assert
+        Assert.AreEqual(expectedStartDate, actualStartDate);
+    }
 
     
     
