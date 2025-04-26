@@ -16,9 +16,15 @@ public class Notification
             {
                 throw new ArgumentException("Description cannot be null or empty.");
             }
+            description = value; 
         }
+
     }
-    
+
+    public void MarkRead()
+    {
+        read = true;
+    }
 
     public Notification(bool read, string description)
     {
