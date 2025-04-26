@@ -29,7 +29,6 @@ public class UserRepository
         {
             throw new ArgumentException("User not found");
         }
-        _users.RemoveAt(index);
         _users[index] = user;
     }
 
