@@ -108,7 +108,17 @@ public class ProjectTest
         project.Name = null; 
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void GivenProject_WhenDescriptionIsEmpty_ThenArgumentExceptionShouldBeThrown()
+    {
+        // Arrange
+        var project = new Project();
     
+        // Act
+        project.Description = "";  
+    }
+
     
 
     
