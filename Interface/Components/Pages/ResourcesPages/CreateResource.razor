@@ -1,0 +1,50 @@
+﻿@page "/resources/create"
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+<h3>Create Resource</h3>
+
+<EditForm Model="@newResource" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <!-- Resource Name Field -->
+    <div class="mb-3">
+        <label for="resourceName" class="form-label">Name</label>
+        <InputText id="resourceName" class="form-control" @bind-Value="newResource.Name" required />
+    </div>
+
+    <!-- Resource Type Field (Input Text) -->
+    <div class="mb-3">
+        <label for="resourceType" class="form-label">Type</label>
+        <InputText id="resourceType" class="form-control" @bind-Value="newResource.Type" required />
+    </div>
+
+    <!-- Resource Description Field -->
+    <div class="mb-3">
+        <label for="resourceDescription" class="form-label">Description</label>
+        <InputTextArea id="resourceDescription" class="form-control" @bind-Value="newResource.Description" />
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Create Resource</button>
+</EditForm>
+
+@code {
+    private Resource newResource = new Resource();
+
+    private void HandleValidSubmit()
+    {
+        // Logic to handle saving resource data (e.g., save to a database or backend service)
+        Console.WriteLine($"Resource Created: {newResource.Name} ({newResource.Type})");
+
+        // Redirect after successful creation
+        Navigation.NavigateTo("/resources");
+    }
+
+    public class Resource
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string Description { get; set; }
+    }
+}
