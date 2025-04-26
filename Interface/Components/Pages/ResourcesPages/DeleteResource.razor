@@ -1,0 +1,48 @@
+﻿@page "/resources/delete"
+@inject NavigationManager Navigation
+
+<h3>Delete Resource</h3>
+
+<p>Select a resource to delete:</p>
+
+<div class="mb-3">
+    <select class="form-control" @bind="selectedResourceId">
+        <option value="">-- Select Resource to Delete --</option>
+        @foreach (var resource in resourcesList)
+        {
+            <option value="@resource.Id">@resource.Name</option>
+        }
+    </select>
+</div>
+
+<button type="button" class="btn btn-danger" @onclick="DeleteResources" disabled="@(!selectedResourceId.HasValue)">
+    Delete Resource
+</button>
+
+@code {
+    private int? selectedResourceId;
+    private List<Resource> resourcesList = new List<Resource>
+    {
+        new Resource { Id = 1, Name = "AWS Server 1" },
+        new Resource { Id = 2, Name = "Senior Analyst" },
+        new Resource { Id = 3, Name = "Software License X" }
+    };
+
+    private void DeleteResources()
+    {
+        var resourceToDelete = resourcesList.FirstOrDefault(r => r.Id == selectedResourceId);
+        if (resourceToDelete != null)
+        {
+            resourcesList.Remove(resourceToDelete);
+            Console.WriteLine($"Resource Deleted: {resourceToDelete.Name}");
+        }
+
+        selectedResourceId = null; // Reset the selection
+    }
+
+    public class Resource
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}
