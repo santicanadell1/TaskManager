@@ -1,3 +1,5 @@
+using Domain;
+
 [TestClass]
 public class LoginTests
 {
@@ -17,22 +19,23 @@ public class LoginTests
         // Arrange
         var email = "john.doe@example.com";
         var password = "Password123@";
+        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject};
 
         // Add a user to the repository for testing
         _userRepository.Add(new User
         {
             Email = email,
-            Name = "John",
+            FirstName = "John",
             LastName = "Doe",
             Password = password, // Correct password
-            Role = "Admin System"
+            Roles = roles
         });
 
         // Act
         _login.Login(email, password);
 
         // Assert
-        var loggedUser = LoggedUser.Current;
+        var loggedUser = _login.GetLoggedUser();
         Assert.IsNotNull(loggedUser);
         Assert.AreEqual("John", loggedUser.Name);
         Assert.AreEqual("Doe", loggedUser.LastName);
