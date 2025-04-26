@@ -63,6 +63,6 @@ public class TaskTests
         DateTime endDate = DateTime.Parse("2022-01-01");
         List<Task> previousTasks = new List<Task>();
         //Act
-        task = new Task("Title", "Description", startDate,  endDate ,-11, previousTasks);
+        task = new Task("Title", "Description", startDate,  endDate ,1, previousTasks);
     }
 }

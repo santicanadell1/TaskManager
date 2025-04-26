@@ -49,7 +49,18 @@ public class Task
         }
     }
     public DateTime ExpectedStartDate { get; set; }
-    public DateTime ExpectedEndDate { get; set; }
+    public DateTime ExpectedEndDate
+    {
+        get => expectedEndDate;
+        set
+        {
+            if (value < this.ExpectedStartDate)
+            {
+                throw new ArgumentException("Expected end date cannot be before expected start date");
+            }
+            expectedEndDate = value;
+        }
+    }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public int Duration
@@ -67,15 +78,4 @@ public class Task
     public List<Task> PreviousTasks { get; set; }
     public State State { get; set; }
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 }
