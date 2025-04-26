@@ -11,7 +11,7 @@ public class UserRepository
     }
     public List<User> GetAll()
     {
-        return _users;
+        return _users.ToList();
     }
     public void AddUser(User user)
     {
