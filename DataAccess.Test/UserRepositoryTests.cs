@@ -24,7 +24,21 @@ public class UserRepositoryTests
         // Act
         userRepository.AddUser(user);
         // Assert
-        userRepository.GetAll().Contains(user);
+        Assert.IsTrue(userRepository.GetAll().Contains(user));
     }
+    [TestMethod]
+    public void AddNewUser_WhenGettingAUser_ShouldReturnUser()
+    {
+        // Arrange
+        UserRepository userRepository = new UserRepository();
+        User user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Parse("20/12/12"), "Password");
+        User user2 = new User("First Name 2", "Last Name 2", "Email2@email.com", DateTime.Parse("20/12/12"), "Password");
+        userRepository.AddUser(user);
+        // Act
+        User user3 = userRepository.Get(u => u.email == "Email1@email.com");
+        // Assert
+        Assert.AreEqual(user, user3);
+    }
+    
     
 }
