@@ -24,7 +24,18 @@ public class Task
         this.PreviousTasks = previousTasks;
         this.State = State.TODO;
     }
-    public string Title { get; set; }
+    public string Title
+    {
+        get => title;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException("Title cannot be empty or white spaces");
+            }
+            title = value;
+        }
+    }
     public string Description { get; set; }
     public DateTime ExpectedStartDate { get; set; }
     public DateTime ExpectedEndDate { get; set; }
