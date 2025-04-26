@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("Service.Test")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("DataAccess")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91c01b8c8d7cffb38c0ec0f62e2361408f4f9a46")]
-[assembly: System.Reflection.AssemblyProductAttribute("Service.Test")]
-[assembly: System.Reflection.AssemblyTitleAttribute("Service.Test")]
+[assembly: System.Reflection.AssemblyProductAttribute("DataAccess")]
+[assembly: System.Reflection.AssemblyTitleAttribute("DataAccess")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Generado por la clase WriteCodeFragment de MSBuild.

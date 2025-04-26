@@ -13,11 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Interface")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c13ab80c3f850ae9c6b81aaa545289068f73497")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+983764d7cbeaad87dd31b86360d7dd3a05275e36")]
->>>>>>> feat/user-domain
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91c01b8c8d7cffb38c0ec0f62e2361408f4f9a46")]
 [assembly: System.Reflection.AssemblyProductAttribute("Interface")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Interface")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

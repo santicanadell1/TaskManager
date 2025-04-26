@@ -1,0 +1,6 @@
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess.Test\obj\Debug\net8.0\DataAccess.Test.csproj.AssemblyReference.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess.Test\obj\Debug\net8.0\DataAccess.Test.GeneratedMSBuildEditorConfig.editorconfig
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess.Test\obj\Debug\net8.0\DataAccess.Test.AssemblyInfoInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess.Test\obj\Debug\net8.0\DataAccess.Test.AssemblyInfo.cs
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess.Test\obj\Debug\net8.0\DataAccess.Test.csproj.CoreCompileInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\DataAccess.Test\obj\Debug\net8.0\DataAccess.Test.sourcelink.json
