@@ -121,5 +121,21 @@ public class UserTest
 
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void RemoveRol_WhenRoleDoesNotExist_ThenThrowInvalidOperationException()
+    {
+        // Arrange: 
+        var roles = new List<Rol> { Rol.AdminSystem };
+        User user;
+        DateTime birthday = DateTime.Parse("10/05/2005");
+        user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
+        
+        // Act: 
+        user.Roles = roles;
+        user.RemoveRol(Rol.ProjectMember);
+
+    }
+    
     
 }
