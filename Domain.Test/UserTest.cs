@@ -138,5 +138,16 @@ public class UserTest
 
     }
     
+    [TestMethod]
+    public void User_WhenInitializedWithEmptyConstructor_ThenPropertiesAreInitializedWithDefaultValues()
+    {
+        // Arrange
+        User user;
+
+        // Act
+        user = new User();
+        
+    }
+    
     
 }
