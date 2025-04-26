@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "b3pntG3s7sM=",
+  "dgSpecHash": "IVaieJbPOi0=",
   "success": true,
-  "projectFilePath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\ESTRUCTURA\\281987_282542_305108\\TaskTrackPro\\TaskTrackPro.csproj",
+  "projectFilePath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\TaskTrackPro\\TaskTrackPro.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\microsoft.codecoverage\\17.8.0\\microsoft.codecoverage.17.8.0.nupkg.sha512",
