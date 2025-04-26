@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Domain\\Domain.csproj",
+      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Domain\\Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Domain\\Domain.csproj",
+      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Domain\\Domain.csproj",
       "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Domain\\obj\\",
+      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Domain\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
