@@ -25,6 +25,7 @@ public class UserRepository
     public void Update(string email, User user)
     {
         int index = _users.FindIndex(u => u.Email == email);
+        
         _users[index] = user;
     }
 

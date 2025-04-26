@@ -54,6 +54,17 @@ public class UserRepositoryTests
         //Assert
         Assert.AreNotEqual(user, userRepository.Get(u => u.Email == "Email1@email.com"));
     }
-    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void updateAUser_WhenEmailIsNotFound_ThrowArgumentException()
+    {
+        //Arrange
+        UserRepository userRepository = new UserRepository();
+        User user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Parse("20/12/12"), "Password");
+        User user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Parse("20/12/12"), "Password");
+        userRepository.AddUser(user);
+        //Act
+        userRepository.Update("EmailDiferente@email.com",user2);
+    }
     
 }
