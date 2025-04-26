@@ -93,9 +93,11 @@ public class User
 
     public void RemoveRol(Rol rol)
     {
-        if (roles.Contains(rol))
+        if (!roles.Contains(rol))
         {
-            roles.Remove(rol); 
+            throw new InvalidOperationException($"Role '{rol}' does not exist for this user.");
         }
+
+        roles.Remove(rol);
     }
 }
