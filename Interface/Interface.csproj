@@ -7,7 +7,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Syncfusion.Blazor" Version="29.1.37" />
+        <PackageReference Include="Syncfusion.Blazor" Version="29.1.37"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="Components\Shared\styleLoginRegisteaar.css">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <DependentUpon>LoginLayout.razor</DependentUpon>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="wwwroot\styles\styleLoginRegister.css"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="wwwroot\styles\styleResourceCreate.css" />
     </ItemGroup>
 
 </Project>
