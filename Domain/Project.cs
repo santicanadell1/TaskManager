@@ -19,7 +19,19 @@ public class Project
             }
             name = value;
         }
-    }    public string Description{get;set;}
+    }    
+    public string Description
+    {
+        get => description;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))  
+            {
+                throw new ArgumentException("Project description cannot be null, empty, or whitespace.");
+            }
+            description = value;
+        }
+    }
     public DateTime StartDate{get;set;}
     public List<User> Members{get;set;}
     public List<Task> Tasks{get;set;}
