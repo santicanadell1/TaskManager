@@ -1,7 +1,0 @@
-﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=505da00d_002D679a_002D4ed1_002D8016_002Dc664204a78b6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AddRol_WhenRoleIsAdded_ThenRoleIsInList #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;MSTest::CA3A818C-362F-4F7F-B2F9-972E0CAF5127::net8.0::Domain.Test.UserTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::46EAE27A-5A23-4B26-95DE-54E27FECB425::net8.0::DataAccess.Test.UserRepositoryTest.Add_WhenAddIsInvokedWithAnEmptyUser_ThenThrowException&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
