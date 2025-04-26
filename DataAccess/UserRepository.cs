@@ -17,4 +17,9 @@ public class UserRepository
     {
         _users.Add(user);
     }
+    public User? Get(Func<User, bool> filter)
+    {
+        return _users.FirstOrDefault(filter);
+    }
+
 }

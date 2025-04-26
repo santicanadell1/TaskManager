@@ -35,7 +35,7 @@ public class UserRepositoryTests
         User user2 = new User("First Name 2", "Last Name 2", "Email2@email.com", DateTime.Parse("20/12/12"), "Password");
         userRepository.AddUser(user);
         // Act
-        User user3 = userRepository.Get(u => u.email == "Email1@email.com");
+        User user3 = userRepository.Get(u => u.Email == "Email1@email.com");
         // Assert
         Assert.AreEqual(user, user3);
     }
