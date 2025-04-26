@@ -17,4 +17,22 @@ public class ProjectTest
         Assert.AreEqual(expectedName, actualName);
     }
     
+    [TestMethod]
+    public void GivenProject_WhenDescriptionIsSet_ThenDescriptionShouldBeCorrect()
+    {
+        // Arrange
+        var project = new Project();
+        string expectedDescription = "This is a test project";
+            
+        // Act
+        project.Description = expectedDescription;
+        string actualDescription = project.Description;
+
+        // Assert
+        Assert.AreEqual(expectedDescription, actualDescription);
+    }
+
+    
+    
+    
 }
