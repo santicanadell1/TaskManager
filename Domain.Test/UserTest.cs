@@ -86,4 +86,23 @@ public class UserTest
         //act
         user = new User("First Name", "Last Name", "Email@email.com", birthday, "");
     }
+    
+    [TestMethod]
+    public void AddRol_WhenRoleIsAdded_ThenRoleIsInList()
+    {
+        // Arrange
+        var roles = new List<Rol> { Rol.AdminSystem };
+        User user;
+        DateTime birthday = DateTime.Parse("10/05/2005");
+        user = new User("First Name", "Last Name", "email@email.com", birthday, "Password", roles);
+
+        // Act
+        user.AddRol(Rol.ProjectMember);
+
+        // Assert
+        Assert.AreEqual(2, user.Roles.Count);
+        Assert.IsTrue(user.Roles.Contains(Rol.ProjectMember));
+    }
+    
+    
 }

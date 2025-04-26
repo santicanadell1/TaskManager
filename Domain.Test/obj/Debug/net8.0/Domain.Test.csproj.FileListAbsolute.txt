@@ -113,3 +113,13 @@ C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.pdb
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.genruntimeconfig.cache
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Domain.Test\obj\Debug\net8.0\ref\Domain.Test.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\bin\Debug\net8.0\CoverletSourceRootsMapping_Domain.Test
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.csproj.AssemblyReference.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.GeneratedMSBuildEditorConfig.editorconfig
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.AssemblyInfoInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.AssemblyInfo.cs
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.csproj.CoreCompileInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.sourcelink.json
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\refint\Domain.Test.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Domain.Test\obj\Debug\net8.0\Domain.Test.pdb
