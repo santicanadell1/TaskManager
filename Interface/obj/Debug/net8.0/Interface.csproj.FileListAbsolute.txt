@@ -46,6 +46,7 @@ D:\all data\OneDrive\OneDrive\Desktop\ESTRUCTURA\281987_282542_305108\Interface\
 D:\all data\OneDrive\OneDrive\Desktop\ESTRUCTURA\281987_282542_305108\Interface\bin\Debug\net8.0\Syncfusion.XlsIO.Portable.dll
 D:\all data\OneDrive\OneDrive\Desktop\ESTRUCTURA\281987_282542_305108\Interface\obj\Debug\net8.0\Interface.csproj.AssemblyReference.cache
 D:\all data\OneDrive\OneDrive\Desktop\ESTRUCTURA\281987_282542_305108\Interface\obj\Debug\net8.0\Interface.csproj.Up2Date
+<<<<<<< HEAD
 D:\facultad\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\Semestre_5\DA1\305108_282542_281987\Interface\bin\Debug\net8.0\appsettings.Development.json
 D:\facultad\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\Semestre_5\DA1\305108_282542_281987\Interface\bin\Debug\net8.0\appsettings.json
 D:\facultad\OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay\Semestre_5\DA1\305108_282542_281987\Interface\bin\Debug\net8.0\Interface.staticwebassets.runtime.json
@@ -108,6 +109,8 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\n
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\refint\Interface.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.pdb
+=======
+>>>>>>> feat/user-domain
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\appsettings.Development.json
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\appsettings.json
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Interface.staticwebassets.runtime.json
@@ -133,6 +136,17 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\n
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Syncfusion.Licensing.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Syncfusion.PdfExport.Net.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\Syncfusion.XlsIO.Portable.dll
+<<<<<<< HEAD
+=======
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\System.Text.Json.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.csproj.AssemblyReference.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.GeneratedMSBuildEditorConfig.editorconfig
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.AssemblyInfoInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.AssemblyInfo.cs
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.csproj.CoreCompileInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.MvcApplicationPartsAssemblyInfo.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.sourcelink.json
+>>>>>>> feat/user-domain
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\staticwebassets.build.json
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\staticwebassets.development.json
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\staticwebassets\msbuild.Interface.Microsoft.AspNetCore.StaticWebAssets.props
@@ -145,6 +159,14 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\n
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\scopedcss\bundle\Interface.styles.css
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\scopedcss\projectbundle\Interface.bundle.scp.css
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.csproj.Up2Date
+<<<<<<< HEAD
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.genruntimeconfig.cache
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\ref\Interface.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\bin\Debug\net8.0\System.Text.Json.dll
+=======
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\refint\Interface.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.pdb
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\Interface.genruntimeconfig.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Interface\obj\Debug\net8.0\ref\Interface.dll
+>>>>>>> feat/user-domain

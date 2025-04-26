@@ -1,6 +1,10 @@
 {
   "Version": 1,
+<<<<<<< HEAD
   "Hash": "aKCZ2UBsvzJBVnkEVWe+aVMhYoYApLc0zlXWPHZgovs=",
+=======
+  "Hash": "bN5Gfw4jRsgjruT9OYUqENV1Ad5lidgwVmfRL4fn9Os=",
+>>>>>>> feat/user-domain
   "Source": "Interface",
   "BasePath": "_content/Interface",
   "Mode": "Default",
@@ -2658,10 +2662,36 @@
       "OriginalItemSpec": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Interface.bundle.scp.css"
     },
     {
+<<<<<<< HEAD
       "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css",
       "SourceId": "Interface",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+=======
+      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\app.css",
+      "SourceId": "Interface",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+      "BasePath": "_content/Interface",
+      "RelativePath": "app.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\app.css"
+    },
+    {
+      "Identity": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "SourceId": "Interface",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\Interface\\wwwroot\\",
+>>>>>>> feat/user-domain
       "BasePath": "_content/Interface",
       "RelativePath": "bootstrap/bootstrap.min.css",
       "AssetKind": "All",

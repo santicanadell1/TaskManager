@@ -10,16 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("Interface")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Service.Test")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c13ab80c3f850ae9c6b81aaa545289068f73497")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+983764d7cbeaad87dd31b86360d7dd3a05275e36")]
->>>>>>> feat/user-domain
-[assembly: System.Reflection.AssemblyProductAttribute("Interface")]
-[assembly: System.Reflection.AssemblyTitleAttribute("Interface")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4e4259e57f2ad886c24d848c95ba0e72d369d0a4")]
+[assembly: System.Reflection.AssemblyProductAttribute("Service.Test")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Service.Test")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Generado por la clase WriteCodeFragment de MSBuild.
