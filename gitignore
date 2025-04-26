@@ -219,6 +219,9 @@ orleans.codegen.cs
 **/obj/Debug/net8.0/*.nuget.info
 **/obj/rider.project.model.nuget.info
 **/obj/rider.project.restore.info
+Interface/obj/Debug/net8.0/Interface.AssemblyInfo.cs
+Interface/obj/Debug/net8.0/Interface.AssemblyInfoInputs.cache
+
 
 
 # Since there are multiple workflows, uncomment next line to ignore bower_components
