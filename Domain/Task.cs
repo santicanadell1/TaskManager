@@ -36,7 +36,18 @@ public class Task
             title = value;
         }
     }
-    public string Description { get; set; }
+    public string Description
+    {
+        get => description;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException("Description cannot be empty or white spaces");
+            }
+            description = value;
+        }
+    }
     public DateTime ExpectedStartDate { get; set; }
     public DateTime ExpectedEndDate { get; set; }
     public DateTime StartDate { get; set; }
