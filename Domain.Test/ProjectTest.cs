@@ -69,7 +69,7 @@ public class ProjectTest
         // Arrange
         var project = new Project();
         var expectedTasks = new List<Task>();
-
+        
         // Act
         project.Tasks = expectedTasks; 
         var actualTasks = project.Tasks; 
