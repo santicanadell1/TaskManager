@@ -29,7 +29,18 @@ public class UserRepository
         {
             throw new ArgumentException("User not found");
         }
+        _users.RemoveAt(index);
         _users[index] = user;
+    }
+
+    public void Delete(string email)
+    {
+        int index = _users.FindIndex(u => u.Email == email);
+        if (index == -1)
+        {
+            throw new ArgumentException("User not found");
+        }
+        _users.RemoveAt(index);
     }
 
 }
