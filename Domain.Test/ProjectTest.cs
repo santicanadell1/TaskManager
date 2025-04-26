@@ -96,6 +96,20 @@ public class ProjectTest
         // Assert
         Assert.IsTrue(actualAdminProject.Roles.Contains(Rol.AdminProject)); 
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void GivenProject_WhenNameIsNull_ThenArgumentExceptionShouldBeThrown()
+    {
+        // Arrange
+        var project = new Project();
+    
+        // Act
+        project.Name = null; 
+    }
+    
+    
+    
 
     
 }
