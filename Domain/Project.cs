@@ -6,9 +6,11 @@ public class Project
     public string description;
     public DateTime startDate;
     public List<User> members;
+    public List<Task> tasks;
     public string Name{get;set;}
     public string Description{get;set;}
     public DateTime StartDate{get;set;}
     public List<User> Members{get;set;}
+    public List<Task> Tasks{get;set;}
     public Project(){}
 }
