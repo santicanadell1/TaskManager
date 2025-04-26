@@ -53,4 +53,16 @@ public class TaskTests
         //Act
         task = new Task("Title", "Description", startDate,  endDate ,-11, previousTasks);
     }
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void NewTask_WhenExpectedEndDateIsBeforeExpectedStartDate_ThenThrowArgumentException()
+    {
+        //Arrange
+        Task task;
+        DateTime startDate = DateTime.Parse("2023-01-01");
+        DateTime endDate = DateTime.Parse("2022-01-01");
+        List<Task> previousTasks = new List<Task>();
+        //Act
+        task = new Task("Title", "Description", startDate,  endDate ,-11, previousTasks);
+    }
 }
