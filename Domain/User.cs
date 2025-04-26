@@ -83,10 +83,12 @@ public class User
     
     public void AddRol(Rol rol)
     {
-        if (!roles.Contains(rol))
+        if (roles.Contains(rol))
         {
-            roles.Add(rol); 
+            throw new InvalidOperationException($"Role '{rol}' already exists for this user.");
         }
+
+        roles.Add(rol);
     }
 
     public void RemoveRol(Rol rol)
