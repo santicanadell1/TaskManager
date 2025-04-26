@@ -4,12 +4,5 @@
   "success": true,
   "projectFilePath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
   "expectedPackageFiles": [],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\DataAccess\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }

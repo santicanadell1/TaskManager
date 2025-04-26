@@ -94,9 +94,10 @@ public class UserTest
         var roles = new List<Rol> { Rol.AdminSystem };
         User user;
         DateTime birthday = DateTime.Parse("10/05/2005");
-        user = new User("First Name", "Last Name", "email@email.com", birthday, "Password", roles);
+        user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
 
         // Act
+        user.Roles = roles;
         user.AddRol(Rol.ProjectMember);
 
         // Assert
