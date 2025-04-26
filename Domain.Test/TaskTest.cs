@@ -29,4 +29,16 @@ public class TaskTests
         //Act
         task = new Task("", "Description", startDate, endDate , 1, previousTasks);
     }
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void NewTask_WhenDescriptionIsEmptyOrWhiteSpaces_ThenThrowArgumentException()
+    {
+        //Arrange
+        Task task;
+        DateTime startDate = DateTime.Now;
+        DateTime endDate = DateTime.Today;
+        List<Task> previousTasks = new List<Task>();
+        //Act
+        task = new Task("Title", "", startDate,  endDate ,1, previousTasks);
+    }
 }
