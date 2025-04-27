@@ -78,4 +78,5 @@ public class LoginTests
         var loggedUserAfterLogout = _login.GetLoggedUser();
         Assert.IsNull(loggedUserAfterLogout);
     }
+    
 }

@@ -1,10 +1,11 @@
 ﻿using DataAccess;
 using Domain;
+using Service.Interfaces;
 using Service.Models;
 
 namespace Service;
 
-public class Login
+public class Login : ILogin
 {
     private readonly UserRepository _userRepository;
 
