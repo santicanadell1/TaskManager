@@ -12,5 +12,8 @@ public class UserDTO
     
     [Required(ErrorMessage = "Email is required.")]
     public string Email { get; set; }
+    
+    [Required(ErrorMessage = "Birthday is required.")]
+    public DateTime Birthday { get; set; }
 
 }
