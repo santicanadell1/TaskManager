@@ -14,4 +14,14 @@ public class UserDTOTest
         // act & assert
         Assert.IsNull(user.FirstName);
     }
+    
+    [TestMethod]
+    public void NewUser_WhenLastNameIsNull_ThenUserIsNotCreated()
+    {
+        // arrange
+        UserDTO user = new UserDTO { LastName = null };
+
+        // act & assert
+        Assert.IsNull(user.LastName);
+    }
 }
