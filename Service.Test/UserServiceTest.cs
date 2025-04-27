@@ -1,3 +1,8 @@
+using DataAccess;
+using Domain;
+using Service.Models;
+using DataAccess;
+
 namespace Service.Test;
 
 [TestClass]
@@ -13,7 +18,9 @@ public class UserServiceTest
         List<Rol> rols = new List<Rol>();
         rols.Add(Rol.ProjectMember);
         
-        UserService _userService = new UserService();
+        UserRepository userRepository = new UserRepository(new DataAccess.DataAccess());
+        
+        UserService _userService = new UserService(userRepository);
         
         var userDTO1 = new UserDTO
         {
