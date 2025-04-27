@@ -54,4 +54,18 @@ public class UserDTOTest
         // act & assert
         Assert.IsNull(user.Password);
     }
+    
+    [TestMethod]
+    public void NewUser_WhenRolesAreAssigned_ThenRolesAreSet()
+    {
+        // arrange
+        var roles = new List<Role> { Role.AdminSystem, Role.ProjectMember };
+        var user = new UserDTO { Roles = roles };
+
+        // act & assert
+        Assert.IsNotNull(user.Roles);
+        Assert.AreEqual(2, user.Roles.Count);
+        Assert.IsTrue(user.Roles.Contains(Role.AdminSystem));
+        Assert.IsTrue(user.Roles.Contains(Role.ProjectMember));
+    }
 }
