@@ -34,4 +34,14 @@ public class UserDTOTest
         // act & assert
         Assert.IsNull(user.Email);
     }
+    
+    [TestMethod]
+    public void NewUser_WhenBirthdayIsDefault_ThenUserIsNotCreated()
+    {
+        // arrange
+        UserDTO user = new UserDTO { Birthday = default(DateTime) };
+
+        // act & assert
+        Assert.AreEqual(default(DateTime), user.Birthday);
+    }
 }
