@@ -79,4 +79,3 @@ public class LoginTests
         Assert.IsNull(loggedUserAfterLogout);
     }
 }
-}

@@ -29,6 +29,11 @@ public class Login
         LoggedUser.Current = FromEntity(user);
     }
     
+    public void Logout()
+    {
+        LoggedUser.Current = null;
+    }
+    
     private static UserDTO FromEntity(User user)
     {
         return new UserDTO()
