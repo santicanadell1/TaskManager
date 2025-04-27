@@ -1,4 +1,6 @@
-﻿namespace Service;
+﻿using DataAccess;
+
+namespace Service;
 
 public class Login
 {

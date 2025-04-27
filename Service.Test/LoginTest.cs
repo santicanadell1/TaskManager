@@ -1,4 +1,6 @@
+using DataAccess;
 using Domain;
+using Interface.Components.Pages.LoginPages;
 
 [TestClass]
 public class LoginTests
