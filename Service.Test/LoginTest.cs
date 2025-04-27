@@ -1,6 +1,6 @@
 using DataAccess;
 using Domain;
-using Interface.Components.Pages.LoginPages;
+using Service;
 
 [TestClass]
 public class LoginTests
@@ -24,7 +24,7 @@ public class LoginTests
         var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject};
 
         // Add a user to the repository for testing
-        _userRepository.Add(new User
+        _userRepository.AddUser(new User
         {
             Email = email,
             FirstName = "John",
@@ -34,12 +34,12 @@ public class LoginTests
         });
 
         // Act
-        _login.Login(email, password);
+        _login.LoginUser(email, password);
 
         // Assert
         var loggedUser = _login.GetLoggedUser();
         Assert.IsNotNull(loggedUser);
-        Assert.AreEqual("John", loggedUser.Name);
+        Assert.AreEqual("John", loggedUser.FirstName);
         Assert.AreEqual("Doe", loggedUser.LastName);
         Assert.AreEqual("john.doe@example.com", loggedUser.Email);
     }
