@@ -1,3 +1,4 @@
+using Domain;
 using Service.Models;
 
 namespace Service.Test.ModelsTests;
@@ -59,13 +60,13 @@ public class UserDTOTest
     public void NewUser_WhenRolesAreAssigned_ThenRolesAreSet()
     {
         // arrange
-        var roles = new List<Role> { Role.AdminSystem, Role.ProjectMember };
+        var roles = new List<Rol> { Rol.AdminSystem, Rol.ProjectMember };
         var user = new UserDTO { Roles = roles };
 
         // act & assert
         Assert.IsNotNull(user.Roles);
         Assert.AreEqual(2, user.Roles.Count);
-        Assert.IsTrue(user.Roles.Contains(Role.AdminSystem));
-        Assert.IsTrue(user.Roles.Contains(Role.ProjectMember));
+        Assert.IsTrue(user.Roles.Contains(Rol.AdminSystem));
+        Assert.IsTrue(user.Roles.Contains(Rol.ProjectMember));
     }
 }

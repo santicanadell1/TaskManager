@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Domain;
 
 namespace Service.Models;
 
@@ -19,12 +20,7 @@ public class UserDTO
     [Required(ErrorMessage = "Password is required.")]
     public string Password { get; set; }
     
-    public List<Role> Roles { get; set; }
+    public List<Rol> Roles { get; set; }
 }
 
-public enum Role
-{
-    AdminSystem,
-    AdminProject,
-    ProjectMember
-}
+
