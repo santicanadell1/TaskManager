@@ -1,3 +1,5 @@
+using Service.Models;
+
 namespace Service.Test.ModelsTests;
 [TestClass]
 public class UserLoginDTOTest
