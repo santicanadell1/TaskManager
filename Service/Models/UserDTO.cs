@@ -9,4 +9,8 @@ public class UserDTO
 
     [Required(ErrorMessage = "LastName is required.")]
     public string LastName { get; set;}
+    
+    [Required(ErrorMessage = "Email is required.")]
+    public string Email { get; set; }
+
 }
