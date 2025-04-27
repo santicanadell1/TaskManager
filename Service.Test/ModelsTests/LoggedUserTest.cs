@@ -1,3 +1,5 @@
+using Service.Models;
+
 namespace Service.Test;
 [TestClass]
 public class LoggedUserTest
