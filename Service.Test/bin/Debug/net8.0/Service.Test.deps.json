@@ -11,7 +11,6 @@
           "MSTest.TestAdapter": "3.1.1",
           "MSTest.TestFramework": "3.1.1",
           "Microsoft.NET.Test.Sdk": "17.8.0",
-          "Service": "1.0.0",
           "coverlet.collector": "6.0.0",
           "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions": "14.0.0.0"
         },
@@ -348,11 +347,14 @@
         }
       },
       "System.Reflection.Metadata/1.6.0": {},
-      "Service/1.0.0": {
+<<<<<<< HEAD:Service.Test/bin/Debug/net8.0/Service.Test.deps.json
+=======
+      "Domain/1.0.0": {
         "runtime": {
-          "Service.dll": {}
+          "Domain.dll": {}
         }
       },
+>>>>>>> feat/user-domain:Domain.Test/bin/Debug/net8.0/Domain.Test.deps.json
       "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions/14.0.0.0": {
         "runtime": {
           "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll": {
@@ -438,11 +440,6 @@
       "sha512": "sha512-COC1aiAJjCoA5GBF+QKL2uLqEBew4JsCkQmoHKbN3TlOZKa2fKLz5CpiRQKDz0RsAOEGsVKqOD5bomsXq/4STQ==",
       "path": "system.reflection.metadata/1.6.0",
       "hashPath": "system.reflection.metadata.1.6.0.nupkg.sha512"
-    },
-    "Service/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     },
     "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions/14.0.0.0": {
       "type": "reference",
