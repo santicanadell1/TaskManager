@@ -18,5 +18,13 @@ public class UserDTO
     
     [Required(ErrorMessage = "Password is required.")]
     public string Password { get; set; }
+    
+    public List<Role> Roles { get; set; }
+}
 
+public enum Role
+{
+    AdminSystem,
+    AdminProject,
+    ProjectMember
 }
