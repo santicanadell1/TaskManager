@@ -5,7 +5,7 @@ public class UserRepository
 {
     private readonly List<User> _users;
 
-    public UserRepository()
+    public UserRepository(DataAccess dataAccess)
     {
         _users = new List<User>();
     }

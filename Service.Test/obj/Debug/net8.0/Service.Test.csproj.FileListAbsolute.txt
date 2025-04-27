@@ -225,3 +225,7 @@ D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\
 D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service..76735BA5.Up2Date
 D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.genruntimeconfig.cache
 D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\ref\Service.Test.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\DataAccess.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Domain.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Domain.pdb
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\DataAccess.pdb

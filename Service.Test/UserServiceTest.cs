@@ -1,7 +1,6 @@
 using DataAccess;
 using Domain;
 using Service.Models;
-using DataAccess;
 
 namespace Service.Test;
 

@@ -1,4 +1,5 @@
 using DataAccess;
+using Domain;
 using Service.Models;
 
 namespace Service;
@@ -15,13 +16,32 @@ public class UserService
     public void AddUser(UserDTO userDTO)
     {
         ValidateUserEmail(userDTO.Email);
-        _userRepository.Add(ToEntity(user));
+        _userRepository.AddUser(ToEntity(userDTO));
     }
 
     private void ValidateUserEmail(string email)
     {
-        foreach(var user in _userRepository.GetAll)
+        foreach (var user in _userRepository.GetAll())
+        {
+            if (user.Email == email)
+            {
+                throw new ArgumentException("Email already exists");
+            }
+        }
     }
-    
-    
+
+    private static User ToEntity(UserDTO userDTO)
+    {
+        return new User
+        {
+            Email = userDTO.Email,
+            FirstName = userDTO.FirstName,
+            LastName = userDTO.LastName,
+            Password = userDTO.Password,
+            Birthday = userDTO.Birthday,
+            Roles = userDTO.Roles
+        };
+    }
 }
+    
+    
