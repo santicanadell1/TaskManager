@@ -10,3 +10,15 @@ D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\refint\Service.dll
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\Service.pdb
 D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\ref\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.deps.json
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.pdb
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.GeneratedMSBuildEditorConfig.editorconfig
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfoInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfo.cs
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.CoreCompileInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.sourcelink.json
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\refint\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.pdb
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\ref\Service.dll
