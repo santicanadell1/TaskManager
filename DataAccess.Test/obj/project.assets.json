@@ -1036,11 +1036,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\DataAccess.Test\\DataAccess.Test.csproj",
+      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\DataAccess.Test\\DataAccess.Test.csproj",
       "projectName": "DataAccess.Test",
-      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\DataAccess.Test\\DataAccess.Test.csproj",
+      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\DataAccess.Test\\DataAccess.Test.csproj",
       "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\DataAccess.Test\\obj\\",
+      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\DataAccess.Test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1057,8 +1057,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
+            "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
             }
           }
         }

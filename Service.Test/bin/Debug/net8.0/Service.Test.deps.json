@@ -347,14 +347,6 @@
         }
       },
       "System.Reflection.Metadata/1.6.0": {},
-<<<<<<< HEAD:Service.Test/bin/Debug/net8.0/Service.Test.deps.json
-=======
-      "Domain/1.0.0": {
-        "runtime": {
-          "Domain.dll": {}
-        }
-      },
->>>>>>> feat/user-domain:Domain.Test/bin/Debug/net8.0/Domain.Test.deps.json
       "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions/14.0.0.0": {
         "runtime": {
           "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll": {
