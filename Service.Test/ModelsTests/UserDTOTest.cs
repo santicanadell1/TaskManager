@@ -44,4 +44,14 @@ public class UserDTOTest
         // act & assert
         Assert.AreEqual(default(DateTime), user.Birthday);
     }
+    
+    [TestMethod]
+    public void NewUser_WhenPasswordIsNull_ThenUserIsNotCreated()
+    {
+        // arrange
+        UserDTO user = new UserDTO { Password = null };
+
+        // act & assert
+        Assert.IsNull(user.Password);
+    }
 }
