@@ -1,6 +1,7 @@
 namespace DataAccess.Test;
-using DataAccess;
+
 using Domain;
+using global::DataAccess;
 
 [TestClass]
 public class UserRepositoryTests
