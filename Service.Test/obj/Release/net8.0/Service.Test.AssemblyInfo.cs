@@ -14,11 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Service.Test")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD:Service.Test/obj/Release/net8.0/Service.Test.AssemblyInfo.cs
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c359e5908fa117bf8fb64741043b654ebe79a9da")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+547963f3cb9e3e9bc7077855f7c6bc52b721eb08")]
->>>>>>> feat/user-domain:Service.Test/obj/Debug/net8.0/Service.Test.AssemblyInfo.cs
 [assembly: System.Reflection.AssemblyProductAttribute("Service.Test")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Service.Test")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

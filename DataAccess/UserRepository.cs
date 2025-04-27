@@ -1,33 +1,45 @@
 ﻿using Domain;
-
 namespace DataAccess;
 
 public class UserRepository
 {
-    private readonly DataAccess _dataAccess;
+    private readonly List<User> _users;
 
-    public UserRepository(DataAccess dataAccess)
+    public UserRepository()
     {
-        _dataAccess = dataAccess;   
+        _users = new List<User>();
+    }
+    public List<User> GetAll()
+    {
+        return _users.ToList();
+    }
+    public void AddUser(User user)
+    {
+        _users.Add(user);
+    }
+    public User? Get(Func<User, bool> filter)
+    {
+        return _users.FirstOrDefault(filter);
     }
 
-    public void Add(User user)
+    public void Update(string email, User user)
     {
-        if (user == null)
+        int index = _users.FindIndex(u => u.Email == email);
+        if (index == -1)
         {
-            throw new ArgumentException("User cannot be null.");
+            throw new ArgumentException("User not found");
         }
-
-        try
-        {
-            _dataAccess.Users.Add(user);
-        }
-        catch (ArgumentException ex)
-        {
-            throw new ArgumentException("Error while adding the user.", ex);
-        }
+        _users[index] = user;
     }
-    
-    
-    
+
+    public void Delete(string email)
+    {
+        int index = _users.FindIndex(u => u.Email == email);
+        if (index == -1)
+        {
+            throw new ArgumentException("User not found");
+        }
+        _users.RemoveAt(index);
+    }
+
 }
