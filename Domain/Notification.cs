@@ -1,35 +1,36 @@
-namespace Domain;
+using Domain.Exceptions;
 
-public class Notification
+namespace Domain
 {
-    public bool read;
-    public string description;
-    
-    public bool Read { get => read; set => read = value; }
-
-    public string Description
+    public class Notification
     {
-        get => description;
-        set
+        public bool read;
+        public string description;
+
+        public bool Read { get => read; set => read = value; }
+
+        public string Description
         {
-            if (string.IsNullOrWhiteSpace(value))
+            get => description;
+            set
             {
-                throw new ArgumentException("Description cannot be null or empty.");
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new NotificationDescriptionException();
+                }
+                description = value;
             }
-            description = value; 
         }
 
-    }
+        public void MarkRead()
+        {
+            read = true;
+        }
 
-    public void MarkRead()
-    {
-        read = true;
+        public Notification(bool read, string description)
+        {
+            this.Read = read;
+            this.Description = description;
+        }
     }
-
-    public Notification(bool read, string description)
-    {
-        this.Read = read;
-        this.Description = description;
-    }
-    
 }
