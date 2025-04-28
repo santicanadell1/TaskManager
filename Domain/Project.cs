@@ -1,51 +1,59 @@
-namespace Domain;
+using Domain.Exceptions;
 
-public class Project
+namespace Domain
 {
-    public string name;
-    public string description;
-    public DateTime startDate;
-    public List<User> members;
-    public List<Task> tasks;
-    public User adminProject;
-    public string Name
+    public class Project
     {
-        get => name;
-        set
+        public string name;
+        public string description;
+        public DateTime startDate;
+        public List<User> members;
+        public List<Task> tasks;
+        public User adminProject;
+
+        public string Name
         {
-            if (string.IsNullOrWhiteSpace(value))
+            get => name;
+            set
             {
-                throw new ArgumentException("Project name cannot be null, empty, or whitespace.");
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ProjectNameException();
+                }
+                name = value;
             }
-            name = value;
         }
-    }    
-    public string Description
-    {
-        get => description;
-        set
+
+        public string Description
         {
-            if (string.IsNullOrWhiteSpace(value))  
+            get => description;
+            set
             {
-                throw new ArgumentException("Project description cannot be null, empty, or whitespace.");
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ProjectDescriptionException();
+                }
+                description = value;
             }
-            description = value;
         }
+
+        public DateTime StartDate
+        {
+            get => startDate;
+            set
+            {
+                if (value == default(DateTime))
+                {
+                    throw new ProjectStartDateException();
+                }
+                startDate = value;
+            }
+        }
+
+        public List<User> Members { get; set; }
+        public List<Task> Tasks { get; set; }
+        public User AdminProject { get; set; }
+
+        public Project() { }
     }
-    public DateTime StartDate
-    {
-        get => startDate;
-        set
-        {
-            if (value == default(DateTime)) 
-            {
-                throw new ArgumentException("Project start date cannot be the default value.");
-            }
-            startDate = value;
-        }
-    }
-    public List<User> Members{get;set;}
-    public List<Task> Tasks{get;set;}
-    public User AdminProject{get;set;}
-    public Project(){}
 }
