@@ -1,0 +1,12 @@
+namespace Domain.Exceptions
+{
+    public class NotificationException : Exception
+    {
+        public NotificationException(string message) : base(message) { }
+
+        public override string ToString()
+        {
+            return $"NotificationException: {this.GetType().Name} - {this.Message}";
+        }
+    }
+}

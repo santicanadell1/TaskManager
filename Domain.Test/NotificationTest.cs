@@ -1,36 +1,32 @@
-namespace Domain.Test;
+using Domain.Exceptions;
 
-
-[TestClass]
-
-
-public class NotificationTest
+namespace Domain.Test
 {
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void NewNotification_WhenDescriptionIsEmpty_ShouldThrowException()
+    [TestClass]
+    public class NotificationTest
     {
+        [TestMethod]
+        [ExpectedException(typeof(NotificationDescriptionException))]
+        public void NewNotification_WhenDescriptionIsEmpty_ShouldThrowNotificationDescriptionException()
+        {
+            // Arrange
+            Notification not;
+            // Act
+            not = new Notification(false, "");
+        }
 
-        //Arrange
-        Notification not;
-        //Act
-        not = new Notification(false, "");
-    }
-    
-    
-    [TestMethod]
-    public void MarkRead_ShouldSetReadToTrue()
-    {
-        // Arrange
-        Notification not;
-        not = new Notification(false, "Some description");
-    
-        // Act
-        not.MarkRead();
-    
-        // Assert
-        Assert.IsTrue(not.Read);
-    }
+        [TestMethod]
+        public void MarkRead_ShouldSetReadToTrue()
+        {
+            // Arrange
+            Notification not;
+            not = new Notification(false, "Some description");
 
+            // Act
+            not.MarkRead();
+
+            // Assert
+            Assert.IsTrue(not.Read);
+        }
+    }
 }
- 
