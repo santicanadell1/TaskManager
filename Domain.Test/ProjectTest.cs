@@ -166,5 +166,14 @@ namespace Domain.Test
             project.AddTask(task1);
             Assert.IsTrue(project.Tasks.Contains(task1));
         }
+
+        [TestMethod]
+        public void GivenProject_WhenAddingANewNotification_ThenNotificationShouldBeAddedToProjectNotifications()
+        {
+            Project project = new Project();
+            Notification nortification1 = new Notification(false, "Some description");
+            project.AddNotification(nortification1);
+            Assert.IsTrue(project.Notifications.Contains(nortification1));
+        }
     }
 }
