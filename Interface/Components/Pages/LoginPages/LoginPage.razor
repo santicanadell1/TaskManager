@@ -1,18 +1,18 @@
 ﻿@page "/login"
 @using System.ComponentModel.DataAnnotations
+@using Service.Models
 @inject NavigationManager Navigation
-@rendermode InteractiveServer
 
 <div class="login-container">
     <h3 class="login-title">Login</h3>
 
-    <EditForm Model="loginModel" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator/>
-        <ValidationSummary/>
+    <EditForm Model="_userLoginDto" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
         <div class="form-group">
             <label for="userName">Email</label>
-            <InputText id="userName" class="form-control mt-1" @bind-Value="loginModel.UserName"/>
+            <InputText id="userName" class="form-control mt-1" @bind-Value="_userLoginDto.Email" />
         </div>
 
         <div class="form-group mt-3">
@@ -21,7 +21,7 @@
                 <InputText id="password"
                            type="@passwordInputType"
                            class="form-control mt-1"
-                           @bind-Value="loginModel.Password"/>
+                           @bind-Value="_userLoginDto.Password" />
                 <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
                     <i class="@passwordEyeIcon"></i>
                 </button>
@@ -43,14 +43,16 @@
     </EditForm>
 </div>
 
-
 @code {
-
-    private readonly LoginModel loginModel = new();
-    private string loginError;
-
     private string passwordInputType = "password";
     private string passwordEyeIcon = "fas fa-eye-slash";
+    private string loginError;
+
+    private UserLoginDTO _userLoginDto = new UserLoginDTO("", "");
+
+    // Hardcoded credentials for demonstration
+    private const string validEmail = "user@example.com";
+    private const string validPassword = "password123";
 
     private void TogglePasswordVisibility()
     {
@@ -60,16 +62,16 @@
 
     private void HandleValidSubmit()
     {
-        // logic
+        // Check if the provided credentials match the hardcoded ones
+        if (_userLoginDto.Email == validEmail && _userLoginDto.Password == validPassword)
+        {
+            // If the credentials are correct, navigate to the home page
+            Navigation.NavigateTo("/");  // Redirect to home page ("/")
+        }
+        else
+        {
+            // If the credentials are incorrect, show an error message
+            loginError = "Invalid email or password. Please try again.";
+        }
     }
-
-    private class LoginModel
-    {
-        [Required] public string UserName { get; set; } = string.Empty;
-
-        [Required]
-        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
-        public string Password { get; set; } = string.Empty;
-    }
-
 }
