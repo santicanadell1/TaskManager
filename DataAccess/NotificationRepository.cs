@@ -41,10 +41,10 @@ namespace DataAccess
                 }
             }
 
-            if (index == -1)
-            {
-                throw new ArgumentException("Notification not found");
-            }
+           // if (index == -1)
+            //{
+            //    throw new ArgumentException("Notification not found");
+          //  }
             
             _notifications[index] = newNotification;
         }

@@ -64,6 +64,20 @@ public class NotificationRepositoryTest
         // Assert
         Assert.AreNotEqual(notification1, notificationRepository.Get(n => n.Description == "Updated notification"));
     }
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void UpdateNotification_WhenNotificationIsNotFound_ShouldThrowArgumentException()
+    {
+        // Arrange
+        NotificationRepository notificationRepository = new NotificationRepository();
+        Notification notification1 = new Notification(false, "Old notification");
+        Notification notification2 = new Notification(true, "Updated notification");
+        notificationRepository.AddNotification(notification1);
+
+        // Act
+        Notification notification3 = new Notification(false, "Nonexistent notification");
+        notificationRepository.Update(notification3, notification2);
+    }
 
     
     
