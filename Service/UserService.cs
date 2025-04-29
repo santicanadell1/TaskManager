@@ -48,6 +48,17 @@ public class UserService
 
         return usersDTO;
     }
+    
+    public UserDTO GetUser(string email)
+    {
+        User? user = _userRepository.Get(user => user.Email == email);
+        if (user == null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        return FromEntity(user);
+    }
 
 
     private void ValidateUserEmail(string email)
