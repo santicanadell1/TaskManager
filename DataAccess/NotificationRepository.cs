@@ -19,5 +19,10 @@ namespace DataAccess
         {
             _notifications.Add(notification);
         }
+
+        public Notification? Get(Func<Notification, bool> filter)
+        {
+            return _notifications.FirstOrDefault(filter);
+        }
     }
 }
