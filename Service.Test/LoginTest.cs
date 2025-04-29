@@ -1,6 +1,7 @@
 using DataAccess;
 using Domain;
 using Service;
+using Service.Exceptions;
 
 [TestClass]
 public class LoginTests
