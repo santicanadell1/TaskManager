@@ -49,6 +49,23 @@ public class NotificationRepositoryTest
         // Assert
         Assert.AreEqual(notification1, notification3);
     }
+    
+    [TestMethod]
+    public void UpdateNotification_WhenGettingTheNotification_ShouldBeDifferentFromOriginalNotification()
+    {
+        // Arrange
+        NotificationRepository notificationRepository = new NotificationRepository();
+        Notification notification1 = new Notification(false, "Old notification");
+        Notification notification2 = new Notification(true, "Updated notification");
+        notificationRepository.AddNotification(notification1);
+
+        // Act
+        notificationRepository.Update(notification1, notification2);
+
+        // Assert
+        Assert.AreNotEqual(notification1, notificationRepository.Get(n => n.Description == "Updated notification"));
+    }
+
 
 
 
