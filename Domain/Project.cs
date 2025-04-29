@@ -52,6 +52,7 @@ namespace Domain
 
         public List<User> Members { get; set; }
         public List<Task> Tasks { get; set; }
+        
         public User AdminProject { get; set; }
 
         public Project() { }

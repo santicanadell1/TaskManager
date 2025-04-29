@@ -11,7 +11,7 @@ namespace Domain.Test
             // Arrange
             var project = new Project();
             string expectedName = "Project A";
-            
+
             // Act
             project.Name = expectedName;
             string actualName = project.Name;
@@ -19,14 +19,14 @@ namespace Domain.Test
             // Assert
             Assert.AreEqual(expectedName, actualName);
         }
-        
+
         [TestMethod]
         public void GivenProject_WhenDescriptionIsSet_ThenDescriptionShouldBeCorrect()
         {
             // Arrange
             var project = new Project();
             string expectedDescription = "This is a test project";
-            
+
             // Act
             project.Description = expectedDescription;
             string actualDescription = project.Description;
@@ -34,14 +34,14 @@ namespace Domain.Test
             // Assert
             Assert.AreEqual(expectedDescription, actualDescription);
         }
-        
+
         [TestMethod]
         public void GivenProject_WhenStartDateIsSet_ThenStartDateShouldBeCorrect()
         {
             // Arrange
             var project = new Project();
             DateTime expectedStartDate = new DateTime(2025, 5, 1);
-            
+
             // Act
             project.StartDate = expectedStartDate;
             DateTime actualStartDate = project.StartDate;
@@ -56,7 +56,7 @@ namespace Domain.Test
             // Arrange
             var project = new Project();
             var expectedMembers = new List<User>();
-            
+
             // Act
             project.Members = expectedMembers;
             List<User> actualMembers = project.Members;
@@ -64,8 +64,21 @@ namespace Domain.Test
             // Assert
             CollectionAssert.AreEqual(expectedMembers, actualMembers);
         }
-        
+
         [TestMethod]
+        public void GivenProject_WhenNotificationsAreSet_ThenNotificationsShouldBeCorrect()
+        {
+            var project = new Project();
+            var expectedNotifications = new List<Notification>();
+            
+            project.Notifications = expectedNotifications;
+            List<Notification> actualNotifications = project.Notifications;
+            
+            CollectionAssert.AreEqual(expectedNotifications, actualNotifications);
+        }
+        
+
+    [TestMethod]
         public void GivenTaskList_WhenTasksAreAdded_ThenTaskListShouldContainCorrectTasks()
         {
             // Arrange
