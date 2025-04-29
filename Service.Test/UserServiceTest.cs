@@ -44,4 +44,25 @@ public class UserServiceTest
         // Act & Assert
         _userService.AddUser(userDTO2); // Should throw exception
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void UpdateUser_ShouldThrowException_WhenUserDoesNotExist()
+    {
+        // Arrange
+        var userRepository = new UserRepository(new DataAccess.DataAccess()); 
+        var userService = new UserService(userRepository);
+
+        var userToUpdate = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "nonexistent.user@example.com", 
+            Role = Rol.ProjectMember
+        };
+
+        // Act & Assert
+        userService.UpdateUser(userToUpdate); 
+    }
+
 }
