@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+﻿﻿using System.Text.RegularExpressions;
 using Domain.Exceptions;
 
 namespace Domain
@@ -9,19 +9,25 @@ namespace Domain
         private string lastName;
         private string email;
         private DateTime birthday;
-        private string password;
+        public string password;
         public List<Rol> roles = new List<Rol>();
 
         public string FirstName
         {
             get => firstName;
-            set { firstName = string.IsNullOrWhiteSpace(value) ? throw new UserFirstNameException() : value; }
+            set { firstName = string.IsNullOrWhiteSpace(value) ? 
+                throw new UserFirstNameException() : value; }
         }
 
         public string LastName
         {
             get => lastName;
-            set { lastName = string.IsNullOrWhiteSpace(value) ? throw new UserLastNameException() : value; }
+            set
+            {
+                lastName = string.IsNullOrWhiteSpace(value) ? 
+                    throw new UserLastNameException() : 
+                    value;
+            }
         }
 
         public string Email
@@ -34,20 +40,23 @@ namespace Domain
                     throw new UserEmailException();
                 }
 
-                email = IsValidEmail(value) ? value : throw new UserEmailException();
+                email = IsValidEmail(value) ? value : 
+                    throw new UserEmailException();
             }
         }
 
         public DateTime Birthday
         {
             get => birthday;
-            set { birthday = DateTime.Today < value ? throw new UserBirthdayException() : value; }
+            set { birthday = DateTime.Today < value ? 
+                throw new UserBirthdayException() : value; }
         }
 
-        private string Password
+        public string Password
         {
             get => password;
-            set { password = string.IsNullOrWhiteSpace(value) ? throw new UserPasswordException() : value; }
+            set { password = string.IsNullOrWhiteSpace(value) ? 
+                throw new UserPasswordException() : value; }
         }
 
         public List<Rol> Roles
