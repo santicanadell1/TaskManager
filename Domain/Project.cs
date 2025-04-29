@@ -68,5 +68,10 @@ namespace Domain
         {
             this.Members.Add(user);
         }
+        public void AddTask(Task task)
+        {
+            this.Tasks.Add(task);
+        }
+       
     }
 }
