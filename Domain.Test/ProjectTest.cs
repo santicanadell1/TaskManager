@@ -154,5 +154,17 @@ namespace Domain.Test
             Assert.IsTrue(project.Members.Contains(user1));
             Assert.IsTrue(project.Members.Contains(user2));
         }
+
+        [TestMethod]
+        public void GivenProject_WhenAddingANewTask_ThenTaskShouldBeAddedToProjectTasks()
+        {
+            Project project = new Project();
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Parse("2026-09-01");
+            List<Task> previousTasks = new List<Task>();
+            Task task1 = new Task("Title", "Description", startDate, endDate, 1, previousTasks);
+            project.AddTask(task1);
+            Assert.IsTrue(project.Tasks.Contains(task1));
+        }
     }
 }
