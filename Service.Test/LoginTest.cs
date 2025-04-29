@@ -79,4 +79,29 @@ public class LoginTests
         Assert.IsNull(loggedUserAfterLogout);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(InvalidLoginCredentialsException))]
+    public void Login_ShouldThrowInvalidLoginCredentialsException_WhenCredentialsAreIncorrect()
+    {
+        // Arrange
+        var email = "john.doe@example.com";
+        var password = "WrongPassword@";
+        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject};
+
+        // Add a user to the repository for testing
+        _userRepository.AddUser(new User
+        {
+            Email = email,
+            FirstName = "John",
+            LastName = "Doe",
+            Password = "Password123@", // Correct password
+            Roles = roles
+        });
+
+        // Act - Try to login with incorrect credentials
+        _login.LoginUser(email, password);
+
+        // Assert is handled by ExpectedException
+    }
+    
 }

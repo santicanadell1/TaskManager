@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Domain;
+using Service.Exceptions;
 using Service.Interfaces;
 using Service.Models;
 
@@ -24,7 +25,7 @@ public class Login : ILogin
         User? user = _userRepository.Get(user => user.Email == email && user.Password == password);
         if (user == null)
         {
-            throw new ArgumentException("User or password is incorrect, try again");
+            throw new InvalidLoginCredentialsException();
         }
 
         LoggedUser.Current = FromEntity(user);
