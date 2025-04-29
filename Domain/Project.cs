@@ -63,5 +63,10 @@ namespace Domain
             this.Tasks = new List<Task>();
             this.Notifications = new List<Notification>();
         }
+        
+        public void AddUser(User user)
+        {
+            this.Members.Add(user);
+        }
     }
 }
