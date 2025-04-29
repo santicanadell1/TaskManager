@@ -1,5 +1,6 @@
 using DataAccess;
 using Domain;
+using Domain.Exceptions;
 using Service.Models;
 
 namespace Service;
@@ -25,7 +26,7 @@ public class UserService
         {
             if (user.Email == email)
             {
-                throw new ArgumentException("Email already exists");
+                throw new InvalidUserEmailException();
             }
         }
     }

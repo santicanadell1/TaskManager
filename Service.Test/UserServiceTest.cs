@@ -1,18 +1,18 @@
 using DataAccess;
 using Domain;
+using Domain.Exceptions;
 using Service.Models;
 
 namespace Service.Test;
 
 [TestClass]
-public class UserServiceTest
+public class UserServiceTest 
 {
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
+    [ExpectedException(typeof(InvalidUserEmailException))]
     public void AddUser_ShouldThrowException_WhenEmailIsNotUnique()
     {
         
-       
         // Arrange
         List<Rol> rols = new List<Rol>();
         rols.Add(Rol.ProjectMember);
