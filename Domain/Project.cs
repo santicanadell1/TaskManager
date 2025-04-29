@@ -72,6 +72,9 @@ namespace Domain
         {
             this.Tasks.Add(task);
         }
-       
+        public void AddNotification(Notification notification)
+        {
+            this.Notifications.Add(notification);
+        }
     }
 }
