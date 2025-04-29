@@ -57,6 +57,11 @@ namespace Domain
         public List<Notification> Notifications { get; set; }
         public User AdminProject { get; set; }
 
-        public Project() { }
+        public Project()
+        {
+            this.Members = new List<User>();
+            this.Tasks = new List<Task>();
+            this.Notifications = new List<Notification>();
+        }
     }
 }
