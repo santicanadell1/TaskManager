@@ -10,7 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c5b2b86-f0c8-46e1-9135-805a24273fe7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Domain/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.305108_282542_281987.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.305108_282542_281987.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service.Test/LoginTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Service.Test/LoginTest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service.Test/Service.Test.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Service.Test/Service.Test.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service.Test/bin/Debug/net8.0/CoverletSourceRootsMapping_Service.Test" beforeDir="false" afterPath="$PROJECT_DIR$/Service.Test/bin/Debug/net8.0/CoverletSourceRootsMapping_Service.Test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/Class1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Service/Login.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gitignore" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,19 +33,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/user-domain&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "feat/login-service",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.Interface: IIS Express">
     <configuration name="Interface: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Interface/Interface.csproj" />
