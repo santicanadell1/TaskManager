@@ -1,5 +1,4 @@
 ﻿using Domain;
-
 namespace DataAccess
 {
     public class NotificationRepository
@@ -9,6 +8,16 @@ namespace DataAccess
         public NotificationRepository()
         {
             _notifications = new List<Notification>();
+        }
+
+        public List<Notification> GetAll()
+        {
+            return _notifications.ToList();
+        }
+
+        public void AddNotification(Notification notification)
+        {
+            _notifications.Add(notification);
         }
     }
 }
