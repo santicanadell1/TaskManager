@@ -77,5 +77,18 @@ public class UserServiceTest
         // Act & Assert
         userService.GetUsers();
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void GetUser_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
+    {
+        // Arrange
+        var userRepository = new UserRepository(); 
+        var userService = new UserService(userRepository);
+
+        // Act & Assert
+        userService.GetUser("nonexistent.user@example.com"); 
+    }
+
 }
     
