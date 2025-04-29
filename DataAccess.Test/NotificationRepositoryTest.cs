@@ -1,11 +1,11 @@
-using Domain;
+
 namespace DataAccess.Test;
 
 
 [TestClass]
 public class NotificationRepositoryTest
 {
-    
+
     [TestMethod]
     public void NewNotificationRepository_WhenRepositoryIsCreated_ShouldNotBeNull()
     {
@@ -18,3 +18,4 @@ public class NotificationRepositoryTest
         // Assert
         Assert.IsNotNull(notificationRepository);
     }
+}
