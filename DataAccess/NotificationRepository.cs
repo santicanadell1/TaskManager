@@ -51,13 +51,25 @@ namespace DataAccess
         
         public void Delete(Notification notification)
         {
-            int index = _notifications.FindIndex(n => n == notification);
+            int index = -1;
+            
+            for (int i = 0; i < _notifications.Count; i++)
+            {
+                if (_notifications[i] == notification)
+                {
+                    index = i;
+                    break;  
+                }
+            }
+            
             if (index == -1)
             {
                 throw new ArgumentException("Notification not found");
             }
+            
             _notifications.RemoveAt(index);
         }
+
         
     }
     
