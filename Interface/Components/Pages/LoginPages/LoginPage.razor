@@ -1,10 +1,24 @@
 ﻿@page "/login"
-@using System.ComponentModel.DataAnnotations
+@using Service
+@using Service.Exceptions
 @using Service.Models
 @inject NavigationManager Navigation
+@inject Login LoginService
+@rendermode InteractiveServer
 
 <div class="login-container">
     <h3 class="login-title">Login</h3>
+
+    <!-- Custom alert for incorrect login with a close button -->
+    @if (alertVisible)
+    {
+        <div class="d-flex justify-content-center align-items-center mt-2">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>@alertMessage</strong>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="ToggleAlertVisibility"></button>
+            </div>
+        </div>
+    }
 
     <EditForm Model="_userLoginDto" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
@@ -35,24 +49,16 @@
         <div class="form-group">
             <a href="/signup">Don't have an account? Register</a>
         </div>
-
-        @if (loginError != null)
-        {
-            <div class="alert alert-danger" role="alert">@loginError</div>
-        }
     </EditForm>
 </div>
 
 @code {
     private string passwordInputType = "password";
     private string passwordEyeIcon = "fas fa-eye-slash";
-    private string loginError;
+    private string alertMessage = "";
+    private bool alertVisible = false;
 
     private UserLoginDTO _userLoginDto = new UserLoginDTO("", "");
-
-    // Hardcoded credentials for demonstration
-    private const string validEmail = "user@example.com";
-    private const string validPassword = "password123";
 
     private void TogglePasswordVisibility()
     {
@@ -62,16 +68,24 @@
 
     private void HandleValidSubmit()
     {
-        // Check if the provided credentials match the hardcoded ones
-        if (_userLoginDto.Email == validEmail && _userLoginDto.Password == validPassword)
+        try
         {
-            // If the credentials are correct, navigate to the home page
+            // Call LoginUser from the Login service to validate credentials
+            LoginService.LoginUser(_userLoginDto.Email, _userLoginDto.Password);
+
+            // Redirect to home page after successful login
             Navigation.NavigateTo("/");  // Redirect to home page ("/")
         }
-        else
+        catch (InvalidLoginCredentialsException ex)
         {
-            // If the credentials are incorrect, show an error message
-            loginError = "Invalid email or password. Please try again.";
+            // If login fails, show the error message
+            alertVisible = true;
+            alertMessage = "Invalid email or password. Please try again.";
         }
+    }
+
+    private void ToggleAlertVisibility()
+    {
+        alertVisible = !alertVisible; // Toggles the visibility of the alert message
     }
 }
