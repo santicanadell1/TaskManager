@@ -9,6 +9,7 @@ namespace Domain
         public DateTime startDate;
         public List<User> members;
         public List<Task> tasks;
+        public List<Notification> notifications;
         public User adminProject;
 
         public string Name
@@ -53,6 +54,7 @@ namespace Domain
         public List<User> Members { get; set; }
         public List<Task> Tasks { get; set; }
         
+        public List<Notification> Notifications { get; set; }
         public User AdminProject { get; set; }
 
         public Project() { }
