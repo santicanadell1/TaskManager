@@ -149,8 +149,8 @@ namespace Domain.Test
             Project project = new Project();
             User user1 = new User();
             User user2 = new User();
-            project.AddUser(user1);
-            project.AddUser(user2);
+            project.AddMember(user1);
+            project.AddMember(user2);
             Assert.IsTrue(project.Members.Contains(user1));
             Assert.IsTrue(project.Members.Contains(user2));
         }

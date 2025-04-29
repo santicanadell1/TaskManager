@@ -64,7 +64,7 @@ namespace Domain
             this.Notifications = new List<Notification>();
         }
         
-        public void AddUser(User user)
+        public void AddMember(User user)
         {
             this.Members.Add(user);
         }
