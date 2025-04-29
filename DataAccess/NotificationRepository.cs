@@ -1,4 +1,5 @@
 using Domain;
+using Domain.Exceptions.NotificationRepositoryExceptions;
 namespace DataAccess
 {
     public class NotificationRepository
@@ -43,8 +44,9 @@ namespace DataAccess
 
             if (index == -1)
             {
-                throw new ArgumentException("Notification not found");
-           }
+                throw new NotificationNotFoundException();
+            }
+
             
             _notifications[index] = newNotification;
         }

@@ -1,4 +1,5 @@
 using Domain;
+using Domain.Exceptions.NotificationRepositoryExceptions;
 namespace DataAccess.Test;
 
 
@@ -65,8 +66,8 @@ public class NotificationRepositoryTest
         Assert.AreNotEqual(notification1, notificationRepository.Get(n => n.Description == "Updated notification"));
     }
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void UpdateNotification_WhenNotificationIsNotFound_ShouldThrowArgumentException()
+    [ExpectedException(typeof(NotificationNotFoundException))]
+    public void UpdateNotification_WhenNotificationIsNotFound_ShouldThrowNotificationNotFoundException()
     {
         // Arrange
         NotificationRepository notificationRepository = new NotificationRepository();
