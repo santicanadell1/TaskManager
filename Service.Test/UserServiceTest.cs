@@ -52,13 +52,15 @@ public class UserServiceTest
         // Arrange
         var userRepository = new UserRepository(new DataAccess.DataAccess()); 
         var userService = new UserService(userRepository);
+        List<Rol> rols = new List<Rol>();
+        rols.Add(Rol.ProjectMember);
 
         var userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
             Email = "nonexistent.user@example.com", 
-            Role = Rol.ProjectMember
+            Roles = rols,
         };
 
         // Act & Assert
