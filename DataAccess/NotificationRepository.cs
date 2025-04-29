@@ -66,7 +66,7 @@ namespace DataAccess
             
             if (index == -1)
             {
-                throw new ArgumentException("Notification not found");
+                throw new NotificationNotFoundException();
             }
             
             _notifications.RemoveAt(index);
