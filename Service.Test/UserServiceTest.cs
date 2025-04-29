@@ -16,7 +16,7 @@ public class UserServiceTest
         List<Rol> rols = new List<Rol>();
         rols.Add(Rol.ProjectMember);
 
-        UserRepository userRepository = new UserRepository(new DataAccess.DataAccess());
+        UserRepository userRepository = new UserRepository();
 
         UserService _userService = new UserService(userRepository);
 
@@ -49,7 +49,7 @@ public class UserServiceTest
     public void UpdateUser_ShouldThrowException_WhenUserDoesNotExist()
     {
         // Arrange
-        var userRepository = new UserRepository(new DataAccess.DataAccess());
+        var userRepository = new UserRepository();
         var userService = new UserService(userRepository);
         List<Rol> rols = new List<Rol>();
         rols.Add(Rol.ProjectMember);
@@ -71,7 +71,7 @@ public class UserServiceTest
     public void GetUsers_ShouldThrowException_WhenNoUsersExist()
     {
         // Arrange
-        var userRepository = new UserRepository(new DataAccess.DataAccess());
+        var userRepository = new UserRepository();
         var userService = new UserService(userRepository);
 
         // Act & Assert
