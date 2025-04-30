@@ -12,7 +12,6 @@ public class UserServiceTest
     [ExpectedException(typeof(InvalidUserEmailException))]
     public void AddUser_ShouldThrowException_WhenEmailIsNotUnique()
     {
-        // Arrange
         List<Rol> rols = new List<Rol>();
         rols.Add(Rol.ProjectMember);
 
@@ -35,20 +34,18 @@ public class UserServiceTest
         {
             FirstName = "Jane",
             LastName = "Doe",
-            Email = "john.doe@example.com", // Same email
+            Email = "john.doe@example.com", 
             Password = "Password123@",
             Roles = rols
         };
 
-        // Act & Assert
-        _userService.AddUser(userDTO2); // Should throw exception
+        _userService.AddUser(userDTO2); 
     }
 
     [TestMethod]
     [ExpectedException(typeof(UserNotFoundException))]
     public void UpdateUser_ShouldThrowException_WhenUserDoesNotExist()
     {
-        // Arrange
         var userRepository = new UserRepository();
         var userService = new UserService(userRepository);
         List<Rol> rols = new List<Rol>();
@@ -62,7 +59,6 @@ public class UserServiceTest
             Roles = rols,
         };
 
-        // Act & Assert
         userService.UpdateUser(userToUpdate);
     }
 
@@ -70,11 +66,9 @@ public class UserServiceTest
     [ExpectedException(typeof(NoUsersFoundException))]
     public void GetUsers_ShouldThrowException_WhenNoUsersExist()
     {
-        // Arrange
         var userRepository = new UserRepository();
         var userService = new UserService(userRepository);
 
-        // Act & Assert
         userService.GetUsers();
     }
     
@@ -82,11 +76,9 @@ public class UserServiceTest
     [ExpectedException(typeof(UserNotFoundException))]
     public void GetUser_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
     {
-        // Arrange
         var userRepository = new UserRepository(); 
         var userService = new UserService(userRepository);
 
-        // Act & Assert
         userService.GetUser("nonexistent.user@example.com"); 
     }
 
