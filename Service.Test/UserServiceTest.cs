@@ -17,7 +17,7 @@ public class UserServiceTest
 
         UserRepository userRepository = new UserRepository();
 
-        UserService _userService = new UserService(userRepository);
+        UserService _userService = new UserService(new InMemoryDatabase());
 
         var userDTO1 = new UserDTO
         {
@@ -47,7 +47,7 @@ public class UserServiceTest
     public void UpdateUser_ShouldThrowException_WhenUserDoesNotExist()
     {
         var userRepository = new UserRepository();
-        var userService = new UserService(userRepository);
+        var userService = new UserService(new InMemoryDatabase());
         List<Rol> rols = new List<Rol>();
         rols.Add(Rol.ProjectMember);
 
@@ -67,7 +67,7 @@ public class UserServiceTest
     public void GetUsers_ShouldThrowException_WhenNoUsersExist()
     {
         var userRepository = new UserRepository();
-        var userService = new UserService(userRepository);
+        var userService = new UserService(new InMemoryDatabase());
 
         userService.GetUsers();
     }
@@ -77,7 +77,7 @@ public class UserServiceTest
     public void GetUser_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
     {
         var userRepository = new UserRepository(); 
-        var userService = new UserService(userRepository);
+        var userService = new UserService(new InMemoryDatabase());
 
         userService.GetUser("nonexistent.user@example.com"); 
     }
