@@ -70,15 +70,12 @@
     {
         try
         {
-            // Call LoginUser from the Login service to validate credentials
             LoginService.LoginUser(_userLoginDto.Email, _userLoginDto.Password);
 
-            // Redirect to home page after successful login
-            Navigation.NavigateTo("/");  // Redirect to home page ("/")
+            Navigation.NavigateTo("/");  
         }
         catch (InvalidLoginCredentialsException ex)
         {
-            // If login fails, show the error message
             alertVisible = true;
             alertMessage = "Invalid email or password. Please try again.";
         }

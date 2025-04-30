@@ -1,6 +1,7 @@
 ﻿@page "/signup"
 @using Domain
 @using Domain.Exceptions
+@using Newtonsoft.Json
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
@@ -81,7 +82,7 @@
 
 @code {
 
-    private UserDTO _userDto;
+    private UserDTO _userDto = new UserDTO();
     private string confirmPassword;
 
     private string logMessage;
@@ -116,8 +117,8 @@
         _userDto.LastName = "";
         _userDto.Email = "";
         _userDto.Password = "";
-        _userDto.Roles = new List<Rol>();
         _userDto.Birthday = DateTime.Now;
+        _userDto.Roles= new List<Rol>();
     }
 
     private void HandleValidSubmit()
@@ -132,14 +133,16 @@
             }
 
             UserService.AddUser(_userDto);
+
             Navigation.NavigateTo("/login");
         }
         catch (Exception ex)
         {
-            alertMessage = ex.Message;
+            alertMessage = $"An error occurred: {ex.Message}";
             alertVisible = true;
         }
     }
+
 
     private void ToggleAlertVisibility()
     {
