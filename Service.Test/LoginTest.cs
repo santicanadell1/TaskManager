@@ -2,18 +2,22 @@ using DataAccess;
 using Domain;
 using Service;
 using Service.Exceptions;
+using Service.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 [TestClass]
 public class LoginTests
 {
     private Login _login;
     private InMemoryDatabase _inMemoryDatabase;
+    private PasswordManager _passwordManager;
 
     [TestInitialize]
     public void Setup()
     {
         _inMemoryDatabase = new InMemoryDatabase();
         _login = new Login(_inMemoryDatabase);
+        _passwordManager = new PasswordManager();
     }
 
     [TestMethod]
@@ -23,14 +27,17 @@ public class LoginTests
         var password = "Password123@";
         var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
 
-        _inMemoryDatabase.users.AddUser(new User
+        var userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
             LastName = "Doe",
             Password = password,
             Roles = roles
-        });
+        };
+
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
 
@@ -48,7 +55,7 @@ public class LoginTests
         var password = "Password123@";
         var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
 
-        var user = new User
+        var userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
@@ -57,7 +64,8 @@ public class LoginTests
             Roles = roles
         };
 
-        _inMemoryDatabase.users.AddUser(user);
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
 
@@ -69,23 +77,26 @@ public class LoginTests
         var loggedUserAfterLogout = _login.GetLoggedUser();
         Assert.IsNull(loggedUserAfterLogout);
     }
-
+    
     [TestMethod]
     [ExpectedException(typeof(InvalidLoginCredentialsException))]
     public void Login_ShouldThrowInvalidLoginCredentialsException_WhenCredentialsAreIncorrect()
     {
         var email = "john.doe@example.com";
         var password = "WrongPassword@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject};
+        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
 
-        _inMemoryDatabase.users.AddUser(new User
+        var userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
             LastName = "Doe",
             Password = "Password123@",
             Roles = roles
-        });
+        };
+
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
     }

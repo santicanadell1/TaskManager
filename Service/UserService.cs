@@ -9,6 +9,7 @@ public class UserService
 {
     private readonly InMemoryDatabase _database;
     private PasswordManager _passwordManager = new PasswordManager();
+
     public UserService(InMemoryDatabase database)
     {
         _database = database;
@@ -29,9 +30,9 @@ public class UserService
         user.Roles = userDTO.Roles;
         user.Birthday = userDTO.Birthday;
         user.Password = _passwordManager.HashPassword(userDTO.Password);
-        _database.users.Update(user.Email,user);
+        _database.users.Update(user.Email, user);
     }
-    
+
     public List<UserDTO> GetUsers()
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
@@ -48,7 +49,7 @@ public class UserService
 
         return usersDTO;
     }
-    
+
     public UserDTO GetUser(string email)
     {
         User? user = _database.users.Get(user => user.Email == email);
@@ -70,13 +71,13 @@ public class UserService
                 throw new InvalidUserEmailException();
             }
         }
-        
+
         if (!_passwordManager.IsValidPassword(userDTO.Password))
         {
             throw new InvalidUserPasswordException();
         }
     }
-    
+
     private User ToEntity(UserDTO userDTO)
     {
         return new User
@@ -89,6 +90,7 @@ public class UserService
             Roles = userDTO.Roles
         };
     }
+
     private User GetUserObject(string email)
     {
         User? user = _database.users.Get(user => user.Email == email);
@@ -96,9 +98,10 @@ public class UserService
         {
             throw new UserNotFoundException();
         }
+
         return user;
     }
-    
+
     private UserDTO FromEntity(User user)
     {
         return new UserDTO()
@@ -112,5 +115,3 @@ public class UserService
         };
     }
 }
-    
-    
