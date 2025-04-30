@@ -8,11 +8,11 @@ namespace Service;
 
 public class Login : ILogin
 {
-    private readonly UserRepository _userRepository;
+    private readonly InMemoryDatabase _database;
 
-    public Login(UserRepository userRepository)
+    public Login(InMemoryDatabase database)
     {
-        _userRepository = userRepository;
+        _database = database;
     }
 
     public UserDTO GetLoggedUser()
@@ -22,7 +22,7 @@ public class Login : ILogin
     
     public void LoginUser(string email, string password)
     {
-        User? user = _userRepository.Get(user => user.Email == email && user.Password == password);
+        User? user = _database.users.Get(user => user.Email == email && user.Password == password);
         if (user == null)
         {
             throw new InvalidLoginCredentialsException();
