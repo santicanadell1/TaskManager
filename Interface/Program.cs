@@ -4,7 +4,7 @@ using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<UserRepository>();
+builder.Services.AddSingleton<InMemoryDatabase>();
 builder.Services.AddScoped<Login>();
 builder.Services.AddScoped<UserService>();
 
