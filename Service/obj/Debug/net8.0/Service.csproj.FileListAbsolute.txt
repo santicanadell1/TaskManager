@@ -22,3 +22,9 @@ D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\D
 D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\refint\Service.dll
 D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.pdb
 D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\ref\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\DataAccess.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Domain.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\DataAccess.pdb
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Domain.pdb
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.AssemblyReference.cache
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.Up2Date

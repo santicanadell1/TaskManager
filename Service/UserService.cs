@@ -8,7 +8,7 @@ namespace Service;
 public class UserService
 {
     private readonly UserRepository _userRepository;
-
+    private PasswordManager _passwordManager =new PasswordManager();
     public UserService(UserRepository userRepository)
     {
         _userRepository = userRepository;
@@ -16,7 +16,7 @@ public class UserService
 
     public void AddUser(UserDTO userDTO)
     {
-        ValidateUserEmail(userDTO.Email);
+        ValidateUserEmailAndPassword(userDTO);
         _userRepository.AddUser(ToEntity(userDTO));
     }
 
@@ -61,25 +61,30 @@ public class UserService
     }
 
 
-    private void ValidateUserEmail(string email)
+    private void ValidateUserEmailAndPassword(UserDTO userDTO)
     {
         foreach (var user in _userRepository.GetAll())
         {
-            if (user.Email == email)
+            if (user.Email == userDTO.Email)
             {
                 throw new InvalidUserEmailException();
             }
         }
+        
+        if (!_passwordManager.IsValidPassword(userDTO.Password))
+        {
+            throw new InvalidUserPasswordException();
+        }
     }
     
-    private static User ToEntity(UserDTO userDTO)
+    private User ToEntity(UserDTO userDTO)
     {
         return new User
         {
             Email = userDTO.Email,
             FirstName = userDTO.FirstName,
             LastName = userDTO.LastName,
-            Password = userDTO.Password,
+            Password = _passwordManager.HashPassword(userDTO.Password),
             Birthday = userDTO.Birthday,
             Roles = userDTO.Roles
         };
@@ -94,7 +99,7 @@ public class UserService
         return user;
     }
     
-    private static UserDTO FromEntity(User user)
+    private UserDTO FromEntity(User user)
     {
         return new UserDTO()
         {
