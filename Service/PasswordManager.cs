@@ -5,18 +5,16 @@ using Service.Interfaces;
 
 public class PasswordManager : IPasswordManager
 {
-    // Returns the default password
     public string getDefaultPassword()
     {
-        var defaultPassword = "Password123?"; // Set a default password
+        var defaultPassword = "Password123?"; 
         return defaultPassword;
     }
 
-    // Validates if the provided password matches the required pattern
     public bool IsValidPassword(string password)
     {
         var passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$";
-        return Regex.IsMatch(password, passwordPattern); // Matches the password with the pattern
+        return Regex.IsMatch(password, passwordPattern); 
     }
 
    
@@ -35,15 +33,13 @@ public class PasswordManager : IPasswordManager
             foreach (var b in
                      bytes) builder.Append(b.ToString("x2")); // Convert each byte to a two-character hexadecimal string
 
-            // Return the resulting hash as a string
             return builder.ToString();
         }
     }
 
-    // Verifies if the provided plain password matches the stored hash
     public bool VerifyPassword(string plainPassword, string storedHash)
     {
-        var hashedPassword = HashPassword(plainPassword); // Hash the plain password
-        return hashedPassword == storedHash; // Compare with the stored hash
+        var hashedPassword = HashPassword(plainPassword);
+        return hashedPassword == storedHash; 
     }
 }
