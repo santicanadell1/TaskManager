@@ -8,7 +8,7 @@ namespace Service;
 public class UserService
 {
     private readonly UserRepository _userRepository;
-    private PasswordManager _passwordManager =new PasswordManager();
+    private PasswordManager _passwordManager = new PasswordManager();
     public UserService(UserRepository userRepository)
     {
         _userRepository = userRepository;
@@ -28,7 +28,7 @@ public class UserService
         user.Email = userDTO.Email;
         user.Roles = userDTO.Roles;
         user.Birthday = userDTO.Birthday;
-        user.Password = userDTO.Password;
+        user.Password = _passwordManager.HashPassword(userDTO.Password);
         _userRepository.Update(user.Email,user);
     }
     
