@@ -7,17 +7,17 @@ namespace Service;
 
 public class UserService
 {
-    private readonly UserRepository _userRepository;
+    private readonly InMemoryDatabase _database;
     private PasswordManager _passwordManager = new PasswordManager();
-    public UserService(UserRepository userRepository)
+    public UserService(InMemoryDatabase database)
     {
-        _userRepository = userRepository;
+        _database = database;
     }
 
     public void AddUser(UserDTO userDTO)
     {
         ValidateUserEmailAndPassword(userDTO);
-        _userRepository.AddUser(ToEntity(userDTO));
+        _database.users.AddUser(ToEntity(userDTO));
     }
 
     public void UpdateUser(UserDTO userDTO)
@@ -29,14 +29,14 @@ public class UserService
         user.Roles = userDTO.Roles;
         user.Birthday = userDTO.Birthday;
         user.Password = _passwordManager.HashPassword(userDTO.Password);
-        _userRepository.Update(user.Email,user);
+        _database.users.Update(user.Email,user);
     }
     
     public List<UserDTO> GetUsers()
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (var user in _userRepository.GetAll())
+        foreach (var user in _database.users.GetAll())
         {
             usersDTO.Add(FromEntity(user));
         }
@@ -51,7 +51,7 @@ public class UserService
     
     public UserDTO GetUser(string email)
     {
-        User? user = _userRepository.Get(user => user.Email == email);
+        User? user = _database.users.Get(user => user.Email == email);
         if (user == null)
         {
             throw new UserNotFoundException();
@@ -63,7 +63,7 @@ public class UserService
 
     private void ValidateUserEmailAndPassword(UserDTO userDTO)
     {
-        foreach (var user in _userRepository.GetAll())
+        foreach (var user in _database.users.GetAll())
         {
             if (user.Email == userDTO.Email)
             {
@@ -91,7 +91,7 @@ public class UserService
     }
     private User GetUserObject(string email)
     {
-        User? user = _userRepository.Get(user => user.Email == email);
+        User? user = _database.users.Get(user => user.Email == email);
         if (user == null)
         {
             throw new UserNotFoundException();
