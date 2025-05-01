@@ -58,6 +58,22 @@ public class AdminSService
         user.Password = newPassword;  
         _userService.UpdateUser(user);  
     }
+    
+    public void AssignRole(UserDTO userDTO, Rol role)
+    {
+        CheckAdminRole();  
+
+        var user = _userService.GetUser(userDTO.Email);  
+
+        if (user == null)
+        {
+            throw new UserNotFoundException();  
+        }
+        
+        user.Roles.Add(role);  
+        
+        _userService.UpdateUser(user); 
+    }
 
 
 
