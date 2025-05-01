@@ -92,6 +92,25 @@ public class AdminSService_Test
 
         _adminService.ChangePassword(userToUpdate.Email, newPassword);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(UnauthorizedAdminAccessException))]
+    public void AdminService_ShouldThrowUnauthorizedAccessException_WhenAssignRolAndUserIsNotAdmin()
+    {
+        _loginService.LoginUser("john.doe@example.com", "Password123@");  
 
+        var userToUpdate = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Password = "Password123@",
+            Roles = new List<Rol>()  
+        };
+
+        var roleToAssign = Rol.ProjectMember;  
+
+        _adminService.AssignRole(userToUpdate, roleToAssign);
+    }
 
 }
