@@ -1,5 +1,6 @@
 using DataAccess;
 using Domain;
+using Domain.Exceptions;
 using Service.Models;
 
 namespace Service.Test;
@@ -7,34 +8,49 @@ namespace Service.Test;
 [TestClass]
 public class AdminSService_Test
 {
-    [TestMethod]
-    [ExpectedException(typeof(UnauthorizedAccessException))]
-    public void AdminService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotAdmin()
+    private InMemoryDatabase _database;
+    private AdminSService _adminService;
+    private Login _loginService;
+    private UserService _userService;
+
+    [TestInitialize]
+    public void TestSetUp()
     {
-        var database = new InMemoryDatabase();  
-        var adminService = new AdminService(database);  
+        _database = new InMemoryDatabase();
+        _adminService = new AdminSService(_database);
+        _loginService = new Login(_database);
+        _userService = new UserService(_database);
 
-        var userDTO = new UserDTO
+        var adminUserDTO = new UserDTO
         {
-            FirstName = "NonAdmin",
+            FirstName = "Admin",
             LastName = "User",
-            Email = "nonadmin.user@example.com",
-            Password = "Password123@",
-            Roles = new List<Rol> { Rol.ProjectMember }  
+            Email = "admin.user@example.com",
+            Password = "AdminPassword123@",
+            Roles = new List<Rol> { Rol.AdminSystem }
         };
-
-        var loginService = new Login(database);  
-        loginService.LoginUser(userDTO.Email, userDTO.Password);  
-
-        var newUserDTO = new UserDTO
+        
+        var normalUserDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
-            Roles = new List<Rol>()  
+            Roles = new List<Rol>()
         };
 
-        adminService.CreateUser(newUserDTO);  
+        _userService.AddUser(normalUserDTO);
+        _userService.AddUser(adminUserDTO);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(UnauthorizedAdminAccessException))]
+    public void AdminService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotAdmin()
+    {
+
+        _loginService.LoginUser("john.doe@example.com", "Password123@");
+        var currentUser = LoggedUser.Current;
+
+        _adminService.CreateUser(currentUser);
     }
 }
