@@ -7,10 +7,12 @@ using Service.Models;
 public class AdminSService
 {
     private readonly InMemoryDatabase _database;
+    private UserService _userService;
 
     public AdminSService(InMemoryDatabase database)
     {
         _database = database;
+        _userService = new UserService(_database);
     }
 
     private void CheckAdminRole()
@@ -25,16 +27,14 @@ public class AdminSService
     public void CreateUser(UserDTO userDTO)
     {
         CheckAdminRole();
-        var userService = new UserService(_database);
-        userService.AddUser(userDTO);
+        _userService.AddUser(userDTO);
     }
     
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole(); 
 
-        var userService = new UserService(_database);
-        var user = userService.GetUser(userDTO.Email);  
+        var user = _userService.GetUser(userDTO.Email);  
 
         if (user == null)
         {
