@@ -71,6 +71,11 @@ namespace Domain
         }
 
         public List<Task> PreviousTasks { get; set; }
+
+        public void AddPreviousTask(Task task)
+        {
+            PreviousTasks.Add(task);
+        }
         public State State { get; set; }
     }
 }
