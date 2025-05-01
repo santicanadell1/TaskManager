@@ -90,6 +90,10 @@ namespace Domain
         {
             SameTimeTasks.Add(task);
         }
+        public void RemoveSameTimeTask(Task task)
+        {
+            SameTimeTasks.Remove(task);
+        }
         public State State { get; set; }
     }
     
