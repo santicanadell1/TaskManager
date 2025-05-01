@@ -9,7 +9,7 @@ namespace Domain.Test
         public void NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated()
         {
             User user;
-            DateTime birthday = DateTime.Parse("10/05/2005");
+            DateTime birthday = DateTime.Parse("10/03/2005");
 
             user = new User("First Name", "Last Name", "Email@email.com", birthday, "Password");
 
