@@ -62,8 +62,8 @@ namespace Domain.Test
             Task task2 = new Task("Title1", "Description1", startDate,1, new List<Task>());
             previousTasks.Add(task2);
             Task task1 = new Task("Title", "Description", startDate,1, previousTasks);
-            task1.DeletePreviousTask(task2);
-            Assert.IsTrue(task1.PreviousTasks.Contains(task2));
+            task1.RemovePreviousTask(task2);
+            Assert.IsFalse(task1.PreviousTasks.Contains(task2));
         }
         
     }

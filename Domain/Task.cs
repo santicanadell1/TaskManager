@@ -76,6 +76,11 @@ namespace Domain
         {
             PreviousTasks.Add(task);
         }
+
+        public void RemovePreviousTask(Task task)
+        {
+            PreviousTasks.Remove(task);
+        }
         public State State { get; set; }
     }
 }
