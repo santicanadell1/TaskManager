@@ -82,6 +82,17 @@ namespace Domain.Test
             task1.AddSameTimeTask(task2);
             Assert.IsTrue(task1.SameTimeTasks.Contains(task2));
         } 
-        
+        [TestMethod]
+        public void NewTask_WhenDeletingASameTimeTask_ThenTaskIsDeleted()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task2 = new Task("Title1", "Description1", startDate,1, new List<Task>(), new List<Task>());
+            sameTimeTasks.Add(task2);
+            Task task1 = new Task("Title", "Description", startDate,1, previousTasks, sameTimeTasks);
+            task1.RemoveSameTimeTask(task2);
+            Assert.IsFalse(task1.SameTimeTasks.Contains(task2));
+        }
     }
 }
