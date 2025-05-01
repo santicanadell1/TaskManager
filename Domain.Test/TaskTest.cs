@@ -8,15 +8,10 @@ namespace Domain.Test
         [TestMethod]
         public void NewTask_WhenConstructorIsNotEmpty_ThenTaskIsNotNull()
         {
-            // Arrange
             Task task;
             DateTime startDate = DateTime.Now;
             List<Task> previousTasks = new List<Task>();
-
-            // Act
             task = new Task("Title", "Description", startDate,1, previousTasks);
-
-            // Assert
             Assert.IsNotNull(task);
         }
 
@@ -24,12 +19,9 @@ namespace Domain.Test
         [ExpectedException(typeof(TaskTitleException))]
         public void NewTask_WhenTitleIsEmptyOrWhiteSpaces_ThenThrowTaskTitleException()
         {
-            // Arrange
             Task task;
             DateTime startDate = DateTime.Now;
             List<Task> previousTasks = new List<Task>();
-
-            // Act
             task = new Task("", "Description", startDate, 1, previousTasks);
         }
 
@@ -37,12 +29,9 @@ namespace Domain.Test
         [ExpectedException(typeof(TaskDescriptionException))]
         public void NewTask_WhenDescriptionIsEmptyOrWhiteSpaces_ThenThrowTaskDescriptionException()
         {
-            // Arrange
             Task task;
             DateTime startDate = DateTime.Now;
             List<Task> previousTasks = new List<Task>();
-
-            // Act
             task = new Task("Title", "", startDate, 1, previousTasks);
         }
 
@@ -50,13 +39,20 @@ namespace Domain.Test
         [ExpectedException(typeof(TaskDurationException))]
         public void NewTask_WhenDurationIsZeroOrNegative_ThenThrowTaskDurationException()
         {
-            // Arrange
             Task task;
             DateTime startDate = DateTime.Now;
             List<Task> previousTasks = new List<Task>();
-
-            // Act
             task = new Task("Title", "Description", startDate, -11, previousTasks); 
+        }
+        [TestMethod]
+        public void NewTask_WhenAddingNewPreviousTask_ThenTaskIsAdded()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            Task task1 = new Task("Title", "Description", startDate,1, previousTasks);
+            Task task2 = new Task("Title1", "Description1", startDate,1, previousTasks);
+            task1.AddPreviousTask(task2);
+            Assert.IsTrue(task1.PreviousTasks.Contains(task2));
         }
         
     }
