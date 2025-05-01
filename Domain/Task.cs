@@ -15,13 +15,14 @@ namespace Domain
         private List<Task> _sameTimeTasks;
         private State _state;
 
-        public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks)
+        public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks, List<Task> sameTimeTasks)
         {
             this.Title = title; 
             this.Description = description; 
             this.ExpectedStartDate = startDate;
             this.Duration = duration;  
             this.PreviousTasks = previousTasks;
+            this.SameTimeTasks = sameTimeTasks;
             this.State = State.TODO;  
         }
 
@@ -82,6 +83,14 @@ namespace Domain
         {
             PreviousTasks.Remove(task);
         }
+        
+        public List<Task> SameTimeTasks { get; set; }
+
+        public void AddSameTimeTask(Task task)
+        {
+            SameTimeTasks.Add(task);
+        }
         public State State { get; set; }
     }
+    
 }
