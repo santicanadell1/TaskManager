@@ -28,4 +28,21 @@ public class AdminSService
         var userService = new UserService(_database);
         userService.AddUser(userDTO);
     }
+    
+    public void DeleteUser(UserDTO userDTO)
+    {
+        CheckAdminRole(); 
+
+        var userService = new UserService(_database);
+        var user = userService.GetUser(userDTO.Email);  
+
+        if (user == null)
+        {
+            throw new UserNotFoundException(); 
+        }
+
+        _database.users.Delete(user.Email);  
+    }
+
+
 }
