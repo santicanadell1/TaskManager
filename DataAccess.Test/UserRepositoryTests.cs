@@ -1,6 +1,7 @@
 namespace DataAccess.Test;
 
 using Domain;
+using Domain.Exceptions.UserRepositoryExceptions;
 using global::DataAccess;
 
 [TestClass]
@@ -56,8 +57,8 @@ public class UserRepositoryTests
         Assert.AreNotEqual(user, userRepository.Get(u => u.Email == "Email1@email.com"));
     }
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void updateAUser_WhenEmailIsNotFound_ThrowArgumentException()
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void updateAUser_WhenEmailIsNotFound_ThrowUserNotFoundException()
     {
         //Arrange
         UserRepository userRepository = new UserRepository();

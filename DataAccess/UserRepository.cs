@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Exceptions.UserRepositoryExceptions;
 namespace DataAccess;
 
 public class UserRepository
@@ -27,7 +28,7 @@ public class UserRepository
         int index = _users.FindIndex(u => u.Email == email);
         if (index == -1)
         {
-            throw new ArgumentException("User not found");
+            throw new UserNotFoundException();
         }
         _users[index] = user;
     }
@@ -37,7 +38,7 @@ public class UserRepository
         int index = _users.FindIndex(u => u.Email == email);
         if (index == -1)
         {
-            throw new ArgumentException("User not found");
+            throw new UserNotFoundException();
         }
         _users.RemoveAt(index);
     }
