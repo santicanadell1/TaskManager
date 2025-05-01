@@ -12,6 +12,7 @@ namespace Domain
         private DateTime _endDate;
         private int _duration;
         private List<Task> _previousTasks;
+        private List<Task> _sameTimeTasks;
         private State _state;
 
         public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks)
