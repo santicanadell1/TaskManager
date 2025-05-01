@@ -1,6 +1,12 @@
+using DataAccess;
 using Interface.Components;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<InMemoryDatabase>();
+builder.Services.AddScoped<Login>();
+builder.Services.AddScoped<UserService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
