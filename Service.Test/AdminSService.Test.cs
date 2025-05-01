@@ -58,7 +58,7 @@ public class AdminSService_Test
     [ExpectedException(typeof(UserNotFoundException))]
     public void AdminService_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
     {
-        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@"); // Logueamos al admin
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@"); 
         var currentUser = LoggedUser.Current;
 
         var userToDeleteDTO = new UserDTO
@@ -72,5 +72,28 @@ public class AdminSService_Test
 
         _adminService.DeleteUser(userToDeleteDTO);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(UnauthorizedAccessException))]
+    public void AdminService_ShouldThrowUnauthorizedAccessException_WhenChangePasswordUserIsNotAdmin()
+    {
+      
+
+        _loginService.LoginUser("john.doe@example.com", "Password123@");  
+
+        var userToUpdate = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Password = "OldPassword123@",
+            Roles = new List<Rol>()
+        };
+
+        var newPassword = "NewPassword456@";
+
+        _adminService.ChangePassword(userToUpdate.Email, newPassword);
+    }
+
 
 }
