@@ -4,7 +4,12 @@ namespace DataAccess;
 
 public class InMemoryDatabase
 {
-    private UserRepository users;
-    private NotificationRepository notifications;
-    
+    public UserRepository users;
+    public NotificationRepository notifications;
+
+    public InMemoryDatabase()
+    {
+        users = new UserRepository();
+        notifications = new NotificationRepository();
+    }
 }

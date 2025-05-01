@@ -1,0 +1,88 @@
+﻿@page "/login"
+@using Service
+@using Service.Exceptions
+@using Service.Models
+@inject NavigationManager Navigation
+@inject Login LoginService
+@rendermode InteractiveServer
+
+<div class="login-container">
+    <h3 class="login-title">Login</h3>
+
+    <!-- Custom alert for incorrect login with a close button -->
+    @if (alertVisible)
+    {
+        <div class="d-flex justify-content-center align-items-center mt-2">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>@alertMessage</strong>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="ToggleAlertVisibility"></button>
+            </div>
+        </div>
+    }
+
+    <EditForm Model="_userLoginDto" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="userName">Email</label>
+            <InputText id="userName" class="form-control mt-1" @bind-Value="_userLoginDto.Email" />
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="password">Password</label>
+            <div class="input-password-wrapper">
+                <InputText id="password"
+                           type="@passwordInputType"
+                           class="form-control mt-1"
+                           @bind-Value="_userLoginDto.Password" />
+                <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
+                    <i class="@passwordEyeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+
+        <div class="form-group">
+            <a href="/signup">Don't have an account? Register</a>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private string passwordInputType = "password";
+    private string passwordEyeIcon = "fas fa-eye-slash";
+    private string alertMessage = "";
+    private bool alertVisible = false;
+
+    private UserLoginDTO _userLoginDto = new UserLoginDTO("", "");
+
+    private void TogglePasswordVisibility()
+    {
+        passwordInputType = passwordInputType == "password" ? "text" : "password";
+        passwordEyeIcon = passwordInputType == "text" ? "fas fa-eye" : "fas fa-eye-slash";
+    }
+
+    private void HandleValidSubmit()
+    {
+        try
+        {
+            LoginService.LoginUser(_userLoginDto.Email, _userLoginDto.Password);
+
+            Navigation.NavigateTo("/");  
+        }
+        catch (InvalidLoginCredentialsException ex)
+        {
+            alertVisible = true;
+            alertMessage = "Invalid email or password. Please try again.";
+        }
+    }
+
+    private void ToggleAlertVisibility()
+    {
+        alertVisible = !alertVisible; // Toggles the visibility of the alert message
+    }
+}

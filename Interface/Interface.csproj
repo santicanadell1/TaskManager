@@ -26,4 +26,9 @@
       <TypeScriptCompile Include="wwwroot\styles\styleResourceCreate.css" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+      <ProjectReference Include="..\Service\Service.csproj" />
+    </ItemGroup>
+
 </Project>

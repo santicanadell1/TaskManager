@@ -2,59 +2,32 @@ using DataAccess;
 using Domain;
 using Service;
 using Service.Exceptions;
+using Service.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 [TestClass]
 public class LoginTests
 {
     private Login _login;
-    private UserRepository _userRepository;
+    private InMemoryDatabase _inMemoryDatabase;
+    private PasswordManager _passwordManager;
 
     [TestInitialize]
     public void Setup()
     {
-        _userRepository = new UserRepository(); 
-        _login = new Login(_userRepository); 
+        _inMemoryDatabase = new InMemoryDatabase();
+        _login = new Login(_inMemoryDatabase);
+        _passwordManager = new PasswordManager();
     }
 
     [TestMethod]
     public void Login_ShouldLoginSuccessfully_WithValidCredentials()
     {
-        // Arrange
-        var email = "john.doe@example.com";
-        var password = "Password123@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject};
-
-        // Add a user to the repository for testing
-        _userRepository.AddUser(new User
-        {
-            Email = email,
-            FirstName = "John",
-            LastName = "Doe",
-            Password = password, // Correct password
-            Roles = roles
-        });
-
-        // Act
-        _login.LoginUser(email, password);
-
-        // Assert
-        var loggedUser = _login.GetLoggedUser();
-        Assert.IsNotNull(loggedUser);
-        Assert.AreEqual("John", loggedUser.FirstName);
-        Assert.AreEqual("Doe", loggedUser.LastName);
-        Assert.AreEqual("john.doe@example.com", loggedUser.Email);
-    }
-    
-    [TestMethod]
-    public void Logout_ShouldLogoutSuccessfully_WhenUserIsLoggedIn()
-    {
-        // Arrange
         var email = "john.doe@example.com";
         var password = "Password123@";
         var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
 
-        // Crear un usuario de prueba
-        var user = new User
+        var userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
@@ -63,19 +36,44 @@ public class LoginTests
             Roles = roles
         };
 
-        _userRepository.AddUser(user);
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
 
-        // Act 
         _login.LoginUser(email, password);
 
-        // Assert 
+        var loggedUser = _login.GetLoggedUser();
+        Assert.IsNotNull(loggedUser);
+        Assert.AreEqual("John", loggedUser.FirstName);
+        Assert.AreEqual("Doe", loggedUser.LastName);
+        Assert.AreEqual("john.doe@example.com", loggedUser.Email);
+    }
+
+    [TestMethod]
+    public void Logout_ShouldLogoutSuccessfully_WhenUserIsLoggedIn()
+    {
+        var email = "john.doe@example.com";
+        var password = "Password123@";
+        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+
+        var userDTO = new UserDTO
+        {
+            Email = email,
+            FirstName = "John",
+            LastName = "Doe",
+            Password = password,
+            Roles = roles
+        };
+
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
+
+        _login.LoginUser(email, password);
+
         var loggedUserBeforeLogout = _login.GetLoggedUser();
         Assert.IsNotNull(loggedUserBeforeLogout);
 
-        // Act - Hacer logout
         _login.Logout();
 
-        // Assert 
         var loggedUserAfterLogout = _login.GetLoggedUser();
         Assert.IsNull(loggedUserAfterLogout);
     }
@@ -84,25 +82,22 @@ public class LoginTests
     [ExpectedException(typeof(InvalidLoginCredentialsException))]
     public void Login_ShouldThrowInvalidLoginCredentialsException_WhenCredentialsAreIncorrect()
     {
-        // Arrange
         var email = "john.doe@example.com";
         var password = "WrongPassword@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject};
+        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
 
-        // Add a user to the repository for testing
-        _userRepository.AddUser(new User
+        var userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
             LastName = "Doe",
-            Password = "Password123@", // Correct password
+            Password = "Password123@",
             Roles = roles
-        });
+        };
 
-        // Act - Try to login with incorrect credentials
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
+
         _login.LoginUser(email, password);
-
-        // Assert is handled by ExpectedException
     }
-    
 }
