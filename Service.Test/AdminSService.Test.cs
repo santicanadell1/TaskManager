@@ -53,4 +53,24 @@ public class AdminSService_Test
 
         _adminService.CreateUser(currentUser);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void AdminService_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@"); // Logueamos al admin
+        var currentUser = LoggedUser.Current;
+
+        var userToDeleteDTO = new UserDTO
+        {
+            FirstName = "Nonexistent",
+            LastName = "User",
+            Email = "nonexistent.user@example.com",  
+            Password = "Password123@",
+            Roles = new List<Rol>()
+        };
+
+        _adminService.DeleteUser(userToDeleteDTO);
+    }
+
 }
