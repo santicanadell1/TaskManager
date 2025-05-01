@@ -43,6 +43,22 @@ public class AdminSService
 
         _database.users.Delete(user.Email);  
     }
+    
+    public void ChangePassword(string email, string newPassword)
+    {
+        CheckAdminRole();  
+
+        var user = _userService.GetUser(email);  
+
+        if (user == null)
+        {
+            throw new UserNotFoundException();  
+        }
+
+        user.Password = newPassword;  
+        _userService.UpdateUser(user);  
+    }
+
 
 
 }

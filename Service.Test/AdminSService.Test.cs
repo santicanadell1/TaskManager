@@ -74,11 +74,9 @@ public class AdminSService_Test
     }
     
     [TestMethod]
-    [ExpectedException(typeof(UnauthorizedAccessException))]
+    [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void AdminService_ShouldThrowUnauthorizedAccessException_WhenChangePasswordUserIsNotAdmin()
     {
-      
-
         _loginService.LoginUser("john.doe@example.com", "Password123@");  
 
         var userToUpdate = new UserDTO
