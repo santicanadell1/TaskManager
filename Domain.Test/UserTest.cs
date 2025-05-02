@@ -131,10 +131,17 @@ namespace Domain.Test
         [TestMethod]
         public void User_WhenInitializedWithEmptyConstructor_ThenPropertiesAreInitializedWithDefaultValues()
         {
-            User user;
+           
+            User user = new User();
 
-            user = new User();
+        
+            Assert.IsNull(user.FirstName);
+            Assert.IsNull(user.LastName);
+            Assert.IsNull(user.Email);
+            Assert.IsNull(user.Password);
+            Assert.AreEqual(0, user.Roles.Count);  
         }
+
 
         [TestMethod]
         public void FirstName_WhenValid_ThenUserIsCreated()
@@ -167,17 +174,10 @@ namespace Domain.Test
 
             Assert.IsTrue(user.Email == "john.doe@example.com");
         }
+  
 
 
 
-
-
-
-
-
-
-
-
-
+        
     }
 }
