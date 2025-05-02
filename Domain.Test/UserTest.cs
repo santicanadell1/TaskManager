@@ -179,13 +179,23 @@ namespace Domain.Test
         public void Roles_WhenAssignedEmptyList_ThenRolesShouldBeEmpty()
         {
             User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-
-            // Asignamos una lista vacía de roles
+            
             user.Roles = new List<Rol>();
 
             Assert.AreEqual(0, user.Roles.Count);
         }
 
+        [TestMethod]
+        public void Email_WhenSetToInvalidFormat_ThenThrowUserEmailException()
+        {
+            User user = new User("John", "Doe", "valid.email@example.com", DateTime.Parse("10/05/2005"), "Password");
+
+            
+            user.Email = "invalidemail";
+
+          
+            Assert.AreEqual("invalidemail", user.Email); 
+        }
 
     
 
