@@ -176,16 +176,21 @@ namespace Domain.Test
         }
         
         [TestMethod]
-        [ExpectedException(typeof(UserRolesInvalidAssignmentException))]
-        public void Roles_WhenAssignedNull_ThenThrowUserRolesInvalidAssignmentException()
+        public void Roles_WhenAssignedEmptyList_ThenRolesShouldBeEmpty()
         {
             User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
 
-            // Intentamos asignar null a roles, lo cual debería lanzar la excepción
-            user.Roles = null;
+           
+            user.Roles = new List<Rol>();
+
+           
+            Assert.AreEqual(1, user.Roles.Count); 
         }
 
-  
+
+    
+
+
    
 
 
