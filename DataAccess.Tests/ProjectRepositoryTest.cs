@@ -80,4 +80,20 @@ public class ProjectRepositoryTest
         projectRepository.RemoveProject(project.Name);
     }
     
+    [TestMethod]
+    public void UpdateProject_WhenGettingProject_ShouldBeDifferentFromTheOriginalProject()
+    {
+        ProjectRepository projectRepository;
+        projectRepository = new ProjectRepository();
+        Project project = new Project();
+        project.Name = "Project 1";
+        project.Description = "Project 1 description";
+        Project project2 = new Project();
+        project2.Name = "Project 1";
+        project2.Description = "Project 2 description";
+        projectRepository.AddProject(project);
+        projectRepository.UpdateProject(project.Name,project2);
+        Assert.AreNotEqual(projectRepository.GetProject(p=> p.Name == "Project 1"), project);
+    }
+    
 }
