@@ -6,6 +6,8 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void NewProjectRepository_WhenRepositoryIsCreated_ShouldNotBeNull()
     {
-        throw new NotImplementedException();
+        ProjectRepository projectRepository;
+        projectRepository = new ProjectRepository();
+        Assert.IsNotNull(projectRepository);
     }
 }
