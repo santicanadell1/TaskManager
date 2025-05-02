@@ -13,7 +13,15 @@ public class ProjectRepository
     
     public void AddProject(Project project)
     {
-        Projects.Add(project);
+        if (Projects.Any(p => p.Name == project.Name))
+        {
+            throw new ProjectRepositoryExceptions.DuplicatedProjectsNameException();
+        }
+        else
+        {
+            Projects.Add(project);
+        }
+        
     }
 
     public List<Project> GetAllProjects()

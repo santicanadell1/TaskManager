@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using DataAccess.ProjectRepositoryExceptions;
+using Domain;
 namespace DataAccess.Test;
 
 [TestClass]
@@ -24,7 +25,7 @@ public class ProjectRepositoryTest
     }
 
     [TestMethod]
-    [ExpectedException(DuplicatedNameException)]
+    [ExpectedException(typeof(DuplicatedProjectsNameException))]
     public void AddNewProject_WhenAddingDuplicatedProject_ShouldThrowDuplicatedNameException()
     {
         ProjectRepository projectRepository;
