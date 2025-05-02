@@ -112,5 +112,4 @@ public class AdminSService_Test
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
     }
-
 }
