@@ -33,4 +33,9 @@ public class ProjectRepository
     {
         return Projects.FirstOrDefault(filter);
     }
+    
+    public void RemoveProject(string name)
+    {
+        Projects.Remove(Projects.Find(p => p.Name == name));
+    }
 }

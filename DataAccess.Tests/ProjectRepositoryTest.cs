@@ -61,7 +61,9 @@ public class ProjectRepositoryTest
         project2.Name = "Project 2";
         projectRepository.AddProject(project);
         projectRepository.AddProject(project2);
-        projectRepository.Delete(project.Name);
+        projectRepository.RemoveProject(project.Name);
         Assert.IsNull(projectRepository.GetProject(p=> p.Name == "Project 1"));
     }
+   
+    
 }
