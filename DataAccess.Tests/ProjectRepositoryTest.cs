@@ -48,6 +48,20 @@ public class ProjectRepositoryTest
         projectRepository.AddProject(project);
         projectRepository.AddProject(project2);
         Assert.AreEqual(projectRepository.GetProject(u=> u.Name == "Project 2"), project2);
+    }
 
+    [TestMethod]
+    public void DeleteProject_WhenGettingProject_ShouldBeNull()
+    {
+        ProjectRepository projectRepository;
+        projectRepository = new ProjectRepository();
+        Project project = new Project();
+        project.Name = "Project 1";
+        Project project2 = new Project();
+        project2.Name = "Project 2";
+        projectRepository.AddProject(project);
+        projectRepository.AddProject(project2);
+        projectRepository.Delete(project.Name);
+        Assert.IsNull(projectRepository.GetProject(p=> p.Name == "Project 1"));
     }
 }
