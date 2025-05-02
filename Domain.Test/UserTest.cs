@@ -165,8 +165,7 @@ namespace Domain.Test
 
             user = new User("John", "Doe", "john.doe@example.com", birthday, "Password");
 
-          
-            Assert.IsTrue(user.Email == "wrong.email@example.com"); 
+            Assert.IsTrue(user.Email == "john.doe@example.com");
         }
 
 
