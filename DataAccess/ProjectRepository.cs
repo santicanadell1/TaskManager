@@ -20,4 +20,9 @@ public class ProjectRepository
     {
         return Projects;
     }
+
+    public Project? GetProject(Func<Project, bool> filter)
+    {
+        return Projects.FirstOrDefault(filter);
+    }
 }

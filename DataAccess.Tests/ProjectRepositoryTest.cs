@@ -34,7 +34,7 @@ public class ProjectRepositoryTest
         project2.Name = "Project 2";
         projectRepository.AddProject(project);
         projectRepository.AddProject(project2);
-        Assert.AreEqual(projectRepository.GetProject("Project 2"), project2);
+        Assert.AreEqual(projectRepository.GetProject(u=> u.Name == "Project 2"), project2);
 
     }
 }
