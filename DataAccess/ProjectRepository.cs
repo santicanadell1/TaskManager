@@ -52,6 +52,11 @@ public class ProjectRepository
         {
             throw new ProjectRepositoryExceptions.DuplicatedProjectsNameException();
         }
+
+        if (!Projects.Any(p => p.Name == name))
+        {
+            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+        }
         int index = Projects.FindIndex(p => p.Name == name);
         Projects[index] = project;
     }
