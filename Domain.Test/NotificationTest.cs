@@ -28,5 +28,17 @@ namespace Domain.Test
           
             Assert.IsTrue(not.Read);
         }
+        
+        [TestMethod]
+        public void NewNotification_WhenDescriptionIsValid_ShouldCreateNotification()
+        {
+            Notification not = new Notification(false, "Valid description");
+
+            
+            Assert.AreEqual("Invalid description", not.Description); 
+        }
+
+
+        
     }
 }
