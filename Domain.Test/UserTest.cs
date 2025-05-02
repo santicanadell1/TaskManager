@@ -142,10 +142,9 @@ namespace Domain.Test
             User user;
             DateTime birthday = DateTime.Parse("10/05/2005");
 
-            // Modificando el valor de FirstName a algo diferente
-            user = new User("Jane", "Doe", "email@email.com", birthday, "Password");
+            user = new User("John", "Doe", "email@email.com", birthday, "Password");
 
-            Assert.AreEqual("John", user.FirstName); // Esto fallará ahora, porque el primer nombre es "Jane"
+            Assert.AreEqual("John", user.FirstName);
         }
 
 
