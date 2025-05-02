@@ -180,11 +180,10 @@ namespace Domain.Test
         {
             User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
 
-           
+            // Asignamos una lista vacía de roles
             user.Roles = new List<Rol>();
 
-           
-            Assert.AreEqual(1, user.Roles.Count); 
+            Assert.AreEqual(0, user.Roles.Count);
         }
 
 
