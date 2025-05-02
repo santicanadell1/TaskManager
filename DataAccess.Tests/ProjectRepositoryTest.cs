@@ -96,4 +96,24 @@ public class ProjectRepositoryTest
         Assert.AreNotEqual(projectRepository.GetProject(p=> p.Name == "Project 1"), project);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(DuplicatedProjectsNameException))]
+    public void updateProject_WhenNameIsDuplicated_ShouldThrowDuplicatedNameException()
+    {
+        ProjectRepository projectRepository;
+        projectRepository = new ProjectRepository();
+        Project project = new Project();
+        project.Name = "Project 1";
+        project.Description = "Project 1 description";
+        Project project2 = new Project();
+        project2.Name = "Project 2";
+        project2.Description = "Project 2 description";
+        Project project3 = new Project();
+        project3.Name = "Project 2";
+        project3.Description = "Project 3 description";
+        projectRepository.AddProject(project);
+        projectRepository.AddProject(project2);
+        projectRepository.UpdateProject(project.Name,project3);
+    }
+    
 }
