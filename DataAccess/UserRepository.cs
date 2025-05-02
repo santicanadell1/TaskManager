@@ -29,6 +29,10 @@ public class UserRepository
 
     public void Update(string email, User user)
     {
+        if (_users.Any(u => u.Email == user.Email) && user.Email != email)
+        {
+            throw new UserEmailIsDuplicatedException();
+        }
         int index = _users.FindIndex(u => u.Email == email);
         if (index == -1)
         {
