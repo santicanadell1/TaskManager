@@ -37,7 +37,7 @@ public class ProjectRepositoryTest
     }
     
     [TestMethod]
-    public void AddNewProject_WhenGettingUser_ShouldReturnUser()
+    public void AddNewProject_WhenGettingProject_ShouldReturnProject()
     {
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
