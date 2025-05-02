@@ -110,9 +110,24 @@ namespace Domain.Test
             Assert.AreEqual(expectedDate, task.ExpectedStartDate);
         }
 
+        [TestMethod]
+        public void EndDate_WhenSet_ThenDateIsAssigned()
+        {
+            DateTime endDate = DateTime.Parse("2026-09-01");
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
+
+            task.EndDate = endDate;
 
 
-        
-        
+            Assert.AreEqual(DateTime.Parse("2026-01-01"), task.EndDate);
+        }
+
+
+
+
+
+
     }
 }
