@@ -131,9 +131,111 @@ namespace Domain.Test
         [TestMethod]
         public void User_WhenInitializedWithEmptyConstructor_ThenPropertiesAreInitializedWithDefaultValues()
         {
-            User user;
+           
+            User user = new User();
 
-            user = new User();
+        
+            Assert.IsNull(user.FirstName);
+            Assert.IsNull(user.LastName);
+            Assert.IsNull(user.Email);
+            Assert.IsNull(user.Password);
+            Assert.AreEqual(0, user.Roles.Count);  
         }
+
+
+        [TestMethod]
+        public void FirstName_WhenValid_ThenUserIsCreated()
+        {
+            User user;
+            DateTime birthday = DateTime.Parse("10/05/2005");
+
+            user = new User("John", "Doe", "email@email.com", birthday, "Password");
+
+            Assert.AreEqual("John", user.FirstName);
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(UserLastNameException))]
+        public void LastName_WhenInvalid_ThenThrowUserLastNameException()
+        {
+            User user;
+            DateTime birthday = DateTime.Parse("10/05/2005");
+
+            user = new User("John", "", "email@email.com", birthday, "Password");
+        }
+        
+        [TestMethod]
+        public void Email_WhenValid_ThenUserIsCreated()
+        {
+            User user;
+            DateTime birthday = DateTime.Parse("10/05/2005");
+
+            user = new User("John", "Doe", "john.doe@example.com", birthday, "Password");
+
+            Assert.IsTrue(user.Email == "john.doe@example.com");
+        }
+        
+        [TestMethod]
+        public void Roles_WhenAssignedEmptyList_ThenRolesShouldBeEmpty()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            
+            user.Roles = new List<Rol>();
+
+            Assert.AreEqual(0, user.Roles.Count);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(UserEmailException))]
+        public void Email_WhenSetToInvalidFormat_ThenThrowUserEmailException()
+        {
+            User user = new User("John", "Doe", "valid.email@example.com", DateTime.Parse("10/05/2005"), "Password");
+
+           
+            user.Email = "invalidemail";
+        }
+
+        
+        
+        [TestMethod]
+        public void AddRol_WhenRolesListIsEmpty_ThenRoleIsAdded()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+
+            
+            user.Roles = new List<Rol>();
+            
+            user.AddRol(Rol.AdminSystem);
+
+            Assert.AreEqual(1, user.Roles.Count);
+            Assert.IsTrue(user.Roles.Contains(Rol.AdminSystem));
+        }
+
+
+        
+    
+        [TestMethod]
+        public void RemoveRol_WhenSingleRole_ThenRoleIsRemoved()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+
+            
+            user.Roles = new List<Rol> { Rol.AdminSystem };
+
+   
+            user.RemoveRol(Rol.AdminSystem);
+
+            Assert.AreEqual(0, user.Roles.Count);
+        }
+
+
+
+
+
+
+   
+
+
+        
     }
 }
