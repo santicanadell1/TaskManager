@@ -64,6 +64,18 @@ public class UserRepositoryTests
         userRepository.Update("EmailDiferente@email.com",user2);
     }
     [TestMethod]
+    [ExpectedException(typeof(UserEmailIsDuplicatedException))]
+    public void updateAUser_WhenEmailAlreadyExists_ThrowUserEmailIsDuplicatedException()
+    {
+        UserRepository userRepository = new UserRepository();
+        User user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Parse("20/12/12"), "Password");
+        User user2 = new User("First Name 2", "Last Name 2", "Email2@email.com", DateTime.Parse("20/12/12"), "Password");
+        User user3 = new User("First Name 3", "Last Name 3", "Email2@email.com", DateTime.Parse("20/12/12"), "Password");
+        userRepository.AddUser(user);
+        userRepository.AddUser(user2);
+        userRepository.Update("Email1@email.com",user3);
+    }
+    [TestMethod]
     public void DeleteAUser_WhenGettingTheUser_ShouldBeNull()
     {
         UserRepository userRepository = new UserRepository();
