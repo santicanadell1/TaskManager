@@ -196,6 +196,19 @@ namespace Domain.Test
         }
 
     
+        [TestMethod]
+        public void RemoveRol_WhenSingleRole_ThenRoleIsRemoved()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+
+            user.Roles = new List<Rol> { Rol.AdminSystem };
+
+            user.RemoveRol(Rol.AdminSystem);
+
+            
+            Assert.AreEqual(1, user.Roles.Count); 
+        }
+
 
 
    
