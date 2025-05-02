@@ -148,16 +148,13 @@ namespace Domain.Test
         }
         
         [TestMethod]
+        [ExpectedException(typeof(UserLastNameException))]
         public void LastName_WhenInvalid_ThenThrowUserLastNameException()
         {
             User user;
             DateTime birthday = DateTime.Parse("10/05/2005");
 
-            // Aquí no se lanzará la excepción
             user = new User("John", "", "email@email.com", birthday, "Password");
-
-            // Puedes agregar una verificación manual para comprobar que la excepción no se lanzó
-            Assert.Fail("Expected exception was not thrown");
         }
 
 
