@@ -186,15 +186,13 @@ namespace Domain.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(UserEmailException))]
         public void Email_WhenSetToInvalidFormat_ThenThrowUserEmailException()
         {
             User user = new User("John", "Doe", "valid.email@example.com", DateTime.Parse("10/05/2005"), "Password");
 
-            
+           
             user.Email = "invalidemail";
-
-          
-            Assert.AreEqual("invalidemail", user.Email); 
         }
 
     
