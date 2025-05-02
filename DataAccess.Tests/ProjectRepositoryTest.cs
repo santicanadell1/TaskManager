@@ -22,6 +22,18 @@ public class ProjectRepositoryTest
         projectRepository.AddProject(project);
         Assert.IsTrue(projectRepository.GetAllProjects().Contains(project));
     }
+
+    [TestMethod]
+    [ExpectedException(DuplicatedNameException)]
+    public void AddNewProject_WhenAddingDuplicatedProject_ShouldThrowDuplicatedNameException()
+    {
+        ProjectRepository projectRepository;
+        projectRepository = new ProjectRepository();
+        Project project = new Project();
+        project.Name = "Project 1";
+        projectRepository.AddProject(project);
+        projectRepository.AddProject(project);
+    }
     
     [TestMethod]
     public void AddNewProject_WhenGettingUser_ShouldReturnUser()
