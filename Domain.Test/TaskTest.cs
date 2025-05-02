@@ -8,16 +8,12 @@ namespace Domain.Test
         [TestMethod]
         public void NewTask_WhenConstructorIsNotEmpty_ThenTaskIsNotNull()
         {
-            
             Task task;
             DateTime startDate = DateTime.Now;
             DateTime endDate = DateTime.Parse("2026-09-01");
             List<Task> previousTasks = new List<Task>();
-
-            
-            task = new Task("Title", "Description", startDate, endDate, 1, previousTasks);
-
-            
+            List<Task> sameTimeTasks = new List<Task>();
+            task = new Task("Title", "Description", startDate,1, previousTasks, sameTimeTasks);
             Assert.IsNotNull(task);
         }
 
@@ -25,56 +21,79 @@ namespace Domain.Test
         [ExpectedException(typeof(TaskTitleException))]
         public void NewTask_WhenTitleIsEmptyOrWhiteSpaces_ThenThrowTaskTitleException()
         {
-         
             Task task;
             DateTime startDate = DateTime.Now;
-            DateTime endDate = DateTime.Today;
             List<Task> previousTasks = new List<Task>();
-
-            
-            task = new Task("", "Description", startDate, endDate, 1, previousTasks);
+            List<Task> sameTimeTasks = new List<Task>();
+            task = new Task("", "Description", startDate, 1, previousTasks, sameTimeTasks);
         }
 
         [TestMethod]
         [ExpectedException(typeof(TaskDescriptionException))]
         public void NewTask_WhenDescriptionIsEmptyOrWhiteSpaces_ThenThrowTaskDescriptionException()
         {
-         
             Task task;
             DateTime startDate = DateTime.Now;
-            DateTime endDate = DateTime.Today;
             List<Task> previousTasks = new List<Task>();
-
-           
-            task = new Task("Title", "", startDate, endDate, 1, previousTasks);
+            List<Task> sameTimeTasks = new List<Task>();
+            task = new Task("Title", "", startDate, 1, previousTasks, sameTimeTasks);
         }
 
         [TestMethod]
         [ExpectedException(typeof(TaskDurationException))]
         public void NewTask_WhenDurationIsZeroOrNegative_ThenThrowTaskDurationException()
         {
-           
             Task task;
             DateTime startDate = DateTime.Now;
-            DateTime endDate = DateTime.Parse("2026-09-01");
             List<Task> previousTasks = new List<Task>();
-
-          
-            task = new Task("Title", "Description", startDate, endDate, -11, previousTasks); // Should throw exception
+            List<Task> sameTimeTasks = new List<Task>();
+            task = new Task("Title", "Description", startDate, -11, previousTasks, sameTimeTasks); 
         }
-
         [TestMethod]
-        [ExpectedException(typeof(TaskEndDateException))]
-        public void NewTask_WhenExpectedEndDateIsBeforeExpectedStartDate_ThenThrowTaskEndDateException()
+        public void NewTask_WhenAddingNewPreviousTask_ThenTaskIsAdded()
         {
-         
-            Task task;
-            DateTime startDate = DateTime.Parse("2023-01-01");
-            DateTime endDate = DateTime.Parse("2022-01-01");
+            DateTime startDate = DateTime.Now;
             List<Task> previousTasks = new List<Task>();
-
-            
-            task = new Task("Title", "Description", startDate, endDate, 1, previousTasks); // Should throw exception
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task1 = new Task("Title", "Description", startDate,1, previousTasks, sameTimeTasks);
+            Task task2 = new Task("Title1", "Description1", startDate,1, previousTasks, sameTimeTasks);
+            task1.AddPreviousTask(task2);
+            Assert.IsTrue(task1.PreviousTasks.Contains(task2));
+        } 
+        [TestMethod]
+        public void NewTask_WhenDeletingAPreviousTask_ThenTaskIsDeleted()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task2 = new Task("Title1", "Description1", startDate,1, new List<Task>(), sameTimeTasks);
+            previousTasks.Add(task2);
+            Task task1 = new Task("Title", "Description", startDate,1, previousTasks, sameTimeTasks);
+            task1.RemovePreviousTask(task2);
+            Assert.IsFalse(task1.PreviousTasks.Contains(task2));
+        }
+        [TestMethod]
+        public void NewTask_WhenAddingNewSameTimeTask_ThenTaskIsAdded()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task1 = new Task("Title", "Description", startDate,1, previousTasks, sameTimeTasks);
+            Task task2 = new Task("Title1", "Description1", startDate,1, previousTasks, sameTimeTasks);
+            task1.AddSameTimeTask(task2);
+            Assert.IsTrue(task1.SameTimeTasks.Contains(task2));
+        } 
+        [TestMethod]
+        public void NewTask_WhenDeletingASameTimeTask_ThenTaskIsDeleted()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task2 = new Task("Title1", "Description1", startDate,1, new List<Task>(), new List<Task>());
+            sameTimeTasks.Add(task2);
+            Task task1 = new Task("Title", "Description", startDate,1, previousTasks, sameTimeTasks);
+            task1.RemoveSameTimeTask(task2);
+            Assert.IsFalse(task1.SameTimeTasks.Contains(task2));
         }
     }
 }
