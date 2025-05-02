@@ -51,7 +51,8 @@ namespace Domain.Test
         {
             Notification not = new Notification(false, "Valid description");
 
-            Assert.AreEqual("Invalid description", not.Description);
+           
+            Assert.AreEqual("Valid description", not.Description);
         }
 
 
