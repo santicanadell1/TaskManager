@@ -64,6 +64,20 @@ public class ProjectRepositoryTest
         projectRepository.RemoveProject(project.Name);
         Assert.IsNull(projectRepository.GetProject(p=> p.Name == "Project 1"));
     }
-   
+    [TestMethod]
+    [ExpectedException(typeof(ProjectNotFoundException))]
+    public void DeleteProject_WhenDeletingAgain_ShouldThrowProjectNotFoundException()
+    {
+        ProjectRepository projectRepository;
+        projectRepository = new ProjectRepository();
+        Project project = new Project();
+        project.Name = "Project 1";
+        Project project2 = new Project();
+        project2.Name = "Project 2";
+        projectRepository.AddProject(project);
+        projectRepository.AddProject(project2);
+        projectRepository.RemoveProject(project.Name);
+        projectRepository.RemoveProject(project.Name);
+    }
     
 }
