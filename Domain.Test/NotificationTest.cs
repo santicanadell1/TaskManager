@@ -33,25 +33,10 @@ namespace Domain.Test
         [ExpectedException(typeof(NotificationDescriptionException))]
         public void NewNotification_WhenDescriptionIsWhiteSpace_ShouldThrowNotificationDescriptionException()
         {
-            
-            Notification not = new Notification(false, "    ");
-    
            
-            Assert.ThrowsException<NotificationDescriptionException>(() =>
-            {
-                throw new NotificationDescriptionException("Description cannot be empty or whitespace.");
-            });
+            Notification not = new Notification(false, "    ");
         }
-
         
-
-
-        
-    
-
-
-
-
         
     }
 }
