@@ -36,6 +36,14 @@ public class ProjectRepository
     
     public void RemoveProject(string name)
     {
-        Projects.Remove(Projects.Find(p => p.Name == name));
+        if (!Projects.Any(p => p.Name == name))
+        {
+            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+        }
+        else
+        {
+            Projects.Remove(Projects.Find(p => p.Name == name));
+        }
+        
     }
 }
