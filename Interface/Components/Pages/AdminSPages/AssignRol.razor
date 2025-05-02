@@ -1,108 +1,146 @@
 ﻿@page "/users/roles"
+@using Domain
+@using Service
+@using Service.Models
 @inject NavigationManager Navigation
+@inject AdminSService AdminService
+@inject UserService UserService
 @rendermode InteractiveServer
 
 <link href="styles/styleAssignRol.css" rel="stylesheet"/>
 <div class="assign-role-container">
     <h3>Assign Roles to User</h3>
 
-    <!-- Dropdown or List of Users -->
     <div class="form-group">
         <label for="userSelect">Select a User</label>
-        <select id="userSelect" class="form-control mt-1" @bind="selectedUserId">
+        <select id="userSelect" class="form-control mt-1" @bind="selectedUserEmail">
             <option value="">-- Select a User --</option>
             @foreach (var user in usersList)
             {
-                <option value="@user.Id">@user.FirstName @user.LastName</option>
+                <option value="@user.Email">@user.FirstName @user.LastName</option>
             }
         </select>
     </div>
 
-    <!-- Role Checkboxes -->
     <div class="form-group mt-3">
         <label>Select Roles</label>
-        <br><br><br>
-        <div class="form-check">
-            <InputCheckbox id="adminSystem" class="form-check-input" @bind-Value="selectedRoles.AdminSystem"/>
-            <label class="form-check-label" for="adminSystem">Admin System</label>
-        </div>
-        <div class="form-check">
-            <InputCheckbox id="adminProject" class="form-check-input" @bind-Value="selectedRoles.AdminProyect"/>
-            <label class="form-check-label" for="adminProject">Admin Project</label>
-        </div>
-        <div class="form-check">
-            <InputCheckbox id="projectMember" class="form-check-input" @bind-Value="selectedRoles.ProyectMember"/>
-            <label class="form-check-label" for="projectMember">Project Member</label>
+        <div class="role-checkboxes mt-2">
+            <div class="form-check">
+                <input type="checkbox" id="adminSystem" class="form-check-input"
+                       @bind="rolesSelected[Rol.AdminSystem]"/>
+                <label class="form-check-label" for="adminSystem">Admin System</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="adminProject" class="form-check-input"
+                       @bind="rolesSelected[Rol.AdminProject]"/>
+                <label class="form-check-label" for="adminProject">Admin Project</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="projectMember" class="form-check-input"
+                       @bind="rolesSelected[Rol.ProjectMember]"/>
+                <label class="form-check-label" for="projectMember">Project Member</label>
+            </div>
         </div>
     </div>
 
-    <!-- Assign Role Button -->
     <div class="form-group mt-3">
-        <button type="button" class="btn btn-primary" @onclick="AssignRoles" disabled="@(!selectedUserId.HasValue)">
+        <button type="button" class="btn btn-primary" @onclick="AssignRoles"
+                disabled="@(string.IsNullOrEmpty(selectedUserEmail))">
             Assign Role
         </button>
     </div>
 
-    <!-- Display Success or Error Messages -->
-    @if (assignError != null)
+    @if (!string.IsNullOrEmpty(assignError))
     {
-        <div class="alert alert-danger">@assignError</div>
+        <div class="alert alert-danger mt-3">@assignError</div>
     }
-    @if (assignSuccess != null)
+    @if (!string.IsNullOrEmpty(assignSuccess))
     {
-        <div class="alert alert-success">@assignSuccess</div>
+        <div class="alert alert-success mt-3">@assignSuccess</div>
     }
 </div>
 
 @code {
+    private List<UserDTO> usersList = new List<UserDTO>();
+    private string selectedUserEmail = "";
+    private string assignError = "";
+    private string assignSuccess = "";
 
-    private List<User> usersList = new()
+    private Dictionary<Rol, bool> rolesSelected = new()
     {
-        new User { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" },
-        new User { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com" },
-        new User { Id = 3, FirstName = "Michael", LastName = "Brown", Email = "michael.brown@example.com" }
+        { Rol.AdminSystem, false },
+        { Rol.AdminProject, false },
+        { Rol.ProjectMember, false }
     };
 
-    private int? selectedUserId;
-    private string assignError;
-    private string assignSuccess;
-
-    // Object to hold the selected roles
-    private UserRoles selectedRoles = new();
+    protected override void OnInitialized()
+    {
+        try
+        {
+            usersList = UserService.GetUsers();
+        }
+        catch (Exception ex)
+        {
+            assignError = $"Error loading users: {ex.Message}";
+        }
+    }
 
     private void AssignRoles()
     {
-        var userToAssignRoles = usersList.FirstOrDefault(u => u.Id == selectedUserId);
+        // Clear previous messages
+        assignError = "";
+        assignSuccess = "";
 
-        if (userToAssignRoles != null)
+        if (string.IsNullOrEmpty(selectedUserEmail))
         {
-            // Simulate role assignment
-            userToAssignRoles.Roles = selectedRoles;
-
-            assignSuccess = $"Roles have been assigned to {userToAssignRoles.FirstName} {userToAssignRoles.LastName} successfully.";
-            selectedUserId = null;
-            selectedRoles = new UserRoles(); // Reset roles selection after assignment
+            assignError = "Please select a user.";
+            return;
         }
-        else
+
+        var userToAssignRoles = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
+
+        if (userToAssignRoles == null)
         {
             assignError = "User not found.";
+            return;
+        }
+
+        try
+        {
+            bool anyRoleAssigned = false;
+
+            foreach (var rolePair in rolesSelected)
+            {
+                if (rolePair.Value)
+                {
+                    AdminService.AssignRole(userToAssignRoles, rolePair.Key);
+                    anyRoleAssigned = true;
+                }
+            }
+
+            if (!anyRoleAssigned)
+            {
+                assignError = "Please select at least one role to assign.";
+                return;
+            }
+
+            assignSuccess = $"Roles have been assigned to {userToAssignRoles.FirstName} {userToAssignRoles.LastName} successfully.";
+
+            selectedUserEmail = "";
+            ResetRoleSelections();
+        }
+        catch (Exception ex)
+        {
+            assignError = $"An error occurred: {ex.Message}";
         }
     }
 
-    public class User
+    private void ResetRoleSelections()
     {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public UserRoles Roles { get; set; } = new();
-    }
-
-    public class UserRoles
-    {
-        public bool AdminSystem { get; set; }
-        public bool AdminProyect { get; set; }
-        public bool ProyectMember { get; set; }
+        foreach (var key in rolesSelected.Keys.ToList())
+        {
+            rolesSelected[key] = false;
+        }
     }
 
 }
