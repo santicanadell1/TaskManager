@@ -15,4 +15,9 @@ public class ProjectRepository
     {
         Projects.Add(project);
     }
+
+    public List<Project> GetAllProjects()
+    {
+        return Projects;
+    }
 }

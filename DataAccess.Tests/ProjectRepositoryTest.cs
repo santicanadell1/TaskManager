@@ -20,6 +20,6 @@ public class ProjectRepositoryTest
         Project project = new Project();
         project.Name = "Project 1";
         projectRepository.AddProject(project);
-        Assert.IsTrue(projectRepository.Projects.Contains(project));
+        Assert.IsTrue(projectRepository.GetAllProjects().Contains(project));
     }
 }
