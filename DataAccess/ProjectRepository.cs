@@ -48,7 +48,10 @@ public class ProjectRepository
 
     public void UpdateProject(string name, Project project)
     {
-        
+        if (Projects.Any(p => p.Name == project.Name) && project.Name != name)
+        {
+            throw new ProjectRepositoryExceptions.DuplicatedProjectsNameException();
+        }
         int index = Projects.FindIndex(p => p.Name == name);
         Projects[index] = project;
     }
