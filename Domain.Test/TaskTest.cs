@@ -95,5 +95,53 @@ namespace Domain.Test
             task1.RemoveSameTimeTask(task2);
             Assert.IsFalse(task1.SameTimeTasks.Contains(task2));
         }
+        
+        [TestMethod]
+        public void ExpectedStartDate_WhenSet_ThenDateIsAssigned()
+        {
+            DateTime expectedDate = DateTime.Parse("2026-09-01");
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
+    
+           
+            task.ExpectedStartDate = expectedDate;
+
+            Assert.AreEqual(expectedDate, task.ExpectedStartDate);
+        }
+
+        [TestMethod]
+        public void EndDate_WhenSet_ThenDateIsAssigned()
+        {
+            DateTime endDate = DateTime.Parse("2026-09-01");
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
+    
+            
+            task.EndDate = endDate;
+
+            Assert.AreEqual(endDate, task.EndDate);
+        }
+
+        [TestMethod]
+        public void State_WhenSet_ThenStateIsAssigned()
+        {
+            State state = State.DONE; 
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
+    
+           
+            task.State = state;
+
+            Assert.AreEqual(state, task.State);
+        }
+
+
+
+
+
+
     }
 }
