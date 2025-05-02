@@ -32,5 +32,6 @@ namespace Domain
             this.Read = read;
             this.Description = description;
         }
+        
     }
 }
