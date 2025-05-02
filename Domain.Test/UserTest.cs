@@ -202,14 +202,13 @@ namespace Domain.Test
         {
             User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
 
-           
+            
             user.Roles = new List<Rol>();
-
             
             user.AddRol(Rol.AdminSystem);
 
-           
-            Assert.AreEqual(2, user.Roles.Count); 
+            Assert.AreEqual(1, user.Roles.Count);
+            Assert.IsTrue(user.Roles.Contains(Rol.AdminSystem));
         }
 
 
