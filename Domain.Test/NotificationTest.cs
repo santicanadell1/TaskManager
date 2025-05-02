@@ -42,11 +42,19 @@ namespace Domain.Test
         {
             Notification not = new Notification(false, "Some description");
 
-       g
+       
             Assert.IsFalse(not.Read);
         }
 
-        
+        [TestMethod]
+        public void Description_WhenSetToValidValue_ThenNoExceptionThrown()
+        {
+            Notification not = new Notification(false, "Valid description");
+
+            Assert.AreEqual("Invalid description", not.Description);
+        }
+
+
 
 
         
