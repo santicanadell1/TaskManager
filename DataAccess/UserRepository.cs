@@ -16,6 +16,10 @@ public class UserRepository
     }
     public void AddUser(User user)
     {
+        if (_users.Any(u => u.Email == user.Email))
+        {
+            throw new UserEmailIsDuplicatedException();
+        }
         _users.Add(user);
     }
     public User? Get(Func<User, bool> filter)

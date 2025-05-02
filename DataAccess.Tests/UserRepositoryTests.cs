@@ -22,12 +22,12 @@ public class UserRepositoryTests
         Assert.IsTrue(userRepository.GetAll().Contains(user));
     }
     [TestMethod]
-    [ExpectedException(typeof(UserNameIsDuplicatedException))]
-    public void AddNewUser_IfUserNameAlreadyExists_ShouldThrowUserNameIsDuplicatedException()
+    [ExpectedException(typeof(UserEmailIsDuplicatedException))]
+    public void AddNewUser_IfUserEmailAlreadyExists_ShouldThrowUseEmailIsDuplicatedException()
     {
         UserRepository userRepository = new UserRepository();
         User user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Parse("20/12/12"), "Password");
-        User user2 = new User("First Name 1", "Last Name 1", "Email2@email.com", DateTime.Parse("20/12/12"), "Password");
+        User user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Parse("20/12/12"), "Password");
         userRepository.AddUser(user);
         userRepository.AddUser(user2);
     }
