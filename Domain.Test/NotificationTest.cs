@@ -38,15 +38,16 @@ namespace Domain.Test
         }
         
         [TestMethod]
-        public void NewNotification_WhenDescriptionIsValid_ShouldCreateNotification()
+        public void NewNotification_WhenCreated_ShouldHaveReadAsFalse()
         {
-          
-            Notification not = new Notification(false, "Valid description");
+            Notification not = new Notification(false, "Some description");
 
-           
-            Assert.AreEqual("Valid description", not.Description);
+            Assert.IsTrue(not.Read);
         }
+
         
+
+
         
     }
 }
