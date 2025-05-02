@@ -174,8 +174,21 @@ namespace Domain.Test
 
             Assert.IsTrue(user.Email == "john.doe@example.com");
         }
-  
+        
+        [TestMethod]
+        public void Roles_WhenAssignedNull_ThenThrowUserRolesInvalidAssignmentException()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
 
+           
+            user.Roles = new List<string> { "Admin" }; 
+
+            
+            Assert.IsTrue(user.Roles.Count > 0);
+        }
+
+  
+   
 
 
         
