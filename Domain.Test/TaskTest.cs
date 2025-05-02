@@ -95,5 +95,23 @@ namespace Domain.Test
             task1.RemoveSameTimeTask(task2);
             Assert.IsFalse(task1.SameTimeTasks.Contains(task2));
         }
+        
+        [TestMethod]
+        public void ExpectedStartDate_WhenSet_ThenDateIsAssigned()
+        {
+            DateTime expectedDate = DateTime.Parse("2026-09-01");
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
+    
+            task.ExpectedStartDate = expectedDate;
+
+            
+            Assert.AreEqual(DateTime.Parse("2026-01-01"), task.ExpectedStartDate); 
+        }
+
+
+        
+        
     }
 }
