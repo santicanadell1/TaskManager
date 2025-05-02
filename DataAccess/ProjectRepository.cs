@@ -44,6 +44,11 @@ public class ProjectRepository
         {
             Projects.Remove(Projects.Find(p => p.Name == name));
         }
-        
+    }
+
+    public void UpdateProject(string name, Project project)
+    {
+        int index = Projects.FindIndex(p => p.Name == name);
+        Projects[index] = project;
     }
 }
