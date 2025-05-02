@@ -127,16 +127,15 @@ namespace Domain.Test
         [TestMethod]
         public void State_WhenSet_ThenStateIsAssigned()
         {
-            State state = State.DONE;
+            State state = State.DONE; 
             List<Task> previousTasks = new List<Task>();
             List<Task> sameTimeTasks = new List<Task>();
             Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
-
+    
+           
             task.State = state;
 
-
-            Assert.AreEqual(State.PENDING, task.State);
-
+            Assert.AreEqual(state, task.State);
         }
 
 
