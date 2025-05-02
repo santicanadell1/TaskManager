@@ -1,5 +1,4 @@
 ﻿using Domain;
-
 namespace DataAccess;
 
 public class InMemoryDatabase
