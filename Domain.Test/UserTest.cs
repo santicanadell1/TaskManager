@@ -195,6 +195,25 @@ namespace Domain.Test
             user.Email = "invalidemail";
         }
 
+        
+        
+        [TestMethod]
+        public void AddRol_WhenRolesListIsEmpty_ThenRoleIsAdded()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+
+           
+            user.Roles = new List<Rol>();
+
+            
+            user.AddRol(Rol.AdminSystem);
+
+           
+            Assert.AreEqual(2, user.Roles.Count); 
+        }
+
+
+        
     
         [TestMethod]
         public void RemoveRol_WhenSingleRole_ThenRoleIsRemoved()
