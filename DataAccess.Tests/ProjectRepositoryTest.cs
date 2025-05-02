@@ -116,4 +116,21 @@ public class ProjectRepositoryTest
         projectRepository.UpdateProject(project.Name,project3);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(ProjectNotFoundException))]
+    public void updateProject_WhenNameIsNotFound_ShouldThrowProjectNotFoundException()
+    {
+        ProjectRepository projectRepository;
+        projectRepository = new ProjectRepository();
+        Project project = new Project();
+        project.Name = "Project 1";
+        project.Description = "Project 1 description";
+        Project project2 = new Project();
+        project2.Name = "Project 2";
+        project2.Description = "Project 2 description";
+        Project project3 = new Project();
+        projectRepository.AddProject(project);
+        projectRepository.UpdateProject("Project 4",project2);
+    }
+    
 }
