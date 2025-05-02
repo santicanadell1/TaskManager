@@ -42,7 +42,8 @@ namespace Domain.Test
         {
             Notification not = new Notification(false, "Some description");
 
-            Assert.IsTrue(not.Read);
+       g
+            Assert.IsFalse(not.Read);
         }
 
         
