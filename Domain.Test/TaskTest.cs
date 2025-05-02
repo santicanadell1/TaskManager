@@ -104,11 +104,12 @@ namespace Domain.Test
             List<Task> sameTimeTasks = new List<Task>();
             Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
     
+           
             task.ExpectedStartDate = expectedDate;
 
-            
-            Assert.AreEqual(DateTime.Parse("2026-01-01"), task.ExpectedStartDate); 
+            Assert.AreEqual(expectedDate, task.ExpectedStartDate);
         }
+
 
 
         
