@@ -30,14 +30,26 @@ namespace Domain.Test
         }
         
         [TestMethod]
-        public void NewNotification_WhenDescriptionIsValid_ShouldCreateNotification()
+        [ExpectedException(typeof(NotificationDescriptionException))]
+        public void NewNotification_WhenDescriptionIsWhiteSpace_ShouldThrowNotificationDescriptionException()
         {
             
-            Notification not = new Notification(false, "Valid description");
-
-            
-            Assert.AreEqual("Valid description", not.Description);
+            Notification not = new Notification(false, "    ");
+    
+           
+            Assert.ThrowsException<NotificationDescriptionException>(() =>
+            {
+                throw new NotificationDescriptionException("Description cannot be empty or whitespace.");
+            });
         }
+
+        
+
+
+        
+    
+
+
 
 
         
