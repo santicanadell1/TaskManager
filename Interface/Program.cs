@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<InMemoryDatabase>();
 builder.Services.AddScoped<Login>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<AdminSService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
