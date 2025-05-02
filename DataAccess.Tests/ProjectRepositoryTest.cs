@@ -1,4 +1,5 @@
-﻿namespace DataAccess.Test;
+﻿using Domain;
+namespace DataAccess.Test;
 
 [TestClass]
 public class ProjectRepositoryTest
@@ -9,5 +10,16 @@ public class ProjectRepositoryTest
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
         Assert.IsNotNull(projectRepository);
+    }
+    
+    [TestMethod]
+    public void NewProject_WhenAddingNewProject_ListShouldContainIt()
+    {
+        ProjectRepository projectRepository;
+        projectRepository = new ProjectRepository();
+        Project project = new Project();
+        project.Name = "Project 1";
+        projectRepository.AddProject(project);
+        Assert.IsTrue(projectRepository.Projects.Contains(project));
     }
 }
