@@ -156,6 +156,20 @@ namespace Domain.Test
 
             user = new User("John", "", "email@email.com", birthday, "Password");
         }
+        
+        [TestMethod]
+        public void Email_WhenValid_ThenUserIsCreated()
+        {
+            User user;
+            DateTime birthday = DateTime.Parse("10/05/2005");
+
+            user = new User("John", "Doe", "john.doe@example.com", birthday, "Password");
+
+          
+            Assert.IsTrue(user.Email == "wrong.email@example.com"); 
+        }
+
+
 
 
 
