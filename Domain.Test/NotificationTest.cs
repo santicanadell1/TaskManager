@@ -58,13 +58,15 @@ namespace Domain.Test
         [TestMethod]
         public void Description_WhenChanged_ThenUpdatedSuccessfully()
         {
+            
             Notification not = new Notification(false, "Initial description");
 
+ 
             not.Description = "Updated description";
 
-            Assert.AreEqual("Different description", not.Description);
+         
+            Assert.AreEqual("Updated description", not.Description);
         }
-g
 
 
 
