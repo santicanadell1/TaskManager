@@ -21,6 +21,10 @@ public class ResourceRepository
 
     public void AddResource(Resource resource)
     {
+        if (resource == null)
+        {
+            throw new ResourceIsNullException();
+        }
         resource.SetId(_nextId++);
         _resources.Add(resource);
     }

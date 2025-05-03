@@ -63,12 +63,10 @@ public class ResourceRepositoryTests
         var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.AddResource(resource);
 
-        var deletedResource = _resourceRepository.Get(r => r.Id == resource.Id);
-        Assert.IsNotNull(deletedResource);
-
         _resourceRepository.Delete(resource.Id);
-
-        _resourceRepository.AddResource(deletedResource);  
+        
+        var deletedResource = _resourceRepository.Get(r => r.Name == resource.Name);
+        
+        _resourceRepository.AddResource(deletedResource);
     }
-
 }
