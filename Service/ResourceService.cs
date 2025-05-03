@@ -1,4 +1,5 @@
 using DataAccess;
+using DataAccess.ResourceRepositoryExceptions;
 using Domain;
 using Service.Models;
 
@@ -17,6 +18,23 @@ namespace Service
         {
             var resource = ToEntity(resourceDTO);
             _database.resources.AddResource(resource);
+        }
+        
+        public ResourceDTO Get(int id)
+        {
+            Resource? resource = _database.resources.Get(r => r.Id == id);
+
+            return FromEntity(resource);
+        }
+        
+        private ResourceDTO FromEntity(Resource resource)
+        {
+            return new ResourceDTO()
+            {
+                Name = resource.Name,
+                Type = resource.Type,
+                Description = resource.Description
+            };
         }
 
         private Resource ToEntity(ResourceDTO resourceDTO)

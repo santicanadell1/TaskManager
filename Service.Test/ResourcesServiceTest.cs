@@ -46,7 +46,7 @@ public class ResourcesServiceTest
         };
 
         _resourceService.AddResource(resourceDTO);
-
+        
         var resource = _resourceService.Get(1);
 
         Assert.IsNotNull(resource);
