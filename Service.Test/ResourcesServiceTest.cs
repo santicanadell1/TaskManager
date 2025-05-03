@@ -15,7 +15,7 @@ public class ResourcesServiceTest
         _database = new InMemoryDatabase();
         _resourceService = new ResourceService(_database);
     }
-    
+
     [TestMethod]
     public void AddResource_ShouldAddResource_WhenValidDTO()
     {
@@ -29,9 +29,29 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
 
         var resource = _database.resources.Get(r => r.Name == "Resource1");
-        Assert.IsNotNull(resource);  
-        Assert.AreEqual("Resource1", resource.Name);  
-        Assert.AreEqual("TypeA", resource.Type);  
-        Assert.AreEqual("Description of Resource1", resource.Description);  
+        Assert.IsNotNull(resource);
+        Assert.AreEqual("Resource1", resource.Name);
+        Assert.AreEqual("TypeA", resource.Type);
+        Assert.AreEqual("Description of Resource1", resource.Description);
+    }
+
+    [TestMethod]
+    public void Get_ShouldReturnResource_WhenResourceExists()
+    {
+        var resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1"
+        };
+
+        _resourceService.AddResource(resourceDTO);
+
+        var resource = _resourceService.Get(1);
+
+        Assert.IsNotNull(resource);
+        Assert.AreEqual("Resource1", resource.Name);
+        Assert.AreEqual("TypeA", resource.Type);
+        Assert.AreEqual("Description of Resource1", resource.Description);
     }
 }
