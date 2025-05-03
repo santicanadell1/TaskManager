@@ -32,13 +32,13 @@ public class ResourceRepository
     
     public void Update(int id, Resource resource)
     {
-        var existingResource = _resources.FirstOrDefault(r = r.Id == id);
+        var existingResource = _resources.FirstOrDefault(r => r.Id == id);
         if (existingResource == null)
         {
             throw new ResourceNotFoundException();
         }
 
-        int index = _resources.FindIndex(r = r.Id == id);
+        int index = _resources.FindIndex(r => r.Id == id);
         
         _resources[index] = resource;
     }
