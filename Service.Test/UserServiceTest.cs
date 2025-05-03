@@ -85,7 +85,7 @@ public class UserServiceTest
     [TestMethod]
     public void AddUser_ShouldAddUser_WhenEmailIsUnique()
     {
-       
+      
         var rols = new List<Rol> { Rol.ProjectMember };
         var userDTO = new UserDTO
         {
@@ -98,14 +98,13 @@ public class UserServiceTest
 
         var userService = new UserService(new InMemoryDatabase());
 
-     
+        
         userService.AddUser(userDTO);
 
        
         var users = userService.GetUsers();
-        Assert.AreEqual(0, users.Count);
-        Assert.AreNotEqual("john.doe@example.com", users[0].Email);
+        Assert.AreEqual(1, users.Count);
+        Assert.AreEqual("john.doe@example.com", users[0].Email);
     }
-
 }
     
