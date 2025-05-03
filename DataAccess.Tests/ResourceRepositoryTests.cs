@@ -7,6 +7,7 @@ namespace DataAccess.Test;
 public class ResourceRepositoryTests
 {
     private ResourceRepository _resourceRepository;
+
     [TestInitialize]
     public void Setup()
     {
@@ -19,7 +20,7 @@ public class ResourceRepositoryTests
         var resources = _resourceRepository.GetAll();
         Assert.AreEqual(0, resources.Count);
     }
-    
+
     [TestMethod]
     public void AddResource_ShouldAddResource_WhenValidResourceIsProvided()
     {
@@ -31,8 +32,8 @@ public class ResourceRepositoryTests
         Assert.IsNotNull(addedResource);
         Assert.AreEqual(resource.Name, addedResource?.Name);
     }
-    
-    
+
+
     [TestMethod]
     public void Update_ShouldUpdateResource_WhenResourceExists()
     {
@@ -47,12 +48,27 @@ public class ResourceRepositoryTests
         Assert.AreEqual(updatedResource.Type, result?.Type);
         Assert.AreEqual(updatedResource.Description, result?.Description);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ResourceNotFoundException))]
     public void Delete_ShouldThrowException_WhenResourceDoesNotExist()
     {
-        _resourceRepository.Delete(999);  
+        _resourceRepository.Delete(999);
     }
-    
+
+    [TestMethod]
+    [ExpectedException(typeof(ResourceIsNullException))]
+    public void Delete_ShouldThrowException_WhenAddingNullResourceAfterDeletion()
+    {
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
+        _resourceRepository.AddResource(resource);
+
+        var deletedResource = _resourceRepository.Get(r => r.Id == resource.Id);
+        Assert.IsNotNull(deletedResource);
+
+        _resourceRepository.Delete(resource.Id);
+
+        _resourceRepository.AddResource(deletedResource);  
+    }
+
 }
