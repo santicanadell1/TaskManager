@@ -222,3 +222,13 @@ C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Service.Test\obj
 C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.pdb
 C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.genruntimeconfig.cache
 C:\Users\santi\OneDrive\Escritorio\Obl Dis\305108_282542_281987\Service.Test\obj\Debug\net8.0\ref\Service.Test.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\CoverletSourceRootsMapping_Service.Test
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.csproj.AssemblyReference.cache
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.GeneratedMSBuildEditorConfig.editorconfig
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.AssemblyInfoInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.AssemblyInfo.cs
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.csproj.CoreCompileInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.sourcelink.json
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\refint\Service.Test.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.pdb
