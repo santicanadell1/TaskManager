@@ -81,6 +81,31 @@ public class UserServiceTest
 
         userService.GetUser("nonexistent.user@example.com"); 
     }
+    
+    [TestMethod]
+    public void AddUser_ShouldAddUser_WhenEmailIsUnique()
+    {
+       
+        var rols = new List<Rol> { Rol.ProjectMember };
+        var userDTO = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Password = "Password123@",
+            Roles = rols
+        };
+
+        var userService = new UserService(new InMemoryDatabase());
+
+     
+        userService.AddUser(userDTO);
+
+       
+        var users = userService.GetUsers();
+        Assert.AreEqual(0, users.Count);
+        Assert.AreNotEqual("john.doe@example.com", users[0].Email);
+    }
 
 }
     
