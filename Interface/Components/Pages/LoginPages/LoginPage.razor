@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@using Domain
 @using Service
 @using Service.Exceptions
 @using Service.Models
@@ -6,9 +7,10 @@
 @inject Login LoginService
 @rendermode InteractiveServer
 
+
 <div class="login-container">
     <h3 class="login-title">Login</h3>
-
+ 
     <!-- Custom alert for incorrect login with a close button -->
     @if (alertVisible)
     {

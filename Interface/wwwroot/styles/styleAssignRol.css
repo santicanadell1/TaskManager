@@ -1,4 +1,4 @@
-﻿/* Assign Role Page Container */
+﻿/* Container for the Assign Roles Page */
 .assign-role-container {
     max-width: 600px;
     margin: 60px auto;
@@ -10,7 +10,36 @@
     text-align: center; /* Centering text inside the container */
 }
 
-/* Center the "Select Roles" and checkboxes */
+/* Hover effect for the container */
+.assign-role-container:hover {
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Title Styles */
+.assign-role-container h3 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    position: relative;
+    text-align: center; /* Center title */
+}
+
+.assign-role-container h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #3498db;
+    border-radius: 3px;
+}
+
+/* Select Input */
 .assign-role-container .form-group {
     margin-bottom: 20px;
     display: flex;
@@ -19,7 +48,6 @@
     text-align: left; /* Keeps labels and checkboxes aligned to the left */
 }
 
-/* Select Input */
 .assign-role-container select.form-control {
     border: 2px solid #e6e6e6;
     border-radius: 12px;
@@ -49,7 +77,6 @@
     width: 100%; /* Ensure the checkboxes stretch across the container */
 }
 
-/* Center the checkbox and label */
 .assign-role-container .form-check-input {
     margin-right: 10px; /* Space between checkbox and label */
 }
@@ -101,10 +128,48 @@
     border-left: 4px solid #27ae60;
 }
 
+/* Button to close alert (with the "X" or a similar icon) */
+.assign-role-container .alert .close {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    padding: 8px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.assign-role-container .alert .close:hover {
+    background-color: #e74c3c; /* Change color on hover */
+    transform: scale(1.1); /* Hover effect */
+}
+
+.assign-role-container .alert .close:focus {
+    outline: none;
+}
+
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
     .assign-role-container {
         padding: 25px;
         margin: 40px auto;
+    }
+
+    .assign-role-container .form-control {
+        font-size: 14px;
+    }
+
+    .assign-role-container .btn {
+        font-size: 14px;
+        padding: 10px;
     }
 }
