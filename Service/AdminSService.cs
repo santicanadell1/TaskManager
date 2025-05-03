@@ -45,7 +45,7 @@ public class AdminSService
         _database.users.Delete(user.Email);
     }
 
-    public void ChangePassword(string email, string newPassword)
+    public void ChangePassword(string email, string newPassword, string oldPassword)
     {
         CheckAdminRole();
 
@@ -54,6 +54,11 @@ public class AdminSService
         if (user == null)
         {
             throw new UserNotFoundException();
+        }
+
+        if (user.Password != _passwordManager.HashPassword(oldPassword))
+        {
+            throw new InvalidOldPasswordException();
         }
 
         if (_passwordManager.IsValidPassword(newPassword))
