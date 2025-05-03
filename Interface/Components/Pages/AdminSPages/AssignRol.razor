@@ -52,12 +52,23 @@
 
     @if (!string.IsNullOrEmpty(assignError))
     {
-        <div class="alert alert-danger mt-3">@assignError</div>
+        <div class="alert alert-danger mt-3">
+            <strong>Error: </strong>@assignError
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
     }
     @if (!string.IsNullOrEmpty(assignSuccess))
     {
-        <div class="alert alert-success mt-3">@assignSuccess</div>
+        <div class="alert alert-success mt-3">
+            <strong>Success: </strong>@assignSuccess
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
     }
+
 </div>
 
 @code {
@@ -87,7 +98,6 @@
 
     private void AssignRoles()
     {
-        // Clear previous messages
         assignError = "";
         assignSuccess = "";
 
@@ -141,6 +151,12 @@
         {
             rolesSelected[key] = false;
         }
+    }
+
+    private void ToggleAlertVisibility()
+    {
+        assignError = "";
+        assignSuccess = "";
     }
 
 }
