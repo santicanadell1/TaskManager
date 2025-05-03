@@ -69,7 +69,17 @@
         <div class="alert alert-danger mt-3">
             <strong>Error: </strong>@alertMessage
             <button type="button" class="close" @onclick="ToggleAlertVisibility">
-                <i class="fas fa-times"></i> 
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+
+    @if (successVisible)
+    {
+        <div class="alert alert-success mt-3">
+            <strong>Success: </strong>@successMessage
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
             </button>
         </div>
     }
@@ -80,6 +90,8 @@
     private string confirmPassword;
     private bool alertVisible = false;
     private string alertMessage = string.Empty;
+    private bool successVisible = false;
+    private string successMessage = string.Empty;
 
     private string passwordInputType = "password";
     private string passwordEyeIcon = "fas fa-eye-slash";
@@ -108,7 +120,7 @@
             Email = "",
             Password = "",
             Birthday = DateTime.Now,
-            Roles = new List<Rol> { Rol.AdminSystem },
+            Roles = new List<Rol>(),
         };
     }
 
@@ -124,17 +136,23 @@
             }
 
             AdminService.CreateUser(_userDto);
+            successMessage = "User created successfully!";
+            successVisible = true;
+            alertVisible = false;
             Navigation.NavigateTo("/");
         }
         catch (Exception ex)
         {
             alertMessage = $"An error occurred: {ex.Message}";
             alertVisible = true;
+            successVisible = false;
         }
     }
 
     private void ToggleAlertVisibility()
     {
         alertVisible = false;
+        successVisible = false; 
     }
+
 }
