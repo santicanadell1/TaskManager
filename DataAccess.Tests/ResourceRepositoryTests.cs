@@ -1,3 +1,4 @@
+using DataAccess.ResourceRepositoryExceptions;
 using Domain;
 
 namespace DataAccess.Test;
@@ -45,6 +46,13 @@ public class ResourceRepositoryTests
         Assert.IsNotNull(result);
         Assert.AreEqual(updatedResource.Type, result?.Type);
         Assert.AreEqual(updatedResource.Description, result?.Description);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ResourceNotFoundException))]
+    public void Delete_ShouldThrowException_WhenResourceDoesNotExist()
+    {
+        _resourceRepository.Delete(999);  
     }
     
 }
