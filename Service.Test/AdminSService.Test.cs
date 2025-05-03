@@ -112,4 +112,24 @@ public class AdminSService_Test
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InvalidUserPasswordException))]
+    public void AdminService_ShouldThrowInvalidUserPasswordException_WhenPasswordUserIsNotInValidFormat()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");  
+
+        var userToUpdate = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Password = "OldPassword123@",
+            Roles = new List<Rol>()
+        };
+
+        var newPassword = "abcD1";
+
+        _adminService.ChangePassword(userToUpdate.Email, newPassword);
+    }
 }
