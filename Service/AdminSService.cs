@@ -8,6 +8,7 @@ public class AdminSService
 {
     private readonly InMemoryDatabase _database;
     private UserService _userService;
+    private PasswordManager _passwordManager = new PasswordManager();
 
     public AdminSService(InMemoryDatabase database)
     {
@@ -29,52 +30,56 @@ public class AdminSService
         CheckAdminRole();
         _userService.AddUser(userDTO);
     }
-    
+
     public void DeleteUser(UserDTO userDTO)
     {
-        CheckAdminRole(); 
+        CheckAdminRole();
 
-        var user = _userService.GetUser(userDTO.Email);  
+        var user = _userService.GetUser(userDTO.Email);
 
         if (user == null)
         {
-            throw new UserNotFoundException(); 
+            throw new UserNotFoundException();
         }
 
-        _database.users.Delete(user.Email);  
+        _database.users.Delete(user.Email);
     }
-    
+
     public void ChangePassword(string email, string newPassword)
     {
-        CheckAdminRole();  
+        CheckAdminRole();
 
-        var user = _userService.GetUser(email);  
+        var user = _userService.GetUser(email);
 
         if (user == null)
         {
-            throw new UserNotFoundException();  
+            throw new UserNotFoundException();
         }
 
-        user.Password = newPassword;  
-        _userService.UpdateUser(user);  
+        if (_passwordManager.IsValidPassword(newPassword))
+        {
+            user.Password = newPassword;
+            _userService.UpdateUser(user);
+        }
+        else
+        {
+            throw new InvalidUserPasswordException();
+        }
     }
-    
+
     public void AssignRole(UserDTO userDTO, Rol role)
     {
-        CheckAdminRole();  
+        CheckAdminRole();
 
-        var user = _userService.GetUser(userDTO.Email);  
+        var user = _userService.GetUser(userDTO.Email);
 
         if (user == null)
         {
-            throw new UserNotFoundException();  
+            throw new UserNotFoundException();
         }
-        
-        user.Roles.Add(role);  
-        
-        _userService.UpdateUser(user); 
+
+        user.Roles.Add(role);
+
+        _userService.UpdateUser(user);
     }
-
-
-
 }
