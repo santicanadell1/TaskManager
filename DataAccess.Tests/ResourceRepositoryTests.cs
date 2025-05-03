@@ -3,6 +3,7 @@ namespace DataAccess.Test;
 [TestClass]
 public class ResourceRepositoryTests
 {
+    private ResourceRepository _resourceRepository;
     [TestInitialize]
     public void Setup()
     {
