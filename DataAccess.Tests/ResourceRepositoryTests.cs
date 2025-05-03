@@ -39,7 +39,7 @@ public class ResourceRepositoryTests
         _resourceRepository.AddResource(resource);
 
         var updatedResource = new Resource("Resource1", "TypeB", "Updated Description");
-        _resourceRepository.Update(resource.Name, updatedResource);
+        _resourceRepository.Update(resource.Id, updatedResource);
 
         var result = _resourceRepository.Get(r => r.Name == updatedResource.Name);
         Assert.IsNotNull(result);
