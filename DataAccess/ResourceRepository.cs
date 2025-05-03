@@ -15,4 +15,14 @@ public class ResourceRepository
     {
         return _resources.ToList();
     }
+    
+    public void AddResource(Resource resource)
+    {
+        _resources.Add(resource);
+    }
+
+    public Resource? Get(Func<Resource, bool> filter)
+    {
+        return _resources.FirstOrDefault(filter);
+    }
 }
