@@ -29,7 +29,7 @@ public class ResourceRepository
     {
         return _resources.FirstOrDefault(filter);
     }
-    
+
     public void Update(int id, Resource resource)
     {
         var existingResource = _resources.FirstOrDefault(r => r.Id == id);
@@ -39,8 +39,18 @@ public class ResourceRepository
         }
 
         int index = _resources.FindIndex(r => r.Id == id);
-        
+
         _resources[index] = resource;
     }
-  
+
+    public void Delete(int id)
+    {
+        var resource = _resources.FirstOrDefault(r => r.Id == id);
+        if (resource == null)
+        {
+            throw new ResourceNotFoundException();
+        }
+
+        _resources.Remove(resource);
+    }
 }
