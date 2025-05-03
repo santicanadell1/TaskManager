@@ -62,4 +62,31 @@ public class ResourcesServiceTest
     {
         _resourceService.Get(999); 
     }
+    
+    [TestMethod]
+    public void GetResources_ShouldReturnAllResources_WhenResourcesExist()
+    {
+        var resourceDTO1 = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1"
+        };
+
+        var resourceDTO2 = new ResourceDTO
+        {
+            Name = "Resource2",
+            Type = "TypeB",
+            Description = "Description of Resource2"
+        };
+
+        _resourceService.AddResource(resourceDTO1);
+        _resourceService.AddResource(resourceDTO2);
+
+        var resources = _resourceService.GetResources();
+
+        Assert.AreEqual(2, resources.Count);  
+        Assert.IsTrue(resources.Exists(r => r.Name == "Resource1"));  
+        Assert.IsTrue(resources.Exists(r => r.Name == "Resource2"));  
+    }
 }
