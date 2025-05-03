@@ -24,6 +24,11 @@ namespace Service
         {
             Resource? resource = _database.resources.Get(r => r.Id == id);
 
+            if (resource == null)
+            {
+                throw new ResourceNotFoundException();
+            }
+            
             return FromEntity(resource);
         }
         
