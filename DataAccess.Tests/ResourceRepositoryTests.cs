@@ -31,4 +31,20 @@ public class ResourceRepositoryTests
         Assert.AreEqual(resource.Name, addedResource?.Name);
     }
     
+    
+    [TestMethod]
+    public void Update_ShouldUpdateResource_WhenResourceExists()
+    {
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
+        _resourceRepository.AddResource(resource);
+
+        var updatedResource = new Resource("Resource1", "TypeB", "Updated Description");
+        _resourceRepository.Update(resource.Name, updatedResource);
+
+        var result = _resourceRepository.Get(r => r.Name == updatedResource.Name);
+        Assert.IsNotNull(result);
+        Assert.AreEqual(updatedResource.Type, result?.Type);
+        Assert.AreEqual(updatedResource.Description, result?.Description);
+    }
+    
 }
