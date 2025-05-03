@@ -110,7 +110,7 @@ public class UserServiceTest
     [TestMethod]
     public void UpdateUser_ShouldUpdateUser_WhenUserExists()
     {
-      
+        
         var rols = new List<Rol> { Rol.ProjectMember };
         var userDTO = new UserDTO
         {
@@ -133,14 +133,16 @@ public class UserServiceTest
             Roles = rols
         };
 
-    
+        
         userService.UpdateUser(updatedUserDTO);
 
-
+        
         var updatedUser = userService.GetUser("john.doe@example.com");
-        Assert.AreEqual("Jonny", updatedUser.FirstName);
-        Assert.AreEqual("Doughy", updatedUser.LastName);
+        Assert.AreEqual("Johnny", updatedUser.FirstName);
+        Assert.AreEqual("Dough", updatedUser.LastName);
     }
+
+
 
 
 }
