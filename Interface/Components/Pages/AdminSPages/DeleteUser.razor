@@ -12,7 +12,6 @@
 <div class="delete-user-container">
     <h3>Delete User</h3>
 
-    <!-- Dropdown or List of Users -->
     <div class="form-group">
         <label for="userSelect">Select a User to Delete</label>
         <select id="userSelect" class="form-control mt-1" @bind="selectedUserEmail">
@@ -24,7 +23,6 @@
         </select>
     </div>
 
-    <!-- Delete Button -->
     <div class="form-group mt-3">
         <button type="button" class="btn btn-danger" @onclick="ShowDeleteConfirmation"
                 disabled="@(string.IsNullOrEmpty(selectedUserEmail))">
@@ -32,7 +30,6 @@
         </button>
     </div>
 
-    <!-- Confirmation Dialog -->
     @if (showConfirmation && userToDelete != null)
     {
         <div class="confirmation-dialog">
@@ -48,15 +45,25 @@
         </div>
     }
 
-    <!-- Display Error or Success Messages -->
     @if (!string.IsNullOrEmpty(deleteError))
     {
-        <div class="alert alert-danger mt-3">@deleteError</div>
+        <div class="alert alert-danger mt-3">
+            <strong>Error: </strong>@deleteError
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
     }
     @if (!string.IsNullOrEmpty(deleteSuccess))
     {
-        <div class="alert alert-success mt-3">@deleteSuccess</div>
+        <div class="alert alert-success mt-3">
+            <strong>Success: </strong>@deleteSuccess
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
     }
+
 </div>
 
 @code {
@@ -76,13 +83,13 @@
             if (usersList == null || !usersList.Any())
             {
                 deleteError = "No users found. The user list may be empty or you may not have permission to view users.";
-                usersList = new List<UserDTO>(); 
+                usersList = new List<UserDTO>();
             }
         }
         catch (Exception ex)
         {
             deleteError = $"Error loading users: {ex.Message}";
-            usersList = new List<UserDTO>(); 
+            usersList = new List<UserDTO>();
         }
     }
 
@@ -105,7 +112,6 @@
             return;
         }
 
-        // Show confirmation dialog
         showConfirmation = true;
     }
 
@@ -129,13 +135,9 @@
             showConfirmation = false;
 
             AdminService.DeleteUser(userToDelete);
-
-
             deleteSuccess = $"User {userToDelete.FirstName} {userToDelete.LastName} has been deleted successfully.";
 
-
             usersList = UserService.GetUsers();
-
             selectedUserEmail = "";
         }
         catch (Exception ex)
@@ -145,5 +147,12 @@
 
         userToDelete = null;
     }
+
+    private void ToggleAlertVisibility()
+    {
+        deleteError = "";
+        deleteSuccess = "";
+    }
+
 
 }
