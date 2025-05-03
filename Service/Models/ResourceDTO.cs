@@ -9,4 +9,7 @@ public class ResourceDTO
     
     [Required(ErrorMessage = "LastName is required.")]
     public string Type { get; set; }
+    
+    [Required(ErrorMessage = "Description is required.")]
+    public string Description { get; set; }
 }
