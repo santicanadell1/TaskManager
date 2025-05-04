@@ -25,6 +25,24 @@ public class NotificationService
         Notification notification = new Notification(notificationDTO.Read,notificationDTO.Description);
         return notification;
     }
-    
-    
+
+    public List<NotificationDTO> GetNotificationsForUser(String userEmail)
+    {
+        List<NotificationDTO> notifications = new List<NotificationDTO>();
+        List<Project> projects = _database.projects.GetAllProjects();
+        foreach (var project in projects)
+        {
+            List<User> members = project.Members;
+            foreach (var member in members)
+            {
+                if (member.Email == userEmail)
+                {
+                    foreach (var notification in project.Notifications)
+                    notifications.Add(FromEntity(notification));
+                }
+            }
+        }
+        return notifications;
+    }
 }
+

@@ -35,14 +35,23 @@ public class NotificationServiceTest
         project.StartDate = DateTime.Today;
         project.Notifications = notifications;
         project.Members = members;
+        Project project2 = new Project();
+        project2.Name = "Project 2";
+        project2.Description = "Description 2";
+        project2.StartDate = DateTime.Today;
+        project2.Notifications = notifications;
+        project2.Members = new List<User> { user1};
         InMemoryDatabase database = new InMemoryDatabase();
         database.projects.AddProject(project);
+        database.projects.AddProject(project2);
         database.users.AddUser(user1);
         database.users.AddUser(user2);
         NotificationService notificationService = new NotificationService(database);
 
-        List<NotificationDTO> notificationForUser1 = notificationService.getNotificationsFor(user1);
+        List<NotificationDTO> notificationForUser1 = notificationService.GetNotificationsForUser(user1.Email);
+        List<NotificationDTO> notificationForUser2 = notificationService.GetNotificationsForUser(user2.Email);
         
-        Assert.IsTrue(notificationForUser1.Count == 2);
+        Assert.IsTrue(notificationForUser1.Count == 4);
+        Assert.IsTrue(notificationForUser2.Count == 2);
     }
 }
