@@ -24,7 +24,7 @@ public class ResourceRepositoryTests
     [TestMethod]
     public void AddResource_ShouldAddResource_WhenValidResourceIsProvided()
     {
-        var resource = new Resource(null,"Resource1", "TypeA", "Description of Resource1");
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
 
         _resourceRepository.AddResource(resource);
 
@@ -37,10 +37,10 @@ public class ResourceRepositoryTests
     [TestMethod]
     public void Update_ShouldUpdateResource_WhenResourceExists()
     {
-        var resource = new Resource(1,"Resource1", "TypeA", "Description of Resource1");
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.AddResource(resource);
 
-        var updatedResource = new Resource(2,"Resource1.v1", "TypeB", "Updated Description");
+        var updatedResource = new Resource("Resource1.v1", "TypeB", "Updated Description");
         _resourceRepository.Update(resource.Id, updatedResource);
 
         var result = _resourceRepository.Get(r =>
@@ -64,7 +64,7 @@ public class ResourceRepositoryTests
     [ExpectedException(typeof(ResourceIsNullException))]
     public void Delete_ShouldThrowException_WhenAddingNullResourceAfterDeletion()
     {
-        var resource = new Resource(1,"Resource1", "TypeA", "Description of Resource1");
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.AddResource(resource);
 
         _resourceRepository.Delete(resource.Id);
