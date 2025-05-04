@@ -6,4 +6,6 @@ public class NotificationDTO
 {
     [Required(ErrorMessage = "Read is required.")]
     public bool? Read { get; set; }
+    
+    
 }
