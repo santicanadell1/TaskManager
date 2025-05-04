@@ -80,7 +80,17 @@ namespace Service
                 State = task.State
             };
         }
-    
+        public Task ToEntity(TaskDTO taskDTO)
+        {
+            return new Task(
+                taskDTO.Title,
+                taskDTO.Description,
+                taskDTO.ExpectedStartDate,
+                taskDTO.Duration,
+                taskDTO.PreviousTasks ?? new List<Task>(),  
+                taskDTO.SameTimeTasks ?? new List<Task>()   
+            );
+        }
 
 
     }
