@@ -17,6 +17,6 @@ public class NotificationServiceTest
         NotificationDTO notificationDto2 = new NotificationDTO();
         notificationDto2.Read = false;
         notificationDto2.Description = "Description 1";
-        Assert.AreEqual(notificationDto,notificationDto2 );
+        Assert.IsTrue(notificationDto.Read == notificationDto2.Read && notificationDto.Description == notificationDto2.Description );
     }
 }
