@@ -86,7 +86,7 @@ public class TaskDTOTest
     [TestMethod]
     public void NewTask_WhenStateIsSet_ThenStateIsAssignedCorrectly()
     {
-        // arrange
+     
         var stateTodo = Domain.Test.State.TODO;
         var stateDoing = Domain.Test.State.DOING;
         var stateDone = Domain.Test.State.DONE;
@@ -95,7 +95,7 @@ public class TaskDTOTest
         var taskDoing = new TaskDTO { State = stateDoing };
         var taskDone = new TaskDTO { State = stateDone };
 
-        // act & assert
+   
         Assert.AreEqual<Domain.Test.State>(stateTodo, taskTodo.State); 
         Assert.AreEqual<Domain.Test.State>(stateDoing, taskDoing.State);
         Assert.AreEqual<Domain.Test.State>(stateDone, taskDone.State);
