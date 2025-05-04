@@ -265,7 +265,7 @@ namespace Service.Test
                 State = State.TODO
             };
 
-            Task task = _taskService.ToEntity();
+            Task task = _taskService.ToEntity(taskDTO);
 
             Assert.AreEqual(taskDTO.Title, task.Title);
             Assert.AreEqual(taskDTO.Description, task.Description);
