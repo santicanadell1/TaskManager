@@ -67,7 +67,19 @@ namespace Service
                    CalculateEarlyFinish(task) == CalculateLateFinish(task);
         }
 
-     
+        public TaskDTO FromEntity(Task task)
+        {
+            return new TaskDTO()
+            {
+                Title = task.Title,
+                Description = task.Description,
+                ExpectedStartDate = task.ExpectedStartDate,
+                Duration = task.Duration,
+                PreviousTasks = task.PreviousTasks ?? new List<Task>(), 
+                SameTimeTasks = task.SameTimeTasks ?? new List<Task>(),   
+                State = task.State
+            };
+        }
 
 
     }
