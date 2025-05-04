@@ -25,7 +25,7 @@ public class NotificationDTOTest
         var notification = new NotificationDTO { Read = false };
 
    
-        Assert(notification.Read);  
+        Assert.IsFalse(notification.Read);  
     }
 
    
