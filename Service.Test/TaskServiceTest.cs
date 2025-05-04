@@ -216,7 +216,23 @@ namespace Service.Test
             _taskService.CalculateEarlyFinish(null);  
         }
         
-       
+        [TestMethod]
+        [ExpectedException(typeof(TaskDurationException))]  
+        public void CalculateEarlyFinish_ShouldThrowException_WhenDurationIsZeroOrNegative()
+        {
+            var task = new Task(
+                "Task 1",
+                "Description of Task 1",
+                new DateTime(2025, 5, 1),
+                0,  
+                new List<Task>(),
+                new List<Task>()
+            );
+
+            _taskService.CalculateEarlyFinish(task);  
+        }
+
+
 
 
 
