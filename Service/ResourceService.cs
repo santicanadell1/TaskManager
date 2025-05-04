@@ -50,6 +50,27 @@ namespace Service
             return resourcesDTO;
         }
         
+        public void UpdateResource(ResourceDTO resourceDTO)
+        {
+            Resource? resource = GetResourceObject(resourceDTO.Id); 
+            resource.Name = resourceDTO.Name;
+            resource.Type = resourceDTO.Type;
+            resource.Description = resourceDTO.Description;
+            _database.resources.Update(resource.Id, resource);
+        }
+        
+        private Resource GetResourceObject(int? id)
+        {
+            Resource? resource = _database.resources.Get(r => r.Id == id);
+            if (resource == null)
+            {
+                throw new ResourceNotFoundException();
+            }
+
+            return resource;
+        }
+
+        
         private ResourceDTO FromEntity(Resource resource)
         {
             return new ResourceDTO()

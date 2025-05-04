@@ -47,7 +47,7 @@ public class ResourcesServiceTest
         };
 
         _resourceService.AddResource(resourceDTO);
-        
+
         var resource = _resourceService.Get(1);
 
         Assert.IsNotNull(resource);
@@ -55,14 +55,14 @@ public class ResourcesServiceTest
         Assert.AreEqual("TypeA", resource.Type);
         Assert.AreEqual("Description of Resource1", resource.Description);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ResourceNotFoundException))]
     public void Get_ShouldThrowException_WhenResourceDoesNotExist()
     {
-        _resourceService.Get(999); 
+        _resourceService.Get(999);
     }
-    
+
     [TestMethod]
     public void GetResources_ShouldReturnAllResources_WhenResourcesExist()
     {
@@ -85,11 +85,11 @@ public class ResourcesServiceTest
 
         var resources = _resourceService.GetResources();
 
-        Assert.AreEqual(2, resources.Count);  
-        Assert.IsTrue(resources.Exists(r => r.Name == "Resource1"));  
-        Assert.IsTrue(resources.Exists(r => r.Name == "Resource2"));  
+        Assert.AreEqual(2, resources.Count);
+        Assert.IsTrue(resources.Exists(r => r.Name == "Resource1"));
+        Assert.IsTrue(resources.Exists(r => r.Name == "Resource2"));
     }
-    
+
     [TestMethod]
     public void UpdateResource_ShouldUpdateResource_WhenResourceExists()
     {
@@ -119,5 +119,4 @@ public class ResourcesServiceTest
         Assert.AreEqual("TypeB", resource.Type);
         Assert.AreEqual("Updated description", resource.Description);
     }
-
 }
