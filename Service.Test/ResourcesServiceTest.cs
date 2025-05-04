@@ -140,4 +140,10 @@ public class ResourcesServiceTest
         var deletedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
+
+    [TestMethod]
+    public void DeleteResource_ShouldThroException_WhenResourceNoExists()
+    {
+        _resourceService.DeleteResource("Name", "Type", "Description");
+    }
 }
