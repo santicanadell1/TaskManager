@@ -16,7 +16,7 @@ public class TaskDTO
     [Required(ErrorMessage = "Duration is required.")]
     public int Duration { get; set; }
     
-
+    public List<Domain.Task> PreviousTasks { get; set; }
     
 
 }
