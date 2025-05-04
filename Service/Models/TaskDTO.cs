@@ -1,0 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+using Domain;
+
+namespace Service.Models;
+public class TaskDTO
+{
+    [Required(ErrorMessage = "Title is required.")]
+    public string Title { get; set; }
+}
