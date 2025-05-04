@@ -68,7 +68,7 @@ public class NotificationDTOTest
         var notification = new NotificationDTO { Description = validDescription };
 
 
-        Assert(validDescription, notification.Description); 
+        Assert.AreEqual(validDescription, notification.Description); 
     }
 
 
