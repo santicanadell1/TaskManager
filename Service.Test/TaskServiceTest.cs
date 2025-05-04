@@ -177,13 +177,39 @@ namespace Service.Test
 
             Task task = _taskService.ToEntity(taskDTO);
 
-            // Assert that the task entity is correctly created from the DTO
+          
             Assert.AreEqual(taskDTO.Title, task.Title);
             Assert.AreEqual(taskDTO.Description, task.Description);
             Assert.AreEqual(taskDTO.ExpectedStartDate, task.ExpectedStartDate);
             Assert.AreEqual(taskDTO.Duration, task.Duration);
             Assert.AreEqual(taskDTO.State, task.State);
         }
+        
+       
+        [TestMethod]
+        public void FromEntity_ShouldMapStateCorrectly()
+        {
+            var task = new Task(
+                "Task 1",
+                "Description of Task 1",
+                new DateTime(2025, 5, 1),
+                5,
+                new List<Task>(),
+                new List<Task>()
+            );
+    
+        
+            task.State = State.DOING;
+
+           
+            TaskDTO taskDTO = _taskService.(task);
+
+         
+            Assert.AreEqual(task.State, taskDTO.State);
+        }
+
+  
+
 
     }
 }
