@@ -1,50 +1,96 @@
 ﻿@page "/resources/create"
+@using Service
+@using Service.Models
 @inject NavigationManager Navigation
-@rendermode InteractiveServer
-<h3>Create Resource</h3>
+@inject ResourceService ResourceService
 
-<EditForm Model="@newResource" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<link href="styles/styleCreateResource.css" rel="stylesheet"/>
 
-    <!-- Resource Name Field -->
-    <div class="mb-3">
-        <label for="resourceName" class="form-label">Name</label>
-        <InputText id="resourceName" class="form-control" @bind-Value="newResource.Name" required />
-    </div>
+<div class="resource-container">
+    <h3 class="resource-title">Create Resource</h3>
 
-    <!-- Resource Type Field (Input Text) -->
-    <div class="mb-3">
-        <label for="resourceType" class="form-label">Type</label>
-        <InputText id="resourceType" class="form-control" @bind-Value="newResource.Type" required />
-    </div>
+    <EditForm Model="@newResource" OnValidSubmit="HandleValidSubmit" FormName="resourceForm">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
 
-    <!-- Resource Description Field -->
-    <div class="mb-3">
-        <label for="resourceDescription" class="form-label">Description</label>
-        <InputTextArea id="resourceDescription" class="form-control" @bind-Value="newResource.Description" />
-    </div>
+        <div class="form-group">
+            <label for="resourceName">Name</label>
+            <InputText id="resourceName" class="form-control mt-1" @bind-Value="newResource.Name" required/>
+        </div>
 
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary">Create Resource</button>
-</EditForm>
+        <div class="form-group mt-3">
+            <label for="resourceType">Type</label>
+            <InputText id="resourceType" class="form-control mt-1" @bind-Value="newResource.Type" required/>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="resourceDescription">Description</label>
+            <InputTextArea id="resourceDescription" class="form-control mt-1" @bind-Value="newResource.Description"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Create Resource</button>
+    </EditForm>
+
+    @if (alertVisible)
+    {
+        <div class="alert alert-danger mt-3">
+            <strong>Error: </strong>@alertMessage
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+
+    @if (successVisible)
+    {
+        <div class="alert alert-success mt-3">
+            <strong>Success: </strong>@successMessage
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+</div>
 
 @code {
-    private Resource newResource = new Resource();
+    private ResourceDTO newResource = new ResourceDTO();
+    private bool alertVisible = false;
+    private string alertMessage = string.Empty;
+    private bool successVisible = false;
+    private string successMessage = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        newResource = new ResourceDTO()
+        {
+            Description = "",
+            Name = "",
+            Type = ""
+        };
+    }
 
     private void HandleValidSubmit()
     {
-        // Logic to handle saving resource data (e.g., save to a database or backend service)
-        Console.WriteLine($"Resource Created: {newResource.Name} ({newResource.Type})");
-
-        // Redirect after successful creation
-        Navigation.NavigateTo("/resources");
+        try
+        {
+            ResourceService.AddResource(newResource);
+            successMessage = "Resource created successfully!";
+            successVisible = true;
+            alertVisible = false;
+            Navigation.NavigateTo("/resources");
+        }
+        catch (Exception ex)
+        {
+            alertMessage = $"An error occurred: {ex.Message}";
+            alertVisible = true;
+            successVisible = false;
+        }
     }
 
-    public class Resource
+    private void ToggleAlertVisibility()
     {
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public string Description { get; set; }
+        alertVisible = false;
+        successVisible = false;
     }
+
 }

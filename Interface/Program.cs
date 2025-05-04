@@ -8,7 +8,7 @@ builder.Services.AddSingleton<InMemoryDatabase>();
 builder.Services.AddScoped<Login>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AdminSService>();
-
+builder.Services.AddScoped<ResourceService>();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
