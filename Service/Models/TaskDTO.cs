@@ -20,5 +20,9 @@ public class TaskDTO
     
     public List<Domain.Task> SameTimeTasks { get; set; }
     
+    [Required(ErrorMessage = "State is required.")]
+
+
+
 
 }

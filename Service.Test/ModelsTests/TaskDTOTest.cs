@@ -82,6 +82,26 @@ public class TaskDTOTest
         Assert.AreEqual("Task A", taskDto.SameTimeTasks[0].Title);
         Assert.AreEqual("Task B", taskDto.SameTimeTasks[1].Title);
     }
+    
+    [TestMethod]
+    public void NewTask_WhenStateIsSet_ThenStateIsAssignedCorrectly()
+    {
+        // arrange
+        var stateTodo = Domain.Test.State.TODO;
+        var stateDoing = Domain.Test.State.DOING;
+        var stateDone = Domain.Test.State.DONE;
+
+        var taskTodo = new TaskDTO { State = stateTodo };
+        var taskDoing = new TaskDTO { State = stateDoing };
+        var taskDone = new TaskDTO { State = stateDone };
+
+        // act & assert
+        Assert.AreEqual<Domain.Test.State>(stateTodo, taskTodo.State); 
+        Assert.AreEqual<Domain.Test.State>(stateDoing, taskDoing.State);
+        Assert.AreEqual<Domain.Test.State>(stateDone, taskDone.State);
+    }
+
+
 
 
 
