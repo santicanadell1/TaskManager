@@ -13,6 +13,5 @@ public class ResourceDTO
     [Required(ErrorMessage = "Description is required.")]
     public string Description { get; set; }
     
-    [Required(ErrorMessage = "Id is required.")]
     public int? Id { get; set; }
 }

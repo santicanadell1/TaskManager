@@ -83,7 +83,7 @@ namespace Service
 
         private Resource ToEntity(ResourceDTO resourceDTO)
         {
-            Resource resource = new Resource(resourceDTO.Name, 
+            var resource = new Resource(resourceDTO.Name, 
                 resourceDTO.Type, resourceDTO.Description);
             return resource;
         }
