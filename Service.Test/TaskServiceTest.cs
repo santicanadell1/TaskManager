@@ -108,7 +108,33 @@ namespace Service.Test
         }
 
 
+        [TestMethod]
+        public void IsCritical_ShouldReturnTrue_WhenTaskHasNoFloat()
+        {
+            var task1 = new Domain.Task(
+                "Task 1",                             
+                "Description of Task 1",             
+                new DateTime(2025, 5, 1),             
+                5,                                    
+                new List<Domain.Task>(),              
+                new List<Domain.Task>()              
+            );
 
+            var task2 = new Domain.Task(
+                "Task 2",                           
+                "Description of Task 2",             
+                new DateTime(2025, 5, 6),             
+                3,                                     
+                new List<Domain.Task> { task1 },     
+                new List<Domain.Task>()               
+            );
+
+          
+            bool isCritical = _taskService.IsCritical(task2);
+
+            
+            Assert.IsTrue(isCritical);
+        }
    
 
 
