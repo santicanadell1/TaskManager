@@ -38,25 +38,14 @@ public class TaskDTOTest
     }
     
     [TestMethod]
-    public void NewTask_WhenStartDateIsValid_ThenTaskIsCreated()
-    {
-       
-        DateTime validStartDate = new DateTime(2025, 5, 4);
-        TaskDTO task = new TaskDTO { StartDate = validStartDate };
-
-
-        Assert.AreEqual(validStartDate, task.StartDate);
-    }
-    
-    [TestMethod]
-    public void NewTask_WhenEndDateIsValid_ThenTaskIsCreated()
+    public void NewTask_WhenDurationIsValid_ThenTaskIsCreated()
     {
       
-        DateTime validEndDate = new DateTime(2025, 5, 10);
-        TaskDTO task = new TaskDTO { EndDate = validEndDate };
+        int validDuration = 5;
+        TaskDTO task = new TaskDTO { Duration = validDuration };
 
-
-        Assert.AreEqual(validEndDate, task.EndDate);
+   
+        Assert.AreEqual(validDuration, task.Duration);
     }
 
 
