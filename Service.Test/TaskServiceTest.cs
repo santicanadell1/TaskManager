@@ -213,7 +213,7 @@ namespace Service.Test
         [ExpectedException(typeof(TaskServiceException))]
         public void CalculateEarlyFinish_ShouldThrowException_WhenTaskIsNull()
         {
-            _taskService.CalculateEarlyFinish();  
+            _taskService.CalculateEarlyFinish(null);  
         }
         
        
