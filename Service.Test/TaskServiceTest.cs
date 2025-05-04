@@ -202,7 +202,7 @@ namespace Service.Test
             task.State = State.DOING;
 
            
-            TaskDTO taskDTO = _taskService.(task);
+            TaskDTO taskDTO = _taskService.FromEntity(task);
 
          
             Assert.AreEqual(task.State, taskDTO.State);
