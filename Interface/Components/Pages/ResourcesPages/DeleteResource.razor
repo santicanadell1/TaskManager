@@ -1,48 +1,61 @@
 ﻿@page "/resources/delete"
+@using Service
+@using Service.Models
 @inject NavigationManager Navigation
+@inject ResourceService ResourceService
+@rendermode InteractiveServer
 
 <h3>Delete Resource</h3>
 
 <p>Select a resource to delete:</p>
 
 <div class="mb-3">
-    <select class="form-control" @bind="selectedResourceId">
+    <select class="form-control" @bind="selectedResource">
         <option value="">-- Select Resource to Delete --</option>
         @foreach (var resource in resourcesList)
         {
-            <option value="@resource.Id">@resource.Name</option>
+            <option value="@resource">@resource.Name</option>
         }
     </select>
 </div>
 
-<button type="button" class="btn btn-danger" @onclick="DeleteResources" disabled="@(!selectedResourceId.HasValue)">
+<button type="button" class="btn btn-danger" @onclick="DeleteResources" disabled="@(selectedResource == null)">
     Delete Resource
 </button>
 
 @code {
-    private int? selectedResourceId;
-    private List<Resource> resourcesList = new List<Resource>
+    private ResourceDTO? selectedResource;
+    private List<ResourceDTO> resourcesList = new List<ResourceDTO>();
+
+    protected override void OnInitialized()
     {
-        new Resource { Id = 1, Name = "AWS Server 1" },
-        new Resource { Id = 2, Name = "Senior Analyst" },
-        new Resource { Id = 3, Name = "Software License X" }
-    };
+        try
+        {
+            resourcesList = ResourceService.GetResources();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading resources: {ex.Message}");
+        }
+    }
 
     private void DeleteResources()
     {
-        var resourceToDelete = resourcesList.FirstOrDefault(r => r.Id == selectedResourceId);
-        if (resourceToDelete != null)
+        if (selectedResource != null)
         {
-            resourcesList.Remove(resourceToDelete);
-            Console.WriteLine($"Resource Deleted: {resourceToDelete.Name}");
+            try
+            {
+                ResourceService.DeleteResource(selectedResource.Name, selectedResource.Type, selectedResource.Description);
+                resourcesList = ResourceService.GetResources();
+                Console.WriteLine($"Resource Deleted: {selectedResource.Name}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting resource: {ex.Message}");
+            }
         }
 
-        selectedResourceId = null; // Reset the selection
+        selectedResource = null; // Limpiamos la selección después de eliminar
     }
 
-    public class Resource
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
 }
