@@ -48,7 +48,9 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var resource = _resourceService.Get(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description);
+        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+
+        var resource = _resourceService.Get(addedResource.Id);
 
         Assert.IsNotNull(resource);
         Assert.AreEqual("Resource1", resource.Name);
@@ -60,7 +62,7 @@ public class ResourcesServiceTest
     [ExpectedException(typeof(ResourceNotFoundException))]
     public void Get_ShouldThrowException_WhenResourceDoesNotExist()
     {
-        _resourceService.Get("", "", "");
+        _resourceService.Get(999);
     }
 
     [TestMethod]
@@ -102,6 +104,8 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
+        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+
         var updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
@@ -109,7 +113,7 @@ public class ResourcesServiceTest
             Description = "Updated description"
         };
 
-        _resourceService.UpdateResource(resourceDTO, updatedResourceDTO);
+        _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
 
         var resource = _database.resources.Get(r =>
             r.Name == updatedResourceDTO.Name && r.Type == updatedResourceDTO.Type &&
@@ -135,7 +139,7 @@ public class ResourcesServiceTest
         var addedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNotNull(addedResource);
 
-        _resourceService.DeleteResource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description);
+        _resourceService.DeleteResource(addedResource.Id);
 
         var deletedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
@@ -145,6 +149,6 @@ public class ResourcesServiceTest
     [ExpectedException(typeof(ResourceNotFoundException))]
     public void DeleteResource_ShouldThroException_WhenResourceNoExists()
     {
-        _resourceService.DeleteResource("Name", "Type", "Description");
+        _resourceService.DeleteResource(999);
     }
 }

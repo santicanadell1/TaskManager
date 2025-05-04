@@ -21,10 +21,9 @@ namespace Service
             _database.resources.AddResource(resource);
         }
 
-        public ResourceDTO Get(string name, string type, string description)
+        public ResourceDTO Get(int? id)
         {
-            Resource? resource =
-                _database.resources.Get(r => r.Name == name && r.Type == type && r.Description == description);
+            Resource? resource = _database.resources.Get(r => r.Id == id);
 
             if (resource == null)
             {
@@ -51,23 +50,20 @@ namespace Service
             return resourcesDTO;
         }
 
-        public void UpdateResource(ResourceDTO resourceDTOToUpdate, ResourceDTO updatedResourceDTO)
+        public void UpdateResource(int? id, ResourceDTO updatedResourceDTO)
         {
-            Resource? resourceToUpdate = GetResourceObject(resourceDTOToUpdate.Name, resourceDTOToUpdate.Type,
-                resourceDTOToUpdate.Description);
+            Resource resourceToUpdate = GetResourceObject(id);
 
             Resource updatedResource = ToEntity(updatedResourceDTO);
 
-            _database.resources.Update(resourceDTOToUpdate.Name, resourceDTOToUpdate.Type,
-                resourceDTOToUpdate.Description,
-                updatedResource);
+            _database.resources.Update(id, updatedResource);
         }
 
-        public void DeleteResource(string name, string type, string description)
+        public void DeleteResource(int? id)
         {
             try
             {
-                _database.resources.Delete(name, type, description);
+                _database.resources.Delete(id);
             }
             catch (Exception ex)
             {
@@ -75,10 +71,9 @@ namespace Service
             }
         }
 
-        private Resource GetResourceObject(string name, string type, string description)
+        private Resource GetResourceObject(int? id)
         {
-            Resource? resource =
-                _database.resources.Get(r => r.Name == name && r.Type == type && r.Description == description);
+            Resource? resource = _database.resources.Get(r => r.Id == id);
 
             if (resource == null)
             {
@@ -95,14 +90,17 @@ namespace Service
             {
                 Name = resource.Name,
                 Type = resource.Type,
-                Description = resource.Description
+                Description = resource.Description,
+                Id = resource.Id,
             };
         }
 
         private Resource ToEntity(ResourceDTO resourceDTO)
         {
-            var resource = new Resource(resourceDTO.Name,
-                resourceDTO.Type, resourceDTO.Description);
+            var resource = new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
+            {
+                Id = resourceDTO.Id
+            };
             return resource;
         }
     }
