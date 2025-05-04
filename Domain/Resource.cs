@@ -21,19 +21,13 @@ namespace Domain
         }
 
         public string Description { get; set; }
-
-        public int Id { get; private set; }
-
+        
         public Resource(string name, string type, string description)
         {
             this.Name = name;
             this.Type = type;
             this.Description = description;
         }
-
-        internal void SetId(int id)
-        {
-            Id = id;
-        }
+        
     }
 }

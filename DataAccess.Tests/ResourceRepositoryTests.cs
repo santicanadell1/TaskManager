@@ -40,20 +40,24 @@ public class ResourceRepositoryTests
         var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.AddResource(resource);
 
-        var updatedResource = new Resource("Resource1", "TypeB", "Updated Description");
-        _resourceRepository.Update(resource.Id, updatedResource);
+        var updatedResource = new Resource("Resource1.v1", "TypeB", "Updated Description");
+        _resourceRepository.Update(resource.Name, resource.Type, resource.Description, updatedResource);
 
-        var result = _resourceRepository.Get(r => r.Name == updatedResource.Name);
+        var result = _resourceRepository.Get(r =>
+            r.Name == updatedResource.Name && r.Description == updatedResource.Description &&
+            r.Type == updatedResource.Type);
+
         Assert.IsNotNull(result);
         Assert.AreEqual(updatedResource.Type, result?.Type);
         Assert.AreEqual(updatedResource.Description, result?.Description);
+        Assert.AreEqual(updatedResource.Name, result?.Name);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ResourceNotFoundException))]
     public void Delete_ShouldThrowException_WhenResourceDoesNotExist()
     {
-        _resourceRepository.Delete(999);
+        _resourceRepository.Delete("", "", "");
     }
 
     [TestMethod]
@@ -63,10 +67,10 @@ public class ResourceRepositoryTests
         var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.AddResource(resource);
 
-        _resourceRepository.Delete(resource.Id);
-        
+        _resourceRepository.Delete(resource.Name, resource.Type, resource.Description);
+
         var deletedResource = _resourceRepository.Get(r => r.Name == resource.Name);
-        
+
         _resourceRepository.AddResource(deletedResource);
     }
 }

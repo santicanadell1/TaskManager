@@ -5,10 +5,4 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
-    <!-- Agregar el acceso de los miembros `internal` de Domain al ensamblaje DataAccess -->
-    <ItemGroup>
-        <InternalsVisibleTo Include="DataAccess" />
-    </ItemGroup>
-
 </Project>
