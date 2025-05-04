@@ -47,13 +47,13 @@
                 <hr style="border-color: rgba(255,255,255,0.1);"/>
             </div>
 
-            @if (_loggedUser.Roles.Contains(Rol.AdminSystem))
-            {
-                <AdminNav/>
-            }
-            else if (_loggedUser.Roles.Contains(Rol.AdminSystem) || _loggedUser.Roles.Contains(Rol.AdminProject))
+            if (_loggedUser.Roles.Contains(Rol.AdminSystem) || _loggedUser.Roles.Contains(Rol.AdminProject))
             {
                 <ResourcesNav/>
+            }
+            else @if (_loggedUser.Roles.Contains(Rol.AdminSystem))
+            {
+                <AdminNav/>
             }
         }
     </nav>
