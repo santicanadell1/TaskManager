@@ -19,3 +19,5 @@ namespace Service.Test
             _database = new InMemoryDatabase();
             _taskService = new TaskService(_database);
         }
+    }
+}
