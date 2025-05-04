@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Domain;
+using Service.Models;
 using Task = Domain.Task;
 
 namespace Service.Test
@@ -136,6 +137,28 @@ namespace Service.Test
             Assert.IsTrue(isCritical);
         }
    
+        
+        [TestMethod]
+        public void FromEntity_ShouldConvertTaskToTaskDTO()
+        {
+            var task = new Task(
+                "Task 1",
+                "Description of Task 1",
+                new DateTime(2025, 5, 1),
+                5,
+                new List<Task>(),
+                new List<Task>()
+            );
+
+            TaskDTO taskDTO = _taskService.FromEntity(task);
+
+            
+            Assert.AreEqual(task.Title, taskDTO.Title);
+            Assert.AreEqual(task.Description, taskDTO.Description);
+            Assert.AreEqual(task.ExpectedStartDate, taskDTO.ExpectedStartDate);
+            Assert.AreEqual(task.Duration, taskDTO.Duration);
+            Assert.AreEqual(task.State, taskDTO.State);
+        }
 
 
 

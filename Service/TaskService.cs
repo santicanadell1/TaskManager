@@ -67,6 +67,8 @@ namespace Service
                    CalculateEarlyFinish(task) == CalculateLateFinish(task);
         }
 
+     
+
 
     }
 }
