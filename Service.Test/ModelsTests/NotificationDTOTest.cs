@@ -60,6 +60,16 @@ public class NotificationDTOTest
         Assert.IsTrue(validationResults.Any(v => v.ErrorMessage.Contains("Description is required."))); 
     }
 
+    [TestMethod]
+    public void NewNotification_WhenDescriptionIsValid_ThenDescriptionIsSetCorrectly()
+    {
+ 
+        var validDescription = "Valid description";
+        var notification = new NotificationDTO { Description = validDescription };
+
+
+        Assert(validDescription, notification.Description); 
+    }
 
 
 
