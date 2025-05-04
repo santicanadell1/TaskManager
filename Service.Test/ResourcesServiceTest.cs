@@ -89,4 +89,35 @@ public class ResourcesServiceTest
         Assert.IsTrue(resources.Exists(r => r.Name == "Resource1"));  
         Assert.IsTrue(resources.Exists(r => r.Name == "Resource2"));  
     }
+    
+    [TestMethod]
+    public void UpdateResource_ShouldUpdateResource_WhenResourceExists()
+    {
+        var resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1",
+            Id = 1
+        };
+
+        _resourceService.AddResource(resourceDTO);
+
+        var updatedResourceDTO = new ResourceDTO
+        {
+            Id = resourceDTO.Id,
+            Name = "Resource1",
+            Type = "TypeB",
+            Description = "Updated description"
+        };
+
+        _resourceService.UpdateResource(updatedResourceDTO);
+
+        var resource = _database.resources.Get(r => r.Id == resourceDTO.Id);
+
+        Assert.IsNotNull(resource);
+        Assert.AreEqual("TypeB", resource.Type);
+        Assert.AreEqual("Updated description", resource.Description);
+    }
+
 }

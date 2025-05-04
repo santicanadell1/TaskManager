@@ -81,6 +81,7 @@ public class UserServiceTest
 
         userService.GetUser("nonexistent.user@example.com"); 
     }
+    
 
 }
     
