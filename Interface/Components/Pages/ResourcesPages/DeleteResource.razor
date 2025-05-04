@@ -1,48 +1,112 @@
 ﻿@page "/resources/delete"
+@using Service
+@using Service.Models
 @inject NavigationManager Navigation
+@inject ResourceService ResourceService
+@rendermode InteractiveServer
 
-<h3>Delete Resource</h3>
+<link href="styles/styleDeleteResource.css" rel="stylesheet"/>
 
-<p>Select a resource to delete:</p>
+<div class="delete-resource-container">
+    <h3 class="delete-resource-title">Delete Resource</h3>
 
-<div class="mb-3">
-    <select class="form-control" @bind="selectedResourceId">
-        <option value="">-- Select Resource to Delete --</option>
-        @foreach (var resource in resourcesList)
-        {
-            <option value="@resource.Id">@resource.Name</option>
-        }
-    </select>
+    <div class="form-group">
+        <label for="resourceSelect">Select a Resource to Delete</label>
+        <select id="resourceSelect" class="form-control mt-1" @bind="selectedResourceId">
+            <option value="">-- Select a Resource --</option>
+            @foreach (var resource in resourcesList)
+            {
+                <option value="@resource.Id">@resource.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="button" class="btn btn-danger" @onclick="DeleteResources"
+                disabled="@(selectedResourceId == null)">
+            Delete Resource
+        </button>
+    </div>
+
+    @if (!string.IsNullOrEmpty(deleteError))
+    {
+        <div class="alert alert-danger mt-3">
+            <strong>Error: </strong>@deleteError
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(deleteSuccess))
+    {
+        <div class="alert alert-success mt-3">
+            <strong>Success: </strong>@deleteSuccess
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
 </div>
 
-<button type="button" class="btn btn-danger" @onclick="DeleteResources" disabled="@(!selectedResourceId.HasValue)">
-    Delete Resource
-</button>
-
 @code {
+    private List<ResourceDTO> resourcesList = new List<ResourceDTO>();
     private int? selectedResourceId;
-    private List<Resource> resourcesList = new List<Resource>
+    private string deleteError = string.Empty;
+    private string deleteSuccess = string.Empty;
+
+    protected override void OnInitialized()
     {
-        new Resource { Id = 1, Name = "AWS Server 1" },
-        new Resource { Id = 2, Name = "Senior Analyst" },
-        new Resource { Id = 3, Name = "Software License X" }
-    };
+        LoadResources();
+    }
+
+    private void LoadResources()
+    {
+        try
+        {
+            resourcesList = ResourceService.GetResources();
+            if (resourcesList == null || resourcesList.Count == 0)
+            {
+                deleteError = "No resources found.";
+                resourcesList = new List<ResourceDTO>();
+            }
+        }
+        catch (Exception ex)
+        {
+            deleteError = $"Error loading resources: {ex.Message}";
+            resourcesList = new List<ResourceDTO>();
+        }
+    }
 
     private void DeleteResources()
     {
-        var resourceToDelete = resourcesList.FirstOrDefault(r => r.Id == selectedResourceId);
-        if (resourceToDelete != null)
+        deleteError = ""; 
+        deleteSuccess = ""; 
+
+        if (selectedResourceId == null)
         {
-            resourcesList.Remove(resourceToDelete);
-            Console.WriteLine($"Resource Deleted: {resourceToDelete.Name}");
+            deleteError = "Please select a resource to delete.";
+            return;
         }
 
-        selectedResourceId = null; // Reset the selection
+        try
+        {
+            ResourceService.DeleteResource(selectedResourceId.Value);
+            deleteSuccess = "Resource deleted successfully.";
+
+            LoadResources();
+            selectedResourceId = null; 
+        }
+        catch (Exception ex)
+        {
+            deleteError = $"An error occurred: {ex.Message}";
+        }
     }
 
-    public class Resource
+    private void ToggleAlertVisibility()
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        deleteError = "";
+        deleteSuccess = "";
     }
+
 }

@@ -1,0 +1,12 @@
+namespace Domain.Exceptions
+{
+    public class ResourceServiceException : Exception
+    {
+        public ResourceServiceException(string message) : base(message) { }
+
+        public override string ToString()
+        {
+            return $"ResourceServiceException: {this.GetType().Name} - {this.Message}";
+        }
+    }
+}
