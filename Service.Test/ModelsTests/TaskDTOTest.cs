@@ -64,6 +64,25 @@ public class TaskDTOTest
         Assert.AreEqual("Task 1", taskDTO.PreviousTasks[0].Title);
         Assert.AreEqual("Task 2", taskDTO.PreviousTasks[1].Title);
     }
+    
+    [TestMethod]
+    public void NewTask_WhenSameTimeTasksAreAssigned_ThenSameTimeTasksAreSet()
+    {
+        // arrange
+        var sameTimeTasks = new List<Domain.Task>
+        {
+            new Domain.Task("Task A", "Description A", DateTime.Now, 3, new List<Domain.Task>(), new List<Domain.Task>()),
+            new Domain.Task("Task B", "Description B", DateTime.Now, 2, new List<Domain.Task>(), new List<Domain.Task>())
+        };
+        var taskDto = new TaskDTO { SameTimeTasks = sameTimeTasks };
+
+
+        Assert.IsNotNull(taskDto.SameTimeTasks);
+        Assert.AreEqual(2, taskDto.SameTimeTasks.Count);
+        Assert.AreEqual("Task A", taskDto.SameTimeTasks[0].Title);
+        Assert.AreEqual("Task B", taskDto.SameTimeTasks[1].Title);
+    }
+
 
 
 }
