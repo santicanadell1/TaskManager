@@ -1,7 +1,8 @@
 ﻿@page "/"
 @inject NavigationManager Navigation
+@rendermode InteractiveServer
 
-
+<link href="styles/styleHome.css" rel="stylesheet"/>
 <PageTitle>TaskTrackPro - Home</PageTitle>
 
 <div class="home-container">
@@ -27,8 +28,6 @@
                 <li>Make informed decisions about resource allocation and task sequencing.</li>
                 <li>Minimize delays and manage risks effectively.</li>
             </ul>
-
-
         </div>
     </section>
 
@@ -37,13 +36,33 @@
         <h3>Get Started with TaskTrackPro</h3>
         <p>Sign up or log in to begin organizing and managing your projects.</p>
         <div class="cta-buttons">
-            <button class="btn btn-primary" href="Shared/Lo">LoginPage</button>
-            <button class="btn btn-secondary" @onclick="NavigateToSignUp">Sign Up</button>
+            @if (isFirstVisit)
+            {
+                <button class="btn btn-primary" @onclick="NavigateToLogin">Login</button>
+                <button class="btn btn-secondary" @onclick="NavigateToSignUp">Sign Up</button>
+            }
+            else
+            {
+                <p>Welcome back! You are logged in.</p>
+                <button class="btn btn-primary" @onclick="NavigateToDashboard">Go to Dashboard</button>
+            }
         </div>
     </section>
 </div>
 
 @code {
+    private bool isFirstVisit = true;
+    private bool isLoggedIn = false;
+
+    protected override void OnInitialized()
+    {
+        // Simulate checking if the user is authenticated.
+        // This would normally come from a server or state management.
+        isLoggedIn = false; // Set to true if user is logged in, false if not.
+
+        // For demo purposes, simulate first-time visit
+        isFirstVisit = !isLoggedIn; // User is first-time if not logged in
+    }
 
     private void NavigateToLogin()
     {
@@ -55,4 +74,8 @@
         Navigation.NavigateTo("/signup");
     }
 
+    private void NavigateToDashboard()
+    {
+        Navigation.NavigateTo("/dashboard");
+    }
 }
