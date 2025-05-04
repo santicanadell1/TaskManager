@@ -40,7 +40,7 @@ public class NotificationDTOTest
         var isValid = Validator.TryValidateObject(notification, validationContext, validationResults, true);
 
 
-        Assert(isValid); 
+        Assert.IsFalse(isValid); 
         Assert.IsTrue(validationResults.Any(v => v.ErrorMessage.Contains("Read is required.")));
     }
 
