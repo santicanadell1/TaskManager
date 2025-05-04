@@ -21,8 +21,8 @@ namespace Domain
             this.Description = description; 
             this.ExpectedStartDate = startDate;
             this.Duration = duration;  
-            this.PreviousTasks = previousTasks;
-            this.SameTimeTasks = sameTimeTasks;
+            this.PreviousTasks =  new List<Task>(); 
+            this.SameTimeTasks =  new List<Task>(); 
             this.State = State.TODO;  
         }
 
