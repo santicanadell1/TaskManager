@@ -10,5 +10,6 @@ public class TaskDTO
     [Required(ErrorMessage = "Description is required.")]
     public string Description { get; set; }
     
-  
+    [Required(ErrorMessage = "ExpectedStartDate is required.")]
+    public DateTime ExpectedStartDate { get; set; }
 }
