@@ -1,48 +1,78 @@
-﻿@using Service
+﻿@using Domain
+@using Microsoft.AspNetCore.Identity
+@using Service
+@using Service.Models
 @inject Login LoginService
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
 
+<link href="styles/styleNavMenu.css" rel="stylesheet"/>
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">TaskTrackPro</a>
+        <a class="navbar-brand" href="">
+            <i class="bi bi-check2-square me-2"></i>TaskTrackPro
+        </a>
     </div>
 </div>
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-        @if (LoginService.GetLoggedUser() == null)
+        @if (_loggedUser == null)
         {
             <!-- If the user is not logged in, show Login and Sign Up -->
-            <div class="nav-item px-3">
+            <div class="nav-item px-3 mt-3">
                 <NavLink class="nav-link" href="/login">
-                    <span aria-hidden="true"></span> Login
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Login
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="/signup">
-                    <span aria-hidden="true"></span> Sign Up
+                    <i class="bi bi-person-plus me-2"></i> Sign Up
                 </NavLink>
             </div>
         }
         else
         {
-            <!-- User icon that leads to the login page if user is logged in -->
-            <div class="nav-item px-3">
-                <button class="btn btn-link" @onclick="Logout">
-                    <i class="bi bi-box-arrow-right" style="font-size: 24px; color: white;"></i>
+            <div class="px-3 py-2 mt-2 d-flex align-items-center justify-content-between">
+                <div class="user-profile-mini">
+                    <i class="bi bi-person-circle" style="font-size: 24px; color: #3498db;"></i>
+                    <span class="ms-2 text-white">@_loggedUser.FirstName</span>
+                </div>
+                <button class="btn btn-link p-1" @onclick="Logout" title="Logout">
+                    <i class="bi bi-box-arrow-right"></i>
                 </button>
             </div>
 
-            <!-- If the user is logged in, show the navigation items -->
+            <div class="px-3 mb-2">
+                <hr style="border-color: rgba(255,255,255,0.1);"/>
+            </div>
 
-            <AdminNav/>
-            <ResourcesNav/>
+            @if (_loggedUser.Roles.Contains(Rol.AdminSystem))
+            {
+                <AdminNav/>
+            }
+            else if (_loggedUser.Roles.Contains(Rol.AdminSystem) || _loggedUser.Roles.Contains(Rol.AdminProject))
+            {
+                <ResourcesNav/>
+            }
         }
     </nav>
 </div>
 
 @code {
+    private UserDTO _loggedUser;
+
+    protected override void OnInitialized()
+    {
+        _loggedUser = LoginService.GetLoggedUser();
+        base.OnInitialized();
+    }
+
+    protected override void OnParametersSet()
+    {
+        _loggedUser = LoginService.GetLoggedUser();
+        base.OnParametersSet();
+    }
 
     private void NavigateToLogin()
     {
@@ -52,7 +82,7 @@
     private void Logout()
     {
         LoginService.Logout();
-        Navigation.NavigateTo("/login");
+        Navigation.NavigateTo("/login", true);
     }
 
 }

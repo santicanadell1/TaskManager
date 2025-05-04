@@ -25,10 +25,13 @@ main {
     white-space: nowrap;
     margin-left: 1.5rem;
     text-decoration: none;
+    color: #fff;
+    font-weight: 500;
 }
 
 .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
     text-decoration: underline;
+    color: #f8f9fa;
 }
 
 .top-row ::deep a:first-child {

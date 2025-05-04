@@ -1,5 +1,8 @@
 ﻿@page "/"
+@using Service
+@using Service.Models
 @inject NavigationManager Navigation
+@inject Login LoginService
 @rendermode InteractiveServer
 
 <link href="styles/styleHome.css" rel="stylesheet"/>
@@ -16,8 +19,10 @@
     <section class="home-description">
         <h2>What is TaskTrackPro?</h2>
         <p>TaskTrackPro is an advanced task management solution that helps teams plan projects efficiently using the
-            Critical Path Method (CPM). In addition to organizing tasks and tracking progress, you can define durations
-            and dependencies to calculate the critical path, enabling you to manage projects more effectively and meet
+            Critical Path Method (CPM). In addition to organizing tasks and tracking progress, you can define
+            durations
+            and dependencies to calculate the critical path, enabling you to manage projects more effectively and
+            meet
             deadlines.</p>
 
         <h3>Why TaskTrackPro?</h3>
@@ -36,33 +41,16 @@
         <h3>Get Started with TaskTrackPro</h3>
         <p>Sign up or log in to begin organizing and managing your projects.</p>
         <div class="cta-buttons">
-            @if (isFirstVisit)
-            {
-                <button class="btn btn-primary" @onclick="NavigateToLogin">Login</button>
-                <button class="btn btn-secondary" @onclick="NavigateToSignUp">Sign Up</button>
-            }
-            else
-            {
-                <p>Welcome back! You are logged in.</p>
-                <button class="btn btn-primary" @onclick="NavigateToDashboard">Go to Dashboard</button>
-            }
+            <button class="btn btn-primary" @onclick="NavigateToLogin">Login</button>
+            <button class="btn btn-secondary" @onclick="NavigateToSignUp">Sign Up</button>
         </div>
     </section>
 </div>
 
+
+
 @code {
-    private bool isFirstVisit = true;
-    private bool isLoggedIn = false;
 
-    protected override void OnInitialized()
-    {
-        // Simulate checking if the user is authenticated.
-        // This would normally come from a server or state management.
-        isLoggedIn = false; // Set to true if user is logged in, false if not.
-
-        // For demo purposes, simulate first-time visit
-        isFirstVisit = !isLoggedIn; // User is first-time if not logged in
-    }
 
     private void NavigateToLogin()
     {
@@ -74,8 +62,4 @@
         Navigation.NavigateTo("/signup");
     }
 
-    private void NavigateToDashboard()
-    {
-        Navigation.NavigateTo("/dashboard");
-    }
 }
