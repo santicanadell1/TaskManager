@@ -19,4 +19,12 @@ public class NotificationService
         notificationDTO.Description = notification.Description;
         return notificationDTO;
     }
+
+    public static Notification ToEntity(NotificationDTO notificationDTO)
+    {
+        Notification notification = new Notification(notificationDTO.Read,notificationDTO.Description);
+        return notification;
+    }
+    
+    
 }
