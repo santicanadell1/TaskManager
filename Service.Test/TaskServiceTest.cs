@@ -246,7 +246,7 @@ namespace Service.Test
                 new List<Task>()
             );
 
-            _taskService.CalculateEarlyFinish();
+            _taskService.CalculateEarlyFinish(task);
 
 
 
