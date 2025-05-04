@@ -63,7 +63,7 @@ public class AdminSService
 
         if (_passwordManager.IsValidPassword(newPassword))
         {
-            user.Password = newPassword;
+            user.Password = _passwordManager.HashPassword(newPassword);
             _userService.UpdateUser(user);
         }
         else
