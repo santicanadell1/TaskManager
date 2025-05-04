@@ -46,7 +46,18 @@ namespace Service
             DateTime latestPreviousEnd = task.PreviousTasks.Max(t => t.EndDate);
             return latestPreviousEnd.AddDays(0); 
         }
+        public DateTime CalculateLateFinish(Task task)
+        {
+           
+            if (task.PreviousTasks.Count == 0)
+            {
+                return CalculateEarlyFinish(task);
+            }
 
+          
+            DateTime latestPreviousFinish = task.PreviousTasks.Max(t => t.EndDate);
+            return latestPreviousFinish.AddDays(task.Duration); 
+        }
 
 
 
