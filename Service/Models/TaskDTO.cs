@@ -17,4 +17,6 @@ public class TaskDTO
     public int Duration { get; set; }
     
 
+    
+
 }
