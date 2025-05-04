@@ -41,7 +41,7 @@ public class ResourceRepositoryTests
         _resourceRepository.AddResource(resource);
 
         var updatedResource = new Resource("Resource1.v1", "TypeB", "Updated Description");
-        _resourceRepository.Update(resource.Name, resource.Type, resource.Description, updatedResource);
+        _resourceRepository.Update(resource.Id, updatedResource);
 
         var result = _resourceRepository.Get(r =>
             r.Name == updatedResource.Name && r.Description == updatedResource.Description &&
@@ -57,7 +57,7 @@ public class ResourceRepositoryTests
     [ExpectedException(typeof(ResourceNotFoundException))]
     public void Delete_ShouldThrowException_WhenResourceDoesNotExist()
     {
-        _resourceRepository.Delete("", "", "");
+        _resourceRepository.Delete(999);
     }
 
     [TestMethod]
@@ -67,7 +67,7 @@ public class ResourceRepositoryTests
         var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.AddResource(resource);
 
-        _resourceRepository.Delete(resource.Name, resource.Type, resource.Description);
+        _resourceRepository.Delete(resource.Id);
 
         var deletedResource = _resourceRepository.Get(r => r.Name == resource.Name);
 

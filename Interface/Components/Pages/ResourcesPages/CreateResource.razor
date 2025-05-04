@@ -3,33 +3,29 @@
 @using Service.Models
 @inject NavigationManager Navigation
 @inject ResourceService ResourceService
-@rendermode InteractiveServer
 
 <link href="styles/styleCreateResource.css" rel="stylesheet"/>
 
 <div class="resource-container">
     <h3 class="resource-title">Create Resource</h3>
 
-    <EditForm Model="@newResource" OnValidSubmit="HandleValidSubmit">
+    <EditForm Model="@newResource" OnValidSubmit="HandleValidSubmit" FormName="resourceForm">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
 
         <div class="form-group">
             <label for="resourceName">Name</label>
-            <InputText id="resourceName" class="form-control mt-1" @bind-Value="newResource.Name"/>
-            <ValidationMessage For="@(() => newResource.Name)"/>
+            <InputText id="resourceName" class="form-control mt-1" @bind-Value="newResource.Name" required/>
         </div>
 
         <div class="form-group mt-3">
             <label for="resourceType">Type</label>
-            <InputText id="resourceType" class="form-control mt-1" @bind-Value="newResource.Type"/>
-            <ValidationMessage For="@(() => newResource.Type)"/>
+            <InputText id="resourceType" class="form-control mt-1" @bind-Value="newResource.Type" required/>
         </div>
 
         <div class="form-group mt-3">
             <label for="resourceDescription">Description</label>
             <InputTextArea id="resourceDescription" class="form-control mt-1" @bind-Value="newResource.Description"/>
-            <ValidationMessage For="@(() => newResource.Description)"/>
         </div>
 
         <button type="submit" class="btn btn-primary mt-3">Create Resource</button>
@@ -40,7 +36,7 @@
         <div class="alert alert-danger mt-3">
             <strong>Error: </strong>@alertMessage
             <button type="button" class="close" @onclick="ToggleAlertVisibility">
-                <span>&times;</span>
+                <i class="fas fa-times"></i>
             </button>
         </div>
     }
@@ -50,14 +46,14 @@
         <div class="alert alert-success mt-3">
             <strong>Success: </strong>@successMessage
             <button type="button" class="close" @onclick="ToggleAlertVisibility">
-                <span>&times;</span>
+                <i class="fas fa-times"></i>
             </button>
         </div>
     }
 </div>
 
 @code {
-    private ResourceDTO newResource;
+    private ResourceDTO newResource = new ResourceDTO();
     private bool alertVisible = false;
     private string alertMessage = string.Empty;
     private bool successVisible = false;
@@ -81,6 +77,7 @@
             successMessage = "Resource created successfully!";
             successVisible = true;
             alertVisible = false;
+            Navigation.NavigateTo("/resources");
         }
         catch (Exception ex)
         {
