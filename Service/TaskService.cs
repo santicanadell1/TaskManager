@@ -2,6 +2,7 @@
 using Domain;
 using Service.Models;
 using System.Linq;
+using Task = Domain.Task;
 
 namespace Service
 {
