@@ -13,5 +13,18 @@ namespace Service
         {
             _database = database;
         }
+        public DateTime CalculateEarlyStart(Task task)
+        {
+            
+            if (task.PreviousTasks.Count == 0)
+            {
+                return task.ExpectedStartDate;
+            }
+
+          
+            DateTime latestPreviousEnd = task.PreviousTasks.Max(t => t.EndDate);
+            return latestPreviousEnd;
+        }
+
     }
 }
