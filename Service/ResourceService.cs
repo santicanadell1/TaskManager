@@ -63,6 +63,11 @@ namespace Service
                 updatedResource);
         }
 
+        public void DeleteResource(string name, string type, string description)
+        {
+            _database.resources.Delete(name, type, description);
+        }
+
         private Resource GetResourceObject(string name, string type, string description)
         {
             Resource? resource =
