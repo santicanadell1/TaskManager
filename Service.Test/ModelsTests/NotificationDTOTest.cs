@@ -18,6 +18,15 @@ public class NotificationDTOTest
       
         Assert.IsTrue(notification.Read);  
     }
+    [TestMethod]
+    public void NewNotification_WhenReadIsFalse_ThenNotificationIsCreatedWithFalse()
+    {
+    
+        var notification = new NotificationDTO { Read = false };
+
+   
+        Assert(notification.Read);  
+    }
 
    
 
