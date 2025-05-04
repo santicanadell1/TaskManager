@@ -27,6 +27,9 @@ namespace Service
             DateTime latestPreviousEnd = task.PreviousTasks.Max(t => t.EndDate);
             return latestPreviousEnd;
         }
+        
+     
+
 
 
     }
