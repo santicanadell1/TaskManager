@@ -12,7 +12,7 @@ namespace Domain.Test
            
             Resource res;
            
-            res = new Resource("", "type", "description");
+            res = new Resource(null,"", "type", "description");
         }
 
         [TestMethod]
@@ -22,7 +22,7 @@ namespace Domain.Test
             
             Resource res;
             
-            res = new Resource("name", "", "description");
+            res = new Resource(null,"name", "", "description");
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace Domain.Test
             var description = "Dell Latitude";
 
         
-            var res = new Resource(name, type, description);
+            var res = new Resource(null,name, type, description);
 
             
             Assert.AreEqual(name, res.Name);
@@ -46,7 +46,7 @@ namespace Domain.Test
         public void UpdateResourceName_ShouldChangeNameSuccessfully()
         {
             
-            var res = new Resource("Old Name", "Humano", "Some description");
+            var res = new Resource(null,"Old Name", "Humano", "Some description");
 
             
             res.Name = "New Name";

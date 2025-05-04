@@ -11,25 +11,22 @@ namespace Domain
         public string Name
         {
             get => name;
-            set 
-            {
-                name = string.IsNullOrEmpty(value) ? throw new ResourceNameException() : value;
-            }
+            set { name = string.IsNullOrEmpty(value) ? throw new ResourceNameException() : value; }
         }
 
         public string Type
         {
             get => type;
-            set
-            {
-                type = string.IsNullOrEmpty(value) ? throw new ResourceTypeException() : value;
-            }
+            set { type = string.IsNullOrEmpty(value) ? throw new ResourceTypeException() : value; }
         }
 
         public string Description { get; set; }
 
-        public Resource(string name, string type, string description)
+        public int? Id { get; set; }
+
+        public Resource(int? id, string name, string type, string description)
         {
+            this.Id = id;
             this.Name = name;
             this.Type = type;
             this.Description = description;
