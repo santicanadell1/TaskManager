@@ -28,7 +28,11 @@ namespace Service
             return latestPreviousEnd;
         }
         
-     
+        public DateTime CalculateEarlyFinish(Task task)
+        {
+            
+            return task.ExpectedStartDate.AddDays(task.Duration);
+        }
 
 
 
