@@ -29,7 +29,7 @@ public class UserService
         user.Email = userDTO.Email;
         user.Roles = userDTO.Roles;
         user.Birthday = userDTO.Birthday;
-        user.Password = _passwordManager.HashPassword(userDTO.Password);
+        user.Password = userDTO.Password;
         _database.users.Update(user.Email, user);
     }
 
