@@ -3,13 +3,14 @@
 @using Service.Models
 @inject NavigationManager Navigation
 @inject ResourceService ResourceService
+@rendermode InteractiveServer
 
 <link href="styles/styleCreateResource.css" rel="stylesheet"/>
 
 <div class="resource-container">
     <h3 class="resource-title">Create Resource</h3>
 
-    <EditForm Model="@newResource" OnValidSubmit="HandleValidSubmit" FormName="resourceForm">
+    <EditForm Model="@newResource" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
 
@@ -56,7 +57,7 @@
 </div>
 
 @code {
-    private ResourceDTO newResource = new ResourceDTO();
+    private ResourceDTO newResource;
     private bool alertVisible = false;
     private string alertMessage = string.Empty;
     private bool successVisible = false;
@@ -88,7 +89,7 @@
             successVisible = false;
         }
     }
-    
+
     private void ToggleAlertVisibility()
     {
         alertVisible = false;
