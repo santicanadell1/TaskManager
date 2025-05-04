@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Domain;
+using Domain.Test;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -160,7 +161,29 @@ namespace Service.Test
             Assert.AreEqual(task.State, taskDTO.State);
         }
 
+        [TestMethod]
+        public void ToEntity_ShouldConvertTaskDTOToTask()
+        {
+            var taskDTO = new TaskDTO
+            {
+                Title = "Task 1",
+                Description = "Description of Task 1",
+                ExpectedStartDate = new DateTime(2025, 5, 1),
+                Duration = 5,
+                PreviousTasks = new List<Task>(),
+                SameTimeTasks = new List<Task>(),
+                State = State.TODO
+            };
 
+            Task task = _taskService.ToEntity(taskDTO);
+
+            // Assert that the task entity is correctly created from the DTO
+            Assert.AreEqual(taskDTO.Title, task.Title);
+            Assert.AreEqual(taskDTO.Description, task.Description);
+            Assert.AreEqual(taskDTO.ExpectedStartDate, task.ExpectedStartDate);
+            Assert.AreEqual(taskDTO.Duration, task.Duration);
+            Assert.AreEqual(taskDTO.State, task.State);
+        }
 
     }
 }
