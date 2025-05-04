@@ -10,22 +10,46 @@
 <p>Select a resource to delete:</p>
 
 <div class="mb-3">
-    <select class="form-control" @bind="selectedResource">
+    <select class="form-control" @bind="selectedResourceId">
         <option value="">-- Select Resource to Delete --</option>
         @foreach (var resource in resourcesList)
         {
-            <option value="@resource">@resource.Name</option>
+            <option value="@resource.Id">@resource.Name</option>
         }
     </select>
 </div>
 
-<button type="button" class="btn btn-danger" @onclick="DeleteResources" disabled="@(selectedResource == null)">
+<button type="button" class="btn btn-danger" @onclick="DeleteResources" disabled="@(selectedResourceId == null)">
     Delete Resource
 </button>
 
+@if (alertVisible)
+{
+    <div class="alert alert-danger mt-3">
+        <strong>Error: </strong>@alertMessage
+        <button type="button" class="close" @onclick="ToggleAlertVisibility">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+}
+
+@if (successVisible)
+{
+    <div class="alert alert-success mt-3">
+        <strong>Success: </strong>@successMessage
+        <button type="button" class="close" @onclick="ToggleAlertVisibility">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+}
+
 @code {
-    private ResourceDTO? selectedResource;
+    private int? selectedResourceId;
     private List<ResourceDTO> resourcesList = new List<ResourceDTO>();
+    private bool alertVisible = false;
+    private string alertMessage = string.Empty;
+    private bool successVisible = false;
+    private string successMessage = string.Empty;
 
     protected override void OnInitialized()
     {
@@ -35,27 +59,38 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading resources: {ex.Message}");
+            alertMessage = $"Error loading resources: {ex.Message}";
+            alertVisible = true;
+            successVisible = false;
         }
     }
 
     private void DeleteResources()
     {
-        if (selectedResource != null)
+        if (selectedResourceId != null)
         {
             try
             {
-                ResourceService.DeleteResource(selectedResource.Name, selectedResource.Type, selectedResource.Description);
-                resourcesList = ResourceService.GetResources();
-                Console.WriteLine($"Resource Deleted: {selectedResource.Name}");
+                ResourceService.DeleteResource(selectedResourceId.Value);
+                successMessage = "Resource deleted successfully!";
+                successVisible = true;
+                alertVisible = false;
+                resourcesList = ResourceService.GetResources(); // Refresh the list after deletion
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error deleting resource: {ex.Message}");
+                alertMessage = $"An error occurred: {ex.Message}";
+                alertVisible = true;
+                successVisible = false;
             }
         }
 
-        selectedResource = null; // Limpiamos la selección después de eliminar
+        selectedResourceId = null; // Reset selection after deletion attempt
     }
 
+    private void ToggleAlertVisibility()
+    {
+        alertVisible = false;
+        successVisible = false;
+    }
 }
