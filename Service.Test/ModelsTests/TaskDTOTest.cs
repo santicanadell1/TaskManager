@@ -15,5 +15,15 @@ public class TaskDTOTest
        
         Assert.IsNull(user.Title);
     }
+    
+    [TestMethod]
+    public void NewTask_WhenDescriptionIsNull_ThenTaskIsNotCreated()
+    {
+       
+        TaskDTO user = new TaskDTO { Description = null };
+
+       
+        Assert.IsNull(user.Description);
+    }
 
 }
