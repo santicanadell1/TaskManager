@@ -125,7 +125,7 @@ namespace Service
 
             if (taskDTO.Duration <= 0)
             {
-                throw new TaskDurationException(); 
+                throw new TaskDuratException(); 
             }
 
             return new Task(
@@ -137,8 +137,5 @@ namespace Service
                 taskDTO.SameTimeTasks ?? new List<Task>()
             );
         }
-        
-        
-        
     }
 }

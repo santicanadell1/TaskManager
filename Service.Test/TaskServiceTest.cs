@@ -285,6 +285,5 @@ namespace Service.Test
             Assert.IsNotNull(taskDTO.SameTimeTasks);
         }
 
-
     }
 }
