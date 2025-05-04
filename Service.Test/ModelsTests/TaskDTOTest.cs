@@ -47,6 +47,17 @@ public class TaskDTOTest
 
         Assert.AreEqual(validStartDate, task.StartDate);
     }
+    
+    [TestMethod]
+    public void NewTask_WhenEndDateIsValid_ThenTaskIsCreated()
+    {
+      
+        DateTime validEndDate = new DateTime(2025, 5, 10);
+        TaskDTO task = new TaskDTO { EndDate = validEndDate };
+
+
+        Assert.AreEqual(validEndDate, task.EndDate);
+    }
 
 
 }
