@@ -274,6 +274,16 @@ namespace Service.Test
             Assert.AreEqual(taskDTO.State, task.State);
         }
 
+        [TestMethod]
+        public void FromEntity_ShouldHandleEmptyListsCorrectly()
+        {
+            var task = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task>(), new List<Task>());
+    
+            TaskDTO taskDTO = _taskService.FromEntity();
+    
+            Assert.IsNotNull(taskDTO.PreviousTasks);
+            Assert.IsNotNull(taskDTO.SameTimeTasks);
+        }
 
 
     }
