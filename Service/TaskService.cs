@@ -59,7 +59,13 @@ namespace Service
             return latestPreviousFinish.AddDays(task.Duration); 
         }
 
-
+      
+        public bool IsCritical(Task task)
+        {
+            
+            return CalculateEarlyStart(task) == CalculateLateStart(task) &&
+                   CalculateEarlyFinish(task) == CalculateLateFinish(task);
+        }
 
 
     }
