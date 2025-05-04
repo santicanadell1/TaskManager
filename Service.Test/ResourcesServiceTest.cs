@@ -142,6 +142,7 @@ public class ResourcesServiceTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ResourceNotFoundException))]
     public void DeleteResource_ShouldThroException_WhenResourceNoExists()
     {
         _resourceService.DeleteResource("Name", "Type", "Description");

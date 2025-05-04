@@ -65,7 +65,14 @@ namespace Service
 
         public void DeleteResource(string name, string type, string description)
         {
-            _database.resources.Delete(name, type, description);
+            try
+            {
+                _database.resources.Delete(name, type, description);
+            }
+            catch (Exception ex)
+            {
+                throw new ResourceNotFoundException();
+            }
         }
 
         private Resource GetResourceObject(string name, string type, string description)
