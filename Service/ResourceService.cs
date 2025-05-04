@@ -1,6 +1,7 @@
 using DataAccess;
 using DataAccess.ResourceRepositoryExceptions;
 using Domain;
+using Domain.Exceptions;
 using Service.Models;
 
 namespace Service
@@ -30,6 +31,23 @@ namespace Service
             }
             
             return FromEntity(resource);
+        }
+        
+        public List<ResourceDTO> GetResources()
+        {
+            List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
+
+            foreach (var resource in _database.resources.GetAll())
+            {
+                resourcesDTO.Add(FromEntity(resource));
+            }
+
+            if (resourcesDTO.Count == 0)
+            {
+                throw new NoResourcesFoundException();
+            }
+
+            return resourcesDTO;
         }
         
         private ResourceDTO FromEntity(Resource resource)
