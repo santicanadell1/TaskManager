@@ -35,7 +35,17 @@ namespace Service
             return task.ExpectedStartDate.AddDays(task.Duration);
         }
         
-
+        public DateTime CalculateLateStart(Task task)
+        {
+           
+            if (task.PreviousTasks.Count == 0)
+            {
+                return task.ExpectedStartDate;
+            }
+            
+            DateTime latestPreviousEnd = task.PreviousTasks.Max(t => t.EndDate);
+            return latestPreviousEnd.AddDays(0); 
+        }
 
 
 
