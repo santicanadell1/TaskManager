@@ -15,6 +15,7 @@ namespace Service
             _database = database;
             
         }
+        
         public DateTime CalculateEarlyStart(Task task)
         {
            
@@ -33,6 +34,10 @@ namespace Service
             
             return task.ExpectedStartDate.AddDays(task.Duration);
         }
+        
+
+
+
 
 
 

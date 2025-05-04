@@ -72,6 +72,9 @@ public class UserServiceTest
         userService.GetUsers();
     }
     
+    
+    
+    
     [TestMethod]
     [ExpectedException(typeof(UserNotFoundException))]
     public void GetUser_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
