@@ -20,19 +20,20 @@ namespace Service
             var resource = ToEntity(resourceDTO);
             _database.resources.AddResource(resource);
         }
-        
-        public ResourceDTO Get(int id)
+
+        public ResourceDTO Get(string name, string type, string description)
         {
-            Resource? resource = _database.resources.Get(r => r.Id == id);
+            Resource? resource =
+                _database.resources.Get(r => r.Name == name && r.Type == type && r.Description == description);
 
             if (resource == null)
             {
                 throw new ResourceNotFoundException();
             }
-            
+
             return FromEntity(resource);
         }
-        
+
         public List<ResourceDTO> GetResources()
         {
             List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
@@ -49,19 +50,24 @@ namespace Service
 
             return resourcesDTO;
         }
-        
-        public void UpdateResource(ResourceDTO resourceDTO)
+
+        public void UpdateResource(ResourceDTO resourceDTOToUpdate, ResourceDTO updatedResourceDTO)
         {
-            Resource? resource = GetResourceObject(resourceDTO.Id); 
-            resource.Name = resourceDTO.Name;
-            resource.Type = resourceDTO.Type;
-            resource.Description = resourceDTO.Description;
-            _database.resources.Update(resource.Id, resource);
+            Resource? resourceToUpdate = GetResourceObject(resourceDTOToUpdate.Name, resourceDTOToUpdate.Type,
+                resourceDTOToUpdate.Description);
+
+            Resource updatedResource = ToEntity(updatedResourceDTO);
+
+            _database.resources.Update(resourceDTOToUpdate.Name, resourceDTOToUpdate.Type,
+                resourceDTOToUpdate.Description,
+                updatedResource);
         }
-        
-        private Resource GetResourceObject(int? id)
+
+        private Resource GetResourceObject(string name, string type, string description)
         {
-            Resource? resource = _database.resources.Get(r => r.Id == id);
+            Resource? resource =
+                _database.resources.Get(r => r.Name == name && r.Type == type && r.Description == description);
+
             if (resource == null)
             {
                 throw new ResourceNotFoundException();
@@ -70,7 +76,7 @@ namespace Service
             return resource;
         }
 
-        
+
         private ResourceDTO FromEntity(Resource resource)
         {
             return new ResourceDTO()
@@ -83,7 +89,7 @@ namespace Service
 
         private Resource ToEntity(ResourceDTO resourceDTO)
         {
-            var resource = new Resource(resourceDTO.Name, 
+            var resource = new Resource(resourceDTO.Name,
                 resourceDTO.Type, resourceDTO.Description);
             return resource;
         }

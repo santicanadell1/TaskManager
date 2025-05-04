@@ -48,7 +48,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var resource = _resourceService.Get(1);
+        var resource = _resourceService.Get(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description);
 
         Assert.IsNotNull(resource);
         Assert.AreEqual("Resource1", resource.Name);
@@ -60,7 +60,7 @@ public class ResourcesServiceTest
     [ExpectedException(typeof(ResourceNotFoundException))]
     public void Get_ShouldThrowException_WhenResourceDoesNotExist()
     {
-        _resourceService.Get(999);
+        _resourceService.Get("", "", "");
     }
 
     [TestMethod]
@@ -98,25 +98,46 @@ public class ResourcesServiceTest
             Name = "Resource1",
             Type = "TypeA",
             Description = "Description of Resource1",
-            Id = 1
         };
 
         _resourceService.AddResource(resourceDTO);
 
         var updatedResourceDTO = new ResourceDTO
         {
-            Id = resourceDTO.Id,
             Name = "Resource1",
             Type = "TypeB",
             Description = "Updated description"
         };
 
-        _resourceService.UpdateResource(updatedResourceDTO);
+        _resourceService.UpdateResource(resourceDTO, updatedResourceDTO);
 
-        var resource = _database.resources.Get(r => r.Id == resourceDTO.Id);
+        var resource = _database.resources.Get(r =>
+            r.Name == updatedResourceDTO.Name && r.Type == updatedResourceDTO.Type &&
+            r.Description == updatedResourceDTO.Description);
 
         Assert.IsNotNull(resource);
         Assert.AreEqual("TypeB", resource.Type);
         Assert.AreEqual("Updated description", resource.Description);
+    }
+
+    [TestMethod]
+    public void DeleteResource_ShouldDeleteResource_WhenResourceExists()
+    {
+        var resourceDTO = new ResourceDTO
+        {
+            Name = "ResourceToDelete",
+            Type = "TypeA",
+            Description = "Description of resource to delete"
+        };
+
+        _resourceService.AddResource(resourceDTO);
+
+        var addedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
+        Assert.IsNotNull(addedResource);
+
+        _resourceService.DeleteResource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description);
+
+        var deletedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
+        Assert.IsNull(deletedResource);
     }
 }
