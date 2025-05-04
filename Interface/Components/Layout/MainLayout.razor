@@ -19,10 +19,7 @@
         </div>
 
         <article class="content px-4">
-            @if (_loggedUser == null)
-            {
-                <Home/>
-            }
+            @Body
         </article>
     </main>
 </div>
@@ -34,18 +31,3 @@
 </div>
 
 
-@code{
-    private UserDTO _loggedUser;
-
-    protected override void OnInitialized()
-    {
-        _loggedUser = LoginService.GetLoggedUser();
-    }
-
-    protected override void OnParametersSet()
-    {
-        _loggedUser = LoginService.GetLoggedUser();
-        base.OnParametersSet();
-    }
-
-}
