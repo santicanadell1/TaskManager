@@ -9,12 +9,12 @@
 .navbar-brand {
     font-size: 1.15rem;
     font-weight: 600;
-    color: #fff;
-    transition: color 0.2s ease;
+    color: #d1d1d1;
+    transition: all 0.3s ease-in-out;
 }
 
 .navbar-brand:hover {
-    color: #3498db;
+    color: #ffffff;
     text-decoration: none;
 }
 
@@ -32,12 +32,15 @@
     font-size: 20px;
     color: white;
     cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .bi-box-arrow-right:hover {
     color: #3498db;
+    transform: rotate(180deg);
 }
 
+/* Button link styling */
 .nav-item button.btn-link {
     background: none;
     border: none;
@@ -53,12 +56,13 @@
 }
 
 .nav-item button.btn-link:focus {
-    outline: none;
+    outline: 3px solid #3498db;
 }
 
+/* Navigation link styling */
 .nav-link {
     color: #e0e0e0;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease-in-out;
     padding: 0.6rem 1rem;
     border-radius: 4px;
 }
@@ -72,4 +76,19 @@
     background-color: rgba(52, 152, 219, 0.2);
     color: #3498db;
     font-weight: 500;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .nav-scrollable {
+        width: 100%;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .nav-item button.btn-link {
+        padding: 10px;
+    }
 }
