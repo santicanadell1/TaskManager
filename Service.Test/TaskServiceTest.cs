@@ -40,13 +40,13 @@ namespace Service.Test
         [TestMethod]
         public void CalculateEarlyFinish_ShouldReturnCorrectDate_WhenGivenDuration()
         {
-            var task = new Domain.Task(
+            var task = new Task(
                 "Task 1",                             
                 "Description of Task 1",              
                 new DateTime(2025, 5, 1),             
                 5,                                     
-                new List<Domain.Task>(),              
-                new List<Domain.Task>()             
+                new List<Task>(),              
+                new List<Task>()             
             );
 
             DateTime earlyFinish = _taskService.CalculateEarlyFinish(task);
@@ -58,22 +58,22 @@ namespace Service.Test
         [TestMethod]
         public void CalculateLateStart_ShouldReturnCorrectDate_WhenThereArePreviousTasks()
         {
-            var task1 = new Domain.Task(
+            var task1 = new Task(
                 "Task 1",                             
                 "Description of Task 1",              
                 new DateTime(2025, 5, 1),             
                 5,                                     
-                new List<Domain.Task>(),             
-                new List<Domain.Task>()              
+                new List<Task>(),             
+                new List<Task>()              
             );
 
-            var task2 = new Domain.Task(
+            var task2 = new Task(
                 "Task 2",                            
                 "Description of Task 2",              
                 new DateTime(2025, 5, 6),             
                 3,                                     
-                new List<Domain.Task> { task1 },     
-                new List<Domain.Task>()               
+                new List<Task> { task1 },     
+                new List<Task>()               
             );
 
             DateTime lateStart = _taskService.CalculateLateStart(task2);
@@ -85,22 +85,22 @@ namespace Service.Test
         [TestMethod]
         public void CalculateLateFinish_ShouldReturnCorrectDate_WhenThereArePreviousTasks()
         {
-            var task1 = new Domain.Task(
+            var task1 = new Task(
                 "Task 1",                             
                 "Description of Task 1",              
                 new DateTime(2025, 5, 1),            
                 5,                                     
-                new List<Domain.Task>(),              
-                new List<Domain.Task>()               
+                new List<Task>(),              
+                new List<Task>()               
             );
 
-            var task2 = new Domain.Task(
+            var task2 = new Task(
                 "Task 2",                             
                 "Description of Task 2",              
                 new DateTime(2025, 5, 6),            
                 3,                                     
-                new List<Domain.Task> { task1 },      
-                new List<Domain.Task>()               
+                new List<Task> { task1 },      
+                new List<Task>()               
             );
 
             DateTime lateFinish = _taskService.CalculateLateFinish(task2);
@@ -113,22 +113,22 @@ namespace Service.Test
         [TestMethod]
         public void IsCritical_ShouldReturnTrue_WhenTaskHasNoFloat()
         {
-            var task1 = new Domain.Task(
+            var task1 = new Task(
                 "Task 1",                             
                 "Description of Task 1",             
                 new DateTime(2025, 5, 1),             
                 5,                                    
-                new List<Domain.Task>(),              
-                new List<Domain.Task>()              
+                new List<Task>(),              
+                new List<Task>()              
             );
 
-            var task2 = new Domain.Task(
+            var task2 = new Task(
                 "Task 2",                           
                 "Description of Task 2",             
                 new DateTime(2025, 5, 6),             
                 3,                                     
-                new List<Domain.Task> { task1 },     
-                new List<Domain.Task>()               
+                new List<Task> { task1 },     
+                new List<Task>()               
             );
 
           
