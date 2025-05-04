@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Domain;
+using Domain.Exceptions;
 using Domain.Test;
 using Service.Models;
 using Task = Domain.Task;
@@ -208,7 +209,15 @@ namespace Service.Test
             Assert.AreEqual(task.State, taskDTO.State);
         }
 
-  
+        [TestMethod]
+        [ExpectedException(typeof(TaskServiceException))]
+        public void CalculateEarlyFinish_ShouldThrowException_WhenTaskIsNull()
+        {
+            _taskService.CalculateEarlyFinish();  
+        }
+        
+       
+
 
 
     }
