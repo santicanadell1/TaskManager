@@ -28,7 +28,23 @@ public class NotificationDTOTest
         Assert.IsFalse(notification.Read);  
     }
 
-   
+    [TestMethod]
+    public void NewNotification_WhenReadIsNotSet_ThenNotificationIsNotCreated()
+    {
+       
+        var notification = new NotificationDTO(); 
+
+     
+        var validationResults = new List<ValidationResult>();
+        var validationContext = new ValidationContext(notification);
+        var isValid = Validator.TryValidateObject(notification, validationContext, validationResults, true);
+
+
+        Assert(isValid); 
+        Assert.IsTrue(validationResults.Any(v => v.ErrorMessage.Contains("Read is required.")));
+    }
+
+
 
 
 }
