@@ -104,8 +104,8 @@ public class ProjectRepository
         task.Duration = updatedTask.Duration;
         task.State = updatedTask.State;  
     }
-
-
+    
+  
 
 
 }

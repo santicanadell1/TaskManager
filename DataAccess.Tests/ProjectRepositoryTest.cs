@@ -281,6 +281,34 @@ public class ProjectRepositoryTest
 
             projectRepository.UpdateTask(project.Name, 999, updatedTask);
         }
+        
+        [TestMethod]
+        public void RemoveTask_WhenTaskExists_ShouldRemoveTaskFromProject()
+        {
+            
+            ProjectRepository projectRepository = new ProjectRepository();
+            Project project = new Project() { Name = "Project 1" };
+            projectRepository.AddProject(project);
+
+            Task task = new Task(
+                "Task 1",                        
+                "Task 1 description",            
+                DateTime.Now,                    
+                5,                               
+                new List<Task>(),                
+                new List<Task>()                 
+            );
+            task.Id = 1; 
+            projectRepository.AddTask(project.Name, task);
+
+           
+            projectRepository.RemoveTask(project.Name, task.Id);
+
+            
+            var taskInProject = project.Tasks.FirstOrDefault(t => t.Id == task.Id);
+            Assert.IsNull(taskInProject);
+        }
+
 
     
 }
