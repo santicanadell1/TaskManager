@@ -90,6 +90,25 @@ namespace Service.Test
 
             Assert.AreEqual(new DateTime(2025, 4, 30), lateStart);
         }
+        
+        
+        [TestMethod]
+        public void IsCritical_ShouldReturnFalse_WhenTaskIsNotCritical()
+        {
+            var previousTask = new Task("Previous Task", "Previous task description", new DateTime(2025, 4, 25), 5, new List<Task>(), new List<Task>())
+            {
+                EndDate = new DateTime(2025, 4, 30)
+            };
+
+            var task = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task> { previousTask }, new List<Task>())
+            {
+                EndDate = new DateTime(2025, 5, 7)
+            };
+
+            bool isCritical = _taskService.IsCritical(task);
+
+            Assert.IsFalse(isCritical);
+        }
 
 
         
