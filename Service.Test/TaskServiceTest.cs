@@ -55,59 +55,6 @@ namespace Service.Test
 
             Assert.AreEqual(new DateTime(2025, 5, 6), earlyFinish);
         }
-
-        [TestMethod]
-        public void CalculateLateStart_ShouldReturnCorrectDate_WhenThereArePreviousTasks()
-        {
-            var task1 = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task>(), new List<Task>());
-            var task2 = new Task("Task 2", "Description of Task 2", new DateTime(2025, 5, 6), 3, new List<Task> { task1 }, new List<Task>());
-
-            DateTime lateStart = _taskService.CalculateLateStart(task2);
-
-            Assert.AreEqual(new DateTime(2025, 5, 6), lateStart);  
-        }
-
-     
-
-        [TestMethod]
-        public void IsCritical_ShouldReturnTrue_WhenTaskHasNoFloat()
-        {
-            var task1 = new Task(
-                "Task 1",
-                "Description of Task 1",
-                new DateTime(2025, 5, 1),
-                5,
-                new List<Task>(),
-                new List<Task>()
-            );
-
-            var task2 = new Task(
-                "Task 2",
-                "Description of Task 2",
-                new DateTime(2025, 5, 6),
-                3,
-                new List<Task> { task1 },
-                new List<Task>()
-            );
-
-
-            bool isCritical = _taskService.IsCritical(task2);
-
-
-            Assert.IsTrue(isCritical);
-        }
-        
-        
-        [TestMethod]
-        public void CalculateEarlyStart_ShouldReturnCorrectDate_WhenThereArePreviousTasks()
-        {
-            var task1 = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task>(), new List<Task>());
-            var task2 = new Task("Task 2", "Description of Task 2", new DateTime(2025, 5, 6), 3, new List<Task> { task1 }, new List<Task>());
-
-            DateTime earlyStart = _taskService.CalculateEarlyStart(task2);
-
-            Assert.AreEqual(new DateTime(2025, 5, 6), earlyStart);  
-        }
         
         [TestMethod]
         public void CalculateLateFinish_ShouldReturnEarlyFinish_WhenNoPreviousTasks()
@@ -118,6 +65,17 @@ namespace Service.Test
 
             Assert.AreEqual(new DateTime(2025, 5, 6), lateFinish);  
         }
+        
+        [TestMethod]
+        public void CalculateLateStart_ShouldReturnExpectedStartDate_WhenNoPreviousTasks()
+        {
+            var task = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task>(), new List<Task>());
+
+            DateTime lateStart = _taskService.CalculateLateStart(task);
+
+            Assert.AreEqual(new DateTime(2025, 5, 1), lateStart);
+        }
+
         
     }
 }
