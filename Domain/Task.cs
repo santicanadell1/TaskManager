@@ -99,5 +99,8 @@ namespace Domain
         }
 
         public State State { get; set; }
+        
+        public int? Id { get; set; }
+        
     }
 }

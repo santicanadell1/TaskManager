@@ -62,7 +62,7 @@ namespace Service
         }
 
 
-        public TaskDTO FromEntity(Task task)
+        private TaskDTO FromEntity(Task task)
         {
             return new TaskDTO()
             {
@@ -77,7 +77,7 @@ namespace Service
         }
 
 
-        public Task ToEntity(TaskDTO taskDTO)
+        private Task ToEntity(TaskDTO taskDTO)
         {
             return new Task(
                 taskDTO.Title,
