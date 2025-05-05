@@ -155,7 +155,17 @@ namespace Domain.Test
             Assert.AreEqual(expectedId, task.Id);
         }
 
-      
+        [TestMethod]
+        public void Id_WhenNotSet_ThenIdIsNull()
+        {
+          
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
+
+        
+            Assert.IsNull(.Id);
+        }
 
     }
 }
