@@ -285,7 +285,7 @@ public class ProjectRepositoryTest
         [TestMethod]
         public void RemoveTask_WhenTaskExists_ShouldRemoveTaskFromProject()
         {
-            
+       
             ProjectRepository projectRepository = new ProjectRepository();
             Project project = new Project() { Name = "Project 1" };
             projectRepository.AddProject(project);

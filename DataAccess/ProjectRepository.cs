@@ -105,7 +105,19 @@ public class ProjectRepository
         task.State = updatedTask.State;  
     }
     
-  
+    public void RemoveTask(string projectName, int? taskId)
+    {
+        var project = Projects.FirstOrDefault(p => p.Name == projectName);
+        
+
+        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task == null)
+        {
+            throw new TaskRepositoryExceptions.TaskNotFoundException();
+        }
+
+        project.Tasks.Remove(task);
+    }
 
 
 }
