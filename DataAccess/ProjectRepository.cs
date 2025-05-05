@@ -83,5 +83,29 @@ public class ProjectRepository
 
         project.Tasks.Add(task); 
     }
+    
+    public void UpdateTask(string projectName, int? taskId, Task updatedTask)
+    {
+        var project = Projects.FirstOrDefault(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+        }
+
+        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task == null)
+        {
+            throw new TaskRepositoryExceptions.TaskNotFoundException();
+        }
+
+        task.Title = updatedTask.Title;
+        task.Description = updatedTask.Description;
+        task.ExpectedStartDate = updatedTask.ExpectedStartDate;
+        task.Duration = updatedTask.Duration;
+        task.State = updatedTask.State;  
+    }
+
+
+
 
 }

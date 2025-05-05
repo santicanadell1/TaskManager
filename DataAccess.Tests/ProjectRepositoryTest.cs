@@ -176,6 +176,50 @@ public class ProjectRepositoryTest
       
         projectRepository.AddTask(project.Name, task2); 
     }
+    
+    [TestMethod]
+    public void UpdateTask_WhenUpdatingExistingTask_ShouldUpdateTaskDetails()
+    {
+        ProjectRepository projectRepository = new ProjectRepository();
+        Project project = new Project() { Name = "Project 1" };
+        projectRepository.AddProject(project);
+
+        Task task = new Task(
+            "Task 1",                        
+            "Task 1 description",            
+            DateTime.Now,                    
+            5,                               
+            new List<Task>(),                
+            new List<Task>()                 
+        );
+        task.Id = 1; 
+        task.State = State.TODO; 
+
+        projectRepository.AddTask(project.Name, task);
+
+        Task updatedTask = new Task(
+            "Updated Task 1",                
+            "Updated Task 1 description",    
+            DateTime.Now.AddDays(1),         
+            10,                              
+            new List<Task>(),                
+            new List<Task>()                 
+        );
+        updatedTask.Id = 1; 
+        updatedTask.State = State.DOING; 
+
+        projectRepository.UpdateTask(project.Name, task.Id, updatedTask);
+
+        var taskInProject = project.Tasks.FirstOrDefault(t => t.Id == task.Id);
+        Assert.IsNotNull(taskInProject);
+        Assert.AreEqual("Updated Task 1", taskInProject.Title);
+        Assert.AreEqual("Updated Task 1 description", taskInProject.Description);
+        Assert.AreEqual(State.DOING, taskInProject.State);  
+        Assert.AreEqual(, taskInProject.Duration);        
+    }
+
+
+
 
     
 }
