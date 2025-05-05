@@ -95,7 +95,7 @@ public class ProjectRepository
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null)
         {
-            throw new TaskRepositoryExceptions.TaskNotFoundException();
+            throw new TaskNotFoundException();
         }
 
         task.Title = updatedTask.Title;

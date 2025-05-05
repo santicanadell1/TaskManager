@@ -249,6 +249,38 @@ public class ProjectRepositoryTest
 
             projectRepository.UpdateTask("NonExistingProject", task.Id, updatedTask);
         }
+        
+        [TestMethod]
+        [ExpectedException(typeof(TaskNotFoundException))]
+        public void UpdateTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
+        {
+            ProjectRepository projectRepository = new ProjectRepository();
+            Project project = new Project() { Name = "Project 1" };
+            projectRepository.AddProject(project);
+
+            Task task = new Task(
+                "Task 1",                        
+                "Task 1 description",            
+                DateTime.Now,                    
+                5,                               
+                new List<Task>(),                
+                new List<Task>()                 
+            );
+            task.Id = 1; 
+            projectRepository.AddTask(project.Name, task);
+
+            Task updatedTask = new Task(
+                "Updated Task 1",                
+                "Updated Task 1 description",    
+                DateTime.Now.AddDays(1),         
+                10,                              
+                new List<Task>(),                
+                new List<Task>()                 
+            );
+            updatedTask.Id = 1; 
+
+            projectRepository.UpdateTask(project.Name, 999, updatedTask);
+        }
 
     
 }
