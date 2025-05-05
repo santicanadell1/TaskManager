@@ -399,6 +399,35 @@ public class ProjectRepositoryTest
             Assert.AreEqual(task2.Id, taskInProject.PreviousTasks[0].Id);  
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ProjectNotFoundException))]
+        public void AddPreviousTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
+        {
+            // Arrange
+            ProjectRepository projectRepository = new ProjectRepository();
+            Task task1 = new Task(
+                "Task 1", 
+                "Task 1 description", 
+                DateTime.Now, 
+                5, 
+                new List<Task>(), 
+                new List<Task>()
+            );
+            task1.Id = 1;
+
+            Task task2 = new Task(
+                "Task 2", 
+                "Task 2 description", 
+                DateTime.Now, 
+                3, 
+                new List<Task>(), 
+                new List<Task>()
+            );
+            task2.Id = 2;
+
+          
+            projectRepository.AddPreviousTask("NonExistingProject", task1.Id, task2);  
+        }
 
     
 }
