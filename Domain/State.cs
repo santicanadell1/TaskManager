@@ -1,8 +1,8 @@
-﻿namespace Domain.Test;
+﻿namespace Domain;
 
 public enum State
 {
-    TODO, 
+    TODO,
     DOING,
     DONE
 }
