@@ -118,6 +118,13 @@ public class TaskDTOTest
         Assert.AreEqual(validId, task.Id); 
     }
 
+    [TestMethod]
+    public void NewTask_WhenIdIsExplicitlyNull_ThenIdIsNull()
+    {
+        TaskDTO task = new TaskDTO { Id = null }; 
+
+        Assert.IsNull(.Id); 
+    }
 
 
 
