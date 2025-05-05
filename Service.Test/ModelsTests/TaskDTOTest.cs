@@ -112,7 +112,7 @@ public class TaskDTOTest
     [TestMethod]
     public void NewTask_WhenIdIsAssigned_ThenIdIsSetCorrectly()
     {
-        int validId = ;
+        int validId = 123;
         TaskDTO task = new TaskDTO { Id = validId }; 
         
         Assert.AreEqual(validId, task.Id); 
