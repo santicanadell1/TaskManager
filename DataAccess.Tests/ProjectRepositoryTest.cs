@@ -359,6 +359,45 @@ public class ProjectRepositoryTest
             projectRepository.RemoveTask("NonExistingProject", task.Id);  
         }
 
+        [TestMethod]
+        public void AddPreviousTask_WhenAddingPreviousTask_ShouldAddToPreviousTasks()
+        {
+           
+            ProjectRepository projectRepository = new ProjectRepository();
+            Project project = new Project() { Name = "Project 1" };
+            projectRepository.AddProject(project);
+
+            Task task1 = new Task(
+                "Task 1", 
+                "Task 1 description", 
+                DateTime.Now, 
+                5, 
+                new List<Task>(), 
+                new List<Task>()
+            );
+            task1.Id = 1; 
+            projectRepository.AddTask(project.Name, task1);
+
+            Task task2 = new Task(
+                "Task 2", 
+                "Task 2 description", 
+                DateTime.Now, 
+                3, 
+                new List<Task>(), 
+                new List<Task>()
+            );
+            task2.Id = 2; 
+            projectRepository.AddTask(project.Name, task2);
+
+            
+            projectRepository.AddPreviousTask(project.Name, task1.Id, task2);
+
+            
+            var taskInProject = project.Tasks.FirstOrDefault(t => t.Id == task1.Id);
+            Assert.IsNotNull(taskInProject);
+            Assert.AreEqual(1, taskInProject.PreviousTasks.Count); 
+            Assert.AreEqual(task2.Id, taskInProject.PreviousTasks[0].Id);  
+        }
 
 
     
