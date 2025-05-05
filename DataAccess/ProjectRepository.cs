@@ -133,7 +133,10 @@ public class ProjectRepository
         }
 
        
-        
+        if (!project.Tasks.Contains(previousTask))
+        {
+            throw new TaskRepositoryExceptions.TaskNotFoundException();
+        }
 
         task.AddPreviousTask(previousTask); 
     }
