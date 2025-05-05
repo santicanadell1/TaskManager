@@ -99,5 +99,6 @@ namespace Domain
         }
 
         public State State { get; set; }
+        
     }
 }
