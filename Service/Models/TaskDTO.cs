@@ -23,6 +23,6 @@ public class TaskDTO
     [Required(ErrorMessage = "State is required.")]
     public State State { get; set; } = State.TODO;
 
-  
+    public int? Id { get; set; }
 
 }
