@@ -429,5 +429,40 @@ public class ProjectRepositoryTest
             projectRepository.AddPreviousTask("NonExistingProject", task1.Id, task2);  
         }
 
-    
+        
+        [TestMethod]
+        [ExpectedException(typeof(TaskNotFoundException))]
+        public void AddPreviousTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
+        {
+            // Arrange
+            ProjectRepository projectRepository = new ProjectRepository();
+            Project project = new Project() { Name = "Project 1" };
+            projectRepository.AddProject(project);
+
+            Task task1 = new Task(
+                "Task 1", 
+                "Task 1 description", 
+                DateTime.Now, 
+                5, 
+                new List<Task>(), 
+                new List<Task>()
+            );
+            task1.Id = 1;
+            projectRepository.AddTask(project.Name, task1);
+
+            Task task2 = new Task(
+                "Task 2", 
+                "Task 2 description", 
+                DateTime.Now, 
+                3, 
+                new List<Task>(), 
+                new List<Task>()
+            );
+            task2.Id = 2; 
+
+          
+            projectRepository.AddPreviousTask(project.Name, task1.Id, task2); 
+        }
+
+
 }

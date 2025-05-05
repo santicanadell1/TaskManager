@@ -132,8 +132,12 @@ public class ProjectRepository
             throw new TaskRepositoryExceptions.TaskNotFoundException();
         }
 
-        task.AddPreviousTask(previousTask);  
+       
+        
+
+        task.AddPreviousTask(previousTask); 
     }
+
 
 
 
