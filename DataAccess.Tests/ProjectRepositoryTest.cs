@@ -215,7 +215,7 @@ public class ProjectRepositoryTest
         Assert.AreEqual("Updated Task 1", taskInProject.Title);
         Assert.AreEqual("Updated Task 1 description", taskInProject.Description);
         Assert.AreEqual(State.DOING, taskInProject.State);  
-        Assert.AreEqual(, taskInProject.Duration);        
+        Assert.AreEqual(10, taskInProject.Duration);        
     }
 
 
