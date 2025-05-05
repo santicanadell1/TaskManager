@@ -1,5 +1,7 @@
 ﻿using DataAccess.ProjectRepositoryExceptions;
 using Domain;
+using Task = Domain.Task;
+
 namespace DataAccess.Test;
 
 [TestClass]
@@ -132,5 +134,26 @@ public class ProjectRepositoryTest
         projectRepository.AddProject(project);
         projectRepository.UpdateProject("Project 4",project2);
     }
+    [TestMethod]
+    public void AddTask_WhenAddingNewTask_ShouldContainIt()
+    {
+        ProjectRepository projectRepository = new ProjectRepository();
+        Project project = new Project();
+        project.Name = "Project 1";
     
+        
+        Task task = new Task(
+            "Task 1",                          
+            "Task 1 description",             
+            DateTime.Now,                      
+            5,                                  
+            new List<Task>(),                  
+            new List<Task>()                    
+        );
+
+        projectRepository.AddProject(project);
+        projectRepository.AddTask(project.Name, task);
+
+        Assert.IsTrue(project.Tasks.Contains(task));
+    }
 }
