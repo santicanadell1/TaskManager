@@ -19,11 +19,7 @@ namespace Service
         
         public DateTime CalculateEarlyStart(Task task)
         {
-            if (task == null) 
-            {
-                throw new TaskServiceException("Task cannot be null.");
-            }
-
+            
             if (task.PreviousTasks == null || task.PreviousTasks.Count == 0)
             {
                 return task.ExpectedStartDate;
@@ -36,26 +32,13 @@ namespace Service
         
         public DateTime CalculateEarlyFinish(Task task)
         {
-            if (task == null)
-            {
-                throw new TaskServiceException("Task cannot be null."); 
-            }
-
-            if (task.Duration <= 0)
-            {
-                throw new TaskDurationException();  
-            }
-
+            
             return task.ExpectedStartDate.AddDays(task.Duration);
         }
 
        
         public DateTime CalculateLateStart(Task task)
         {
-            if (task == null) 
-            {
-                throw new TaskServiceException("Task cannot be null.");
-            }
 
             if (task.PreviousTasks.Count == 0)
             {
@@ -69,27 +52,30 @@ namespace Service
         
         public DateTime CalculateLateFinish(Task task)
         {
-            if (task == null)
-            {
-                throw new TaskServiceException("Task cannot be null.");
-            }
-
             if (task.PreviousTasks.Count == 0)
             {
-                return CalculateEarlyFinish(task);
+                return CalculateEarlyFinish(task); 
+            }
+           
+            DateTime latestPreviousFinish = task.PreviousTasks[0].EndDate;
+    
+            foreach (var prevTask in task.PreviousTasks.Skip(1))  
+            {
+                if (prevTask.EndDate > latestPreviousFinish)
+                {
+                    latestPreviousFinish = prevTask.EndDate;  
+                }
             }
 
-            DateTime latestPreviousFinish = task.PreviousTasks.Max(t => t.EndDate);
-            return latestPreviousFinish.AddDays(task.Duration); 
+        
+            return latestPreviousFinish.AddDays(task.Duration);
         }
+
 
        
         public bool IsCritical(Task task)
         {
-            if (task == null) 
-            {
-                throw new TaskServiceException("Task cannot be null.");
-            }
+            
 
             return CalculateEarlyStart(task) == CalculateLateStart(task) &&
                    CalculateEarlyFinish(task) == CalculateLateFinish(task);
@@ -98,10 +84,6 @@ namespace Service
       
         public TaskDTO FromEntity(Task task)
         {
-            if (task == null) 
-            {
-                throw new TaskServiceException("Task cannot be null.");
-            }
 
             return new TaskDTO()
             {
@@ -118,15 +100,6 @@ namespace Service
        
         public Task ToEntity(TaskDTO taskDTO)
         {
-            if (taskDTO == null) 
-            {
-                throw new TaskServiceException("TaskDTO cannot be null.");
-            }
-
-            if (taskDTO.Duration <= 0)
-            {
-                throw new TaskDuratException(); 
-            }
 
             return new Task(
                 taskDTO.Title,
