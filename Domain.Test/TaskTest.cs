@@ -139,9 +139,23 @@ namespace Domain.Test
         }
 
 
+        [TestMethod]
+        public void Id_WhenSet_ThenIdIsAssigned()
+        {
+            
+            int expectedId = 123;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
 
+           
+            task.Id = expectedId;
 
+            
+            Assert.AreEqual(expectedId, task.Id);
+        }
 
+      
 
     }
 }

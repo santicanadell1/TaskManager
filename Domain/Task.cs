@@ -95,6 +95,8 @@ namespace Domain
             SameTimeTasks.Remove(task);
         }
         public State State { get; set; }
+        
+        
     }
     
 }
