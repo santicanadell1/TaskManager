@@ -174,7 +174,7 @@ public class ProjectRepositoryTest
         Task task2 = new Task("Task 1", "Description 2", DateTime.Now.AddDays(1), 3, new List<Task>(), new List<Task>());
 
       
-        projectRepository.AddTask(project.Name, ); 
+        projectRepository.AddTask(project.Name, task2); 
     }
 
     
