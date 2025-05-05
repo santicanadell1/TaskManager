@@ -2,25 +2,29 @@
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
 
-<div class="create-project-page">
+<link href="styles/styleCreateProject.css" rel="stylesheet"/>
+<div class="create-project-container">
+
+    <h2 class="create-project-title">Create New Project</h2>
 
     <EditForm Model="@newProject" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
 
         <div class="mb-3">
             <label for="projectName" class="form-label">Project Name</label>
-            <InputText id="projectName" class="form-control" @bind-Value="newProject.Name" required />
+            <InputText id="projectName" class="form-control" @bind-Value="newProject.Name" required/>
         </div>
 
         <div class="mb-3">
             <label for="projectDescription" class="form-label">Description (max. 400 characters)</label>
-            <InputTextArea id="projectDescription" class="form-control" @bind-Value="newProject.Description" MaxLength="400" required />
+            <InputTextArea id="projectDescription" class="form-control" @bind-Value="newProject.Description"
+                           MaxLength="400" required/>
         </div>
 
         <div class="mb-3">
             <label for="startDate" class="form-label">Estimated Start Date</label>
-            <InputDate id="startDate" class="form-control" @bind-Value="newProject.StartDate" required />
+            <InputDate id="startDate" class="form-control" @bind-Value="newProject.StartDate" required/>
         </div>
 
         <button type="submit" class="btn btn-primary">Create Project</button>
@@ -43,4 +47,5 @@
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
     }
+
 }

@@ -3,18 +3,20 @@
 @rendermode InteractiveServer
 @using ModalsProject
 
-<link href="styles/styleModalsAdminProject.css" rel="stylesheet"/>
+<link href="styles/styleProjectList.css" rel="stylesheet"/>
 <h3>Project List</h3>
 
-<div class="project-list">
+<div class="project-list-container">
     @if (projects != null && projects.Any())
     {
         <ul class="list-group">
             @foreach (var project in projects)
             {
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+                <li class="list-group-item">
                     <span>@project.Name</span>
-                    <button class="btn btn-info" @onclick="() => ShowProjectOptions(project)">View Options</button>
+                    <button class="view-options-btn @GetButtonClass(project)"
+                            @onclick="() => ShowProjectOptions(project)">View Options
+                    </button>
                 </li>
             }
         </ul>
@@ -29,17 +31,18 @@
 {
     <div class="project-options mt-3">
         <h5>@selectedProject.Name Options</h5>
-        <button class="btn btn-primary" @onclick="CreateTask">Create Task</button>
-        <button class="btn btn-secondary" @onclick="ShowAddMembersModal">Add Members</button>
-        <button class="btn btn-success" @onclick="ShowAssignTaskToMemberModal">Assign Task to Member</button>
+        <button class="btn-create-task" @onclick="CreateTask">Create Task</button>
+        <button class="btn-secondary" @onclick="ShowAddMembersModal">Add Members</button>
+        <button class="btn-assign-task" @onclick="ShowAssignTaskToMemberModal">Assign Task to Member</button>
     </div>
 }
 
-<AddTask IsVisible="@showCreateTaskModal" OnClose="CloseCreateTaskModal" />
-<AddMember IsVisible="@showAddMembersModal" OnClose="CloseAddMembersModal" />
-<AssignMtoT IsVisible="@showAssignTaskToMemberModal" OnClose="CloseAssignTaskToMemberModal" />
+<AddTask IsVisible="@showCreateTaskModal" OnClose="CloseCreateTaskModal"/>
+<AddMember IsVisible="@showAddMembersModal" OnClose="CloseAddMembersModal"/>
+<AssignMtoT IsVisible="@showAssignTaskToMemberModal" OnClose="CloseAssignTaskToMemberModal"/>
 
 @code {
+
     private List<Project> projects = new List<Project>
     {
         new Project { Name = "Project 1", Description = "First project", StartDate = DateTime.Now },
@@ -50,10 +53,12 @@
     private bool showCreateTaskModal = false;
     private bool showAddMembersModal = false;
     private bool showAssignTaskToMemberModal = false;
+    private Project selectedProjectForButtonClass;
 
     private void ShowProjectOptions(Project project)
     {
         selectedProject = project;
+        selectedProjectForButtonClass = project; // Update the selected project for button class
     }
 
     private void CreateTask()
@@ -65,7 +70,7 @@
     {
         showAddMembersModal = true;
     }
-    
+
     private void ShowAssignTaskToMemberModal()
     {
         showAssignTaskToMemberModal = true;
@@ -80,10 +85,15 @@
     {
         showAddMembersModal = isClosed;
     }
-    
+
     private void CloseAssignTaskToMemberModal(bool isClosed)
     {
         showAssignTaskToMemberModal = isClosed;
+    }
+
+    public string GetButtonClass(Project project)
+    {
+        return selectedProjectForButtonClass == project ? "selected" : "";
     }
 
     public class Project
@@ -92,4 +102,5 @@
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
     }
+
 }

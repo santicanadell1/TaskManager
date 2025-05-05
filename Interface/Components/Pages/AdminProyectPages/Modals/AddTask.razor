@@ -13,6 +13,20 @@
                     <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @successMessage
+                        </div>
+                    }
+
                     <EditForm Model="@newTask" OnValidSubmit="HandleTaskSubmit">
                         <DataAnnotationsValidator />
                         <ValidationSummary />
@@ -37,33 +51,41 @@
                             <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration" required />
                         </div>
 
+                        <!-- Resource Checklist -->
                         <div class="mb-3">
-                            <label for="resource" class="form-label">Select Resources</label>
-                            <select id="resources" class="form-control" @bind="newTask.PreviousTaskId">
-                                <option value="">-- Select a Resource --</option>
-                                @foreach (var task in taskList)
+                            <label for="resources" class="form-label">Select Resources</label>
+                            <div>
+                                @foreach (var resource in availableResources)
                                 {
-                                    <option value="@task.Id">@task.Title</option>
+                                    <div>
+                                        <InputCheckbox id="@resource.Id" class="form-check-input" @bind-Value="resource.IsSelected" />
+                                        <label class="form-check-label" for="@resource.Id">@resource.Name</label>
+                                    </div>
                                 }
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="previousTasks" class="form-label">Select Previous Task</label>
-                            <select id="previousTasks" class="form-control" @bind="newTask.PreviousTaskId">
-                                <option value="">-- Select a Task --</option>
-                                @foreach (var task in taskList)
-                                {
-                                    <option value="@task.Id">@task.Title</option>
-                                }
-                            </select>
+                            </div>
                         </div>
 
+                        <!-- Previous Tasks and Dependency Type -->
                         <div class="mb-3">
-                            <label for="dependencyType" class="form-label">Dependency Type</label>
-                            <select id="dependencyType" class="form-control" @bind="newTask.DependencyType">
-                                <option value="FS">Finish-to-Start (FS)</option>
-                                <option value="SS">Start-to-Start (SS)</option>
-                            </select>
+                            <label for="previousTasks" class="form-label">Previous Tasks</label>
+                            @foreach (var prevTask in previousTasks)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <select class="form-control" @bind="prevTask.SelectedTaskId">
+                                        <option value="">-- Select Task --</option>
+                                        @foreach (var task in taskList)
+                                        {
+                                            <option value="@task.Id">@task.Title</option>
+                                        }
+                                    </select>
+                                    <select class="form-control ms-2" @bind="prevTask.DependencyType">
+                                        <option value="FS">Finish-to-Start (FS)</option>
+                                        <option value="SS">Start-to-Start (SS)</option>
+                                    </select>
+                                    <button class="btn btn-danger ms-2" @onclick="() => RemovePreviousTask(prevTask)">Remove</button>
+                                </div>
+                            }
+                            <button class="btn btn-info mt-2" @onclick="AddPreviousTask">Add Previous Task</button>
                         </div>
 
                         <button type="submit" class="btn btn-success">Create Task</button>
@@ -85,17 +107,87 @@
         new Task { Id = 2, Title = "Previous Task 2" }
     };
 
+    private List<Resource> availableResources = new List<Resource>
+    {
+        new Resource { Id = 1, Name = "Resource 1" },
+        new Resource { Id = 2, Name = "Resource 2" }
+    };
+
+    private List<PreviousTask> previousTasks;
+    private string errorMessage = string.Empty;
+    private string successMessage = string.Empty;
+
+    // Método OnInitialized para inicializar el estado de previousTasks
+    protected override void OnInitialized()
+    {
+        // Inicializar previousTasks con al menos una tarea vacía
+        previousTasks = new List<PreviousTask>
+        {
+            new PreviousTask() // Al menos una tarea vacía
+        };
+    }
+
+    // Método para añadir una nueva tarea previa
+    private void AddPreviousTask()
+    {
+        errorMessage = string.Empty;  // Limpiar cualquier mensaje de error previo
+        previousTasks.Add(new PreviousTask()); // Añadir una nueva tarea previa vacía
+    }
+
+    // Método para eliminar una tarea previa
+    private void RemovePreviousTask(PreviousTask prevTask)
+    {
+        if (previousTasks.Count == 1)
+        {
+            // Mostrar mensaje de error si se intenta eliminar la última tarea
+            errorMessage = "You must have at least one previous task.";
+        }
+        else
+        {
+            // Eliminar tarea previa y limpiar mensajes de error
+            previousTasks.Remove(prevTask);
+            errorMessage = string.Empty;
+            EnsureAtLeastOnePreviousTask(); // Verificar que siempre quede al menos una tarea previa
+        }
+    }
+
+    // Método para asegurarse de que siempre haya al menos una tarea previa
+    private void EnsureAtLeastOnePreviousTask()
+    {
+        if (previousTasks.Count == 0)
+        {
+            previousTasks.Add(new PreviousTask()); // Agregar una tarea vacía si la lista está vacía
+        }
+    }
+
     private void CloseModal()
     {
-        OnClose.InvokeAsync(false); // Close the modal
+        // Reseteamos las tareas previas y limpiamos los mensajes al cerrar el modal
+        ResetPreviousTasks();
+        OnClose.InvokeAsync(false);  // Cerrar el modal
     }
 
     private void HandleTaskSubmit()
     {
-        // Logic to handle task creation
-        Console.WriteLine($"Task Created: {newTask.Title}, Dependency: {newTask.DependencyType}");
-        // Close the modal after submitting the task
+        // Lógica para manejar la creación de la tarea
+        var selectedResources = availableResources.Where(r => r.IsSelected).Select(r => r.Id).ToList();
+        Console.WriteLine($"Task Created: {newTask.Title}, Resources: {string.Join(", ", selectedResources)}, Dependencies: {string.Join(", ", previousTasks.Select(p => p.DependencyType))}");
+        successMessage = "Task created successfully!";
+        errorMessage = string.Empty;
+
+        // Cerrar el modal después de crear la tarea
         CloseModal();
+    }
+
+    // Resetea las tareas previas cuando se cierra el modal
+    private void ResetPreviousTasks()
+    {
+        previousTasks = new List<PreviousTask>
+        {
+            new PreviousTask() // Reinicia la lista con una tarea vacía
+        };
+        errorMessage = string.Empty; // Limpiar mensaje de error
+        successMessage = string.Empty; // Limpiar mensaje de éxito
     }
 
     public class Task
@@ -104,8 +196,19 @@
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
-        public int Duration { get; set; } // Duration in hours
-        public int? PreviousTaskId { get; set; }
-        public string DependencyType { get; set; } // "FS" or "SS"
+        public int Duration { get; set; } // Duración en horas
+    }
+
+    public class Resource
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public bool IsSelected { get; set; } // Para hacer seguimiento de la selección en el checklist
+    }
+
+    public class PreviousTask
+    {
+        public int? SelectedTaskId { get; set; }
+        public string DependencyType { get; set; } // "FS" o "SS"
     }
 }

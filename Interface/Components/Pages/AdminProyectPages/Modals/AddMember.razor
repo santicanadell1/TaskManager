@@ -5,7 +5,8 @@
 <!-- Modal -->
 @if (IsVisible)
 {
-    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="addMembersModal" aria-hidden="true">
+    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="addMembersModal"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -18,7 +19,8 @@
                         @foreach (var member in membersList)
                         {
                             <div class="form-check">
-                                <InputCheckbox id="@member.Id" class="form-check-input" @bind-Value="member.IsSelected" />
+                                <InputCheckbox id="@member.Id" class="form-check-input"
+                                               @bind-Value="member.IsSelected"/>
                                 <label class="form-check-label" for="@member.Id">
                                     @member.Name
                                 </label>
@@ -49,7 +51,8 @@
 
     private void CloseModal()
     {
-        OnClose.InvokeAsync(false);  // Close the modal
+        ResetMemberSelections(); // Reset member selections when closing the modal
+        OnClose.InvokeAsync(false); // Close the modal
     }
 
     private void AddSelectedMembers()
@@ -62,11 +65,20 @@
         CloseModal();
     }
 
+    private void ResetMemberSelections()
+    {
+        // Reset the IsSelected property for all members
+        foreach (var member in membersList)
+        {
+            member.IsSelected = false;
+        }
+    }
+
     public class Member
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public bool IsSelected { get; set; } // Track whether the member is selected
     }
-}
 
+}

@@ -1,0 +1,134 @@
+﻿/* Title for Project List */
+.project-list-container h3 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    position: relative;
+    text-align: center;
+}
+
+.project-list-container h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #3498db;
+    border-radius: 3px;
+}
+
+/* Buttons for Create Task, Assign Task */
+.project-options button {
+    margin-right: 10px;
+    width: 200px; /* Ensuring buttons have a uniform width */
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Create Task Button */
+.project-options button.btn-create-task {
+    background-color: #2ea7cc; /* Green color */
+    border: none;
+    color: white;
+}
+
+.project-options button.btn-create-task:hover {
+    background-color: #279aae;
+    transform: translateY(-2px);
+}
+
+.project-options button.btn-create-task:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(37, 188, 170, 0.4);
+}
+
+/* Assign Task to Member Button */
+.project-options button.btn-assign-task {
+    background-color: #f39c12; /* Yellow color */
+    border: none;
+    color: white;
+}
+
+.project-options button.btn-assign-task:hover {
+    background-color: #e67e22;
+    transform: translateY(-2px);
+}
+
+.project-options button.btn-assign-task:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(241, 196, 15, 0.4);
+}
+
+/* General hover effect */
+.project-options button:hover {
+    transform: translateY(-2px);
+}
+
+/* Project List Items */
+.project-list-container .list-group {
+    width: 100%;
+}
+
+.project-list-container .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.project-list-container .list-group-item:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.project-list-container .list-group-item span {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* View Options Button */
+.project-list-container .view-options-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.project-list-container .view-options-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.project-list-container .view-options-btn.selected {
+    background-color: #2ecc71; /* Green color when selected */
+    transform: translateY(0);
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    .project-list-container {
+        padding: 25px;
+        margin: 40px auto;
+    }
+
+    .project-list-container .list-group-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
