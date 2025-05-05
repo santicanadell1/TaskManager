@@ -164,7 +164,7 @@ namespace Domain.Test
             Task task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks);
 
         
-            Assert.IsNull(.Id);
+            Assert.IsNull(task.Id);
         }
 
     }
