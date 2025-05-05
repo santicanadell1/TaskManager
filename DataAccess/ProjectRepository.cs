@@ -62,6 +62,23 @@ public class ProjectRepository
         Projects[index] = project;
     }
     
-    
+    public void AddTask(string projectName, Task task)
+    {
+        var project = Projects.FirstOrDefault(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+        }
+
+        
+        if (project.Tasks == null)
+        {
+            project.Tasks = new List<Task>();
+        }
+
+      
+
+        project.Tasks.Add(task); 
+    }
 
 }
