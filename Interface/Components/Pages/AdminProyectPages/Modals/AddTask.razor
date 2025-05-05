@@ -1,0 +1,111 @@
+﻿@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@namespace ModalsProject
+
+<!-- Modal -->
+@if (IsVisible)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="createTaskModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Task</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@newTask" OnValidSubmit="HandleTaskSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="mb-3">
+                            <label for="taskTitle" class="form-label">Task Title</label>
+                            <InputText id="taskTitle" class="form-control" @bind-Value="newTask.Title" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="taskDescription" class="form-label">Description</label>
+                            <InputTextArea id="taskDescription" class="form-control" @bind-Value="newTask.Description" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">Estimated Start Date</label>
+                            <InputDate id="startDate" class="form-control" @bind-Value="newTask.StartDate" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="duration" class="form-label">Duration (hours)</label>
+                            <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="resource" class="form-label">Select Resources</label>
+                            <select id="resources" class="form-control" @bind="newTask.PreviousTaskId">
+                                <option value="">-- Select a Resource --</option>
+                                @foreach (var task in taskList)
+                                {
+                                    <option value="@task.Id">@task.Title</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="previousTasks" class="form-label">Select Previous Task</label>
+                            <select id="previousTasks" class="form-control" @bind="newTask.PreviousTaskId">
+                                <option value="">-- Select a Task --</option>
+                                @foreach (var task in taskList)
+                                {
+                                    <option value="@task.Id">@task.Title</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="dependencyType" class="form-label">Dependency Type</label>
+                            <select id="dependencyType" class="form-control" @bind="newTask.DependencyType">
+                                <option value="FS">Finish-to-Start (FS)</option>
+                                <option value="SS">Start-to-Start (SS)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Create Task</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+    [Parameter] public bool IsVisible { get; set; }
+
+    private Task newTask = new Task();
+    private List<Task> taskList = new List<Task>
+    {
+        new Task { Id = 1, Title = "Previous Task 1" },
+        new Task { Id = 2, Title = "Previous Task 2" }
+    };
+
+    private void CloseModal()
+    {
+        OnClose.InvokeAsync(false); // Close the modal
+    }
+
+    private void HandleTaskSubmit()
+    {
+        // Logic to handle task creation
+        Console.WriteLine($"Task Created: {newTask.Title}, Dependency: {newTask.DependencyType}");
+        // Close the modal after submitting the task
+        CloseModal();
+    }
+
+    public class Task
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime StartDate { get; set; }
+        public int Duration { get; set; } // Duration in hours
+        public int? PreviousTaskId { get; set; }
+        public string DependencyType { get; set; } // "FS" or "SS"
+    }
+}

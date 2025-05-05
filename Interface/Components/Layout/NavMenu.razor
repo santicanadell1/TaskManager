@@ -47,13 +47,21 @@
                 <hr style="border-color: rgba(255,255,255,0.1);"/>
             </div>
 
-            if (_loggedUser.Roles.Contains(Rol.AdminSystem) || _loggedUser.Roles.Contains(Rol.AdminProject))
+            if (_loggedUser.Roles.Contains(Rol.AdminSystem) && _loggedUser.Roles.Count.Equals(1))
             {
                 <ResourcesNav/>
+                <AdminSNav/>
             }
-            else @if (_loggedUser.Roles.Contains(Rol.AdminSystem))
+            else if (_loggedUser.Roles.Contains(Rol.AdminProject) && _loggedUser.Roles.Count.Equals(1))
             {
-                <AdminNav/>
+                <ResourcesNav/>
+                <AdminPNav/>
+            }
+            else if (_loggedUser.Roles.Contains(Rol.AdminSystem) && _loggedUser.Roles.Contains(Rol.AdminProject))
+            {
+                <ResourcesNav/>
+                <AdminSNav/>
+                <AdminPNav/>
             }
         }
     </nav>

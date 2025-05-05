@@ -15,7 +15,6 @@ namespace Service
         {
             _database = database;
         }
-
         
         public DateTime CalculateEarlyStart(Task task)
         {
@@ -60,10 +59,7 @@ namespace Service
             DateTime latestPreviousFinish = task.PreviousTasks.Max(t => t.EndDate);
             return latestPreviousFinish.AddDays(task.Duration); 
         }
-
-
-
-       
+        
         public bool IsCritical(Task task)
         {
             
