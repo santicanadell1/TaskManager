@@ -113,7 +113,6 @@ public class ProjectRepository
             throw new ProjectRepositoryExceptions.ProjectNotFoundException();
         }
 
-
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null)
         {
@@ -122,6 +121,8 @@ public class ProjectRepository
 
         project.Tasks.Remove(task);
     }
+
+
 
 
 }

@@ -309,11 +309,13 @@ public class ProjectRepositoryTest
             Assert.IsNull(taskInProject);
         }
 
+
+        
         [TestMethod]
-        [ExpectedException(typeof(ProjectNotFoundException))]
-        public void RemoveTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
+        [ExpectedException(typeof(TaskNotFoundException))]
+        public void RemoveTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
         {
-         
+            // Arrange
             ProjectRepository projectRepository = new ProjectRepository();
             Project project = new Project() { Name = "Project 1" };
             projectRepository.AddProject(project);
@@ -329,9 +331,35 @@ public class ProjectRepositoryTest
             task.Id = 1; 
             projectRepository.AddTask(project.Name, task);
 
-          
+            
+            projectRepository.RemoveTask(project., 999);  
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(ProjectRepositoryExceptions.ProjectNotFoundException))]
+        public void RemoveTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
+        {
+            // Arrange
+            ProjectRepository projectRepository = new ProjectRepository();
+            Project project = new Project() { Name = "Project 1" };
+            projectRepository.AddProject(project);
+
+            Task task = new Task(
+                "Task 1",                        
+                "Task 1 description",            
+                DateTime.Now,                    
+                5,                               
+                new List<Task>(),                
+                new List<Task>()                 
+            );
+            task.Id = 1; 
+            projectRepository.AddTask(project.Name, task);
+
+            
             projectRepository.RemoveTask("NonExistingProject", task.Id);  
         }
+
+
 
     
 }
