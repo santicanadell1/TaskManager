@@ -49,27 +49,18 @@ namespace Service
             return latestPreviousEnd.AddDays(0); 
         }
 
-        
         public DateTime CalculateLateFinish(Task task)
         {
+
             if (task.PreviousTasks.Count == 0)
             {
-                return CalculateEarlyFinish(task); 
-            }
-           
-            DateTime latestPreviousFinish = task.PreviousTasks[0].EndDate;
-    
-            foreach (var prevTask in task.PreviousTasks.Skip(1))  
-            {
-                if (prevTask.EndDate > latestPreviousFinish)
-                {
-                    latestPreviousFinish = prevTask.EndDate;  
-                }
+                return CalculateEarlyFinish(task);
             }
 
-        
-            return latestPreviousFinish.AddDays(task.Duration);
+            DateTime latestPreviousFinish = task.PreviousTasks.Max(t => t.EndDate);
+            return latestPreviousFinish.AddDays(task.Duration); 
         }
+
 
 
        

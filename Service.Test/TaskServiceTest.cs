@@ -214,16 +214,19 @@ namespace Service.Test
             Assert.AreEqual(new DateTime(2025, 5, 6), earlyStart);  
         }
         
-      [TestMethod]
-     public void CalculateLateFinish_ShouldReturnEarlyFinish_WhenNoPreviousTasks()
-    {
-      var task = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task>(), new List<Task>());
-  
-      DateTime lateFinish = _taskService.CalculateLateFinish(task);
-  
-      Assert.AreEqual(new DateTime(2025, 5, 6), lateFinish);  
-     }
-     
+        [TestMethod]
+        public void CalculateLateFinish_ShouldReturnEarlyFinish_WhenNoPreviousTasks()
+        {
+            var task = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task>(), new List<Task>());
+
+            DateTime lateFinish = _taskService.CalculateLateFinish(task);
+
+            Assert.AreEqual(new DateTime(2025, 5, 6), lateFinish);  
+        }
+
+        
+        
+
 
     }
 }
