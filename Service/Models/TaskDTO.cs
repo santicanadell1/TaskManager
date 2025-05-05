@@ -21,7 +21,7 @@ public class TaskDTO
     public List<Domain.Task> SameTimeTasks { get; set; }
     
     [Required(ErrorMessage = "State is required.")]
-    public Domain.Test.State State { get; set; } = Domain.Test.State.TODO;
+    public State State { get; set; } = State.TODO;
 
 
 

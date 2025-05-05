@@ -1,7 +1,6 @@
 ﻿using DataAccess;
 using Domain;
 using Domain.Exceptions;
-using Domain.Test;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -223,10 +222,6 @@ namespace Service.Test
 
             Assert.AreEqual(new DateTime(2025, 5, 6), lateFinish);  
         }
-
         
-        
-
-
     }
 }
