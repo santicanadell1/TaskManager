@@ -1,5 +1,4 @@
 ﻿using Domain.Exceptions;
-using Domain.Test;
 
 namespace Domain
 {
@@ -15,15 +14,16 @@ namespace Domain
         private List<Task> _sameTimeTasks;
         private State _state;
 
-        public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks, List<Task> sameTimeTasks)
+        public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks,
+            List<Task> sameTimeTasks)
         {
-            this.Title = title; 
-            this.Description = description; 
+            this.Title = title;
+            this.Description = description;
             this.ExpectedStartDate = startDate;
-            this.Duration = duration;  
-            this.PreviousTasks =  new List<Task>(); 
-            this.SameTimeTasks =  new List<Task>(); 
-            this.State = State.TODO;  
+            this.Duration = duration;
+            this.PreviousTasks = previousTasks;
+            this.SameTimeTasks = sameTimeTasks;
+            this.State = State.TODO;
         }
 
         public string Title
@@ -35,6 +35,7 @@ namespace Domain
                 {
                     throw new TaskTitleException();
                 }
+
                 _title = value;
             }
         }
@@ -48,13 +49,13 @@ namespace Domain
                 {
                     throw new TaskDescriptionException();
                 }
+
                 _description = value;
             }
         }
 
         public DateTime ExpectedStartDate { get; set; }
 
-        
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -66,8 +67,9 @@ namespace Domain
             {
                 if (value <= 0)
                 {
-                    throw new TaskDurationException(); 
+                    throw new TaskDurationException();
                 }
+
                 _duration = value;
             }
         }
@@ -83,18 +85,19 @@ namespace Domain
         {
             PreviousTasks.Remove(task);
         }
-        
+
         public List<Task> SameTimeTasks { get; set; }
 
         public void AddSameTimeTask(Task task)
         {
             SameTimeTasks.Add(task);
         }
+
         public void RemoveSameTimeTask(Task task)
         {
             SameTimeTasks.Remove(task);
         }
+
         public State State { get; set; }
     }
-    
 }
