@@ -1,5 +1,6 @@
 ﻿using DataAccess.ProjectRepositoryExceptions;
 using Domain;
+using Domain.Exceptions.TaskRepositoryExceptions;
 using Task = Domain.Task;
 
 namespace DataAccess.Test;
@@ -156,4 +157,25 @@ public class ProjectRepositoryTest
 
         Assert.IsTrue(project.Tasks.Contains(task));
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(TaskAlreadyExistsException))]
+    public void AddTask_WhenTaskWithDuplicateTitle_ShouldThrowTaskAlreadyExistsException()
+    {
+        
+        ProjectRepository projectRepository = new ProjectRepository();
+        Project project = new Project() { Name = "Project 1" };
+        projectRepository.AddProject(project);
+
+        Task task1 = new Task("Task 1", "Description 1", DateTime.Now, 5, new List<Task>(), new List<Task>());
+        projectRepository.AddTask(project.Name, task1);
+
+       
+        Task task2 = new Task("Task 1", "Description 2", DateTime.Now.AddDays(1), 3, new List<Task>(), new List<Task>());
+
+      
+        projectRepository.AddTask(project.Name, ); 
+    }
+
+    
 }

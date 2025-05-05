@@ -1,6 +1,6 @@
 ﻿using Domain;
 using Task = Domain.Task;
-
+using TaskRepositoryExceptions = Domain.Exceptions.TaskRepositoryExceptions;
 namespace DataAccess;
 
 public class ProjectRepository
@@ -76,7 +76,10 @@ public class ProjectRepository
             project.Tasks = new List<Task>();
         }
 
-      
+        if (project.Tasks.Any(t => t.Title == task.Title))
+        {
+            throw new TaskRepositoryExceptions.TaskAlreadyExistsException(task.Title);
+        }
 
         project.Tasks.Add(task); 
     }
