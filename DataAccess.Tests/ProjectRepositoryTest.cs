@@ -332,7 +332,7 @@ public class ProjectRepositoryTest
             projectRepository.AddTask(project.Name, task);
 
             
-            projectRepository.RemoveTask(project., 999);  
+            projectRepository.RemoveTask(project.Name, 999);  
         }
         
         [TestMethod]
