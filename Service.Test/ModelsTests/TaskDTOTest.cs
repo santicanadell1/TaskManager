@@ -100,6 +100,14 @@ public class TaskDTOTest
         Assert.AreEqual<State>(stateDoing, taskDoing.State);
         Assert.AreEqual<State>(stateDone, taskDone.State);
     }
+  
+    [TestMethod]
+    public void NewTask_WhenIdIsNotAssigned_ThenIdIsNull()
+    {
+        TaskDTO task = new TaskDTO(); 
+
+        Assert.IsNull(task.Id); 
+    }
 
 
 
