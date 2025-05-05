@@ -70,19 +70,19 @@ public class ProjectRepository
             throw new ProjectRepositoryExceptions.ProjectNotFoundException();
         }
 
-        
         if (project.Tasks == null)
         {
             project.Tasks = new List<Task>();
         }
 
-        if (project.Tasks.Any(t => t.Title == task.Title))
+        if (project.Tasks.Any(t => t.Id == task.Id))
         {
-            throw new TaskRepositoryExceptions.TaskAlreadyExistsException(task.Title);
+            throw new TaskRepositoryExceptions.TaskAlreadyExistsException($"Task with ID {task.Id} already exists in project {projectName}.");
         }
 
         project.Tasks.Add(task); 
     }
+
     
     public void UpdateTask(string projectName, int? taskId, Task updatedTask)
     {
