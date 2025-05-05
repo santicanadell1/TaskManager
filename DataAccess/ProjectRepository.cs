@@ -92,19 +92,15 @@ public class ProjectRepository
             throw new ProjectRepositoryExceptions.ProjectNotFoundException();
         }
 
-        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
-        if (task == null)
+        int index = project.Tasks.FindIndex(t => t.Id == taskId);
+        if (index == -1)
         {
             throw new TaskRepositoryExceptions.TaskNotFoundException();
         }
 
-        task.Title = updatedTask.Title;
-        task.Description = updatedTask.Description;
-        task.ExpectedStartDate = updatedTask.ExpectedStartDate;
-        task.Duration = updatedTask.Duration;
-        task.State = updatedTask.State;  
+        project.Tasks[index] = updatedTask;  
     }
-    
+
     public void RemoveTask(string projectName, int? taskId)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
