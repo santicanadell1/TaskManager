@@ -109,6 +109,14 @@ public class TaskDTOTest
         Assert.IsNull(task.Id); 
     }
 
+    [TestMethod]
+    public void NewTask_WhenIdIsAssigned_ThenIdIsSetCorrectly()
+    {
+        int validId = ;
+        TaskDTO task = new TaskDTO { Id = validId }; 
+        
+        Assert.AreEqual(validId, task.Id); 
+    }
 
 
 
