@@ -123,7 +123,7 @@ public class TaskDTOTest
     {
         TaskDTO task = new TaskDTO { Id = null }; 
 
-        Assert.IsNull(.Id); 
+        Assert.IsNull(task.Id); 
     }
 
 
