@@ -34,10 +34,7 @@ namespace Domain
             get => _resources; 
             set
             {
-                if (value == null)  
-                {
-                    throw new TaskResourceException("Resources cannot be null ");
-                }
+                
                 _resources = value;
             }
         }

@@ -172,4 +172,17 @@ public class TaskTests
        
         task.PreviousTasks = null;  
     }
+    
+        [TestMethod]
+        [ExpectedException(typeof(TaskResourceException))]
+        public void SetResources_WhenResourcesIsNull_ShouldThrowTaskResourceException()
+        {
+           
+            Task task = new Task("Title", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
+
+           
+            task.Resource = null;  
+        }
+    
+   
 }
