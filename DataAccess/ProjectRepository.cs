@@ -1,17 +1,22 @@
 ﻿using Domain;
 using Task = Domain.Task;
 using TaskRepositoryExceptions = Domain.Exceptions.TaskRepositoryExceptions;
+
 namespace DataAccess;
 
 public class ProjectRepository
 {
     private List<Project> _projects;
+    private static int _nextIdTask;
+
     public ProjectRepository()
     {
         Projects = new List<Project>();
+        _nextIdTask = 1;
     }
+
     public List<Project> Projects { get; set; }
-    
+
     public void AddProject(Project project)
     {
         if (Projects.Any(p => p.Name == project.Name))
@@ -22,7 +27,6 @@ public class ProjectRepository
         {
             Projects.Add(project);
         }
-        
     }
 
     public List<Project> GetAllProjects()
@@ -34,7 +38,7 @@ public class ProjectRepository
     {
         return Projects.FirstOrDefault(filter);
     }
-    
+
     public void RemoveProject(string name)
     {
         if (!Projects.Any(p => p.Name == name))
@@ -58,10 +62,11 @@ public class ProjectRepository
         {
             throw new ProjectRepositoryExceptions.ProjectNotFoundException();
         }
+
         int index = Projects.FindIndex(p => p.Name == name);
         Projects[index] = project;
     }
-    
+
     public void AddTask(string projectName, Task task)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
@@ -77,13 +82,15 @@ public class ProjectRepository
 
         if (project.Tasks.Any(t => t.Id == task.Id))
         {
-            throw new TaskRepositoryExceptions.TaskAlreadyExistsException($"Task with ID {task.Id} already exists in project {projectName}.");
+            throw new TaskRepositoryExceptions.TaskAlreadyExistsException(
+                $"Task with ID {task.Id} already exists in project {projectName}.");
         }
 
-        project.Tasks.Add(task); 
+        task.Id = _nextIdTask++;
+        project.Tasks.Add(task);
     }
 
-    
+
     public void UpdateTask(string projectName, int? taskId, Task updatedTask)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
@@ -98,7 +105,7 @@ public class ProjectRepository
             throw new TaskRepositoryExceptions.TaskNotFoundException();
         }
 
-        project.Tasks[index] = updatedTask;  
+        project.Tasks[index] = updatedTask;
     }
 
     public void RemoveTask(string projectName, int? taskId)
@@ -117,7 +124,7 @@ public class ProjectRepository
 
         project.Tasks.Remove(task);
     }
-    
+
     public void AddPreviousTask(string projectName, int? taskId, Task previousTask)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
@@ -132,13 +139,13 @@ public class ProjectRepository
             throw new TaskRepositoryExceptions.TaskNotFoundException();
         }
 
-       
+
         if (!project.Tasks.Contains(previousTask))
         {
             throw new TaskRepositoryExceptions.TaskNotFoundException();
         }
 
-        task.AddPreviousTask(previousTask); 
+        task.AddPreviousTask(previousTask);
     }
 
     public void AddResourceToTask(string projectName, int? taskId, Resource resource)
@@ -162,9 +169,4 @@ public class ProjectRepository
 
         task.Resource.Add(resource);
     }
-
-
-
-
-
 }
