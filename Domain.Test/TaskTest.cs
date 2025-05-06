@@ -205,6 +205,6 @@ public class TaskTests
             task1.AddPreviousTask(task2);
 
             
-            Assert.IsTrue(task1.PreviousTasks.Contains());
+            Assert.IsTrue(task1.PreviousTasks.Contains(task2));
         }
 }
