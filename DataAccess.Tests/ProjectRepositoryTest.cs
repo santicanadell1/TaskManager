@@ -523,6 +523,20 @@ public class ProjectRepositoryTest
 
         projectRepository.AddResourceToTask("NonExistingProject", task.Id, resource);
     }
+    
+    
+    [TestMethod]
+    [ExpectedException(typeof(TaskNotFoundException))]
+    public void AddResourceToTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
+    {
+        ProjectRepository projectRepository = new ProjectRepository();
+        Project project = new Project() { Name = "Project 1" };
+        projectRepository.AddProject(project);
+
+        Resource resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
+
+        projectRepository.AddResourceToTask(project.Name, 999, resource);  // Task with ID 999 does not exist
+    }
 
 
 }
