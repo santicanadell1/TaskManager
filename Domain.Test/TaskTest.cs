@@ -183,6 +183,17 @@ public class TaskTests
            
             task.Resource = null;  
         }
+        
+        [TestMethod]
+        [ExpectedException(typeof(TaskResourceException))]
+        public void AddPreviousTask_WhenTaskIsNull_ShouldThrowTaskResourceException()
+        {
+            
+            Task task = new Task("Title", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
+
+           
+            task.AddPreviousTask(); 
+        }
     
-   
+       
 }
