@@ -502,6 +502,27 @@ public class ProjectRepositoryTest
         Assert.IsNotNull(taskInProject);
         Assert.IsTrue(taskInProject.Resource.Contains(resource));
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ProjectNotFoundException))]
+    public void AddResourceToTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
+    {
+        ProjectRepository projectRepository = new ProjectRepository();
+        Task task = new Task(
+            "Task 1", 
+            "Task 1 description", 
+            DateTime.Now, 
+            5, 
+            new List<Task>(), 
+            new List<Task>(), 
+            new List<Resource>()
+        );
+        task.Id = 1;
+
+        Resource resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
+
+        projectRepository.AddResourceToTask("NonExistingProject", task.Id, resource);
+    }
 
 
 }

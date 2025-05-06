@@ -144,11 +144,7 @@ public class ProjectRepository
     public void AddResourceToTask(string projectName, int? taskId, Resource resource)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
-        if (project == null)
-        {
-            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
-        }
-
+       
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null)
         {
