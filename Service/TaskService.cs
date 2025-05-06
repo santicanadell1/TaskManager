@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.ProjectRepositoryExceptions;
 using Domain;
+using Domain.Exceptions.TaskRepositoryExceptions;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -26,6 +27,23 @@ namespace Service
 
             var task = ToEntity(taskDTO);
             _database.projects.AddTask(projectName, task);
+        }
+
+        public void DeleteTask(string projectName, int? taskId)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+            if (task == null)
+            {
+                throw new TaskNotFoundException();
+            }
+
+            _database.projects.RemoveTask(projectName, task.Id);
         }
 
 
