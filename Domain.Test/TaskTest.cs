@@ -218,4 +218,19 @@ public class TaskTests
             
             task1.RemovePreviousTask(null);  
         }
+        
+        [TestMethod]
+        public void RemovePreviousTask_WhenTaskIsValid_ShouldRemoveFromPreviousTasks()
+        {
+            
+            Task task1 = new Task("Title", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
+            Task task2 = new Task("Title 2", "Description 2", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>());
+            task1.AddPreviousTask(task2);
+
+          
+            task1.RemovePreviousTask(task2);
+
+            
+            Assert.IsFalse(task1.PreviousTasks.Contains());
+        }
 }
