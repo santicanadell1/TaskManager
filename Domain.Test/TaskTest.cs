@@ -246,5 +246,17 @@ public class TaskTests
             task1.AddSameTimeTask(null);  
         }
 
-      
+        [TestMethod]
+        public void AddSameTimeTask_WhenTaskIsValid_ShouldAddToSameTimeTasks()
+        {
+           
+            Task task1 = new Task("Title", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
+            Task task2 = new Task("Title 2", "Description 2", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>());
+
+           
+            task1.AddSameTimeTask(task2);
+
+           
+            Assert.IsTrue(task1.SameTimeTasks.Contains());
+        }
 }
