@@ -216,6 +216,6 @@ public class TaskTests
             Task task1 = new Task("Title", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
     
             
-            task1.RemovePreviousTask();  
+            task1.RemovePreviousTask(null);  
         }
 }
