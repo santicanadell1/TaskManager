@@ -231,6 +231,6 @@ public class TaskTests
             task1.RemovePreviousTask(task2);
 
             
-            Assert.IsFalse(task1.PreviousTasks.Contains());
+            Assert.IsFalse(task1.PreviousTasks.Contains(task2));
         }
 }
