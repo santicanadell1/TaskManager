@@ -259,4 +259,16 @@ public class TaskTests
            
             Assert.IsTrue(task1.SameTimeTasks.Contains(task2));
         }
+        
+        [TestMethod]
+        [ExpectedException(typeof(TaskResourceException))]
+        public void RemoveSameTimeTask_WhenTaskIsNull_ShouldThrowTaskResourceException()
+        {
+           
+            Task task1 = new Task("Title", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
+    
+           
+            task1.RemoveSameTimeTask(); 
+        }
+
 }
