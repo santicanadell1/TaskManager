@@ -153,7 +153,7 @@ public class ProjectTest
         DateTime startDate = DateTime.Now;
         DateTime endDate = DateTime.Parse("2026-09-01");
         List<Task> previousTasks = new List<Task>();
-        Task task1 = new Task("Title", "Description", startDate, 1, previousTasks, null);
+        Task task1 = new Task("Title", "Description", startDate, 1, previousTasks, null, null);
         project.AddTask(task1);
         Assert.IsTrue(project.Tasks.Contains(task1));
     }
