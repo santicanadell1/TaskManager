@@ -93,6 +93,6 @@ public class TaskDTOTest
     public void NewTask_WhenIdIsNotSet_ThenIdIsNull()
     {
         TaskDTO taskDTO = new TaskDTO();
-        Assert.IsNull(.Id);
+        Assert.IsNull(taskDTO.Id);
     }
 }
