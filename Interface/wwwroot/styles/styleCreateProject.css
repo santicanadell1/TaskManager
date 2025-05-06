@@ -1,80 +1,134 @@
-﻿.create-project-page {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 30px;
+﻿/* Container for Create Project Page */
+.create-project-container {
+    max-width: 600px;
+    margin: 60px auto;
     background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    font-family: 'Roboto', sans-serif; 
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-align: center;
 }
 
-.create-project-page h3 {
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 28px;
-    font-weight: 600;
+.create-project-container:hover {
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Title Styles */
+.create-project-container .create-project-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.create-project-container .create-project-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #3498db;
+    border-radius: 3px;
+}
+
+/* Form Inputs */
+.create-project-container .form-control {
+    border: 2px solid #e6e6e6;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 16px;
+    transition: all 0.25s ease-in-out;
+    width: 100%;
+    background-color: #f8f9fa;
     color: #333;
 }
 
-.create-project-page .form-label {
-    font-weight: 600;
-    font-size: 16px;
-    color: #444;
-    margin-bottom: 8px;
-}
-
-.create-project-page .form-control {
-    border-radius: 8px;
-    padding: 12px 15px;
-    font-size: 16px;
-    color: #555;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.create-project-page .form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+.create-project-container .form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.35);
     outline: none;
+    background-color: #fff;
 }
 
-.create-project-page button {
+/* Buttons */
+.create-project-container button.btn {
     width: 100%;
-    padding: 14px;
-    font-size: 18px;
-    border-radius: 8px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    padding: 12px;
+    border-radius: 12px;
     font-weight: 600;
+    font-size: 16px;
+    background-color: #3498db;
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-.create-project-page button:hover {
-    background-color: #0056b3;
+.create-project-container button.btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
 }
 
-.create-project-page button:active {
-    background-color: #004085;
+.create-project-container button.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(41, 128, 185, 0.4);
 }
 
-.create-project-page .form-control::placeholder {
-    color: #888;
-    font-style: italic;
+/* Error Message */
+.create-project-container .alert-danger {
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #ff6b6b;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border-left: 4px solid #e74c3c;
 }
 
-.create-project-page .form-control:disabled {
-    background-color: #e9ecef;
-    cursor: not-allowed;
+/* Button to close alert (with the "X" or a similar icon) */
+.create-project-container .alert .close {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    padding: 8px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.create-project-page textarea.form-control {
-    resize: vertical;
-    min-height: 150px;
+.create-project-container .alert .close:hover {
+    background-color: #e74c3c;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.create-project-page .mb-3 {
-    margin-bottom: 20px;
+.create-project-container .alert .close:focus {
+    outline: none;
+    background-color: #e74c3c;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    .create-project-container {
+        padding: 25px;
+        margin: 40px auto;
+    }
 }
