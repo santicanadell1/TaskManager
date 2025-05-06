@@ -51,23 +51,20 @@
 
     private void CloseModal()
     {
-        ResetMemberSelections(); // Reset member selections when closing the modal
-        OnClose.InvokeAsync(false); // Close the modal
+        ResetMemberSelections(); 
+        OnClose.InvokeAsync(false); 
     }
 
     private void AddSelectedMembers()
     {
-        // Logic to handle adding selected members
         var selectedMembers = membersList.Where(m => m.IsSelected).ToList();
         Console.WriteLine($"Selected Members: {string.Join(", ", selectedMembers.Select(m => m.Name))}");
 
-        // Close the modal after adding members
         CloseModal();
     }
 
     private void ResetMemberSelections()
     {
-        // Reset the IsSelected property for all members
         foreach (var member in membersList)
         {
             member.IsSelected = false;
@@ -78,7 +75,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool IsSelected { get; set; } // Track whether the member is selected
+        public bool IsSelected { get; set; } 
     }
 
 }

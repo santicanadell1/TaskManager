@@ -1,7 +1,8 @@
-﻿@page "/project/list"
+﻿@page "/project/options"
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
 @using ModalsProject
+@using Interface.Components.Pages.AdminProyectPages.Modals
 
 <link href="styles/styleProjectList.css" rel="stylesheet"/>
 <h3>Project List</h3>
@@ -34,31 +35,52 @@
         <button class="btn-create-task" @onclick="CreateTask">Create Task</button>
         <button class="btn-secondary" @onclick="ShowAddMembersModal">Add Members</button>
         <button class="btn-assign-task" @onclick="ShowAssignTaskToMemberModal">Assign Task to Member</button>
+        <button class="btn-warning" @onclick="ShowTaskListModal">Task List</button>
     </div>
 }
 
 <AddTask IsVisible="@showCreateTaskModal" OnClose="CloseCreateTaskModal"/>
 <AddMember IsVisible="@showAddMembersModal" OnClose="CloseAddMembersModal"/>
 <AssignMtoT IsVisible="@showAssignTaskToMemberModal" OnClose="CloseAssignTaskToMemberModal"/>
+<TaskList IsVisible="@showTaskListModal" OnClose="CloseTaskListModal"/>
 
 @code {
 
     private List<Project> projects = new List<Project>
     {
-        new Project { Name = "Project 1", Description = "First project", StartDate = DateTime.Now },
-        new Project { Name = "Project 2", Description = "Second project", StartDate = DateTime.Now }
+        new Project
+        {
+            Name = "Project 1",
+            Description = "First project",
+            StartDate = DateTime.Now,
+            Tasks = new List<Task>
+            {
+                new Task { Id = 1, Name = "Task 1", StartDate = DateTime.Now.AddDays(-10), Duration = 5 },
+                new Task { Id = 2, Name = "Task 2", StartDate = DateTime.Now.AddDays(-5), Duration = 7 }
+            }
+        },
+        new Project
+        {
+            Name = "Project 2",
+            Description = "Second project",
+            StartDate = DateTime.Now,
+            Tasks = new List<Task>
+            {
+                new Task { Id = 3, Name = "Task 1", StartDate = DateTime.Now.AddDays(-5), Duration = 3 },
+                new Task { Id = 4, Name = "Task 2", StartDate = DateTime.Now.AddDays(-2), Duration = 4 }
+            }
+        }
     };
 
     private Project selectedProject;
     private bool showCreateTaskModal = false;
     private bool showAddMembersModal = false;
     private bool showAssignTaskToMemberModal = false;
-    private Project selectedProjectForButtonClass;
+    private bool showTaskListModal = false;
 
     private void ShowProjectOptions(Project project)
     {
         selectedProject = project;
-        selectedProjectForButtonClass = project; // Update the selected project for button class
     }
 
     private void CreateTask()
@@ -76,6 +98,11 @@
         showAssignTaskToMemberModal = true;
     }
 
+    private void ShowTaskListModal()
+    {
+        showTaskListModal = true;
+    }
+
     private void CloseCreateTaskModal(bool isClosed)
     {
         showCreateTaskModal = isClosed;
@@ -91,9 +118,14 @@
         showAssignTaskToMemberModal = isClosed;
     }
 
+    private void CloseTaskListModal(bool isClosed)
+    {
+        showTaskListModal = isClosed;
+    }
+
     public string GetButtonClass(Project project)
     {
-        return selectedProjectForButtonClass == project ? "selected" : "";
+        return selectedProject == project ? "selected" : "";
     }
 
     public class Project
@@ -101,6 +133,15 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
+        public List<Task> Tasks { get; set; } = new List<Task>();
+    }
+
+    public class Task
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime StartDate { get; set; }
+        public int Duration { get; set; }
     }
 
 }
