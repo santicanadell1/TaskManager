@@ -257,6 +257,6 @@ public class TaskTests
             task1.AddSameTimeTask(task2);
 
            
-            Assert.IsTrue(task1.SameTimeTasks.Contains());
+            Assert.IsTrue(task1.SameTimeTasks.Contains(task2));
         }
 }
