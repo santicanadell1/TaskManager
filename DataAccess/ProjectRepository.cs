@@ -127,16 +127,10 @@ public class ProjectRepository
         }
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
-        if (task == null)
-        {
-            throw new TaskRepositoryExceptions.TaskNotFoundException();
-        }
+      
 
        
-        if (!project.Tasks.Contains(previousTask))
-        {
-            throw new TaskRepositoryExceptions.TaskNotFoundException();
-        }
+     
 
         task.AddPreviousTask(previousTask); 
     }
