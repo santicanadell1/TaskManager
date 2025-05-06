@@ -155,5 +155,23 @@ namespace Service.Test
 
             Assert.IsFalse(isCritical);
         }
+        
+        [TestMethod]
+        public void AddTask_ShouldAddTask_WhenTaskIsValid()
+        {
+            var taskDTO = new TaskDTO
+            {
+                Title = "Test Task",
+                Description = "Test Description",
+                ExpectedStartDate = DateTime.Now.AddDays(1),
+                Duration = 5
+            };
+
+            _taskService.AddTask(taskDTO);
+
+            var tasks = _database.tasks.GetAll();
+            Assert.AreEqual(1, tasks.Count); 
+            Assert.AreEqual("Test Task", tasks[0].Title); 
+        }
     }
 }
