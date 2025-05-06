@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using DataAccess.ProjectRepositoryExceptions;
 using Domain;
 using Service.Models;
 using Task = Domain.Task;
@@ -14,6 +15,19 @@ namespace Service
         {
             _database = database;
         }
+
+        public void AddTask(string projectName, TaskDTO taskDTO)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var task = ToEntity(taskDTO);
+            _database.projects.AddTask(projectName, task);
+        }
+
 
         public DateTime CalculateEarlyStart(Task task)
         {
