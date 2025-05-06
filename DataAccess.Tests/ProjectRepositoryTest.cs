@@ -475,6 +475,33 @@ public class ProjectRepositoryTest
     }
 
 
+    [TestMethod]
+    public void AddResourceToTask_WhenTaskExists_ShouldAddResource()
+    {
+        ProjectRepository projectRepository = new ProjectRepository();
+        Project project = new Project() { Name = "Project 1" };
+        projectRepository.AddProject(project);
+
+        Task task = new Task(
+            "Task 1", 
+            "Task 1 description", 
+            DateTime.Now, 
+            5, 
+            new List<Task>(), 
+            new List<Task>(), 
+            new List<Resource>()
+        );
+        task.Id = 1;
+        projectRepository.AddTask(project.Name, task);
+
+        Resource resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
+
+        projectRepository.AddResourceToTask(project.Name, task.Id, resource);
+
+        var taskInProject = project.Tasks.FirstOrDefault(t => t.Id == task.Id);
+        Assert.IsNotNull(taskInProject);
+        Assert.IsTrue(taskInProject.Resource.Contains(resource));
+    }
 
 
 }
