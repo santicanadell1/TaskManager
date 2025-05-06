@@ -21,6 +21,7 @@ namespace Domain
                 {
                     throw new ProjectNameException();
                 }
+
                 name = value;
             }
         }
@@ -34,6 +35,7 @@ namespace Domain
                 {
                     throw new ProjectDescriptionException();
                 }
+
                 description = value;
             }
         }
@@ -47,19 +49,44 @@ namespace Domain
                 {
                     throw new ProjectStartDateException();
                 }
+
                 startDate = value;
             }
         }
 
         public List<User> Members { get; set; }
         public List<Task> Tasks { get; set; }
-        
+
         public List<Notification> Notifications { get; set; }
         public User AdminProject { get; set; }
 
         public Project()
         {
-            Tasks = new List<Task>();
+            this.Members = new List<User>();
+            this.Tasks = new List<Task>();
+            this.Notifications = new List<Notification>();
+        }
+
+        public Project(string name, string description, DateTime startDate)
+        {
+            this.Name = name;
+            this.Description = description;
+            this.StartDate = startDate;
+        }
+
+        public void AddMember(User user)
+        {
+            this.Members.Add(user);
+        }
+
+        public void AddTask(Task task)
+        {
+            this.Tasks.Add(task);
+        }
+
+        public void AddNotification(Notification notification)
+        {
+            this.Notifications.Add(notification);
         }
     }
 }
