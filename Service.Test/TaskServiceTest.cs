@@ -19,7 +19,6 @@ namespace Service.Test
             _taskService = new TaskService(_database);
         }
 
-
         [TestMethod]
         public void CalculateEarlyStart_ShouldReturnCorrectDate_WhenNoPreviousTasks()
         {
@@ -29,11 +28,11 @@ namespace Service.Test
                 new DateTime(2025, 5, 1),
                 5,
                 new List<Task>(),
-                new List<Task>()
+                new List<Task>(),
+                new List<Resource>()
             );
 
             DateTime earlyStart = _taskService.CalculateEarlyStart(task);
-
 
             Assert.AreEqual(new DateTime(2025, 5, 1), earlyStart);
         }
@@ -47,60 +46,107 @@ namespace Service.Test
                 new DateTime(2025, 5, 1),
                 5,
                 new List<Task>(),
-                new List<Task>()
+                new List<Task>(),
+                new List<Resource>()
             );
 
             DateTime earlyFinish = _taskService.CalculateEarlyFinish(task);
 
-
             Assert.AreEqual(new DateTime(2025, 5, 6), earlyFinish);
         }
-        
+
         [TestMethod]
         public void CalculateLateFinish_ShouldReturnEarlyFinish_WhenNoPreviousTasks()
         {
-            var task = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task>(), new List<Task>());
+            var task = new Task(
+                "Task 1",
+                "Description of Task 1",
+                new DateTime(2025, 5, 1),
+                5,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource>()
+            );
 
             DateTime lateFinish = _taskService.CalculateLateFinish(task);
 
             Assert.AreEqual(new DateTime(2025, 5, 6), lateFinish);  
         }
-        
+
         [TestMethod]
         public void CalculateLateStart_ShouldReturnExpectedStartDate_WhenNoPreviousTasks()
         {
-            var task = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task>(), new List<Task>());
+            var task = new Task(
+                "Task 1",
+                "Description of Task 1",
+                new DateTime(2025, 5, 1),
+                5,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource>()
+            );
 
             DateTime lateStart = _taskService.CalculateLateStart(task);
 
             Assert.AreEqual(new DateTime(2025, 5, 1), lateStart);
         }
-        
+
         [TestMethod]
         public void CalculateLateStart_ShouldReturnCorrectDate_WhenPreviousTasksExist()
         {
-            var previousTask = new Task("Previous Task", "Previous task description", new DateTime(2025, 4, 25), 5, new List<Task>(), new List<Task>())
+            var previousTask = new Task(
+                "Previous Task",
+                "Previous task description",
+                new DateTime(2025, 4, 25),
+                5,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource>()
+            )
             {
                 EndDate = new DateTime(2025, 4, 30)
             };
 
-            var task = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task> { previousTask }, new List<Task>());
+            var task = new Task(
+                "Task 1",
+                "Description of Task 1",
+                new DateTime(2025, 5, 1),
+                5,
+                new List<Task> { previousTask },
+                new List<Task>(),
+                new List<Resource>()
+            );
 
             DateTime lateStart = _taskService.CalculateLateStart(task);
 
             Assert.AreEqual(new DateTime(2025, 4, 30), lateStart);
         }
-        
-        
+
         [TestMethod]
         public void IsCritical_ShouldReturnFalse_WhenTaskIsNotCritical()
         {
-            var previousTask = new Task("Previous Task", "Previous task description", new DateTime(2025, 4, 25), 5, new List<Task>(), new List<Task>())
+            var previousTask = new Task(
+                "Previous Task",
+                "Previous task description",
+                new DateTime(2025, 4, 25),
+                5,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource>()
+            )
             {
                 EndDate = new DateTime(2025, 4, 30)
             };
 
-            var task = new Task("Task 1", "Description of Task 1", new DateTime(2025, 5, 1), 5, new List<Task> { previousTask }, new List<Task>())
+            var task = new Task(
+                "Task 1",
+                "Description of Task 1",
+                new DateTime(2025, 5, 1),
+                5,
+                new List<Task> { previousTask },
+                new List<Task>(),
+                new List<Resource>()
+            )
             {
                 EndDate = new DateTime(2025, 5, 7)
             };
@@ -109,8 +155,5 @@ namespace Service.Test
 
             Assert.IsFalse(isCritical);
         }
-        
-
-        
     }
 }

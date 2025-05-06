@@ -85,7 +85,8 @@ namespace Service
                 taskDTO.ExpectedStartDate,
                 taskDTO.Duration,
                 taskDTO.PreviousTasks ?? new List<Task>(),
-                taskDTO.SameTimeTasks ?? new List<Task>()
+                taskDTO.SameTimeTasks ?? new List<Task>(),
+                taskDTO.Resources ?? new List<Resource>()
             );
         }
     }
