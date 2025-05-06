@@ -67,6 +67,13 @@ namespace Domain
             this.Notifications = new List<Notification>();
         }
 
+        public Project(string name, string description, DateTime startDate)
+        {
+            this.Name = name;
+            this.Description = description;
+            this.StartDate = startDate;
+        }
+
         public void AddMember(User user)
         {
             this.Members.Add(user);
