@@ -89,5 +89,10 @@ public class TaskDTOTest
         Assert.AreEqual(123, taskDTO.Id);
     }
 
-
+    [TestMethod]
+    public void NewTask_WhenIdIsNotSet_ThenIdIsNull()
+    {
+        TaskDTO taskDTO = new TaskDTO();
+        Assert.IsNull(.Id);
+    }
 }
