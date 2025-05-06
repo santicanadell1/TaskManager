@@ -141,6 +141,27 @@ public class ProjectRepository
         task.AddPreviousTask(previousTask); 
     }
 
+    public void AddResourceToTask(string projectName, int? taskId, Resource resource)
+    {
+        var project = Projects.FirstOrDefault(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+        }
+
+        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task == null)
+        {
+            throw new TaskRepositoryExceptions.TaskNotFoundException();
+        }
+
+        if (task.Resource == null)
+        {
+            task.Resource = new List<Resource>();
+        }
+
+        task.Resource.Add(resource);
+    }
 
 
 
