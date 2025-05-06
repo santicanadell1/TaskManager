@@ -1,0 +1,175 @@
+﻿/* Container for the Assign Roles Page */
+.assign-role-container {
+    max-width: 600px;
+    margin: 60px auto;
+    background-color: #ffffff;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-align: center; /* Centering text inside the container */
+}
+
+/* Hover effect for the container */
+.assign-role-container:hover {
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Title Styles */
+.assign-role-container h3 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    position: relative;
+    text-align: center; /* Center title */
+}
+
+.assign-role-container h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #3498db;
+    border-radius: 3px;
+}
+
+/* Select Input */
+.assign-role-container .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Ensuring the content is centered */
+    text-align: left; /* Keeps labels and checkboxes aligned to the left */
+}
+
+.assign-role-container select.form-control {
+    border: 2px solid #e6e6e6;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 16px;
+    transition: all 0.25s ease-in-out;
+    width: 100%;
+    max-width: 400px; /* Limit width to make it look nicer */
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0 auto; /* Centering the select element */
+}
+
+.assign-role-container select.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.35);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Role Checkboxes */
+.assign-role-container .form-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    width: 100%; /* Ensure the checkboxes stretch across the container */
+}
+
+.assign-role-container .form-check-input {
+    margin-right: 10px; /* Space between checkbox and label */
+}
+
+/* Assign Button */
+.assign-role-container .btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    background-color: #3498db;
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.assign-role-container .btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
+}
+
+.assign-role-container .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(41, 128, 185, 0.4);
+}
+
+/* Error and Success Messages */
+.assign-role-container .alert-danger {
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #ff6b6b;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border-left: 4px solid #e74c3c;
+}
+
+.assign-role-container .alert-success {
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #2ecc71;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border-left: 4px solid #27ae60;
+}
+
+/* Button to close alert (with the "X" or a similar icon) */
+.assign-role-container .alert .close {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    padding: 8px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.assign-role-container .alert .close:hover {
+    background-color: #e74c3c; /* Change color on hover */
+    transform: scale(1.1); /* Hover effect */
+}
+
+.assign-role-container .alert .close:focus {
+    outline: none;
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    .assign-role-container {
+        padding: 25px;
+        margin: 40px auto;
+    }
+
+    .assign-role-container .form-control {
+        font-size: 14px;
+    }
+
+    .assign-role-container .btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}

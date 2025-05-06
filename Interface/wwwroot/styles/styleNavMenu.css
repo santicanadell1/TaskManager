@@ -1,0 +1,94 @@
+/* Top bar appearance */
+.top-row {
+    height: 3.5rem;
+    background-color: #1c1c1c;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Brand styling */
+.navbar-brand {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #d1d1d1;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar-brand:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Navigation scrollable sidebar */
+.nav-scrollable {
+    background-color: #2b2b2b;
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-item:not(:last-child) {
+    margin-bottom: 0.25rem;
+}
+
+.bi-box-arrow-right {
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.bi-box-arrow-right:hover {
+    color: #3498db;
+    transform: rotate(180deg);
+}
+
+/* Button link styling */
+.nav-item button.btn-link {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    transition: background-color 0.2s ease;
+    border-radius: 4px;
+}
+
+.nav-item button.btn-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item button.btn-link:focus {
+    outline: 3px solid #3498db;
+}
+
+/* Navigation link styling */
+.nav-link {
+    color: #e0e0e0;
+    transition: all 0.3s ease-in-out;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #3498db;
+}
+
+.nav-link.active {
+    background-color: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    font-weight: 500;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .nav-scrollable {
+        width: 100%;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .nav-item button.btn-link {
+        padding: 10px;
+    }
+}
