@@ -464,7 +464,7 @@ public class ProjectRepositoryTest
         task2.Id = 2;
 
         projectRepository.AddTask(project.Name, task1);
-        projectRepository.AddTask(project.Name, );
+        projectRepository.AddTask(project.Name, task2);
 
         projectRepository.AddPreviousTask(project.Name, task1.Id, task2);
 
