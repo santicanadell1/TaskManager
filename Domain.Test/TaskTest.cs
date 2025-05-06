@@ -284,7 +284,7 @@ public class TaskTests
             task1.RemoveSameTimeTask(task2);
 
           
-            Assert.IsFalse(task1.SameTimeTasks.Contains());
+            Assert.IsFalse(task1.SameTimeTasks.Contains(task2));
         }
 
 }
