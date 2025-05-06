@@ -179,4 +179,19 @@ public class TaskServiceTest
         Assert.AreEqual(1, tasks.Count);
         Assert.AreEqual("Test Task", tasks[0].Title);
     }
+    
+    [TestMethod]
+    public void DeleteTask_ShouldDeleteTask_WhenTaskExists()
+    {
+        var task1 = new Task("Task 1", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
+        var task2 = new Task("Task 2", "Description", DateTime.Now.AddDays(2), 3, new List<Task>(), new List<Task>(), new List<Resource>());
+        _genericProject.Tasks.Add(task1);
+        _genericProject.Tasks.Add(task2);
+
+        _taskService.DeleteTask("Generic Project", task1.Id);
+
+        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        Assert.AreEqual(1, project.Tasks.Count);  
+        Assert.AreEqual("Task 2", project.Tasks[0].Title); 
+    }
 }
