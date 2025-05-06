@@ -121,10 +121,7 @@ public class ProjectRepository
     public void AddPreviousTask(string projectName, int? taskId, Task previousTask)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
-        if (project == null)
-        {
-            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
-        }
+     
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null)
