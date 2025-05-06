@@ -93,7 +93,10 @@ namespace Domain
             get => _previousTasks; 
             set
             {
-               
+                if (value == null)  
+                {
+                    throw new TaskPreviousTaskException("PreviousTasks cannot be null ");
+                }
                 _previousTasks = value;
             }
         }
