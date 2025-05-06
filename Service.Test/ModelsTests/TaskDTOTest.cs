@@ -95,4 +95,25 @@ public class TaskDTOTest
         TaskDTO taskDTO = new TaskDTO();
         Assert.IsNull(taskDTO.Id);
     }
+    
+    [TestMethod]
+    public void NewTask_WhenResourcesAreAssigned_ThenResourcesAreSet()
+    {
+        var resources = new List<Resource>
+        {
+            new Resource("Resource 1", "Type 1", "Description of Resource 1"),
+            new Resource("Resource 2", "Type 2", "Description of Resource 2")
+        };
+    
+        var taskDTO = new TaskDTO { Resources = resources };
+
+        Assert.IsNotNull(taskDTO.Resources);
+        Assert.AreEqual(2, taskDTO.Resources.Count);
+        Assert.AreEqual("Resource 1", taskDTO.Resources[0].Name);
+        Assert.AreEqual("Resource 2", taskDTO.Resources[1].Name);
+    }
+
+   
+
+    
 }
