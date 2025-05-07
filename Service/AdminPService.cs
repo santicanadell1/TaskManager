@@ -57,6 +57,12 @@ public class AdminPService
         _database.projects.UpdateProject(projectNameToUpdate, ToEntity(updatedProjectDTO));
     }
 
+    public List<Project> GetAllProjects()
+    {
+        return
+            _database.projects.GetAllProjects();
+    }
+
     public Project ToEntity(ProjectDTO projectDTO)
     {
         return new Project
