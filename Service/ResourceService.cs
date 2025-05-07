@@ -152,10 +152,10 @@ namespace Service
         {
             var currentUser = LoggedUser.Current;
             List<Project> projects = GetProjectsThatAreUsingResource(resource);
+            if (projects.Count == 0) return false;
             bool currentUserIsAdmin = currentUser.Roles.Contains(Rol.AdminProject);
             bool isUsedByOneProject = projects.Count == 1;
             bool projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
-            if (projects.Count == 0) return false;
             return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
         }
     }
