@@ -1,5 +1,6 @@
 using DataAccess;
 using DataAccess.ResourceRepositoryExceptions;
+using Domain;
 using Service.Models;
 
 namespace Service.Test;
@@ -9,12 +10,44 @@ public class ResourcesServiceTest
 {
     private InMemoryDatabase _database;
     private ResourceService _resourceService;
-
+    private Login _loginService;
+    private UserService _userService;
     [TestInitialize]
-    public void SetUp()
+    public void TestSetUp()
     {
         _database = new InMemoryDatabase();
+        _loginService = new Login(_database);
+        _userService = new UserService(_database);
         _resourceService = new ResourceService(_database);
+
+        var adminSUserDTO = new UserDTO
+        {
+            FirstName = "AdminSystem",
+            LastName = "User",
+            Email = "adminSystem.user@example.com",
+            Password = "AdminPassword123@",
+            Roles = new List<Rol> { Rol.AdminSystem }
+        };
+        var adminPUserDTO = new UserDTO
+        {
+            FirstName = "AdminProject",
+            LastName = "User",
+            Email = "adminProject.user@example.com",
+            Password = "AdminPassword123@",
+            Roles = new List<Rol> { Rol.AdminProject }
+        };
+
+        var normalUserDTO = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Password = "Password123@",
+            Roles = new List<Rol>()
+        };
+        _userService.AddUser(normalUserDTO);
+        _userService.AddUser(adminSUserDTO);
+        _userService.AddUser(adminPUserDTO);
     }
 
     [TestMethod]
