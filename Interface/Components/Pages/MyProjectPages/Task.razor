@@ -1,0 +1,129 @@
+﻿@page "/project/tasks"
+
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+
+<link href="styles/styleTaskProjectMember.css" rel="stylesheet" />
+
+<div class="project-member-container">
+    <h3>Assign Task to User</h3>
+
+    <!-- Select Proyecto -->
+    <div class="form-group">
+        <label for="projectSelect">Select Project</label>
+        <select id="projectSelect" class="form-control" @onchange="OnProjectChange">
+            <option value="">-- Select a Project --</option>
+            @foreach (var project in projects)
+            {
+                <option value="@project.Id">@project.Name</option>
+            }
+        </select>
+    </div>
+
+    <!-- Select Task (se muestra solo cuando se elige un proyecto) -->
+    @if (!string.IsNullOrEmpty(selectedProjectId))
+    {
+        <div class="form-group mt-3">
+            <label for="taskSelect">Select Task</label>
+            <select id="taskSelect" class="form-control" @onchange="OnTaskChange">
+                <option value="">-- Select a Task --</option>
+                @foreach (var task in tasks)
+                {
+                    <option value="@task.Id">@task.Name</option>
+                }
+            </select>
+        </div>
+    }
+
+    <!-- Los campos de Estado de la tarea, Fecha de Ejecución y Horas trabajadas solo se muestran si se ha seleccionado una tarea -->
+    @if (!string.IsNullOrEmpty(selectedTaskId))
+    {
+        <div class="form-group mt-3">
+            <label for="taskStatus">Task Status</label>
+            <select id="taskStatus" class="form-control" @bind="taskStatus">
+                <option value="ToDo">To Do</option>
+                <option value="Doing">Doing</option>
+                <option value="Done">Done</option>
+            </select>
+        </div>
+
+        <!-- Solo mostrar el campo de ejecución si el estado es "Done" -->
+        @if (taskStatus == "Done")
+        {
+            <div class="form-group mt-3">
+                <label for="executionDate">Execution Date</label>
+                <InputDate id="executionDate" class="form-control" @bind-Value="executionDate" />
+            </div>
+        }
+
+        <div class="form-group mt-3">
+            <label for="hoursWorked">Hours Worked</label>
+            <InputNumber id="hoursWorked" class="form-control" @bind-Value="hoursWorked" min="0" />
+        </div>
+
+        <!-- Submit Button -->
+        <button class="btn btn-primary mt-3" @onclick="HandleSubmit">Submit</button>
+    }
+</div>
+
+@code {
+    private List<Project> projects = new List<Project>
+    {
+        new Project { Id = "1", Name = "Project A" },
+        new Project { Id = "2", Name = "Project B" },
+        new Project { Id = "3", Name = "Project C" }
+    };
+
+    private List<TaskItem> tasks = new List<TaskItem>
+    {
+        new TaskItem { Id = "1", Name = "Task 1" },
+        new TaskItem { Id = "2", Name = "Task 2" },
+        new TaskItem { Id = "3", Name = "Task 3" }
+    };
+
+    private string selectedProjectId;
+    private string selectedTaskId;
+    private string taskStatus = "ToDo"; 
+    private DateTime? executionDate;
+    private int hoursWorked;
+
+    private void OnProjectChange(ChangeEventArgs e)
+    {
+        selectedProjectId = e.Value.ToString();
+        selectedTaskId = string.Empty; 
+    }
+
+    private void OnTaskChange(ChangeEventArgs e)
+    {
+        selectedTaskId = e.Value.ToString();
+    }
+
+    private void HandleSubmit()
+    {
+        if (string.IsNullOrEmpty(taskStatus) || executionDate == null || hoursWorked <= 0)
+        {
+           
+            Console.WriteLine("Please fill out all fields properly.");
+        }
+        else
+        {
+           
+            Console.WriteLine($"Task Status: {taskStatus}, Execution Date: {executionDate}, Hours Worked: {hoursWorked}");
+
+           
+            Navigation.NavigateTo("/success"); 
+        }
+    }
+
+    public class Project
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class TaskItem
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+}
