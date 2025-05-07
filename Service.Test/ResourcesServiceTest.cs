@@ -2,6 +2,7 @@ using DataAccess;
 using DataAccess.ResourceRepositoryExceptions;
 using Domain;
 using Service.Models;
+using Task = Domain.Task;
 
 namespace Service.Test;
 
@@ -141,6 +142,41 @@ public class ResourcesServiceTest
 
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
 
+        var updatedResourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeB",
+            Description = "Updated description"
+        };
+
+        _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
+
+        var resource = _database.resources.Get(r =>
+            r.Name == updatedResourceDTO.Name && r.Type == updatedResourceDTO.Type &&
+            r.Description == updatedResourceDTO.Description);
+
+        Assert.IsNotNull(resource);
+        Assert.AreEqual("TypeB", resource.Type);
+        Assert.AreEqual("Updated description", resource.Description);
+    }
+    [TestMethod]
+    public void UpdateResource_ShouldUpdateResource_WhenResourceIsExclusive()
+    {
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1",
+        };
+
+        _resourceService.AddResource(resourceDTO);
+        
+        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        Task task = new Task("Title1", "Description1" , DateTime.Today, 5,new List<Task>(), new List<Task>(),new List<Resource>(){addedResource});
+        Project project = new Project("Project1", "Description1", DateTime.Today);
+        project.AddTask(task);
+        project.AdminProject = _database.users.Get(u => u.Email == "adminProject.user@example.com");
         var updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
