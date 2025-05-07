@@ -292,6 +292,7 @@ public class ResourcesServiceTest
         
     }
     [TestMethod]
+    [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void UpdateResource_ShouldThrowException_WhenResourceIsNotExclusiveForTheAdmin()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
