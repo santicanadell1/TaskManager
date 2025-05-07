@@ -13,5 +13,7 @@ namespace Service.Models
 
         [Required(ErrorMessage = "Project start date is required.")]
         public DateTime StartDate { get; set; }
+
+        public UserDTO AdminProyect { get; set; }
     }
 }
