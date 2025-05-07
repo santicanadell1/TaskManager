@@ -70,7 +70,8 @@ namespace Service
         }
 
         public void DeleteResource(int? id)
-        {
+        {   
+            isAbleToModifyResource(GetResourceObject(id));
             try
             {
                 _database.resources.Delete(id);
