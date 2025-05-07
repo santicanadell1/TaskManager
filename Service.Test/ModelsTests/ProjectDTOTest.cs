@@ -24,4 +24,22 @@ public class ProjectDTOTests
 
         Assert.IsFalse(isValid);
     }
+
+
+    [TestMethod]
+    public void Validate_ShouldThrowValidationException_WhenDescriptionIsNullOrWhiteSpace()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "",
+            StartDate = DateTime.Now
+        };
+
+        var validationResults = new System.Collections.Generic.List<ValidationResult>();
+        bool isValid =
+            Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
+
+        Assert.IsFalse(isValid);
+    }
 }
