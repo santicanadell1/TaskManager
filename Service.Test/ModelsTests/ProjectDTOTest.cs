@@ -51,7 +51,7 @@ public class ProjectDTOTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Parse("")
+            StartDate = DateTime.Parse("2020-09-01"),
         };
 
         var validationResults = new System.Collections.Generic.List<ValidationResult>();
