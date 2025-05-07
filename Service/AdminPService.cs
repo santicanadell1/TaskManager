@@ -63,6 +63,17 @@ public class AdminPService
             _database.projects.GetAllProjects();
     }
 
+    public Project GetProjectByName(string projectName)
+    {
+        var project = _database.projects.GetProject(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException();
+        }
+
+        return project;
+    }
+
     public Project ToEntity(ProjectDTO projectDTO)
     {
         return new Project
