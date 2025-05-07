@@ -66,6 +66,29 @@ namespace Service
             _database.projects.UpdateTask(projectName, taskId, updatedTask);
         }
 
+        public List<TaskDTO> GetTasks(string projectName)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var taskDTOs = project.Tasks.Select(t => new TaskDTO
+            {
+                Title = t.Title,
+                Description = t.Description,
+                ExpectedStartDate = t.ExpectedStartDate,
+                Duration = t.Duration,
+                PreviousTasks = t.PreviousTasks,
+                SameTimeTasks = t.SameTimeTasks,
+                State = t.State,
+                Resources = t.Resource
+            }).ToList();
+
+            return taskDTOs;
+        }
+
 
         public DateTime CalculateEarlyStart(Task task)
         {
