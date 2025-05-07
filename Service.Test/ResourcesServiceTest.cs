@@ -360,7 +360,48 @@ public class ResourcesServiceTest
         var deletedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
-    
+    [TestMethod]
+    public void DeleteResource_ShouldDeleteResource_WhenResourceIsExclusive()
+    {
+        
+        var resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1",
+        };
+
+        _resourceService.AddResource(resourceDTO);
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        
+        ProjectDTO project = new ProjectDTO();
+        project.Name = "Project1";
+        project.Description = "Description of Project1";
+        project.StartDate = DateTime.Today;
+        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
+        
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Title1", 
+            Description = "Description1" , 
+            ExpectedStartDate = DateTime.Today, 
+            Duration = 5,
+            PreviousTasks = new List<Task>(), 
+            SameTimeTasks = new List<Task>(),
+            Resources = new List<Resource>(){addedResource}
+        };
+        
+        _adminProjectService.CreateProject(project);
+        _taskService.AddTask("Project1",task );
+        
+        Assert.IsNotNull(addedResource);
+
+        _resourceService.DeleteResource(addedResource.Id);
+
+        var deletedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
+        Assert.IsNull(deletedResource);
+    }
 
     [TestMethod]
     [ExpectedException(typeof(ResourceNotFoundException))]
