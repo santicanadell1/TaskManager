@@ -36,4 +36,34 @@ public class AdminPServiceTests
         Assert.IsNotNull(project);
         Assert.AreEqual("New Project", project.Name);
     }
+
+    [TestMethod]
+    public void AssignMembersToProject_ShouldAddMembers_WhenValid()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "New Project",
+            Description = "Project Description",
+            StartDate = DateTime.Now
+        };
+
+        _service.CreateProject(projectDTO);
+
+        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+
+        var userDTO = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "password123",
+            Roles = new List<Rol> { Rol.AdminProject }
+        };
+
+        _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+
+        Assert.IsTrue(project.Members.Count > 0);
+        Assert.AreEqual("John", project.Members[0].FirstName);
+    }
 }
