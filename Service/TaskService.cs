@@ -89,6 +89,23 @@ namespace Service
             return taskDTOs;
         }
 
+        public TaskDTO GetTask(string projectName, int? taskId)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+            if (task == null)
+            {
+                throw new TaskNotFoundException();
+            }
+
+            return FromEntity(task);
+        }
+
 
         public DateTime CalculateEarlyStart(Task task)
         {
