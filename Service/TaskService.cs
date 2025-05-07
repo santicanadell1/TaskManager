@@ -1,5 +1,7 @@
 ﻿using DataAccess;
+using DataAccess.ProjectRepositoryExceptions;
 using Domain;
+using Domain.Exceptions.TaskRepositoryExceptions;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -14,6 +16,96 @@ namespace Service
         {
             _database = database;
         }
+
+        public void AddTask(string projectName, TaskDTO taskDTO)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var task = ToEntity(taskDTO);
+            _database.projects.AddTask(projectName, task);
+        }
+
+        public void DeleteTask(string projectName, int? taskId)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+            if (task == null)
+            {
+                throw new TaskNotFoundException();
+            }
+
+            _database.projects.RemoveTask(projectName, task.Id);
+        }
+
+        public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+            if (task == null)
+            {
+                throw new TaskNotFoundException();
+            }
+
+            var updatedTask = ToEntity(taskDTO);
+            updatedTask.Id = task.Id;
+
+            _database.projects.UpdateTask(projectName, taskId, updatedTask);
+        }
+
+        public List<TaskDTO> GetTasks(string projectName)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var taskDTOs = project.Tasks.Select(t => new TaskDTO
+            {
+                Title = t.Title,
+                Description = t.Description,
+                ExpectedStartDate = t.ExpectedStartDate,
+                Duration = t.Duration,
+                PreviousTasks = t.PreviousTasks,
+                SameTimeTasks = t.SameTimeTasks,
+                State = t.State,
+                Resources = t.Resource
+            }).ToList();
+
+            return taskDTOs;
+        }
+
+        public TaskDTO GetTask(string projectName, int? taskId)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+            if (task == null)
+            {
+                throw new TaskNotFoundException();
+            }
+
+            return FromEntity(task);
+        }
+
 
         public DateTime CalculateEarlyStart(Task task)
         {
@@ -62,7 +154,7 @@ namespace Service
         }
 
 
-        public TaskDTO FromEntity(Task task)
+        private TaskDTO FromEntity(Task task)
         {
             return new TaskDTO()
             {
@@ -77,7 +169,7 @@ namespace Service
         }
 
 
-        public Task ToEntity(TaskDTO taskDTO)
+        private Task ToEntity(TaskDTO taskDTO)
         {
             return new Task(
                 taskDTO.Title,
@@ -85,7 +177,8 @@ namespace Service
                 taskDTO.ExpectedStartDate,
                 taskDTO.Duration,
                 taskDTO.PreviousTasks ?? new List<Task>(),
-                taskDTO.SameTimeTasks ?? new List<Task>()
+                taskDTO.SameTimeTasks ?? new List<Task>(),
+                taskDTO.Resources ?? new List<Resource>()
             );
         }
     }
