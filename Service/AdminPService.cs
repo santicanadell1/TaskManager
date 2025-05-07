@@ -74,14 +74,20 @@ public class AdminPService
         _database.projects.UpdateProject(projectNameToUpdate, ToEntity(updatedProjectDTO));
     }
 
-    public List<Project> GetAllProjects()
+    public List<ProjectDTO> GetAllProjects()
     {
         CheckAdminProyectRole();
-        return
-            _database.projects.GetAllProjects();
+        List<Project> projects = _database.projects.GetAllProjects();
+        List<ProjectDTO> projectDTOs = new List<ProjectDTO>();
+        foreach (var project in projects)
+        {
+            projectDTOs.Add(FromEntity(project));
+        }
+
+        return projectDTOs;
     }
 
-    public Project GetProjectByName(string projectName)
+    public ProjectDTO GetProjectByName(string projectName)
     {
         CheckAdminProyectRole();
         var project = _database.projects.GetProject(p => p.Name == projectName);
@@ -90,7 +96,17 @@ public class AdminPService
             throw new ProjectNotFoundException();
         }
 
-        return project;
+        return FromEntity(project);
+    }
+
+    private ProjectDTO FromEntity(Project project)
+    {
+        return new ProjectDTO()
+        {
+            Name = project.Name,
+            Description = project.Description,
+            StartDate = project.StartDate,
+        };
     }
 
     public Project ToEntity(ProjectDTO projectDTO)
