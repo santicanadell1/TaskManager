@@ -113,22 +113,36 @@ namespace Service
             };
             return resource;
         }
-        
+
         private void isAbleToModifyResource(Resource resource)
         {
             var currentUser = LoggedUser.Current;
-            List<Project> projects = GetProjectsThatAreUsingResource(resource);
-            
-            if (currentUser == null || !isAdminSystem() || isExclusive(resource))
+
+            if (currentUser == null)
             {
                 throw new UnauthorizedAdminAccessException();
             }
+
+            // Si es admin del sistema, tiene permiso para modificar cualquier recurso
+            if (currentUser.Roles.Contains(Rol.AdminSystem))
+            {
+                return;
+            }
+
+            // Si es admin de proyecto, verifica si el recurso es exclusivo de su proyecto
+            if (currentUser.Roles.Contains(Rol.AdminProject) && isExclusive(resource))
+            {
+                return;
+            }
+
+            // En cualquier otro caso, lanza la excepción
+            throw new UnauthorizedAdminAccessException();
         }
 
         private bool isAdminSystem()
         {
             var currentUser = LoggedUser.Current;
-            return currentUser.Roles.Contains(Rol.AdminSystem);
+            return currentUser.Roles.Contains(Rol.AdminSystem) || currentUser.Roles.Contains(Rol.AdminProject) ;
         }
         
         private List<Project> GetProjectsThatAreUsingResource(Resource resource)

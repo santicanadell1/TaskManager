@@ -13,6 +13,7 @@ public class ResourcesServiceTest
     private ResourceService _resourceService;
     private Login _loginService;
     private UserService _userService;
+    private AdminPService _adminProjectService;
     [TestInitialize]
     public void TestSetUp()
     {
@@ -173,10 +174,18 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
-        Task task = new Task("Title1", "Description1" , DateTime.Today, 5,new List<Task>(), new List<Task>(),new List<Resource>(){addedResource});
-        Project project = new Project("Project1", "Description1", DateTime.Today);
-        project.AddTask(task);
+        
+        Project project = new Project();
+        project.Name = "Project1";
+        project.Description = "Description of Project1";
+        project.StartDate = DateTime.Today;
         project.AdminProject = _database.users.Get(u => u.Email == "adminProject.user@example.com");
+        
+        Task task = new Task("Title1", "Description1" , DateTime.Today, 5,new List<Task>(), new List<Task>(),new List<Resource>(){addedResource});
+        
+        project.AddTask(task);
+        _adminProjectService.Add(project);
+       
         var updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
