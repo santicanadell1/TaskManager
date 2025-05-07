@@ -197,4 +197,37 @@ public class TaskServiceTest
         Assert.AreEqual(1, project.Tasks.Count);
         Assert.AreEqual("Task 2", project.Tasks[0].Title);
     }
+
+    [TestMethod]
+    public void UpdateTask_ShouldUpdateTask_WhenTaskExists()
+    {
+        var task1 = new Task("Task 1", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(),
+            new List<Resource>());
+        var task2 = new Task("Task 2", "Description", DateTime.Now.AddDays(2), 3, new List<Task>(), new List<Task>(),
+            new List<Resource>());
+
+        _database.projects.AddTask("Generic Project", task1);
+        _database.projects.AddTask("Generic Project", task2);
+
+        var taskDTO = new TaskDTO
+        {
+            Title = "Updated Task 1",
+            Description = "Updated Description",
+            ExpectedStartDate = DateTime.Now.AddDays(1),
+            Duration = 6,
+            PreviousTasks = new List<Task>(),
+            SameTimeTasks = new List<Task>(),
+            State = State.TODO
+        };
+
+        _taskService.UpdateTask("Generic Project", task1.Id, taskDTO);
+
+        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == task1.Id);
+
+        Assert.AreEqual("Updated Task 1", updatedTask.Title);
+        Assert.AreEqual("Updated Description", updatedTask.Description);
+        Assert.AreEqual(6, updatedTask.Duration);
+        Assert.AreEqual(State.TODO, updatedTask.State);
+    }
 }
