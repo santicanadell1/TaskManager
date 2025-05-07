@@ -49,12 +49,6 @@ public class AdminPService
 
     public void RemoveProject(string projectName)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
-        if (project == null)
-        {
-            throw new ProjectNotFoundException();
-        }
-
         _database.projects.RemoveProject(projectName);
     }
 
