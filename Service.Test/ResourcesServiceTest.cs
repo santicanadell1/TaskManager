@@ -215,6 +215,69 @@ public class ResourcesServiceTest
         Assert.AreEqual("TypeB", resource.Type);
         Assert.AreEqual("Updated description", resource.Description);
     }
+    [TestMethod]
+    public void UpdateResource_ShouldThrowException_WhenResourceIsNotExclusive()
+    {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        var resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1",
+        };
+
+        _resourceService.AddResource(resourceDTO);
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        
+        ProjectDTO project = new ProjectDTO();
+        project.Name = "Project 1";
+        project.Description = "Description of Project1";
+        project.StartDate = DateTime.Today;
+        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
+        
+        ProjectDTO project2 = new ProjectDTO();
+        project2.Name = "Project 2";
+        project2.Description = "Description of Project2";
+        project2.StartDate = DateTime.Today;
+        project2.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
+        
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Title 1", 
+            Description = "Description1" , 
+            ExpectedStartDate = DateTime.Today, 
+            Duration = 5,
+            PreviousTasks = new List<Task>(), 
+            SameTimeTasks = new List<Task>(),
+            Resources = new List<Resource>(){addedResource}
+        };
+        TaskDTO task2 = new TaskDTO()
+        {
+            Title = "Title 2", 
+            Description = "Description2" , 
+            ExpectedStartDate = DateTime.Today, 
+            Duration = 5,
+            PreviousTasks = new List<Task>(), 
+            SameTimeTasks = new List<Task>(),
+            Resources = new List<Resource>(){addedResource}
+        };
+        
+        _adminProjectService.CreateProject(project);
+        _taskService.AddTask("Project 1",task );
+        _adminProjectService.CreateProject(project2);
+        _taskService.AddTask("Project 2",task2 );
+       
+        var updatedResourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeB",
+            Description = "Updated description"
+        };
+        
+        _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
+        
+    }
 
     [TestMethod]
     public void DeleteResource_ShouldDeleteResource_WhenResourceExists()
