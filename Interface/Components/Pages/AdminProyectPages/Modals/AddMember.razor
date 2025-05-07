@@ -1,8 +1,9 @@
-﻿@inject NavigationManager Navigation
+﻿@using Service.Models
+@inject AdminPService AdminPService
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
 @namespace ModalsProject
 
-<!-- Modal -->
 @if (IsVisible)
 {
     <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="addMembersModal"
@@ -40,25 +41,38 @@
 @code {
     [Parameter] public EventCallback<bool> OnClose { get; set; }
     [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public ProjectDTO SelectedProject { get; set; }
 
-    private List<Member> membersList = new List<Member>
+    private List<Service.Models.UserDTO> membersList = new List<Service.Models.UserDTO>
     {
-        new Member { Id = 1, Name = "John Doe" },
-        new Member { Id = 2, Name = "Jane Smith" },
-        new Member { Id = 3, Name = "Michael Brown" },
-        new Member { Id = 4, Name = "Lisa White" }
+        new Service.Models.UserDTO { FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" },
+        new Service.Models.UserDTO { FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com" },
+        new Service.Models.UserDTO { FirstName = "Michael", LastName = "Brown", Email = "michael.brown@example.com" },
+        new Service.Models.UserDTO { FirstName = "Lisa", LastName = "White", Email = "lisa.white@example.com" }
     };
 
     private void CloseModal()
     {
-        ResetMemberSelections(); 
-        OnClose.InvokeAsync(false); 
+        ResetMemberSelections();
+        OnClose.InvokeAsync(false);
     }
 
     private void AddSelectedMembers()
     {
         var selectedMembers = membersList.Where(m => m.IsSelected).ToList();
-        Console.WriteLine($"Selected Members: {string.Join(", ", selectedMembers.Select(m => m.Name))}");
+
+        if (selectedMembers.Any())
+        {
+            try
+            {
+                AdminPService.AssignMembersToProject(SelectedProject.Name, selectedMembers);
+                Console.WriteLine("Members added successfully!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding members: {ex.Message}");
+            }
+        }
 
         CloseModal();
     }
@@ -69,13 +83,6 @@
         {
             member.IsSelected = false;
         }
-    }
-
-    public class Member
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public bool IsSelected { get; set; } 
     }
 
 }
