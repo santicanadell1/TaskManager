@@ -47,6 +47,17 @@ public class AdminPService
         _database.projects.UpdateProject(projectName, project);
     }
 
+    public void RemoveProject(string projectName)
+    {
+        var project = _database.projects.GetProject(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException();
+        }
+
+        _database.projects.RemoveProject(projectName);
+    }
+
     private User ToEntity(UserDTO userDTO)
     {
         return new User
