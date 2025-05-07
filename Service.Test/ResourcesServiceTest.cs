@@ -1,6 +1,7 @@
 using DataAccess;
 using DataAccess.ResourceRepositoryExceptions;
 using Domain;
+using Domain.Exceptions;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -41,6 +42,16 @@ public class ResourcesServiceTest
             Password = "AdminPassword123@",
             Roles = new List<Rol> { Rol.AdminProject }
         };
+        
+        
+        var adminPUserDTO2 = new UserDTO
+        {
+            FirstName = "AdminProject2",
+            LastName = "User2",
+            Email = "adminProject2.user@example.com",
+            Password = "AdminPassword123@",
+            Roles = new List<Rol> { Rol.AdminProject }
+        };
 
         var normalUserDTO = new UserDTO
         {
@@ -53,6 +64,7 @@ public class ResourcesServiceTest
         _userService.AddUser(normalUserDTO);
         _userService.AddUser(adminSUserDTO);
         _userService.AddUser(adminPUserDTO);
+        _userService.AddUser(adminPUserDTO2);
     }
 
     [TestMethod]
@@ -216,6 +228,7 @@ public class ResourcesServiceTest
         Assert.AreEqual("Updated description", resource.Description);
     }
     [TestMethod]
+    [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void UpdateResource_ShouldThrowException_WhenResourceIsNotExclusive()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
@@ -278,6 +291,7 @@ public class ResourcesServiceTest
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
         
     }
+    
 
     [TestMethod]
     public void DeleteResource_ShouldDeleteResource_WhenResourceExists()
