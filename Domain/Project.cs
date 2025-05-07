@@ -4,13 +4,9 @@ namespace Domain
 {
     public class Project
     {
-        public string name;
-        public string description;
-        public DateTime startDate;
-        public List<User> members;
-        public List<Task> tasks;
-        public List<Notification> notifications;
-        public User adminProject;
+        private string name;
+        private string description;
+        private DateTime startDate;
 
         public string Name
         {
@@ -54,39 +50,35 @@ namespace Domain
             }
         }
 
-        public List<User> Members { get; set; }
-        public List<Task> Tasks { get; set; }
-
-        public List<Notification> Notifications { get; set; }
+        public List<User> Members { get; set; } = new List<User>();
+        public List<Task> Tasks { get; set; } = new List<Task>();
+        public List<Notification> Notifications { get; set; } = new List<Notification>();
         public User AdminProject { get; set; }
 
         public Project()
         {
-            this.Members = new List<User>();
-            this.Tasks = new List<Task>();
-            this.Notifications = new List<Notification>();
         }
 
         public Project(string name, string description, DateTime startDate)
         {
-            this.Name = name;
-            this.Description = description;
-            this.StartDate = startDate;
+            Name = name;
+            Description = description;
+            StartDate = startDate;
         }
 
         public void AddMember(User user)
         {
-            this.Members.Add(user);
+            Members.Add(user);
         }
 
         public void AddTask(Task task)
         {
-            this.Tasks.Add(task);
+            Tasks.Add(task);
         }
 
         public void AddNotification(Notification notification)
         {
-            this.Notifications.Add(notification);
+            Notifications.Add(notification);
         }
     }
 }
