@@ -248,4 +248,22 @@ public class TaskServiceTest
         Assert.AreEqual("Task 1", tasks[0].Title);
         Assert.AreEqual("Task 2", tasks[1].Title);
     }
+
+    [TestMethod]
+    public void GetTask_ShouldReturnTask_WhenTaskExists()
+    {
+        var task1 = new Task("Task 1", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(),
+            new List<Resource>());
+        var task2 = new Task("Task 2", "Description", DateTime.Now.AddDays(2), 3, new List<Task>(), new List<Task>(),
+            new List<Resource>());
+
+        _database.projects.AddTask("Generic Project", task1);
+        _database.projects.AddTask("Generic Project", task2);
+
+        var taskDTO = _taskService.GetTask("Generic Project", task1.Id);
+
+        Assert.AreEqual("Task 1", taskDTO.Title);
+        Assert.AreEqual("Description", taskDTO.Description);
+        Assert.AreEqual(5, taskDTO.Duration);
+    }
 }
