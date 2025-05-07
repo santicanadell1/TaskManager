@@ -58,6 +58,21 @@ public class AdminPService
         _database.projects.RemoveProject(projectName);
     }
 
+    public void UpdateProject(string projectNameToUpdate, ProjectDTO updatedProjectDTO)
+    {
+        _database.projects.UpdateProject(projectNameToUpdate, ToEntity(updatedProjectDTO));
+    }
+
+    public Project ToEntity(ProjectDTO projectDTO)
+    {
+        return new Project
+        {
+            Name = projectDTO.Name,
+            Description = projectDTO.Description,
+            StartDate = projectDTO.StartDate
+        };
+    }
+
     private User ToEntity(UserDTO userDTO)
     {
         return new User
