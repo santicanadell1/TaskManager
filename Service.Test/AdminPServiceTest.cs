@@ -139,4 +139,23 @@ public class AdminPServiceTests
         Assert.AreEqual("Project 1", projects[0].Name);
         Assert.AreEqual("Project 2", projects[1].Name);
     }
+
+    [TestMethod]
+    public void GetProjectByName_ShouldReturnProject_WhenProjectExists()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now
+        };
+
+        _service.CreateProject(projectDTO);
+
+        var project = _service.GetProjectByName("Test Project");
+
+        Assert.IsNotNull(project);
+        Assert.AreEqual("Test Project", project.Name);
+        Assert.AreEqual("Test Description", project.Description);
+    }
 }
