@@ -14,6 +14,7 @@ public class ResourcesServiceTest
     private Login _loginService;
     private UserService _userService;
     private AdminPService _adminProjectService;
+    private TaskService _taskService;
     [TestInitialize]
     public void TestSetUp()
     {
@@ -21,6 +22,8 @@ public class ResourcesServiceTest
         _loginService = new Login(_database);
         _userService = new UserService(_database);
         _resourceService = new ResourceService(_database);
+        _adminProjectService = new AdminPService(_database);
+        _taskService = new TaskService(_database);
 
         var adminSUserDTO = new UserDTO
         {
@@ -163,7 +166,7 @@ public class ResourcesServiceTest
     [TestMethod]
     public void UpdateResource_ShouldUpdateResource_WhenResourceIsExclusive()
     {
-        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
         var resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
@@ -172,19 +175,28 @@ public class ResourcesServiceTest
         };
 
         _resourceService.AddResource(resourceDTO);
-        
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
         
-        Project project = new Project();
+        ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
-        project.AdminProject = _database.users.Get(u => u.Email == "adminProject.user@example.com");
+        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
         
-        Task task = new Task("Title1", "Description1" , DateTime.Today, 5,new List<Task>(), new List<Task>(),new List<Resource>(){addedResource});
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Title1", 
+            Description = "Description1" , 
+            ExpectedStartDate = DateTime.Today, 
+            Duration = 5,
+            PreviousTasks = new List<Task>(), 
+            SameTimeTasks = new List<Task>(),
+            Resources = new List<Resource>(){addedResource}
+        };
         
-        project.AddTask(task);
-        _adminProjectService.Add(project);
+        _adminProjectService.CreateProject(project);
+        _taskService.AddTask("Project1",task );
        
         var updatedResourceDTO = new ResourceDTO
         {
@@ -192,7 +204,7 @@ public class ResourcesServiceTest
             Type = "TypeB",
             Description = "Updated description"
         };
-
+        
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
 
         var resource = _database.resources.Get(r =>
