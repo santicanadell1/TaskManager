@@ -53,6 +53,7 @@ public class ResourcesServiceTest
     [TestMethod]
     public void AddResource_ShouldAddResource_WhenValidDTO()
     {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
         var resourceDTO = new ResourceDTO
         {
             Name = "Resource1",

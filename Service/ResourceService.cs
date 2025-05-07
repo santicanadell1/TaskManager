@@ -3,6 +3,7 @@ using DataAccess.ResourceRepositoryExceptions;
 using Domain;
 using Domain.Exceptions;
 using Service.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace Service
 {
@@ -102,6 +103,43 @@ namespace Service
                 Id = resourceDTO.Id
             };
             return resource;
+        }
+        
+        private void CheckAdminRole(Resource resource)
+        {
+            var currentUser = LoggedUser.Current;
+            List<Project> projects = GetProjectsThatAreUsingResource(resource);
+            
+            if (currentUser == null || !currentUser.Roles.Contains(Rol.AdminSystem) || CheckAdminProjectRole(resource))
+            {
+                throw new UnauthorizedAdminAccessException();
+            }
+        }
+        
+        private List<Project> GetProjectsThatAreUsingResource(Resource resource)
+        {
+            List<Project> projects = _database.projects.GetAllProjects();
+            List<Project> projectsThatAreUsingResource = new List<Project>();
+            foreach (var project in projects)
+            {
+                foreach (var task in project.Tasks)
+                {
+                    if (task.Resource.Contains(resource))
+                    {
+                        projectsThatAreUsingResource.Add(project);
+                    }
+                }
+            }
+            return projectsThatAreUsingResource;
+        }
+
+        private bool CheckAdminProjectRole(Resource resource)
+        {
+            var currentUser = LoggedUser.Current;
+            List<Project> projects = GetProjectsThatAreUsingResource(resource);
+            if (projects.Count == 0) return false;
+            return currentUser.Roles.Contains(Rol.AdminProject) && (projects.Count == 1 &&
+                   !(projects[0].AdminProject.Email.Equals(currentUser.Email)));
         }
     }
 }
