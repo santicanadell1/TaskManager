@@ -61,6 +61,7 @@ namespace Service
 
         public void UpdateResource(int? id, ResourceDTO updatedResourceDTO)
         {
+            isAbleToModifyResource(GetResourceObject(id));
             Resource resourceToUpdate = GetResourceObject(id);
 
             Resource updatedResource = ToEntity(updatedResourceDTO);
