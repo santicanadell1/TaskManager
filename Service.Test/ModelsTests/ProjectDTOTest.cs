@@ -42,4 +42,22 @@ public class ProjectDTOTests
 
         Assert.IsFalse(isValid);
     }
+
+
+    [TestMethod]
+    public void Validate_ShouldNotThrowValidationException_WhenAllFieldsAreValid()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Parse("")
+        };
+
+        var validationResults = new System.Collections.Generic.List<ValidationResult>();
+        bool isValid =
+            Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
+
+        Assert.IsTrue(isValid);
+    }
 }
