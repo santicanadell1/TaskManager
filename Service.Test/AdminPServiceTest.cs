@@ -66,4 +66,25 @@ public class AdminPServiceTests
         Assert.IsTrue(project.Members.Count > 0);
         Assert.AreEqual("John", project.Members[0].FirstName);
     }
+
+    [TestMethod]
+    public void RemoveProject_ShouldRemoveProject_WhenValid()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "New Project",
+            Description = "Project Description",
+            StartDate = DateTime.Now
+        };
+
+        _service.CreateProject(projectDTO);
+
+        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        Assert.IsNotNull(project);
+
+        _service.RemoveProject("New Project");
+
+        project = _database.projects.GetProject(p => p.Name == "New Project");
+        Assert.IsNull(project);
+    }
 }
