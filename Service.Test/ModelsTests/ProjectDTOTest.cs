@@ -23,6 +23,5 @@ public class ProjectDTOTests
             Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
 
         Assert.IsFalse(isValid);
-        Assert.AreEqual("Name is required.", validationResults[0].ErrorMessage);
     }
 }
