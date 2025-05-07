@@ -18,8 +18,16 @@ namespace Service
 
         public void AddResource(ResourceDTO resourceDTO)
         {
-            var resource = ToEntity(resourceDTO);
-            _database.resources.AddResource(resource);
+            if (isAdminSystem())
+            {
+                var resource = ToEntity(resourceDTO);
+                _database.resources.AddResource(resource);
+            }
+            else
+            {
+                throw new UnauthorizedAdminAccessException();
+            }
+            
         }
 
         public ResourceDTO Get(int? id)
@@ -105,15 +113,21 @@ namespace Service
             return resource;
         }
         
-        private void CheckAdminRole(Resource resource)
+        private void isAbleToModifyResource(Resource resource)
         {
             var currentUser = LoggedUser.Current;
             List<Project> projects = GetProjectsThatAreUsingResource(resource);
             
-            if (currentUser == null || !currentUser.Roles.Contains(Rol.AdminSystem) || isExclusive(resource))
+            if (currentUser == null || !isAdminSystem() || isExclusive(resource))
             {
                 throw new UnauthorizedAdminAccessException();
             }
+        }
+
+        private bool isAdminSystem()
+        {
+            var currentUser = LoggedUser.Current;
+            return currentUser.Roles.Contains(Rol.AdminSystem);
         }
         
         private List<Project> GetProjectsThatAreUsingResource(Resource resource)
