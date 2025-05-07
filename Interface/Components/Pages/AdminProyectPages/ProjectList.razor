@@ -15,10 +15,14 @@
             {
                 <li class="list-group-item">
                     <span>@project.Name</span>
-                    <button class="view-options-btn @GetButtonClass(project)"
-                            @onclick="() => ShowProjectOptions(project)">View Options
-                    </button>
+                    <div class="button-container">
+                        <button class="view-options-btn @GetButtonClass(project)" @onclick="() => ShowProjectOptions(project)">View Options</button>
+                        <button class="btn-danger btn-sm" @onclick="() => RemoveProject(project)">Remove Project</button>
+                    </div>
                 </li>
+
+
+
             }
         </ul>
     }
@@ -121,6 +125,18 @@
     private void CloseTaskListModal(bool isClosed)
     {
         showTaskListModal = isClosed;
+    }
+
+    private void RemoveProject(Project project)
+    {
+        // Eliminar el proyecto de la lista
+        projects.Remove(project);
+
+        // Si el proyecto eliminado es el que está seleccionado, limpiamos la variable selectedProject
+        if (selectedProject == project)
+        {
+            selectedProject = null;
+        }
     }
 
     public string GetButtonClass(Project project)
