@@ -113,4 +113,30 @@ public class AdminPServiceTests
 
         _service.UpdateProject("Old Project", updatedDTO);
     }
+
+    [TestMethod]
+    public void GetAllProjects_ShouldReturnAllProjects()
+    {
+        var projectDTO1 = new ProjectDTO
+        {
+            Name = "Project 1",
+            Description = "Description 1",
+            StartDate = DateTime.Now
+        };
+        var projectDTO2 = new ProjectDTO
+        {
+            Name = "Project 2",
+            Description = "Description 2",
+            StartDate = DateTime.Now.AddDays(1)
+        };
+
+        _service.CreateProject(projectDTO1);
+        _service.CreateProject(projectDTO2);
+
+        var projects = _service.GetAllProjects();
+
+        Assert.AreEqual(2, projects.Count);
+        Assert.AreEqual("Project 1", projects[0].Name);
+        Assert.AreEqual("Project 2", projects[1].Name);
+    }
 }
