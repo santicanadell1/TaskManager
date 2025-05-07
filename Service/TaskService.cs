@@ -46,6 +46,26 @@ namespace Service
             _database.projects.RemoveTask(projectName, task.Id);
         }
 
+        public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+            if (task == null)
+            {
+                throw new TaskNotFoundException();
+            }
+
+            var updatedTask = ToEntity(taskDTO);
+            updatedTask.Id = task.Id;
+
+            _database.projects.UpdateTask(projectName, taskId, updatedTask);
+        }
+
 
         public DateTime CalculateEarlyStart(Task task)
         {
