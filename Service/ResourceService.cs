@@ -110,7 +110,7 @@ namespace Service
             var currentUser = LoggedUser.Current;
             List<Project> projects = GetProjectsThatAreUsingResource(resource);
             
-            if (currentUser == null || !currentUser.Roles.Contains(Rol.AdminSystem) || CheckAdminProjectRole(resource))
+            if (currentUser == null || !currentUser.Roles.Contains(Rol.AdminSystem) || isExclusive(resource))
             {
                 throw new UnauthorizedAdminAccessException();
             }
@@ -133,13 +133,15 @@ namespace Service
             return projectsThatAreUsingResource;
         }
 
-        private bool CheckAdminProjectRole(Resource resource)
+        private bool isExclusive(Resource resource)
         {
             var currentUser = LoggedUser.Current;
             List<Project> projects = GetProjectsThatAreUsingResource(resource);
+            bool currentUserIsAdmin = currentUser.Roles.Contains(Rol.AdminProject);
+            bool isUsedByOneProject = projects.Count == 1;
+            bool projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
             if (projects.Count == 0) return false;
-            return currentUser.Roles.Contains(Rol.AdminProject) && (projects.Count == 1 &&
-                   !(projects[0].AdminProject.Email.Equals(currentUser.Email)));
+            return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
         }
     }
 }
