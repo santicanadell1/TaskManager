@@ -20,10 +20,10 @@
                         @foreach (var member in membersList)
                         {
                             <div class="form-check">
-                                <InputCheckbox id="@member.Id" class="form-check-input"
-                                               @bind-Value="member.IsSelected"/>
-                                <label class="form-check-label" for="@member.Id">
-                                    @member.Name
+                                <InputCheckbox id="@member.Email" class="form-check-input"
+                                               @onchange="(e) => ToggleSelection(e, member.Email)"/>
+                                <label class="form-check-label" for="@member.Email">
+                                    @member.FirstName @member.LastName
                                 </label>
                             </div>
                         }
@@ -42,14 +42,9 @@
     [Parameter] public EventCallback<bool> OnClose { get; set; }
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public ProjectDTO SelectedProject { get; set; }
+    [Parameter] public List<UserDTO> membersList { get; set; }
 
-    private List<Service.Models.UserDTO> membersList = new List<Service.Models.UserDTO>
-    {
-        new Service.Models.UserDTO { FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" },
-        new Service.Models.UserDTO { FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com" },
-        new Service.Models.UserDTO { FirstName = "Michael", LastName = "Brown", Email = "michael.brown@example.com" },
-        new Service.Models.UserDTO { FirstName = "Lisa", LastName = "White", Email = "lisa.white@example.com" }
-    };
+    private HashSet<string> selectedEmails = new HashSet<string>();
 
     private void CloseModal()
     {
@@ -57,9 +52,24 @@
         OnClose.InvokeAsync(false);
     }
 
+    private void ToggleSelection(ChangeEventArgs e, string email)
+    {
+        if (e.Value is bool isSelected)
+        {
+            if (isSelected)
+            {
+                selectedEmails.Add(email);
+            }
+            else
+            {
+                selectedEmails.Remove(email);
+            }
+        }
+    }
+
     private void AddSelectedMembers()
     {
-        var selectedMembers = membersList.Where(m => m.IsSelected).ToList();
+        var selectedMembers = membersList.Where(m => selectedEmails.Contains(m.Email)).ToList();
 
         if (selectedMembers.Any())
         {
@@ -79,10 +89,7 @@
 
     private void ResetMemberSelections()
     {
-        foreach (var member in membersList)
-        {
-            member.IsSelected = false;
-        }
+        selectedEmails.Clear();
     }
 
 }

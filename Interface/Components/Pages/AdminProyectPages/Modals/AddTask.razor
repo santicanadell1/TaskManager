@@ -5,7 +5,8 @@
 <!-- Modal -->
 @if (IsVisible)
 {
-    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="createTaskModal" aria-hidden="true">
+    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="createTaskModal"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -28,27 +29,28 @@
                     }
 
                     <EditForm Model="@newTask" OnValidSubmit="HandleTaskSubmit">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
 
                         <div class="mb-3">
                             <label for="taskTitle" class="form-label">Task Title</label>
-                            <InputText id="taskTitle" class="form-control" @bind-Value="newTask.Title" required />
+                            <InputText id="taskTitle" class="form-control" @bind-Value="newTask.Title" required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="taskDescription" class="form-label">Description</label>
-                            <InputTextArea id="taskDescription" class="form-control" @bind-Value="newTask.Description" required />
+                            <InputTextArea id="taskDescription" class="form-control" @bind-Value="newTask.Description"
+                                           required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="startDate" class="form-label">Estimated Start Date</label>
-                            <InputDate id="startDate" class="form-control" @bind-Value="newTask.StartDate" required />
+                            <InputDate id="startDate" class="form-control" @bind-Value="newTask.StartDate" required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="duration" class="form-label">Duration (hours)</label>
-                            <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration" required />
+                            <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration" required/>
                         </div>
 
                         <!-- Resource Checklist -->
@@ -58,7 +60,8 @@
                                 @foreach (var resource in availableResources)
                                 {
                                     <div>
-                                        <InputCheckbox id="@resource.Id" class="form-check-input" @bind-Value="resource.IsSelected" />
+                                        <InputCheckbox id="@resource.Id" class="form-check-input"
+                                                       @bind-Value="resource.IsSelected"/>
                                         <label class="form-check-label" for="@resource.Id">@resource.Name</label>
                                     </div>
                                 }
@@ -82,7 +85,9 @@
                                         <option value="FS">Finish-to-Start (FS)</option>
                                         <option value="SS">Start-to-Start (SS)</option>
                                     </select>
-                                    <button class="btn btn-danger ms-2" @onclick="() => RemovePreviousTask(prevTask)">Remove</button>
+                                    <button class="btn btn-danger ms-2" @onclick="() => RemovePreviousTask(prevTask)">
+                                        Remove
+                                    </button>
                                 </div>
                             }
                             <button class="btn btn-info mt-2" @onclick="AddPreviousTask">Add Previous Task</button>
@@ -101,6 +106,7 @@
     [Parameter] public bool IsVisible { get; set; }
 
     private Task newTask = new Task();
+
     private List<Task> taskList = new List<Task>
     {
         new Task { Id = 1, Title = "Previous Task 1" },
@@ -130,7 +136,7 @@
     // Método para añadir una nueva tarea previa
     private void AddPreviousTask()
     {
-        errorMessage = string.Empty;  // Limpiar cualquier mensaje de error previo
+        errorMessage = string.Empty; // Limpiar cualquier mensaje de error previo
         previousTasks.Add(new PreviousTask()); // Añadir una nueva tarea previa vacía
     }
 
@@ -164,7 +170,7 @@
     {
         // Reseteamos las tareas previas y limpiamos los mensajes al cerrar el modal
         ResetPreviousTasks();
-        OnClose.InvokeAsync(false);  // Cerrar el modal
+        OnClose.InvokeAsync(false); // Cerrar el modal
     }
 
     private void HandleTaskSubmit()
@@ -211,4 +217,5 @@
         public int? SelectedTaskId { get; set; }
         public string DependencyType { get; set; } // "FS" o "SS"
     }
+
 }
