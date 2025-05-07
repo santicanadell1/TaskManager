@@ -12,12 +12,30 @@ public class AdminPServiceTests
 {
     private InMemoryDatabase _database;
     private AdminPService _service;
+    private Login _login;
+    private UserService _userservice;
 
     [TestInitialize]
     public void Setup()
     {
         _database = new InMemoryDatabase();
         _service = new AdminPService(_database);
+        _userservice = new UserService(_database);
+        _login = new Login(_database);
+
+
+        var userDTO = new UserDTO
+        {
+            FirstName = "Admin",
+            LastName = "User",
+            Email = "admin.user@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "Password123@",
+            Roles = new List<Rol> { Rol.AdminProject }
+        };
+
+        _userservice.AddUser(userDTO);
+        _login.LoginUser(userDTO.Email, userDTO.Password);
     }
 
     [TestMethod]
