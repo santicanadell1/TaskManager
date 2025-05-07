@@ -363,7 +363,7 @@ public class ResourcesServiceTest
     [TestMethod]
     public void DeleteResource_ShouldDeleteResource_WhenResourceIsExclusive()
     {
-        
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
         var resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
