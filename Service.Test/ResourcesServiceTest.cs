@@ -458,6 +458,7 @@ public class ResourcesServiceTest
         Assert.IsNotNull(addedResource);
 
         _resourceService.DeleteResource(addedResource.Id);
+        
     }
 
     [TestMethod]
