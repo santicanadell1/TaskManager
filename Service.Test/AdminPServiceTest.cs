@@ -87,4 +87,35 @@ public class AdminPServiceTests
         project = _database.projects.GetProject(p => p.Name == "New Project");
         Assert.IsNull(project);
     }
+
+
+    [TestMethod]
+    public void UpdateProject_ShouldUpdateProject_WhenValid()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Old Project",
+            Description = "Old Description",
+            StartDate = DateTime.Now
+        };
+
+        _service.CreateProject(projectDTO);
+
+        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        Assert.IsNotNull(project);
+
+        var updatedDTO = new ProjectDTO
+        {
+            Name = "Updated Project",
+            Description = "Updated Description",
+            StartDate = DateTime.Now.AddDays(1)
+        };
+
+        _service.UpdateProject("Old Project", updatedDTO);
+
+        project = _database.projects.GetProject(p => p.Name == "Updated Project");
+        Assert.IsNotNull(project);
+        Assert.AreEqual("Updated Description", project.Description);
+        Assert.AreEqual(updatedDTO.StartDate, project.StartDate);
+    }
 }
