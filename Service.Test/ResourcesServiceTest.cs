@@ -460,6 +460,46 @@ public class ResourcesServiceTest
         _resourceService.DeleteResource(addedResource.Id);
         
     }
+    [TestMethod]
+    public void DeleteResource_ShouldThrowExceptin_WhenResourceIsNotExclusiveForTheAdmin()
+    {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        var resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1",
+        };
+
+        _resourceService.AddResource(resourceDTO);
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        
+        ProjectDTO project = new ProjectDTO();
+        project.Name = "Project1";
+        project.Description = "Description of Project1";
+        project.StartDate = DateTime.Today;
+        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
+        
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Title1", 
+            Description = "Description1" , 
+            ExpectedStartDate = DateTime.Today, 
+            Duration = 5,
+            PreviousTasks = new List<Task>(), 
+            SameTimeTasks = new List<Task>(),
+            Resources = new List<Resource>(){addedResource}
+        };
+        
+        _adminProjectService.CreateProject(project);
+        _taskService.AddTask("Project1",task );
+        
+        Assert.IsNotNull(addedResource);
+        _loginService.LoginUser("adminProject2.user@example.com", "AdminPassword123@");
+
+        _resourceService.DeleteResource(addedResource.Id);
+    }
 
     [TestMethod]
     [ExpectedException(typeof(ResourceNotFoundException))]
