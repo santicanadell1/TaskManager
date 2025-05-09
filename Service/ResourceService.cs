@@ -3,6 +3,7 @@ using DataAccess.ResourceRepositoryExceptions;
 using Domain;
 using Domain.Exceptions;
 using Service.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace Service
 {
@@ -17,8 +18,16 @@ namespace Service
 
         public void AddResource(ResourceDTO resourceDTO)
         {
-            var resource = ToEntity(resourceDTO);
-            _database.resources.AddResource(resource);
+            if (isAdminSystem())
+            {
+                var resource = ToEntity(resourceDTO);
+                _database.resources.AddResource(resource);
+            }
+            else
+            {
+                throw new UnauthorizedAdminAccessException();
+            }
+            
         }
 
         public ResourceDTO Get(int? id)
@@ -52,6 +61,7 @@ namespace Service
 
         public void UpdateResource(int? id, ResourceDTO updatedResourceDTO)
         {
+            isAbleToModifyResource(GetResourceObject(id));
             Resource resourceToUpdate = GetResourceObject(id);
 
             Resource updatedResource = ToEntity(updatedResourceDTO);
@@ -60,7 +70,8 @@ namespace Service
         }
 
         public void DeleteResource(int? id)
-        {
+        {   
+            isAbleToModifyResource(GetResourceObject(id));
             try
             {
                 _database.resources.Delete(id);
@@ -102,6 +113,59 @@ namespace Service
                 Id = resourceDTO.Id
             };
             return resource;
+        }
+
+        private void isAbleToModifyResource(Resource resource)
+        {
+            var currentUser = LoggedUser.Current;
+
+            if (currentUser == null)
+            {
+                throw new UnauthorizedAdminAccessException();
+            }
+            if (currentUser.Roles.Contains(Rol.AdminSystem))
+            {
+                return;
+            }
+            if (currentUser.Roles.Contains(Rol.AdminProject) && isExclusive(resource))
+            {
+                return;
+            }
+            throw new UnauthorizedAdminAccessException();
+        }
+
+        private bool isAdminSystem()
+        {
+            var currentUser = LoggedUser.Current;
+            return currentUser.Roles.Contains(Rol.AdminSystem);
+        }
+        
+        private List<Project> GetProjectsThatAreUsingResource(Resource resource)
+        {
+            List<Project> projects = _database.projects.GetAllProjects();
+            List<Project> projectsThatAreUsingResource = new List<Project>();
+            foreach (var project in projects)
+            {
+                foreach (var task in project.Tasks)
+                {
+                    if (task.Resource.Contains(resource))
+                    {
+                        projectsThatAreUsingResource.Add(project);
+                    }
+                }
+            }
+            return projectsThatAreUsingResource;
+        }
+
+        private bool isExclusive(Resource resource)
+        {
+            var currentUser = LoggedUser.Current;
+            List<Project> projects = GetProjectsThatAreUsingResource(resource);
+            if (projects.Count == 0) return false;
+            bool currentUserIsAdmin = currentUser.Roles.Contains(Rol.AdminProject);
+            bool isUsedByOneProject = projects.Count == 1;
+            bool projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
+            return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
         }
     }
 }
