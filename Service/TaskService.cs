@@ -5,7 +5,6 @@ using Domain.Exceptions.TaskRepositoryExceptions;
 using Service.Models;
 using Task = Domain.Task;
 
-
 namespace Service
 {
     public class TaskService
@@ -80,10 +79,10 @@ namespace Service
                 Description = t.Description,
                 ExpectedStartDate = t.ExpectedStartDate,
                 Duration = t.Duration,
-                PreviousTasks = t.PreviousTasks,
-                SameTimeTasks = t.SameTimeTasks,
-                State = t.State,
-                Resources = t.Resource
+                PreviousTasks = FromEntityList(t.PreviousTasks),
+                SameTimeTasks = FromEntityList(t.SameTimeTasks),
+                State = (StateDTO)t.State, 
+                Resources = FromResourceEntityList(t.Resource)
             }).ToList();
 
             return taskDTOs;
@@ -106,7 +105,6 @@ namespace Service
             return FromEntity(task);
         }
 
-
         public DateTime CalculateEarlyStart(Task task)
         {
             if (task.PreviousTasks == null || task.PreviousTasks.Count == 0)
@@ -118,12 +116,10 @@ namespace Service
             return latestPreviousEnd;
         }
 
-
         public DateTime CalculateEarlyFinish(Task task)
         {
             return task.ExpectedStartDate.AddDays(task.Duration);
         }
-
 
         public DateTime CalculateLateStart(Task task)
         {
@@ -153,7 +149,6 @@ namespace Service
                    CalculateEarlyFinish(task) == CalculateLateFinish(task);
         }
 
-
         private TaskDTO FromEntity(Task task)
         {
             return new TaskDTO()
@@ -162,12 +157,40 @@ namespace Service
                 Description = task.Description,
                 ExpectedStartDate = task.ExpectedStartDate,
                 Duration = task.Duration,
-                PreviousTasks = task.PreviousTasks ?? new List<Task>(),
-                SameTimeTasks = task.SameTimeTasks ?? new List<Task>(),
-                State = task.State
+                PreviousTasks = FromEntityList(task.PreviousTasks) ?? new List<TaskDTO>(),
+                SameTimeTasks = FromEntityList(task.SameTimeTasks) ?? new List<TaskDTO>(),
+                State = (StateDTO)task.State, 
+                Resources = FromResourceEntityList(task.Resource) ?? new List<ResourceDTO>()
             };
         }
 
+        private List<TaskDTO> FromEntityList(List<Task> tasks)
+        {
+            var taskDTOs = new List<TaskDTO>();
+            foreach (var task in tasks)
+            {
+                taskDTOs.Add(FromEntity(task));
+            }
+
+            return taskDTOs;
+        }
+
+        private List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
+        {
+            var resourceDTOs = new List<ResourceDTO>();
+            foreach (var resource in resources)
+            {
+                resourceDTOs.Add(new ResourceDTO
+                {
+                    Name = resource.Name,
+                    Type = resource.Type,
+                    Description = resource.Description,
+                    Id = resource.Id
+                });
+            }
+
+            return resourceDTOs;
+        }
 
         private Task ToEntity(TaskDTO taskDTO)
         {
@@ -176,10 +199,32 @@ namespace Service
                 taskDTO.Description,
                 taskDTO.ExpectedStartDate,
                 taskDTO.Duration,
-                taskDTO.PreviousTasks ?? new List<Task>(),
-                taskDTO.SameTimeTasks ?? new List<Task>(),
-                taskDTO.Resources ?? new List<Resource>()
+                ToEntityList(taskDTO.PreviousTasks),
+                ToEntityList(taskDTO.SameTimeTasks),
+                ToResourceEntityList(taskDTO.Resources)
             );
+        }
+
+        private List<Task> ToEntityList(List<TaskDTO> taskDTOs)
+        {
+            var tasks = new List<Task>();
+            foreach (var taskDTO in taskDTOs)
+            {
+                tasks.Add(ToEntity(taskDTO));
+            }
+
+            return tasks;
+        }
+
+        private List<Resource> ToResourceEntityList(List<ResourceDTO> resourceDTOs)
+        {
+            var resources = new List<Resource>();
+            foreach (var resourceDTO in resourceDTOs)
+            {
+                resources.Add(new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description));
+            }
+
+            return resources;
         }
     }
 }

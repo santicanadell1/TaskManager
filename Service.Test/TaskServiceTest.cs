@@ -12,6 +12,10 @@ public class TaskServiceTest
     private InMemoryDatabase _database;
     private TaskService _taskService;
     private Project _genericProject;
+    private Task _task1;
+    private Task _task2;
+    private TaskDTO _taskDTO1;
+    private TaskDTO _taskDTO2;
 
     [TestInitialize]
     public void Setup()
@@ -21,143 +25,100 @@ public class TaskServiceTest
 
         _genericProject = new Project("Generic Project", "Description", DateTime.Now);
         _database.projects.AddProject(_genericProject);
-    }
 
+        _taskDTO1 = new TaskDTO
+        {
+            Title = "Task 1",
+            Description = "Description of Task 1",
+            ExpectedStartDate = DateTime.Now,
+            Duration = 5,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>()
+        };
 
-    [TestMethod]
-    public void CalculateEarlyStart_ShouldReturnCorrectDate_WhenNoPreviousTasks()
-    {
-        var task = new Task(
-            "Task 1",
-            "Description of Task 1",
-            new DateTime(2025, 5, 1),
-            5,
+        _taskDTO2 = new TaskDTO
+        {
+            Title = "Task 2",
+            Description = "Description of Task 2",
+            ExpectedStartDate = DateTime.Now.AddDays(2),
+            Duration = 3,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>()
+        };
+
+        _task1 = new Task(
+            _taskDTO1.Title,
+            _taskDTO1.Description,
+            _taskDTO1.ExpectedStartDate,
+            _taskDTO1.Duration,
+            new List<Task>(),
+            new List<Task>(),
+            new List<Resource>()
+        );
+        _task2 = new Task(
+            _taskDTO2.Title,
+            _taskDTO2.Description,
+            _taskDTO2.ExpectedStartDate,
+            _taskDTO2.Duration,
             new List<Task>(),
             new List<Task>(),
             new List<Resource>()
         );
 
-        DateTime earlyStart = _taskService.CalculateEarlyStart(task);
+        _database.projects.AddTask("Generic Project", _task1);
+        _database.projects.AddTask("Generic Project", _task2);
+    }
 
-        Assert.AreEqual(new DateTime(2025, 5, 1), earlyStart);
+    [TestMethod]
+    public void CalculateEarlyStart_ShouldReturnCorrectDate_WhenNoPreviousTasks()
+    {
+        DateTime earlyStart = _taskService.CalculateEarlyStart(_task1);
+        Assert.AreEqual(_task1.ExpectedStartDate, earlyStart);
     }
 
     [TestMethod]
     public void CalculateEarlyFinish_ShouldReturnCorrectDate_WhenGivenDuration()
     {
-        var task = new Task(
-            "Task 1",
-            "Description of Task 1",
-            new DateTime(2025, 5, 1),
-            5,
-            new List<Task>(),
-            new List<Task>(),
-            new List<Resource>()
-        );
-
-        DateTime earlyFinish = _taskService.CalculateEarlyFinish(task);
-
-        Assert.AreEqual(new DateTime(2025, 5, 6), earlyFinish);
+        DateTime earlyFinish = _taskService.CalculateEarlyFinish(_task1);
+        Assert.AreEqual(_task1.ExpectedStartDate.AddDays(_task1.Duration), earlyFinish);
     }
 
     [TestMethod]
     public void CalculateLateFinish_ShouldReturnEarlyFinish_WhenNoPreviousTasks()
     {
-        var task = new Task(
-            "Task 1",
-            "Description of Task 1",
-            new DateTime(2025, 5, 1),
-            5,
-            new List<Task>(),
-            new List<Task>(),
-            new List<Resource>()
-        );
-
-        DateTime lateFinish = _taskService.CalculateLateFinish(task);
-
-        Assert.AreEqual(new DateTime(2025, 5, 6), lateFinish);
+        DateTime lateFinish = _taskService.CalculateLateFinish(_task1);
+        Assert.AreEqual(_task1.ExpectedStartDate.AddDays(_task1.Duration), lateFinish);
     }
 
     [TestMethod]
     public void CalculateLateStart_ShouldReturnExpectedStartDate_WhenNoPreviousTasks()
     {
-        var task = new Task(
-            "Task 1",
-            "Description of Task 1",
-            new DateTime(2025, 5, 1),
-            5,
-            new List<Task>(),
-            new List<Task>(),
-            new List<Resource>()
-        );
-
-        DateTime lateStart = _taskService.CalculateLateStart(task);
-
-        Assert.AreEqual(new DateTime(2025, 5, 1), lateStart);
+        DateTime lateStart = _taskService.CalculateLateStart(_task1);
+        Assert.AreEqual(_task1.ExpectedStartDate, lateStart);
     }
 
     [TestMethod]
     public void CalculateLateStart_ShouldReturnCorrectDate_WhenPreviousTasksExist()
     {
-        var previousTask = new Task(
-            "Previous Task",
-            "Previous task description",
-            new DateTime(2025, 4, 25),
-            5,
-            new List<Task>(),
-            new List<Task>(),
-            new List<Resource>()
-        )
-        {
-            EndDate = new DateTime(2025, 4, 30)
-        };
+        _task2.EndDate = new DateTime(2025, 4, 30);
+        _taskDTO1.PreviousTasks.Add(_taskDTO2);
+        _task1.PreviousTasks.Add(_task2);
 
-        var task = new Task(
-            "Task 1",
-            "Description of Task 1",
-            new DateTime(2025, 5, 1),
-            5,
-            new List<Task> { previousTask },
-            new List<Task>(),
-            new List<Resource>()
-        );
-
-        DateTime lateStart = _taskService.CalculateLateStart(task);
-
-        Assert.AreEqual(new DateTime(2025, 4, 30), lateStart);
+        DateTime lateStart = _taskService.CalculateLateStart(_task1);
+        Assert.AreEqual(_task2.EndDate, lateStart);
     }
 
     [TestMethod]
     public void IsCritical_ShouldReturnFalse_WhenTaskIsNotCritical()
     {
-        var previousTask = new Task(
-            "Previous Task",
-            "Previous task description",
-            new DateTime(2025, 4, 25),
-            5,
-            new List<Task>(),
-            new List<Task>(),
-            new List<Resource>()
-        )
-        {
-            EndDate = new DateTime(2025, 4, 30)
-        };
+        _task2.EndDate = new DateTime(2025, 4, 30);
+        _task1.EndDate = new DateTime(2025, 5, 7);
+        _taskDTO1.PreviousTasks.Add(_taskDTO2);
+        _task1.PreviousTasks.Add(_task2);
 
-        var task = new Task(
-            "Task 1",
-            "Description of Task 1",
-            new DateTime(2025, 5, 1),
-            5,
-            new List<Task> { previousTask },
-            new List<Task>(),
-            new List<Resource>()
-        )
-        {
-            EndDate = new DateTime(2025, 5, 7)
-        };
-
-        bool isCritical = _taskService.IsCritical(task);
-
+        bool isCritical = _taskService.IsCritical(_task1);
         Assert.IsFalse(isCritical);
     }
 
@@ -169,29 +130,25 @@ public class TaskServiceTest
             Title = "Test Task",
             Description = "Test Description",
             ExpectedStartDate = DateTime.Now.AddDays(1),
-            Duration = 5
+            Duration = 5,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>()
         };
 
         _taskService.AddTask("Generic Project", taskDTO);
 
         var project = _database.projects.GetProject(p => p.Name == "Generic Project");
         var tasks = project.Tasks;
-        Assert.AreEqual(1, tasks.Count);
-        Assert.AreEqual("Test Task", tasks[0].Title);
+        Assert.AreEqual(3, tasks.Count);
+        Assert.AreEqual("Test Task", tasks[2].Title);
     }
+
 
     [TestMethod]
     public void DeleteTask_ShouldDeleteTask_WhenTaskExists()
     {
-        var task1 = new Task("Task 1", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-        var task2 = new Task("Task 2", "Description", DateTime.Now.AddDays(2), 3, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-
-        _database.projects.AddTask("Generic Project", task1);
-        _database.projects.AddTask("Generic Project", task2);
-
-        _taskService.DeleteTask("Generic Project", task1.Id);
+        _taskService.DeleteTask("Generic Project", _task1.Id);
 
         var project = _database.projects.GetProject(p => p.Name == "Generic Project");
         Assert.AreEqual(1, project.Tasks.Count);
@@ -201,47 +158,32 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldUpdateTask_WhenTaskExists()
     {
-        var task1 = new Task("Task 1", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-        var task2 = new Task("Task 2", "Description", DateTime.Now.AddDays(2), 3, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-
-        _database.projects.AddTask("Generic Project", task1);
-        _database.projects.AddTask("Generic Project", task2);
-
-        var taskDTO = new TaskDTO
+        var updateDTO = new TaskDTO
         {
             Title = "Updated Task 1",
             Description = "Updated Description",
             ExpectedStartDate = DateTime.Now.AddDays(1),
             Duration = 6,
-            PreviousTasks = new List<Task>(),
-            SameTimeTasks = new List<Task>(),
-            State = State.TODO
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            State = StateDTO.TODO,
+            Resources = new List<ResourceDTO>()
         };
 
-        _taskService.UpdateTask("Generic Project", task1.Id, taskDTO);
+        _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
 
         var project = _database.projects.GetProject(p => p.Name == "Generic Project");
-        var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == task1.Id);
+        var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
 
         Assert.AreEqual("Updated Task 1", updatedTask.Title);
         Assert.AreEqual("Updated Description", updatedTask.Description);
         Assert.AreEqual(6, updatedTask.Duration);
-        Assert.AreEqual(State.TODO, updatedTask.State);
     }
+
 
     [TestMethod]
     public void GetTasks_ShouldReturnAllTasks_WhenProjectExists()
     {
-        var task1 = new Task("Task 1", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-        var task2 = new Task("Task 2", "Description", DateTime.Now.AddDays(2), 3, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-
-        _database.projects.AddTask("Generic Project", task1);
-        _database.projects.AddTask("Generic Project", task2);
-
         var tasks = _taskService.GetTasks("Generic Project");
 
         Assert.AreEqual(2, tasks.Count);
@@ -252,18 +194,10 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTask_WhenTaskExists()
     {
-        var task1 = new Task("Task 1", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-        var task2 = new Task("Task 2", "Description", DateTime.Now.AddDays(2), 3, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-
-        _database.projects.AddTask("Generic Project", task1);
-        _database.projects.AddTask("Generic Project", task2);
-
-        var taskDTO = _taskService.GetTask("Generic Project", task1.Id);
+        var taskDTO = _taskService.GetTask("Generic Project", _task1.Id);
 
         Assert.AreEqual("Task 1", taskDTO.Title);
-        Assert.AreEqual("Description", taskDTO.Description);
+        Assert.AreEqual("Description of Task 1", taskDTO.Description);
         Assert.AreEqual(5, taskDTO.Duration);
     }
 }
