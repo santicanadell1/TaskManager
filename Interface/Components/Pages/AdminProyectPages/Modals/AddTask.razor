@@ -6,6 +6,9 @@
 @rendermode InteractiveServer
 @namespace ModalsProject
 
+
+<link href="styles/styleModalsAdminProject.css" rel="stylesheet"/>
+
 @if (IsVisible)
 {
     <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="createTaskModal"
@@ -32,27 +35,29 @@
                     }
 
                     <EditForm Model="@newTask" OnValidSubmit="HandleTaskSubmit">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
 
                         <div class="mb-3">
                             <label for="taskTitle" class="form-label">Task Title</label>
-                            <InputText id="taskTitle" class="form-control" @bind-Value="newTask.Title" required />
+                            <InputText id="taskTitle" class="form-control" @bind-Value="newTask.Title" required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="taskDescription" class="form-label">Description</label>
-                            <InputTextArea id="taskDescription" class="form-control" @bind-Value="newTask.Description" required />
+                            <InputTextArea id="taskDescription" class="form-control" @bind-Value="newTask.Description"
+                                           required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="startDate" class="form-label">Estimated Start Date</label>
-                            <InputDate id="startDate" class="form-control" @bind-Value="newTask.ExpectedStartDate" required />
+                            <InputDate id="startDate" class="form-control" @bind-Value="newTask.ExpectedStartDate"
+                                       required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="duration" class="form-label">Duration (hours)</label>
-                            <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration" required />
+                            <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration" required/>
                         </div>
 
                         <!-- Resource Checklist -->
@@ -63,7 +68,7 @@
                                 {
                                     <div>
                                         <InputCheckbox id="@resource.Id" class="form-check-input"
-                                                       @onchange="(e) => ToggleResourceSelection(e, resource.Id)" />
+                                                       @onchange="(e) => ToggleResourceSelection(e, resource.Id)"/>
                                         <label class="form-check-label" for="@resource.Id">@resource.Name</label>
                                     </div>
                                 }
@@ -216,4 +221,5 @@
 
         CloseModal();
     }
+
 }
