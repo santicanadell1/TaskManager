@@ -81,7 +81,7 @@ namespace Service
                 Duration = t.Duration,
                 PreviousTasks = FromEntityList(t.PreviousTasks),
                 SameTimeTasks = FromEntityList(t.SameTimeTasks),
-                State = (StateDTO)t.State, 
+                State = (StateDTO)t.State,
                 Resources = FromResourceEntityList(t.Resource)
             }).ToList();
 
@@ -159,7 +159,7 @@ namespace Service
                 Duration = task.Duration,
                 PreviousTasks = FromEntityList(task.PreviousTasks) ?? new List<TaskDTO>(),
                 SameTimeTasks = FromEntityList(task.SameTimeTasks) ?? new List<TaskDTO>(),
-                State = (StateDTO)task.State, 
+                State = (StateDTO)task.State,
                 Resources = FromResourceEntityList(task.Resource) ?? new List<ResourceDTO>()
             };
         }
@@ -221,7 +221,8 @@ namespace Service
             var resources = new List<Resource>();
             foreach (var resourceDTO in resourceDTOs)
             {
-                resources.Add(new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description));
+                resources.Add(new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
+                    { Id = resourceDTO.Id });
             }
 
             return resources;
