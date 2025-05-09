@@ -1,7 +1,10 @@
-﻿@inject NavigationManager Navigation
+﻿@using Service
+@using Service.Models
+@inject AdminPService AdminPService
+@inject TaskService TaskService
+@inject NavigationManager Navigation
 @namespace ModalsProject
 
-<!-- Modal -->
 @if (IsVisible)
 {
     <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="assignTaskToMemberModal"
@@ -18,7 +21,7 @@
                         <option value="">-- Select a Member --</option>
                         @foreach (var member in membersList)
                         {
-                            <option value="@member.Id">@member.Name</option>
+                            <option value="@member.Email">@member.FirstName @member.LastName</option>
                         }
                     </select>
 
@@ -26,8 +29,12 @@
                     <div>
                         @foreach (var task in tasksList)
                         {
+                            <!-- 
+                                   @onchange="(e) => ToggleTaskSelection(e, task.Id)"/>
+                                -->
                             <div class="form-check">
-                                <InputCheckbox id="@task.Id" class="form-check-input" @bind-Value="task.IsSelected"/>
+                                <InputCheckbox id="@task.Id" class="form-check-input"/>
+                                              
                                 <label class="form-check-label" for="@task.Id">
                                     @task.Title
                                 </label>
@@ -47,72 +54,67 @@
 @code {
     [Parameter] public EventCallback<bool> OnClose { get; set; }
     [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public ProjectDTO SelectedProject { get; set; }
 
-    private int? selectedMemberId;
+    private string selectedMemberId;
+    private List<UserDTO> membersList = new List<UserDTO>();
+    private List<TaskDTO> tasksList = new List<TaskDTO>();
+    private HashSet<int> selectedTaskIds = new HashSet<int>();
 
-    private List<Member> membersList = new List<Member>
+    protected override void OnInitialized()
     {
-        new Member { Id = 1, Name = "John Doe" },
-        new Member { Id = 2, Name = "Jane Smith" },
-        new Member { Id = 3, Name = "Michael Brown" },
-        new Member { Id = 4, Name = "Lisa White" }
-    };
+        LoadMembers();
+        LoadTasks();
+    }
 
-    private List<Task> tasksList = new List<Task>
+    private void LoadMembers()
     {
-        new Task { Id = 1, Title = "Task 1" },
-        new Task { Id = 2, Title = "Task 2" },
-        new Task { Id = 3, Title = "Task 3" }
-    };
+        //membersList = TaskService.GetMembersOfProject(SelectedProject.Name);
+    }
+
+    private void LoadTasks()
+    {
+        tasksList = TaskService.GetTasks(SelectedProject.Name);
+    }
 
     private void CloseModal()
     {
-        ResetTaskSelections(); // Reset task selections and selected member when closing the modal
-        OnClose.InvokeAsync(false); // Close the modal
+        ResetTaskSelections();
+        OnClose.InvokeAsync(false);
     }
 
     private void AssignTasksToMember()
     {
-        // Logic to handle assigning tasks to the member
-        var selectedTasks = tasksList.Where(t => t.IsSelected).ToList();
-        var selectedMember = membersList.FirstOrDefault(m => m.Id == selectedMemberId);
+        //var selectedTasks = tasksList.Where(t => selectedTaskIds.Contains(t.Id)).ToList();
+        var selectedMember = membersList.FirstOrDefault(m => m.Email == selectedMemberId);
 
-        if (selectedMember != null && selectedTasks.Any())
+        //if (selectedMember != null && selectedTasks.Any())
         {
-            Console.WriteLine($"Assigned Tasks to {selectedMember.Name}: {string.Join(", ", selectedTasks.Select(t => t.Title))}");
-            // Perform the assignment logic (e.g., save the assignment in the database)
-        }
-        else
-        {
-            Console.WriteLine("No tasks selected or no member selected.");
+            //AdminPService.AssignTasksToMember(SelectedProject.Name, selectedMember.Email, selectedTasks);
         }
 
-        // Close the modal after assigning tasks
         CloseModal();
+    }
+
+    private void ToggleTaskSelection(ChangeEventArgs e, int taskId)
+    {
+        if (e.Value is bool isSelected)
+        {
+            if (isSelected)
+            {
+                selectedTaskIds.Add(taskId);
+            }
+            else
+            {
+                selectedTaskIds.Remove(taskId);
+            }
+        }
     }
 
     private void ResetTaskSelections()
     {
-        // Reset the IsSelected property for all tasks
-        foreach (var task in tasksList)
-        {
-            task.IsSelected = false;
-        }
-
-        selectedMemberId = null; // Reset the selected member
-    }
-
-    public class Member
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-
-    public class Task
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public bool IsSelected { get; set; } // Track whether the task is selected
+        selectedTaskIds.Clear();
+        selectedMemberId = null;
     }
 
 }

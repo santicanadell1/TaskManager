@@ -1112,6 +1112,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "DataAccess >= 1.0.0",
+      "Domain >= 1.0.0",
       "Service >= 1.0.0",
       "Syncfusion.Blazor >= 29.1.37"
     ]
@@ -1145,6 +1146,9 @@
           "projectReferences": {
             "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
               "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
+            },
+            "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Domain\\Domain.csproj": {
+              "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Domain\\Domain.csproj"
             },
             "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj": {
               "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj"

@@ -8,12 +8,12 @@
 
 @if (IsVisible)
 {
-    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="createTaskModal"
+    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="editTaskModal"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Create Task</h5>
+                    <h5 class="modal-title">Edit Task</h5>
                     <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -31,28 +31,31 @@
                         </div>
                     }
 
-                    <EditForm Model="@newTask" OnValidSubmit="HandleTaskSubmit">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+                    <EditForm Model="@selectedTask" OnValidSubmit="HandleTaskSubmit">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
 
                         <div class="mb-3">
                             <label for="taskTitle" class="form-label">Task Title</label>
-                            <InputText id="taskTitle" class="form-control" @bind-Value="newTask.Title" required />
+                            <InputText id="taskTitle" class="form-control" @bind-Value="selectedTask.Title" required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="taskDescription" class="form-label">Description</label>
-                            <InputTextArea id="taskDescription" class="form-control" @bind-Value="newTask.Description" required />
+                            <InputTextArea id="taskDescription" class="form-control"
+                                           @bind-Value="selectedTask.Description" required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="startDate" class="form-label">Estimated Start Date</label>
-                            <InputDate id="startDate" class="form-control" @bind-Value="newTask.ExpectedStartDate" required />
+                            <InputDate id="startDate" class="form-control" @bind-Value="selectedTask.ExpectedStartDate"
+                                       required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="duration" class="form-label">Duration (hours)</label>
-                            <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration" required />
+                            <InputNumber id="duration" class="form-control" @bind-Value="selectedTask.Duration"
+                                         required/>
                         </div>
 
                         <!-- Resource Checklist -->
@@ -63,7 +66,8 @@
                                 {
                                     <div>
                                         <InputCheckbox id="@resource.Id" class="form-check-input"
-                                                       @onchange="(e) => ToggleResourceSelection(e, resource.Id)" />
+                                                       @onchange="(e) => ToggleResourceSelection(e, resource.Id)"
+                                                       checked="@selectedResourceIds.Contains(resource.Id)"/>
                                         <label class="form-check-label" for="@resource.Id">@resource.Name</label>
                                     </div>
                                 }
@@ -87,15 +91,14 @@
                                         <option value="FS">Finish-to-Start (FS)</option>
                                         <option value="SS">Start-to-Start (SS)</option>
                                     </select>
-                                    <button class="btn btn-danger ms-2" @onclick="() => RemovePreviousTask(i)">
-                                        Remove
+                                    <button class="btn btn-danger ms-2" @onclick="() => RemovePreviousTask(i)">Remove
                                     </button>
                                 </div>
                             }
                             <button class="btn btn-info mt-2" @onclick="AddPreviousTask">Add Previous Task</button>
                         </div>
 
-                        <button type="submit" class="btn btn-success">Create Task</button>
+                        <button type="submit" class="btn btn-success">Save Changes</button>
                     </EditForm>
                 </div>
             </div>
@@ -107,12 +110,12 @@
     [Parameter] public EventCallback<bool> OnClose { get; set; }
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public ProjectDTO SelectedProject { get; set; }
+    [Parameter] public TaskDTO TaskToEdit { get; set; }
 
-    private TaskDTO newTask = new TaskDTO();
+    private TaskDTO selectedTask;
     private List<TaskDTO> taskList = new List<TaskDTO>();
     private List<ResourceDTO> availableResources = new List<ResourceDTO>();
 
-    // Listas para almacenar TaskId y DependencyType
     private List<int?> previousTaskIds = new List<int?>();
     private List<string> previousTaskDependencies = new List<string>();
 
@@ -124,6 +127,7 @@
     {
         LoadResources();
         LoadTasks();
+        InitializeEditForm();
     }
 
     private void LoadResources()
@@ -150,6 +154,23 @@
         }
     }
 
+    private void InitializeEditForm()
+    {
+        if (TaskToEdit != null)
+        {
+            selectedTask = TaskToEdit;
+            previousTaskIds.Clear();
+            previousTaskDependencies.Clear();
+            foreach (var prevTask in selectedTask.PreviousTasks)
+            {
+                previousTaskIds.Add(prevTask.Id);
+                previousTaskDependencies.Add("FS");
+            }
+
+            selectedResourceIds = new HashSet<int?>(selectedTask.Resources.Select(r => r.Id)); // Asignar recursos
+        }
+    }
+
     private void ToggleResourceSelection(ChangeEventArgs e, int? resourceId)
     {
         if (e.Value is bool isSelected)
@@ -167,8 +188,8 @@
 
     private void AddPreviousTask()
     {
-        previousTaskIds.Add(null); // Add an empty task ID
-        previousTaskDependencies.Add("FS"); // Default to "Finish-to-Start"
+        previousTaskIds.Add(null);
+        previousTaskDependencies.Add("FS");
     }
 
     private void RemovePreviousTask(int index)
@@ -178,15 +199,6 @@
             previousTaskIds.RemoveAt(index);
             previousTaskDependencies.RemoveAt(index);
         }
-        else
-        {
-            errorMessage = "You must have at least one previous task.";
-        }
-    }
-
-    private void CloseModal()
-    {
-        OnClose.InvokeAsync(false);
     }
 
     private void HandleTaskSubmit()
@@ -206,14 +218,21 @@
             }
         }
 
-        newTask.PreviousTasks = previousTasksFS;
-        newTask.SameTimeTasks = sameTimeTasksSS;
+        selectedTask.PreviousTasks = previousTasksFS;
+        selectedTask.SameTimeTasks = sameTimeTasksSS;
+        selectedTask.Resources = availableResources.Where(r => selectedResourceIds.Contains(r.Id)).ToList(); // Asignar recursos
 
-        successMessage = "Task created successfully!";
+        successMessage = "Task edited successfully!";
         errorMessage = string.Empty;
 
-        TaskService.AddTask(SelectedProject.Name, newTask);
+        TaskService.UpdateTask(SelectedProject.Name, selectedTask.Id, selectedTask);
 
         CloseModal();
     }
+
+    private void CloseModal()
+    {
+        OnClose.InvokeAsync(false);
+    }
+
 }

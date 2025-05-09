@@ -3,7 +3,8 @@
 <link href="styles/styleCreateProject.css" rel="stylesheet"/>
 <div class="nav-item px-3">
     <!-- Admin Project (Nivel principal) -->
-    <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center" @onclick="ToggleAdminProject">
+    <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center"
+            @onclick="ToggleAdminProject">
         <span>
             <i class="bi bi-briefcase"></i> Admin Project
         </span>
@@ -14,7 +15,8 @@
     {
         <!-- PROJECTS Section -->
         <div class="nav-item mt-1 ms-3">
-            <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center" @onclick="ToggleProjects">
+            <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center"
+                    @onclick="ToggleProjects">
                 <span>
                     <i class="bi bi-list"></i> Projects
                 </span>
@@ -23,8 +25,8 @@
             @if (showProjects)
             {
                 <div class="ms-3">
-                    <NavLink class="nav-link" href="/project/list">
-                        <i class="bi bi-briefcase"></i> Project List
+                    <NavLink class="nav-link" href="/project/options">
+                        <i class="bi bi-briefcase"></i> Project Options
                     </NavLink>
                     <NavLink class="nav-link" href="/project/create">
                         <i class="bi bi-plus-square"></i> Create Project
