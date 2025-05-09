@@ -1,109 +1,105 @@
-﻿@using ModalsProject
+﻿@using Service
+@using Service.Models
+@inject NavigationManager Navigation
+@inject TaskService TaskService
+@inject ResourceService ResourceService
+@rendermode InteractiveServer
+@namespace ModalsProject
 
 @if (IsVisible)
 {
-    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="taskListModal"
+    <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="editTaskModal"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@((isEditing ? "Edit Task" : "Task List"))</h5>
+                    <h5 class="modal-title">Edit Task</h5>
                     <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @if (isEditing)
+                    @if (!string.IsNullOrEmpty(errorMessage))
                     {
-                        <!-- Edit Form for the selected Task -->
-                        <EditForm Model="@selectedTask" OnValidSubmit="HandleTaskSubmit">
-                            <DataAnnotationsValidator/>
-                            <ValidationSummary/>
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
+                        </div>
+                    }
 
-                            <!-- Task Title -->
-                            <div class="mb-3">
-                                <label for="taskTitle" class="form-label">Task Title</label>
-                                <InputText id="taskTitle" class="form-control" @bind-Value="selectedTask.Title"
-                                           required/>
-                            </div>
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @successMessage
+                        </div>
+                    }
 
-                            <!-- Task Description -->
-                            <div class="mb-3">
-                                <label for="taskDescription" class="form-label">Description</label>
-                                <InputTextArea id="taskDescription" class="form-control"
-                                               @bind-Value="selectedTask.Description"/>
-                            </div>
+                    <EditForm Model="@selectedTask" OnValidSubmit="HandleTaskSubmit">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
 
-                            <!-- Start Date -->
-                            <div class="mb-3">
-                                <label for="startDate" class="form-label">Start Date</label>
-                                <InputDate id="startDate" class="form-control" @bind-Value="selectedTask.StartDate"
-                                           required/>
-                            </div>
+                        <div class="mb-3">
+                            <label for="taskTitle" class="form-label">Task Title</label>
+                            <InputText id="taskTitle" class="form-control" @bind-Value="selectedTask.Title" required/>
+                        </div>
 
-                            <!-- Duration -->
-                            <div class="mb-3">
-                                <label for="duration" class="form-label">Duration (Days)</label>
-                                <InputNumber id="duration" class="form-control" @bind-Value="selectedTask.Duration"
-                                             required/>
-                            </div>
+                        <div class="mb-3">
+                            <label for="taskDescription" class="form-label">Description</label>
+                            <InputTextArea id="taskDescription" class="form-control"
+                                           @bind-Value="selectedTask.Description" required/>
+                        </div>
 
-                            <!-- Resources -->
-                            <div class="mb-3">
-                                <label for="resources" class="form-label">Select Resources</label>
-                                <div>
-                                    @foreach (var resource in availableResources)
-                                    {
-                                        <div>
-                                            <InputCheckbox id="@resource.Id" class="form-check-input"
-                                                           @bind-Value="resource.IsSelected"/>
-                                            <label class="form-check-label" for="@resource.Id">@resource.Name</label>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">Estimated Start Date</label>
+                            <InputDate id="startDate" class="form-control" @bind-Value="selectedTask.ExpectedStartDate"
+                                       required/>
+                        </div>
 
-                            <!-- Previous Tasks and Dependency Type -->
-                            <div class="mb-3">
-                                <label for="previousTasks" class="form-label">Previous Tasks</label>
-                                @foreach (var prevTask in previousTasks)
+                        <div class="mb-3">
+                            <label for="duration" class="form-label">Duration (hours)</label>
+                            <InputNumber id="duration" class="form-control" @bind-Value="selectedTask.Duration"
+                                         required/>
+                        </div>
+
+                        <!-- Resource Checklist -->
+                        <div class="mb-3">
+                            <label for="resources" class="form-label">Select Resources</label>
+                            <div>
+                                @foreach (var resource in availableResources)
                                 {
-                                    <div class="d-flex align-items-center">
-                                        <select class="form-control" @bind="prevTask.SelectedTaskId">
-                                            <option value="">-- Select Task --</option>
-                                            @foreach (var task in taskList)
-                                            {
-                                                <option value="@task.Id">@task.Title</option>
-                                            }
-                                        </select>
-                                        <select class="form-control ms-2" @bind="prevTask.DependencyType">
-                                            <option value="FS">Finish-to-Start (FS)</option>
-                                            <option value="SS">Start-to-Start (SS)</option>
-                                        </select>
-                                        <button class="btn btn-danger ms-2"
-                                                @onclick="() => RemovePreviousTask(prevTask)">Remove
-                                        </button>
+                                    <div>
+                                        <InputCheckbox id="@resource.Id" class="form-check-input"
+                                                       @onchange="(e) => ToggleResourceSelection(e, resource.Id)"
+                                                       checked="@selectedResourceIds.Contains(resource.Id)"/>
+                                        <label class="form-check-label" for="@resource.Id">@resource.Name</label>
                                     </div>
                                 }
-                                <button class="btn btn-info mt-2" @onclick="AddPreviousTask">Add Previous Task</button>
                             </div>
+                        </div>
 
-                            <!-- Save Button -->
-                            <button type="submit" class="btn btn-success">Save Changes</button>
-                        </EditForm>
-                    }
-                    else
-                    {
-                        <!-- List of tasks -->
-                        <ul class="list-group">
-                            @foreach (var task in taskList)
+                        <!-- Previous Tasks and Dependency Type -->
+                        <div class="mb-3">
+                            <label for="previousTasks" class="form-label">Previous Tasks</label>
+                            @for (int i = 0; i < previousTaskIds.Count; i++)
                             {
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span>@task.Title</span>
-                                    <button class="btn btn-info" @onclick="() => EditTask(task)">Edit</button>
-                                    <button class="btn btn-danger" @onclick="() => DeleteTask(task)">Delete</button>
-                                </li>
+                                <div class="d-flex align-items-center">
+                                    <select class="form-control" @bind="previousTaskIds[i]">
+                                        <option value="">-- Select Task --</option>
+                                        @foreach (var task in taskList)
+                                        {
+                                            <option value="@task.Id">@task.Title</option>
+                                        }
+                                    </select>
+                                    <select class="form-control ms-2" @bind="previousTaskDependencies[i]">
+                                        <option value="FS">Finish-to-Start (FS)</option>
+                                        <option value="SS">Start-to-Start (SS)</option>
+                                    </select>
+                                    <button class="btn btn-danger ms-2" @onclick="() => RemovePreviousTask(i)">Remove
+                                    </button>
+                                </div>
                             }
-                        </ul>
-                    }
+                            <button class="btn btn-info mt-2" @onclick="AddPreviousTask">Add Previous Task</button>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </EditForm>
                 </div>
             </div>
         </div>
@@ -111,98 +107,132 @@
 }
 
 @code {
-    [Parameter] public bool IsVisible { get; set; }
     [Parameter] public EventCallback<bool> OnClose { get; set; }
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public ProjectDTO SelectedProject { get; set; }
+    [Parameter] public TaskDTO TaskToEdit { get; set; }
 
-    private List<Task> taskList = new List<Task>
+    private TaskDTO selectedTask;
+    private List<TaskDTO> taskList = new List<TaskDTO>();
+    private List<ResourceDTO> availableResources = new List<ResourceDTO>();
+
+    private List<int?> previousTaskIds = new List<int?>();
+    private List<string> previousTaskDependencies = new List<string>();
+
+    private HashSet<int?> selectedResourceIds = new HashSet<int?>();
+    private string errorMessage = string.Empty;
+    private string successMessage = string.Empty;
+
+    protected override void OnInitialized()
     {
-        new Task { Id = 1, Title = "Task 1", StartDate = DateTime.Now.AddDays(-5), Duration = 3 },
-        new Task { Id = 2, Title = "Task 2", StartDate = DateTime.Now.AddDays(-3), Duration = 5 },
-        new Task { Id = 3, Title = "Task 3", StartDate = DateTime.Now.AddDays(-1), Duration = 7 }
-    };
-
-    private Task selectedTask;
-    private bool isEditing = false;
-
-    private List<Resource> availableResources = new List<Resource>
-    {
-        new Resource { Id = 1, Name = "Resource 1" },
-        new Resource { Id = 2, Name = "Resource 2" }
-    };
-
-    private List<PreviousTask> previousTasks = new List<PreviousTask>
-    {
-        new PreviousTask { SelectedTaskId = 1, DependencyType = "FS" }
-    };
-
-    private void EditTask(Task task)
-    {
-        selectedTask = task;
-        isEditing = true;
+        LoadResources();
+        LoadTasks();
+        InitializeEditForm();
     }
 
-    private void HandleTaskSubmit()
+    private void LoadResources()
     {
-        // Handle task updates or creation
-        if (selectedTask != null)
+        try
         {
-            var existingTask = taskList.FirstOrDefault(t => t.Id == selectedTask.Id);
-            if (existingTask != null)
+            availableResources = ResourceService.GetResources();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading resources: {ex.Message}";
+        }
+    }
+
+    private void LoadTasks()
+    {
+        try
+        {
+            taskList = TaskService.GetTasks(SelectedProject.Name);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading tasks: {ex.Message}";
+        }
+    }
+
+    private void InitializeEditForm()
+    {
+        if (TaskToEdit != null)
+        {
+            selectedTask = TaskToEdit;
+            previousTaskIds.Clear();
+            previousTaskDependencies.Clear();
+            foreach (var prevTask in selectedTask.PreviousTasks)
             {
-                existingTask.Title = selectedTask.Title;
-                existingTask.Description = selectedTask.Description;
-                existingTask.StartDate = selectedTask.StartDate;
-                existingTask.Duration = selectedTask.Duration;
+                previousTaskIds.Add(prevTask.Id);
+                previousTaskDependencies.Add("FS");
+            }
+
+            selectedResourceIds = new HashSet<int?>(selectedTask.Resources.Select(r => r.Id)); // Asignar recursos
+        }
+    }
+
+    private void ToggleResourceSelection(ChangeEventArgs e, int? resourceId)
+    {
+        if (e.Value is bool isSelected)
+        {
+            if (isSelected)
+            {
+                selectedResourceIds.Add(resourceId);
+            }
+            else
+            {
+                selectedResourceIds.Remove(resourceId);
             }
         }
-
-        CloseModal();
     }
 
     private void AddPreviousTask()
     {
-        previousTasks.Add(new PreviousTask());
+        previousTaskIds.Add(null);
+        previousTaskDependencies.Add("FS");
     }
 
-    private void RemovePreviousTask(PreviousTask prevTask)
+    private void RemovePreviousTask(int index)
     {
-        if (previousTasks.Count > 1)
+        if (previousTaskIds.Count > 1)
         {
-            previousTasks.Remove(prevTask);
+            previousTaskIds.RemoveAt(index);
+            previousTaskDependencies.RemoveAt(index);
         }
     }
 
-    private void DeleteTask(Task task)
+    private void HandleTaskSubmit()
     {
-        taskList.Remove(task);
+        var previousTasksFS = new List<TaskDTO>();
+        var sameTimeTasksSS = new List<TaskDTO>();
+
+        for (int i = 0; i < previousTaskIds.Count; i++)
+        {
+            if (previousTaskDependencies[i] == "FS")
+            {
+                previousTasksFS.Add(new TaskDTO { Id = previousTaskIds[i] ?? 0 });
+            }
+            else if (previousTaskDependencies[i] == "SS")
+            {
+                sameTimeTasksSS.Add(new TaskDTO { Id = previousTaskIds[i] ?? 0 });
+            }
+        }
+
+        selectedTask.PreviousTasks = previousTasksFS;
+        selectedTask.SameTimeTasks = sameTimeTasksSS;
+        selectedTask.Resources = availableResources.Where(r => selectedResourceIds.Contains(r.Id)).ToList(); // Asignar recursos
+
+        successMessage = "Task edited successfully!";
+        errorMessage = string.Empty;
+
+        TaskService.UpdateTask(SelectedProject.Name, selectedTask.Id, selectedTask);
+
+        CloseModal();
     }
 
     private void CloseModal()
     {
-        isEditing = false; // Reset editing state
         OnClose.InvokeAsync(false);
-    }
-
-    public class Task
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public DateTime StartDate { get; set; }
-        public int Duration { get; set; } // Duration in hours
-    }
-
-    public class Resource
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public bool IsSelected { get; set; } // Track resource selection
-    }
-
-    public class PreviousTask
-    {
-        public int? SelectedTaskId { get; set; }
-        public string DependencyType { get; set; } // "FS" or "SS"
     }
 
 }

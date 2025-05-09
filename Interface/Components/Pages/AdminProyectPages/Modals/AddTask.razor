@@ -32,29 +32,27 @@
                     }
 
                     <EditForm Model="@newTask" OnValidSubmit="HandleTaskSubmit">
-                        <DataAnnotationsValidator/>
-                        <ValidationSummary/>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
 
                         <div class="mb-3">
                             <label for="taskTitle" class="form-label">Task Title</label>
-                            <InputText id="taskTitle" class="form-control" @bind-Value="newTask.Title" required/>
+                            <InputText id="taskTitle" class="form-control" @bind-Value="newTask.Title" required />
                         </div>
 
                         <div class="mb-3">
                             <label for="taskDescription" class="form-label">Description</label>
-                            <InputTextArea id="taskDescription" class="form-control" @bind-Value="newTask.Description"
-                                           required/>
+                            <InputTextArea id="taskDescription" class="form-control" @bind-Value="newTask.Description" required />
                         </div>
 
                         <div class="mb-3">
                             <label for="startDate" class="form-label">Estimated Start Date</label>
-                            <InputDate id="startDate" class="form-control" @bind-Value="newTask.ExpectedStartDate"
-                                       required/>
+                            <InputDate id="startDate" class="form-control" @bind-Value="newTask.ExpectedStartDate" required />
                         </div>
 
                         <div class="mb-3">
                             <label for="duration" class="form-label">Duration (hours)</label>
-                            <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration" required/>
+                            <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration" required />
                         </div>
 
                         <!-- Resource Checklist -->
@@ -65,7 +63,7 @@
                                 {
                                     <div>
                                         <InputCheckbox id="@resource.Id" class="form-check-input"
-                                                       @onchange="(e) => ToggleResourceSelection(e, resource.Id)"/>
+                                                       @onchange="(e) => ToggleResourceSelection(e, resource.Id)" />
                                         <label class="form-check-label" for="@resource.Id">@resource.Name</label>
                                     </div>
                                 }
@@ -75,21 +73,21 @@
                         <!-- Previous Tasks and Dependency Type -->
                         <div class="mb-3">
                             <label for="previousTasks" class="form-label">Previous Tasks</label>
-                            @foreach (var prevTask in previousTasks)
+                            @for (int i = 0; i < previousTaskIds.Count; i++)
                             {
                                 <div class="d-flex align-items-center">
-                                    <select class="form-control" @bind="prevTask.SelectedTaskId">
+                                    <select class="form-control" @bind="previousTaskIds[i]">
                                         <option value="">-- Select Task --</option>
                                         @foreach (var task in taskList)
                                         {
                                             <option value="@task.Id">@task.Title</option>
                                         }
                                     </select>
-                                    <select class="form-control ms-2" @bind="prevTask.DependencyType">
+                                    <select class="form-control ms-2" @bind="previousTaskDependencies[i]">
                                         <option value="FS">Finish-to-Start (FS)</option>
                                         <option value="SS">Start-to-Start (SS)</option>
                                     </select>
-                                    <button class="btn btn-danger ms-2" @onclick="() => RemovePreviousTask(prevTask)">
+                                    <button class="btn btn-danger ms-2" @onclick="() => RemovePreviousTask(i)">
                                         Remove
                                     </button>
                                 </div>
@@ -110,17 +108,17 @@
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public ProjectDTO SelectedProject { get; set; }
 
-    private Service.Models.TaskDTO newTask = new Service.Models.TaskDTO();
-    private List<Service.Models.TaskDTO> taskList = new List<Service.Models.TaskDTO>();
-    private List<Service.Models.ResourceDTO> availableResources = new List<Service.Models.ResourceDTO>();
-    private List<PreviousTask> previousTasks = new List<PreviousTask>();
-    private HashSet<int> selectedResourceIds = new HashSet<int>(); // Para llevar el seguimiento de los recursos seleccionados
+    private TaskDTO newTask = new TaskDTO();
+    private List<TaskDTO> taskList = new List<TaskDTO>();
+    private List<ResourceDTO> availableResources = new List<ResourceDTO>();
+
+    // Listas para almacenar TaskId y DependencyType
+    private List<int?> previousTaskIds = new List<int?>();
+    private List<string> previousTaskDependencies = new List<string>();
+
+    private HashSet<int?> selectedResourceIds = new HashSet<int?>();
     private string errorMessage = string.Empty;
     private string successMessage = string.Empty;
-
-    // Listas para tareas previas FS y SS
-    private List<Service.Models.TaskDTO> previousTasksFS = new List<Service.Models.TaskDTO>(); // Lista para tareas previas FS
-    private List<Service.Models.TaskDTO> sameTimeTasksSS = new List<Service.Models.TaskDTO>(); // Lista para tareas simultáneas SS
 
     protected override void OnInitialized()
     {
@@ -132,7 +130,7 @@
     {
         try
         {
-            availableResources = ResourceService.GetResources(); // Llamamos al servicio para obtener los recursos
+            availableResources = ResourceService.GetResources();
         }
         catch (Exception ex)
         {
@@ -144,7 +142,7 @@
     {
         try
         {
-            taskList = TaskService.GetTasks(SelectedProject.Name); // Llamamos al servicio para obtener las tareas
+            taskList = TaskService.GetTasks(SelectedProject.Name);
         }
         catch (Exception ex)
         {
@@ -158,100 +156,64 @@
         {
             if (isSelected)
             {
-                selectedResourceIds.Add(resourceId); // Añadir a la lista de recursos seleccionados
+                selectedResourceIds.Add(resourceId);
             }
             else
             {
-                selectedResourceIds.Remove(resourceId); // Eliminar de la lista de recursos seleccionados
+                selectedResourceIds.Remove(resourceId);
             }
         }
     }
 
     private void AddPreviousTask()
     {
-        errorMessage = string.Empty;
-        previousTasks.Add(new PreviousTask());
+        previousTaskIds.Add(null); // Add an empty task ID
+        previousTaskDependencies.Add("FS"); // Default to "Finish-to-Start"
     }
 
-    private void RemovePreviousTask(PreviousTask prevTask)
+    private void RemovePreviousTask(int index)
     {
-        if (previousTasks.Count == 1)
+        if (previousTaskIds.Count > 1)
         {
-            errorMessage = "You must have at least one previous task.";
+            previousTaskIds.RemoveAt(index);
+            previousTaskDependencies.RemoveAt(index);
         }
         else
         {
-            previousTasks.Remove(prevTask);
-            errorMessage = string.Empty;
-            EnsureAtLeastOnePreviousTask();
-        }
-    }
-
-    private void EnsureAtLeastOnePreviousTask()
-    {
-        if (previousTasks.Count == 0)
-        {
-            previousTasks.Add(new PreviousTask());
+            errorMessage = "You must have at least one previous task.";
         }
     }
 
     private void CloseModal()
     {
-        ResetPreviousTasks();
         OnClose.InvokeAsync(false);
     }
 
     private void HandleTaskSubmit()
     {
-        // Limpiar las listas de tareas previas FS y SS
-        previousTasksFS.Clear();
-        sameTimeTasksSS.Clear();
+        var previousTasksFS = new List<TaskDTO>();
+        var sameTimeTasksSS = new List<TaskDTO>();
 
-        // Asignamos las tareas previas en las listas correspondientes
-        foreach (var prevTask in previousTasks)
+        for (int i = 0; i < previousTaskIds.Count; i++)
         {
-            if (prevTask.DependencyType == "FS")
+            if (previousTaskDependencies[i] == "FS")
             {
-                // Agregar a PreviousTasks (FS)
-                previousTasksFS.Add(new Service.Models.TaskDTO
-                {
-                    Id = prevTask.SelectedTaskId ?? 0, // Asignar el ID de la tarea seleccionada
-                });
+                previousTasksFS.Add(new TaskDTO { Id = previousTaskIds[i] ?? 0 });
             }
-            else if (prevTask.DependencyType == "SS")
+            else if (previousTaskDependencies[i] == "SS")
             {
-                // Agregar a SameTimeTasks (SS)
-                sameTimeTasksSS.Add(new Service.Models.TaskDTO
-                {
-                    Id = prevTask.SelectedTaskId ?? 0, // Asignar el ID de la tarea seleccionada
-                });
+                sameTimeTasksSS.Add(new TaskDTO { Id = previousTaskIds[i] ?? 0 });
             }
         }
 
-        // Asignamos las listas de tareas previas y simultáneas a la tarea creada
         newTask.PreviousTasks = previousTasksFS;
         newTask.SameTimeTasks = sameTimeTasksSS;
 
         successMessage = "Task created successfully!";
         errorMessage = string.Empty;
 
-        // Asignamos la tarea a través del servicio TaskService
-        TaskService.AddTask(SelectedProject.Name, newTask); // Llamamos al servicio para agregar la tarea
+        TaskService.AddTask(SelectedProject.Name, newTask);
 
         CloseModal();
     }
-
-    private void ResetPreviousTasks()
-    {
-        previousTasks = new List<PreviousTask> { new PreviousTask() };
-        errorMessage = string.Empty;
-        successMessage = string.Empty;
-    }
-
-    public class PreviousTask
-    {
-        public int? SelectedTaskId { get; set; }
-        public string DependencyType { get; set; } // "FS" o "SS"
-    }
-
 }
