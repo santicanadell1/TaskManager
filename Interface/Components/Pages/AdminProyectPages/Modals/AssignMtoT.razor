@@ -5,6 +5,8 @@
 @inject NavigationManager Navigation
 @namespace ModalsProject
 
+<link href="styles/styleModalsAdminProject.css" rel="stylesheet"/>
+
 @if (IsVisible)
 {
     <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="assignTaskToMemberModal"
@@ -34,7 +36,7 @@
                                 -->
                             <div class="form-check">
                                 <InputCheckbox id="@task.Id" class="form-check-input"/>
-                                              
+
                                 <label class="form-check-label" for="@task.Id">
                                     @task.Title
                                 </label>
