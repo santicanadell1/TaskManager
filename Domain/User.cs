@@ -128,6 +128,12 @@ namespace Domain
             }
             tasks.Add(taskId);
         }
+
+        public void RemoveTask(int taskId)
+        {
+            
+            tasks.Remove(taskId);
+        }
         
         
     }
