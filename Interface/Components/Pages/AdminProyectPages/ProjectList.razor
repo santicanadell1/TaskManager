@@ -1,8 +1,10 @@
 ﻿@page "/project/options"
 @inject NavigationManager Navigation
 @inject AdminPService AdminPService
+@inject TaskService TaskService
+@inject ResourceService ResourceService
 @rendermode InteractiveServer
-@using ModalsProject
+@using Service
 @using Service.Models
 
 <link href="styles/styleProjectList.css" rel="stylesheet"/>
@@ -33,95 +35,1180 @@
     }
 </div>
 
-@if (selectedProject != null)
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-3">
+        @errorMessage
+        <button type="button" class="btn-close float-end" @onclick="() => errorMessage = string.Empty"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(selectedProjectName))
 {
     <div class="project-options mt-3">
-        <h5>@selectedProject.Name Options</h5>
-        <button class="btn-create-task" @onclick="CreateTask">Create Task</button>
+        <h5>@selectedProjectName Options</h5>
+        <button class="btn-create-task" @onclick="ShowCreateTaskModal">Create Task</button>
         <button class="btn-secondary" @onclick="ShowAddMembersModal">Add Members</button>
         <button class="btn-assign-task" @onclick="ShowAssignTaskToMemberModal">Assign Task to Member</button>
         <button class="btn-warning" @onclick="ShowTaskListModal">Task List</button>
     </div>
 }
 
-<AddTask IsVisible="@showCreateTaskModal" OnClose="CloseCreateTaskModal"/>
-<AddMember IsVisible="@showAddMembersModal" OnClose="CloseAddMembersModal"/>
-<AssignMtoT IsVisible="@showAssignTaskToMemberModal" OnClose="CloseAssignTaskToMemberModal"/>
-<TaskList IsVisible="@showTaskListModal" OnClose="CloseTaskListModal"/>
+<!-- Modal Create Task -->
+@if (showCreateTaskModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="createTaskModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Task</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseCreateTaskModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(taskErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span>@taskErrorMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => taskErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(taskSuccessMessage))
+                    {
+                        <div class="alert alert-success d-flex justify-content-between" role="alert">
+                            <span>@taskSuccessMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => taskSuccessMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <EditForm Model="@newTask" OnValidSubmit="HandleCreateTaskSubmit">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+
+                        <div class="mb-3">
+                            <label for="taskTitle" class="form-label">Task Title</label>
+                            <InputText id="taskTitle" class="form-control" @bind-Value="newTask.Title" required/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="taskDescription" class="form-label">Description</label>
+                            <InputTextArea id="taskDescription" class="form-control" @bind-Value="newTask.Description"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">Estimated Start Date</label>
+                            <InputDate id="startDate" class="form-control" @bind-Value="newTask.ExpectedStartDate"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="duration" class="form-label">Duration (hours)</label>
+                            <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration"/>
+                        </div>
+
+                        <!-- Resource Checklist -->
+                        <div class="mb-3">
+                            <label class="form-label">Select Resources</label>
+                            <div>
+                                @if (availableResources != null && availableResources.Any())
+                                {
+                                    foreach (var resource in availableResources)
+                                    {
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input"
+                                                   id="@($"resource-{resource.Id}")"
+                                                   @onchange="(e) => ToggleResourceSelection(e, resource.Id)"
+                                                   checked="@selectedResourceIds.Contains(resource.Id)"/>
+                                            <label class="form-check-label" for="@($"resource-{resource.Id}")">
+                                                @resource.Name
+                                            </label>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No resources available</p>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Previous Tasks and Dependency Type -->
+                        <div class="mb-3">
+                            <label class="form-label">Previous Tasks</label>
+                            @if (taskList != null && taskList.Any())
+                            {
+                                @for (int i = 0; i < previousTaskIds.Count; i++)
+                                {
+                                    int index = i;
+                                    <div class="d-flex align-items-center mb-2">
+                                        <select class="form-control"
+                                                @onchange="(e) => UpdatePreviousTaskId(e, index)">
+                                            <option value="">-- Select Task --</option>
+                                            @foreach (var task in taskList)
+                                            {
+                                                <option value="@task.Id"
+                                                        selected="@(previousTaskIds[index] == task.Id)">
+                                                    @task.Title (ID: @task.Id)
+                                                </option>
+                                            }
+                                        </select>
+                                        <select class="form-control ms-2"
+                                                @onchange="(e) => UpdateDependencyType(e, index)">
+                                            <option value="FS" selected="@(previousTaskDependencies[index] == "FS")">
+                                                Finish-to-Start (FS)
+                                            </option>
+                                            <option value="SS" selected="@(previousTaskDependencies[index] == "SS")">
+                                                Start-to-Start (SS)
+                                            </option>
+                                        </select>
+                                        <button type="button" class="btn btn-danger ms-2"
+                                                @onclick="() => RemovePreviousTask(index)">
+                                            Remove
+                                        </button>
+                                    </div>
+                                }
+
+                                <button type="button" class="btn btn-info mt-2" @onclick="AddPreviousTask">Add Previous
+                                    Task
+                                </button>
+                            }
+                            else
+                            {
+                                <p>No tasks available for dependencies</p>
+                            }
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Create Task</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal Edit Task -->
+@if (showEditTaskModal && selectedTaskToEdit != null)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="editTaskModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Task</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseEditTaskModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(editTaskErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span>@editTaskErrorMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => editTaskErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(editTaskSuccessMessage))
+                    {
+                        <div class="alert alert-success d-flex justify-content-between" role="alert">
+                            <span>@editTaskSuccessMessage</span>
+                            <button type="button" class="btn-close"
+                                    @onclick="() => editTaskSuccessMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <EditForm Model="@selectedTaskToEdit" OnValidSubmit="HandleEditTaskSubmit">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+
+                        <div class="mb-3">
+                            <label for="editTaskTitle" class="form-label">Task Title</label>
+                            <InputText id="editTaskTitle" class="form-control" @bind-Value="selectedTaskToEdit.Title"
+                                       required/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editTaskDescription" class="form-label">Description</label>
+                            <InputTextArea id="editTaskDescription" class="form-control"
+                                           @bind-Value="selectedTaskToEdit.Description"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editStartDate" class="form-label">Estimated Start Date</label>
+                            <InputDate id="editStartDate" class="form-control"
+                                       @bind-Value="selectedTaskToEdit.ExpectedStartDate"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editDuration" class="form-label">Duration (hours)</label>
+                            <InputNumber id="editDuration" class="form-control"
+                                         @bind-Value="selectedTaskToEdit.Duration"/>
+                        </div>
+
+                        <!-- Resource Checklist -->
+                        <div class="mb-3">
+                            <label class="form-label">Select Resources</label>
+                            <div>
+                                @if (availableResources != null && availableResources.Any())
+                                {
+                                    foreach (var resource in availableResources)
+                                    {
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input"
+                                                   id="@($"edit-resource-{resource.Id}")"
+                                                   @onchange="(e) => ToggleEditResourceSelection(e, resource.Id)"
+                                                   checked="@editSelectedResourceIds.Contains(resource.Id)"/>
+                                            <label class="form-check-label" for="@($"edit-resource-{resource.Id}")">
+                                                @resource.Name
+                                            </label>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No resources available</p>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Previous Tasks and Dependency Type -->
+                        <div class="mb-3">
+                            <label class="form-label">Previous Tasks</label>
+                            @if (taskList != null && taskList.Any())
+                            {
+                                @for (int i = 0; i < editPreviousTaskIds.Count; i++)
+                                {
+                                    int index = i;
+                                    <div class="d-flex align-items-center mb-2">
+                                        <select class="form-control"
+                                                @onchange="(e) => UpdateEditPreviousTaskId(e, index)">
+                                            <option value="">-- Select Task --</option>
+                                            @foreach (var task in taskList)
+                                            {
+                                                <option value="@task.Id"
+                                                        selected="@(editPreviousTaskIds[index] == task.Id)">
+                                                    @task.Title (ID: @task.Id)
+                                                </option>
+                                            }
+                                        </select>
+                                        <select class="form-control ms-2"
+                                                @onchange="(e) => UpdateEditDependencyType(e, index)">
+                                            <option value="FS"
+                                                    selected="@(editPreviousTaskDependencies[index] == "FS")">
+                                                Finish-to-Start (FS)
+                                            </option>
+                                            <option value="SS"
+                                                    selected="@(editPreviousTaskDependencies[index] == "SS")">
+                                                Start-to-Start (SS)
+                                            </option>
+                                        </select>
+                                        <button type="button" class="btn btn-danger ms-2"
+                                                @onclick="() => RemoveEditPreviousTask(index)">
+                                            Remove
+                                        </button>
+                                    </div>
+                                }
+
+                                <button type="button" class="btn btn-info mt-2" @onclick="AddEditPreviousTask">Add
+                                    Previous Task
+                                </button>
+                            }
+                            else
+                            {
+                                <p>No tasks available for dependencies</p>
+                            }
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal Add Members -->
+@if (showAddMembersModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="addMembersModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Members to Project</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseAddMembersModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(memberErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span>@memberErrorMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => memberErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(memberSuccessMessage))
+                    {
+                        <div class="alert alert-success d-flex justify-content-between" role="alert">
+                            <span>@memberSuccessMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => memberSuccessMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <h6>Select Members to Add</h6>
+                    <div class="mb-3">
+                        @foreach (var member in membersList ?? new List<UserDTO>())
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="@member.Email"
+                                       @onchange="(e) => ToggleMemberSelection(e, member.Email)"/>
+                                <label class="form-check-label" for="@member.Email">
+                                    @member.FirstName @member.LastName
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="() => CloseAddMembersModal(false)">Close
+                    </button>
+                    <button type="button" class="btn btn-primary" @onclick="AddSelectedMembers">Add Members</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal Assign Task to Member -->
+@if (showAssignTaskToMemberModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="assignTaskToMemberModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assign Tasks to Member</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseAssignTaskToMemberModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Select Member</h6>
+                    <select id="memberSelection" class="form-control" @bind="selectedMemberId">
+                        <option value="">-- Select a Member --</option>
+                        @foreach (var member in membersList)
+                        {
+                            <option value="@member.Email">@member.FirstName @member.LastName</option>
+                        }
+                    </select>
+
+                    <h6 class="mt-3">Select Tasks</h6>
+                    <div>
+                        @foreach (var task in taskList)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="@($"task-{task.Id}")"
+                                       @onchange="(e) => ToggleTaskSelection(e, task.Id)"
+                                       checked="@selectedTaskIds.Contains(task.Id)"/>
+                                <label class="form-check-label" for="@($"task-{task.Id}")">
+                                    @task.Title
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            @onclick="() => CloseAssignTaskToMemberModal(false)">Close
+                    </button>
+                    <button type="button" class="btn btn-primary" @onclick="AssignTasksToMember">Assign Tasks</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal Task List -->
+@if (showTaskListModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="taskListModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Task List - @selectedProjectName</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseTaskListModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (taskList != null && taskList.Any())
+                    {
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Start Date</th>
+                                <th>Duration</th>
+                                <th>State</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var task in taskList)
+                            {
+                                <tr>
+                                    <td>@task.Title</td>
+                                    <td>@task.Description</td>
+                                    <td>@task.ExpectedStartDate.ToShortDateString()</td>
+                                    <td>@task.Duration hours</td>
+                                    <td>@task.State</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary me-2"
+                                                @onclick="() => ShowEditTaskModal(task)">Edit
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" @onclick="() => RemoveTask(task)">Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>No tasks available for this project.</p>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="() => CloseTaskListModal(false)">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
+
+    // Main data and lists
     private List<ProjectDTO> projects = new List<ProjectDTO>();
-    private ProjectDTO selectedProject;
+    private string selectedProjectName;
+    private List<TaskDTO> taskList = new List<TaskDTO>();
+    private List<ResourceDTO> availableResources = new List<ResourceDTO>();
+    private List<UserDTO> membersList = new List<UserDTO>();
+
+    // Modal states
     private bool showCreateTaskModal = false;
+    private bool showEditTaskModal = false;
     private bool showAddMembersModal = false;
     private bool showAssignTaskToMemberModal = false;
     private bool showTaskListModal = false;
 
-    protected override async Task OnInitializedAsync()
+    // Error and success messages
+    private string errorMessage = string.Empty;
+    private string taskErrorMessage = string.Empty;
+    private string taskSuccessMessage = string.Empty;
+    private string editTaskErrorMessage = string.Empty;
+    private string editTaskSuccessMessage = string.Empty;
+    private string memberErrorMessage = string.Empty;
+    private string memberSuccessMessage = string.Empty;
+
+    // Create Task data
+    private TaskDTO newTask = new TaskDTO();
+    private HashSet<int?> selectedResourceIds = new HashSet<int?>();
+    private List<int?> previousTaskIds = new List<int?>();
+    private List<string> previousTaskDependencies = new List<string>();
+
+    // Edit Task data
+    private TaskDTO selectedTaskToEdit = null;
+    private HashSet<int?> editSelectedResourceIds = new HashSet<int?>();
+    private List<int?> editPreviousTaskIds = new List<int?>();
+    private List<string> editPreviousTaskDependencies = new List<string>();
+
+    // Add Members data
+    private HashSet<string> selectedEmails = new HashSet<string>();
+
+    // Assign Task to Member data
+    private string selectedMemberId;
+    private HashSet<int?> selectedTaskIds = new HashSet<int?>();
+
+    // Lifecycle methods
+    protected override void OnInitialized()
     {
-        projects = AdminPService.GetAllProjects();
+        LoadProjects();
+        LoadResources();
     }
 
+    private void LoadProjects()
+    {
+        try
+        {
+            projects = AdminPService.GetAllProjects();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading projects: {ex.Message}";
+        }
+    }
+
+    private void LoadResources()
+    {
+        try
+        {
+            availableResources = ResourceService.GetResources();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading resources: {ex.Message}";
+            availableResources = new List<ResourceDTO>();
+        }
+    }
+
+    private void LoadTasks()
+    {
+        if (string.IsNullOrEmpty(selectedProjectName))
+        {
+            taskList = new List<TaskDTO>();
+            return;
+        }
+
+        try
+        {
+            taskList = TaskService.GetTasks(selectedProjectName);
+            // Ensure taskList is not null
+            if (taskList == null)
+            {
+                taskList = new List<TaskDTO>();
+            }
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading tasks: {ex.Message}";
+            taskList = new List<TaskDTO>();
+        }
+    }
+
+    // Navigation and UI methods
     private void ShowProjectOptions(ProjectDTO project)
     {
-        selectedProject = project;
-    }
-
-    private void CreateTask()
-    {
-        showCreateTaskModal = true;
-    }
-
-    private void ShowAddMembersModal()
-    {
-        showAddMembersModal = true;
-    }
-
-    private void ShowAssignTaskToMemberModal()
-    {
-        showAssignTaskToMemberModal = true;
-    }
-
-    private void ShowTaskListModal()
-    {
-        showTaskListModal = true;
-    }
-
-    private void CloseCreateTaskModal(bool isClosed)
-    {
-        showCreateTaskModal = isClosed;
-    }
-
-    private void CloseAddMembersModal(bool isClosed)
-    {
-        showAddMembersModal = isClosed;
-    }
-
-    private void CloseAssignTaskToMemberModal(bool isClosed)
-    {
-        showAssignTaskToMemberModal = isClosed;
-    }
-
-    private void CloseTaskListModal(bool isClosed)
-    {
-        showTaskListModal = isClosed;
-    }
-
-    private void RemoveProject(ProjectDTO project)
-    {
-        AdminPService.RemoveProject(project.Name);
-
-        projects.Remove(project);
-
-        if (selectedProject == project)
-        {
-            selectedProject = null;
-        }
+        selectedProjectName = project.Name;
+        errorMessage = string.Empty;
+        LoadTasks();
     }
 
     public string GetButtonClass(ProjectDTO project)
     {
-        return selectedProject == project ? "selected" : "";
+        return selectedProjectName == project.Name ? "selected" : "";
+    }
+
+    private void RemoveProject(ProjectDTO project)
+    {
+        try
+        {
+            AdminPService.RemoveProject(project.Name);
+            projects.Remove(project);
+
+            if (selectedProjectName == project.Name)
+            {
+                selectedProjectName = null;
+                taskList.Clear();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error removing project: {ex.Message}";
+        }
+    }
+
+    // Create Task Modal methods
+    private void ShowCreateTaskModal()
+    {
+        if (!string.IsNullOrEmpty(selectedProjectName))
+        {
+            LoadTasks();
+
+            // Initialize newTask with all properties
+            newTask = new TaskDTO
+            {
+                ExpectedStartDate = DateTime.Today,
+                Duration = 1,
+                Title = string.Empty,
+                Description = string.Empty,
+                PreviousTasks = new List<TaskDTO>(),
+                SameTimeTasks = new List<TaskDTO>(),
+                Resources = new List<ResourceDTO>(),
+                State = StateDTO.TODO, // Assuming there's a default state
+                Id = null
+            };
+
+            previousTaskIds.Clear();
+            previousTaskDependencies.Clear();
+            selectedResourceIds.Clear();
+            taskErrorMessage = string.Empty;
+            taskSuccessMessage = string.Empty;
+
+            showCreateTaskModal = true;
+            StateHasChanged();
+        }
+        else
+        {
+            errorMessage = "Please select a project before creating a task.";
+        }
+    }
+
+    private void CloseCreateTaskModal(bool refreshData)
+    {
+        showCreateTaskModal = false;
+        if (refreshData)
+        {
+            LoadTasks();
+        }
+    }
+
+    private async Task HandleCreateTaskSubmit()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(selectedProjectName))
+            {
+                taskErrorMessage = "Please select a project before creating a task.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(newTask.Title))
+            {
+                taskErrorMessage = "Task title is required.";
+                return;
+            }
+
+            if (newTask.Duration <= 0)
+            {
+                taskErrorMessage = "Duration must be greater than 0.";
+                return;
+            }
+
+            // Debug logs
+            Console.WriteLine($"Number of previous tasks selected: {previousTaskIds.Count}");
+            for (int i = 0; i < previousTaskIds.Count; i++)
+            {
+                Console.WriteLine($"Previous task {i}: ID = {previousTaskIds[i]}, Dependency = {previousTaskDependencies[i]}");
+            }
+
+            // Check for empty selections
+            bool hasEmptySelection = false;
+            for (int i = 0; i < previousTaskIds.Count; i++)
+            {
+                if (!previousTaskIds[i].HasValue)
+                {
+                    hasEmptySelection = true;
+                    break;
+                }
+            }
+
+            if (hasEmptySelection)
+            {
+                taskErrorMessage = "Please select valid tasks for all previous task entries.";
+                return;
+            }
+
+            // Initialize lists properly
+            var previousTasksFS = new List<TaskDTO>();
+            var sameTimeTasksSS = new List<TaskDTO>();
+
+            // Process previous tasks
+            for (int i = 0; i < previousTaskIds.Count; i++)
+            {
+                if (previousTaskIds[i].HasValue)
+                {
+                    var taskId = previousTaskIds[i].Value;
+
+                    // Create a minimal TaskDTO with just the ID
+                    var taskDto = new TaskDTO { Id = taskId };
+
+                    if (previousTaskDependencies[i] == "FS")
+                    {
+                        previousTasksFS.Add(taskDto);
+                    }
+                    else if (previousTaskDependencies[i] == "SS")
+                    {
+                        sameTimeTasksSS.Add(taskDto);
+                    }
+                }
+            }
+
+            // Debug - check if newTask exists
+            if (newTask == null)
+            {
+                taskErrorMessage = "Task object is null";
+                return;
+            }
+
+            // Initialize the lists if they are null
+            newTask.PreviousTasks = previousTasksFS ?? new List<TaskDTO>();
+            newTask.SameTimeTasks = sameTimeTasksSS ?? new List<TaskDTO>();
+
+            // Handle resources
+            newTask.Resources = availableResources?
+                .Where(r => r != null && r.Id.HasValue && selectedResourceIds.Contains(r.Id))
+                .ToList() ?? new List<ResourceDTO>();
+
+            // Debug logs
+            Console.WriteLine($"Sending previous tasks (FS): {newTask.PreviousTasks.Count}");
+            Console.WriteLine($"Sending same time tasks (SS): {newTask.SameTimeTasks.Count}");
+            Console.WriteLine($"Sending resources: {newTask.Resources.Count}");
+            Console.WriteLine($"Task title: {newTask.Title}");
+            Console.WriteLine($"Task description: {newTask.Description}");
+            Console.WriteLine($"Task duration: {newTask.Duration}");
+            Console.WriteLine($"Task start date: {newTask.ExpectedStartDate}");
+
+            TaskService.AddTask(selectedProjectName, newTask);
+            taskSuccessMessage = "Task created successfully!";
+            taskErrorMessage = string.Empty;
+
+            await Task.Delay(1500);
+            CloseCreateTaskModal(true);
+        }
+        catch (Exception ex)
+        {
+            taskErrorMessage = $"Error creating task: {ex.Message}";
+            taskSuccessMessage = string.Empty;
+            Console.WriteLine($"Exception details: {ex}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+        }
+    }
+
+    private void ToggleResourceSelection(ChangeEventArgs e, int? resourceId)
+    {
+        if (e.Value is bool isSelected && resourceId.HasValue)
+        {
+            if (isSelected)
+            {
+                selectedResourceIds.Add(resourceId);
+            }
+            else
+            {
+                selectedResourceIds.Remove(resourceId);
+            }
+        }
+    }
+
+    private void AddPreviousTask()
+    {
+        previousTaskIds.Add(null);
+        previousTaskDependencies.Add("FS");
+    }
+
+    private void RemovePreviousTask(int index)
+    {
+        if (index >= 0 && index < previousTaskIds.Count)
+        {
+            previousTaskIds.RemoveAt(index);
+            previousTaskDependencies.RemoveAt(index);
+        }
+    }
+
+    private void UpdatePreviousTaskId(ChangeEventArgs e, int index)
+    {
+        var value = e.Value?.ToString();
+        Console.WriteLine($"UpdatePreviousTaskId - Raw value: '{value}', Index: {index}");
+
+        if (string.IsNullOrEmpty(value))
+        {
+            previousTaskIds[index] = null;
+        }
+        else if (int.TryParse(value, out int taskId))
+        {
+            previousTaskIds[index] = taskId;
+            Console.WriteLine($"Successfully parsed task ID: {taskId}");
+        }
+        else
+        {
+            previousTaskIds[index] = null;
+            Console.WriteLine($"Failed to parse task ID from value: '{value}'");
+        }
+    }
+
+    private void UpdateDependencyType(ChangeEventArgs e, int index)
+    {
+        previousTaskDependencies[index] = e.Value?.ToString() ?? "FS";
+    }
+
+    // Edit Task Modal methods
+    private void ShowEditTaskModal(TaskDTO task)
+    {
+        selectedTaskToEdit = new TaskDTO
+        {
+            Id = task.Id,
+            Title = task.Title,
+            Description = task.Description,
+            ExpectedStartDate = task.ExpectedStartDate,
+            Duration = task.Duration,
+            State = task.State,
+            PreviousTasks = task.PreviousTasks != null ? new List<TaskDTO>(task.PreviousTasks) : new List<TaskDTO>(),
+            SameTimeTasks = task.SameTimeTasks != null ? new List<TaskDTO>(task.SameTimeTasks) : new List<TaskDTO>(),
+            Resources = task.Resources != null ? new List<ResourceDTO>(task.Resources) : new List<ResourceDTO>()
+        };
+
+        editPreviousTaskIds.Clear();
+        editPreviousTaskDependencies.Clear();
+        editSelectedResourceIds.Clear();
+
+        // Load selected resources
+        if (selectedTaskToEdit.Resources != null)
+        {
+            foreach (var resource in selectedTaskToEdit.Resources)
+            {
+                editSelectedResourceIds.Add(resource.Id);
+            }
+        }
+
+        // Load previous tasks
+        if (selectedTaskToEdit.PreviousTasks != null)
+        {
+            foreach (var prevTask in selectedTaskToEdit.PreviousTasks)
+            {
+                editPreviousTaskIds.Add(prevTask.Id);
+                editPreviousTaskDependencies.Add("FS");
+            }
+        }
+
+        if (selectedTaskToEdit.SameTimeTasks != null)
+        {
+            foreach (var sameTask in selectedTaskToEdit.SameTimeTasks)
+            {
+                editPreviousTaskIds.Add(sameTask.Id);
+                editPreviousTaskDependencies.Add("SS");
+            }
+        }
+
+        editTaskErrorMessage = string.Empty;
+        editTaskSuccessMessage = string.Empty;
+        showEditTaskModal = true;
+    }
+
+    private void CloseEditTaskModal(bool refreshData)
+    {
+        showEditTaskModal = false;
+        selectedTaskToEdit = null;
+        if (refreshData)
+        {
+            LoadTasks();
+        }
+    }
+
+    private async Task HandleEditTaskSubmit()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(selectedProjectName))
+            {
+                editTaskErrorMessage = "Project not selected.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(selectedTaskToEdit.Title))
+            {
+                editTaskErrorMessage = "Task title is required.";
+                return;
+            }
+
+            if (selectedTaskToEdit.Duration <= 0)
+            {
+                editTaskErrorMessage = "Duration must be greater than 0.";
+                return;
+            }
+
+            // Check for empty selections
+            bool hasEmptySelection = false;
+            for (int i = 0; i < editPreviousTaskIds.Count; i++)
+            {
+                if (!editPreviousTaskIds[i].HasValue)
+                {
+                    hasEmptySelection = true;
+                    break;
+                }
+            }
+
+            if (hasEmptySelection)
+            {
+                editTaskErrorMessage = "Please select valid tasks for all previous task entries.";
+                return;
+            }
+
+            var previousTasksFS = new List<TaskDTO>();
+            var sameTimeTasksSS = new List<TaskDTO>();
+
+            // Process previous tasks
+            for (int i = 0; i < editPreviousTaskIds.Count; i++)
+            {
+                if (editPreviousTaskIds[i].HasValue)
+                {
+                    var taskId = editPreviousTaskIds[i].Value;
+
+                    // Create a minimal TaskDTO with just the ID
+                    var taskDto = new TaskDTO { Id = taskId };
+
+                    if (editPreviousTaskDependencies[i] == "FS")
+                    {
+                        previousTasksFS.Add(taskDto);
+                    }
+                    else if (editPreviousTaskDependencies[i] == "SS")
+                    {
+                        sameTimeTasksSS.Add(taskDto);
+                    }
+                }
+            }
+
+            selectedTaskToEdit.PreviousTasks = previousTasksFS;
+            selectedTaskToEdit.SameTimeTasks = sameTimeTasksSS;
+            selectedTaskToEdit.Resources = availableResources
+                .Where(r => r.Id.HasValue && editSelectedResourceIds.Contains(r.Id))
+                .ToList();
+
+            TaskService.UpdateTask(selectedProjectName, selectedTaskToEdit.Id, selectedTaskToEdit);
+            editTaskSuccessMessage = "Task updated successfully!";
+            editTaskErrorMessage = string.Empty;
+
+            await Task.Delay(1500);
+            CloseEditTaskModal(true);
+        }
+        catch (Exception ex)
+        {
+            editTaskErrorMessage = $"Error updating task: {ex.Message}";
+            editTaskSuccessMessage = string.Empty;
+            Console.WriteLine($"Exception details: {ex}");
+        }
+    }
+
+    private void ToggleEditResourceSelection(ChangeEventArgs e, int? resourceId)
+    {
+        if (e.Value is bool isSelected && resourceId.HasValue)
+        {
+            if (isSelected)
+            {
+                editSelectedResourceIds.Add(resourceId);
+            }
+            else
+            {
+                editSelectedResourceIds.Remove(resourceId);
+            }
+        }
+    }
+
+    private void AddEditPreviousTask()
+    {
+        editPreviousTaskIds.Add(null);
+        editPreviousTaskDependencies.Add("FS");
+    }
+
+    private void RemoveEditPreviousTask(int index)
+    {
+        if (index >= 0 && index < editPreviousTaskIds.Count)
+        {
+            editPreviousTaskIds.RemoveAt(index);
+            editPreviousTaskDependencies.RemoveAt(index);
+        }
+    }
+
+    private void UpdateEditPreviousTaskId(ChangeEventArgs e, int index)
+    {
+        var value = e.Value?.ToString();
+        Console.WriteLine($"UpdateEditPreviousTaskId - Raw value: '{value}', Index: {index}");
+
+        if (string.IsNullOrEmpty(value))
+        {
+            editPreviousTaskIds[index] = null;
+        }
+        else if (int.TryParse(value, out int taskId))
+        {
+            editPreviousTaskIds[index] = taskId;
+            Console.WriteLine($"Successfully parsed task ID: {taskId}");
+        }
+        else
+        {
+            editPreviousTaskIds[index] = null;
+            Console.WriteLine($"Failed to parse task ID from value: '{value}'");
+        }
+    }
+
+    private void UpdateEditDependencyType(ChangeEventArgs e, int index)
+    {
+        editPreviousTaskDependencies[index] = e.Value?.ToString() ?? "FS";
+    }
+
+    private void RemoveTask(TaskDTO task)
+    {
+        try
+        {
+            TaskService.DeleteTask(selectedProjectName, task.Id);
+            LoadTasks();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error removing task: {ex.Message}";
+        }
+    }
+
+    // Add Members Modal methods
+    private void ShowAddMembersModal()
+    {
+        if (!string.IsNullOrEmpty(selectedProjectName))
+        {
+            showAddMembersModal = true;
+            // TODO: Load available members
+            // membersList = LoadAvailableMembers();
+        }
+        else
+        {
+            errorMessage = "Please select a project to add members.";
+        }
+    }
+
+    private void CloseAddMembersModal(bool refreshData)
+    {
+        showAddMembersModal = false;
+        selectedEmails.Clear();
+    }
+
+    private void ToggleMemberSelection(ChangeEventArgs e, string email)
+    {
+        if (e.Value is bool isSelected)
+        {
+            if (isSelected)
+            {
+                selectedEmails.Add(email);
+            }
+            else
+            {
+                selectedEmails.Remove(email);
+            }
+        }
+    }
+
+    private void AddSelectedMembers()
+    {
+        var selectedMembers = membersList.Where(m => selectedEmails.Contains(m.Email)).ToList();
+
+        if (selectedMembers.Any())
+        {
+            try
+            {
+                AdminPService.AssignMembersToProject(selectedProjectName ?? "", selectedMembers);
+                memberSuccessMessage = "Members added successfully!";
+                memberErrorMessage = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                memberErrorMessage = $"Error adding members: {ex.Message}";
+                memberSuccessMessage = string.Empty;
+            }
+        }
+        else
+        {
+            memberErrorMessage = "No members selected.";
+            memberSuccessMessage = string.Empty;
+        }
+
+        CloseAddMembersModal(false);
+    }
+
+    // Assign Task to Member Modal methods
+    private void ShowAssignTaskToMemberModal()
+    {
+        if (!string.IsNullOrEmpty(selectedProjectName))
+        {
+            LoadTasks();
+            showAssignTaskToMemberModal = true;
+        }
+        else
+        {
+            errorMessage = "Please select a project to assign tasks.";
+        }
+    }
+
+    private void CloseAssignTaskToMemberModal(bool refreshData)
+    {
+        showAssignTaskToMemberModal = false;
+        selectedTaskIds.Clear();
+        selectedMemberId = null;
+    }
+
+    private void ToggleTaskSelection(ChangeEventArgs e, int? taskId)
+    {
+        if (e.Value is bool isSelected)
+        {
+            if (isSelected)
+            {
+                selectedTaskIds.Add(taskId);
+            }
+            else
+            {
+                selectedTaskIds.Remove(taskId);
+            }
+        }
+    }
+
+    private void AssignTasksToMember()
+    {
+        var selectedMember = membersList.FirstOrDefault(m => m.Email == selectedMemberId);
+        var selectedTasks = taskList.Where(t => selectedTaskIds.Contains(t.Id)).ToList();
+
+        if (selectedMember != null && selectedTasks.Any())
+        {
+            try
+            {
+                // TODO: Implement the logic to assign tasks to member
+                // AdminPService.AssignTasksToMember(selectedProjectName, selectedMember.Email, selectedTasks);
+                Console.WriteLine("Tasks assigned successfully!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error assigning tasks: {ex.Message}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("No tasks or no member selected.");
+        }
+
+        CloseAssignTaskToMemberModal(false);
+    }
+
+    // Task List Modal methods
+    private void ShowTaskListModal()
+    {
+        if (!string.IsNullOrEmpty(selectedProjectName))
+        {
+            LoadTasks();
+            showTaskListModal = true;
+        }
+        else
+        {
+            errorMessage = "Please select a project to view the task list.";
+        }
+    }
+
+    private void CloseTaskListModal(bool refreshData)
+    {
+        showTaskListModal = false;
+        if (refreshData)
+        {
+            LoadTasks();
+        }
     }
 
 }
