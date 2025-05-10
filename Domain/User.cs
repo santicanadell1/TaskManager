@@ -131,7 +131,10 @@ namespace Domain
 
         public void RemoveTask(int taskId)
         {
-            
+            if (!tasks.Contains(taskId))
+            {
+                throw new UserTaskException("the task is not assigned to the user.");
+            }
             tasks.Remove(taskId);
         }
         
