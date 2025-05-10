@@ -183,10 +183,13 @@ public class AdminPService
     {
         CheckAdminProyectRole();
         var project = this.GetProjectByName(projectName);
+        Project projectEntity = _database.projects.GetProject(p => p.Name == projectName);
         if (project.Members.Find(m => m.Email == memberEmail) == null)
         {
             throw new UserIsNotAMemberException();
         }
+
+       
         UserDTO user = project.Members.Find(m => m.Email == memberEmail);
         User userEntity = ToEntity(user);
         userEntity.AddTask(taskID);

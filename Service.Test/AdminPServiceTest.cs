@@ -280,5 +280,30 @@ public class AdminPServiceTests
         
         _service.AddTaskToMember("Test Project","member1.user@example.com" , 1);
         
+    }[TestMethod]
+    [ExpectedException(typeof(TaskIsNotFromTheProjectException))]
+    public void AddTaskToMember_WhenTaskIsNotFromTheProject_ShouldThrowException()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _service.CreateProject(projectDTO);
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Task1",
+            Description = "Description",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        _taskService.AddTask("Test Project", task);
+        
+        _service.AddTaskToMember("Test Project","member1.user@example.com" , 2);
+        
     }
+    
 }
