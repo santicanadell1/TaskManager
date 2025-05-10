@@ -101,7 +101,47 @@ namespace Service
                 throw new TaskNotFoundException();
             }
 
-            var updatedTask = ToEntity(taskDTO);
+            var previousTasks = new List<Task>();
+            if (taskDTO.PreviousTasks != null)
+            {
+                foreach (var prevTaskDTO in taskDTO.PreviousTasks)
+                {
+                    if (prevTaskDTO.Id.HasValue)
+                    {
+                        var existingTask = project.Tasks.FirstOrDefault(t => t.Id == prevTaskDTO.Id);
+                        if (existingTask != null && existingTask.Id != taskId)
+                        {
+                            previousTasks.Add(existingTask);
+                        }
+                    }
+                }
+            }
+
+            var sameTimeTasks = new List<Task>();
+            if (taskDTO.SameTimeTasks != null)
+            {
+                foreach (var sameTaskDTO in taskDTO.SameTimeTasks)
+                {
+                    if (sameTaskDTO.Id.HasValue)
+                    {
+                        var existingTask = project.Tasks.FirstOrDefault(t => t.Id == sameTaskDTO.Id);
+                        if (existingTask != null && existingTask.Id != taskId)
+                        {
+                            sameTimeTasks.Add(existingTask);
+                        }
+                    }
+                }
+            }
+
+            var updatedTask = new Task(
+                taskDTO.Title,
+                taskDTO.Description,
+                taskDTO.ExpectedStartDate,
+                taskDTO.Duration,
+                previousTasks,
+                sameTimeTasks,
+                ToResourceEntityList(taskDTO.Resources)
+            );
             updatedTask.Id = task.Id;
 
             _database.projects.UpdateTask(projectName, taskId, updatedTask);
