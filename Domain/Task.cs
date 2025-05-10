@@ -19,7 +19,7 @@ namespace Domain
 
         // Propiedades para CPM
         private DateTime _latestStart;
-    
+        private DateTime _latestFinish;
 
         public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks,
             List<Task> sameTimeTasks, List<Resource> resources)
@@ -37,7 +37,8 @@ namespace Domain
             this.StartDate = startDate;
             this.EndDate = startDate.AddDays(duration);
             this.LatestStart = startDate;
-        
+            this.LatestFinish = startDate.AddDays(duration);
+            
         }
 
         public List<Resource> Resource
@@ -105,7 +106,11 @@ namespace Domain
             get => _latestStart;
             set => _latestStart = value;
         }
-
+        public DateTime LatestFinish
+        {
+            get => _latestFinish;
+            set => _latestFinish = value;
+        }
         
         public int Duration
         {
