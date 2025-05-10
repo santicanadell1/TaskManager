@@ -244,7 +244,16 @@ namespace Domain.Test
             User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
             user.AddTask(1);
             user.AddTask(1);
-
+        }
+        [TestMethod]
+        public void RemoveTask_WhenRemovingTask_ThenTaskIsRemoved()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            user.AddTask(1);
+            user.RemoveTask(1);
+            
+            Assert.AreEqual(0,user.Tasks.Count);
+            
         }
 
 
