@@ -30,6 +30,7 @@ public class UserService
         user.Roles = userDTO.Roles;
         user.Birthday = userDTO.Birthday;
         user.Password = userDTO.Password;
+        user.Tasks = userDTO.Tasks;
         _database.users.Update(user.Email, user);
     }
 
@@ -87,7 +88,8 @@ public class UserService
             LastName = userDTO.LastName,
             Password = _passwordManager.HashPassword(userDTO.Password),
             Birthday = userDTO.Birthday,
-            Roles = userDTO.Roles
+            Roles = userDTO.Roles,
+            Tasks = userDTO.Tasks
         };
     }
 
@@ -112,6 +114,7 @@ public class UserService
             Roles = user.Roles,
             Password = user.Password,
             Birthday = user.Birthday,
+            Tasks = user.Tasks
         };
     }
 }
