@@ -250,7 +250,7 @@ public class AdminPServiceTests
         };
         _taskService.AddTask("Test Project", task);
         
-        _service.AddTaskToMember(projectDTO,"member.user@example.com" , 1);
+        _service.AddTaskToMember("Test Project","member.user@example.com" , 1);
         
         Assert.IsNotNull(_userservice.GetUser("member.user@example.com").Tasks.Contains(1));
     }

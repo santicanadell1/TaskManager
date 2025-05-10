@@ -207,6 +207,10 @@ namespace Service
 
         private List<Task> ToEntityList(List<TaskDTO> taskDTOs)
         {
+            if (taskDTOs == null)
+            {
+                return new List<Task>();
+            }
             var tasks = new List<Task>();
             foreach (var taskDTO in taskDTOs)
             {
@@ -218,6 +222,10 @@ namespace Service
 
         private List<Resource> ToResourceEntityList(List<ResourceDTO> resourceDTOs)
         {
+            if (resourceDTOs == null)
+            {
+                return new List<Resource>();
+            }
             var resources = new List<Resource>();
             foreach (var resourceDTO in resourceDTOs)
             {

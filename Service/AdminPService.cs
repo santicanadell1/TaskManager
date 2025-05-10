@@ -179,5 +179,13 @@ public class AdminPService
     
         return memberDTOs;
     }
-    
+    public void AddTaskToMember(string projectName, string memberEmail, int taskID)
+    {
+        CheckAdminProyectRole();
+        var project = this.GetProjectByName(projectName);
+        UserDTO user = project.Members.Find(m => m.Email == memberEmail);
+        User userEntity = ToEntity(user);
+        userEntity.AddTask(taskID);
+        _database.users.Update(memberEmail,userEntity);
+    }
 }
