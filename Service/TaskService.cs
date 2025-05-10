@@ -236,16 +236,30 @@ namespace Service
         {
             return new TaskDTO()
             {
+                Id = task.Id,
                 Title = task.Title,
                 Description = task.Description,
                 ExpectedStartDate = task.ExpectedStartDate,
                 Duration = task.Duration,
-                PreviousTasks = FromEntityList(task.PreviousTasks) ?? new List<TaskDTO>(),
-                SameTimeTasks = FromEntityList(task.SameTimeTasks) ?? new List<TaskDTO>(),
+                PreviousTasks = ToMinimalTaskDTOList(task.PreviousTasks),
+                SameTimeTasks = ToMinimalTaskDTOList(task.SameTimeTasks),
                 State = (StateDTO)task.State,
-                Resources = FromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
-                Id = task.Id
+                Resources = FromResourceEntityList(task.Resources) ?? new List<ResourceDTO>()
             };
+        }
+
+        private List<TaskDTO> ToMinimalTaskDTOList(List<Task> tasks)
+        {
+            if (tasks == null)
+            {
+                return new List<TaskDTO>();
+            }
+
+            return tasks.Select(t => new TaskDTO
+            {
+                Id = t.Id,
+                Title = t.Title
+            }).ToList();
         }
 
         private List<TaskDTO> FromEntityList(List<Task> tasks)
