@@ -16,15 +16,15 @@ public class TaskDTO
     [Required(ErrorMessage = "Duration is required.")]
     public int Duration { get; set; }
     
-    public List<Domain.Task> PreviousTasks { get; set; }
+    public List<TaskDTO> PreviousTasks { get; set; }
     
-    public List<Domain.Task> SameTimeTasks { get; set; }
+    public List<TaskDTO> SameTimeTasks { get; set; }
     
     [Required(ErrorMessage = "State is required.")]
-    public State State { get; set; } = State.TODO;
+    public StateDTO State { get; set; } = StateDTO.TODO;
 
     public int? Id { get; set; }
     
-    public List<Resource> Resources { get; set; }
+    public List<ResourceDTO> Resources { get; set; }
 
 }
