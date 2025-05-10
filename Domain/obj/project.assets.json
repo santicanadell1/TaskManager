@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\santi\\.nuget\\packages\\": {}
+    "/Users/santicanadell/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\santi\\OneDrive\\Escritorio\\ob\\305108_282542_281987\\Domain\\Domain.csproj",
+      "projectUniqueName": "/Users/santicanadell/Desktop/Wa/305108_282542_281987/Domain/Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\ob\\305108_282542_281987\\Domain\\Domain.csproj",
-      "packagesPath": "C:\\Users\\santi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\ob\\305108_282542_281987\\Domain\\obj\\",
+      "projectPath": "/Users/santicanadell/Desktop/Wa/305108_282542_281987/Domain/Domain.csproj",
+      "packagesPath": "/Users/santicanadell/.nuget/packages/",
+      "outputPath": "/Users/santicanadell/Desktop/Wa/305108_282542_281987/Domain/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\santi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/santicanadell/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -64,7 +64,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.407/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/Users/santicanadell/.dotnet/sdk/8.0.406/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

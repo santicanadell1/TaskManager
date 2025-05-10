@@ -286,5 +286,16 @@ public class TaskTests
           
             Assert.IsFalse(task1.SameTimeTasks.Contains(task2));
         }
+        
+        [TestMethod]
+        public void LatestStart_WhenNewTaskIsCreated_ShouldBeEqualToStartDate()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            Assert.AreEqual(startDate, task.LatestStart);
+        }
 
 }
