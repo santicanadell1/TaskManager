@@ -69,4 +69,14 @@ public class UserDTOTest
         Assert.IsTrue(user.Roles.Contains(Rol.AdminSystem));
         Assert.IsTrue(user.Roles.Contains(Rol.ProjectMember));
     }
+
+    [TestMethod]
+    public void NewUser_WhenTasksAreAssigned_ThenTasksAreSet()
+    {
+        List<int> tasksIds = new List<int> { 1, 2, 3 };
+        var user = new UserDTO{Tasks = tasksIds};
+        Assert.IsNotNull(user.Tasks);
+    }
+
+    
 }

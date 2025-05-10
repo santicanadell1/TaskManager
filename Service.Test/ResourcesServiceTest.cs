@@ -16,6 +16,7 @@ public class ResourcesServiceTest
     private UserService _userService;
     private AdminPService _adminProjectService;
     private TaskService _taskService;
+
     [TestInitialize]
     public void TestSetUp()
     {
@@ -42,8 +43,8 @@ public class ResourcesServiceTest
             Password = "AdminPassword123@",
             Roles = new List<Rol> { Rol.AdminProject }
         };
-        
-        
+
+
         var adminPUserDTO2 = new UserDTO
         {
             FirstName = "AdminProject2",
@@ -175,6 +176,7 @@ public class ResourcesServiceTest
         Assert.AreEqual("TypeB", resource.Type);
         Assert.AreEqual("Updated description", resource.Description);
     }
+
     [TestMethod]
     public void UpdateResource_ShouldUpdateResource_WhenResourceIsExclusive()
     {
@@ -189,34 +191,42 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
-        
+
+        var addedResourceDto = new ResourceDTO()
+        {
+            Name = addedResource.Name,
+            Type = "TypeB",
+            Description = "Updated description"
+        };
+
+
         ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
-        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
-        
+        project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
         TaskDTO task = new TaskDTO()
         {
-            Title = "Title1", 
-            Description = "Description1" , 
-            ExpectedStartDate = DateTime.Today, 
+            Title = "Title1",
+            Description = "Description1",
+            ExpectedStartDate = DateTime.Today,
             Duration = 5,
-            PreviousTasks = new List<Task>(), 
-            SameTimeTasks = new List<Task>(),
-            Resources = new List<Resource>(){addedResource}
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>() { addedResourceDto }
         };
-        
+
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project1",task );
-       
+        _taskService.AddTask("Project1", task);
+
         var updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeB",
             Description = "Updated description"
         };
-        
+
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
 
         var resource = _database.resources.Get(r =>
@@ -227,6 +237,7 @@ public class ResourcesServiceTest
         Assert.AreEqual("TypeB", resource.Type);
         Assert.AreEqual("Updated description", resource.Description);
     }
+
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void UpdateResource_ShouldThrowException_WhenResourceIsNotExclusive()
@@ -242,55 +253,62 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
-        
+
+        var addedResourceDto = new ResourceDTO()
+        {
+            Name = addedResource.Name,
+            Type = addedResource.Type,
+            Description = addedResource.Description,
+        };
+
         ProjectDTO project = new ProjectDTO();
         project.Name = "Project 1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
-        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
-        
+        project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
         ProjectDTO project2 = new ProjectDTO();
         project2.Name = "Project 2";
         project2.Description = "Description of Project2";
         project2.StartDate = DateTime.Today;
-        project2.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
-        
+        project2.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
         TaskDTO task = new TaskDTO()
         {
-            Title = "Title 1", 
-            Description = "Description1" , 
-            ExpectedStartDate = DateTime.Today, 
+            Title = "Title 1",
+            Description = "Description1",
+            ExpectedStartDate = DateTime.Today,
             Duration = 5,
-            PreviousTasks = new List<Task>(), 
-            SameTimeTasks = new List<Task>(),
-            Resources = new List<Resource>(){addedResource}
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>() { addedResourceDto }
         };
         TaskDTO task2 = new TaskDTO()
         {
-            Title = "Title 2", 
-            Description = "Description2" , 
-            ExpectedStartDate = DateTime.Today, 
+            Title = "Title 2",
+            Description = "Description2",
+            ExpectedStartDate = DateTime.Today,
             Duration = 5,
-            PreviousTasks = new List<Task>(), 
-            SameTimeTasks = new List<Task>(),
-            Resources = new List<Resource>(){addedResource}
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>() { addedResourceDto }
         };
-        
+
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project 1",task );
+        _taskService.AddTask("Project 1", task);
         _adminProjectService.CreateProject(project2);
-        _taskService.AddTask("Project 2",task2 );
-       
+        _taskService.AddTask("Project 2", task2);
+
         var updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeB",
             Description = "Updated description"
         };
-        
+
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
-        
     }
+
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void UpdateResource_ShouldThrowException_WhenResourceIsNotExclusiveForTheAdmin()
@@ -306,37 +324,42 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
-        
+        var addedResourceDto = new ResourceDTO()
+        {
+            Name = addedResource.Name,
+            Type = addedResource.Type,
+            Description = addedResource.Description,
+        };
+
         ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
-        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
-        
+        project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
         TaskDTO task = new TaskDTO()
         {
-            Title = "Title1", 
-            Description = "Description1" , 
-            ExpectedStartDate = DateTime.Today, 
+            Title = "Title1",
+            Description = "Description1",
+            ExpectedStartDate = DateTime.Today,
             Duration = 5,
-            PreviousTasks = new List<Task>(), 
-            SameTimeTasks = new List<Task>(),
-            Resources = new List<Resource>(){addedResource}
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>() { addedResourceDto }
         };
-        
+
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project1",task );
-       
+        _taskService.AddTask("Project1", task);
+
         var updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeB",
             Description = "Updated description"
         };
-        
+
         _loginService.LoginUser("adminProject2.user@example.com", "AdminPassword123@");
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
-        
     }
 
     [TestMethod]
@@ -360,6 +383,7 @@ public class ResourcesServiceTest
         var deletedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
+
     [TestMethod]
     public void DeleteResource_ShouldDeleteResource_WhenResourceIsExclusive()
     {
@@ -374,27 +398,35 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
-        
+
+        var addedResourceDto = new ResourceDTO()
+        {
+            Name = addedResource.Name,
+            Type = addedResource.Type,
+            Description = addedResource.Description,
+        };
+
         ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
-        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
-        
+        project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
         TaskDTO task = new TaskDTO()
         {
-            Title = "Title1", 
-            Description = "Description1" , 
-            ExpectedStartDate = DateTime.Today, 
+            Title = "Title1",
+            Description = "Description1",
+            ExpectedStartDate = DateTime.Today,
             Duration = 5,
-            PreviousTasks = new List<Task>(), 
-            SameTimeTasks = new List<Task>(),
-            Resources = new List<Resource>(){addedResource}
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>() { addedResourceDto }
         };
-        
+
+
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project1",task );
-        
+        _taskService.AddTask("Project1", task);
+
         Assert.IsNotNull(addedResource);
 
         _resourceService.DeleteResource(addedResource.Id);
@@ -402,6 +434,7 @@ public class ResourcesServiceTest
         var deletedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
+
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void DeleteResource_ShouldThrowException_WhenResourceIsNotExclusive()
@@ -417,49 +450,56 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
-        
+
+        var addedResourceDto = new ResourceDTO()
+        {
+            Name = addedResource.Name,
+            Type = addedResource.Type,
+            Description = addedResource.Description,
+        };
+
         ProjectDTO project = new ProjectDTO();
         project.Name = "Project 1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
-        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
-        
+        project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
         ProjectDTO project2 = new ProjectDTO();
         project2.Name = "Project 2";
         project2.Description = "Description of Project2";
         project2.StartDate = DateTime.Today;
-        project2.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
-        
+        project2.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
         TaskDTO task = new TaskDTO()
         {
-            Title = "Title 1", 
-            Description = "Description1" , 
-            ExpectedStartDate = DateTime.Today, 
+            Title = "Title 1",
+            Description = "Description1",
+            ExpectedStartDate = DateTime.Today,
             Duration = 5,
-            PreviousTasks = new List<Task>(), 
-            SameTimeTasks = new List<Task>(),
-            Resources = new List<Resource>(){addedResource}
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>() { addedResourceDto }
         };
         TaskDTO task2 = new TaskDTO()
         {
-            Title = "Title 2", 
-            Description = "Description2" , 
-            ExpectedStartDate = DateTime.Today, 
+            Title = "Title 2",
+            Description = "Description2",
+            ExpectedStartDate = DateTime.Today,
             Duration = 5,
-            PreviousTasks = new List<Task>(), 
-            SameTimeTasks = new List<Task>(),
-            Resources = new List<Resource>(){addedResource}
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>() { addedResourceDto }
         };
-        
+
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project 1",task );
+        _taskService.AddTask("Project 1", task);
         _adminProjectService.CreateProject(project2);
-        _taskService.AddTask("Project 2",task2 );
+        _taskService.AddTask("Project 2", task2);
         Assert.IsNotNull(addedResource);
 
         _resourceService.DeleteResource(addedResource.Id);
-        
     }
+
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void DeleteResource_ShouldThrowExceptin_WhenResourceIsNotExclusiveForTheAdmin()
@@ -475,27 +515,34 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
-        
+
+        var addedResourceDto = new ResourceDTO()
+        {
+            Name = addedResource.Name,
+            Type = addedResource.Type,
+            Description = addedResource.Description,
+        };
+
         ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
-        project.AdminProyect = _userService.GetUser( "adminProject.user@example.com");
-        
+        project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
         TaskDTO task = new TaskDTO()
         {
-            Title = "Title1", 
-            Description = "Description1" , 
-            ExpectedStartDate = DateTime.Today, 
+            Title = "Title1",
+            Description = "Description1",
+            ExpectedStartDate = DateTime.Today,
             Duration = 5,
-            PreviousTasks = new List<Task>(), 
-            SameTimeTasks = new List<Task>(),
-            Resources = new List<Resource>(){addedResource}
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO>() { addedResourceDto }
         };
-        
+
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project1",task );
-        
+        _taskService.AddTask("Project1", task);
+
         Assert.IsNotNull(addedResource);
         _loginService.LoginUser("adminProject2.user@example.com", "AdminPassword123@");
 

@@ -15,5 +15,7 @@ namespace Service.Models
         public DateTime StartDate { get; set; }
 
         public UserDTO? AdminProyect { get; set; }
+        
+        public List<UserDTO> Members { get; set; }
     }
 }

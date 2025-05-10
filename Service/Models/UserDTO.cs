@@ -21,6 +21,8 @@ public class UserDTO
     public string Password { get; set; }
     
     public List<Rol> Roles { get; set; }
+    
+    public List<int> Tasks { get; set; }
 }
 
 

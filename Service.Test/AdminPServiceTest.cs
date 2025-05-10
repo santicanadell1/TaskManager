@@ -4,6 +4,9 @@ using DataAccess;
 using Domain;
 using System;
 using System.Collections.Generic;
+using DataAccess.ProjectRepositoryExceptions;
+using Domain.Exceptions;
+using Task = System.Threading.Tasks.Task;
 
 namespace Service.Test;
 
@@ -11,9 +14,14 @@ namespace Service.Test;
 public class AdminPServiceTests
 {
     private InMemoryDatabase _database;
-    private AdminPService _service;
+    private global::AdminPService _service;
     private Login _login;
     private UserService _userservice;
+    private UserDTO UserDTO;
+    private UserDTO Admin;
+    private List<UserDTO> members;
+    private TaskService _taskService;
+    
 
     [TestInitialize]
     public void Setup()
@@ -22,9 +30,9 @@ public class AdminPServiceTests
         _service = new AdminPService(_database);
         _userservice = new UserService(_database);
         _login = new Login(_database);
+        _taskService = new TaskService(_database);
 
-
-        var userDTO = new UserDTO
+        Admin = new UserDTO
         {
             FirstName = "Admin",
             LastName = "User",
@@ -34,8 +42,21 @@ public class AdminPServiceTests
             Roles = new List<Rol> { Rol.AdminProject }
         };
 
-        _userservice.AddUser(userDTO);
-        _login.LoginUser(userDTO.Email, userDTO.Password);
+        UserDTO = new UserDTO
+        {
+            FirstName = "User",
+            LastName = "Member",
+            Email = "member.user@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "Password123@",
+            Roles = new List<Rol> { Rol.ProjectMember }
+        };
+
+        members = new List<UserDTO> { UserDTO };
+
+        _userservice.AddUser(Admin);
+        _userservice.AddUser(UserDTO);
+        _login.LoginUser(Admin.Email, Admin.Password); 
     }
 
     [TestMethod]
@@ -46,6 +67,8 @@ public class AdminPServiceTests
             Name = "New Project",
             Description = "Project Description",
             StartDate = DateTime.Parse("2021-09-01"),
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
@@ -62,7 +85,9 @@ public class AdminPServiceTests
         {
             Name = "New Project",
             Description = "Project Description",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
@@ -82,7 +107,7 @@ public class AdminPServiceTests
         _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
 
         Assert.IsTrue(project.Members.Count > 0);
-        Assert.AreEqual("John", project.Members[0].FirstName);
+        Assert.AreEqual("John", project.Members[1].FirstName);
     }
 
     [TestMethod]
@@ -92,7 +117,9 @@ public class AdminPServiceTests
         {
             Name = "New Project",
             Description = "Project Description",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
@@ -114,7 +141,9 @@ public class AdminPServiceTests
         {
             Name = "Old Project",
             Description = "Old Description",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
@@ -126,7 +155,9 @@ public class AdminPServiceTests
         {
             Name = "Updated Project",
             Description = "Updated Description",
-            StartDate = DateTime.Now.AddDays(1)
+            StartDate = DateTime.Now.AddDays(1),
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.UpdateProject("Old Project", updatedDTO);
@@ -139,13 +170,17 @@ public class AdminPServiceTests
         {
             Name = "Project 1",
             Description = "Description 1",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
         var projectDTO2 = new ProjectDTO
         {
             Name = "Project 2",
             Description = "Description 2",
-            StartDate = DateTime.Now.AddDays(1)
+            StartDate = DateTime.Now.AddDays(1),
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO1);
@@ -165,7 +200,9 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
@@ -176,4 +213,133 @@ public class AdminPServiceTests
         Assert.AreEqual("Test Project", project.Name);
         Assert.AreEqual("Test Description", project.Description);
     }
+    [TestMethod]
+    public void GetMembers_ShouldReturnListOfMembers_WhenProjectExist()
+    {
+       var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+       _service.CreateProject(projectDTO);
+       var projectMembers = _service.GetMembers("Test Project");
+       Assert.IsNotNull(projectMembers);
+       Assert.AreEqual(1, projectMembers.Count);
+       Assert.AreEqual("User", projectMembers[0].FirstName);
+    }
+    
+    [TestMethod]
+    public void AddTaskToMember_WhenUserIsMember_ShouldAddTaskToMember()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _service.CreateProject(projectDTO);
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Task1",
+            Description = "Description",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        _taskService.AddTask("Test Project", task);
+        
+        _service.AddTaskToMember("Test Project","member.user@example.com" , 1);
+        
+        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Contains(1));
+    }
+    [TestMethod]
+    [ExpectedException(typeof(UserIsNotAMemberException))]
+    public void AddTaskToMember_WhenUserIsNotMember_ShouldThrowUserIsNotAMemberException()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _service.CreateProject(projectDTO);
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Task1",
+            Description = "Description",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        _taskService.AddTask("Test Project", task);
+        
+        _service.AddTaskToMember("Test Project","member1.user@example.com" , 1);
+        
+    }
+    [TestMethod]
+    [ExpectedException(typeof(TaskIsNotFromTheProjectException))]
+    public void AddTaskToMember_WhenTaskIsNotFromTheProject_ShouldThrowException()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _service.CreateProject(projectDTO);
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Task1",
+            Description = "Description",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        _taskService.AddTask("Test Project", task);
+        
+        _service.AddTaskToMember("Test Project","member.user@example.com" , 2);
+        
+    }[TestMethod]
+    public void GetTasksForAMember_WhenGettingTasksForAMember_ShouldReturnListOfTasks()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _service.CreateProject(projectDTO);
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Task1",
+            Description = "Description",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        TaskDTO task2 = new TaskDTO()
+        {
+            Title = "Task2",
+            Description = "Description2",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        _taskService.AddTask("Test Project", task);
+        _taskService.AddTask("Test Project", task2);
+        
+        _service.AddTaskToMember("Test Project","member.user@example.com" ,1 );
+        _service.AddTaskToMember("Test Project","member.user@example.com" ,2 );
+        
+        List<TaskDTO> tasks = _service.GetAllTaskForAMember("member.user@example.com");
+        
+        Assert.AreEqual(2, tasks.Count);
+    }
+    
 }

@@ -148,7 +148,7 @@ namespace Service
             {
                 foreach (var task in project.Tasks)
                 {
-                    if (task.Resource.Contains(resource))
+                    if (task.Resources.Contains(resource))
                     {
                         projectsThatAreUsingResource.Add(project);
                     }
