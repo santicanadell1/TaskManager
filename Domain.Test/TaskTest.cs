@@ -371,7 +371,7 @@ public class TaskTests
 
             task.Slack = newSlack;
 
-            Assert.AreEqual(newSlack, task);
+            Assert.AreEqual(newSlack, task.Slack);
         }
 
 
