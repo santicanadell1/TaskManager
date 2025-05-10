@@ -237,6 +237,15 @@ namespace Domain.Test
             
             Assert.AreEqual(1,user.Tasks.Count);
         }
+        [TestMethod]
+        [ExpectedException(typeof(UserTaskException))]
+        public void AddTask_WhenAddingTaskWithTheSameId_ThenTaskThrowsException()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            user.AddTask(1);
+            user.AddTask(1);
+
+        }
 
 
 
