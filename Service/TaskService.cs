@@ -24,7 +24,49 @@ namespace Service
                 throw new ProjectNotFoundException();
             }
 
-            var task = ToEntity(taskDTO);
+            var previousTasks = new List<Task>();
+            var sameTimeTasks = new List<Task>();
+
+            if (taskDTO.PreviousTasks != null)
+            {
+                foreach (var prevTaskDTO in taskDTO.PreviousTasks)
+                {
+                    if (prevTaskDTO.Id.HasValue)
+                    {
+                        var existingTask = project.Tasks.FirstOrDefault(t => t.Id == prevTaskDTO.Id);
+                        if (existingTask != null)
+                        {
+                            previousTasks.Add(existingTask);
+                        }
+                    }
+                }
+            }
+
+            if (taskDTO.SameTimeTasks != null)
+            {
+                foreach (var sameTaskDTO in taskDTO.SameTimeTasks)
+                {
+                    if (sameTaskDTO.Id.HasValue)
+                    {
+                        var existingTask = project.Tasks.FirstOrDefault(t => t.Id == sameTaskDTO.Id);
+                        if (existingTask != null)
+                        {
+                            sameTimeTasks.Add(existingTask);
+                        }
+                    }
+                }
+            }
+
+            var task = new Task(
+                taskDTO.Title,
+                taskDTO.Description,
+                taskDTO.ExpectedStartDate,
+                taskDTO.Duration,
+                previousTasks,
+                sameTimeTasks,
+                ToResourceEntityList(taskDTO.Resources)
+            );
+
             _database.projects.AddTask(projectName, task);
         }
 
@@ -82,7 +124,7 @@ namespace Service
                 PreviousTasks = FromEntityList(t.PreviousTasks),
                 SameTimeTasks = FromEntityList(t.SameTimeTasks),
                 State = (StateDTO)t.State,
-                Resources = FromResourceEntityList(t.Resource),
+                Resources = FromResourceEntityList(t.Resources),
                 Id = t.Id
             }).ToList();
 
@@ -161,7 +203,7 @@ namespace Service
                 PreviousTasks = FromEntityList(task.PreviousTasks) ?? new List<TaskDTO>(),
                 SameTimeTasks = FromEntityList(task.SameTimeTasks) ?? new List<TaskDTO>(),
                 State = (StateDTO)task.State,
-                Resources = FromResourceEntityList(task.Resource) ?? new List<ResourceDTO>(),
+                Resources = FromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
                 Id = task.Id
             };
         }
@@ -213,6 +255,7 @@ namespace Service
             {
                 return new List<Task>();
             }
+
             var tasks = new List<Task>();
             foreach (var taskDTO in taskDTOs)
             {
@@ -228,6 +271,7 @@ namespace Service
             {
                 return new List<Resource>();
             }
+
             var resources = new List<Resource>();
             foreach (var resourceDTO in resourceDTOs)
             {

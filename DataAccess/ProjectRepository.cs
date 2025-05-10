@@ -162,11 +162,11 @@ public class ProjectRepository
             throw new TaskRepositoryExceptions.TaskNotFoundException();
         }
 
-        if (task.Resource == null)
+        if (task.Resources == null)
         {
-            task.Resource = new List<Resource>();
+            task.Resources = new List<Resource>();
         }
 
-        task.Resource.Add(resource);
+        task.Resources.Add(resource);
     }
 }

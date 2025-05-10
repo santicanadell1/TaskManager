@@ -1050,32 +1050,34 @@
     ]
   },
   "packageFolders": {
-    "/Users/santicanadell/.nuget/packages/": {}
+    "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/santicanadell/Desktop/WWWW/305108_282542_281987/Service.Test/Service.Test.csproj",
+      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
       "projectName": "Service.Test",
-      "projectPath": "/Users/santicanadell/Desktop/WWWW/305108_282542_281987/Service.Test/Service.Test.csproj",
-      "packagesPath": "/Users/santicanadell/.nuget/packages/",
-      "outputPath": "/Users/santicanadell/Desktop/WWWW/305108_282542_281987/Service.Test/obj/",
+      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
+      "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
+      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service.Test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/santicanadell/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/santicanadell/Desktop/WWWW/305108_282542_281987/Service/Service.csproj": {
-              "projectPath": "/Users/santicanadell/Desktop/WWWW/305108_282542_281987/Service/Service.csproj"
+            "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj": {
+              "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj"
             }
           }
         }
@@ -1128,7 +1130,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/santicanadell/.dotnet/sdk/8.0.406/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
