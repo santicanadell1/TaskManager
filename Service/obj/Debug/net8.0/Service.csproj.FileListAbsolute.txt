@@ -1,87 +1,31 @@
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/bin/Debug/net8.0/Service.deps.json
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/bin/Debug/net8.0/Service.dll
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/bin/Debug/net8.0/Service.pdb
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/obj/Debug/net8.0/Service.GeneratedMSBuildEditorConfig.editorconfig
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/obj/Debug/net8.0/Service.AssemblyInfoInputs.cache
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/obj/Debug/net8.0/Service.AssemblyInfo.cs
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/obj/Debug/net8.0/Service.csproj.CoreCompileInputs.cache
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/obj/Debug/net8.0/Service.sourcelink.json
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/obj/Debug/net8.0/Service.dll
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/obj/Debug/net8.0/refint/Service.dll
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/obj/Debug/net8.0/Service.pdb
-D:/all data/OneDrive/OneDrive/Desktop/305108_282542_281987/Service/obj/Debug/net8.0/ref/Service.dll
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/bin/Debug/net8.0/Service.deps.json
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/bin/Debug/net8.0/Service.dll
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/bin/Debug/net8.0/Service.pdb
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/obj/Debug/net8.0/Service.GeneratedMSBuildEditorConfig.editorconfig
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/obj/Debug/net8.0/Service.AssemblyInfoInputs.cache
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/obj/Debug/net8.0/Service.AssemblyInfo.cs
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/obj/Debug/net8.0/Service.csproj.CoreCompileInputs.cache
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/obj/Debug/net8.0/Service.sourcelink.json
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/obj/Debug/net8.0/Service.dll
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/obj/Debug/net8.0/refint/Service.dll
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/obj/Debug/net8.0/Service.pdb
-/Users/santicanadell/Desktop/OBL/305108_282542_281987/Service/obj/Debug/net8.0/ref/Service.dll
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/bin/Debug/net8.0/Service.deps.json
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/bin/Debug/net8.0/Service.dll
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/bin/Debug/net8.0/Service.pdb
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/bin/Debug/net8.0/DataAccess.dll
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/bin/Debug/net8.0/Domain.dll
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/bin/Debug/net8.0/DataAccess.pdb
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/bin/Debug/net8.0/Domain.pdb
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/Service.csproj.AssemblyReference.cache
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/Service.GeneratedMSBuildEditorConfig.editorconfig
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/Service.AssemblyInfoInputs.cache
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/Service.AssemblyInfo.cs
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/Service.csproj.CoreCompileInputs.cache
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/Service.sourcelink.json
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/Service.csproj.Up2Date
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/Service.dll
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/refint/Service.dll
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/Service.pdb
-/Users/santicanadell/Desktop/Disennn/305108_282542_281987/Service/obj/Debug/net8.0/ref/Service.dll
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.deps.json
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.dll
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.pdb
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\bin\Debug\net8.0\DataAccess.dll
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Domain.dll
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\bin\Debug\net8.0\DataAccess.pdb
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Domain.pdb
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.AssemblyReference.cache
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.GeneratedMSBuildEditorConfig.editorconfig
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfoInputs.cache
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfo.cs
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.CoreCompileInputs.cache
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.sourcelink.json
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.Up2Date
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.dll
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\refint\Service.dll
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.pdb
-D:\all data\OneDrive\OneDrive\Desktop\OBL1-DA1\305108_282542_281987\Service\obj\Debug\net8.0\ref\Service.dll
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\bin\Debug\net8.0\Service.deps.json
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\bin\Debug\net8.0\Service.dll
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\bin\Debug\net8.0\Service.pdb
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\bin\Debug\net8.0\DataAccess.dll
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\bin\Debug\net8.0\Domain.dll
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\bin\Debug\net8.0\DataAccess.pdb
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\bin\Debug\net8.0\Domain.pdb
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.AssemblyReference.cache
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\Service.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfoInputs.cache
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfo.cs
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.CoreCompileInputs.cache
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\Service.sourcelink.json
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.Up2Date
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\Service.dll
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\refint\Service.dll
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\Service.pdb
-C:\Users\santi\OneDrive\Escritorio\ob\305108_282542_281987\Service\obj\Debug\net8.0\ref\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\bin\Debug\net8.0\Service.deps.json
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\bin\Debug\net8.0\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\bin\Debug\net8.0\Service.pdb
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\Service.GeneratedMSBuildEditorConfig.editorconfig
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfoInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfo.cs
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.CoreCompileInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\Service.sourcelink.json
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\refint\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\Service.pdb
+D:\all data\OneDrive\OneDrive\Desktop\305108_282542_281987\Service\obj\Debug\net8.0\ref\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.deps.json
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.pdb
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.GeneratedMSBuildEditorConfig.editorconfig
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfoInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.AssemblyInfo.cs
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.CoreCompileInputs.cache
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.sourcelink.json
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\refint\Service.dll
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.pdb
+D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service\obj\Debug\net8.0\ref\Service.dll
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.deps.json
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.dll
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service\bin\Debug\net8.0\Service.pdb
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service\bin\Debug\net8.0\DataAccess.dll
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service\bin\Debug\net8.0\Domain.dll
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service\bin\Debug\net8.0\DataAccess.pdb
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service\bin\Debug\net8.0\Domain.pdb
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.csproj.AssemblyReference.cache
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service\obj\Debug\net8.0\Service.GeneratedMSBuildEditorConfig.editorconfig
