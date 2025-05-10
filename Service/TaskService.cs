@@ -250,10 +250,26 @@ namespace Service
 
         private List<TaskDTO> FromEntityList(List<Task> tasks)
         {
+            if (tasks == null)
+            {
+                return new List<TaskDTO>();
+            }
+
             var taskDTOs = new List<TaskDTO>();
             foreach (var task in tasks)
             {
-                taskDTOs.Add(FromEntity(task));
+                taskDTOs.Add(new TaskDTO
+                {
+                    Id = task.Id,
+                    Title = task.Title,
+                    Description = task.Description,
+                    ExpectedStartDate = task.ExpectedStartDate,
+                    Duration = task.Duration,
+                    State = (StateDTO)task.State,
+                    PreviousTasks = new List<TaskDTO>(),
+                    SameTimeTasks = new List<TaskDTO>(),
+                    Resources = new List<ResourceDTO>()
+                });
             }
 
             return taskDTOs;
