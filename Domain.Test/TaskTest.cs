@@ -345,6 +345,21 @@ public class TaskTests
 
             Assert.AreEqual(newLatestStart, task.LatestStart);
         }
+        
+        [TestMethod]
+        public void SetLatestFinish_WhenAssigned_ShouldUpdateValue()
+        {
+            DateTime startDate = DateTime.Now;
+            DateTime newLatestFinish = startDate.AddDays(7);
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            task.LatestFinish = newLatestFinish;
+
+            Assert.AreEqual(newLatestFinish, task.);
+        }
+
 
 
 }
