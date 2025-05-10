@@ -1,0 +1,96 @@
+﻿@using Domain
+@using Microsoft.AspNetCore.Identity
+@using Service
+@using Service.Models
+@inject Login LoginService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<link href="styles/styleNavMenu.css" rel="stylesheet"/>
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">
+            <i class="bi bi-check2-square me-2"></i>TaskTrackPro
+        </a>
+    </div>
+</div>
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        @if (_loggedUser == null)
+        {
+            <!-- If the user is not logged in, show Login and Sign Up -->
+            <div class="nav-item px-3 mt-3">
+                <NavLink class="nav-link" href="/login">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/signup">
+                    <i class="bi bi-person-plus me-2"></i> Sign Up
+                </NavLink>
+            </div>
+        }
+        else
+        {
+            <div class="px-3 py-2 mt-2 d-flex align-items-center justify-content-between">
+                <div class="user-profile-mini">
+                    <i class="bi bi-person-circle" style="font-size: 24px; color: #3498db;"></i>
+                    <span class="ms-2 text-white">@_loggedUser.FirstName</span>
+                </div>
+                <button class="btn btn-link p-1" @onclick="Logout" title="Logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="px-3 mb-2">
+                <hr style="border-color: rgba(255,255,255,0.1);"/>
+            </div>
+
+            if (_loggedUser.Roles.Contains(Rol.AdminSystem) && _loggedUser.Roles.Count.Equals(1))
+            {
+                <ResourcesNav/>
+                <AdminSNav/>
+            }
+            else if (_loggedUser.Roles.Contains(Rol.AdminProject) && _loggedUser.Roles.Count.Equals(1))
+            {
+                <ResourcesNav/>
+                <AdminPNav/>
+            }
+            else if (_loggedUser.Roles.Contains(Rol.AdminSystem) && _loggedUser.Roles.Contains(Rol.AdminProject))
+            {
+                <ResourcesNav/>
+                <AdminSNav/>
+                <AdminPNav/>
+            }
+        }
+    </nav>
+</div>
+
+@code {
+    private UserDTO _loggedUser;
+
+    protected override void OnInitialized()
+    {
+        _loggedUser = LoginService.GetLoggedUser();
+        base.OnInitialized();
+    }
+
+    protected override void OnParametersSet()
+    {
+        _loggedUser = LoginService.GetLoggedUser();
+        base.OnParametersSet();
+    }
+
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("/login");
+    }
+
+    private void Logout()
+    {
+        LoginService.Logout();
+        Navigation.NavigateTo("/login", true);
+    }
+
+}
