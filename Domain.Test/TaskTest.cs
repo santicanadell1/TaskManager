@@ -343,7 +343,7 @@ public class TaskTests
 
             task.LatestStart = newLatestStart;
 
-            Assert.AreEqual(newLatestStart, task);
+            Assert.AreEqual(newLatestStart, task.LatestStart);
         }
 
 
