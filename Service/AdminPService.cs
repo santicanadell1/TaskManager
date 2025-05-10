@@ -198,5 +198,23 @@ public class AdminPService
         _database.users.Update(memberEmail,userEntity);
     }
 
-    
+    public List<TaskDTO> GetAllTaskForAMember(string email)
+    {
+        User user = _database.users.Get(u => u.Email == email);
+        TaskService taskService = new TaskService(_database);
+        List<TaskDTO> returnList = new List<TaskDTO>();
+        foreach (var project in _database.projects.GetAllProjects())
+        {
+            List<TaskDTO> tasks = taskService.GetTasks(project.Name);
+            foreach (var task in tasks)
+            {
+                if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+                {
+                    returnList.Add(task);
+                }
+            }
+            
+        }
+        return returnList;
+    }
 }
