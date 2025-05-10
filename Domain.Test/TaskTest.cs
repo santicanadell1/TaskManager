@@ -286,5 +286,107 @@ public class TaskTests
           
             Assert.IsFalse(task1.SameTimeTasks.Contains(task2));
         }
+        
+        [TestMethod]
+        public void LatestStart_WhenNewTaskIsCreated_ShouldBeEqualToStartDate()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            Assert.AreEqual(startDate, task.LatestStart);
+        }
+        
+        [TestMethod]
+        public void LatestFinish_WhenNewTaskIsCreated_ShouldBeEqualToEndDate()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+        
+            DateTime expectedEndDate = startDate.AddDays(5);
+            Assert.AreEqual(expectedEndDate, task.LatestFinish);
+        }
+        
+        [TestMethod]
+        public void Slack_WhenNewTaskIsCreated_ShouldBeZero()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+        
+            Assert.AreEqual(TimeSpan.Zero, task.Slack);
+        }
+        
+        [TestMethod]
+        public void IsCritical_WhenNewTaskIsCreated_ShouldBeFalse()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+        
+            Assert.IsFalse(task.IsCritical);
+        }
+        
+        [TestMethod]
+        public void SetLatestStart_WhenAssigned_ShouldUpdateValue()
+        {
+            DateTime startDate = DateTime.Now;
+            DateTime newLatestStart = startDate.AddDays(3);
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            task.LatestStart = newLatestStart;
+
+            Assert.AreEqual(newLatestStart, task.LatestStart);
+        }
+        
+        [TestMethod]
+        public void SetLatestFinish_WhenAssigned_ShouldUpdateValue()
+        {
+            DateTime startDate = DateTime.Now;
+            DateTime newLatestFinish = startDate.AddDays(7);
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            task.LatestFinish = newLatestFinish;
+
+            Assert.AreEqual(newLatestFinish, task.LatestFinish);
+        }
+        
+        [TestMethod]
+        public void SetSlack_WhenAssigned_ShouldUpdateValue()
+        {
+            DateTime startDate = DateTime.Now;
+            TimeSpan newSlack = TimeSpan.FromDays(2);
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            task.Slack = newSlack;
+
+            Assert.AreEqual(newSlack, task.Slack);
+        }
+        
+        [TestMethod]
+        public void SetIsCritical_WhenAssigned_ShouldUpdateValue()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            task.IsCritical = true;
+
+            Assert.IsTrue(task.IsCritical);
+        }
+
+
 
 }
