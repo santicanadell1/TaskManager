@@ -320,5 +320,16 @@ public class TaskTests
         
             Assert.AreEqual(TimeSpan.Zero, task.Slack);
         }
+        
+        [TestMethod]
+        public void IsCritical_WhenNewTaskIsCreated_ShouldBeFalse()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+        
+            Assert.IsFalse(task.IsCritical);
+        }
 
 }
