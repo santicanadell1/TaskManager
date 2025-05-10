@@ -331,5 +331,20 @@ public class TaskTests
         
             Assert.IsFalse(task.IsCritical);
         }
+        
+        [TestMethod]
+        public void SetLatestStart_WhenAssigned_ShouldUpdateValue()
+        {
+            DateTime startDate = DateTime.Now;
+            DateTime newLatestStart = startDate.AddDays(3);
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            task.LatestStart = newLatestStart;
+
+            Assert.AreEqual(newLatestStart, task);
+        }
+
 
 }
