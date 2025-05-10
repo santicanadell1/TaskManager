@@ -159,7 +159,7 @@ public class ProjectRepositoryTest
 
         Assert.IsTrue(project.Tasks.Contains(task));
     }
-    
+
     [TestMethod]
     public void UpdateTask_WhenUpdatingExistingTask_ShouldUpdateTaskDetails()
     {
@@ -485,7 +485,7 @@ public class ProjectRepositoryTest
 
         var taskInProject = project.Tasks.FirstOrDefault(t => t.Id == task.Id);
         Assert.IsNotNull(taskInProject);
-        Assert.IsTrue(taskInProject.Resource.Contains(resource));
+        Assert.IsTrue(taskInProject.Resources.Contains(resource));
     }
 
     [TestMethod]
