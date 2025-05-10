@@ -124,7 +124,7 @@ namespace Domain
         {
             if (tasks.Contains(taskId))
             {
-                throw new UserTaskException();
+                throw new UserTaskException("The task is already assigned to the user.");
             }
             tasks.Add(taskId);
         }

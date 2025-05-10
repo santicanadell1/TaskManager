@@ -255,6 +255,13 @@ namespace Domain.Test
             Assert.AreEqual(0,user.Tasks.Count);
             
         }
+        [TestMethod]
+        [ExpectedException(typeof(UserTaskException))]
+        public void RemoveTask_WhenRemovingTaskThatIsNotInTheList_ThenThrowsException()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            user.RemoveTask(2);
+        }
 
 
 

@@ -2,7 +2,7 @@
 
 public class UserTaskException:Exception
 {
-    public UserTaskException() : base("The task is already assigned to the user.")
+    public UserTaskException(String message) : base(message)
     {
         
     }
