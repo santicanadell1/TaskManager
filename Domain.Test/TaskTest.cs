@@ -359,6 +359,20 @@ public class TaskTests
 
             Assert.AreEqual(newLatestFinish, task.LatestFinish);
         }
+        
+        [TestMethod]
+        public void SetSlack_WhenAssigned_ShouldUpdateValue()
+        {
+            DateTime startDate = DateTime.Now;
+            TimeSpan newSlack = TimeSpan.FromDays(2);
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            task.Slack = newSlack;
+
+            Assert.AreEqual(newSlack, task);
+        }
 
 
 
