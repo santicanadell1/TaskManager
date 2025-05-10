@@ -384,7 +384,7 @@ public class TaskTests
 
             task.IsCritical = true;
 
-            Assert.IsTrue(task);
+            Assert.IsTrue(task.IsCritical);
         }
 
 
