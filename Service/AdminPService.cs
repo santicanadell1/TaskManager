@@ -5,6 +5,7 @@ using Domain.Exceptions;
 using Service;
 using Service.Models;
 
+
 public class AdminPService
 {
     private readonly InMemoryDatabase _database;
@@ -192,9 +193,10 @@ public class AdminPService
         {
             throw new TaskIsNotFromTheProjectException();
         }
-        UserDTO user = project.Members.Find(m => m.Email == memberEmail);
-        User userEntity = ToEntity(user);
+        User userEntity = _database.users.Get(u => u.Email == memberEmail);
         userEntity.AddTask(taskID);
         _database.users.Update(memberEmail,userEntity);
     }
+
+    
 }

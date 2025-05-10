@@ -82,7 +82,8 @@ namespace Service
                 PreviousTasks = FromEntityList(t.PreviousTasks),
                 SameTimeTasks = FromEntityList(t.SameTimeTasks),
                 State = (StateDTO)t.State,
-                Resources = FromResourceEntityList(t.Resource)
+                Resources = FromResourceEntityList(t.Resource),
+                Id = t.Id
             }).ToList();
 
             return taskDTOs;
@@ -160,7 +161,8 @@ namespace Service
                 PreviousTasks = FromEntityList(task.PreviousTasks) ?? new List<TaskDTO>(),
                 SameTimeTasks = FromEntityList(task.SameTimeTasks) ?? new List<TaskDTO>(),
                 State = (StateDTO)task.State,
-                Resources = FromResourceEntityList(task.Resource) ?? new List<ResourceDTO>()
+                Resources = FromResourceEntityList(task.Resource) ?? new List<ResourceDTO>(),
+                Id = task.Id
             };
         }
 

@@ -77,7 +77,14 @@ namespace Domain
         public List<int> Tasks
         {
             get => tasks;
-            set => tasks = value;
+            set
+            {
+                if (value == null)
+                {
+                    tasks = new List<int>();
+                }
+                tasks = value;
+            }
         }
 
         public User(string firstName, string lastName, string email, DateTime birthday, string password)
@@ -122,6 +129,10 @@ namespace Domain
 
         public void AddTask(int taskId)
         {
+            if (tasks == null)
+            {
+                Tasks = new List<int>();
+            }
             if (tasks.Contains(taskId))
             {
                 throw new UserTaskException("The task is already assigned to the user.");
