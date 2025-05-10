@@ -17,7 +17,6 @@ namespace Domain
         private State _state;
         private List<Resource> _resources;
 
-        // Propiedades para CPM
         private DateTime _latestStart;
         private DateTime _latestFinish;
         private TimeSpan _slack;
@@ -35,7 +34,6 @@ namespace Domain
             this.State = State.TODO;
             this.Resource = resources ?? new List<Resource>();
 
-            // Inicializar propiedades CPM
             this.StartDate = startDate;
             this.EndDate = startDate.AddDays(duration);
             this.LatestStart = startDate;
