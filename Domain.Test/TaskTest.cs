@@ -373,6 +373,19 @@ public class TaskTests
 
             Assert.AreEqual(newSlack, task.Slack);
         }
+        
+        [TestMethod]
+        public void SetIsCritical_WhenAssigned_ShouldUpdateValue()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+
+            task.IsCritical = true;
+
+            Assert.IsTrue(task);
+        }
 
 
 
