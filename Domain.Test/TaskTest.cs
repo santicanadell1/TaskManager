@@ -309,5 +309,16 @@ public class TaskTests
             DateTime expectedEndDate = startDate.AddDays(5);
             Assert.AreEqual(expectedEndDate, task.LatestFinish);
         }
+        
+        [TestMethod]
+        public void Slack_WhenNewTaskIsCreated_ShouldBeZero()
+        {
+            DateTime startDate = DateTime.Now;
+            List<Task> previousTasks = new List<Task>();
+            List<Task> sameTimeTasks = new List<Task>();
+            Task task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
+        
+            Assert.AreEqual(TimeSpan.Zero, task.Slack);
+        }
 
 }
