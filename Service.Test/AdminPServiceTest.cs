@@ -4,6 +4,7 @@ using DataAccess;
 using Domain;
 using System;
 using System.Collections.Generic;
+using Task = System.Threading.Tasks.Task;
 
 namespace Service.Test;
 
@@ -17,6 +18,7 @@ public class AdminPServiceTests
     private UserDTO UserDTO;
     private UserDTO Admin;
     private List<UserDTO> members;
+    private TaskService _taskService;
     
 
     [TestInitialize]
@@ -26,6 +28,7 @@ public class AdminPServiceTests
         _service = new AdminPService(_database);
         _userservice = new UserService(_database);
         _login = new Login(_database);
+        _taskService = new TaskService(_database);
 
         Admin = new UserDTO
         {
@@ -224,5 +227,31 @@ public class AdminPServiceTests
        Assert.IsNotNull(projectMembers);
        Assert.AreEqual(1, projectMembers.Count);
        Assert.AreEqual("User", projectMembers[0].FirstName);
+    }
+    
+    [TestMethod]
+    public void AddTaskToMember_WhenUserIsMember_ShouldAddTaskToMember()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _service.CreateProject(projectDTO);
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Task1",
+            Description = "Description",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        _taskService.AddTask("Test Project", task);
+        
+        _service.AddTaskToMember(projectDTO,"member.user@example.com" , 1);
+        
+        Assert.IsNotNull(_userservice.GetUser("member.user@example.com").Tasks.Contains(1));
     }
 }

@@ -807,7 +807,6 @@ D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\
 D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service..76735BA5.Up2Date
 D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.genruntimeconfig.cache
 D:\all data\OneDrive\OneDrive\Desktop\OBL-DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\ref\Service.Test.dll
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\CoverletSourceRootsMapping_Service.Test
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.csproj.AssemblyReference.cache
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.AssemblyInfoInputs.cache
@@ -916,32 +915,14 @@ C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\tr\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\zh-Hans\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-<<<<<<< HEAD
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\DataAccess.dll
-=======
->>>>>>> develop
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Domain.dll
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Service.dll
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Service.pdb
-<<<<<<< HEAD
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\DataAccess.pdb
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Domain.pdb
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.csproj.AssemblyReference.cache
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.AssemblyInfoInputs.cache
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.AssemblyInfo.cs
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.csproj.CoreCompileInputs.cache
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.sourcelink.json
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service..76735BA5.Up2Date
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.dll
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\refint\Service.Test.dll
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.pdb
-=======
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Domain.pdb
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
-C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service..76735BA5.Up2Date
->>>>>>> develop
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\Service.Test.genruntimeconfig.cache
 C:\Users\felid\OneDrive\Escritorio\Facultad\Semestre 5\DA1\305108_282542_281987\Service.Test\obj\Debug\net8.0\ref\Service.Test.dll
