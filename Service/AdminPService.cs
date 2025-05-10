@@ -188,8 +188,10 @@ public class AdminPService
         {
             throw new UserIsNotAMemberException();
         }
-
-       
+        if (projectEntity.Tasks.Find(m => m.Id == taskID) == null)
+        {
+            throw new TaskIsNotFromTheProjectException();
+        }
         UserDTO user = project.Members.Find(m => m.Email == memberEmail);
         User userEntity = ToEntity(user);
         userEntity.AddTask(taskID);

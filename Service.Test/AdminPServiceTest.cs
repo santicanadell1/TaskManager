@@ -302,7 +302,7 @@ public class AdminPServiceTests
         };
         _taskService.AddTask("Test Project", task);
         
-        _service.AddTaskToMember("Test Project","member1.user@example.com" , 2);
+        _service.AddTaskToMember("Test Project","member.user@example.com" , 2);
         
     }
     
