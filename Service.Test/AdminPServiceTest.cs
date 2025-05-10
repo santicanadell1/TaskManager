@@ -5,6 +5,7 @@ using Domain;
 using System;
 using System.Collections.Generic;
 using DataAccess.ProjectRepositoryExceptions;
+using Domain.Exceptions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Service.Test;
@@ -13,7 +14,7 @@ namespace Service.Test;
 public class AdminPServiceTests
 {
     private InMemoryDatabase _database;
-    private AdminPService _service;
+    private global::AdminPService _service;
     private Login _login;
     private UserService _userservice;
     private UserDTO UserDTO;
