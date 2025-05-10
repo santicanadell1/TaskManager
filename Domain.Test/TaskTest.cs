@@ -181,7 +181,7 @@ public class TaskTests
             Task task = new Task("Title", "Description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
 
            
-            task.Resource = null;  
+            task.Resources = null;  
         }
         
         [TestMethod]
