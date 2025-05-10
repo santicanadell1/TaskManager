@@ -21,7 +21,7 @@ namespace Domain
         private DateTime _latestStart;
         private DateTime _latestFinish;
         private TimeSpan _slack;
-    
+        private bool _isCritical;
 
         public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks,
             List<Task> sameTimeTasks, List<Resource> resources)
@@ -41,7 +41,7 @@ namespace Domain
             this.LatestStart = startDate;
             this.LatestFinish = startDate.AddDays(duration);
             this.Slack = TimeSpan.Zero;
-           
+            this.IsCritical = false;
         }
 
         public List<Resource> Resource
@@ -119,7 +119,11 @@ namespace Domain
             get => _slack;
             set => _slack = value;
         }
-    
+        public bool IsCritical
+        {
+            get => _isCritical;
+            set => _isCritical = value;
+        }
         
         public int Duration
         {
