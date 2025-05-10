@@ -14,6 +14,10 @@ public class AdminPServiceTests
     private AdminPService _service;
     private Login _login;
     private UserService _userservice;
+    private UserDTO UserDTO;
+    private UserDTO Admin;
+    private List<UserDTO> members;
+    
 
     [TestInitialize]
     public void Setup()
@@ -33,6 +37,16 @@ public class AdminPServiceTests
             Password = "Password123@",
             Roles = new List<Rol> { Rol.AdminProject }
         };
+        var User = new UserDTO
+        {
+            FirstName = "User",
+            LastName = "Member",
+            Email = "member.user@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "Password123@",
+            Roles = new List<Rol> { Rol.ProjectMember }
+        };
+        var members = new List<UserDTO> { User };
 
         _userservice.AddUser(userDTO);
         _login.LoginUser(userDTO.Email, userDTO.Password);
@@ -175,5 +189,22 @@ public class AdminPServiceTests
         Assert.IsNotNull(project);
         Assert.AreEqual("Test Project", project.Name);
         Assert.AreEqual("Test Description", project.Description);
+    }
+    [TestMethod]
+    public void GetMembers_ShouldReturnListOfMembers_WhenProjectExist()
+    {
+       var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+       _service.CreateProject(projectDTO);
+       var projectMembers = _service.GetMembers("Test Project");
+       Assert.IsNotNull(projectMembers);
+       Assert.AreEqual(1, projectMembers.Count);
+       Assert.AreEqual("User", projectMembers[0].FirstName);
     }
 }
