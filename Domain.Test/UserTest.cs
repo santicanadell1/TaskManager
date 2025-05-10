@@ -227,6 +227,16 @@ namespace Domain.Test
 
             Assert.AreEqual(0, user.Roles.Count);
         }
+        
+        
+        [TestMethod]
+        public void NewUser_WhenAddingTaskID_ThenTaskIdIsAdded()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password",new List<int> ());
+            user.AddTask(1);
+            
+            Assert.AreEqual(1,user.Tasks.Count);
+        }
 
 
 

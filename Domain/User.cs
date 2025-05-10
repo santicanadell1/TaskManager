@@ -11,6 +11,7 @@ namespace Domain
         private DateTime birthday;
         public string password;
         public List<Rol> roles = new List<Rol>();
+        
 
         public string FirstName
         {
@@ -110,5 +111,7 @@ namespace Domain
 
             roles.Remove(rol);
         }
+        
+        
     }
 }
