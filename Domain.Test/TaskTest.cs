@@ -357,7 +357,7 @@ public class TaskTests
 
             task.LatestFinish = newLatestFinish;
 
-            Assert.AreEqual(newLatestFinish, task.);
+            Assert.AreEqual(newLatestFinish, task.LatestFinish);
         }
 
 
