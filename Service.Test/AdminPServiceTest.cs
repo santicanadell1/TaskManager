@@ -4,6 +4,7 @@ using DataAccess;
 using Domain;
 using System;
 using System.Collections.Generic;
+using DataAccess.ProjectRepositoryExceptions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Service.Test;
@@ -253,5 +254,30 @@ public class AdminPServiceTests
         _service.AddTaskToMember("Test Project","member.user@example.com" , 1);
         
         Assert.IsNotNull(_userservice.GetUser("member.user@example.com").Tasks.Contains(1));
+    }
+    [TestMethod]
+    [ExpectedException(typeof(UserIsNotAMemberException))]
+    public void AddTaskToMember_WhenUserIsNotMember_ShouldThrowUserIsNotAMemberException()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _service.CreateProject(projectDTO);
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Task1",
+            Description = "Description",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        _taskService.AddTask("Test Project", task);
+        
+        _service.AddTaskToMember("Test Project","member1.user@example.com" , 1);
+        
     }
 }
