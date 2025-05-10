@@ -32,7 +32,7 @@ namespace Domain
             this.PreviousTasks = previousTasks ?? new List<Task>();
             this.SameTimeTasks = sameTimeTasks ?? new List<Task>();
             this.State = State.TODO;
-            this.Resource = resources ?? new List<Resource>();
+            this.Resources = resources ?? new List<Resource>();
 
             this.StartDate = startDate;
             this.EndDate = startDate.AddDays(duration);
@@ -42,7 +42,7 @@ namespace Domain
             this.IsCritical = false;
         }
 
-        public List<Resource> Resource
+        public List<Resource> Resources
         {
             get => _resources;
             set
