@@ -227,6 +227,41 @@ namespace Domain.Test
 
             Assert.AreEqual(0, user.Roles.Count);
         }
+        
+        
+        [TestMethod]
+        public void NewUser_WhenAddingTaskID_ThenTaskIdIsAdded()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            user.AddTask(1);
+            
+            Assert.AreEqual(1,user.Tasks.Count);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(UserTaskException))]
+        public void AddTask_WhenAddingTaskWithTheSameId_ThenTaskThrowsException()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            user.AddTask(1);
+            user.AddTask(1);
+        }
+        [TestMethod]
+        public void RemoveTask_WhenRemovingTask_ThenTaskIsRemoved()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            user.AddTask(1);
+            user.RemoveTask(1);
+            
+            Assert.AreEqual(0,user.Tasks.Count);
+            
+        }
+        [TestMethod]
+        [ExpectedException(typeof(UserTaskException))]
+        public void RemoveTask_WhenRemovingTaskThatIsNotInTheList_ThenThrowsException()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            user.RemoveTask(2);
+        }
 
 
 
