@@ -122,6 +122,10 @@ namespace Domain
 
         public void AddTask(int taskId)
         {
+            if (tasks.Contains(taskId))
+            {
+                throw new UserTaskException();
+            }
             tasks.Add(taskId);
         }
         
