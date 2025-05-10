@@ -32,13 +32,12 @@ public class AdminPService
             throw new DuplicatedProjectsNameException();
         }
 
-        var adminProyect = LoggedUser.Current;
-
-        var newProject = new Project(projectDTO.Name, projectDTO.Description, projectDTO.StartDate);
-        newProject.AdminProject = ToEntity(adminProyect);
+        var newProject = ToEntity(projectDTO); 
+        newProject.AdminProject = ToEntity(LoggedUser.Current); 
 
         _database.projects.AddProject(newProject);
     }
+
 
     public void AssignMembersToProject(string projectName, List<UserDTO> membersDTO)
     {
@@ -101,21 +100,44 @@ public class AdminPService
 
     private ProjectDTO FromEntity(Project project)
     {
+        List<UserDTO> memberDTOs = new List<UserDTO>();
+        if (project.Members != null)
+        {
+            foreach (var member in project.Members)
+            {
+                memberDTOs.Add(FromEntity(member));
+            }
+        }
+
         return new ProjectDTO()
         {
             Name = project.Name,
             Description = project.Description,
             StartDate = project.StartDate,
+            Members = memberDTOs,
+            AdminProyect = project.AdminProject != null ? FromEntity(project.AdminProject) : null
         };
     }
 
+
     public Project ToEntity(ProjectDTO projectDTO)
     {
+        List<User> members = new List<User>();
+        if (projectDTO.Members != null)
+        {
+            foreach (var memberDTO in projectDTO.Members)
+            {
+                members.Add(ToEntity(memberDTO));
+            }
+        }
+    
         return new Project
         {
             Name = projectDTO.Name,
             Description = projectDTO.Description,
-            StartDate = projectDTO.StartDate
+            StartDate = projectDTO.StartDate,
+            AdminProject = projectDTO.AdminProyect != null ? ToEntity(projectDTO.AdminProyect) : null,
+            Members = members,
         };
     }
 
@@ -131,6 +153,30 @@ public class AdminPService
             Roles = userDTO.Roles
         };
     }
-  
+    private UserDTO FromEntity(User user)
+    {
+        return new UserDTO
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Birthday = user.Birthday,
+            Password = user.Password,
+            Roles = user.Roles
+        };
+    }
+
+    public List<UserDTO> GetMembers(string projectName)
+    {
+        CheckAdminProyectRole();
+        var project = this.GetProjectByName(projectName);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException();
+        }
+
+        List<UserDTO> memberDTOs = project.Members;
     
+        return memberDTOs;
+    }
 }

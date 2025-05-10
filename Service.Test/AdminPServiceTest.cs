@@ -27,8 +27,7 @@ public class AdminPServiceTests
         _userservice = new UserService(_database);
         _login = new Login(_database);
 
-
-        var userDTO = new UserDTO
+        Admin = new UserDTO
         {
             FirstName = "Admin",
             LastName = "User",
@@ -37,7 +36,8 @@ public class AdminPServiceTests
             Password = "Password123@",
             Roles = new List<Rol> { Rol.AdminProject }
         };
-        var User = new UserDTO
+
+        UserDTO = new UserDTO
         {
             FirstName = "User",
             LastName = "Member",
@@ -46,10 +46,12 @@ public class AdminPServiceTests
             Password = "Password123@",
             Roles = new List<Rol> { Rol.ProjectMember }
         };
-        var members = new List<UserDTO> { User };
 
-        _userservice.AddUser(userDTO);
-        _login.LoginUser(userDTO.Email, userDTO.Password);
+        members = new List<UserDTO> { UserDTO };
+
+        _userservice.AddUser(Admin);
+        _userservice.AddUser(UserDTO);
+        _login.LoginUser(Admin.Email, Admin.Password); 
     }
 
     [TestMethod]
@@ -60,6 +62,8 @@ public class AdminPServiceTests
             Name = "New Project",
             Description = "Project Description",
             StartDate = DateTime.Parse("2021-09-01"),
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
@@ -76,7 +80,9 @@ public class AdminPServiceTests
         {
             Name = "New Project",
             Description = "Project Description",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
@@ -96,7 +102,7 @@ public class AdminPServiceTests
         _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
 
         Assert.IsTrue(project.Members.Count > 0);
-        Assert.AreEqual("John", project.Members[0].FirstName);
+        Assert.AreEqual("John", project.Members[1].FirstName);
     }
 
     [TestMethod]
@@ -106,7 +112,9 @@ public class AdminPServiceTests
         {
             Name = "New Project",
             Description = "Project Description",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
@@ -128,7 +136,9 @@ public class AdminPServiceTests
         {
             Name = "Old Project",
             Description = "Old Description",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
@@ -140,7 +150,9 @@ public class AdminPServiceTests
         {
             Name = "Updated Project",
             Description = "Updated Description",
-            StartDate = DateTime.Now.AddDays(1)
+            StartDate = DateTime.Now.AddDays(1),
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.UpdateProject("Old Project", updatedDTO);
@@ -153,13 +165,17 @@ public class AdminPServiceTests
         {
             Name = "Project 1",
             Description = "Description 1",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
         var projectDTO2 = new ProjectDTO
         {
             Name = "Project 2",
             Description = "Description 2",
-            StartDate = DateTime.Now.AddDays(1)
+            StartDate = DateTime.Now.AddDays(1),
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO1);
@@ -179,7 +195,9 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
         };
 
         _service.CreateProject(projectDTO);
