@@ -9,6 +9,8 @@ namespace Service
 {
     public class CpmService
     {
+        private const double SLACK_TOLERANCE = 0.0001;
+
         public CpmResult CalculateCriticalPath(List<Task> tasks)
         {
             if (tasks == null)
@@ -127,7 +129,7 @@ namespace Service
             foreach (var task in tasks)
             {
                 task.Slack = task.LatestStart - task.StartDate;
-                task.IsCritical = Math.Abs(task.Slack.TotalDays) < 0.0001;
+                task.IsCritical = Math.Abs(task.Slack.TotalDays) < SLACK_TOLERANCE;
             }
         }
 
@@ -138,7 +140,7 @@ namespace Service
 
             if (!criticalTasks.Any())
             {
-                throw new CriticalPathCalculationException("No se encontraron tareas críticas en el proyecto");
+                throw new CriticalPathCalculationException("No critical tasks were found in the project");
             }
 
             var currentTask = criticalTasks.FirstOrDefault(t => 
@@ -247,7 +249,7 @@ namespace Service
 
         public bool IsCritical(Task task)
         {
-            return Math.Abs(task.Slack.TotalDays) < 0.0001;
+            return Math.Abs(task.Slack.TotalDays) < SLACK_TOLERANCE;
         }
     }
 
