@@ -215,7 +215,14 @@ public class AdminPService
         userEntity.AddTask(taskID);
         _database.users.Update(memberEmail,userEntity);
     }
-    
+
+    public void RemoveTaskFromMember(string projectName, string memberEmail, int taskID)
+    {
+        CheckAdminProyectRole();
+        User userEntity = _database.users.Get(u => u.Email == memberEmail);
+        userEntity.RemoveTask(taskID);
+        _database.users.Update(memberEmail,userEntity);
+    }
 
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
