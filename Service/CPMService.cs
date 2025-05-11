@@ -2,6 +2,7 @@ using Domain;
 using Domain.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Task = Domain.Task;
 
 namespace Service
@@ -20,11 +21,25 @@ namespace Service
                 throw new EmptyTaskListException();
             }
 
-            return null;
+            // Para una sola tarea, es automáticamente crítica
+            var task = tasks.First();
+            task.IsCritical = true;
+            
+            return new CpmResult
+            {
+                AllTasks = tasks,
+                CriticalPath = new List<Task> { task },
+                CriticalTasks = new List<Task> { task },
+                ProjectDuration = task.Duration
+            };
         }
     }
 
     public class CpmResult
     {
+        public List<Task> AllTasks { get; set; }
+        public List<Task> CriticalPath { get; set; }
+        public List<Task> CriticalTasks { get; set; }
+        public int ProjectDuration { get; set; }
     }
 }
