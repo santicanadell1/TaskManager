@@ -73,7 +73,7 @@ namespace Service.Test
             
             Assert.AreEqual(_taskA.ExpectedStartDate, processedTask.StartDate);
             
-            Assert.AreEqual(_taskA.ExpectedStartDate.AddDays(_taskA.Duration), processedTask);
+            Assert.AreEqual(_taskA.ExpectedStartDate.AddDays(_taskA.Duration), processedTask.EndDate);
         }
     }
 }

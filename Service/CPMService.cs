@@ -21,16 +21,32 @@ namespace Service
                 throw new EmptyTaskListException();
             }
 
-            var task = tasks.First();
-            task.IsCritical = true;
+            CalculateEarlyDates(tasks);
+
+            foreach (var task in tasks)
+            {
+                task.IsCritical = true;
+            }
             
             return new CpmResult
             {
                 AllTasks = tasks,
-                CriticalPath = new List<Task> { task },
-                CriticalTasks = new List<Task> { task },
-                ProjectDuration = task.Duration
+                CriticalPath = new List<Task>(tasks),
+                CriticalTasks = new List<Task>(tasks),
+                ProjectDuration = tasks.First().Duration
             };
+        }
+
+        private void CalculateEarlyDates(List<Task> tasks)
+        {
+            foreach (var task in tasks)
+            {
+                if (task.PreviousTasks.Count == 0)
+                {
+                    task.StartDate = task.ExpectedStartDate;
+                    task.EndDate = task.StartDate.AddDays(task.Duration);
+                }
+            }
         }
     }
 
