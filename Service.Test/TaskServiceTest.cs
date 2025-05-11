@@ -433,6 +433,27 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
         {
             _taskService.GetTask("Generic Project", 999);
         }
+        
+        [TestMethod]
+        public void GetTask_ShouldReturnTaskWithResources()
+        {
+            var taskDTO = _taskService.GetTask("Generic Project", _task1.Id);
+
+            Assert.AreEqual(1, taskDTO.Resources.Count);
+            Assert.AreEqual("Resource 1", taskDTO.Resources[0].Name);
+            Assert.AreEqual("Type 1", taskDTO.Resources[0].Type);
+            Assert.AreEqual("Description 1", taskDTO.Resources[0].Description);
+        }
+
+        [TestMethod]
+        public void GetTask_ShouldReturnTaskWithCorrectState()
+        {
+            var taskDTO = _taskService.GetTask("Generic Project", _task1.Id);
+            Assert.AreEqual(StateDTO.TODO, taskDTO.State);
+    
+            var taskDTO2 = _taskService.GetTask("Generic Project", _task2.Id);
+            Assert.AreEqual(StateDTO.TODO, taskDTO2);
+        }
 
     }
 }
