@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Service;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Task = Domain.Task;
 
 namespace Service.Test
@@ -12,11 +13,23 @@ namespace Service.Test
     public class CpmServiceTest
     {
         private CpmService _cpmService;
+        private Task _taskA;
 
         [TestInitialize]
         public void Setup()
         {
             _cpmService = new CpmService();
+            
+            _taskA = new Task(
+                "Tarea A",
+                "Descripción de Tarea A",
+                new DateTime(2025, 1, 1),
+                3,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource>()
+            );
+            _taskA.Id = 1;
         }
 
         [TestMethod]
@@ -31,6 +44,23 @@ namespace Service.Test
         public void CalculateCriticalPath_ShouldThrowException_WhenTasksListIsEmpty()
         {
             _cpmService.CalculateCriticalPath(new List<Task>());
+        }
+
+        [TestMethod]
+        public void CalculateCriticalPath_ShouldReturnValidResult_WhenSingleTaskExists()
+        {
+            var singleTask = new List<Task> { _taskA };
+            var result = _cpmService.CalculateCriticalPath(singleTask);
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.AllTasks);
+            Assert.IsNotNull(result.CriticalPath);
+            Assert.IsNotNull(result.CriticalTasks);
+            
+            Assert.AreEqual(1, result.AllTasks.Count);
+            Assert.AreEqual(1, result.CriticalPath.Count);
+            Assert.AreEqual(1, result.CriticalTasks.Count);
+            Assert.AreEqual(_taskA.Duration, result.ProjectDuration);
         }
     }
 }

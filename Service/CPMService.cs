@@ -20,13 +20,11 @@ namespace Service
                 throw new EmptyTaskListException();
             }
 
-            // Por ahora solo devolvemos null para que compile
             return null;
         }
     }
 
     public class CpmResult
     {
-        // Clase vacía por ahora
     }
 }
