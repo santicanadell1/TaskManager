@@ -366,7 +366,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
                 Resources = new List<ResourceDTO>()
             };
 
-            _taskService.UpdateTask("Generic Project", _task1.Id);
+            _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
 
             var project = _database.projects.GetProject(p => p.Name == "Generic Project");
             var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
