@@ -411,7 +411,14 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual(1, tasks[1].Resources.Count);
             Assert.AreEqual("Resource 2", tasks[1].Resources[0].Name);
         }
+        [TestMethod]
+        public void GetTasks_ShouldReturnTasksWithCorrectState()
+        {
+            var tasks = _taskService.GetTasks("Generic Project");
 
+            Assert.AreEqual(StateDTO.TODO, tasks[0].State);
+            Assert.AreEqual(StateDTO.TODO, tasks[1]);
+        }
 
     }
 }
