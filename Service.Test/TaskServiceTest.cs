@@ -138,7 +138,7 @@ namespace Service.Test
                 Duration = 5
             };
 
-            _taskService.AddTask("Non-Existent Project");
+            _taskService.AddTask("Non-Existent Project", taskDTO);
         }
 
         [TestMethod]
