@@ -28,25 +28,56 @@ namespace Service
                 task.IsCritical = true;
             }
             
+            var projectDuration = CalculateProjectDuration(tasks);
+            
             return new CpmResult
             {
                 AllTasks = tasks,
                 CriticalPath = new List<Task>(tasks),
                 CriticalTasks = new List<Task>(tasks),
-                ProjectDuration = tasks.First().Duration
+                ProjectDuration = projectDuration
             };
         }
 
         private void CalculateEarlyDates(List<Task> tasks)
         {
-            foreach (var task in tasks)
+            var processedTasks = new HashSet<Task>();
+            var remainingTasks = new Queue<Task>(tasks);
+
+            while (remainingTasks.Count > 0)
             {
-                if (task.PreviousTasks.Count == 0)
+                var task = remainingTasks.Dequeue();
+
+                if (task.PreviousTasks.All(p => processedTasks.Contains(p)))
                 {
-                    task.StartDate = task.ExpectedStartDate;
+                    if (task.PreviousTasks.Count == 0)
+                    {
+                        task.StartDate = task.ExpectedStartDate;
+                    }
+                    else
+                    {
+                        task.StartDate = task.PreviousTasks.Max(p => p.EndDate);
+                    }
+
                     task.EndDate = task.StartDate.AddDays(task.Duration);
+                    processedTasks.Add(task);
+                }
+                else
+                {
+                    remainingTasks.Enqueue(task);
                 }
             }
+        }
+
+        private int CalculateProjectDuration(List<Task> tasks)
+        {
+            if (!tasks.Any())
+                return 0;
+
+            var earliestStart = tasks.Min(t => t.StartDate);
+            var latestFinish = tasks.Max(t => t.EndDate);
+
+            return (int)(latestFinish - earliestStart).TotalDays;
         }
     }
 
