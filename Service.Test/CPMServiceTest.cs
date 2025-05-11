@@ -184,5 +184,16 @@ namespace Service.Test
             Assert.IsTrue(result.CriticalPath.Any(t => t.Id == 2) || result.CriticalPath.Any(t => t.Id == 1));
             Assert.IsTrue(result.CriticalPath.Any(t => t.Id == 4));
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(CircularDependencyException))]
+        public void CalculateCriticalPath_ShouldThrowException_WhenCircularDependencyExists()
+        {
+            _taskA.PreviousTasks.Add(_taskB);
+            _taskB.PreviousTasks.Add(_taskA);
+            
+            var circularTasks = new List<Task> { _taskA, _taskB };
+            _cpmService.CalculateCriticalPath(circularTasks);
+        }
     }
 }
