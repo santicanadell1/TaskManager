@@ -417,7 +417,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             var tasks = _taskService.GetTasks("Generic Project");
 
             Assert.AreEqual(StateDTO.TODO, tasks[0].State);
-            Assert.AreEqual(StateDTO.TODO, tasks[1]);
+            Assert.AreEqual(StateDTO.TODO, tasks[1].State);
         }
 
     }
