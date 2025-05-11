@@ -6,7 +6,7 @@ using Service;
 using Service.Models;
 
 
-public class AdminPService
+public class AdminPService : IAdminPService
 {
     private readonly InMemoryDatabase _database;
 
@@ -33,8 +33,8 @@ public class AdminPService
             throw new DuplicatedProjectsNameException();
         }
 
-        var newProject = ToEntity(projectDTO); 
-        newProject.AdminProject = ToEntity(LoggedUser.Current); 
+        var newProject = ToEntity(projectDTO);
+        newProject.AdminProject = ToEntity(LoggedUser.Current);
 
         _database.projects.AddProject(newProject);
     }
@@ -57,12 +57,13 @@ public class AdminPService
             {
                 throw new UserIsAlreadyAMemberException();
             }
+
             project.AddMember(user);
         }
 
         _database.projects.UpdateProject(projectName, project);
     }
-    
+
     public void RemoveMemberFromProject(string projectName, string memberEmail)
     {
         CheckAdminProyectRole();
@@ -71,11 +72,12 @@ public class AdminPService
         {
             throw new ProjectNotFoundException();
         }
-        
+
         if (project.Members.Find(m => m.Email == memberEmail) == null)
         {
             throw new UserIsNotAMemberException();
         }
+
         project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
         _database.projects.UpdateProject(projectName, project);
     }
@@ -149,7 +151,7 @@ public class AdminPService
                 members.Add(ToEntity(memberDTO));
             }
         }
-    
+
         return new Project
         {
             Name = projectDTO.Name,
@@ -172,6 +174,7 @@ public class AdminPService
             Roles = userDTO.Roles
         };
     }
+
     private UserDTO FromEntity(User user)
     {
         return new UserDTO
@@ -195,9 +198,10 @@ public class AdminPService
         }
 
         List<UserDTO> memberDTOs = project.Members;
-    
+
         return memberDTOs;
     }
+
     public void AddTaskToMember(string projectName, string memberEmail, int taskID)
     {
         CheckAdminProyectRole();
@@ -207,13 +211,15 @@ public class AdminPService
         {
             throw new UserIsNotAMemberException();
         }
+
         if (projectEntity.Tasks.Find(m => m.Id == taskID) == null)
         {
             throw new TaskIsNotFromTheProjectException();
         }
+
         User userEntity = _database.users.Get(u => u.Email == memberEmail);
         userEntity.AddTask(taskID);
-        _database.users.Update(memberEmail,userEntity);
+        _database.users.Update(memberEmail, userEntity);
     }
 
     public void RemoveTaskFromMember(string projectName, string memberEmail, int taskID)
@@ -225,13 +231,15 @@ public class AdminPService
         {
             throw new UserIsNotAMemberException();
         }
+
         if (projectEntity.Tasks.Find(m => m.Id == taskID) == null)
         {
             throw new TaskIsNotFromTheProjectException();
         }
+
         User userEntity = _database.users.Get(u => u.Email == memberEmail);
         userEntity.RemoveTask(taskID);
-        _database.users.Update(memberEmail,userEntity);
+        _database.users.Update(memberEmail, userEntity);
     }
 
     public List<TaskDTO> GetAllTaskForAMember(string email)
@@ -249,12 +257,12 @@ public class AdminPService
                     returnList.Add(task);
                 }
             }
-            
         }
+
         return returnList;
     }
-    
-     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName,string email)
+
+    public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
     {
         User user = _database.users.Get(u => u.Email == email);
         TaskService taskService = new TaskService(_database);
@@ -267,8 +275,7 @@ public class AdminPService
                 returnList.Add(task);
             }
         }
+
         return returnList;
     }
-    
-    
 }
