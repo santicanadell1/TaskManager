@@ -431,7 +431,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
         [ExpectedException(typeof(TaskNotFoundException))]
         public void GetTask_ShouldThrowException_WhenTaskDoesNotExist()
         {
-            _taskService.GetTask("Generic Project");
+            _taskService.GetTask("Generic Project", 999);
         }
 
     }
