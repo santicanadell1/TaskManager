@@ -107,5 +107,24 @@ public class MemberPServiceTest
     
         _memberPService.GetAllProjectsFromAMember(user.Email);
     }
+    [TestMethod]
+    [ExpectedException(typeof(UserHasNoProjectsException))]
+    public void GetAllProjectsForMember_WhenUserHasNoProjects_ThenThrowNoProjectsException()
+    {
+        var user = new UserDTO
+        {
+            FirstName = "Another",
+            LastName = "Member",
+            Email = "another.member@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "Password123@",
+            Roles = new List<Rol> { Rol.ProjectMember }
+        };
+
+        _userservice.AddUser(user);
+
+        _memberPService.GetAllProjectsFromAMember(user.Email);
+    }
+
 
 }
