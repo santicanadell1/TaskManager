@@ -62,6 +62,14 @@ public class AdminPService
 
         _database.projects.UpdateProject(projectName, project);
     }
+    
+    public void RemoveMemberFromProject(string projectName, string memberEmail)
+    {
+        CheckAdminProyectRole();
+        var project = _database.projects.GetProject(p => p.Name == projectName);
+        project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
+        _database.projects.UpdateProject(projectName, project);
+    }
 
     public void RemoveProject(string projectName)
     {
