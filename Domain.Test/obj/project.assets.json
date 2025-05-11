@@ -1013,19 +1013,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\santi\\.nuget\\packages\\": {}
+    "C:\\Users\\felid\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\santi\\OneDrive\\Escritorio\\ob\\305108_282542_281987\\Domain.Test\\Domain.Test.csproj",
+      "projectUniqueName": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain.Test\\Domain.Test.csproj",
       "projectName": "Domain.Test",
-      "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\ob\\305108_282542_281987\\Domain.Test\\Domain.Test.csproj",
-      "packagesPath": "C:\\Users\\santi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\ob\\305108_282542_281987\\Domain.Test\\obj\\",
+      "projectPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain.Test\\Domain.Test.csproj",
+      "packagesPath": "C:\\Users\\felid\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain.Test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\santi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\felid\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1037,8 +1037,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\santi\\OneDrive\\Escritorio\\ob\\305108_282542_281987\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\ob\\305108_282542_281987\\Domain\\Domain.csproj"
+            "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain\\Domain.csproj"
             }
           }
         }
@@ -1091,7 +1091,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.407/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\felid\\.dotnet\\sdk\\8.0.406/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
