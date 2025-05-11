@@ -454,6 +454,30 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             var taskDTO2 = _taskService.GetTask("Generic Project", _task2.Id);
             Assert.AreEqual(StateDTO.TODO, taskDTO2.State);
         }
+        
+        [TestMethod]
+        public void GetTask_ShouldReturnTaskWithMinimalPreviousTasks()
+        {
+            var taskWithDependencies = new Task(
+                "Task with Dependencies",
+                "Description",
+                DateTime.Now,
+                3,
+                new List<Task> { _task1 },
+                new List<Task>(),
+                new List<Resource>()
+            );
+            taskWithDependencies.Id = 3;
+    
+            _database.projects.AddTask("Generic Project", taskWithDependencies);
+    
+            var taskDTO = _taskService.GetTask("Generic Project", taskWithDependencies.Id);
+    
+            Assert.AreEqual(1, taskDTO.PreviousTasks.Count);
+            Assert.AreEqual(_task1.Id, taskDTO.PreviousTasks[0].Id);
+            Assert.AreEqual(_task1.Title, taskDTO.PreviousTasks[0].Title);
+            Assert.IsNull(taskDTO.PreviousTasks[0]); 
+        }
 
     }
 }
