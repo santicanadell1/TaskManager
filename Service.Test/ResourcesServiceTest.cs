@@ -194,11 +194,11 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO()
         {
+            Id = addedResource.Id,
             Name = addedResource.Name,
-            Type = "TypeB",
-            Description = "Updated description"
+            Type = addedResource.Type,
+            Description = addedResource.Description
         };
-
 
         ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
@@ -237,6 +237,7 @@ public class ResourcesServiceTest
         Assert.AreEqual("TypeB", resource.Type);
         Assert.AreEqual("Updated description", resource.Description);
     }
+
 
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
@@ -401,6 +402,7 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO()
         {
+            Id = addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description,
@@ -422,7 +424,6 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>() { addedResourceDto }
         };
-
 
         _adminProjectService.CreateProject(project);
         _taskService.AddTask("Project1", task);

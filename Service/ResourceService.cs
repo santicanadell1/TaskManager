@@ -27,7 +27,6 @@ namespace Service
             {
                 throw new UnauthorizedAdminAccessException();
             }
-            
         }
 
         public ResourceDTO Get(int? id)
@@ -70,7 +69,7 @@ namespace Service
         }
 
         public void DeleteResource(int? id)
-        {   
+        {
             isAbleToModifyResource(GetResourceObject(id));
             try
             {
@@ -123,14 +122,17 @@ namespace Service
             {
                 throw new UnauthorizedAdminAccessException();
             }
+
             if (currentUser.Roles.Contains(Rol.AdminSystem))
             {
                 return;
             }
+
             if (currentUser.Roles.Contains(Rol.AdminProject) && isExclusive(resource))
             {
                 return;
             }
+
             throw new UnauthorizedAdminAccessException();
         }
 
@@ -139,7 +141,7 @@ namespace Service
             var currentUser = LoggedUser.Current;
             return currentUser.Roles.Contains(Rol.AdminSystem);
         }
-        
+
         private List<Project> GetProjectsThatAreUsingResource(Resource resource)
         {
             List<Project> projects = _database.projects.GetAllProjects();
@@ -148,12 +150,14 @@ namespace Service
             {
                 foreach (var task in project.Tasks)
                 {
-                    if (task.Resources.Contains(resource))
+                    if (task.Resources.Any(r => r.Id == resource.Id))
                     {
                         projectsThatAreUsingResource.Add(project);
+                        break;
                     }
                 }
             }
+
             return projectsThatAreUsingResource;
         }
 
