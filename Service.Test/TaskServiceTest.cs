@@ -261,7 +261,7 @@ namespace Service.Test
                 Duration = 5
             };
 
-            _taskService.UpdateTask("Non-Existent Project", _task1.Id);
+            _taskService.UpdateTask("Non-Existent Project", _task1.Id, updateDTO);
         }
         
         
