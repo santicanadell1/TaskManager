@@ -409,7 +409,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual("Resource 1", tasks[0].Resources[0].Name);
     
             Assert.AreEqual(1, tasks[1].Resources.Count);
-            Assert.AreEqual("Resource 2", tasks[1].Resources[0]);
+            Assert.AreEqual("Resource 2", tasks[1].Resources[0].Name);
         }
 
 
