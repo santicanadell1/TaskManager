@@ -53,12 +53,30 @@ public class AdminPService
         {
             var user = ToEntity(memberDTO);
 
-            if (!project.Members.Contains(user))
+            if (project.Members.Any(u => u.Email == user.Email))
             {
-                project.AddMember(user);
+                throw new UserIsAlreadyAMemberException();
             }
+            project.AddMember(user);
         }
 
+        _database.projects.UpdateProject(projectName, project);
+    }
+    
+    public void RemoveMemberFromProject(string projectName, string memberEmail)
+    {
+        CheckAdminProyectRole();
+        var project = _database.projects.GetProject(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException();
+        }
+        
+        if (project.Members.Find(m => m.Email == memberEmail) == null)
+        {
+            throw new UserIsNotAMemberException();
+        }
+        project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
         _database.projects.UpdateProject(projectName, project);
     }
 
@@ -198,6 +216,24 @@ public class AdminPService
         _database.users.Update(memberEmail,userEntity);
     }
 
+    public void RemoveTaskFromMember(string projectName, string memberEmail, int taskID)
+    {
+        CheckAdminProyectRole();
+        var project = this.GetProjectByName(projectName);
+        Project projectEntity = _database.projects.GetProject(p => p.Name == projectName);
+        if (project.Members.Find(m => m.Email == memberEmail) == null)
+        {
+            throw new UserIsNotAMemberException();
+        }
+        if (projectEntity.Tasks.Find(m => m.Id == taskID) == null)
+        {
+            throw new TaskIsNotFromTheProjectException();
+        }
+        User userEntity = _database.users.Get(u => u.Email == memberEmail);
+        userEntity.RemoveTask(taskID);
+        _database.users.Update(memberEmail,userEntity);
+    }
+
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
         User user = _database.users.Get(u => u.Email == email);
@@ -217,4 +253,22 @@ public class AdminPService
         }
         return returnList;
     }
+    
+     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName,string email)
+    {
+        User user = _database.users.Get(u => u.Email == email);
+        TaskService taskService = new TaskService(_database);
+        List<TaskDTO> returnList = new List<TaskDTO>();
+        List<TaskDTO> tasks = taskService.GetTasks(projectName);
+        foreach (var task in tasks)
+        {
+            if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+            {
+                returnList.Add(task);
+            }
+        }
+        return returnList;
+    }
+    
+    
 }
