@@ -277,6 +277,31 @@ namespace Service.Test
             };
 
             _taskService.UpdateTask("Generic Project", 999, updateDTO);
+            
+            
+        }
+        
+        [TestMethod]
+        public void UpdateTask_ShouldUpdateTaskWithSameTimeTasks()
+        {
+            var updateDTO = new TaskDTO
+            {
+                Title = "Updated Task with Same Time",
+                Description = "Description",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 3,
+                PreviousTasks = new List<TaskDTO>(),
+                SameTimeTasks = new List<TaskDTO> { new TaskDTO { Id = _task2.Id } },
+                Resources = new List<ResourceDTO>()
+            };
+
+            _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
+
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
+
+            Assert.AreEqual(1, updatedTask.SameTimeTasks.Count);
+            Assert.AreEqual(_task2.Id, updatedTask.SameTimeTasks[0]);
         }
 
         [TestMethod]
