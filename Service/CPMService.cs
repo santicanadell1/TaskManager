@@ -25,13 +25,14 @@ namespace Service
             CalculateLateDates(tasks);
             CalculateSlackAndCriticalTasks(tasks);
             
+            var criticalPath = FindCriticalPath(tasks);
             var projectDuration = CalculateProjectDuration(tasks);
             
             return new CpmResult
             {
                 AllTasks = tasks,
-                CriticalPath = new List<Task>(tasks.Where(t => t.IsCritical)),
-                CriticalTasks = new List<Task>(tasks.Where(t => t.IsCritical)),
+                CriticalPath = criticalPath,
+                CriticalTasks = tasks.Where(t => t.IsCritical).ToList(),
                 ProjectDuration = projectDuration
             };
         }
@@ -112,6 +113,48 @@ namespace Service
                 task.Slack = task.LatestStart - task.StartDate;
                 task.IsCritical = Math.Abs(task.Slack.TotalDays) < 0.0001;
             }
+        }
+
+        private List<Task> FindCriticalPath(List<Task> tasks)
+        {
+            var criticalPath = new List<Task>();
+            var criticalTasks = tasks.Where(t => t.IsCritical).ToList();
+
+            if (!criticalTasks.Any())
+            {
+                return criticalPath;
+            }
+
+            var currentTask = criticalTasks.FirstOrDefault(t => 
+                t.PreviousTasks.Count == 0 || 
+                !t.PreviousTasks.Any(p => p.IsCritical));
+
+            if (currentTask == null)
+            {
+                currentTask = criticalTasks.OrderBy(t => t.StartDate).First();
+            }
+
+            var processedTasks = new HashSet<Task>();
+
+            while (currentTask != null)
+            {
+                if (processedTasks.Contains(currentTask))
+                {
+                    break;
+                }
+                
+                criticalPath.Add(currentTask);
+                processedTasks.Add(currentTask);
+                
+                var nextTask = criticalTasks.FirstOrDefault(t => 
+                    t.PreviousTasks.Contains(currentTask) && 
+                    t.IsCritical && 
+                    !processedTasks.Contains(t));
+                    
+                currentTask = nextTask;
+            }
+
+            return criticalPath;
         }
 
         private bool IsSuccessorOfAny(Task task, List<Task> allTasks)

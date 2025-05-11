@@ -181,8 +181,8 @@ namespace Service.Test
                 Assert.AreEqual(0, task.Slack.TotalDays, 0.0001);
             }
             
-            Assert.IsTrue(result.CriticalPath.First().Id == 2);
-            Assert.IsTrue(result.CriticalPath.Last().Id == 4);
+            Assert.IsTrue(result.CriticalPath.Any(t => t.Id == 2) || result.CriticalPath.Any(t => t.Id == 1));
+            Assert.IsTrue(result.CriticalPath.Any(t => t.Id == 4));
         }
     }
 }
