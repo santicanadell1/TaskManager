@@ -7,7 +7,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Service
 {
-    public class ResourceService
+    public class ResourceService : IResourceService
     {
         private readonly InMemoryDatabase _database;
 
