@@ -303,6 +303,32 @@ namespace Service.Test
             Assert.AreEqual(1, updatedTask.SameTimeTasks.Count);
             Assert.AreEqual(_task2.Id, updatedTask.SameTimeTasks[0].Id);
         }
+        
+        [TestMethod]
+        public void UpdateTask_ShouldUpdateTaskWithResources()
+        {
+            var updateDTO = new TaskDTO
+            {
+                Title = "Updated Task with Resources",
+                Description = "Description",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 3,
+                PreviousTasks = new List<TaskDTO>(),
+                SameTimeTasks = new List<TaskDTO>(),
+                Resources = new List<ResourceDTO>
+                {
+                    new ResourceDTO { Id = 10, Name = "Updated Resource", Type = "Updated Type", Description = "Updated Desc" }
+                }
+            };
+
+            _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
+
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
+
+            Assert.AreEqual(1, updatedTask.Resources.Count);
+            Assert.AreEqual("Updated Resource", updatedTask.Resources[0]);
+        }
 
         [TestMethod]
         public void GetTasks_ShouldReturnAllTasks_WhenProjectExists()
