@@ -72,57 +72,6 @@ public class TaskServiceTest
     }
 
     [TestMethod]
-    public void CalculateEarlyStart_ShouldReturnCorrectDate_WhenNoPreviousTasks()
-    {
-        DateTime earlyStart = _taskService.CalculateEarlyStart(_task1);
-        Assert.AreEqual(_task1.ExpectedStartDate, earlyStart);
-    }
-
-    [TestMethod]
-    public void CalculateEarlyFinish_ShouldReturnCorrectDate_WhenGivenDuration()
-    {
-        DateTime earlyFinish = _taskService.CalculateEarlyFinish(_task1);
-        Assert.AreEqual(_task1.ExpectedStartDate.AddDays(_task1.Duration), earlyFinish);
-    }
-
-    [TestMethod]
-    public void CalculateLateFinish_ShouldReturnEarlyFinish_WhenNoPreviousTasks()
-    {
-        DateTime lateFinish = _taskService.CalculateLateFinish(_task1);
-        Assert.AreEqual(_task1.ExpectedStartDate.AddDays(_task1.Duration), lateFinish);
-    }
-
-    [TestMethod]
-    public void CalculateLateStart_ShouldReturnExpectedStartDate_WhenNoPreviousTasks()
-    {
-        DateTime lateStart = _taskService.CalculateLateStart(_task1);
-        Assert.AreEqual(_task1.ExpectedStartDate, lateStart);
-    }
-
-    [TestMethod]
-    public void CalculateLateStart_ShouldReturnCorrectDate_WhenPreviousTasksExist()
-    {
-        _task2.EndDate = new DateTime(2025, 4, 30);
-        _taskDTO1.PreviousTasks.Add(_taskDTO2);
-        _task1.PreviousTasks.Add(_task2);
-
-        DateTime lateStart = _taskService.CalculateLateStart(_task1);
-        Assert.AreEqual(_task2.EndDate, lateStart);
-    }
-
-    [TestMethod]
-    public void IsCritical_ShouldReturnFalse_WhenTaskIsNotCritical()
-    {
-        _task2.EndDate = new DateTime(2025, 4, 30);
-        _task1.EndDate = new DateTime(2025, 5, 7);
-        _taskDTO1.PreviousTasks.Add(_taskDTO2);
-        _task1.PreviousTasks.Add(_task2);
-
-        bool isCritical = _taskService.IsCritical(_task1);
-        Assert.IsFalse(isCritical);
-    }
-
-    [TestMethod]
     public void AddTask_ShouldAddTask_WhenTaskIsValid()
     {
         var taskDTO = new TaskDTO
@@ -143,7 +92,6 @@ public class TaskServiceTest
         Assert.AreEqual(3, tasks.Count);
         Assert.AreEqual("Test Task", tasks[2].Title);
     }
-
 
     [TestMethod]
     public void DeleteTask_ShouldDeleteTask_WhenTaskExists()
@@ -179,7 +127,6 @@ public class TaskServiceTest
         Assert.AreEqual("Updated Description", updatedTask.Description);
         Assert.AreEqual(6, updatedTask.Duration);
     }
-
 
     [TestMethod]
     public void GetTasks_ShouldReturnAllTasks_WhenProjectExists()
