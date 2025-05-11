@@ -393,6 +393,24 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual("Description of Task 1", taskDTO.Description);
             Assert.AreEqual(5, taskDTO.Duration);
         }
+        [TestMethod]
+        [ExpectedException(typeof(ProjectNotFoundException))]
+        public void GetTasks_ShouldThrowException_WhenProjectDoesNotExist()
+        {
+            _taskService.GetTasks("Non-Existent Project");
+        }
+
+        [TestMethod]
+        public void GetTasks_ShouldReturnTasksWithResources()
+        {
+            var tasks = _taskService.GetTasks("Generic Project");
+
+            Assert.AreEqual(1, tasks[0].Resources.Count);
+            Assert.AreEqual("Resource 1", tasks[0].Resources[0].Name);
+    
+            Assert.AreEqual(1, tasks[1].Resources.Count);
+            Assert.AreEqual("Resource 2", tasks[1].Resources[0]);
+        }
 
 
     }
