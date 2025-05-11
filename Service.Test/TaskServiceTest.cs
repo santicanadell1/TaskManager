@@ -424,7 +424,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
         [ExpectedException(typeof(ProjectNotFoundException))]
         public void GetTask_ShouldThrowException_WhenProjectDoesNotExist()
         {
-            _taskService.GetTask("Non-Existent Project", gId);
+            _taskService.GetTask("Non-Existent Project", _task1.Id);
         }
 
     }
