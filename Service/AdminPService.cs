@@ -254,6 +254,21 @@ public class AdminPService
         return returnList;
     }
     
-     
+     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName,string email)
+    {
+        User user = _database.users.Get(u => u.Email == email);
+        TaskService taskService = new TaskService(_database);
+        List<TaskDTO> returnList = new List<TaskDTO>();
+        List<TaskDTO> tasks = taskService.GetTasks(projectName);
+        foreach (var task in tasks)
+        {
+            if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+            {
+                returnList.Add(task);
+            }
+        }
+        return returnList;
+    }
+    
     
 }
