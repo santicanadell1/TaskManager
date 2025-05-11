@@ -14,6 +14,7 @@ namespace Service.Test
     {
         private CpmService _cpmService;
         private Task _taskA;
+        private Task _taskB;
 
         [TestInitialize]
         public void Setup()
@@ -30,6 +31,18 @@ namespace Service.Test
                 new List<Resource>()
             );
             _taskA.Id = 1;
+
+            // Tarea B depende de A
+            _taskB = new Task(
+                "Tarea B",
+                "Descripción de Tarea B",
+                new DateTime(2025, 1, 1),
+                4,
+                new List<Task> { _taskA },
+                new List<Task>(),
+                new List<Resource>()
+            );
+            _taskB.Id = 2;
         }
 
         [TestMethod]
@@ -74,6 +87,22 @@ namespace Service.Test
             Assert.AreEqual(_taskA.ExpectedStartDate, processedTask.StartDate);
             
             Assert.AreEqual(_taskA.ExpectedStartDate.AddDays(_taskA.Duration), processedTask.EndDate);
+        }
+
+        [TestMethod]
+        public void CalculateCriticalPath_ShouldCalculateEarlyDates_ForTaskWithPredecessors()
+        {
+            var tasks = new List<Task> { _taskA, _taskB };
+            var result = _cpmService.CalculateCriticalPath(tasks);
+
+            var taskA = result.AllTasks.First(t => t.Id == 1);
+            var taskB = result.AllTasks.First(t => t.Id == 2);
+            
+            Assert.AreEqual(_taskA.ExpectedStartDate, taskA.StartDate);
+            
+            Assert.AreEqual(taskA.EndDate, taskB.StartDate);
+            
+            Assert.AreEqual(taskB.StartDate.AddDays(taskB.Duration), taskB.EndDate);
         }
     }
 }
