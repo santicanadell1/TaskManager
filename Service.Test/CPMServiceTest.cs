@@ -203,6 +203,7 @@ namespace Service.Test
             Assert.AreEqual(_taskA.ExpectedStartDate, earlyStart);
         }
 
+        
         [TestMethod]
         public void CalculateEarlyStart_ShouldReturnLatestPreviousEnd_WhenHasPreviousTasks()
         {
@@ -254,6 +255,21 @@ namespace Service.Test
         {
             _taskA.Slack = TimeSpan.FromDays(2);
             Assert.IsFalse(_cpmService.IsCritical(_taskA));
+        }
+        
+        [TestMethod]
+        public void CalculateLateFinish_ShouldReturnMinSuccessorLatestStart_WhenHasSuccessors()
+        {
+            _taskC.LatestStart = new DateTime(2025, 1, 6);
+            _taskD.LatestStart = new DateTime(2025, 1, 4);
+            
+            _taskC.PreviousTasks = new List<Task> { _taskA };
+            _taskD.PreviousTasks = new List<Task> { _taskA };
+            
+            var tasks = new List<Task> { _taskA, _taskC, _taskD };
+            var lateFinish = _cpmService.CalculateLateFinish(_taskA, tasks);
+            
+            Assert.AreEqual(_taskD.LatestStart, lateFinish);
         }
 
         [TestMethod]
@@ -384,18 +400,6 @@ namespace Service.Test
             var lateFinish = _cpmService.CalculateLateFinish(testTask, taskList);
 
             Assert.AreEqual(testTask.EndDate, lateFinish);
-        }
-
-        [TestMethod]
-        public void CalculateLateFinish_ShouldReturnMinSuccessorLatestStart_WhenHasSuccessors()
-        {
-            _taskC.LatestStart = new DateTime(2025, 1, 6);
-            _taskD.LatestStart = new DateTime(2025, 1, 4);
-
-            var tasks = new List<Task> { _taskA, _taskC, _taskD };
-            var lateFinish = _cpmService.CalculateLateFinish(_taskA, tasks);
-
-            Assert.AreEqual(_taskD.LatestStart, lateFinish);
         }
 
         [TestMethod]
