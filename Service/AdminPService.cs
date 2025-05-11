@@ -71,6 +71,11 @@ public class AdminPService
         {
             throw new ProjectNotFoundException();
         }
+        
+        if (project.Members.Find(m => m.Email == memberEmail) == null)
+        {
+            throw new UserIsNotAMemberException();
+        }
         project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
         _database.projects.UpdateProject(projectName, project);
     }
