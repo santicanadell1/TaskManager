@@ -220,7 +220,7 @@ namespace Service.Test
         [ExpectedException(typeof(TaskNotFoundException))]
         public void DeleteTask_ShouldThrowException_WhenTaskDoesNotExist()
         {
-            _taskService.DeleteTask("Generic Project");
+            _taskService.DeleteTask("Generic Project", 999);
         }
 
 
