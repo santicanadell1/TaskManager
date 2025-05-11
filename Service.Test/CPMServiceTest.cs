@@ -118,7 +118,7 @@ namespace Service.Test
             Assert.AreEqual(0, taskA.Slack.TotalDays);
             Assert.AreEqual(0, taskB.Slack.TotalDays);
             
-            Assert.IsTrue(taskA);
+            Assert.IsTrue(taskA.IsCritical);
             Assert.IsTrue(taskB.IsCritical);
         }
     }

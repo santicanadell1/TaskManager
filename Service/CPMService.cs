@@ -22,19 +22,16 @@ namespace Service
             }
 
             CalculateEarlyDates(tasks);
-
-            foreach (var task in tasks)
-            {
-                task.IsCritical = true;
-            }
+            CalculateLateDates(tasks);
+            CalculateSlackAndCriticalTasks(tasks);
             
             var projectDuration = CalculateProjectDuration(tasks);
             
             return new CpmResult
             {
                 AllTasks = tasks,
-                CriticalPath = new List<Task>(tasks),
-                CriticalTasks = new List<Task>(tasks),
+                CriticalPath = new List<Task>(tasks.Where(t => t.IsCritical)),
+                CriticalTasks = new List<Task>(tasks.Where(t => t.IsCritical)),
                 ProjectDuration = projectDuration
             };
         }
@@ -67,6 +64,64 @@ namespace Service
                     remainingTasks.Enqueue(task);
                 }
             }
+        }
+
+        private void CalculateLateDates(List<Task> tasks)
+        {
+            var finalTasks = tasks.Where(t => !IsSuccessorOfAny(t, tasks)).ToList();
+
+            foreach (var finalTask in finalTasks)
+            {
+                finalTask.LatestFinish = finalTask.EndDate;
+                finalTask.LatestStart = finalTask.LatestFinish.AddDays(-finalTask.Duration);
+            }
+
+            var processedTasks = new HashSet<Task>(finalTasks);
+            var remainingTasks = new Queue<Task>(tasks.Except(finalTasks));
+
+            while (remainingTasks.Count > 0)
+            {
+                var task = remainingTasks.Dequeue();
+                var successors = GetSuccessors(task, tasks);
+
+                if (successors.All(s => processedTasks.Contains(s)))
+                {
+                    if (successors.Count > 0)
+                    {
+                        task.LatestFinish = successors.Min(s => s.LatestStart);
+                    }
+                    else
+                    {
+                        task.LatestFinish = task.EndDate;
+                    }
+
+                    task.LatestStart = task.LatestFinish.AddDays(-task.Duration);
+                    processedTasks.Add(task);
+                }
+                else
+                {
+                    remainingTasks.Enqueue(task);
+                }
+            }
+        }
+
+        private void CalculateSlackAndCriticalTasks(List<Task> tasks)
+        {
+            foreach (var task in tasks)
+            {
+                task.Slack = task.LatestStart - task.StartDate;
+                task.IsCritical = Math.Abs(task.Slack.TotalDays) < 0.0001;
+            }
+        }
+
+        private bool IsSuccessorOfAny(Task task, List<Task> allTasks)
+        {
+            return allTasks.Any(t => t.PreviousTasks.Contains(task));
+        }
+
+        private List<Task> GetSuccessors(Task task, List<Task> allTasks)
+        {
+            return allTasks.Where(t => t.PreviousTasks.Contains(task)).ToList();
         }
 
         private int CalculateProjectDuration(List<Task> tasks)
