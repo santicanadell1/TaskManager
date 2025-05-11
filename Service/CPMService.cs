@@ -41,9 +41,17 @@ namespace Service
         {
             var processedTasks = new HashSet<Task>();
             var remainingTasks = new Queue<Task>(tasks);
+            int iterationCount = 0;
+            int maxIterations = tasks.Count * tasks.Count;
 
             while (remainingTasks.Count > 0)
             {
+                iterationCount++;
+                if (iterationCount > maxIterations)
+                {
+                    throw new CircularDependencyException();
+                }
+
                 var task = remainingTasks.Dequeue();
 
                 if (task.PreviousTasks.All(p => processedTasks.Contains(p)))
@@ -79,9 +87,17 @@ namespace Service
 
             var processedTasks = new HashSet<Task>(finalTasks);
             var remainingTasks = new Queue<Task>(tasks.Except(finalTasks));
+            int iterationCount = 0;
+            int maxIterations = tasks.Count * tasks.Count;
 
             while (remainingTasks.Count > 0)
             {
+                iterationCount++;
+                if (iterationCount > maxIterations)
+                {
+                    throw new CircularDependencyException();
+                }
+
                 var task = remainingTasks.Dequeue();
                 var successors = GetSuccessors(task, tasks);
 
