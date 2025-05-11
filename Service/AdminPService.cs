@@ -215,6 +215,7 @@ public class AdminPService
         userEntity.AddTask(taskID);
         _database.users.Update(memberEmail,userEntity);
     }
+    
 
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
@@ -235,4 +236,6 @@ public class AdminPService
         }
         return returnList;
     }
+    
+    
 }

@@ -414,7 +414,38 @@ public class AdminPServiceTests
         
         _service.AddTaskToMember("Test Project","member.user@example.com" , 2);
         
-    }[TestMethod]
+    }    
+    [TestMethod]
+    public void RemoveTaskFromMember_WhenUserIsMember_ShouldRemoveTaskFromMember()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _service.CreateProject(projectDTO);
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Task1",
+            Description = "Description",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        _taskService.AddTask("Test Project", task);
+        
+        _service.AddTaskToMember("Test Project","member.user@example.com" , 1);
+        
+        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Contains(1));
+        
+        _service.RemoveTaskFromMember("Test Project","member.user@example.com" , 1);
+        
+        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Count == 0);
+    }
+
+    [TestMethod]
     public void GetTasksForAMember_WhenGettingTasksForAMember_ShouldReturnListOfTasks()
     {
         var projectDTO = new ProjectDTO
