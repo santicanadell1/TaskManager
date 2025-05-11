@@ -109,6 +109,39 @@ public class AdminPServiceTests
         Assert.IsTrue(project.Members.Count > 0);
         Assert.AreEqual("John", project.Members[1].FirstName);
     }
+    [TestMethod]
+    [ExpectedException(typeof(UserIsNotAMemberException))]
+    public void AssignMembersToProject_ShouldThrowException_WhenAddingAMemberThatAlreadyExists()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "New Project",
+            Description = "Project Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+
+        _service.CreateProject(projectDTO);
+
+        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+
+        var userDTO = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "password123",
+            Roles = new List<Rol> { Rol.AdminProject }
+        };
+
+        _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+        _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+
+        Assert.IsTrue(project.Members.Count > 0);
+        Assert.AreEqual("John", project.Members[1].FirstName);
+    }
 
     [TestMethod]
     public void RemoveProject_ShouldRemoveProject_WhenValid()
