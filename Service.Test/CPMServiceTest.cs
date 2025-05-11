@@ -255,5 +255,55 @@ namespace Service.Test
             _taskA.Slack = TimeSpan.FromDays(2);
             Assert.IsFalse(_cpmService.IsCritical(_taskA));
         }
+
+        [TestMethod]
+        public void gg()
+        {
+            var taskE = new Task(
+                "Tarea E",
+                "Descripción de Tarea E",
+                new DateTime(2025, 1, 1),
+                6,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource>()
+            );
+            taskE.Id = 5;
+
+            var taskF = new Task(
+                "Tarea F",
+                "Descripción de Tarea F",
+                new DateTime(2025, 1, 1),
+                2,
+                new List<Task> { taskE },
+                new List<Task>(),
+                new List<Resource>()
+            );
+            taskF.Id = 6;
+
+            var taskG = new Task(
+                "Tarea G",
+                "Descripción de Tarea G",
+                new DateTime(2025, 1, 1),
+                1,
+                new List<Task> { _taskD, taskF },
+                new List<Task>(),
+                new List<Resource>()
+            );
+            taskG.Id = 7;
+
+            var tasks = new List<Task> { _taskA, _taskB, _taskC, _taskD, taskE, taskF, taskG };
+            var result = _cpmService.CalculateCriticalPath(tasks);
+
+            Assert.IsTrue(result.CriticalPath.Count > 0);
+            Assert.IsTrue(result.CriticalTasks.Count > 0);
+            
+            Assert.IsTrue(result.CriticalTasks.Any(t => t.Id == 7));
+            
+            var criticalIds = result.CriticalTasks.Select(t => t.Id).ToList();
+            Assert.IsTrue(criticalIds.Contains(5) && criticalIds.Contains(6));
+            
+            Assert.IsTrue(result.ProjectDuration );
+        }
     }
 }
