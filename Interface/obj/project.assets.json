@@ -1068,11 +1068,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Interface\\Interface.csproj",
+      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Interface\\Interface.csproj",
       "projectName": "Interface",
-      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Interface\\Interface.csproj",
+      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Interface\\Interface.csproj",
       "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Interface\\obj\\",
+      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Interface\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",

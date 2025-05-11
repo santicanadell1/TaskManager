@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
+      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
       "projectName": "DataAccess",
-      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
+      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
       "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\DataAccess\\obj\\",
+      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\DataAccess\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",

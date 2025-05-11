@@ -390,9 +390,33 @@
           }
         }
       },
+      "DataAccess/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/DataAccess.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DataAccess.dll": {}
+        }
+      },
+      "Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Domain.dll": {}
+        }
+      },
       "Service/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "DataAccess": "1.0.0",
+          "Domain": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/Service.dll": {}
         },
@@ -997,6 +1021,16 @@
         "version.txt"
       ]
     },
+    "DataAccess/1.0.0": {
+      "type": "project",
+      "path": "../DataAccess/DataAccess.csproj",
+      "msbuildProject": "../DataAccess/DataAccess.csproj"
+    },
+    "Domain/1.0.0": {
+      "type": "project",
+      "path": "../Domain/Domain.csproj",
+      "msbuildProject": "../Domain/Domain.csproj"
+    },
     "Service/1.0.0": {
       "type": "project",
       "path": "../Service/Service.csproj",
@@ -1018,11 +1052,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
+      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
       "projectName": "Service.Test",
-      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
+      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
       "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Service.Test\\obj\\",
+      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service.Test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1039,8 +1073,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Service\\Service.csproj": {
-              "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL-DA1\\305108_282542_281987\\Service\\Service.csproj"
+            "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj": {
+              "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj"
             }
           }
         }
