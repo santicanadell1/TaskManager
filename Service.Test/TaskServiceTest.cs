@@ -339,7 +339,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
         Description = "Description",
         ExpectedStartDate = DateTime.Now,
         Duration = 3,
-        PreviousTasks = new List<TaskDTO> { new TaskDTO { Id = _task1.Id } }, // Auto-referencia
+        PreviousTasks = new List<TaskDTO> { new TaskDTO { Id = _task1.Id } }, 
         SameTimeTasks = new List<TaskDTO>(),
         Resources = new List<ResourceDTO>()
     };
@@ -351,6 +351,28 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
 
     Assert.AreEqual(0, updatedTask.PreviousTasks.Count);
 }
+
+        [TestMethod]
+        public void UpdateTask_ShouldIgnoreSelfInSameTimeTasks()
+        {
+            var updateDTO = new TaskDTO
+            {
+                Title = "Updated Task Self Reference",
+                Description = "Description",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 3,
+                PreviousTasks = new List<TaskDTO>(),
+                SameTimeTasks = new List<TaskDTO> { new TaskDTO { Id = _task1.Id } }, 
+                Resources = new List<ResourceDTO>()
+            };
+
+            _taskService.UpdateTask("Generic Project", _task1.Id);
+
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
+
+            Assert.AreEqual(0, updatedTask.SameTimeTasks.Count);
+        }
 
         [TestMethod]
         public void GetTasks_ShouldReturnAllTasks_WhenProjectExists()
