@@ -80,5 +80,13 @@ public class MemberPServiceTest
         _taskService.AddTask("New Project", task2);
     }
 
-   
+    [TestMethod]
+    public void GetAllProjectsForMember_WhenMemberIsAssigned_ThenReturnProjects()
+    {
+        var result = _memberPService.GetAllProjectsFromAMember(UserDTO.Email);
+
+        Assert.AreEqual(1, result.Count);
+        Assert.AreEqual("New Project", result[0].Name);
+    }
+
 }
