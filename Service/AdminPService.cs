@@ -53,10 +53,11 @@ public class AdminPService
         {
             var user = ToEntity(memberDTO);
 
-            if (!project.Members.Any(u => u.Email == user.Email))
+            if (project.Members.Any(u => u.Email == user.Email))
             {
-                project.AddMember(user);
+                throw new UserIsAlreadyAMemberException();
             }
+            project.AddMember(user);
         }
 
         _database.projects.UpdateProject(projectName, project);

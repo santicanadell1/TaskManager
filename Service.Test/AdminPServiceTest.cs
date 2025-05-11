@@ -110,7 +110,7 @@ public class AdminPServiceTests
         Assert.AreEqual("John", project.Members[1].FirstName);
     }
     [TestMethod]
-    [ExpectedException(typeof(UserIsNotAMemberException))]
+    [ExpectedException(typeof(UserIsAlreadyAMemberException))]
     public void AssignMembersToProject_ShouldThrowException_WhenAddingAMemberThatAlreadyExists()
     {
         var projectDTO = new ProjectDTO
