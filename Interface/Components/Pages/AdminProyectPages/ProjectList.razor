@@ -701,13 +701,6 @@
                 return;
             }
 
-            // Debug logs
-            Console.WriteLine($"Number of previous tasks selected: {previousTaskIds.Count}");
-            for (int i = 0; i < previousTaskIds.Count; i++)
-            {
-                Console.WriteLine($"Previous task {i}: ID = {previousTaskIds[i]}, Dependency = {previousTaskDependencies[i]}");
-            }
-
             // Check for empty selections
             bool hasEmptySelection = false;
             for (int i = 0; i < previousTaskIds.Count; i++)
@@ -766,15 +759,6 @@
                 .Where(r => r != null && r.Id.HasValue && selectedResourceIds.Contains(r.Id))
                 .ToList() ?? new List<ResourceDTO>();
 
-            // Debug logs
-            Console.WriteLine($"Sending previous tasks (FS): {newTask.PreviousTasks.Count}");
-            Console.WriteLine($"Sending same time tasks (SS): {newTask.SameTimeTasks.Count}");
-            Console.WriteLine($"Sending resources: {newTask.Resources.Count}");
-            Console.WriteLine($"Task title: {newTask.Title}");
-            Console.WriteLine($"Task description: {newTask.Description}");
-            Console.WriteLine($"Task duration: {newTask.Duration}");
-            Console.WriteLine($"Task start date: {newTask.ExpectedStartDate}");
-
             TaskService.AddTask(selectedProjectName, newTask);
             taskSuccessMessage = "Task created successfully!";
             taskErrorMessage = string.Empty;
@@ -786,8 +770,6 @@
         {
             taskErrorMessage = $"Error creating task: {ex.Message}";
             taskSuccessMessage = string.Empty;
-            Console.WriteLine($"Exception details: {ex}");
-            Console.WriteLine($"Stack trace: {ex.StackTrace}");
         }
     }
 
@@ -824,7 +806,6 @@
     private void UpdatePreviousTaskId(ChangeEventArgs e, int index)
     {
         var value = e.Value?.ToString();
-        Console.WriteLine($"UpdatePreviousTaskId - Raw value: '{value}', Index: {index}");
 
         if (string.IsNullOrEmpty(value))
         {
@@ -833,12 +814,10 @@
         else if (int.TryParse(value, out int taskId))
         {
             previousTaskIds[index] = taskId;
-            Console.WriteLine($"Successfully parsed task ID: {taskId}");
         }
         else
         {
             previousTaskIds[index] = null;
-            Console.WriteLine($"Failed to parse task ID from value: '{value}'");
         }
     }
 
@@ -990,7 +969,6 @@
         {
             editTaskErrorMessage = $"Error updating task: {ex.Message}";
             editTaskSuccessMessage = string.Empty;
-            Console.WriteLine($"Exception details: {ex}");
         }
     }
 
@@ -1027,7 +1005,6 @@
     private void UpdateEditPreviousTaskId(ChangeEventArgs e, int index)
     {
         var value = e.Value?.ToString();
-        Console.WriteLine($"UpdateEditPreviousTaskId - Raw value: '{value}', Index: {index}");
 
         if (string.IsNullOrEmpty(value))
         {
@@ -1036,12 +1013,10 @@
         else if (int.TryParse(value, out int taskId))
         {
             editPreviousTaskIds[index] = taskId;
-            Console.WriteLine($"Successfully parsed task ID: {taskId}");
         }
         else
         {
             editPreviousTaskIds[index] = null;
-            Console.WriteLine($"Failed to parse task ID from value: '{value}'");
         }
     }
 
@@ -1069,8 +1044,7 @@
         if (!string.IsNullOrEmpty(selectedProjectName))
         {
             showAddMembersModal = true;
-            // TODO: Load available members
-            // membersList = LoadAvailableMembers();
+            membersList = AdminPService.GetMembers(selectedProjectName);
         }
         else
         {
@@ -1126,7 +1100,6 @@
         CloseAddMembersModal(false);
     }
 
-    // Assign Task to Member Modal methods
     private void ShowAssignTaskToMemberModal()
     {
         if (!string.IsNullOrEmpty(selectedProjectName))
@@ -1171,18 +1144,19 @@
         {
             try
             {
-                // TODO: Implement the logic to assign tasks to member
-                // AdminPService.AssignTasksToMember(selectedProjectName, selectedMember.Email, selectedTasks);
-                Console.WriteLine("Tasks assigned successfully!");
+                foreach (var task in selectedTasks)
+                {
+                    AdminPService.AddTaskToMember(selectedProjectName, selectedMember.Email, (int)task.Id);
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error assigning tasks: {ex.Message}");
+                errorMessage = $"Error assigning tasks: {ex.Message}";
             }
         }
         else
         {
-            Console.WriteLine("No tasks or no member selected.");
+            errorMessage = "No tasks or no member selected.";
         }
 
         CloseAssignTaskToMemberModal(false);
