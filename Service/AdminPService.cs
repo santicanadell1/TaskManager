@@ -67,6 +67,10 @@ public class AdminPService
     {
         CheckAdminProyectRole();
         var project = _database.projects.GetProject(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException();
+        }
         project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
         _database.projects.UpdateProject(projectName, project);
     }
