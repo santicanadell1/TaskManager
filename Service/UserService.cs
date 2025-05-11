@@ -5,7 +5,7 @@ using Service.Models;
 
 namespace Service;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly InMemoryDatabase _database;
     private PasswordManager _passwordManager = new PasswordManager();
