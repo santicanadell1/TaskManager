@@ -216,7 +216,12 @@ namespace Service.Test
             _taskService.DeleteTask("Non-Existent Project", _task1.Id);
         }
 
-       
+        [TestMethod]
+        [ExpectedException(typeof(TaskNotFoundException))]
+        public void DeleteTask_ShouldThrowException_WhenTaskDoesNotExist()
+        {
+            _taskService.DeleteTask("Generic Project");
+        }
 
 
         [TestMethod]
