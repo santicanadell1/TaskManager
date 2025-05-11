@@ -329,6 +329,28 @@ namespace Service.Test
             Assert.AreEqual(1, updatedTask.Resources.Count);
             Assert.AreEqual("Updated Resource", updatedTask.Resources[0].Name);
         }
+        
+        [TestMethod]
+        public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
+        {
+            var updateDTO = new TaskDTO
+            {
+                Title = "Updated Task Self Reference",
+                Description = "Description",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 3,
+                PreviousTasks = new List<TaskDTO> { new TaskDTO { Id = _task1.Id } }, // Auto-referencia
+                SameTimeTasks = new List<TaskDTO>(),
+                Resources = new List<ResourceDTO>()
+            };
+
+            _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
+
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
+
+            Assert.AreEqual(0, updatedTask.PreviousTasks.Count);
+        }
 
         [TestMethod]
         public void GetTasks_ShouldReturnAllTasks_WhenProjectExists()
@@ -346,7 +368,7 @@ namespace Service.Test
             var taskDTO = _taskService.GetTask("Generic Project", _task1.Id);
 
             Assert.AreEqual("Task 1", taskDTO.Title);
-            Assert.AreEqual("Description of Task 1", taskDTO.Description);
+            Assert.AreEqual("Description of Task 1", taskDTO);
             Assert.AreEqual(5, taskDTO.Duration);
         }
 
