@@ -11,6 +11,23 @@ public class MemberPService
     {
         _database = database;
     }
+    
+    public List<ProjectDTO> GetAllProjectsFromAMember(string email)
+    {
+        AdminPService adminPService = new AdminPService(_database);
+        UserService userService = new UserService(_database);
+        List<ProjectDTO> projectsFromMember = new List<ProjectDTO>();
+        List<ProjectDTO> projects = adminPService.GetAllProjects();
+        UserDTO user = userService.GetUser(email);
+        foreach (var project in projects)
+        {
+            if (project.Members.Any(m => m.Email == user.Email))
+            {
+                projectsFromMember.Add(project);
+            }
+        }
+        return projectsFromMember;
+    }
 
 
 }
