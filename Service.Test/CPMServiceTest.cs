@@ -195,5 +195,65 @@ namespace Service.Test
             var circularTasks = new List<Task> { _taskA, _taskB };
             _cpmService.CalculateCriticalPath(circularTasks);
         }
+
+        [TestMethod]
+        public void CalculateEarlyStart_ShouldReturnExpectedStartDate_WhenNoPreviousTasks()
+        {
+            var earlyStart = _cpmService.CalculateEarlyStart(_taskA);
+            Assert.AreEqual(_taskA.ExpectedStartDate, earlyStart);
+        }
+
+        [TestMethod]
+        public void CalculateEarlyStart_ShouldReturnLatestPreviousEnd_WhenHasPreviousTasks()
+        {
+            _taskA.EndDate = new DateTime(2025, 1, 4);
+            var earlyStart = _cpmService.CalculateEarlyStart(_taskC);
+            Assert.AreEqual(_taskA.EndDate, earlyStart);
+        }
+
+        [TestMethod]
+        public void CalculateEarlyFinish_ShouldReturnStartPlusDuration()
+        {
+            _taskA.StartDate = new DateTime(2025, 1, 1);
+            var earlyFinish = _cpmService.CalculateEarlyFinish(_taskA);
+            Assert.AreEqual(_taskA.StartDate.AddDays(_taskA.Duration), earlyFinish);
+        }
+
+        [TestMethod]
+        public void CalculateLateStart_ShouldReturnStartDate_WhenNoSuccessors()
+        {
+            var testTask = new Task(
+                "Test Task",
+                "Description",
+                new DateTime(2025, 1, 1),
+                3,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource>()
+            );
+            
+            testTask.StartDate = new DateTime(2025, 1, 1);
+            testTask.EndDate = testTask.StartDate.AddDays(testTask.Duration);
+            
+            var taskList = new List<Task> { testTask };
+            
+            var lateStart = _cpmService.CalculateLateStart(testTask, taskList);
+            
+            Assert.AreEqual(testTask.StartDate, lateStart);
+        }
+
+        [TestMethod]
+        public void IsCritical_ShouldReturnTrue_WhenSlackIsZero()
+        {
+            _taskA.Slack = TimeSpan.Zero;
+            Assert.IsTrue(_cpmService.IsCritical(_taskA));
+        }
+
+        [TestMethod]
+        public void IsCritical_ShouldReturnFalse_WhenSlackIsNotZero()
+        {
+            _taskA.Slack = TimeSpan.FromDays(2);
+            Assert.IsFalse(_cpmService.IsCritical(_taskA));
+        }
     }
 }
