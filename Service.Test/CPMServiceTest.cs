@@ -257,7 +257,7 @@ namespace Service.Test
         }
 
         [TestMethod]
-        public void gg()
+        public void CalculateCriticalPath_ShouldHandleMultipleParallelPaths()
         {
             var taskE = new Task(
                 "Tarea E",
@@ -303,7 +303,39 @@ namespace Service.Test
             var criticalIds = result.CriticalTasks.Select(t => t.Id).ToList();
             Assert.IsTrue(criticalIds.Contains(5) && criticalIds.Contains(6));
             
-            Assert.IsTrue(result.ProjectDuration );
+            Assert.IsTrue(result.ProjectDuration >= 9);
+            
+            for (int i = 0; i < result.CriticalPath.Count - 1; i++)
+            {
+                var currentTask = result.CriticalPath[i];
+                var nextTask = result.CriticalPath[i + 1];
+                
+                Assert.IsTrue(nextTask.PreviousTasks.Contains(currentTask) || 
+                             nextTask.PreviousTasks.Any(p => result.CriticalPath.Contains(p)),
+                             $"El camino crítico no está ordenado correctamente: {currentTask.Title} -> {nextTask.Title}");
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(CriticalPathCalculationException))]
+        public void FindCriticalPath_ShouldThrowException_WhenNoCriticalTasksFound()
+        {
+            var taskX = new Task(
+                "Tarea X",
+                "Descripción de Tarea X",
+                new DateTime(2025, 1, 1),
+                1,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource>()
+            );
+            
+            taskX.IsCritical = false;
+            taskX.Slack = TimeSpan.FromDays(5);
+            
+            var tasks = new List<Task> { taskX };
+            
+            _cpmService.CalculateCriticalPath(tasks);
         }
     }
 }
