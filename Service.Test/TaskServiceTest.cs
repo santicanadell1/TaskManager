@@ -208,6 +208,16 @@ namespace Service.Test
             Assert.AreEqual(1, project.Tasks.Count);
             Assert.AreEqual("Task 2", project.Tasks[0].Title);
         }
+        
+        [TestMethod]
+        [ExpectedException(typeof(ProjectNotFoundException))]
+        public void DeleteTask_ShouldThrowException_WhenProjectDoesNotExist()
+        {
+            _taskService.DeleteTask("Non-Existent Project", );
+        }
+
+       
+
 
         [TestMethod]
         public void UpdateTask_ShouldUpdateTask_WhenTaskExists()
