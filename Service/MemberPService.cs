@@ -21,10 +21,7 @@ public class MemberPService
         List<ProjectDTO> projectsFromMember = new List<ProjectDTO>();
         List<ProjectDTO> projects = adminPService.GetAllProjects();
         UserDTO user = userService.GetUser(email);
-        if (!user.Roles.Contains(Rol.ProjectMember))
-        {
-            throw new UserIsNotAMemberException();
-        }
+        CheckUserRole(email);
         foreach (var project in projects)
         {
             if (project.Members.Any(m => m.Email == user.Email))
@@ -39,6 +36,17 @@ public class MemberPService
 
         return projectsFromMember;
     }
+
+    private void CheckUserRole(string email)
+    {
+        UserService UserService = new UserService(_database);
+        UserDTO user = UserService.GetUser(email);
+        if (!user.Roles.Contains(Rol.ProjectMember))
+        {
+            throw new UserIsNotAMemberException();
+        }
+    }
+    
 
 
 }
