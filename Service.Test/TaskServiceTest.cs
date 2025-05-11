@@ -264,7 +264,20 @@ namespace Service.Test
             _taskService.UpdateTask("Non-Existent Project", _task1.Id, updateDTO);
         }
         
-        
+        [TestMethod]
+        [ExpectedException(typeof(TaskNotFoundException))]
+        public void UpdateTask_ShouldThrowException_WhenTaskDoesNotExist()
+        {
+            var updateDTO = new TaskDTO
+            {
+                Title = "Updated Task",
+                Description = "Updated Description",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 5
+            };
+
+            _taskService.UpdateTask("Generic Project", 999);
+        }
 
         [TestMethod]
         public void GetTasks_ShouldReturnAllTasks_WhenProjectExists()
