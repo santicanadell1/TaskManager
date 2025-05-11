@@ -198,6 +198,24 @@ public class AdminPServiceTests
         var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
         
         _service.RemoveMemberFromProject("Proyecto 1", "member.user@example.com");
+    }[TestMethod]
+    [ExpectedException(typeof(UserIsNotAMemberException))]
+    public void RemoveMembersFromProject_ShouldThrowException_WhenRemovingMemberThatNotExists()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "New Project",
+            Description = "Project Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+
+        _service.CreateProject(projectDTO);
+
+        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        
+        _service.RemoveMemberFromProject(project.Name, "john.user@example.com");
     }
 
     [TestMethod]
