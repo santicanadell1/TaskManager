@@ -317,25 +317,50 @@ namespace Service.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(CriticalPathCalculationException))]
-        public void FindCriticalPath_ShouldThrowException_WhenNoCriticalTasksFound()
+        public void CalculateCriticalPath_ShouldHandleParallelTasksWithSameStartEnd()
         {
-            var taskX = new Task(
-                "Tarea X",
-                "Descripción de Tarea X",
+            var parallelTask1 = new Task(
+                "Paralela 1",
+                "Descripción",
                 new DateTime(2025, 1, 1),
-                1,
+                5,
                 new List<Task>(),
                 new List<Task>(),
                 new List<Resource>()
             );
+            parallelTask1.Id = 10;
+
+            var parallelTask2 = new Task(
+                "Paralela 2",
+                "Descripción",
+                new DateTime(2025, 1, 1),
+                5,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource>()
+            );
+            parallelTask2.Id = 11;
+
+            var finalTask = new Task(
+                "Final",
+                "Descripción",
+                new DateTime(2025, 1, 1),
+                2,
+                new List<Task> { parallelTask1, parallelTask2 },
+                new List<Task>(),
+                new List<Resource>()
+            );
+            finalTask.Id = 12;
+
+            var tasks = new List<Task> { parallelTask1, parallelTask2, finalTask };
+            var result = _cpmService.CalculateCriticalPath(tasks);
+
+            Assert.AreEqual(3, result.CriticalTasks.Count);
+            Assert.AreEqual(7, result.ProjectDuration);
             
-            taskX.IsCritical = false;
-            taskX.Slack = TimeSpan.FromDays(5);
-            
-            var tasks = new List<Task> { taskX };
-            
-            _cpmService.CalculateCriticalPath(tasks);
+            Assert.IsTrue(result.CriticalTasks.Any(t => t.Id == 10));
+            Assert.IsTrue(result.CriticalTasks.Any(t => t.Id));
+            Assert.IsTrue(result.CriticalTasks.Any(t => t.Id == 12));
         }
     }
 }

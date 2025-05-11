@@ -138,7 +138,7 @@ namespace Service
 
             if (!criticalTasks.Any())
             {
-                return criticalPath;
+                throw new CriticalPathCalculationException("No se encontraron tareas críticas en el proyecto");
             }
 
             var currentTask = criticalTasks.FirstOrDefault(t => 
