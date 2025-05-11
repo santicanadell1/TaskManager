@@ -327,7 +327,7 @@ namespace Service.Test
             var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
 
             Assert.AreEqual(1, updatedTask.Resources.Count);
-            Assert.AreEqual("Updated Resource", updatedTask.Resources[0]);
+            Assert.AreEqual("Updated Resource", updatedTask.Resources[0].Name);
         }
 
         [TestMethod]
