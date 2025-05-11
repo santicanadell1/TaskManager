@@ -419,6 +419,13 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual(StateDTO.TODO, tasks[0].State);
             Assert.AreEqual(StateDTO.TODO, tasks[1].State);
         }
+        
+        [TestMethod]
+        [ExpectedException(typeof(ProjectNotFoundException))]
+        public void GetTask_ShouldThrowException_WhenProjectDoesNotExist()
+        {
+            _taskService.GetTask("Non-Existent Project", gId);
+        }
 
     }
 }
