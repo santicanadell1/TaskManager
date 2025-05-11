@@ -220,9 +220,14 @@ public class AdminPService
     {
         CheckAdminProyectRole();
         var project = this.GetProjectByName(projectName);
+        Project projectEntity = _database.projects.GetProject(p => p.Name == projectName);
         if (project.Members.Find(m => m.Email == memberEmail) == null)
         {
             throw new UserIsNotAMemberException();
+        }
+        if (projectEntity.Tasks.Find(m => m.Id == taskID) == null)
+        {
+            throw new TaskIsNotFromTheProjectException();
         }
         User userEntity = _database.users.Get(u => u.Email == memberEmail);
         userEntity.RemoveTask(taskID);
