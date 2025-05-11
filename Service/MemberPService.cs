@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Service.MemberServiceException;
 using Service.Models;
 
 namespace Service;
@@ -31,6 +32,11 @@ public class MemberPService
                 projectsFromMember.Add(project);
             }
         }
+        if (projectsFromMember.Count == 0)
+        {
+            throw new UserHasNoProjectsException();
+        }
+
         return projectsFromMember;
     }
 

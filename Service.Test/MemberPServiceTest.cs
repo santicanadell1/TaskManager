@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Service.MemberServiceException;
 using Service.Models;
 
 namespace Service.Test;
