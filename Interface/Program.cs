@@ -9,6 +9,9 @@ builder.Services.AddScoped<Login>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AdminSService>();
 builder.Services.AddScoped<ResourceService>();
+builder.Services.AddScoped<TaskService>();
+builder.Services.AddScoped<AdminPService>();
+
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

@@ -7,17 +7,16 @@ public class PasswordManager : IPasswordManager
 {
     public string getDefaultPassword()
     {
-        var defaultPassword = "Password123?"; 
+        var defaultPassword = "Password123?";
         return defaultPassword;
     }
 
     public bool IsValidPassword(string password)
     {
         var passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$";
-        return Regex.IsMatch(password, passwordPattern); 
+        return Regex.IsMatch(password, passwordPattern);
     }
 
-   
 
     // Hashing function using SHA-256 algorithm to hash the password
     public string HashPassword(string password)
@@ -40,6 +39,6 @@ public class PasswordManager : IPasswordManager
     public bool VerifyPassword(string plainPassword, string storedHash)
     {
         var hashedPassword = HashPassword(plainPassword);
-        return hashedPassword == storedHash; 
+        return hashedPassword == storedHash;
     }
 }
