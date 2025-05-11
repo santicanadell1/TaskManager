@@ -534,5 +534,41 @@ public class AdminPServiceTests
         
         Assert.AreEqual(2, tasks.Count);
     }
+    [TestMethod]
+    public void GetTasksForAMemberInAProject_WhenGettingTasksForAMember_ShouldReturnListOfTasks()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _service.CreateProject(projectDTO);
+        TaskDTO task = new TaskDTO()
+        {
+            Title = "Task1",
+            Description = "Description",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        TaskDTO task2 = new TaskDTO()
+        {
+            Title = "Task2",
+            Description = "Description2",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+        };
+        _taskService.AddTask("Test Project", task);
+        _taskService.AddTask("Test Project", task2);
+        
+        _service.AddTaskToMember("Test Project","member.user@example.com" ,1 );
+        _service.AddTaskToMember("Test Project","member.user@example.com" ,2 );
+        
+        List<TaskDTO> tasks = _service.GetAllTaskForAMemberInAProject("Test Project","member.user@example.com");
+        
+        Assert.AreEqual(2, tasks.Count);
+    }
     
 }
