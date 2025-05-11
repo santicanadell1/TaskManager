@@ -32,7 +32,6 @@ namespace Service.Test
             );
             _taskA.Id = 1;
 
-            // Tarea B depende de A
             _taskB = new Task(
                 "Tarea B",
                 "Descripción de Tarea B",
@@ -85,7 +84,6 @@ namespace Service.Test
             var processedTask = result.AllTasks.First();
             
             Assert.AreEqual(_taskA.ExpectedStartDate, processedTask.StartDate);
-            
             Assert.AreEqual(_taskA.ExpectedStartDate.AddDays(_taskA.Duration), processedTask.EndDate);
         }
 
@@ -99,10 +97,29 @@ namespace Service.Test
             var taskB = result.AllTasks.First(t => t.Id == 2);
             
             Assert.AreEqual(_taskA.ExpectedStartDate, taskA.StartDate);
-            
             Assert.AreEqual(taskA.EndDate, taskB.StartDate);
-            
             Assert.AreEqual(taskB.StartDate.AddDays(taskB.Duration), taskB.EndDate);
+        }
+
+        [TestMethod]
+        public void CalculateCriticalPath_ShouldCalculateLateDates_AndSlack()
+        {
+            var tasks = new List<Task> { _taskA, _taskB };
+            var result = _cpmService.CalculateCriticalPath(tasks);
+
+            var taskA = result.AllTasks.First(t => t.Id == 1);
+            var taskB = result.AllTasks.First(t => t.Id == 2);
+            
+            Assert.IsNotNull(taskA.LatestStart);
+            Assert.IsNotNull(taskA.LatestFinish);
+            Assert.IsNotNull(taskB.LatestStart);
+            Assert.IsNotNull(taskB.LatestFinish);
+            
+            Assert.AreEqual(0, taskA.Slack.TotalDays);
+            Assert.AreEqual(0, taskB.Slack.TotalDays);
+            
+            Assert.IsTrue(taskA);
+            Assert.IsTrue(taskB.IsCritical);
         }
     }
 }
