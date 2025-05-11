@@ -276,7 +276,7 @@ namespace Service.Test
                 Duration = 5
             };
 
-            _taskService.UpdateTask("Generic Project", 999);
+            _taskService.UpdateTask("Generic Project", 999, updateDTO);
         }
 
         [TestMethod]
