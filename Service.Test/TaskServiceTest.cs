@@ -140,6 +140,64 @@ namespace Service.Test
 
             _taskService.AddTask("Non-Existent Project", taskDTO);
         }
+        
+        [TestMethod]
+        public void AddTask_ShouldAddTaskWithPreviousTasks_WhenPreviousTasksExist()
+        {
+            var taskDTO = new TaskDTO
+            {
+                Title = "Task with Dependencies",
+                Description = "Description",
+                ExpectedStartDate = DateTime.Now.AddDays(5),
+                Duration = 2,
+                PreviousTasks = new List<TaskDTO>
+                {
+                    new TaskDTO { Id = _task1.Id },
+                    new TaskDTO { Id = _task2.Id }
+                },
+                SameTimeTasks = new List<TaskDTO>(),
+                Resources = new List<ResourceDTO>()
+            };
+
+            _taskService.AddTask("Generic Project", taskDTO);
+
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Task with Dependencies");
+
+            Assert.IsNotNull(addedTask);
+            Assert.AreEqual(2, addedTask.PreviousTasks.Count);
+            Assert.IsTrue(addedTask.PreviousTasks.Any(t => t.Id == _task1.Id));
+            Assert.IsTrue(addedTask.PreviousTasks.Any(t => t.Id == _task2.Id));
+        }
+
+        [TestMethod]
+        public void AddTask_ShouldAddTaskWithSameTimeTasks_WhenSameTimeTasksExist()
+        {
+            var taskDTO = new TaskDTO
+            {
+                Title = "Task with Same Time Tasks",
+                Description = "Description",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 2,
+                PreviousTasks = new List<TaskDTO>(),
+                SameTimeTasks = new List<TaskDTO>
+                {
+                    new TaskDTO { Id = _task1.Id },
+                    new TaskDTO { Id = _task2.Id }
+                },
+                Resources = new List<ResourceDTO>()
+            };
+
+            _taskService.AddTask("Generic Project", taskDTO);
+
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Task with Same Time Tasks");
+
+            Assert.IsNotNull(addedTask);
+            Assert.AreEqual(2, addedTask.SameTimeTasks.Count);
+            Assert.IsTrue(addedTask.SameTimeTasks.Any(t => t.Id == _task1.Id));
+            Assert.IsTrue(addedTask.SameTimeTasks.Any(t => t.Id == ));
+        }
 
         [TestMethod]
         public void DeleteTask_ShouldDeleteTask_WhenTaskExists()
