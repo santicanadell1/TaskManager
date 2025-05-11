@@ -248,6 +248,23 @@ namespace Service.Test
             Assert.AreEqual("Updated Description", updatedTask.Description);
             Assert.AreEqual(6, updatedTask.Duration);
         }
+        
+        [TestMethod]
+        [ExpectedException(typeof(ProjectNotFoundException))]
+        public void UpdateTask_ShouldThrowException_WhenProjectDoesNotExist()
+        {
+            var updateDTO = new TaskDTO
+            {
+                Title = "Updated Task",
+                Description = "Updated Description",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 5
+            };
+
+            _taskService.UpdateTask("Non-Existent Project", _task1.Id);
+        }
+        
+        
 
         [TestMethod]
         public void GetTasks_ShouldReturnAllTasks_WhenProjectExists()
