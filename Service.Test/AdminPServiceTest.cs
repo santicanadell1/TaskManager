@@ -180,6 +180,25 @@ public class AdminPServiceTests
         
         Assert.IsTrue(project.Members.Count == 0);
     }
+    [TestMethod]
+    [ExpectedException(typeof(ProjectNotFoundException))]
+    public void RemoveMembersFromProject_ShouldThrowException_WhenRemovingMemberFromAProjectThatNotExist()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "New Project",
+            Description = "Project Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+
+        _service.CreateProject(projectDTO);
+
+        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        
+        _service.RemoveMemberFromProject("Proyecto 1", "member.user@example.com");
+    }
 
     [TestMethod]
     public void RemoveProject_ShouldRemoveProject_WhenValid()
