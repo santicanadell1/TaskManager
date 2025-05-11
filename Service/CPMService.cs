@@ -193,6 +193,50 @@ namespace Service
 
             return (int)(latestFinish - earliestStart).TotalDays;
         }
+
+        public DateTime CalculateEarlyStart(Task task)
+        {
+            if (task.PreviousTasks == null || task.PreviousTasks.Count == 0)
+            {
+                return task.ExpectedStartDate;
+            }
+
+            return task.PreviousTasks.Max(t => t.EndDate);
+        }
+
+        public DateTime CalculateEarlyFinish(Task task)
+        {
+            return task.StartDate.AddDays(task.Duration);
+        }
+
+        public DateTime CalculateLateStart(Task task, List<Task> allTasks)
+        {
+            var successors = GetSuccessors(task, allTasks);
+            
+            if (!successors.Any())
+            {
+                if (task.LatestStart != default(DateTime))
+                {
+                    return task.LatestStart;
+                }
+                else if (task.StartDate != default(DateTime))
+                {
+                    return task.StartDate;
+                }
+                else
+                {
+                    return task.ExpectedStartDate;
+                }
+            }
+
+            DateTime earliestSuccessorStart = successors.Min(s => s.LatestStart);
+            return earliestSuccessorStart.AddDays(-task.Duration);
+        }
+
+        public bool IsCritical(Task task)
+        {
+            return Math.Abs(task.Slack.TotalDays) < 0.0001;
+        }
     }
 
     public class CpmResult
