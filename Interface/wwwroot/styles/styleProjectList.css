@@ -1,0 +1,56 @@
+﻿/* Alineación de los botones en la misma línea */
+.project-list-container .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Aseguramos que los botones tengan el mismo tamaño y alineación */
+.project-list-container .button-container {
+    display: flex;
+    gap: 10px; /* Espacio entre los botones */
+    align-items: center;
+    justify-content: flex-start; /* Mantener los botones juntos */
+}
+
+/* Estilos comunes para ambos botones */
+.project-list-container .view-options-btn,
+.project-list-container .btn-danger {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 150px;  /* Aseguramos que ambos botones tengan el mismo ancho */
+}
+
+/* Estilo para el botón "View Options" */
+.project-list-container .view-options-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+}
+
+.project-list-container .view-options-btn:hover {
+    background-color: #2980b9;
+}
+
+.project-list-container .view-options-btn.selected {
+    background-color: #2ecc71;
+}
+
+/* Estilo para el botón "Remove Project" */
+.project-list-container .btn-danger {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+}
+
+.project-list-container .btn-danger:hover {
+    background-color: #c0392b;
+}

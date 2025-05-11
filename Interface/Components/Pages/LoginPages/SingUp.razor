@@ -1,0 +1,152 @@
+﻿@page "/signup"
+@using Domain
+@using Domain.Exceptions
+@using Newtonsoft.Json
+@using Service
+@using Service.Models
+@inject NavigationManager Navigation
+@inject UserService UserService
+@rendermode InteractiveServer
+
+<div class="login-container">
+    <h3 class="login-title">Sign Up</h3>
+   
+    <EditForm Model="@_userDto" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <InputText id="firstName" class="form-control mt-1" @bind-Value="_userDto.FirstName"/>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="lastName">Last Name</label>
+            <InputText id="lastName" class="form-control mt-1" @bind-Value="_userDto.LastName"/>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="email">Email</label>
+            <InputText id="email" class="form-control mt-1" @bind-Value="_userDto.Email"/>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="dob">Date of Birth</label>
+            <InputDate id="dob" class="form-control mt-1" @bind-Value="_userDto.Birthday"/>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="password">Password</label>
+            <div class="input-password-wrapper">
+                <InputText id="password" type="@passwordInputType" class="form-control mt-1"
+                           @bind-Value="_userDto.Password"/>
+                <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
+                    <i class="@passwordEyeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="input-password-wrapper">
+                <InputText id="confirmPassword" type="@confirmPasswordInputType" class="form-control mt-1"
+                           @bind-Value="@confirmPassword"/>
+                <button type="button" class="btn-eye" @onclick="ToggleConfirmPasswordVisibility">
+                    <i class="@confirmPasswordEyeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+
+        <div class="form-group">
+            <a href="/login">Already have an account? Log in</a>
+        </div>
+
+    </EditForm>
+
+    @if (alertVisible)
+    {
+        <div class="d-flex justify-content-center align-items-center mt-2">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>@alertMessage</strong>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="ToggleAlertVisibility"></button>
+            </div>
+        </div>
+    }
+
+
+</div>
+
+@code {
+
+    private UserDTO _userDto = new UserDTO();
+    private string confirmPassword;
+
+    private string logMessage;
+    private string registerError;
+
+    private bool alertVisible = false;
+    private string alertMessage = string.Empty;
+
+    private string passwordInputType = "password";
+    private string passwordEyeIcon = "fas fa-eye-slash";
+
+    private string confirmPasswordInputType = "password";
+    private string confirmPasswordEyeIcon = "fas fa-eye-slash";
+
+    private void TogglePasswordVisibility()
+    {
+        passwordInputType = passwordInputType == "password" ? "text" : "password";
+        passwordEyeIcon = passwordInputType == "text" ? "fas fa-eye" : "fas fa-eye-slash";
+    }
+
+    private void ToggleConfirmPasswordVisibility()
+    {
+        confirmPasswordInputType = confirmPasswordInputType == "password" ? "text" : "password";
+        confirmPasswordEyeIcon = confirmPasswordInputType == "text" ? "fas fa-eye" : "fas fa-eye-slash";
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        _userDto = new UserDTO();
+        _userDto.FirstName = "";
+        _userDto.LastName = "";
+        _userDto.Email = "";
+        _userDto.Password = "";
+        _userDto.Birthday = DateTime.Now;
+        _userDto.Roles= new List<Rol>();
+    }
+
+    private void HandleValidSubmit()
+    {
+        try
+        {
+            if (confirmPassword != _userDto.Password)
+            {
+                alertMessage = "Password and Confirm Password do not match.";
+                alertVisible = true;
+                return;
+            }
+
+            UserService.AddUser(_userDto);
+
+            Navigation.NavigateTo("/login");
+        }
+        catch (Exception ex)
+        {
+            alertMessage = $"An error occurred: {ex.Message}";
+            alertVisible = true;
+        }
+    }
+
+
+    private void ToggleAlertVisibility()
+    {
+        alertVisible = false;
+    }
+
+}

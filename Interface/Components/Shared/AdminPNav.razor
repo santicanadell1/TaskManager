@@ -1,0 +1,46 @@
+﻿@rendermode InteractiveServer
+
+<link href="styles/styleCreateProject.css" rel="stylesheet"/>
+<div class="nav-item px-3">
+    <!-- Admin Project (Nivel principal) -->
+    <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center"
+            @onclick="ToggleAdminProject">
+        <span>
+            <i class="bi bi-briefcase"></i> Admin Project
+        </span>
+        <i class="bi @(showAdminProject ? "bi-chevron-down" : "bi-chevron-right")"></i>
+    </button>
+
+    @if (showAdminProject)
+    {
+        <!-- PROJECTS Section -->
+        <div class="nav-item mt-1 ms-3">
+            <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center"
+                    @onclick="ToggleProjects">
+                <span>
+                    <i class="bi bi-list"></i> Projects
+                </span>
+                <i class="bi @(showProjects ? "bi-chevron-down" : "bi-chevron-right")"></i>
+            </button>
+            @if (showProjects)
+            {
+                <div class="ms-3">
+                    <NavLink class="nav-link" href="/project/options">
+                        <i class="bi bi-briefcase"></i> Project Options
+                    </NavLink>
+                    <NavLink class="nav-link" href="/project/create">
+                        <i class="bi bi-plus-square"></i> Create Project
+                    </NavLink>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool showAdminProject = false;
+    private bool showProjects = false;
+
+    private void ToggleAdminProject() => showAdminProject = !showAdminProject;
+    private void ToggleProjects() => showProjects = !showProjects;
+}

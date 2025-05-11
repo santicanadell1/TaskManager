@@ -1,0 +1,12 @@
+namespace Domain.Exceptions
+{
+    public class ProjectException : Exception
+    {
+        public ProjectException(string message) : base(message) { }
+
+        public override string ToString()
+        {
+            return $"ProjectException: {this.GetType().Name} - {this.Message}";
+        }
+    }
+}
