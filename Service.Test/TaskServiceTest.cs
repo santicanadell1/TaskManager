@@ -301,7 +301,7 @@ namespace Service.Test
             var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
 
             Assert.AreEqual(1, updatedTask.SameTimeTasks.Count);
-            Assert.AreEqual(_task2.Id, updatedTask.SameTimeTasks[0]);
+            Assert.AreEqual(_task2.Id, updatedTask.SameTimeTasks[0].Id);
         }
 
         [TestMethod]
