@@ -219,6 +219,11 @@ public class AdminPService
     public void RemoveTaskFromMember(string projectName, string memberEmail, int taskID)
     {
         CheckAdminProyectRole();
+        var project = this.GetProjectByName(projectName);
+        if (project.Members.Find(m => m.Email == memberEmail) == null)
+        {
+            throw new UserIsNotAMemberException();
+        }
         User userEntity = _database.users.Get(u => u.Email == memberEmail);
         userEntity.RemoveTask(taskID);
         _database.users.Update(memberEmail,userEntity);
