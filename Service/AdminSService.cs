@@ -4,7 +4,7 @@ using Domain.Exceptions;
 using Service;
 using Service.Models;
 
-public class AdminSService
+public class AdminSService : IAdminSService
 {
     private readonly InMemoryDatabase _database;
     private UserService _userService;
