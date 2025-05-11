@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Domain;
+using Domain.Exceptions;
 using Service.Models;
 
 namespace Service.Test;
@@ -87,6 +88,24 @@ public class MemberPServiceTest
 
         Assert.AreEqual(1, result.Count);
         Assert.AreEqual("New Project", result[0].Name);
+    }
+    [TestMethod]
+    [ExpectedException(typeof(UserIsNotAMemberException))]
+    public void GetAllProjectsForMember_WhenUserHasNoProjectMemberRole_ThenThrowPermissionException()
+    {
+        var user = new UserDTO
+        {
+            FirstName = "NoRole",
+            LastName = "User",
+            Email = "no.role@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "Password123@",
+            Roles = new List<Rol> { Rol.AdminSystem } 
+        };
+
+        _userservice.AddUser(user);
+    
+        _memberPService.GetAllProjectsFromAMember(user.Email);
     }
 
 }
