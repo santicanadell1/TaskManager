@@ -126,6 +126,26 @@ public class MemberPServiceTest
 
         _memberPService.GetAllProjectsFromAMember(user.Email);
     }
+    [TestMethod]
+    public void GetAllProjectsForMember_WhenUserHasMultipleProjects_ThenReturnAllProjects()
+    {
+        var secondProject = new ProjectDTO
+        {
+            Name = "Second Project",
+            Description = "Another project",
+            StartDate = DateTime.Parse("2022-01-01"),
+            AdminProyect = UserDTO,
+            Members = new List<UserDTO> { UserDTO }
+        };
+
+        _adminPService.CreateProject(secondProject);
+
+        var result = _memberPService.GetAllProjectsFromAMember(UserDTO.Email);
+
+        Assert.AreEqual(2, result.Count);
+        Assert.IsTrue(result.Any(p => p.Name == "New Project"));
+        Assert.IsTrue(result.Any(p => p.Name == "Second Project"));
+    }
 
 
 }
