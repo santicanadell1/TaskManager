@@ -359,7 +359,7 @@ namespace Service.Test
             Assert.AreEqual(7, result.ProjectDuration);
             
             Assert.IsTrue(result.CriticalTasks.Any(t => t.Id == 10));
-            Assert.IsTrue(result.CriticalTasks.Any(t => t.I));
+            Assert.IsTrue(result.CriticalTasks.Any(t => t.Id == 11));
             Assert.IsTrue(result.CriticalTasks.Any(t => t.Id == 12));
         }
     }

@@ -233,6 +233,18 @@ namespace Service
             return earliestSuccessorStart.AddDays(-task.Duration);
         }
 
+        public DateTime CalculateLateFinish(Task task, List<Task> allTasks)
+        {
+            var successors = GetSuccessors(task, allTasks);
+            
+            if (!successors.Any())
+            {
+                return task.EndDate;
+            }
+
+            return successors.Min(s => s.LatestStart);
+        }
+
         public bool IsCritical(Task task)
         {
             return Math.Abs(task.Slack.TotalDays) < 0.0001;
