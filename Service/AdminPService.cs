@@ -53,7 +53,7 @@ public class AdminPService
         {
             var user = ToEntity(memberDTO);
 
-            if (!project.Members.Contains(user))
+            if (!project.Members.Any(u => u.Email == user.Email))
             {
                 project.AddMember(user);
             }
