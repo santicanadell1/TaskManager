@@ -21,7 +21,6 @@ namespace Service
                 throw new EmptyTaskListException();
             }
 
-            // Para una sola tarea, es automáticamente crítica
             var task = tasks.First();
             task.IsCritical = true;
             

@@ -62,5 +62,18 @@ namespace Service.Test
             Assert.AreEqual(1, result.CriticalTasks.Count);
             Assert.AreEqual(_taskA.Duration, result.ProjectDuration);
         }
+
+        [TestMethod]
+        public void CalculateCriticalPath_ShouldCalculateEarlyDates_ForTaskWithoutPredecessors()
+        {
+            var singleTask = new List<Task> { _taskA };
+            var result = _cpmService.CalculateCriticalPath(singleTask);
+
+            var processedTask = result.AllTasks.First();
+            
+            Assert.AreEqual(_taskA.ExpectedStartDate, processedTask.StartDate);
+            
+            Assert.AreEqual(_taskA.ExpectedStartDate.AddDays(_taskA.Duration), processedTask);
+        }
     }
 }
