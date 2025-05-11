@@ -438,7 +438,7 @@ namespace Service.Test
 
             foreach (var criticalTask in result.CriticalTasks)
             {
-                Assert.AreEqual(0, criticalTask.Slack, 0.0001);
+                Assert.AreEqual(0, criticalTask.Slack.TotalDays, 0.0001);
             }
         }
 
