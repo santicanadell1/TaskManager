@@ -196,7 +196,7 @@ namespace Service.Test
             Assert.IsNotNull(addedTask);
             Assert.AreEqual(2, addedTask.SameTimeTasks.Count);
             Assert.IsTrue(addedTask.SameTimeTasks.Any(t => t.Id == _task1.Id));
-            Assert.IsTrue(addedTask.SameTimeTasks.Any(t => t.Id == ));
+            Assert.IsTrue(addedTask.SameTimeTasks.Any(t => t.Id == _task2.Id));
         }
 
         [TestMethod]
