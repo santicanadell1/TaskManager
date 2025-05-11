@@ -382,7 +382,11 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual(2, tasks.Count);
             Assert.AreEqual("Task 1", tasks[0].Title);
             Assert.AreEqual("Task 2", tasks[1].Title);
+
+            Assert.AreEqual(1, tasks[0].Resources.Count);
+            Assert.AreEqual("Resource 1", tasks[0].Resources[0].Name);
         }
+
 
         [TestMethod]
         public void GetTask_ShouldReturnTask_WhenTaskExists()
@@ -478,6 +482,9 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual(_task1.Title, taskDTO.PreviousTasks[0].Title);
             Assert.IsNull(taskDTO.PreviousTasks[0].Description); 
         }
+        
+    
+
 
     }
 }
