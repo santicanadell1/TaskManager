@@ -30,7 +30,7 @@ public class AdminPServiceTests
         _service = new AdminPService(_database);
         _userservice = new UserService(_database);
         _login = new Login(_database);
-        _taskService = new TaskService(_database);
+        _taskService = new TaskService(_database, new CpmService());
 
         Admin = new UserDTO
         {
@@ -39,7 +39,7 @@ public class AdminPServiceTests
             Email = "admin.user@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<Rol> { Rol.AdminProject }
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
         UserDTO = new UserDTO
@@ -49,7 +49,7 @@ public class AdminPServiceTests
             Email = "member.user@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<Rol> { Rol.ProjectMember }
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
 
         members = new List<UserDTO> { UserDTO };
@@ -101,7 +101,7 @@ public class AdminPServiceTests
             Email = "john.doe@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "password123",
-            Roles = new List<Rol> { Rol.AdminProject }
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
         _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
@@ -133,7 +133,7 @@ public class AdminPServiceTests
             Email = "john.doe@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "password123",
-            Roles = new List<Rol> { Rol.AdminProject }
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
         _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
@@ -165,7 +165,7 @@ public class AdminPServiceTests
             Email = "john.doe@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "password123",
-            Roles = new List<Rol> { Rol.AdminProject }
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
         _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });

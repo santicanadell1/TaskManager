@@ -25,7 +25,7 @@ public class LoginTests
     {
         var email = "john.doe@example.com";
         var password = "Password123@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
         var userDTO = new UserDTO
         {
@@ -53,7 +53,7 @@ public class LoginTests
     {
         var email = "john.doe@example.com";
         var password = "Password123@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
         var userDTO = new UserDTO
         {
@@ -84,7 +84,7 @@ public class LoginTests
     {
         var email = "john.doe@example.com";
         var password = "WrongPassword@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
         var userDTO = new UserDTO
         {
@@ -100,6 +100,75 @@ public class LoginTests
 
         _login.LoginUser(email, password);
     }
-    
+
+    [TestMethod]
+    public void IsAdminSystem_ShouldReturnTrue_WhenUserIsAdminSystem()
+    {
+        var email = "john.doe@example.com";
+        var password = "Password123@";
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
+
+        var userDTO = new UserDTO
+        {
+            Email = email,
+            FirstName = "John",
+            LastName = "Doe",
+            Password = password,
+            Roles = roles
+        };
+
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
+
+        _login.LoginUser(email, password);
+        
+        Assert.IsTrue(_login.IsAdminSystem());
+    }
+    [TestMethod]
+    public void IsAdminProject_ShouldReturnTrue_WhenUserIsAdminProject()
+    {
+        var email = "john.doe@example.com";
+        var password = "Password123@";
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
+
+        var userDTO = new UserDTO
+        {
+            Email = email,
+            FirstName = "John",
+            LastName = "Doe",
+            Password = password,
+            Roles = roles
+        };
+
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
+
+        _login.LoginUser(email, password);
+        
+        Assert.IsTrue(_login.IsAdminProject());
+    }
+    [TestMethod]
+    public void IsProjectMember_ShouldReturnTrue_WhenUserIsProjectMember()
+    {
+        var email = "john.doe@example.com";
+        var password = "Password123@";
+        var roles = new List<RolDTO> { RolDTO.ProjectMember };
+
+        var userDTO = new UserDTO
+        {
+            Email = email,
+            FirstName = "John",
+            LastName = "Doe",
+            Password = password,
+            Roles = roles
+        };
+
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
+
+        _login.LoginUser(email, password);
+        
+        Assert.IsTrue(_login.IsProjectMember());
+    }
     
 }

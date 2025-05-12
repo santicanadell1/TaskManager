@@ -28,17 +28,17 @@
         <div class="role-checkboxes mt-2">
             <div class="form-check">
                 <input type="checkbox" id="adminSystem" class="form-check-input"
-                       @bind="rolesSelected[Rol.AdminSystem]"/>
+                       @bind="rolesSelected[RolDTO.AdminSystem]"/>
                 <label class="form-check-label" for="adminSystem">Admin System</label>
             </div>
             <div class="form-check">
                 <input type="checkbox" id="adminProject" class="form-check-input"
-                       @bind="rolesSelected[Rol.AdminProject]"/>
+                       @bind="rolesSelected[RolDTO.AdminProject]"/>
                 <label class="form-check-label" for="adminProject">Admin Project</label>
             </div>
             <div class="form-check">
                 <input type="checkbox" id="projectMember" class="form-check-input"
-                       @bind="rolesSelected[Rol.ProjectMember]"/>
+                       @bind="rolesSelected[RolDTO.ProjectMember]"/>
                 <label class="form-check-label" for="projectMember">Project Member</label>
             </div>
         </div>
@@ -78,11 +78,11 @@
     private string assignError = "";
     private string assignSuccess = "";
 
-    private Dictionary<Rol, bool> rolesSelected = new()
+    private Dictionary<RolDTO, bool> rolesSelected = new()
     {
-        { Rol.AdminSystem, false },
-        { Rol.AdminProject, false },
-        { Rol.ProjectMember, false }
+        { RolDTO.AdminSystem, false },
+        { RolDTO.AdminProject, false },
+        { RolDTO.ProjectMember, false }
     };
 
     protected override void OnInitialized()

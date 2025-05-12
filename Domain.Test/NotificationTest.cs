@@ -68,6 +68,19 @@ namespace Domain.Test
             Assert.AreEqual("Updated description", not.Description);
         }
 
+        [TestMethod]
+        public void Project_WhenSetIsNull_ThenNoExceptionThrown()
+        {
+            Project project = new Project();
+            project.Name = "Project name";
+            Notification not = new Notification(false, "description");
+            not.Id = 1;
+            not.Project = project;
+            
+            Assert.AreEqual(project.Name, not.Project.Name);
+            
+        }
+
 
 
         

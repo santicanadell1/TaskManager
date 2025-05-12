@@ -3,11 +3,12 @@ using DataAccess.ResourceRepositoryExceptions;
 using Domain;
 using Domain.Exceptions;
 using Service.Models;
+using Service.Models.Exceptions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Service
 {
-    public class ResourceService
+    public class ResourceService : IResourceService
     {
         private readonly InMemoryDatabase _database;
 
@@ -123,12 +124,12 @@ namespace Service
                 throw new UnauthorizedAdminAccessException();
             }
 
-            if (currentUser.Roles.Contains(Rol.AdminSystem))
+            if (currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminSystem)))
             {
                 return;
             }
 
-            if (currentUser.Roles.Contains(Rol.AdminProject) && isExclusive(resource))
+            if (currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminProject)) && isExclusive(resource))
             {
                 return;
             }
@@ -139,7 +140,7 @@ namespace Service
         private bool isAdminSystem()
         {
             var currentUser = LoggedUser.Current;
-            return currentUser.Roles.Contains(Rol.AdminSystem);
+            return currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminSystem));
         }
 
         private List<Project> GetProjectsThatAreUsingResource(Resource resource)
@@ -166,10 +167,25 @@ namespace Service
             var currentUser = LoggedUser.Current;
             List<Project> projects = GetProjectsThatAreUsingResource(resource);
             if (projects.Count == 0) return false;
-            bool currentUserIsAdmin = currentUser.Roles.Contains(Rol.AdminProject);
+            bool currentUserIsAdmin = currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminProject));
             bool isUsedByOneProject = projects.Count == 1;
             bool projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
             return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
+        }
+
+        private RolDTO ConvertToDTORole(Rol role)
+        {
+            switch (role)
+            {
+                case Rol.AdminSystem:
+                    return RolDTO.AdminSystem;
+                case Rol.ProjectMember:
+                    return RolDTO.ProjectMember;
+                case Rol.AdminProject:
+                    return RolDTO.AdminProject;
+                default:
+                    throw new InvalidRolException();
+            }
         }
     }
 }

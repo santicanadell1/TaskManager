@@ -1,5 +1,4 @@
-﻿@using Domain
-@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity
 @using Service
 @using Service.Models
 @inject Login LoginService
@@ -47,26 +46,25 @@
                 <hr style="border-color: rgba(255,255,255,0.1);"/>
             </div>
 
-            if (_loggedUser.Roles.Contains(Rol.AdminSystem) && _loggedUser.Roles.Count.Equals(1))
+            if (LoginService.IsAdminSystem() || LoginService.IsAdminProject())
             {
                 <ResourcesNav/>
+            }
+
+            if (LoginService.IsAdminSystem())
+            {
                 <AdminSNav/>
             }
-            else if (_loggedUser.Roles.Contains(Rol.AdminProject) && _loggedUser.Roles.Count.Equals(1))
+
+            if (LoginService.IsAdminProject())
             {
-                <ResourcesNav/>
-                <AdminPNav/>
-            }
-            else if (_loggedUser.Roles.Contains(Rol.AdminSystem) && _loggedUser.Roles.Contains(Rol.AdminProject))
-            {
-                <ResourcesNav/>
-                <AdminSNav/>
                 <AdminPNav/>
             }
 
-            <ResourcesNav/>
-            <AdminSNav/>
-            <AdminPNav/>
+            if (LoginService.IsProjectMember())
+            {
+                <MyProjectsNav/>
+            }
         }
     </nav>
 </div>

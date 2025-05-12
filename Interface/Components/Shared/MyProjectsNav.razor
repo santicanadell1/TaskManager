@@ -1,0 +1,51 @@
+﻿@page "/myprojects"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+
+<link href="styles/styleNavMenu.css" rel="stylesheet"/>
+
+<div class="nav-item px-3">
+    <!-- My Projects Section -->
+    <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center"
+            @onclick="ToggleMyProjects">
+        <span>
+            <i class="bi bi-clipboard"></i> My Projects
+        </span>
+        <i class="bi @(showMyProjects ? "bi-chevron-down" : "bi-chevron-right")"></i>
+    </button>
+
+    @if (showMyProjects)
+    {
+        <!-- My Projects Options -->
+        <div class="nav-item mt-1 ms-3">
+            <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center"
+                    @onclick="ToggleProjectOptions">
+                <span>
+                    <i class="bi bi-folder"></i> Projects
+                </span>
+                <i class="bi @(showProjectOptions ? "bi-chevron-down" : "bi-chevron-right")"></i>
+            </button>
+            @if (showProjectOptions)
+            {
+                <div class="ms-3">
+                    <!-- Tasks Option -->
+                    <NavLink class="nav-link" href="/project/tasks">
+                        <i class="bi bi-list-check"></i> Tasks
+                    </NavLink>
+                    <!-- Gantt Diagram Option -->
+                    <NavLink class="nav-link" href="/project/gantt">
+                        <i class="bi bi-calendar"></i> Gantt Diagram
+                    </NavLink>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool showMyProjects = false;
+    private bool showProjectOptions = false;
+
+    private void ToggleMyProjects() => showMyProjects = !showMyProjects;
+    private void ToggleProjectOptions() => showProjectOptions = !showProjectOptions;
+}
