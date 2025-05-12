@@ -86,6 +86,8 @@ namespace Domain
                 tasks = value;
             }
         }
+        
+        public List<Notification> Notifications { get; set; }
 
         public User(string firstName, string lastName, string email, DateTime birthday, string password)
         {
