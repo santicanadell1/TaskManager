@@ -245,7 +245,8 @@ public class AdminPService : IAdminPService
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
         User user = _database.users.Get(u => u.Email == email);
-        TaskService taskService = new TaskService(_database);
+        CpmService cpmService = new CpmService(); 
+        TaskService taskService = new TaskService(_database, cpmService); 
         List<TaskDTO> returnList = new List<TaskDTO>();
         foreach (var project in _database.projects.GetAllProjects())
         {
@@ -262,10 +263,12 @@ public class AdminPService : IAdminPService
         return returnList;
     }
 
+
     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
     {
         User user = _database.users.Get(u => u.Email == email);
-        TaskService taskService = new TaskService(_database);
+        CpmService cpmService = new CpmService(); 
+        TaskService taskService = new TaskService(_database, cpmService); 
         List<TaskDTO> returnList = new List<TaskDTO>();
         List<TaskDTO> tasks = taskService.GetTasks(projectName);
         foreach (var task in tasks)

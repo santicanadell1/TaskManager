@@ -26,11 +26,10 @@ public class MemberPServiceTest
     {
         database = new InMemoryDatabase();
         _memberPService = new MemberPService(database);
-        _taskService = new TaskService(database);
+        _taskService = new TaskService(database, new CpmService()); 
         _adminPService = new AdminPService(database);
         _login = new Login(database);
         _userservice = new UserService(database);
-
         Admin = new UserDTO
         {
             FirstName = "Admin",
@@ -153,7 +152,7 @@ public class MemberPServiceTest
     public void ChangeTaskStatus_WhenUserIsMember_ThenStateIsUpdated()
     {
         AdminPService adminPService = new AdminPService(database);
-        State newState = State.DONE;
+        StateDTO newState = StateDTO.DONE;
         task = _taskService.GetTask("New Project", 1);
         adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)task.Id);
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, task, newState);
@@ -177,9 +176,10 @@ public class MemberPServiceTest
         _userservice.AddUser(User);
 
         var task = _taskService.GetTasks("New Project").First();
-        var newState = State.DOING;
+        var newState = StateDTO.DOING;
         
         _memberPService.ChangeTaskStatus("New Project", User.Email, task, newState);
     }
+    
 
 }

@@ -7,14 +7,15 @@ using Service.Models;
 
 namespace Service;
 
-public class MemberPService:IMemberPService
+public class MemberPService : IMemberPService
 {
     private InMemoryDatabase _database;
+
     public MemberPService(InMemoryDatabase database)
     {
         _database = database;
     }
-    
+
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)
     {
         AdminPService adminPService = new AdminPService(_database);
@@ -30,6 +31,7 @@ public class MemberPService:IMemberPService
                 projectsFromMember.Add(project);
             }
         }
+
         if (projectsFromMember.Count == 0)
         {
             throw new UserHasNoProjectsException();
@@ -55,21 +57,59 @@ public class MemberPService:IMemberPService
         {
             throw new TaskCantBeModifiedByUserException();
         }
-    
+
         List<int> taskIds = user.Tasks ?? new List<int>();
         if (taskIds.Count == 0 || !taskIds.Contains(taskId))
         {
             throw new TaskCantBeModifiedByUserException();
         }
-
     }
-    public void ChangeTaskStatus(string projectName, string email, TaskDTO task, State status)
+
+    public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
         CheckIsTaskOfTheUser((int)task.Id, email);
-        TaskService taskService = new TaskService(_database);
-        task.State = (StateDTO)status;
+        CpmService cpmService = new CpmService(); 
+        TaskService taskService = new TaskService(_database, cpmService); 
+        task.State = status;
         taskService.UpdateTask(projectName, task.Id, task);
     }
+    
+    public List<TaskDTO> GetAllTaskForAMember(string email)
+    {
+        User user = _database.users.Get(u => u.Email == email);
+        CpmService cpmService = new CpmService();
+        TaskService taskService = new TaskService(_database, cpmService);
+        List<TaskDTO> returnList = new List<TaskDTO>();
+        foreach (var project in _database.projects.GetAllProjects())
+        {
+            List<TaskDTO> tasks = taskService.GetTasks(project.Name);
+            foreach (var task in tasks)
+            {
+                if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+                {
+                    returnList.Add(task);
+                }
+            }
+        }
 
+        return returnList;
+    }
 
+    public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
+    {
+        User user = _database.users.Get(u => u.Email == email);
+        CpmService cpmService = new CpmService();
+        TaskService taskService = new TaskService(_database, cpmService);
+        List<TaskDTO> returnList = new List<TaskDTO>();
+        List<TaskDTO> tasks = taskService.GetTasks(projectName);
+        foreach (var task in tasks)
+        {
+            if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+            {
+                returnList.Add(task);
+            }
+        }
+
+        return returnList;
+    }
 }
