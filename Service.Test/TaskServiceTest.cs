@@ -515,7 +515,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual("Mapping Resource", taskDTO.Resources[0].Name);
             Assert.AreEqual("Mapping Type", taskDTO.Resources[0].Type);
             Assert.AreEqual("Mapping Description", taskDTO.Resources[0].Description);
-            Assert.AreEqual(50, taskDTO.Resources[0]);
+            Assert.AreEqual(50, taskDTO.Resources[0].Id);
         }
 
     }
