@@ -23,7 +23,7 @@ namespace Service.Test.ModelsTests;
         }
 
         [TestMethod]
-        public void GanttData_ShouldHoldProvidedData()
+        public void GanttData_WhenInitializeWithCorrectData_ShouldHoldProvidedData()
         {
             var task = new GanttTask { id = 1, text = "Tarea 1", start_date = "2025-05-10", duration = 5, progress = 0.5 };
             var link = new GanttLink { id = 1, source = 1, target = 2, type = "0", critical = true };
