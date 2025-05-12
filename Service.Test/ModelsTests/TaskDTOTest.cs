@@ -159,7 +159,17 @@ public class TaskDTOTest
             
         Assert.AreEqual(endDate, taskDTO.EndDate);
     }
-
+    
+    [TestMethod]
+    public void TaskDTO_WhenLatestStartIsSet_ThenLatestStartIsAssigned()
+    {
+        DateTime latestStart = new DateTime(2025, 6, 16);
+        TaskDTO taskDTO = new TaskDTO();
+            
+        taskDTO.LatestStart = latestStart;
+            
+        Assert.AreEqual(latestStart, taskDTO.LatestStart);
+    }
     
     
 
