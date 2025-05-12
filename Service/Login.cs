@@ -50,4 +50,17 @@ public class Login : ILogin
             Birthday = user.Birthday
         };
     }
+    
+    public bool IsAdminSystem()
+    {
+        return LoggedUser.Current?.Roles.Contains(Rol.AdminSystem) ?? false;
+    }
+    public bool IsAdminProject()
+    {
+        return LoggedUser.Current?.Roles.Contains(Rol.AdminProject) ?? false;
+    }
+    public bool IsProjectMember()
+    {
+        return LoggedUser.Current?.Roles.Contains(Rol.ProjectMember) ?? false;
+    }
 }
