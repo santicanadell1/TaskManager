@@ -1,12 +1,13 @@
 ﻿using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Service.Interfaces;
 using Service.MemberServiceException;
 using Service.Models;
 
 namespace Service;
 
-public class MemberPService
+public class MemberPService:IMemberPService
 {
     private InMemoryDatabase _database;
     public MemberPService(InMemoryDatabase database)
