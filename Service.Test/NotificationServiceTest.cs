@@ -52,7 +52,8 @@ public class NotificationServiceTest
             Notifications = notifications,
             Members = new List<User> { user1 }
         };
-
+        dataAccess.notifications.AddNotification(notification1);
+        dataAccess.notifications.AddNotification(notification2);
         dataAccess.projects.AddProject(project1);
         dataAccess.projects.AddProject(project2);
     }
@@ -92,11 +93,11 @@ public class NotificationServiceTest
     public void RemoveNotificationFromProject_WhenNotificationExists_ThenNotificationShouldBeRemoved()
     {
         var projectId = "Project 1";
-        var notificationDescription = "Description 1";
-        _notificationService.RemoveNotificationFromProject(projectId, notificationDescription);
+        int notificationId = 1;
+        _notificationService.RemoveNotificationFromProject(projectId, notificationId);
 
         var project = dataAccess.projects.GetProject(p => p.Name == projectId);
-        var removedNotification = project.Notifications.FirstOrDefault(n => n.Description == notificationDescription);
+        var removedNotification = project.Notifications.FirstOrDefault(n => n.Id == notificationId);
 
         Assert.IsNull(removedNotification);
     }

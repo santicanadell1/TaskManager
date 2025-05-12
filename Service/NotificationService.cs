@@ -63,4 +63,21 @@ public class NotificationService
 
         _database.projects.UpdateProject(projectName, project);
     }
+
+    public void RemoveNotificationFromProject(string projectName, int idNotification)
+    {
+        Project project = _database.projects.GetProject(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException();
+        }
+
+        var notificationToRemove = project.Notifications.FirstOrDefault(n => n.Id == idNotification);
+        if (notificationToRemove != null)
+        {
+            project.Notifications.Remove(notificationToRemove);
+        }
+
+        _database.projects.UpdateProject(projectName, project);
+    }
 }
