@@ -91,5 +91,17 @@ namespace Service.Test.ModelsTests
             
             Assert.AreEqual(latestFinishDate, resultDTO.LatestFinishDate);
         }
+        
+        [TestMethod]
+        public void CpmResultDTO_DefaultValues_ShouldBeCorrect()
+        {
+            CpmResultDTO resultDTO = new CpmResultDTO();
+            
+            Assert.AreEqual(0, resultDTO.ProjectDuration);
+            Assert.IsNull(resultDTO.CriticalPathIds);
+            Assert.IsNull(resultDTO.CriticalTaskIds);
+            Assert.AreEqual(default(DateTime), resultDTO.EarliestStartDate);
+            Assert.AreEqual(default(DateTime), resultDTO);
+        }
     }
 }
