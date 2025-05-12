@@ -45,18 +45,22 @@ public class NotificationService
 
     public void AddNotificationToProject(string projectName, NotificationDTO notificationDTO)
     {
-        Notification notification = ToEntity(notificationDTO);
-
         Project project = _database.projects.GetProject(p => p.Name == projectName);
         if (project == null)
         {
             throw new ProjectNotFoundException();
         }
 
-        project.AddNotification(notification);
+        Notification notification = ToEntity(notificationDTO);
+
+        foreach (var member in project.Members)
+        {
+            var userNotification = new Notification(notification.Read, notification.Description);
+            member.Notifications.Add(userNotification);
+            _database.users.Update(member.Email, member);
+        }
 
         _database.notifications.AddNotification(notification);
-        _database.projects.UpdateProject(projectName, project);
     }
 
     public void RemoveNotificationFromProject(string projectName, int idNotification)
