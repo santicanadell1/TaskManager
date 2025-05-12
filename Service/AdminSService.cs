@@ -1,6 +1,7 @@
 using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Domain.Exceptions.UserRepositoryExceptions;
 using Service;
 using Service.Exceptions;
 using Service.Models;
