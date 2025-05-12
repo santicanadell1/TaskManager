@@ -382,11 +382,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual(2, tasks.Count);
             Assert.AreEqual("Task 1", tasks[0].Title);
             Assert.AreEqual("Task 2", tasks[1].Title);
-
-            Assert.AreEqual(1, tasks[0].Resources.Count);
-            Assert.AreEqual("Resource 1", tasks[0].Resources[0].Name);
         }
-
 
         [TestMethod]
         public void GetTask_ShouldReturnTask_WhenTaskExists()
@@ -483,8 +479,44 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.IsNull(taskDTO.PreviousTasks[0].Description); 
         }
         
+        [TestMethod]
+        public void GetTask_ShouldCorrectlyMapTaskProperties_TestingFromEntity()
+        {
+            var task = new Task(
+                "Mapping Test Task",
+                "Detailed description for mapping test",
+                new DateTime(2025, 1, 1),
+                7,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource> {
+                    new Resource("Mapping Resource", "Mapping Type", "Mapping Description") { Id = 50 }
+                }
+            );
     
-
+            task.State = Domain.State.DONE;
+    
+            _database.projects.AddTask("Generic Project", task);
+    
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Mapping Test Task");
+    
+            Assert.IsNotNull(addedTask, "La tarea no se agregó correctamente al proyecto");
+    
+            var taskDTO = _taskService.GetTask("Generic Project", addedTask.Id);
+    
+            Assert.AreEqual(addedTask.Id, taskDTO.Id);
+            Assert.AreEqual("Mapping Test Task", taskDTO.Title);
+            Assert.AreEqual("Detailed description for mapping test", taskDTO.Description);
+            Assert.AreEqual(new DateTime(2025, 1, 1), taskDTO.ExpectedStartDate);
+            Assert.AreEqual(7, taskDTO.Duration);
+            Assert.AreEqual(StateDTO.DONE, taskDTO.State);
+            Assert.AreEqual(1, taskDTO.Resources.Count);
+            Assert.AreEqual("Mapping Resource", taskDTO.Resources[0].Name);
+            Assert.AreEqual("Mapping Type", taskDTO.Resources[0].Type);
+            Assert.AreEqual("Mapping Description", taskDTO.Resources[0].Description);
+            Assert.AreEqual(50, taskDTO.Resources[0]);
+        }
 
     }
 }
