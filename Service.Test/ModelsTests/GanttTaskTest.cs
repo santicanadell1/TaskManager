@@ -6,7 +6,7 @@ namespace Service.Test.ModelsTests;
     public class GanttTaskTests
     {
         [TestMethod]
-        public void GanttTask_ShouldAllowNonCriticalTasks()
+        public void GanttTask_WhenInitializing_ShouldAllowNonCriticalTasks()
         {
             var task = new GanttTask { critical = false };
             Assert.IsFalse(task.critical);
