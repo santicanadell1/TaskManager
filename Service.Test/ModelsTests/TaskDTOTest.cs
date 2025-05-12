@@ -177,9 +177,20 @@ public class TaskDTOTest
         DateTime latestFinish = new DateTime(2025, 6, 21);
         TaskDTO taskDTO = new TaskDTO();
             
-        taskDTO.g = latestFinish;
+        taskDTO.LatestFinish = latestFinish;
             
         Assert.AreEqual(latestFinish, taskDTO.LatestFinish);
+    }
+    
+    [TestMethod]
+    public void TaskDTO_WhenSlackIsSet_ThenSlackIsAssigned()
+    {
+        TimeSpan slack = TimeSpan.FromDays(2);
+        TaskDTO taskDTO = new TaskDTO();
+            
+        taskDTO.g = slack;
+            
+        Assert.AreEqual(slack, taskDTO.Slack);
     }
 
 }
