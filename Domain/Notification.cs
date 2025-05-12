@@ -34,6 +34,7 @@ namespace Domain
 
         public int Id { get; set; }
 
+
         public Notification(bool read, string description)
         {
             this.Read = read;
