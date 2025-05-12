@@ -119,7 +119,22 @@ public class AdminPService : IAdminPService
         return FromEntity(project);
     }
 
-    
+    public List<ProjectDTO> GetAllProjectsForUser(string Email)
+    {
+        if (LoggedUser.Current.Roles.Contains(Rol.AdminSystem))
+        {
+            return GetAllProjects();
+        }
+        List<ProjectDTO> projects = new List<ProjectDTO>();
+        foreach (var project in _database.projects.GetAllProjects())
+        {
+            if (project.AdminProject.Email == Email || project.Members.Any(m => m.Email == Email))
+            {
+                projects.Add(FromEntity(project));
+            }
+        }
+        return projects;
+    }
 
     private ProjectDTO FromEntity(Project project)
     {
