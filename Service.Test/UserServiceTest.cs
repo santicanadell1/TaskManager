@@ -1,6 +1,7 @@
 using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Service.Exceptions;
 using Service.Models;
 
 namespace Service.Test;
@@ -12,8 +13,8 @@ public class UserServiceTest
     [ExpectedException(typeof(InvalidUserEmailException))]
     public void AddUser_ShouldThrowException_WhenEmailIsNotUnique()
     {
-        List<Rol> rols = new List<Rol>();
-        rols.Add(Rol.ProjectMember);
+        List<RolDTO> rols = new List<RolDTO>();
+        rols.Add(RolDTO.ProjectMember);
 
         UserRepository userRepository = new UserRepository();
 
@@ -48,8 +49,8 @@ public class UserServiceTest
     {
         var userRepository = new UserRepository();
         var userService = new UserService(new InMemoryDatabase());
-        List<Rol> rols = new List<Rol>();
-        rols.Add(Rol.ProjectMember);
+        List<RolDTO> rols = new List<RolDTO>();
+        rols.Add(RolDTO.ProjectMember);
 
         var userToUpdate = new UserDTO
         {
@@ -89,7 +90,7 @@ public class UserServiceTest
     public void AddUser_ShouldAddUser_WhenEmailIsUnique()
     {
       
-        var rols = new List<Rol> { Rol.ProjectMember };
+        var rols = new List<RolDTO> { RolDTO.ProjectMember };
         var userDTO = new UserDTO
         {
             FirstName = "John",
@@ -114,7 +115,7 @@ public class UserServiceTest
     public void UpdateUser_ShouldUpdateUser_WhenUserExists()
     {
         
-        var rols = new List<Rol> { Rol.ProjectMember };
+        var rols = new List<RolDTO> { RolDTO.ProjectMember };
         var userDTO = new UserDTO
         {
             FirstName = "John",
