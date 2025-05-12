@@ -3,6 +3,7 @@ using Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Service.Models;
 using Task = Domain.Task;
 
 namespace Service
@@ -11,7 +12,7 @@ namespace Service
     {
         private const double SLACK_TOLERANCE = 0.0001;
 
-        public CpmResult CalculateCriticalPath(List<Task> tasks)
+        public CpmResult CalculateCriticalPath(List<TaskDTO> tasks)
         {
             if (tasks == null)
             {
@@ -39,10 +40,10 @@ namespace Service
             };
         }
 
-        private void CalculateEarlyDates(List<Task> tasks)
+        private void CalculateEarlyDates(List<TaskDTO> tasks)
         {
-            var processedTasks = new HashSet<Task>();
-            var remainingTasks = new Queue<Task>(tasks);
+            var processedTasks = new HashSet<TaskDTO>();
+            var remainingTasks = new Queue<TaskDTO>(tasks);
             int iterationCount = 0;
             int maxIterations = tasks.Count * tasks.Count;
 
@@ -255,9 +256,9 @@ namespace Service
 
     public class CpmResult
     {
-        public List<Task> AllTasks { get; set; }
-        public List<Task> CriticalPath { get; set; }
-        public List<Task> CriticalTasks { get; set; }
+        public List<TaskDTO> AllTasks { get; set; }
+        public List<TaskDTO> CriticalPath { get; set; }
+        public List<TaskDTO> CriticalTasks { get; set; }
         public int ProjectDuration { get; set; }
     }
 }
