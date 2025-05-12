@@ -192,5 +192,55 @@ public class TaskDTOTest
             
         Assert.AreEqual(slack, taskDTO.Slack);
     }
+    
+      [TestMethod]
+        public void TaskDTO_DefaultValues_ShouldBeCorrect()
+        {
+            // Arrange & Act
+            TaskDTO taskDTO = new TaskDTO();
+            
+            // Assert
+            Assert.IsFalse(taskDTO.IsCritical, "Default value for IsCritical should be false");
+            Assert.AreEqual(default(DateTime), taskDTO.StartDate, "Default value for StartDate should be default(DateTime)");
+            Assert.AreEqual(default(DateTime), taskDTO.EndDate, "Default value for EndDate should be default(DateTime)");
+            Assert.AreEqual(default(DateTime), taskDTO.LatestStart, "Default value for LatestStart should be default(DateTime)");
+            Assert.AreEqual(default(DateTime), taskDTO.LatestFinish, "Default value for LatestFinish should be default(DateTime)");
+            Assert.AreEqual(default(TimeSpan), taskDTO.Slack, "Default value for Slack should be default(TimeSpan)");
+        }
 
-}
+        [TestMethod]
+        public void TaskDTO_PropertiesCanBeSetInConstructor()
+        {
+            DateTime now = DateTime.Now;
+            DateTime startDate = now;
+            DateTime endDate = now.AddDays(5);
+            DateTime latestStart = now.AddDays(1);
+            DateTime latestFinish = now.AddDays(6);
+            TimeSpan slack = TimeSpan.FromDays(1);
+            
+            TaskDTO taskDTO = new TaskDTO
+            {
+                Title = "Test Task",
+                Description = "Test Description",
+                ExpectedStartDate = now,
+                Duration = 5,
+                IsCritical = true,
+                StartDate = startDate,
+                EndDate = endDate,
+                LatestStart = latestStart,
+                LatestFinish = latestFinish,
+                Slack = slack
+            };
+            
+            Assert.AreEqual("Test Task", taskDTO.Title);
+            Assert.AreEqual("Test Description", taskDTO.Description);
+            Assert.AreEqual(now, taskDTO.ExpectedStartDate);
+            Assert.AreEqual(5, taskDTO.Duration);
+            Assert.IsTrue(taskDTO.IsCritical);
+            Assert.AreEqual(startDate, taskDTO.StartDate);
+            Assert.AreEqual(endDate, taskDTO.EndDate);
+            Assert.AreEqual(latestStart, taskDTO.LatestStart);
+            Assert.AreEqual(latestFinish, taskDTO.LatestFinish);
+            Assert.AreEqual(slack, taskDTO);
+        }
+    }
