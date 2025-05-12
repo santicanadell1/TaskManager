@@ -46,7 +46,7 @@ public class MemberPService
             throw new UserIsNotAMemberException();
         }
     }
-    
+
 
 
 }

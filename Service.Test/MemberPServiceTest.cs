@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Domain.Exceptions.TaskRepositoryExceptions;
 using Service.MemberServiceException;
 using Service.Models;
 
@@ -18,6 +19,7 @@ public class MemberPServiceTest
     private List<UserDTO> members;
     private Login _login;
     private UserService _userservice;
+    private TaskDTO task;
 
     [TestInitialize]
     public void Initialize()
@@ -64,7 +66,7 @@ public class MemberPServiceTest
             Members = members
         };
         _adminPService.CreateProject(projectDTO);
-        TaskDTO task = new TaskDTO()
+        task = new TaskDTO()
         {
             Title = "Task1",
             Description = "Description",
@@ -146,6 +148,16 @@ public class MemberPServiceTest
         Assert.IsTrue(result.Any(p => p.Name == "New Project"));
         Assert.IsTrue(result.Any(p => p.Name == "Second Project"));
     }
+    
+    [TestMethod]
+    public void ChangeTaskStatus_WhenUserIsMember_ThenStateIsUpdated()
+    {
+        State newState = State.DONE;
+        task = _taskService.GetTask("New Project", 1);
+        _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, task, newState);
+        var updatedTask = _taskService.GetTask("New Project", 1);
 
-
+        Assert.AreEqual(StateDTO.DONE, updatedTask.State);
+    }
+    
 }

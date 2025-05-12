@@ -144,6 +144,7 @@ namespace Service
             );
             updatedTask.Id = task.Id;
 
+
             _database.projects.UpdateTask(projectName, taskId, updatedTask);
         }
 
