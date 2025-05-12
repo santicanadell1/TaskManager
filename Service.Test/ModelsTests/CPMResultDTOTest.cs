@@ -33,14 +33,14 @@ namespace Service.Test.ModelsTests
             Assert.AreEqual(latestFinishDate, resultDTO.LatestFinishDate);
         }
         [TestMethod]
-        public void g()
+        public void CpmResultDTO_WhenProjectDurationIsSet_ThenProjectDurationIsAssigned()
         {
             int projectDuration = 10;
             CpmResultDTO resultDTO = new CpmResultDTO();
             
             resultDTO.ProjectDuration = projectDuration;
             
-            Assert.AreEqual(projectDuration, resultDTO);
+            Assert.AreEqual(projectDuration, resultDTO.ProjectDuration);
         }
     }
 }
