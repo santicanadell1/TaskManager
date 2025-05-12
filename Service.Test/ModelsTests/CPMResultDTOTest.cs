@@ -89,7 +89,7 @@ namespace Service.Test.ModelsTests
             
             resultDTO.LatestFinishDate = latestFinishDate;
             
-            Assert.AreEqual(latestFinishDate, resultDTO);
+            Assert.AreEqual(latestFinishDate, resultDTO.LatestFinishDate);
         }
     }
 }
