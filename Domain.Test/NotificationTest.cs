@@ -73,11 +73,11 @@ namespace Domain.Test
         {
             Project project = new Project();
             project.Name = "Project name";
-            Notification not = new Notification(false, "");
+            Notification not = new Notification(false, "description");
             not.Id = 1;
-            Notification.Project(project);
+            not.Project = project;
             
-            Assert.AreEqual(project.Name, not.Project);
+            Assert.AreEqual(project.Name, not.Project.Name);
             
         }
 
