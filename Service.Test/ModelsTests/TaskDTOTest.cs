@@ -177,7 +177,7 @@ public class TaskDTOTest
         DateTime latestFinish = new DateTime(2025, 6, 21);
         TaskDTO taskDTO = new TaskDTO();
             
-        taskDTO.LatestFinish = latestFinish;
+        taskDTO.g = latestFinish;
             
         Assert.AreEqual(latestFinish, taskDTO.LatestFinish);
     }

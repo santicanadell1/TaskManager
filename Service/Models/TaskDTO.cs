@@ -31,5 +31,5 @@ public class TaskDTO
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public DateTime LatestStart { get; set; }
-    
+    public DateTime LatestFinish { get; set; }
 }
