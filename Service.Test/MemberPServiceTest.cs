@@ -159,5 +159,25 @@ public class MemberPServiceTest
 
         Assert.AreEqual(StateDTO.DONE, updatedTask.State);
     }
-    
+    [TestMethod]
+    [ExpectedException(typeof(UserIsNotAMemberException))]
+    public void ChangeTaskStatus_WhenUserIsNotMember_ThenThrowException()
+    {
+        var User = new UserDTO
+        {
+            FirstName = "User",
+            LastName = "NotMember",
+            Email = "User.NotMember@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "Password123@",
+            Roles = new List<Rol> { Rol.ProjectMember }
+        };
+        _userservice.AddUser(User);
+
+        var task = _taskService.GetTasks("New Project").First();
+        var newState = State.DOING;
+        
+        _memberPService.ChangeTaskStatus("New Project", User.Email, task, newState);
+    }
+
 }
