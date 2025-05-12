@@ -100,9 +100,6 @@ public class LoginTests
 
         _login.LoginUser(email, password);
     }
-<<<<<<< HEAD
-    
-=======
 
     [TestMethod]
     public void IsAdminSystem_ShouldReturnTrue_WhenUserIsAdminSystem()
@@ -173,6 +170,5 @@ public class LoginTests
         
         Assert.IsTrue(_login.IsProjectMember());
     }
->>>>>>> feat/login-service
     
 }
