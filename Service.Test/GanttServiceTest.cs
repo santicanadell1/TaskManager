@@ -65,7 +65,11 @@ public class GanttServiceTestTests
             Assert.AreEqual(2.0, ganttTask2.slack);
             Assert.IsFalse(result.links[0].critical); 
         }
-        
+        [TestMethod]
+        public void Convert_ShouldCreateCorrectTasksAndLinks_WithCriticalFlag()
+        {
+            throw new NotImplementedException();
+        }
 }
 
 
