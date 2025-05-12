@@ -17,18 +17,27 @@
     @if (isNotificationsVisible)
     {
         <div class="notifications-dropdown">
-            <ul>
-                @foreach (var notification in notifications)
-                {
-                    <li>
-                        <div>
-                            <p>@notification.Description</p>
-
-                            <button @onclick="() => MarkAsRead(notification.Description)">Visto</button>
-                        </div>
-                    </li>
-                }
-            </ul>
+            @if (notifications.Any())
+            {
+                <ul>
+                    @foreach (var notification in notifications)
+                    {
+                        <li>
+                            <div>
+                                <p>@notification.Description</p>
+                                @if (!notification.Read.GetValueOrDefault())
+                                {
+                                    <button @onclick="() => MarkAsRead(notification.Id)">Visto</button>
+                                }
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="no-notifications">No hay notificaciones pendientes</p>
+            }
         </div>
     }
 </div>
@@ -36,12 +45,29 @@
 @code {
     private bool isNotificationsVisible = false;
     private List<NotificationDTO> notifications = new List<NotificationDTO>();
-    private int unreadCount => notifications.Count(n => (bool)!n.Read);
+    private int unreadCount => notifications.Count(n => !n.Read.GetValueOrDefault());
 
-    protected void OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        var loggedUser = LoginService.GetLoggedUser();
-        notifications = NotificationService.GetNotificationsForUser(loggedUser.Email);
+        LoadNotifications();
+    }
+
+    private void LoadNotifications()
+    {
+        try
+        {
+            var loggedUser = LoginService.GetLoggedUser();
+            if (loggedUser != null)
+            {
+                notifications = NotificationService.GetNotificationsForUser(loggedUser.Email);
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar notificaciones: {ex.Message}");
+            notifications = new List<NotificationDTO>();
+        }
     }
 
     private void ToggleNotifications()
@@ -49,10 +75,22 @@
         isNotificationsVisible = !isNotificationsVisible;
     }
 
-    private void MarkAsRead(string notificationId)
+    private void MarkAsRead(int notificationId)
     {
-        //NotificationService.MarkAsRead(notificationId);
-        //notifications = NotificationService.GetNotifications(); 
+        try
+        {
+            var loggedUser = LoginService.GetLoggedUser();
+            if (loggedUser != null)
+            {
+                NotificationService.MarkNotificationAsRead(notificationId, loggedUser.Email);
+
+                LoadNotifications();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al marcar notificación como leída: {ex.Message}");
+        }
     }
 
 }
