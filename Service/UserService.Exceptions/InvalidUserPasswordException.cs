@@ -1,4 +1,4 @@
-namespace Domain.Exceptions
+namespace Service.Exceptions
 {
     public class InvalidUserPasswordException : UserServiceException
     {

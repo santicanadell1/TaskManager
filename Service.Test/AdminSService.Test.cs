@@ -1,7 +1,9 @@
 using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Service.Exceptions;
 using Service.Models;
+using UserNotFoundException = Domain.Exceptions.UserRepositoryExceptions.UserNotFoundException;
 
 namespace Service.Test;
 
@@ -27,7 +29,7 @@ public class AdminSService_Test
             LastName = "User",
             Email = "admin.user@example.com",
             Password = "AdminPassword123@",
-            Roles = new List<Rol> { Rol.AdminSystem }
+            Roles = new List<RolDTO> { RolDTO.AdminSystem }
         };
 
         var normalUserDTO = new UserDTO
@@ -36,7 +38,7 @@ public class AdminSService_Test
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
-            Roles = new List<Rol>()
+            Roles = new List<RolDTO>()
         };
 
         _userService.AddUser(normalUserDTO);
@@ -66,7 +68,7 @@ public class AdminSService_Test
             LastName = "User",
             Email = "nonexistent.user@example.com",
             Password = "Password123@",
-            Roles = new List<Rol>()
+            Roles = new List<RolDTO>()
         };
 
         _adminService.DeleteUser(userToDeleteDTO);
@@ -84,7 +86,7 @@ public class AdminSService_Test
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "OldPassword123@",
-            Roles = new List<Rol>()
+            Roles = new List<RolDTO>()
         };
 
         var newPassword = "NewPassword456@";
@@ -104,10 +106,10 @@ public class AdminSService_Test
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
-            Roles = new List<Rol>()
+            Roles = new List<RolDTO>()
         };
 
-        var roleToAssign = Rol.ProjectMember;
+        var roleToAssign = RolDTO.ProjectMember;
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
     }
@@ -124,7 +126,7 @@ public class AdminSService_Test
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
-            Roles = new List<Rol>()
+            Roles = new List<RolDTO>()
         };
 
         var newPassword = "abcD1";

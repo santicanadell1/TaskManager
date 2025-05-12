@@ -25,15 +25,14 @@ public class ResourcesServiceTest
         _userService = new UserService(_database);
         _resourceService = new ResourceService(_database);
         _adminProjectService = new AdminPService(_database);
-        _taskService = new TaskService(_database);
-
+        _taskService = new TaskService(_database, new CpmService());
         var adminSUserDTO = new UserDTO
         {
             FirstName = "AdminSystem",
             LastName = "User",
             Email = "adminSystem.user@example.com",
             Password = "AdminPassword123@",
-            Roles = new List<Rol> { Rol.AdminSystem }
+            Roles = new List<RolDTO> { RolDTO.AdminSystem }
         };
         var adminPUserDTO = new UserDTO
         {
@@ -41,7 +40,7 @@ public class ResourcesServiceTest
             LastName = "User",
             Email = "adminProject.user@example.com",
             Password = "AdminPassword123@",
-            Roles = new List<Rol> { Rol.AdminProject }
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
 
@@ -51,7 +50,7 @@ public class ResourcesServiceTest
             LastName = "User2",
             Email = "adminProject2.user@example.com",
             Password = "AdminPassword123@",
-            Roles = new List<Rol> { Rol.AdminProject }
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
         var normalUserDTO = new UserDTO
@@ -60,7 +59,7 @@ public class ResourcesServiceTest
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
-            Roles = new List<Rol>()
+            Roles = new List<RolDTO>()
         };
         _userService.AddUser(normalUserDTO);
         _userService.AddUser(adminSUserDTO);
@@ -194,11 +193,11 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO()
         {
+            Id = addedResource.Id,
             Name = addedResource.Name,
-            Type = "TypeB",
-            Description = "Updated description"
+            Type = addedResource.Type,
+            Description = addedResource.Description
         };
-
 
         ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
@@ -237,6 +236,7 @@ public class ResourcesServiceTest
         Assert.AreEqual("TypeB", resource.Type);
         Assert.AreEqual("Updated description", resource.Description);
     }
+
 
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
@@ -401,6 +401,7 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO()
         {
+            Id = addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description,
@@ -422,7 +423,6 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>() { addedResourceDto }
         };
-
 
         _adminProjectService.CreateProject(project);
         _taskService.AddTask("Project1", task);

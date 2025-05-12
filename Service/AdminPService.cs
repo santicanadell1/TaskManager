@@ -4,9 +4,10 @@ using Domain;
 using Domain.Exceptions;
 using Service;
 using Service.Models;
+using Service.Models.Exceptions;
 
 
-public class AdminPService
+public class AdminPService : IAdminPService
 {
     private readonly InMemoryDatabase _database;
 
@@ -18,7 +19,7 @@ public class AdminPService
     private void CheckAdminProyectRole()
     {
         var currentUser = LoggedUser.Current;
-        if (currentUser == null || !currentUser.Roles.Contains(Rol.AdminProject))
+        if (currentUser == null || !currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminProject)))
         {
             throw new UnauthorizedAdminAccessException();
         }
@@ -33,8 +34,8 @@ public class AdminPService
             throw new DuplicatedProjectsNameException();
         }
 
-        var newProject = ToEntity(projectDTO); 
-        newProject.AdminProject = ToEntity(LoggedUser.Current); 
+        var newProject = ToEntity(projectDTO);
+        newProject.AdminProject = ToEntity(LoggedUser.Current);
 
         _database.projects.AddProject(newProject);
     }
@@ -53,12 +54,32 @@ public class AdminPService
         {
             var user = ToEntity(memberDTO);
 
-            if (!project.Members.Contains(user))
+            if (project.Members.Any(u => u.Email == user.Email))
             {
-                project.AddMember(user);
+                throw new UserIsAlreadyAMemberException();
             }
+
+            project.AddMember(user);
         }
 
+        _database.projects.UpdateProject(projectName, project);
+    }
+
+    public void RemoveMemberFromProject(string projectName, string memberEmail)
+    {
+        CheckAdminProyectRole();
+        var project = _database.projects.GetProject(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException();
+        }
+
+        if (project.Members.Find(m => m.Email == memberEmail) == null)
+        {
+            throw new UserIsNotAMemberException();
+        }
+
+        project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
         _database.projects.UpdateProject(projectName, project);
     }
 
@@ -131,7 +152,7 @@ public class AdminPService
                 members.Add(ToEntity(memberDTO));
             }
         }
-    
+
         return new Project
         {
             Name = projectDTO.Name,
@@ -151,9 +172,11 @@ public class AdminPService
             Email = userDTO.Email,
             Birthday = userDTO.Birthday,
             Password = userDTO.Password,
-            Roles = userDTO.Roles
+            Roles = ConvertToDomainRoles(userDTO.Roles)
         };
     }
+
+
     private UserDTO FromEntity(User user)
     {
         return new UserDTO
@@ -163,7 +186,7 @@ public class AdminPService
             Email = user.Email,
             Birthday = user.Birthday,
             Password = user.Password,
-            Roles = user.Roles
+            Roles = ConvertToDTORoles(user.Roles)
         };
     }
 
@@ -177,9 +200,10 @@ public class AdminPService
         }
 
         List<UserDTO> memberDTOs = project.Members;
-    
+
         return memberDTOs;
     }
+
     public void AddTaskToMember(string projectName, string memberEmail, int taskID)
     {
         CheckAdminProyectRole();
@@ -189,19 +213,42 @@ public class AdminPService
         {
             throw new UserIsNotAMemberException();
         }
+
         if (projectEntity.Tasks.Find(m => m.Id == taskID) == null)
         {
             throw new TaskIsNotFromTheProjectException();
         }
+
         User userEntity = _database.users.Get(u => u.Email == memberEmail);
         userEntity.AddTask(taskID);
-        _database.users.Update(memberEmail,userEntity);
+        _database.users.Update(memberEmail, userEntity);
+    }
+
+    public void RemoveTaskFromMember(string projectName, string memberEmail, int taskID)
+    {
+        CheckAdminProyectRole();
+        var project = this.GetProjectByName(projectName);
+        Project projectEntity = _database.projects.GetProject(p => p.Name == projectName);
+        if (project.Members.Find(m => m.Email == memberEmail) == null)
+        {
+            throw new UserIsNotAMemberException();
+        }
+
+        if (projectEntity.Tasks.Find(m => m.Id == taskID) == null)
+        {
+            throw new TaskIsNotFromTheProjectException();
+        }
+
+        User userEntity = _database.users.Get(u => u.Email == memberEmail);
+        userEntity.RemoveTask(taskID);
+        _database.users.Update(memberEmail, userEntity);
     }
 
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
         User user = _database.users.Get(u => u.Email == email);
-        TaskService taskService = new TaskService(_database);
+        CpmService cpmService = new CpmService();
+        TaskService taskService = new TaskService(_database, cpmService);
         List<TaskDTO> returnList = new List<TaskDTO>();
         foreach (var project in _database.projects.GetAllProjects())
         {
@@ -213,8 +260,88 @@ public class AdminPService
                     returnList.Add(task);
                 }
             }
-            
         }
+
         return returnList;
+    }
+
+
+    public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
+    {
+        User user = _database.users.Get(u => u.Email == email);
+        CpmService cpmService = new CpmService();
+        TaskService taskService = new TaskService(_database, cpmService);
+        List<TaskDTO> returnList = new List<TaskDTO>();
+        List<TaskDTO> tasks = taskService.GetTasks(projectName);
+        foreach (var task in tasks)
+        {
+            if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+            {
+                returnList.Add(task);
+            }
+        }
+
+        return returnList;
+    }
+
+    private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
+    {
+        var roles = new List<Rol>();
+
+        foreach (var roleDTO in roleDTOs)
+        {
+            switch (roleDTO)
+            {
+                case RolDTO.AdminSystem:
+                    roles.Add(Rol.AdminSystem);
+                    break;
+                case RolDTO.ProjectMember:
+                    roles.Add(Rol.ProjectMember);
+                    break;
+                case RolDTO.AdminProject:
+                    roles.Add(Rol.AdminProject);
+                    break;
+            }
+        }
+
+        return roles;
+    }
+
+    private List<RolDTO> ConvertToDTORoles(List<Rol> roles)
+    {
+        var roleDTOs = new List<RolDTO>();
+
+        foreach (var role in roles)
+        {
+            switch (role)
+            {
+                case Rol.AdminSystem:
+                    roleDTOs.Add(RolDTO.AdminSystem);
+                    break;
+                case Rol.ProjectMember:
+                    roleDTOs.Add(RolDTO.ProjectMember);
+                    break;
+                case Rol.AdminProject:
+                    roleDTOs.Add(RolDTO.AdminProject);
+                    break;
+            }
+        }
+
+        return roleDTOs;
+    }
+
+    private RolDTO ConvertToDTORole(Rol role)
+    {
+        switch (role)
+        {
+            case Rol.AdminSystem:
+                return RolDTO.AdminSystem;
+            case Rol.ProjectMember:
+                return RolDTO.ProjectMember;
+            case Rol.AdminProject:
+                return RolDTO.AdminProject;
+            default:
+                throw new InvalidRolException();
+        }
     }
 }

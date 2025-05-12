@@ -1,11 +1,13 @@
 using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Domain.Exceptions.UserRepositoryExceptions;
+using Service.Exceptions;
 using Service.Models;
 
 namespace Service;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly InMemoryDatabase _database;
     private PasswordManager _passwordManager = new PasswordManager();
@@ -27,7 +29,7 @@ public class UserService
         user.FirstName = userDTO.FirstName;
         user.LastName = userDTO.LastName;
         user.Email = userDTO.Email;
-        user.Roles = userDTO.Roles;
+        user.Roles = ConvertToDomainRoles(userDTO.Roles);
         user.Birthday = userDTO.Birthday;
         user.Password = userDTO.Password;
         user.Tasks = userDTO.Tasks;
@@ -88,7 +90,7 @@ public class UserService
             LastName = userDTO.LastName,
             Password = _passwordManager.HashPassword(userDTO.Password),
             Birthday = userDTO.Birthday,
-            Roles = userDTO.Roles,
+            Roles = ConvertToDomainRoles(userDTO.Roles),
             Tasks = userDTO.Tasks
         };
     }
@@ -111,10 +113,56 @@ public class UserService
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
-            Roles = user.Roles,
+            Roles = ConvertToDTORoles(user.Roles),
             Password = user.Password,
             Birthday = user.Birthday,
             Tasks = user.Tasks
         };
+    }
+
+    private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
+    {
+        var roles = new List<Rol>();
+
+        foreach (var roleDTO in roleDTOs)
+        {
+            switch (roleDTO)
+            {
+                case RolDTO.AdminSystem:
+                    roles.Add(Rol.AdminSystem);
+                    break;
+                case RolDTO.ProjectMember:
+                    roles.Add(Rol.ProjectMember);
+                    break;
+                case RolDTO.AdminProject:
+                    roles.Add(Rol.AdminProject);
+                    break;
+            }
+        }
+
+        return roles;
+    }
+
+    private List<RolDTO> ConvertToDTORoles(List<Rol> roles)
+    {
+        var roleDTOs = new List<RolDTO>();
+
+        foreach (var role in roles)
+        {
+            switch (role)
+            {
+                case Rol.AdminSystem:
+                    roleDTOs.Add(RolDTO.AdminSystem);
+                    break;
+                case Rol.ProjectMember:
+                    roleDTOs.Add(RolDTO.ProjectMember);
+                    break;
+                case Rol.AdminProject:
+                    roleDTOs.Add(RolDTO.AdminProject);
+                    break;
+            }
+        }
+
+        return roleDTOs;
     }
 }
