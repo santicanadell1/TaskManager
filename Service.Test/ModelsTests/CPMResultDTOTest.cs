@@ -9,7 +9,7 @@ namespace Service.Test.ModelsTests
     public class CpmResultDTOTest
     {
         [TestMethod]
-        public void CpmResultDTO_PropertiesAreAssignedCorrectlygg()
+        public void CpmResultDTO_PropertiesAreAssignedCorrectly()
         {
             int projectDuration = 15;
             List<int?> criticalPathIds = new List<int?> { 1, 2, 3 };
