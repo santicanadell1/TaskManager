@@ -143,6 +143,7 @@ namespace Service
                 ToResourceEntityList(taskDTO.Resources)
             );
             updatedTask.Id = task.Id;
+            updatedTask.State = (State)taskDTO.State;
 
             _database.projects.UpdateTask(projectName, taskId, updatedTask);
         }
