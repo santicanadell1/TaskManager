@@ -62,8 +62,6 @@ public class MemberPService
         }
 
     }
-    
-    
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, State status)
     {
         CheckIsTaskOfTheUser((int)task.Id, email);
