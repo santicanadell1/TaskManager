@@ -26,5 +26,9 @@ public class GanttLinkTest
         // Assert
         Assert.IsFalse(link.critical);
     }
-
+    [TestMethod]
+    public void GanttLink_WhenInitializingAType_ShouldAllowCustomValue()
+    {
+    throw new NotImplementedException();
+    }
 }
