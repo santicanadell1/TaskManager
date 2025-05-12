@@ -26,7 +26,12 @@ public class GanttServiceTestTests
             Assert.AreEqual(0.5, result.data.First(t => t.id == 2).progress);
             Assert.AreEqual(1.0, result.data.First(t => t.id == 3).progress);
         }
-        
+        [TestMethod]
+        public void Convert_ShouldHandleCriticalPathAndSlackCorrectly()
+        {
+            throw new NotImplementedException();
+        }
 }
+
 
 
