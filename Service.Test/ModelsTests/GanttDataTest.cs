@@ -25,6 +25,10 @@ namespace Service.Test.ModelsTests;
             Assert.AreEqual(0, ganttData.criticalPathIds.Count);
         }
 
-
+        [TestMethod]
+        public void GanttData_ShouldHoldProvidedData()
+        {
+            throw new NotImplementedException();
+        }
         
     }
