@@ -137,5 +137,7 @@ public class TaskDTOTest
             
         Assert.AreEqual(isCritical, taskDTO.IsCritical);
     }
+    
+    
 
 }
