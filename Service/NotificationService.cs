@@ -1,12 +1,14 @@
 ﻿using Service.Models;
 
 namespace Service;
+
 using Domain;
 using DataAccess;
+
 public class NotificationService
 {
     private readonly InMemoryDatabase _database;
-    
+
     public NotificationService(InMemoryDatabase database)
     {
         _database = database;
@@ -22,7 +24,7 @@ public class NotificationService
 
     private static Notification ToEntity(NotificationDTO notificationDTO)
     {
-        Notification notification = new Notification((bool)notificationDTO.Read,notificationDTO.Description);
+        Notification notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description);
         return notification;
     }
 
@@ -38,11 +40,11 @@ public class NotificationService
                 if (member.Email == userEmail)
                 {
                     foreach (var notification in project.Notifications)
-                    notifications.Add(FromEntity(notification));
+                        notifications.Add(FromEntity(notification));
                 }
             }
         }
+
         return notifications;
     }
 }
-

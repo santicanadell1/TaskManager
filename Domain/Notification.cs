@@ -34,7 +34,6 @@ namespace Domain
 
         public int Id { get; set; }
 
-        public Project Project { get; set; }
 
         public Notification(bool read, string description)
         {
