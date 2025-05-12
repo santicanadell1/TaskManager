@@ -26,7 +26,7 @@ public class ProjectDTOTests
             Email = "admin.user@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<Rol> { Rol.AdminProject }
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
         User = new UserDTO
         {
@@ -35,7 +35,7 @@ public class ProjectDTOTests
             Email = "member.user@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<Rol> { Rol.ProjectMember }
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
         members = new List<UserDTO> { User };
     }

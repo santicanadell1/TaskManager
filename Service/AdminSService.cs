@@ -1,8 +1,11 @@
 using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Domain.Exceptions.UserRepositoryExceptions;
 using Service;
+using Service.Exceptions;
 using Service.Models;
+using Service.Models.Exceptions;
 
 public class AdminSService : IAdminSService
 {
@@ -19,7 +22,7 @@ public class AdminSService : IAdminSService
     private void CheckAdminRole()
     {
         var currentUser = LoggedUser.Current;
-        if (currentUser == null || !currentUser.Roles.Contains(Rol.AdminSystem))
+        if (currentUser == null || !currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminSystem)))
         {
             throw new UnauthorizedAdminAccessException();
         }
@@ -83,8 +86,23 @@ public class AdminSService : IAdminSService
             throw new UserNotFoundException();
         }
 
-        user.Roles.Add((Rol)role);
+        user.Roles.Add(role);
 
         _userService.UpdateUser(user);
+    }
+
+    private RolDTO ConvertToDTORole(Rol role)
+    {
+        switch (role)
+        {
+            case Rol.AdminSystem:
+                return RolDTO.AdminSystem;
+            case Rol.ProjectMember:
+                return RolDTO.ProjectMember;
+            case Rol.AdminProject:
+                return RolDTO.AdminProject;
+            default:
+                throw new InvalidRolException();
+        }
     }
 }

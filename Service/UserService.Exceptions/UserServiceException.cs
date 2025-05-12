@@ -1,8 +1,10 @@
-namespace Domain.Exceptions
+namespace Service.Exceptions
 {
     public class UserServiceException : Exception
     {
-        public UserServiceException(string message) : base(message) { }
+        public UserServiceException(string message) : base(message)
+        {
+        }
 
         public override string ToString()
         {
