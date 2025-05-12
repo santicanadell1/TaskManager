@@ -597,7 +597,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
     
             Assert.AreEqual(1, taskYDTO.PreviousTasks.Count);
             Assert.AreEqual(taskXEntity.Id, taskYDTO.PreviousTasks[0].Id);
-            Assert.AreEqual("Task X", taskYDTO.PreviousTasks[0]);
+            Assert.AreEqual("Task X", taskYDTO.PreviousTasks[0].g);
         }
 
 
