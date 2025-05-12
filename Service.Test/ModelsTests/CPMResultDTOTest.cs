@@ -55,7 +55,7 @@ namespace Service.Test.ModelsTests
             Assert.AreEqual(3, resultDTO.CriticalPathIds.Count);
             Assert.AreEqual(1, resultDTO.CriticalPathIds[0]);
             Assert.AreEqual(3, resultDTO.CriticalPathIds[1]);
-            Assert.AreEqual(5, resultDTO);
+            Assert.AreEqual(5, resultDTO.CriticalPathIds[2]);
         }
         
     }
