@@ -6,7 +6,7 @@ namespace Service.Test.ModelsTests;
     public class GanttDataTests
     {
         [TestMethod]
-        public void GanttData_ShouldInitializeWithEmptyLists()
+        public void GanttData_WhenInitializingWithEmptyLists_ShouldInitializeCorrectly()
         {
             var ganttData = new GanttData
             {
