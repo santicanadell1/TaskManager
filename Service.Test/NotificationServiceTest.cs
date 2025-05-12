@@ -87,4 +87,17 @@ public class NotificationServiceTest
         Assert.AreEqual("New Notification for Project 1", addedNotification.Description);
         Assert.IsFalse(addedNotification.Read);
     }
+
+    [TestMethod]
+    public void RemoveNotificationFromProject_WhenNotificationExists_ThenNotificationShouldBeRemoved()
+    {
+        var projectId = "Project 1";
+        var notificationDescription = "Description 1";
+        _notificationService.RemoveNotificationFromProject(projectId, notificationDescription);
+
+        var project = dataAccess.projects.GetProject(p => p.Name == projectId);
+        var removedNotification = project.Notifications.FirstOrDefault(n => n.Description == notificationDescription);
+
+        Assert.IsNull(removedNotification);
+    }
 }
