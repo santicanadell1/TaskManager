@@ -13,7 +13,7 @@ builder.Services.AddScoped<TaskService>();
 builder.Services.AddScoped<AdminPService>();
 builder.Services.AddScoped<MemberPService>();
 builder.Services.AddScoped<CpmService>();
-builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<GanttService>();
 
 
 // Add services to the container.

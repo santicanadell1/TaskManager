@@ -323,6 +323,26 @@ public class AdminPServiceTests
         Assert.AreEqual("Test Description", project.Description);
     }
     [TestMethod]
+    public void GetAllProjectsForUsers_ShouldReturnListOfProjects_WhenUserIsAdminOrMember()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+
+        _service.CreateProject(projectDTO);
+
+        var project = _service.GetAllProjectsForUser(UserDTO.Email);
+
+        Assert.IsNotNull(project);
+        Assert.AreEqual("Test Project", project[0].Name);
+        Assert.AreEqual("Test Description", project[0].Description);
+    }
+    [TestMethod]
     public void GetMembers_ShouldReturnListOfMembers_WhenProjectExist()
     {
        var projectDTO = new ProjectDTO
