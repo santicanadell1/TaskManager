@@ -122,7 +122,7 @@ public class AdminPService : IAdminPService
 
     public List<ProjectDTO> GetAllProjectsForUser(string Email)
     {
-        if (LoggedUser.Current.Roles.Contains(Rol.AdminSystem))
+        if (LoggedUser.Current.Roles.Contains((RolDTO)Rol.AdminSystem))
         {
             return GetAllProjects();
         }
