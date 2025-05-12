@@ -10,6 +10,7 @@ public interface IAdminPService
     void RemoveProject(string projectName);
     List<ProjectDTO> GetAllProjects();
     ProjectDTO GetProjectByName(string projectName);
+    List<ProjectDTO> GetAllProjectsFromProject(string email);
 
     // Member management
     void AssignMembersToProject(string projectName, List<UserDTO> membersDTO);
