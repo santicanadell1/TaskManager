@@ -1,5 +1,6 @@
 ﻿using DataAccess.ProjectRepositoryExceptions;
 using Domain.Exceptions;
+using Domain.Exceptions.UserRepositoryExceptions;
 using Service.Models;
 
 namespace Service;
@@ -31,24 +32,15 @@ public class NotificationService
         return notification;
     }
 
-    public List<NotificationDTO> GetNotificationsForUser(String userEmail)
+    public List<NotificationDTO> GetNotificationsForUser(string userEmail)
     {
-        List<NotificationDTO> notifications = new List<NotificationDTO>();
-        List<Project> projects = _database.projects.GetAllProjects();
-        foreach (var project in projects)
+        User user = _database.users.Get(u => u.Email == userEmail);
+        if (user == null)
         {
-            List<User> members = project.Members;
-            foreach (var member in members)
-            {
-                if (member.Email == userEmail)
-                {
-                    foreach (var notification in project.Notifications)
-                        notifications.Add(FromEntity(notification));
-                }
-            }
+            throw new UserNotFoundException();
         }
 
-        return notifications;
+        return user.Notifications.Select(n => FromEntity(n)).ToList();
     }
 
     public void AddNotificationToProject(string projectName, NotificationDTO notificationDTO)
