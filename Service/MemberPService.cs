@@ -47,10 +47,26 @@ public class MemberPService
         }
     }
 
+    private void CheckIsTaskOfTheUser(int taskId, string email)
+    {
+        var user = _database.users.Get(u => u.Email == email);
+        if (user == null)
+        {
+            throw new TaskCantBeModifiedByUserException();
+        }
+    
+        List<int> taskIds = user.Tasks ?? new List<int>();
+        if (taskIds.Count == 0 || !taskIds.Contains(taskId))
+        {
+            throw new TaskCantBeModifiedByUserException();
+        }
 
+    }
+    
     
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, State status)
     {
+        CheckIsTaskOfTheUser((int)task.Id, email);
         TaskService taskService = new TaskService(_database);
         task.State = (StateDTO)status;
         taskService.UpdateTask(projectName, task.Id, task);

@@ -152,15 +152,17 @@ public class MemberPServiceTest
     [TestMethod]
     public void ChangeTaskStatus_WhenUserIsMember_ThenStateIsUpdated()
     {
+        AdminPService adminPService = new AdminPService(database);
         State newState = State.DONE;
         task = _taskService.GetTask("New Project", 1);
+        adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)task.Id);
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, task, newState);
         var updatedTask = _taskService.GetTask("New Project", 1);
 
         Assert.AreEqual(StateDTO.DONE, updatedTask.State);
     }
     [TestMethod]
-    [ExpectedException(typeof(UserIsNotAMemberException))]
+    [ExpectedException(typeof(TaskCantBeModifiedByUserException))]
     public void ChangeTaskStatus_WhenUserIsNotMember_ThenThrowException()
     {
         var User = new UserDTO
