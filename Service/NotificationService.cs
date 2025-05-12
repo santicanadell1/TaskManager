@@ -12,7 +12,7 @@ public class NotificationService
         _database = database;
     }
 
-    public static NotificationDTO FromEntity(Notification notification)
+    private static NotificationDTO FromEntity(Notification notification)
     {
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.Read = notification.Read;
@@ -20,7 +20,7 @@ public class NotificationService
         return notificationDTO;
     }
 
-    public static Notification ToEntity(NotificationDTO notificationDTO)
+    private static Notification ToEntity(NotificationDTO notificationDTO)
     {
         Notification notification = new Notification(notificationDTO.Read,notificationDTO.Description);
         return notification;
