@@ -21,7 +21,7 @@ public class UserService : IUserService
     {
         if (_database.users.GetAll().Count == 0)
         {
-            userDTO.Roles.Add(Rol.AdminSystem);
+            userDTO.Roles.Add(RolDTO.AdminSystem);
         }
         ValidateUserEmailAndPassword(userDTO);
         _database.users.AddUser(ToEntity(userDTO));

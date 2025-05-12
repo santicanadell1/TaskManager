@@ -40,9 +40,9 @@ public class AdminSService_Test
             Password = "Password123@",
             Roles = new List<RolDTO>()
         };
-
-        _userService.AddUser(normalUserDTO);
         _userService.AddUser(adminUserDTO);
+        _userService.AddUser(normalUserDTO);
+        
     }
 
     [TestMethod]
