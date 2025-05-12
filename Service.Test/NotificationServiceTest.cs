@@ -66,4 +66,25 @@ public class NotificationServiceTest
         Assert.IsTrue(notificationForUser1.Count == 4);
         Assert.IsTrue(notificationForUser2.Count == 2);
     }
+
+    [TestMethod]
+    public void AddNotificationToProject_WhenNotificationIsAdded_ThenNotificationShouldBeAssociatedWithProject()
+    {
+        var projectId = "Project 1";
+        var notificationDTO = new NotificationDTO
+        {
+            Read = false,
+            Description = "New Notification for Project 1",
+        };
+
+        _notificationService.AddNotificationToProject(projectId, notificationDTO);
+
+        var project = dataAccess.projects.GetProject(p => p.Name == projectId);
+        var addedNotification =
+            project.Notifications.FirstOrDefault(n => n.Description == "New Notification for Project 1");
+
+        Assert.IsNotNull(addedNotification);
+        Assert.AreEqual("New Notification for Project 1", addedNotification.Description);
+        Assert.IsFalse(addedNotification.Read);
+    }
 }
