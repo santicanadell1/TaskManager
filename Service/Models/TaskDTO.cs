@@ -28,8 +28,7 @@ public class TaskDTO
     public List<ResourceDTO> Resources { get; set; }
 
     public bool IsCritical { get; set; }
-    
     public DateTime StartDate { get; set; }
-    
+    public DateTime EndDate { get; set; }
     
 }

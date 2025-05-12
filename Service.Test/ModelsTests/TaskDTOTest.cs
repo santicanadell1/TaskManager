@@ -155,7 +155,7 @@ public class TaskDTOTest
         DateTime endDate = new DateTime(2025, 6, 20);
         TaskDTO taskDTO = new TaskDTO();
             
-        taskDTO.g = endDate;
+        taskDTO.EndDate = endDate;
             
         Assert.AreEqual(endDate, taskDTO.EndDate);
     }
