@@ -1,14 +1,95 @@
-﻿@page
+﻿@page "/gantt"
+@using Service
+@using Service.Models
+@inject IJSRuntime JS
+@inject TaskService TaskService
+@inject CpmService CpmService
+@inject GanttService GanttService
+@inject AdminPService AdminPService
 
-<!DOCTYPE html>
+<h3>Gantt Diagram</h3>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
-</div>
-</body>
-</html>
+@if (projects is null)
+{
+    <p>There is no projects for this user</p>
+}
+else
+{
+    <label>Select Project:</label>
+    <select @onchange="OnProjectSelected" class="form-select" style="width: 300px; margin-bottom: 1rem;">
+        <option disabled selected value="">-- Select a Project --</option>
+        @foreach (var project in projects)
+        {
+            <option value="@project.Name">@project.Name</option>
+        }
+    </select>
+}
+
+@if (showGantt)
+{
+    <div id="gantt_here" style="width: 100%; height: 80vh;"></div>
+}
+
+<link href="Interface/wwwroot/GanttLibrary/codebase/dhtmlxgantt.css" rel="stylesheet" />
+<script src="Interface/wwwroot/GanttLibrary/codebase/dhtmlxgantt.js"></script>
+
+<script>
+    window.initGantt = (ganttData) => {
+        gantt.config.date_format = "%Y-%m-%d";
+        gantt.config.show_progress = true;
+
+        gantt.config.columns = [
+            { name: "text", label: "Tarea", width: "*", tree: true },
+            { name: "start_date", label: "Inicio", align: "center" },
+            { name: "end_date", label: "Fin", align: "center" },
+            { name: "duration", label: "Duración", align: "center" },
+            { name: "slack", label: "Holgura", align: "center", template: t => t.slack },
+            { name: "add", label: "", width: 44 }
+        ];
+
+        gantt.templates.task_class = (start, end, task) => task.critical ? "gantt_critical_task" : "";
+        gantt.templates.link_class = link => link.critical ? "gantt_critical_link" : "";
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .gantt_critical_task .gantt_task_bar {
+                background-color: #e74c3c !important;
+                border: 1px solid #c0392b !important;
+            }
+            .gantt_critical_link {
+                stroke: #c0392b !important;
+                stroke-width: 2px !important;
+            }
+        `;
+        document.head.appendChild(style);
+
+        gantt.init("gantt_here");
+        gantt.parse(ganttData);
+    };
+</script>
+
+@code {
+    private List<ProjectDTO>? projects;
+    private GanttData ganttData = new();
+    private bool showGantt = false;
+
+    private string currentUserEmail = LoggedUser.Current.Email;
+
+    protected override void OnInitialized()
+    {
+        projects = AdminPService.GetAllProjectsForUser(currentUserEmail);
+    }
+
+    private async Task OnProjectSelected(ChangeEventArgs e)
+    {
+        var selectedProjectName = e.Value?.ToString();
+        if (string.IsNullOrWhiteSpace(selectedProjectName)) return;
+
+        var tasks = TaskService.GetTasks(selectedProjectName);
+        var cpm = CpmService.CalculateCriticalPath(tasks);
+        ganttData = GanttService.Convert(tasks, cpm.CriticalPath);
+        showGantt = true;
+
+        await JS.InvokeVoidAsync("initGantt", ganttData);
+    }
+}
