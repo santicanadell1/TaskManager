@@ -49,7 +49,7 @@ public class UserDTOTest
     [TestMethod]
     public void NewUser_WhenRolesAreAssigned_ThenRolesAreSet()
     {
-        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.ProjectMember };
+        var roles = new List<RolDTO> {RolDTO.AdminSystem,RolDTO.ProjectMember };
         var user = new UserDTO { Roles = roles };
 
         Assert.IsNotNull(user.Roles);
