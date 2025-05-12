@@ -84,26 +84,37 @@ public class NotificationService
         _database.projects.UpdateProject(projectName, project);
     }
 
-    public void MarkNotificationAsRead(string projectName, int idNotification)
+    public void MarkNotificationAsRead(int idNotification, string userEmail)
     {
-        Project project = _database.projects.GetProject(p => p.Name == projectName);
-        if (project == null)
+        List<Project> projects = _database.projects.GetAllProjects();
+        bool notificationFound = false;
+
+        foreach (var project in projects)
         {
-            throw new ProjectNotFoundException();
+            bool isUserMember = project.Members.Any(m => m.Email == userEmail);
+
+            if (!isUserMember) continue;
+
+            var notificationToMark = project.Notifications.FirstOrDefault(n => n.Id == idNotification);
+
+            if (notificationToMark != null)
+            {
+                notificationToMark.MarkRead();
+
+                _database.notifications.Delete(notificationToMark);
+
+                project.Notifications.Remove(notificationToMark);
+
+                _database.projects.UpdateProject(project.Name, project);
+
+                notificationFound = true;
+                break; // only one notification has this id
+            }
         }
 
-        var notificationToMark = project.Notifications.FirstOrDefault(n => n.Id == idNotification);
-        if (notificationToMark == null)
+        if (!notificationFound)
         {
             throw new NotificationNotFoundException();
         }
-
-        notificationToMark.MarkRead();
-
-        project.Notifications.Remove(notificationToMark);
-
-        _database.notifications.Delete(notificationToMark);
-
-        _database.projects.UpdateProject(projectName, project);
     }
 }
