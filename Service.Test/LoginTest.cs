@@ -25,7 +25,7 @@ public class LoginTests
     {
         var email = "john.doe@example.com";
         var password = "Password123@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
         var userDTO = new UserDTO
         {
@@ -53,7 +53,7 @@ public class LoginTests
     {
         var email = "john.doe@example.com";
         var password = "Password123@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
         var userDTO = new UserDTO
         {
@@ -84,7 +84,7 @@ public class LoginTests
     {
         var email = "john.doe@example.com";
         var password = "WrongPassword@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
         var userDTO = new UserDTO
         {
@@ -106,7 +106,7 @@ public class LoginTests
     {
         var email = "john.doe@example.com";
         var password = "Password123@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
         var userDTO = new UserDTO
         {
@@ -129,7 +129,7 @@ public class LoginTests
     {
         var email = "john.doe@example.com";
         var password = "Password123@";
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
         var userDTO = new UserDTO
         {
@@ -152,7 +152,7 @@ public class LoginTests
     {
         var email = "john.doe@example.com";
         var password = "Password123@";
-        var roles = new List<Rol> { Rol.ProjectMember };
+        var roles = new List<RolDTO> { RolDTO.ProjectMember };
 
         var userDTO = new UserDTO
         {
