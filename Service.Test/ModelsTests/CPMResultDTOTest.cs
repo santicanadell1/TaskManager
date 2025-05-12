@@ -80,5 +80,16 @@ namespace Service.Test.ModelsTests
             
             Assert.AreEqual(earliestStartDate, resultDTO.EarliestStartDate);
         }
+        
+        [TestMethod]
+        public void CpmResultDTO_WhenLatestFinishDateIsSet_ThenLatestFinishDateIsAssigned()
+        {
+            DateTime latestFinishDate = new DateTime(2025, 4, 30);
+            CpmResultDTO resultDTO = new CpmResultDTO();
+            
+            resultDTO.LatestFinishDate = latestFinishDate;
+            
+            Assert.AreEqual(latestFinishDate, resultDTO);
+        }
     }
 }
