@@ -11,6 +11,7 @@ namespace Domain
         private DateTime birthday;
         public string password;
         public List<Rol> roles = new List<Rol>();
+        public List<int> tasks = new List<int>();
 
         public string FirstName
         {
@@ -73,6 +74,19 @@ namespace Domain
             }
         }
 
+        public List<int> Tasks
+        {
+            get => tasks;
+            set
+            {
+                if (value == null)
+                {
+                    tasks = new List<int>();
+                }
+                tasks = value;
+            }
+        }
+
         public User(string firstName, string lastName, string email, DateTime birthday, string password)
         {
             this.FirstName = firstName;
@@ -80,6 +94,8 @@ namespace Domain
             this.Email = email;
             this.Birthday = birthday;
             this.Password = password;
+            this.Roles = new List<Rol>();
+            this.Tasks = new List<int>();
         }
         
         public User(){}
@@ -110,5 +126,29 @@ namespace Domain
 
             roles.Remove(rol);
         }
+
+        public void AddTask(int taskId)
+        {
+            if (tasks == null)
+            {
+                Tasks = new List<int>();
+            }
+            if (tasks.Contains(taskId))
+            {
+                throw new UserTaskException("The task is already assigned to the user.");
+            }
+            tasks.Add(taskId);
+        }
+
+        public void RemoveTask(int taskId)
+        {
+            if (!tasks.Contains(taskId))
+            {
+                throw new UserTaskException("the task is not assigned to the user.");
+            }
+            tasks.Remove(taskId);
+        }
+        
+        
     }
 }

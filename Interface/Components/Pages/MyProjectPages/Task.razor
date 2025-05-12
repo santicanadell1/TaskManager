@@ -1,26 +1,35 @@
 ﻿@page "/project/tasks"
-
-@rendermode InteractiveServer
+@using Service
+@using Service.Models
+@inject TaskService TaskServiceClient
 @inject NavigationManager Navigation
+@inject MemberPService MemberPService
+@inject AdminPService AdminPService
+@inject Login Login
 
-<link href="styles/styleTaskProjectMember.css" rel="stylesheet" />
+<link href="styles/styleTaskProjectMember.css" rel="stylesheet"/>
 
 <div class="project-member-container">
-    <h3>Assign Task to User</h3>
+    <h3>Update Task Status</h3>
 
-    <!-- Select Proyecto -->
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">
+            @errorMessage
+        </div>
+    }
+
     <div class="form-group">
         <label for="projectSelect">Select Project</label>
         <select id="projectSelect" class="form-control" @onchange="OnProjectChange">
             <option value="">-- Select a Project --</option>
             @foreach (var project in projects)
             {
-                <option value="@project.Id">@project.Name</option>
+                <option value="@project.Name">@project.Name</option>
             }
         </select>
     </div>
 
-    <!-- Select Task (se muestra solo cuando se elige un proyecto) -->
     @if (!string.IsNullOrEmpty(selectedProjectId))
     {
         <div class="form-group mt-3">
@@ -29,13 +38,12 @@
                 <option value="">-- Select a Task --</option>
                 @foreach (var task in tasks)
                 {
-                    <option value="@task.Id">@task.Name</option>
+                    <option value="@task.Id">@task.Title</option>
                 }
             </select>
         </div>
     }
 
-    <!-- Los campos de Estado de la tarea, Fecha de Ejecución y Horas trabajadas solo se muestran si se ha seleccionado una tarea -->
     @if (!string.IsNullOrEmpty(selectedTaskId))
     {
         <div class="form-group mt-3">
@@ -47,83 +55,130 @@
             </select>
         </div>
 
-        <!-- Solo mostrar el campo de ejecución si el estado es "Done" -->
         @if (taskStatus == "Done")
         {
             <div class="form-group mt-3">
                 <label for="executionDate">Execution Date</label>
-                <InputDate id="executionDate" class="form-control" @bind-Value="executionDate" />
+                <InputDate id="executionDate" class="form-control" @bind-Value="executionDate"/>
             </div>
         }
 
         <div class="form-group mt-3">
             <label for="hoursWorked">Hours Worked</label>
-            <InputNumber id="hoursWorked" class="form-control" @bind-Value="hoursWorked" min="0" />
+            <InputNumber id="hoursWorked" class="form-control" @bind-Value="hoursWorked" min="0"/>
         </div>
 
-        <!-- Submit Button -->
-        <button class="btn btn-primary mt-3" @onclick="HandleSubmit">Submit</button>
+        <button class="btn btn-primary mt-3" @onclick="HandleSubmit">Update Status</button>
     }
 </div>
 
 @code {
-    private List<Project> projects = new List<Project>
-    {
-        new Project { Id = "1", Name = "Project A" },
-        new Project { Id = "2", Name = "Project B" },
-        new Project { Id = "3", Name = "Project C" }
-    };
-
-    private List<TaskItem> tasks = new List<TaskItem>
-    {
-        new TaskItem { Id = "1", Name = "Task 1" },
-        new TaskItem { Id = "2", Name = "Task 2" },
-        new TaskItem { Id = "3", Name = "Task 3" }
-    };
-
+    private List<TaskDTO> tasks = new List<TaskDTO>();
+    private List<ProjectDTO> projects = new List<ProjectDTO>();
+    private string loginMailUser;
     private string selectedProjectId;
     private string selectedTaskId;
-    private string taskStatus = "ToDo"; 
-    private DateTime? executionDate;
+    private string taskStatus = "ToDo";
+    private DateTime? executionDate = DateTime.Today;
     private int hoursWorked;
+    private string errorMessage;
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            loginMailUser = Login.GetLoggedUser().Email;
+
+            projects = MemberPService.GetAllProjectsFromAMember(loginMailUser);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading projects: {ex.Message}";
+        }
+    }
 
     private void OnProjectChange(ChangeEventArgs e)
     {
         selectedProjectId = e.Value.ToString();
-        selectedTaskId = string.Empty; 
+        selectedTaskId = string.Empty;
+        errorMessage = string.Empty;
+
+        try
+        {
+            tasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectId, loginMailUser);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading tasks: {ex.Message}";
+            tasks = new List<TaskDTO>();
+        }
     }
 
     private void OnTaskChange(ChangeEventArgs e)
     {
         selectedTaskId = e.Value.ToString();
+        errorMessage = string.Empty;
+
+        try
+        {
+            if (!string.IsNullOrEmpty(selectedTaskId) && !string.IsNullOrEmpty(selectedProjectId))
+            {
+                var task = TaskServiceClient.GetTask(selectedProjectId, int.Parse(selectedTaskId));
+                taskStatus = task.State.ToString();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading task details: {ex.Message}";
+        }
     }
 
     private void HandleSubmit()
     {
-        if (string.IsNullOrEmpty(taskStatus) || executionDate == null || hoursWorked <= 0)
+        if (string.IsNullOrEmpty(selectedTaskId))
         {
-           
-            Console.WriteLine("Please fill out all fields properly.");
+            errorMessage = "Please select a task";
+            return;
         }
-        else
+
+        if (taskStatus == "Done" && executionDate == null)
         {
-           
-            Console.WriteLine($"Task Status: {taskStatus}, Execution Date: {executionDate}, Hours Worked: {hoursWorked}");
+            errorMessage = "Please provide an execution date for completed tasks";
+            return;
+        }
 
-           
-            Navigation.NavigateTo("/success"); 
+        if (hoursWorked <= 0)
+        {
+            errorMessage = "Hours worked must be greater than 0";
+            return;
+        }
+
+        try
+        {
+            var existingTask = TaskServiceClient.GetTask(selectedProjectId, int.Parse(selectedTaskId));
+
+            var taskDTO = new TaskDTO
+            {
+                Id = existingTask.Id,
+                Title = existingTask.Title,
+                Description = existingTask.Description,
+                ExpectedStartDate = existingTask.ExpectedStartDate,
+                Duration = existingTask.Duration,
+                PreviousTasks = existingTask.PreviousTasks,
+                SameTimeTasks = existingTask.SameTimeTasks,
+                Resources = existingTask.Resources,
+                State = (StateDTO)Enum.Parse(typeof(StateDTO), taskStatus)
+            };
+
+            StateDTO newStatus = (StateDTO)Enum.Parse(typeof(StateDTO), taskStatus);
+            MemberPService.ChangeTaskStatus(selectedProjectId, loginMailUser, taskDTO, newStatus);
+
+            Navigation.NavigateTo("/success");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error updating task: {ex.Message}";
         }
     }
 
-    public class Project
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-    }
-
-    public class TaskItem
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-    }
 }

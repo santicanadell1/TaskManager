@@ -4,7 +4,7 @@ using Domain.Exceptions;
 using Service;
 using Service.Models;
 
-public class AdminSService
+public class AdminSService : IAdminSService
 {
     private readonly InMemoryDatabase _database;
     private UserService _userService;
@@ -72,7 +72,7 @@ public class AdminSService
         }
     }
 
-    public void AssignRole(UserDTO userDTO, Rol role)
+    public void AssignRole(UserDTO userDTO, RolDTO role)
     {
         CheckAdminRole();
 
@@ -83,7 +83,7 @@ public class AdminSService
             throw new UserNotFoundException();
         }
 
-        user.Roles.Add(role);
+        user.Roles.Add((Rol)role);
 
         _userService.UpdateUser(user);
     }

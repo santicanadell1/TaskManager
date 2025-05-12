@@ -4,13 +4,9 @@ namespace Domain
 {
     public class Project
     {
-        public string name;
-        public string description;
-        public DateTime startDate;
-        public List<User> members;
-        public List<Task> tasks;
-        public List<Notification> notifications;
-        public User adminProject;
+        private string name;
+        private string description;
+        private DateTime startDate;
 
         public string Name
         {
@@ -21,6 +17,7 @@ namespace Domain
                 {
                     throw new ProjectNameException();
                 }
+
                 name = value;
             }
         }
@@ -34,6 +31,7 @@ namespace Domain
                 {
                     throw new ProjectDescriptionException();
                 }
+
                 description = value;
             }
         }
@@ -47,16 +45,40 @@ namespace Domain
                 {
                     throw new ProjectStartDateException();
                 }
+
                 startDate = value;
             }
         }
 
-        public List<User> Members { get; set; }
-        public List<Task> Tasks { get; set; }
-        
-        public List<Notification> Notifications { get; set; }
+        public List<User> Members { get; set; } = new List<User>();
+        public List<Task> Tasks { get; set; } = new List<Task>();
+        public List<Notification> Notifications { get; set; } = new List<Notification>();
         public User AdminProject { get; set; }
 
-        public Project() { }
+        public Project()
+        {
+        }
+
+        public Project(string name, string description, DateTime startDate)
+        {
+            Name = name;
+            Description = description;
+            StartDate = startDate;
+        }
+
+        public void AddMember(User user)
+        {
+            Members.Add(user);
+        }
+
+        public void AddTask(Task task)
+        {
+            Tasks.Add(task);
+        }
+
+        public void AddNotification(Notification notification)
+        {
+            Notifications.Add(notification);
+        }
     }
 }

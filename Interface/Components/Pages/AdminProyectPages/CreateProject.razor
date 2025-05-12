@@ -1,51 +1,99 @@
 ﻿@page "/project/create"
-@rendermode InteractiveServer
+@using Service.Models
 @inject NavigationManager Navigation
+@inject AdminPService AdminPService
+@rendermode InteractiveServer
 
 <link href="styles/styleCreateProject.css" rel="stylesheet"/>
-<div class="create-project-container">
 
+<div class="create-project-container">
     <h2 class="create-project-title">Create New Project</h2>
 
-    <EditForm Model="@newProject" OnValidSubmit="HandleValidSubmit">
+    <EditForm Model="@newProjectDTO" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
 
         <div class="mb-3">
             <label for="projectName" class="form-label">Project Name</label>
-            <InputText id="projectName" class="form-control" @bind-Value="newProject.Name" required/>
+            <InputText id="projectName" class="form-control" @bind-Value="newProjectDTO.Name" required/>
         </div>
 
         <div class="mb-3">
             <label for="projectDescription" class="form-label">Description (max. 400 characters)</label>
-            <InputTextArea id="projectDescription" class="form-control" @bind-Value="newProject.Description"
+            <InputTextArea id="projectDescription" class="form-control" @bind-Value="newProjectDTO.Description"
                            MaxLength="400" required/>
         </div>
 
         <div class="mb-3">
             <label for="startDate" class="form-label">Estimated Start Date</label>
-            <InputDate id="startDate" class="form-control" @bind-Value="newProject.StartDate" required/>
+            <InputDate id="startDate" class="form-control" @bind-Value="newProjectDTO.StartDate" required/>
         </div>
 
         <button type="submit" class="btn btn-primary">Create Project</button>
     </EditForm>
+
+    @if (alertVisible)
+    {
+        <div class="alert alert-danger mt-3">
+            <strong>Error: </strong>@alertMessage
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+
+    @if (successVisible)
+    {
+        <div class="alert alert-success mt-3">
+            <strong>Success: </strong>@successMessage
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
 </div>
 
 @code {
-    private Project newProject = new Project();
+    private ProjectDTO newProjectDTO = new ProjectDTO();
+    private bool alertVisible = false;
+    private bool successVisible = false;
+    private string alertMessage = string.Empty;
+    private string successMessage = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        newProjectDTO = new ProjectDTO()
+        {
+            StartDate = DateTime.Now,
+            Description = "",
+            Name = ""
+        };
+    }
 
     private void HandleValidSubmit()
     {
-        // Lógica para manejar la creación del proyecto (guardar en base de datos o backend)
-        Console.WriteLine("Project Created: " + newProject.Name);
-        Navigation.NavigateTo("/projects");
+        try
+        {
+            AdminPService.CreateProject(newProjectDTO);
+
+            successMessage = "Project created successfully!";
+            successVisible = true;
+
+            newProjectDTO = new ProjectDTO();
+
+            Navigation.NavigateTo("/projects");
+        }
+        catch (Exception ex)
+        {
+            alertMessage = $"Error: {ex.Message}";
+            alertVisible = true;
+        }
     }
 
-    public class Project
+    private void ToggleAlertVisibility()
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public DateTime StartDate { get; set; }
+        alertVisible = false;
+        successVisible = false;
     }
 
 }

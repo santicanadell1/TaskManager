@@ -107,7 +107,7 @@ public class AdminSService_Test
             Roles = new List<Rol>()
         };
 
-        var roleToAssign = Rol.ProjectMember;
+        var roleToAssign = RolDTO.ProjectMember;
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
     }
