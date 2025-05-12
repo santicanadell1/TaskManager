@@ -1,0 +1,58 @@
+﻿@using Service
+@using Service.Models
+@inject NotificationService NotificationService
+@inject Login LoginService
+@rendermode InteractiveServer
+
+<link href="styles/styleNotificationBell.css" rel="stylesheet"/>
+<div class="notification-bell">
+    <button @onclick="ToggleNotifications">
+        <i class="bi bi-bell"></i>
+        @if (unreadCount > 0)
+        {
+            <span class="badge bg-danger">@unreadCount</span>
+        }
+    </button>
+
+    @if (isNotificationsVisible)
+    {
+        <div class="notifications-dropdown">
+            <ul>
+                @foreach (var notification in notifications)
+                {
+                    <li>
+                        <div>
+                            <p>@notification.Description</p>
+
+                            <button @onclick="() => MarkAsRead(notification.Description)">Visto</button>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+
+@code {
+    private bool isNotificationsVisible = false;
+    private List<NotificationDTO> notifications = new List<NotificationDTO>();
+    private int unreadCount => notifications.Count(n => (bool)!n.Read);
+
+    protected void OnInitializedAsync()
+    {
+        var loggedUser = LoginService.GetLoggedUser();
+        notifications = NotificationService.GetNotificationsForUser(loggedUser.Email);
+    }
+
+    private void ToggleNotifications()
+    {
+        isNotificationsVisible = !isNotificationsVisible;
+    }
+
+    private void MarkAsRead(string notificationId)
+    {
+        //NotificationService.MarkAsRead(notificationId);
+        //notifications = NotificationService.GetNotifications(); 
+    }
+
+}
