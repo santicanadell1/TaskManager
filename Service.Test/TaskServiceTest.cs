@@ -555,7 +555,7 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual(1, addedTask.Resources.Count);
             Assert.AreEqual("Complex Resource", addedTask.Resources[0].Name);
             Assert.AreEqual("Complex Type", addedTask.Resources[0].Type);
-            Assert.AreEqual("Complex resource description", addedTask.Resources[0]);
+            Assert.AreEqual("Complex resource description", addedTask.Resources[0].Description);
         }
 
 
