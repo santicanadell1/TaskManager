@@ -67,7 +67,7 @@ namespace Service.Test.ModelsTests
             resultDTO.CriticalTaskIds = criticalTaskIds;
             
             Assert.AreEqual(criticalTaskIds, resultDTO.CriticalTaskIds);
-            Assert.AreEqual(4, resultDTO.CriticalTaskIds);
+            Assert.AreEqual(4, resultDTO.CriticalTaskIds.Count);
         }
         
     }
