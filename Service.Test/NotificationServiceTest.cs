@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Domain;
+using Domain.Exceptions;
 using Service;
 using Service.Models;
 
@@ -28,20 +29,16 @@ public class NotificationServiceTest
 
     private void CreateAndAddProjects()
     {
-        Notification notification1 = new Notification(false, "Description 1");
-        Notification notification2 = new Notification(false, "Description 2");
-        List<Notification> notifications = new List<Notification> { notification1, notification2 };
-
-        User user1 = dataAccess.users.GetAll().First(u => u.Email == "Email1@example.com");
-        User user2 = dataAccess.users.GetAll().First(u => u.Email == "Email2@example.com");
+        User user1 = dataAccess.users.Get(u => u.Email == "Email1@example.com");
+        User user2 = dataAccess.users.Get(u => u.Email == "Email2@example.com");
 
         Project project1 = new Project
         {
             Name = "Project 1",
             Description = "Description 1",
             StartDate = DateTime.Today,
-            Notifications = notifications,
-            Members = new List<User> { user1, user2 }
+            Members = new List<User> { user1, user2 },
+            Notifications = new List<Notification>()
         };
 
         Project project2 = new Project
@@ -49,73 +46,84 @@ public class NotificationServiceTest
             Name = "Project 2",
             Description = "Description 2",
             StartDate = DateTime.Today,
-            Notifications = notifications,
-            Members = new List<User> { user1 }
+            Members = new List<User> { user1 },
+            Notifications = new List<Notification>()
         };
-        dataAccess.notifications.AddNotification(notification1);
-        dataAccess.notifications.AddNotification(notification2);
+
         dataAccess.projects.AddProject(project1);
         dataAccess.projects.AddProject(project2);
     }
 
     [TestMethod]
-    public void NotificationService_WhenGettingAllNotificationsForUser_ThenReturnNotifications()
+    public void GetNotificationsForUser_WhenUserHasNotifications_ThenReturnNotifications()
     {
-        List<NotificationDTO> notificationForUser1 = _notificationService.GetNotificationsForUser("Email1@example.com");
-        List<NotificationDTO> notificationForUser2 = _notificationService.GetNotificationsForUser("Email2@example.com");
+        var userEmail = "Email1@example.com";
+        var notificationDTO = new NotificationDTO { Read = false, Description = "Test notification" };
+        _notificationService.AddNotificationToProject("Project 1", notificationDTO);
 
-        Assert.IsTrue(notificationForUser1.Count == 4);
-        Assert.IsTrue(notificationForUser2.Count == 2);
+        var result = _notificationService.GetNotificationsForUser(userEmail);
+
+        Assert.AreEqual(1, result.Count);
+        Assert.AreEqual("Test notification", result[0].Description);
     }
 
     [TestMethod]
-    public void AddNotificationToProject_WhenNotificationIsAdded_ThenNotificationShouldBeAssociatedWithProject()
+    public void AddNotificationToProject_WhenNotificationIsAdded_ThenNotificationShouldBeAddedToAllProjectMembers()
     {
-        var projectId = "Project 1";
-        var notificationDTO = new NotificationDTO
-        {
-            Read = false,
-            Description = "New Notification for Project 1",
-        };
+        var notificationDTO = new NotificationDTO { Read = false, Description = "New Project Notification" };
+        var projectName = "Project 1";
 
-        _notificationService.AddNotificationToProject(projectId, notificationDTO);
+        _notificationService.AddNotificationToProject(projectName, notificationDTO);
 
-        var project = dataAccess.projects.GetProject(p => p.Name == projectId);
-        var addedNotification =
-            project.Notifications.FirstOrDefault(n => n.Description == "New Notification for Project 1");
+        var project = dataAccess.projects.GetProject(p => p.Name == projectName);
+        Assert.AreEqual(1, project.Notifications.Count);
 
-        Assert.IsNotNull(addedNotification);
-        Assert.AreEqual("New Notification for Project 1", addedNotification.Description);
-        Assert.IsFalse(addedNotification.Read);
+        var user1 = dataAccess.users.Get(u => u.Email == "Email1@example.com");
+        var user2 = dataAccess.users.Get(u => u.Email == "Email2@example.com");
+
+        Assert.AreEqual(1, user1.Notifications.Count);
+        Assert.AreEqual(1, user2.Notifications.Count);
     }
 
     [TestMethod]
     public void RemoveNotificationFromProject_WhenNotificationExists_ThenNotificationShouldBeRemoved()
     {
-        var projectId = "Project 1";
-        int notificationId = 1;
-        _notificationService.RemoveNotificationFromProject(projectId, notificationId);
+        var notificationDTO = new NotificationDTO { Read = false, Description = "Notification to Remove" };
+        _notificationService.AddNotificationToProject("Project 1", notificationDTO);
 
-        var project = dataAccess.projects.GetProject(p => p.Name == projectId);
-        var removedNotification = project.Notifications.FirstOrDefault(n => n.Id == notificationId);
+        var project = dataAccess.projects.GetProject(p => p.Name == "Project 1");
+        var notificationToRemove = project.Notifications.First(n => n.Description == "Notification to Remove");
 
-        Assert.IsNull(removedNotification);
+        _notificationService.RemoveNotificationFromProject("Project 1", notificationToRemove.Id);
+
+        var updatedProject = dataAccess.projects.GetProject(p => p.Name == "Project 1");
+        Assert.IsFalse(updatedProject.Notifications.Any(n => n.Description == "Notification to Remove"));
     }
 
     [TestMethod]
-    public void
-        MarkNotificationAsRead_WithUserEmail_WhenNotificationExists_ThenRemoveNotificationFromProjectAndRepository()
+    public void MarkNotificationAsRead_WhenNotificationExists_ThenMarkAsReadAndRemoveFromUser()
     {
+        var notificationDTO = new NotificationDTO { Read = false, Description = "Test notification to mark as read" };
+        _notificationService.AddNotificationToProject("Project 1", notificationDTO);
+
         var userEmail = "Email1@example.com";
-        var notificationId = 1;
+        var user = dataAccess.users.Get(u => u.Email == userEmail);
+        var notificationId = user.Notifications.First(n => n.Description == "Test notification to mark as read").Id;
 
         _notificationService.MarkNotificationAsRead(notificationId, userEmail);
 
-        var project = dataAccess.projects.GetProject(p => p.Name == "Project 1");
-        var removedNotification = project.Notifications.FirstOrDefault(n => n.Id == notificationId);
-        Assert.IsNull(removedNotification);
+        var updatedUser = dataAccess.users.Get(u => u.Email == userEmail);
+        Assert.AreEqual(0, updatedUser.Notifications.Count);
+        Assert.IsTrue(updatedUser.Notifications.All(n => n.Read == true));
+    }
 
-        var notificationInRepository = dataAccess.notifications.Get(n => n.Id == notificationId);
-        Assert.IsNull(notificationInRepository);
+    [TestMethod]
+    [ExpectedException(typeof(NotificationNotFoundException))]
+    public void MarkNotificationAsRead_WhenNotificationDoesNotExist_ThenThrowException()
+    {
+        var userEmail = "Email1@example.com";
+        var invalidNotificationId = 999;
+
+        _notificationService.MarkNotificationAsRead(invalidNotificationId, userEmail);
     }
 }

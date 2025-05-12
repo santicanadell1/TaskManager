@@ -55,12 +55,23 @@ public class NotificationService
 
         foreach (var member in project.Members)
         {
-            var userNotification = new Notification(notification.Read, notification.Description);
+            if (member.Notifications == null)
+            {
+                member.Notifications = new List<Notification>();
+            }
+
+            var userNotification = new Notification(notification.Read, notification.Description)
+            {
+                Id = notification.Id
+            };
+
             member.Notifications.Add(userNotification);
+
             _database.users.Update(member.Email, member);
         }
 
-        _database.notifications.AddNotification(notification);
+        project.Notifications.Add(notification);
+        _database.projects.UpdateProject(projectName, project);
     }
 
     public void RemoveNotificationFromProject(string projectName, int idNotification)
@@ -82,35 +93,26 @@ public class NotificationService
 
     public void MarkNotificationAsRead(int idNotification, string userEmail)
     {
-        List<Project> projects = _database.projects.GetAllProjects();
-        bool notificationFound = false;
-
-        foreach (var project in projects)
+        User user = _database.users.Get(u => u.Email == userEmail);
+        if (user == null)
         {
-            bool isUserMember = project.Members.Any(m => m.Email == userEmail);
-
-            if (!isUserMember) continue;
-
-            var notificationToMark = project.Notifications.FirstOrDefault(n => n.Id == idNotification);
-
-            if (notificationToMark != null)
-            {
-                notificationToMark.MarkRead();
-
-                _database.notifications.Delete(notificationToMark);
-
-                project.Notifications.Remove(notificationToMark);
-
-                _database.projects.UpdateProject(project.Name, project);
-
-                notificationFound = true;
-                break; // only one notification has this id
-            }
+            throw new UserNotFoundException();
         }
 
-        if (!notificationFound)
+        if (user.Notifications == null || !user.Notifications.Any())
         {
             throw new NotificationNotFoundException();
         }
+
+        var notification = user.Notifications.FirstOrDefault(n => n.Id == idNotification);
+        if (notification == null)
+        {
+            throw new NotificationNotFoundException();
+        }
+
+        notification.MarkRead();
+        user.Notifications.Remove(notification);
+
+        _database.users.Update(userEmail, user);
     }
 }
