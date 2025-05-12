@@ -656,6 +656,43 @@ public void UpdateTask_WithComplexRelationships_ShouldCorrectlyMapAllProperties(
         "El estado de la tarea no debería cambiar o debería mantener su valor original");
 }
 
+        [TestMethod]
+        public void GetTasks_ShouldCorrectlyMapAllTaskProperties_TestingFromEntityList()
+        {
+            var specialTask = new Task(
+                "Special Task for List Mapping",
+                "Special Description",
+                new DateTime(2025, 12, 25),
+                5,
+                new List<Task>(),
+                new List<Task>(),
+                new List<Resource> {
+                    new Resource("Special Resource", "Special Type", "Special Description") { Id = 200 }
+                }
+            );
+            specialTask.State = Domain.State.DONE; 
+    
+            _database.projects.AddTask("Generic Project", specialTask);
+    
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var addedSpecialTask = project.Tasks.FirstOrDefault(t => t.Title == "Special Task for List Mapping");
+    
+            Assert.IsNotNull(addedSpecialTask, "La tarea no se agregó correctamente al proyecto");
+    
+            var allTasks = _taskService.GetTasks("Generic Project");
+    
+            var mappedSpecialTask = allTasks.FirstOrDefault(t => t.Id == addedSpecialTask.Id);
+    
+            Assert.IsNotNull(mappedSpecialTask);
+            Assert.AreEqual("Special Task for List Mapping", mappedSpecialTask.Title);
+            Assert.AreEqual("Special Description", mappedSpecialTask.Description);
+            Assert.AreEqual(new DateTime(2025, 12, 25), mappedSpecialTask.ExpectedStartDate);
+            Assert.AreEqual(5, mappedSpecialTask.Duration);
+            Assert.AreEqual(StateDTO.DONE, mappedSpecialTask.State);
+            Assert.AreEqual(1, mappedSpecialTask.Resources.Count);
+            Assert.AreEqual("Special Resource", mappedSpecialTask.Resources[0]);
+        }
+
 
         
      
