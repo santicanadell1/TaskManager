@@ -163,7 +163,7 @@ public class MemberPServiceTest
     }
     [TestMethod]
     [ExpectedException(typeof(TaskCantBeModifiedByUserException))]
-    public void ChangeTaskStatus_WhenUserIsNotMember_ThenThrowException()
+    public void ChangeTaskStatus_WhentaskIsNotFromAMember_ThenThrowException()
     {
         var User = new UserDTO
         {
