@@ -690,7 +690,7 @@ public void UpdateTask_WithComplexRelationships_ShouldCorrectlyMapAllProperties(
             Assert.AreEqual(5, mappedSpecialTask.Duration);
             Assert.AreEqual(StateDTO.DONE, mappedSpecialTask.State);
             Assert.AreEqual(1, mappedSpecialTask.Resources.Count);
-            Assert.AreEqual("Special Resource", mappedSpecialTask.Resources[0]);
+            Assert.AreEqual("Special Resource", mappedSpecialTask.Resources[0].Name);
         }
 
 
