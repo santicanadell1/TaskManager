@@ -62,11 +62,11 @@ public class MemberPService
         }
 
     }
-    public void ChangeTaskStatus(string projectName, string email, TaskDTO task, State status)
+    public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
         CheckIsTaskOfTheUser((int)task.Id, email);
         TaskService taskService = new TaskService(_database);
-        task.State = (StateDTO)status;
+        task.State = status;
         taskService.UpdateTask(projectName, task.Id, task);
     }
 
