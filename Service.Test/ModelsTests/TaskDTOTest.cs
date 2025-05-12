@@ -138,6 +138,20 @@ public class TaskDTOTest
         Assert.AreEqual(isCritical, taskDTO.IsCritical);
     }
     
+    [TestMethod]
+    public void TaskDTO_WhenStartDateIsSet_ThenStartDateIsAssigned()
+    {
+        DateTime startDate = new DateTime(2025, 6, 15);
+        TaskDTO taskDTO = new TaskDTO();
+            
+        taskDTO.StartDate = startDate;
+            
+        Assert.AreEqual(startDate, taskDTO.StartDate);
+    }
+    
+    g
+
+    
     
 
 }

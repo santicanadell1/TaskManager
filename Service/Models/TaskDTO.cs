@@ -29,5 +29,7 @@ public class TaskDTO
 
     public bool IsCritical { get; set; }
     
+    public DateTime StartDate { get; set; }
+    
     
 }
