@@ -126,4 +126,16 @@ public class TaskDTOTest
         Assert.AreEqual("Resource 1", taskDTO.Resources[0].Name);
         Assert.AreEqual("Resource 2", taskDTO.Resources[1].Name);
     }
+    
+    [TestMethod]
+    public void TaskDTO_WhenIsCriticalIsSet_ThenIsCriticalIsAssigned()
+    {
+        bool isCritical = true;
+        TaskDTO taskDTO = new TaskDTO();
+            
+        taskDTO.IsCritical = isCritical;
+            
+        Assert.AreEqual(isCritical, taskDTO.IsCritical);
+    }
+
 }

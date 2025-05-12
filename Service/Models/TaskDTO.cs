@@ -27,4 +27,7 @@ public class TaskDTO
     
     public List<ResourceDTO> Resources { get; set; }
 
+    
+    
+    
 }
