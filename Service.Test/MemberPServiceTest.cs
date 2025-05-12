@@ -26,11 +26,10 @@ public class MemberPServiceTest
     {
         database = new InMemoryDatabase();
         _memberPService = new MemberPService(database);
-        _taskService = new TaskService(database);
+        _taskService = new TaskService(database, new CpmService()); 
         _adminPService = new AdminPService(database);
         _login = new Login(database);
         _userservice = new UserService(database);
-
         Admin = new UserDTO
         {
             FirstName = "Admin",
@@ -181,5 +180,6 @@ public class MemberPServiceTest
         
         _memberPService.ChangeTaskStatus("New Project", User.Email, task, newState);
     }
+    
 
 }

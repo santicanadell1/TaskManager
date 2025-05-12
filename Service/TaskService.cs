@@ -10,10 +10,12 @@ namespace Service
     public class TaskService
     {
         private readonly InMemoryDatabase _database;
+        private readonly CpmService _cpmService;
 
-        public TaskService(InMemoryDatabase database)
+        public TaskService(InMemoryDatabase database, CpmService cpmService)
         {
             _database = database;
+            _cpmService = cpmService;
         }
 
         public void AddTask(string projectName, TaskDTO taskDTO)
@@ -68,6 +70,8 @@ namespace Service
             );
 
             _database.projects.AddTask(projectName, task);
+
+            RecalculateCriticalPath(projectName);
         }
 
         public void DeleteTask(string projectName, int? taskId)
@@ -85,6 +89,8 @@ namespace Service
             }
 
             _database.projects.RemoveTask(projectName, task.Id);
+
+            RecalculateCriticalPath(projectName);
         }
 
         public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
@@ -143,9 +149,12 @@ namespace Service
                 ToResourceEntityList(taskDTO.Resources)
             );
             updatedTask.Id = task.Id;
-            updatedTask.State = (State)taskDTO.State;
+
+            updatedTask.State = task.State;
 
             _database.projects.UpdateTask(projectName, taskId, updatedTask);
+
+            RecalculateCriticalPath(projectName);
         }
 
         public List<TaskDTO> GetTasks(string projectName)
@@ -166,7 +175,13 @@ namespace Service
                 SameTimeTasks = FromEntityList(t.SameTimeTasks),
                 State = (StateDTO)t.State,
                 Resources = FromResourceEntityList(t.Resources),
-                Id = t.Id
+                Id = t.Id,
+                IsCritical = t.IsCritical,
+                StartDate = t.StartDate,
+                EndDate = t.EndDate,
+                LatestStart = t.LatestStart,
+                LatestFinish = t.LatestFinish,
+                Slack = t.Slack
             }).ToList();
 
             return taskDTOs;
@@ -189,6 +204,44 @@ namespace Service
             return FromEntity(task);
         }
 
+        public CpmResultDTO GetCriticalPath(string projectName)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
+
+            var cpmResult = _cpmService.CalculateCriticalPath(project.Tasks);
+
+            return new CpmResultDTO
+            {
+                ProjectDuration = cpmResult.ProjectDuration,
+                CriticalTaskIds = cpmResult.CriticalTasks.Select(t => t.Id).ToList(),
+                CriticalPathIds = cpmResult.CriticalPath.Select(t => t.Id).ToList(),
+                EarliestStartDate = project.Tasks.Min(t => t.StartDate),
+                LatestFinishDate = project.Tasks.Max(t => t.EndDate)
+            };
+        }
+
+        private void RecalculateCriticalPath(string projectName)
+        {
+            var project = _database.projects.GetProject(p => p.Name == projectName);
+            if (project == null || project.Tasks.Count == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                _cpmService.CalculateCriticalPath(project.Tasks);
+
+            }
+            catch (Exception)
+            {
+            }
+        }
+
         private TaskDTO FromEntity(Task task)
         {
             return new TaskDTO()
@@ -201,7 +254,13 @@ namespace Service
                 PreviousTasks = ToMinimalTaskDTOList(task.PreviousTasks),
                 SameTimeTasks = ToMinimalTaskDTOList(task.SameTimeTasks),
                 State = (StateDTO)task.State,
-                Resources = FromResourceEntityList(task.Resources) ?? new List<ResourceDTO>()
+                Resources = FromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
+                IsCritical = task.IsCritical,
+                StartDate = task.StartDate,
+                EndDate = task.EndDate,
+                LatestStart = task.LatestStart,
+                LatestFinish = task.LatestFinish,
+                Slack = task.Slack
             };
         }
 
@@ -308,7 +367,6 @@ namespace Service
 
             return resources;
         }
-        
-        
     }
 }
+

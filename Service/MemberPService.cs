@@ -68,8 +68,48 @@ public class MemberPService : IMemberPService
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
         CheckIsTaskOfTheUser((int)task.Id, email);
-        TaskService taskService = new TaskService(_database);
+        CpmService cpmService = new CpmService(); 
+        TaskService taskService = new TaskService(_database, cpmService); 
         task.State = status;
         taskService.UpdateTask(projectName, task.Id, task);
+    }
+    
+    public List<TaskDTO> GetAllTaskForAMember(string email)
+    {
+        User user = _database.users.Get(u => u.Email == email);
+        CpmService cpmService = new CpmService();
+        TaskService taskService = new TaskService(_database, cpmService);
+        List<TaskDTO> returnList = new List<TaskDTO>();
+        foreach (var project in _database.projects.GetAllProjects())
+        {
+            List<TaskDTO> tasks = taskService.GetTasks(project.Name);
+            foreach (var task in tasks)
+            {
+                if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+                {
+                    returnList.Add(task);
+                }
+            }
+        }
+
+        return returnList;
+    }
+
+    public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
+    {
+        User user = _database.users.Get(u => u.Email == email);
+        CpmService cpmService = new CpmService();
+        TaskService taskService = new TaskService(_database, cpmService);
+        List<TaskDTO> returnList = new List<TaskDTO>();
+        List<TaskDTO> tasks = taskService.GetTasks(projectName);
+        foreach (var task in tasks)
+        {
+            if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+            {
+                returnList.Add(task);
+            }
+        }
+
+        return returnList;
     }
 }

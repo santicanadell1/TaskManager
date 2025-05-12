@@ -30,7 +30,7 @@ public class AdminPServiceTests
         _service = new AdminPService(_database);
         _userservice = new UserService(_database);
         _login = new Login(_database);
-        _taskService = new TaskService(_database);
+        _taskService = new TaskService(_database, new CpmService());
 
         Admin = new UserDTO
         {

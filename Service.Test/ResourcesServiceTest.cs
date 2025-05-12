@@ -25,8 +25,7 @@ public class ResourcesServiceTest
         _userService = new UserService(_database);
         _resourceService = new ResourceService(_database);
         _adminProjectService = new AdminPService(_database);
-        _taskService = new TaskService(_database);
-
+        _taskService = new TaskService(_database, new CpmService());
         var adminSUserDTO = new UserDTO
         {
             FirstName = "AdminSystem",
