@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "sWM5htUjdoI=",
+=======
+  "dgSpecHash": "WThz/CIfPXA=",
+>>>>>>> feat/login-service
   "success": true,
   "projectFilePath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Interface\\Interface.csproj",
   "expectedPackageFiles": [
