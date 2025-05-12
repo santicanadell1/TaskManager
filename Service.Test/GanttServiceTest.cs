@@ -68,7 +68,58 @@ public class GanttServiceTestTests
         [TestMethod]
         public void Convert_ShouldCreateCorrectTasksAndLinks_WithCriticalFlag()
         {
-            throw new NotImplementedException();
+            // Arrange
+            var task1 = new TaskDTO
+            {
+                Id = 1,
+                Title = "Inicio",
+                StartDate = new DateTime(2025, 5, 1),
+                EndDate = new DateTime(2025, 5, 2),
+                Duration = 1,
+                State = StateDTO.TODO,
+                Slack = TimeSpan.Zero,
+                PreviousTasks = new List<TaskDTO>()
+            };
+
+            var task2 = new TaskDTO
+            {
+                Id = 2,
+                Title = "Diseño",
+                StartDate = new DateTime(2025, 5, 2),
+                EndDate = new DateTime(2025, 5, 4),
+                Duration = 2,
+                State = StateDTO.DONE,
+                Slack = TimeSpan.FromDays(1),
+                PreviousTasks = new List<TaskDTO> { task1 }
+            };
+
+            var allTasks = new List<TaskDTO> { task1, task2 };
+            var criticalPath = new List<TaskDTO> { task1, task2 };
+
+            // Act
+            var result = GanttService.Convert(allTasks, criticalPath);
+
+            // Assert
+            Assert.AreEqual(2, result.data.Count);
+            Assert.AreEqual(1, result.links.Count);
+
+            var ganttTask1 = result.data.First(t => t.id == 1);
+            var ganttTask2 = result.data.First(t => t.id == 2);
+
+            Assert.AreEqual("Inicio", ganttTask1.text);
+            Assert.AreEqual("2025-05-01", ganttTask1.start_date);
+            Assert.AreEqual("2025-05-02", ganttTask1.end_date);
+            Assert.AreEqual(1.0, ganttTask2.progress, 0.01);
+            Assert.IsTrue(ganttTask2.critical);
+            Assert.AreEqual(1, ganttTask2.slack);
+
+            var link = result.links.First();
+            Assert.AreEqual(1, link.source);
+            Assert.AreEqual(2, link.target);
+            Assert.AreEqual("0", link.type);
+            Assert.IsTrue(link.critical);
+
+            CollectionAssert.AreEqual(new List<int> { 1, 2 }, result.criticalPathIds);
         }
 }
 
