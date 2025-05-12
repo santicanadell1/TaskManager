@@ -652,7 +652,7 @@ public void UpdateTask_WithComplexRelationships_ShouldCorrectlyMapAllProperties(
     
     var updatedTaskCDTO = _taskService.GetTask("Generic Project", addedTaskC.Id);
     
-    Assert(originalState, updatedTaskCDTO.State, 
+    Assert.AreEqual(originalState, updatedTaskCDTO.State, 
         "El estado de la tarea no debería cambiar o debería mantener su valor original");
 }
 
