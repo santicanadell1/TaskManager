@@ -9,7 +9,7 @@ namespace Service.Test.ModelsTests
     public class CpmResultDTOTest
     {
         [TestMethod]
-        public void g()
+        public void CpmResultDTO_PropertiesAreAssignedCorrectlygg()
         {
             int projectDuration = 15;
             List<int?> criticalPathIds = new List<int?> { 1, 2, 3 };
@@ -101,7 +101,7 @@ namespace Service.Test.ModelsTests
             Assert.IsNull(resultDTO.CriticalPathIds);
             Assert.IsNull(resultDTO.CriticalTaskIds);
             Assert.AreEqual(default(DateTime), resultDTO.EarliestStartDate);
-            Assert.AreEqual(default(DateTime), resultDTO.gg);
+            Assert.AreEqual(default(DateTime), resultDTO.LatestFinishDate);
         }
     }
 }
