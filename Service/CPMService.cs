@@ -78,7 +78,7 @@ namespace Service
             }
         }
 
-        private void CalculateLateDates(List<Task> tasks)
+        private void CalculateLateDates(List<TaskDTO> tasks)
         {
             var finalTasks = tasks.Where(t => !IsSuccessorOfAny(t, tasks)).ToList();
 
@@ -88,8 +88,8 @@ namespace Service
                 finalTask.LatestStart = finalTask.LatestFinish.AddDays(-finalTask.Duration);
             }
 
-            var processedTasks = new HashSet<Task>(finalTasks);
-            var remainingTasks = new Queue<Task>(tasks.Except(finalTasks));
+            var processedTasks = new HashSet<TaskDTO>(finalTasks);
+            var remainingTasks = new Queue<TaskDTO>(tasks.Except(finalTasks));
             int iterationCount = 0;
             int maxIterations = tasks.Count * tasks.Count;
 
@@ -125,7 +125,7 @@ namespace Service
             }
         }
 
-        private void CalculateSlackAndCriticalTasks(List<Task> tasks)
+        private void CalculateSlackAndCriticalTasks(List<TaskDTO> tasks)
         {
             foreach (var task in tasks)
             {
@@ -134,9 +134,9 @@ namespace Service
             }
         }
 
-        private List<Task> FindCriticalPath(List<Task> tasks)
+        private List<TaskDTO> FindCriticalPath(List<TaskDTO> tasks)
         {
-            var criticalPath = new List<Task>();
+            var criticalPath = new List<TaskDTO>();
             var criticalTasks = tasks.Where(t => t.IsCritical).ToList();
 
             if (!criticalTasks.Any())
@@ -153,7 +153,7 @@ namespace Service
                 currentTask = criticalTasks.OrderBy(t => t.StartDate).First();
             }
 
-            var processedTasks = new HashSet<Task>();
+            var processedTasks = new HashSet<TaskDTO>();
 
             while (currentTask != null)
             {
@@ -176,17 +176,17 @@ namespace Service
             return criticalPath;
         }
 
-        private bool IsSuccessorOfAny(Task task, List<Task> allTasks)
+        private bool IsSuccessorOfAny(TaskDTO task, List<TaskDTO> allTasks)
         {
             return allTasks.Any(t => t.PreviousTasks.Contains(task));
         }
 
-        private List<Task> GetSuccessors(Task task, List<Task> allTasks)
+        private List<TaskDTO> GetSuccessors(TaskDTO task, List<TaskDTO> allTasks)
         {
             return allTasks.Where(t => t.PreviousTasks.Contains(task)).ToList();
         }
 
-        private int CalculateProjectDuration(List<Task> tasks)
+        private int CalculateProjectDuration(List<TaskDTO> tasks)
         {
             if (!tasks.Any())
                 return 0;
@@ -197,7 +197,7 @@ namespace Service
             return (int)(latestFinish - earliestStart).TotalDays;
         }
 
-        public DateTime CalculateEarlyStart(Task task)
+        public DateTime CalculateEarlyStart(TaskDTO task)
         {
             if (task.PreviousTasks == null || task.PreviousTasks.Count == 0)
             {
@@ -207,12 +207,12 @@ namespace Service
             return task.PreviousTasks.Max(t => t.EndDate);
         }
 
-        public DateTime CalculateEarlyFinish(Task task)
+        public DateTime CalculateEarlyFinish(TaskDTO task)
         {
             return task.StartDate.AddDays(task.Duration);
         }
 
-        public DateTime CalculateLateStart(Task task, List<Task> allTasks)
+        public DateTime CalculateLateStart(TaskDTO task, List<TaskDTO> allTasks)
         {
             var successors = GetSuccessors(task, allTasks);
             
@@ -236,7 +236,7 @@ namespace Service
             return earliestSuccessorStart.AddDays(-task.Duration);
         }
 
-        public DateTime CalculateLateFinish(Task task, List<Task> allTasks)
+        public DateTime CalculateLateFinish(TaskDTO task, List<TaskDTO> allTasks)
         {
             var successors = GetSuccessors(task, allTasks);
             
@@ -248,7 +248,7 @@ namespace Service
             return successors.Min(s => s.LatestStart);
         }
 
-        public bool IsCritical(Task task)
+        public bool IsCritical(TaskDTO task)
         {
             return Math.Abs(task.Slack.TotalDays) < SLACK_TOLERANCE;
         }
