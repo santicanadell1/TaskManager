@@ -32,4 +32,31 @@ namespace Service.Test.ModelsTests;
             // Assert
             Assert.IsTrue(task.progress >= 0 && task.progress <= 1);
         }
+        [TestMethod]
+        public void GanttTask_ShouldSetAllPropertiesCorrectly()
+        {
+            // Arrange
+            var task = new GanttTask
+            {
+                id = 1,
+                text = "Diseñar base de datos",
+                start_date = "2025-05-12",
+                end_date = "2025-05-17",
+                duration = 5,
+                progress = 0.75,
+                critical = true,
+                slack = 0
+            };
+
+            // Assert
+            Assert.AreEqual(1, task.id);
+            Assert.AreEqual("Diseñar base de datos", task.text);
+            Assert.AreEqual("2025-05-12", task.start_date);
+            Assert.AreEqual("2025-05-17", task.end_date);
+            Assert.AreEqual(5, task.duration);
+            Assert.AreEqual(0.75, task.progress, 0.001);
+            Assert.IsTrue(task.critical);
+            Assert.AreEqual(0, task.slack);
+        }
+
     }
