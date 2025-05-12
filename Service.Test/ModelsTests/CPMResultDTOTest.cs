@@ -70,5 +70,15 @@ namespace Service.Test.ModelsTests
             Assert.AreEqual(4, resultDTO.CriticalTaskIds.Count);
         }
         
+        [TestMethod]
+        public void CpmResultDTO_WhenEarliestStartDateIsSet_ThenEarliestStartDateIsAssigned()
+        {
+            DateTime earliestStartDate = new DateTime(2025, 3, 15);
+            CpmResultDTO resultDTO = new CpmResultDTO();
+            
+            resultDTO.EarliestStartDate = earliestStartDate;
+            
+            Assert.AreEqual(earliestStartDate, resultDTO);
+        }
     }
 }
