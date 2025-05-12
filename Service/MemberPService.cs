@@ -48,5 +48,13 @@ public class MemberPService
     }
 
 
+    
+    public void ChangeTaskStatus(string projectName, string email, TaskDTO task, State status)
+    {
+        TaskService taskService = new TaskService(_database);
+        task.State = (StateDTO)status;
+        taskService.UpdateTask(projectName, task.Id, task);
+    }
+
 
 }
