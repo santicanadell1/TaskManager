@@ -257,7 +257,6 @@
     </div>
 }
 
-<!-- Modal Edit Task -->
 @if (showEditTaskModal && selectedTaskToEdit != null)
 {
     <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
@@ -787,7 +786,6 @@
 
 @code {
 
-    // Main data and lists
     private List<ProjectDTO> projects = new List<ProjectDTO>();
     private string selectedProjectName;
     private List<TaskDTO> taskList = new List<TaskDTO>();
@@ -795,7 +793,6 @@
     private List<UserDTO> membersList = new List<UserDTO>();
     private List<UserDTO> membersProjectList = new List<UserDTO>();
 
-    // Modal states
     private bool showCreateTaskModal = false;
     private bool showEditTaskModal = false;
     private bool showAddMembersModal = false;
@@ -803,7 +800,6 @@
     private bool showTaskListModal = false;
     private bool showMemberListModal = false;
 
-    // Error and success messages
     private string errorMessage = string.Empty;
     private string taskErrorMessage = string.Empty;
     private string taskSuccessMessage = string.Empty;
@@ -814,7 +810,6 @@
     private string assignTaskErrorMessage = string.Empty;
     private string assignTaskSuccessMessage = string.Empty;
 
-    // Create Task data
     private TaskDTO newTask = new TaskDTO();
     private HashSet<int?> selectedResourceIds = new HashSet<int?>();
     private List<int?> previousTaskIds = new List<int?>();
@@ -822,7 +817,6 @@
     private int? newPreviousTaskId = null;
     private string newDependencyType = "FS";
 
-    // Edit Task data
     private TaskDTO selectedTaskToEdit = null;
     private HashSet<int?> editSelectedResourceIds = new HashSet<int?>();
     private List<int?> editPreviousTaskIds = new List<int?>();
@@ -830,16 +824,13 @@
     private int? editNewPreviousTaskId = null;
     private string editNewDependencyType = "FS";
 
-    // Add Members data
     private HashSet<string> selectedEmails = new HashSet<string>();
 
-    // Assign Task to Member data
     private string selectedMemberId;
     private string selectedMemberName;
     private List<TaskDTO> assignedTasks = new List<TaskDTO>();
     private List<UserDTO> projectMembers = new List<UserDTO>();
 
-    // Lifecycle methods
     protected override void OnInitialized()
     {
         LoadProjects();
@@ -882,7 +873,6 @@
         try
         {
             taskList = TaskService.GetTasks(selectedProjectName);
-            // Ensure taskList is not null
             if (taskList == null)
             {
                 taskList = new List<TaskDTO>();
@@ -897,7 +887,6 @@
         }
     }
 
-    // Navigation and UI methods
     private void ShowProjectOptions(ProjectDTO project)
     {
         selectedProjectName = project.Name;
@@ -940,14 +929,12 @@
         }
     }
 
-    // Create Task Modal methods
     private void ShowCreateTaskModal()
     {
         if (!string.IsNullOrEmpty(selectedProjectName))
         {
             LoadTasks();
 
-            // Initialize newTask with all properties
             newTask = new TaskDTO
             {
                 ExpectedStartDate = DateTime.Today,
@@ -957,7 +944,7 @@
                 PreviousTasks = new List<TaskDTO>(),
                 SameTimeTasks = new List<TaskDTO>(),
                 Resources = new List<ResourceDTO>(),
-                State = StateDTO.TODO, // Assuming there's a default state
+                State = StateDTO.TODO, 
                 Id = null
             };
 
@@ -995,7 +982,6 @@
             previousTaskIds.Add(newPreviousTaskId);
             previousTaskDependencies.Add(newDependencyType);
 
-            // Limpiar la selección para la próxima tarea
             newPreviousTaskId = null;
             newDependencyType = "FS";
         }
@@ -1027,11 +1013,9 @@
                 return;
             }
 
-            // Initialize lists properly
             var previousTasksFS = new List<TaskDTO>();
             var sameTimeTasksSS = new List<TaskDTO>();
 
-            // Process previous tasks
             for (int i = 0; i < previousTaskIds.Count; i++)
             {
                 if (previousTaskIds[i].HasValue)
@@ -1052,18 +1036,15 @@
                 }
             }
 
-            // Debug - check if newTask exists
             if (newTask == null)
             {
                 taskErrorMessage = "Task object is null";
                 return;
             }
 
-            // Initialize the lists if they are null
             newTask.PreviousTasks = previousTasksFS ?? new List<TaskDTO>();
             newTask.SameTimeTasks = sameTimeTasksSS ?? new List<TaskDTO>();
 
-            // Handle resources
             newTask.Resources = availableResources?
                 .Where(r => r != null && r.Id.HasValue && selectedResourceIds.Contains(r.Id))
                 .ToList() ?? new List<ResourceDTO>();
@@ -1106,10 +1087,8 @@
         }
     }
 
-    // Edit Task Modal methods
     private void ShowEditTaskModal(TaskDTO task)
     {
-        // Cerrar el modal de la lista de tareas si está abierto
         showTaskListModal = false;
 
         selectedTaskToEdit = new TaskDTO
@@ -1131,7 +1110,6 @@
         editNewPreviousTaskId = null;
         editNewDependencyType = "FS";
 
-        // Load selected resources
         if (selectedTaskToEdit.Resources != null)
         {
             foreach (var resource in selectedTaskToEdit.Resources)
@@ -1140,7 +1118,6 @@
             }
         }
 
-        // Load previous tasks
         if (selectedTaskToEdit.PreviousTasks != null)
         {
             foreach (var prevTask in selectedTaskToEdit.PreviousTasks)
@@ -1187,7 +1164,6 @@
             editPreviousTaskIds.Add(editNewPreviousTaskId);
             editPreviousTaskDependencies.Add(editNewDependencyType);
 
-            // Limpiar la selección para la próxima tarea
             editNewPreviousTaskId = null;
             editNewDependencyType = "FS";
         }
@@ -1222,14 +1198,12 @@
             var previousTasksFS = new List<TaskDTO>();
             var sameTimeTasksSS = new List<TaskDTO>();
 
-            // Process previous tasks
             for (int i = 0; i < editPreviousTaskIds.Count; i++)
             {
                 if (editPreviousTaskIds[i].HasValue)
                 {
                     var taskId = editPreviousTaskIds[i].Value;
 
-                    // Create a minimal TaskDTO with just the ID
                     var taskDto = new TaskDTO { Id = taskId };
 
                     if (editPreviousTaskDependencies[i] == "FS")
@@ -1300,7 +1274,6 @@
         }
     }
 
-    // Add Members Modal methods
     private void ShowAddMembersModal()
     {
         if (!string.IsNullOrEmpty(selectedProjectName))
@@ -1361,10 +1334,8 @@
             memberSuccessMessage = string.Empty;
         }
 
-        //CloseAddMembersModal(false);
     }
 
-    // Task List Modal methods
     private void ShowTaskListModal()
     {
         if (!string.IsNullOrEmpty(selectedProjectName))
@@ -1387,7 +1358,6 @@
         }
     }
 
-    // Member List Modal methods
     private void ShowMemberListModal()
     {
         LoadProjectMembers();
@@ -1424,10 +1394,8 @@
         }
     }
 
-    // Assign Task to Member methods
     private void ShowAssignTaskModal(UserDTO member)
     {
-        // Cerrar el modal de la lista de miembros si está abierto
         showMemberListModal = false;
 
         selectedMemberId = member.Email;
@@ -1435,10 +1403,8 @@
 
         try
         {
-            // Load all project tasks
             LoadTasks();
 
-            // Load tasks assigned to this member
             assignedTasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
 
             assignTaskErrorMessage = string.Empty;
@@ -1469,7 +1435,6 @@
             assignTaskSuccessMessage = $"Task '{task.Title}' assigned successfully";
             assignTaskErrorMessage = string.Empty;
 
-            // Refresh assigned tasks list
             assignedTasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
         }
         catch (Exception ex)
@@ -1487,7 +1452,6 @@
             assignTaskSuccessMessage = $"Task '{task.Title}' removed successfully";
             assignTaskErrorMessage = string.Empty;
 
-            // Refresh assigned tasks list
             assignedTasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
         }
         catch (Exception ex)
