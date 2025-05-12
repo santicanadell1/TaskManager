@@ -1,4 +1,5 @@
-﻿using Service.Models;
+﻿using DataAccess.ProjectRepositoryExceptions;
+using Service.Models;
 
 namespace Service;
 
@@ -46,5 +47,20 @@ public class NotificationService
         }
 
         return notifications;
+    }
+
+    public void AddNotificationToProject(string projectName, NotificationDTO notificationDTO)
+    {
+        Notification notification = ToEntity(notificationDTO);
+
+        Project project = _database.projects.GetProject(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException();
+        }
+
+        project.AddNotification(notification);
+
+        _database.projects.UpdateProject(projectName, project);
     }
 }
