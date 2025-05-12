@@ -4,6 +4,7 @@ using Domain.Exceptions;
 using Service.Interfaces;
 using Service.MemberServiceException;
 using Service.Models;
+using Service.Models.Exceptions;
 
 namespace Service;
 
@@ -44,7 +45,7 @@ public class MemberPService : IMemberPService
     {
         UserService UserService = new UserService(_database);
         UserDTO user = UserService.GetUser(email);
-        if (!user.Roles.Contains(Rol.ProjectMember))
+        if (!user.Roles.Contains(ConvertToDTORole(Rol.ProjectMember)))
         {
             throw new UserIsNotAMemberException();
         }
@@ -68,12 +69,12 @@ public class MemberPService : IMemberPService
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
         CheckIsTaskOfTheUser((int)task.Id, email);
-        CpmService cpmService = new CpmService(); 
-        TaskService taskService = new TaskService(_database, cpmService); 
+        CpmService cpmService = new CpmService();
+        TaskService taskService = new TaskService(_database, cpmService);
         task.State = status;
         taskService.UpdateTask(projectName, task.Id, task);
     }
-    
+
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
         User user = _database.users.Get(u => u.Email == email);
@@ -111,5 +112,20 @@ public class MemberPService : IMemberPService
         }
 
         return returnList;
+    }
+
+    private RolDTO ConvertToDTORole(Rol role)
+    {
+        switch (role)
+        {
+            case Rol.AdminSystem:
+                return RolDTO.AdminSystem;
+            case Rol.ProjectMember:
+                return RolDTO.ProjectMember;
+            case Rol.AdminProject:
+                return RolDTO.AdminProject;
+            default:
+                throw new InvalidRolException();
+        }
     }
 }
