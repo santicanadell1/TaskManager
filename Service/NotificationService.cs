@@ -61,6 +61,7 @@ public class NotificationService
 
         project.AddNotification(notification);
 
+        _database.notifications.AddNotification(notification);
         _database.projects.UpdateProject(projectName, project);
     }
 
