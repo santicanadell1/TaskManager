@@ -101,4 +101,20 @@ public class NotificationServiceTest
 
         Assert.IsNull(removedNotification);
     }
+
+    [TestMethod]
+    public void MarkNotificationAsRead_WhenNotificationExists_ThenRemoveNotificationFromProjectAndRepository()
+    {
+        var projectId = "Project 1 ";
+        var notificationId = 1;
+
+        _notificationService.MarkNotificationAsRead(projectId, notificationId);
+
+        var project = dataAccess.projects.GetProject(p => p.Name == projectId);
+        var removedNotification = project.Notifications.FirstOrDefault(n => n.Id == notificationId);
+        Assert.IsNull(removedNotification);
+
+        var notificationInRepository = dataAccess.notifications.Get(n => n.Id == notificationId);
+        Assert.IsNull(notificationInRepository);
+    }
 }
