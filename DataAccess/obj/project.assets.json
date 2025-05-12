@@ -27,19 +27,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\felid\\.nuget\\packages\\": {}
+    "/Users/santicanadell/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
+      "projectUniqueName": "/Users/santicanadell/Desktop/bsadjkhda/305108_282542_281987/DataAccess/DataAccess.csproj",
       "projectName": "DataAccess",
-      "projectPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
-      "packagesPath": "C:\\Users\\felid\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\DataAccess\\obj\\",
+      "projectPath": "/Users/santicanadell/Desktop/bsadjkhda/305108_282542_281987/DataAccess/DataAccess.csproj",
+      "packagesPath": "/Users/santicanadell/.nuget/packages/",
+      "outputPath": "/Users/santicanadell/Desktop/bsadjkhda/305108_282542_281987/DataAccess/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\felid\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/santicanadell/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -51,8 +51,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain\\Domain.csproj"
+            "/Users/santicanadell/Desktop/bsadjkhda/305108_282542_281987/Domain/Domain.csproj": {
+              "projectPath": "/Users/santicanadell/Desktop/bsadjkhda/305108_282542_281987/Domain/Domain.csproj"
             }
           }
         }
@@ -87,7 +87,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\felid\\.dotnet\\sdk\\8.0.406/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/Users/santicanadell/.dotnet/sdk/8.0.406/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
