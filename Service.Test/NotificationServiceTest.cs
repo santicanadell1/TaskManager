@@ -103,14 +103,15 @@ public class NotificationServiceTest
     }
 
     [TestMethod]
-    public void MarkNotificationAsRead_WhenNotificationExists_ThenRemoveNotificationFromProjectAndRepository()
+    public void
+        MarkNotificationAsRead_WithUserEmail_WhenNotificationExists_ThenRemoveNotificationFromProjectAndRepository()
     {
-        var projectId = "Project 1";
+        var userEmail = "Email1@example.com";
         var notificationId = 1;
 
-        _notificationService.MarkNotificationAsRead(projectId, notificationId);
+        _notificationService.MarkNotificationAsRead(notificationId, userEmail);
 
-        var project = dataAccess.projects.GetProject(p => p.Name == projectId);
+        var project = dataAccess.projects.GetProject(p => p.Name == "Project 1");
         var removedNotification = project.Notifications.FirstOrDefault(n => n.Id == notificationId);
         Assert.IsNull(removedNotification);
 
