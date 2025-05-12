@@ -557,6 +557,49 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual("Complex Type", addedTask.Resources[0].Type);
             Assert.AreEqual("Complex resource description", addedTask.Resources[0].Description);
         }
+        
+        [TestMethod]
+        public void AddTaskAndGetTask_ShouldPreserveListRelationships_TestingEntityListMappings()
+        {
+            var taskX = new TaskDTO
+            {
+                Title = "Task X",
+                Description = "Task X Description",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 3,
+                Resources = new List<ResourceDTO>()
+            };
+    
+            _taskService.AddTask("Generic Project", taskX);
+    
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var taskXEntity = project.Tasks.FirstOrDefault(t => t.Title == "Task X");
+    
+            var taskY = new TaskDTO
+            {
+                Title = "Task Y",
+                Description = "Task Y Description",
+                ExpectedStartDate = DateTime.Now.AddDays(3),
+                Duration = 2,
+                PreviousTasks = new List<TaskDTO> { new TaskDTO { Id = taskXEntity.Id } },
+                SameTimeTasks = new List<TaskDTO>(),
+                Resources = new List<ResourceDTO>()
+            };
+    
+            _taskService.AddTask("Generic Project", taskY);
+    
+            var taskYEntity = project.Tasks.FirstOrDefault(t => t.Title == "Task Y");
+    
+            Assert.AreEqual(1, taskYEntity.PreviousTasks.Count);
+            Assert.AreEqual(taskXEntity.Id, taskYEntity.PreviousTasks[0].Id);
+    
+            var taskYDTO = _taskService.GetTask("Generic Project", taskYEntity.Id);
+    
+            Assert.AreEqual(1, taskYDTO.PreviousTasks.Count);
+            Assert.AreEqual(taskXEntity.Id, taskYDTO.PreviousTasks[0].Id);
+            Assert.AreEqual("Task X", taskYDTO.PreviousTasks[0]);
+        }
+
 
 
     }
