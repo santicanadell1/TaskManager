@@ -29,8 +29,43 @@ public class GanttServiceTestTests
         [TestMethod]
         public void Convert_ShouldHandleCriticalPathAndSlackCorrectly()
         {
-            throw new NotImplementedException();
+            // Arrange
+            var task = new TaskDTO
+            {
+                Id = 1,
+                Title = "Crítica",
+                State = StateDTO.DOING,
+                StartDate = new DateTime(2025, 5, 1),
+                EndDate = new DateTime(2025, 5, 3),
+                Duration = 2,
+                Slack = TimeSpan.Zero,
+                PreviousTasks = new List<TaskDTO>()
+            };
+
+            var nonCriticalTask = new TaskDTO
+            {
+                Id = 2,
+                Title = "Opcional",
+                State = StateDTO.TODO,
+                StartDate = new DateTime(2025, 5, 3),
+                EndDate = new DateTime(2025, 5, 5),
+                Duration = 2,
+                Slack = TimeSpan.FromDays(2),
+                PreviousTasks = new List<TaskDTO> { task }
+            };
+
+            var result = GanttService.Convert(new List<TaskDTO> { task, nonCriticalTask },new List<TaskDTO> { task });
+
+            // Assert
+            var ganttTask1 = result.data.First(t => t.id == 1);
+            var ganttTask2 = result.data.First(t => t.id == 2);
+
+            Assert.IsTrue(ganttTask1.critical);
+            Assert.IsFalse(ganttTask2.critical);
+            Assert.AreEqual(2.0, ganttTask2.slack);
+            Assert.IsFalse(result.links[0].critical); 
         }
+        
 }
 
 
