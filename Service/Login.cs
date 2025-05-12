@@ -55,5 +55,8 @@ public class Login : ILogin
     {
         return LoggedUser.Current?.Roles.Contains(Rol.AdminSystem) ?? false;
     }
-
+    public bool IsAdminProject()
+    {
+        return LoggedUser.Current?.Roles.Contains(Rol.AdminProject) ?? false;
+    }
 }
