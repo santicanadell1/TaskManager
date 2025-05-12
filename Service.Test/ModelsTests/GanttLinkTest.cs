@@ -35,4 +35,25 @@ public class GanttLinkTest
         // Assert
         Assert.AreEqual("2", link.type);
     }
+    
+    [TestMethod]
+    public void GanttLink_ShouldSetAllPropertiesCorrectly()
+    {
+        // Arrange
+        var link = new GanttLink
+        {
+            id = 1,
+            source = 101,
+            target = 202,
+            type = "1",
+            critical = true
+        };
+
+        // Assert
+        Assert.AreEqual(1, link.id);
+        Assert.AreEqual(101, link.source);
+        Assert.AreEqual(202, link.target);
+        Assert.AreEqual("1", link.type);
+        Assert.IsTrue(link.critical);
+    }
 }
