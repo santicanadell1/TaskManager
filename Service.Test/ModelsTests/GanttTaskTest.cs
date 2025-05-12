@@ -23,4 +23,13 @@ namespace Service.Test.ModelsTests;
             // Assert
             Assert.AreEqual(3.5, task.slack, 0.001);
         }
+        [TestMethod]
+        public void GanttTask_Progress_ShouldBeADoubleBetween0And1()
+        {
+            // Arrange
+            var task = new GanttTask { progress = 0.6 };
+
+            // Assert
+            Assert.IsTrue(task.progress >= 0 && task.progress <= 1);
+        }
     }
