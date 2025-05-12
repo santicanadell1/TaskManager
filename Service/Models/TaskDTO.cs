@@ -27,7 +27,7 @@ public class TaskDTO
     
     public List<ResourceDTO> Resources { get; set; }
 
-    
+    public bool IsCritical { get; set; }
     
     
 }
