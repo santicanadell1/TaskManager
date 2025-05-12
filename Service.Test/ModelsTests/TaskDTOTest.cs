@@ -149,7 +149,16 @@ public class TaskDTOTest
         Assert.AreEqual(startDate, taskDTO.StartDate);
     }
     
-    g
+    [TestMethod]
+    public void TaskDTO_WhenEndDateIsSet_ThenEndDateIsAssigned()
+    {
+        DateTime endDate = new DateTime(2025, 6, 20);
+        TaskDTO taskDTO = new TaskDTO();
+            
+        taskDTO.g = endDate;
+            
+        Assert.AreEqual(endDate, taskDTO.EndDate);
+    }
 
     
     
