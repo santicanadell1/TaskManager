@@ -1,19 +1,21 @@
 ﻿using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Service.Interfaces;
 using Service.MemberServiceException;
 using Service.Models;
 
 namespace Service;
 
-public class MemberPService
+public class MemberPService : IMemberPService
 {
     private InMemoryDatabase _database;
+
     public MemberPService(InMemoryDatabase database)
     {
         _database = database;
     }
-    
+
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)
     {
         AdminPService adminPService = new AdminPService(_database);
@@ -29,6 +31,7 @@ public class MemberPService
                 projectsFromMember.Add(project);
             }
         }
+
         if (projectsFromMember.Count == 0)
         {
             throw new UserHasNoProjectsException();
@@ -54,14 +57,14 @@ public class MemberPService
         {
             throw new TaskCantBeModifiedByUserException();
         }
-    
+
         List<int> taskIds = user.Tasks ?? new List<int>();
         if (taskIds.Count == 0 || !taskIds.Contains(taskId))
         {
             throw new TaskCantBeModifiedByUserException();
         }
-
     }
+
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
         CheckIsTaskOfTheUser((int)task.Id, email);
@@ -69,6 +72,4 @@ public class MemberPService
         task.State = status;
         taskService.UpdateTask(projectName, task.Id, task);
     }
-
-
 }
