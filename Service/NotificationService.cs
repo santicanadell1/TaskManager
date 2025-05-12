@@ -21,6 +21,7 @@ public class NotificationService
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.Read = notification.Read;
         notificationDTO.Description = notification.Description;
+        notificationDTO.Id = notification.Id;
         return notificationDTO;
     }
 
