@@ -24,7 +24,7 @@ namespace Service.Test.ModelsTests;
             Assert.IsTrue(task.progress >= 0 && task.progress <= 1);
         }
         [TestMethod]
-        public void GanttTask_ShouldSetAllPropertiesCorrectly()
+        public void GanttTask_WhenInitializingWithCorrectValues_ShouldSetAllPropertiesCorrectly()
         {
             var task = new GanttTask
             {
