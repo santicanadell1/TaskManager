@@ -1,5 +1,6 @@
 ﻿using DataAccess.ProjectRepositoryExceptions;
 using Domain.Exceptions;
+using Domain.Exceptions.UserRepositoryExceptions;
 using Service.Models;
 
 namespace Service;
@@ -31,39 +32,45 @@ public class NotificationService
         return notification;
     }
 
-    public List<NotificationDTO> GetNotificationsForUser(String userEmail)
+    public List<NotificationDTO> GetNotificationsForUser(string userEmail)
     {
-        List<NotificationDTO> notifications = new List<NotificationDTO>();
-        List<Project> projects = _database.projects.GetAllProjects();
-        foreach (var project in projects)
+        User user = _database.users.Get(u => u.Email == userEmail);
+        if (user == null)
         {
-            List<User> members = project.Members;
-            foreach (var member in members)
-            {
-                if (member.Email == userEmail)
-                {
-                    foreach (var notification in project.Notifications)
-                        notifications.Add(FromEntity(notification));
-                }
-            }
+            throw new UserNotFoundException();
         }
 
-        return notifications;
+        return user.Notifications.Select(n => FromEntity(n)).ToList();
     }
 
     public void AddNotificationToProject(string projectName, NotificationDTO notificationDTO)
     {
-        Notification notification = ToEntity(notificationDTO);
-
         Project project = _database.projects.GetProject(p => p.Name == projectName);
         if (project == null)
         {
             throw new ProjectNotFoundException();
         }
 
-        project.AddNotification(notification);
+        Notification notification = ToEntity(notificationDTO);
 
-        _database.notifications.AddNotification(notification);
+        foreach (var member in project.Members)
+        {
+            if (member.Notifications == null)
+            {
+                member.Notifications = new List<Notification>();
+            }
+
+            var userNotification = new Notification(notification.Read, notification.Description)
+            {
+                Id = notification.Id
+            };
+
+            member.Notifications.Add(userNotification);
+
+            _database.users.Update(member.Email, member);
+        }
+
+        project.Notifications.Add(notification);
         _database.projects.UpdateProject(projectName, project);
     }
 
@@ -86,35 +93,26 @@ public class NotificationService
 
     public void MarkNotificationAsRead(int idNotification, string userEmail)
     {
-        List<Project> projects = _database.projects.GetAllProjects();
-        bool notificationFound = false;
-
-        foreach (var project in projects)
+        User user = _database.users.Get(u => u.Email == userEmail);
+        if (user == null)
         {
-            bool isUserMember = project.Members.Any(m => m.Email == userEmail);
-
-            if (!isUserMember) continue;
-
-            var notificationToMark = project.Notifications.FirstOrDefault(n => n.Id == idNotification);
-
-            if (notificationToMark != null)
-            {
-                notificationToMark.MarkRead();
-
-                _database.notifications.Delete(notificationToMark);
-
-                project.Notifications.Remove(notificationToMark);
-
-                _database.projects.UpdateProject(project.Name, project);
-
-                notificationFound = true;
-                break; // only one notification has this id
-            }
+            throw new UserNotFoundException();
         }
 
-        if (!notificationFound)
+        if (user.Notifications == null || !user.Notifications.Any())
         {
             throw new NotificationNotFoundException();
         }
+
+        var notification = user.Notifications.FirstOrDefault(n => n.Id == idNotification);
+        if (notification == null)
+        {
+            throw new NotificationNotFoundException();
+        }
+
+        notification.MarkRead();
+        user.Notifications.Remove(notification);
+
+        _database.users.Update(userEmail, user);
     }
 }
