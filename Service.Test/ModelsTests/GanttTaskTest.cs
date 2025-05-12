@@ -14,4 +14,13 @@ namespace Service.Test.ModelsTests;
             // Assert
             Assert.IsFalse(task.critical);
         }
+        [TestMethod]
+        public void GanttTask_ShouldHandleSlackValues()
+        {
+            // Arrange
+            var task = new GanttTask { slack = 3.5 };
+
+            // Assert
+            Assert.AreEqual(3.5, task.slack, 0.001);
+        }
     }
