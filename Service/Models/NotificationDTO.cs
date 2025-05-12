@@ -9,4 +9,6 @@ public class NotificationDTO
     
     [Required(ErrorMessage = "Description is required.")]
     public String Description { get; set; }
+    
+    public int Id { get; set; }
 }
