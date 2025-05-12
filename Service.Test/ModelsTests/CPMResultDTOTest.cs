@@ -32,5 +32,15 @@ namespace Service.Test.ModelsTests
             Assert.AreEqual(earliestStartDate, resultDTO.EarliestStartDate);
             Assert.AreEqual(latestFinishDate, resultDTO.LatestFinishDate);
         }
+        [TestMethod]
+        public void g()
+        {
+            int projectDuration = 10;
+            CpmResultDTO resultDTO = new CpmResultDTO();
+            
+            resultDTO.ProjectDuration = projectDuration;
+            
+            Assert.AreEqual(projectDuration, resultDTO);
+        }
     }
 }
