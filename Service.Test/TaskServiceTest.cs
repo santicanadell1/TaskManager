@@ -517,6 +517,47 @@ public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
             Assert.AreEqual("Mapping Description", taskDTO.Resources[0].Description);
             Assert.AreEqual(50, taskDTO.Resources[0].Id);
         }
+        
+        [TestMethod]
+        public void AddTask_ShouldCorrectlyMapDTOToEntity_TestingToEntity()
+        {
+            var complexDTO = new TaskDTO
+            {
+                Title = "Complex Mapping DTO",
+                Description = "Complex mapping description",
+                ExpectedStartDate = new DateTime(2025, 6, 15),
+                Duration = 9,
+                State = StateDTO.DOING,
+                PreviousTasks = new List<TaskDTO>(),
+                SameTimeTasks = new List<TaskDTO>(),
+                Resources = new List<ResourceDTO>
+                {
+                    new ResourceDTO
+                    {
+                        Id = 100,
+                        Name = "Complex Resource",
+                        Type = "Complex Type",
+                        Description = "Complex resource description"
+                    }
+                }
+            };
+    
+            _taskService.AddTask("Generic Project", complexDTO);
+    
+            var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+            var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Complex Mapping DTO");
+    
+            Assert.IsNotNull(addedTask);
+            Assert.AreEqual("Complex Mapping DTO", addedTask.Title);
+            Assert.AreEqual("Complex mapping description", addedTask.Description);
+            Assert.AreEqual(new DateTime(2025, 6, 15), addedTask.ExpectedStartDate);
+            Assert.AreEqual(9, addedTask.Duration);
+            Assert.AreEqual(1, addedTask.Resources.Count);
+            Assert.AreEqual("Complex Resource", addedTask.Resources[0].Name);
+            Assert.AreEqual("Complex Type", addedTask.Resources[0].Type);
+            Assert.AreEqual("Complex resource description", addedTask.Resources[0]);
+        }
+
 
     }
 }
