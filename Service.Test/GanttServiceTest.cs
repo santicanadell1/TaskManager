@@ -6,9 +6,8 @@ namespace Service.Test;
 [TestClass]
 public class GanttServiceTestTests
 {
-        
         [TestMethod]
-        public void Convert_ShouldAssignProgressCorrectlyBasedOnState()
+        public void Convert_WhenCreatingGanttTask_ShouldAssignProgressCorrectlyBasedOnState()
         {
             var tasks = new List<TaskDTO>
             {
