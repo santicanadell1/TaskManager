@@ -29,6 +29,10 @@ public class GanttLinkTest
     [TestMethod]
     public void GanttLink_WhenInitializingAType_ShouldAllowCustomValue()
     {
-    throw new NotImplementedException();
+        // Arrange
+        var link = new GanttLink { type = "2" };
+
+        // Assert
+        Assert.AreEqual("2", link.type);
     }
 }
