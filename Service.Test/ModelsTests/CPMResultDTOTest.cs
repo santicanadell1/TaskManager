@@ -42,5 +42,21 @@ namespace Service.Test.ModelsTests
             
             Assert.AreEqual(projectDuration, resultDTO.ProjectDuration);
         }
+        
+        [TestMethod]
+        public void CpmResultDTO_WhenCriticalPathIdsAreSet_ThenCriticalPathIdsAreAssigned()
+        {
+            List<int?> criticalPathIds = new List<int?> { 1, 3, 5 };
+            CpmResultDTO resultDTO = new CpmResultDTO();
+            
+            resultDTO.CriticalPathIds = criticalPathIds;
+            
+            Assert.AreEqual(criticalPathIds, resultDTO.CriticalPathIds);
+            Assert.AreEqual(3, resultDTO.CriticalPathIds.Count);
+            Assert.AreEqual(1, resultDTO.CriticalPathIds[0]);
+            Assert.AreEqual(3, resultDTO.CriticalPathIds[1]);
+            Assert.AreEqual(5, resultDTO);
+        }
+        
     }
 }
