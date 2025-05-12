@@ -26,11 +26,10 @@ public class MemberPServiceTest
     {
         database = new InMemoryDatabase();
         _memberPService = new MemberPService(database);
-        _taskService = new TaskService(database);
+        _taskService = new TaskService(database, new CpmService()); 
         _adminPService = new AdminPService(database);
         _login = new Login(database);
         _userservice = new UserService(database);
-
         Admin = new UserDTO
         {
             FirstName = "Admin",
@@ -38,7 +37,7 @@ public class MemberPServiceTest
             Email = "admin.user@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<Rol> { Rol.AdminProject }
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
         UserDTO = new UserDTO
@@ -48,7 +47,7 @@ public class MemberPServiceTest
             Email = "member.user@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<Rol> { Rol.ProjectMember }
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
 
         members = new List<UserDTO> { UserDTO };
@@ -103,7 +102,7 @@ public class MemberPServiceTest
             Email = "no.role@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<Rol> { Rol.AdminSystem } 
+            Roles = new List<RolDTO> { RolDTO.AdminSystem } 
         };
 
         _userservice.AddUser(user);
@@ -121,7 +120,7 @@ public class MemberPServiceTest
             Email = "another.member@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<Rol> { Rol.ProjectMember }
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
 
         _userservice.AddUser(user);
@@ -172,7 +171,7 @@ public class MemberPServiceTest
             Email = "User.NotMember@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<Rol> { Rol.ProjectMember }
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
         _userservice.AddUser(User);
 
@@ -181,5 +180,6 @@ public class MemberPServiceTest
         
         _memberPService.ChangeTaskStatus("New Project", User.Email, task, newState);
     }
+    
 
 }

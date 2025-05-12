@@ -1,6 +1,4 @@
 ﻿@page "/signup"
-@using Domain
-@using Domain.Exceptions
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
@@ -117,7 +115,7 @@
         _userDto.Email = "";
         _userDto.Password = "";
         _userDto.Birthday = DateTime.Now;
-        _userDto.Roles= new List<Rol>();
+        _userDto.Roles= new List<RolDTO>();
     }
 
     private void HandleValidSubmit()
