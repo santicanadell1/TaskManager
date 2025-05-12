@@ -17,5 +17,14 @@ public class GanttLinkTest
         // Assert
         Assert.AreEqual("0", type);
     }
+    [TestMethod]
+    public void GanttLink_WhenInitializingCritical_ShouldBeFalseByDefault()
+    {
+        // Arrange
+        var link = new GanttLink();
+
+        // Assert
+        Assert.IsFalse(link.critical);
+    }
 
 }
