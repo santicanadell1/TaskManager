@@ -2,5 +2,6 @@
 
 public class GanttTask
 {
+    public bool critical { get; set; } 
 
 }
