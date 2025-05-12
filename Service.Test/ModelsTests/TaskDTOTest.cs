@@ -241,6 +241,6 @@ public class TaskDTOTest
             Assert.AreEqual(endDate, taskDTO.EndDate);
             Assert.AreEqual(latestStart, taskDTO.LatestStart);
             Assert.AreEqual(latestFinish, taskDTO.LatestFinish);
-            Assert.AreEqual(slack, taskDTO);
+            Assert.AreEqual(slack, taskDTO.Slack);
         }
     }
