@@ -32,4 +32,5 @@ public class TaskDTO
     public DateTime EndDate { get; set; }
     public DateTime LatestStart { get; set; }
     public DateTime LatestFinish { get; set; }
+    public TimeSpan Slack { get; set; }
 }

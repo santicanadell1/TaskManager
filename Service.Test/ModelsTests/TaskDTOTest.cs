@@ -188,7 +188,7 @@ public class TaskDTOTest
         TimeSpan slack = TimeSpan.FromDays(2);
         TaskDTO taskDTO = new TaskDTO();
             
-        taskDTO.g = slack;
+        taskDTO.Slack = slack;
             
         Assert.AreEqual(slack, taskDTO.Slack);
     }
