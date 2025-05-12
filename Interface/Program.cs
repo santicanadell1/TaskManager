@@ -14,7 +14,7 @@ builder.Services.AddScoped<AdminPService>();
 builder.Services.AddScoped<MemberPService>();
 builder.Services.AddScoped<CpmService>();
 builder.Services.AddScoped<GanttService>();
-
+builder.Services.AddScoped<NotificationService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

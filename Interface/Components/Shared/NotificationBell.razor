@@ -83,7 +83,6 @@
             if (loggedUser != null)
             {
                 NotificationService.MarkNotificationAsRead(notificationId, loggedUser.Email);
-
                 LoadNotifications();
             }
         }
