@@ -78,7 +78,7 @@ namespace Service.Test.ModelsTests
             
             resultDTO.EarliestStartDate = earliestStartDate;
             
-            Assert.AreEqual(earliestStartDate, resultDTO);
+            Assert.AreEqual(earliestStartDate, resultDTO.EarliestStartDate);
         }
     }
 }
