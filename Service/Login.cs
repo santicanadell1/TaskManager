@@ -51,5 +51,9 @@ public class Login : ILogin
         };
     }
     
-   
+    public bool IsAdminSystem()
+    {
+        return LoggedUser.Current?.Roles.Contains(Rol.AdminSystem) ?? false;
+    }
+
 }
