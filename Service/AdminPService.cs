@@ -4,6 +4,7 @@ using Domain;
 using Domain.Exceptions;
 using Service;
 using Service.Models;
+using Service.Models.Exceptions;
 
 
 public class AdminPService : IAdminPService
@@ -18,7 +19,7 @@ public class AdminPService : IAdminPService
     private void CheckAdminProyectRole()
     {
         var currentUser = LoggedUser.Current;
-        if (currentUser == null || !currentUser.Roles.Contains(Rol.AdminProject))
+        if (currentUser == null || !currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminProject)))
         {
             throw new UnauthorizedAdminAccessException();
         }
@@ -171,9 +172,10 @@ public class AdminPService : IAdminPService
             Email = userDTO.Email,
             Birthday = userDTO.Birthday,
             Password = userDTO.Password,
-            Roles = userDTO.Roles
+            Roles = ConvertToDomainRoles(userDTO.Roles)
         };
     }
+
 
     private UserDTO FromEntity(User user)
     {
@@ -184,7 +186,7 @@ public class AdminPService : IAdminPService
             Email = user.Email,
             Birthday = user.Birthday,
             Password = user.Password,
-            Roles = user.Roles
+            Roles = ConvertToDTORoles(user.Roles)
         };
     }
 
@@ -245,8 +247,8 @@ public class AdminPService : IAdminPService
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
         User user = _database.users.Get(u => u.Email == email);
-        CpmService cpmService = new CpmService(); 
-        TaskService taskService = new TaskService(_database, cpmService); 
+        CpmService cpmService = new CpmService();
+        TaskService taskService = new TaskService(_database, cpmService);
         List<TaskDTO> returnList = new List<TaskDTO>();
         foreach (var project in _database.projects.GetAllProjects())
         {
@@ -267,8 +269,8 @@ public class AdminPService : IAdminPService
     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
     {
         User user = _database.users.Get(u => u.Email == email);
-        CpmService cpmService = new CpmService(); 
-        TaskService taskService = new TaskService(_database, cpmService); 
+        CpmService cpmService = new CpmService();
+        TaskService taskService = new TaskService(_database, cpmService);
         List<TaskDTO> returnList = new List<TaskDTO>();
         List<TaskDTO> tasks = taskService.GetTasks(projectName);
         foreach (var task in tasks)
@@ -280,5 +282,66 @@ public class AdminPService : IAdminPService
         }
 
         return returnList;
+    }
+
+    private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
+    {
+        var roles = new List<Rol>();
+
+        foreach (var roleDTO in roleDTOs)
+        {
+            switch (roleDTO)
+            {
+                case RolDTO.AdminSystem:
+                    roles.Add(Rol.AdminSystem);
+                    break;
+                case RolDTO.ProjectMember:
+                    roles.Add(Rol.ProjectMember);
+                    break;
+                case RolDTO.AdminProject:
+                    roles.Add(Rol.AdminProject);
+                    break;
+            }
+        }
+
+        return roles;
+    }
+
+    private List<RolDTO> ConvertToDTORoles(List<Rol> roles)
+    {
+        var roleDTOs = new List<RolDTO>();
+
+        foreach (var role in roles)
+        {
+            switch (role)
+            {
+                case Rol.AdminSystem:
+                    roleDTOs.Add(RolDTO.AdminSystem);
+                    break;
+                case Rol.ProjectMember:
+                    roleDTOs.Add(RolDTO.ProjectMember);
+                    break;
+                case Rol.AdminProject:
+                    roleDTOs.Add(RolDTO.AdminProject);
+                    break;
+            }
+        }
+
+        return roleDTOs;
+    }
+
+    private RolDTO ConvertToDTORole(Rol role)
+    {
+        switch (role)
+        {
+            case Rol.AdminSystem:
+                return RolDTO.AdminSystem;
+            case Rol.ProjectMember:
+                return RolDTO.ProjectMember;
+            case Rol.AdminProject:
+                return RolDTO.AdminProject;
+            default:
+                throw new InvalidRolException();
+        }
     }
 }

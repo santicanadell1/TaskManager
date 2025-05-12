@@ -11,6 +11,8 @@ builder.Services.AddScoped<AdminSService>();
 builder.Services.AddScoped<ResourceService>();
 builder.Services.AddScoped<TaskService>();
 builder.Services.AddScoped<AdminPService>();
+builder.Services.AddScoped<MemberPService>();
+builder.Services.AddScoped<CpmService>();
 
 
 // Add services to the container.

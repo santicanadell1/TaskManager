@@ -1,7 +1,7 @@
 namespace Service.Exceptions;
 
-public class UserNotFoundException : LoginException
+public partial class UserNotFoundExceptionLogin : LoginException
 {
-    public UserNotFoundException() 
+    public UserNotFoundExceptionLogin() 
         : base("User not found.") { }
 }
