@@ -13,20 +13,7 @@ public class GanttService
         foreach (var task in allTasks)
         {
             bool isInCriticalPath = criticalPath.Any(ct => ct.Id == task.Id);
-            double progress = 0.0;
-            switch (task.State)
-            {
-                case StateDTO.TODO:
-                    progress = 0.0;
-                    break;
-                case StateDTO.DOING:
-                    progress = 0.5;
-                    break;
-                case StateDTO.DONE:
-                    progress = 1.0;
-                    break;
-            }
-            
+            double progress = GetProgress(task);
             data.Add(new GanttTask
             {
                 id = task.Id ?? 0,
@@ -57,5 +44,23 @@ public class GanttService
             links = links,
             criticalPathIds = criticalPath.Select(t => t.Id ?? 0).ToList()
         };
+    }
+
+    private static double GetProgress(TaskDTO task)
+    {
+        double progress = 0;
+        switch (task.State)
+        {
+            case StateDTO.TODO:
+                progress = 0.0;
+                break;
+            case StateDTO.DOING:
+                progress = 0.5;
+                break;
+            case StateDTO.DONE:
+                progress = 1.0;
+                break;
+        }
+        return progress;
     }
 }
