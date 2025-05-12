@@ -21,7 +21,7 @@ public class GanttServiceTestTests
             Assert.AreEqual(1.0, result.data.First(t => t.id == 3).progress);
         }
         [TestMethod]
-        public void Convert_ShouldHandleCriticalPathAndSlackCorrectly()
+        public void Convert_WhenCratingGanttTask_ShouldHandleCriticalPathAndSlackCorrectly()
         {
             var task = new TaskDTO
             {
