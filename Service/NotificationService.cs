@@ -1,4 +1,5 @@
 ﻿using DataAccess.ProjectRepositoryExceptions;
+using Domain.Exceptions;
 using Service.Models;
 
 namespace Service;
@@ -78,6 +79,29 @@ public class NotificationService
         {
             project.Notifications.Remove(notificationToRemove);
         }
+
+        _database.projects.UpdateProject(projectName, project);
+    }
+
+    public void MarkNotificationAsRead(string projectName, int idNotification)
+    {
+        Project project = _database.projects.GetProject(p => p.Name == projectName);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException();
+        }
+
+        var notificationToMark = project.Notifications.FirstOrDefault(n => n.Id == idNotification);
+        if (notificationToMark == null)
+        {
+            throw new NotificationNotFoundException();
+        }
+
+        notificationToMark.MarkRead();
+
+        project.Notifications.Remove(notificationToMark);
+
+        _database.notifications.Delete(notificationToMark);
 
         _database.projects.UpdateProject(projectName, project);
     }

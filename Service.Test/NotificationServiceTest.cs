@@ -105,7 +105,7 @@ public class NotificationServiceTest
     [TestMethod]
     public void MarkNotificationAsRead_WhenNotificationExists_ThenRemoveNotificationFromProjectAndRepository()
     {
-        var projectId = "Project 1 ";
+        var projectId = "Project 1";
         var notificationId = 1;
 
         _notificationService.MarkNotificationAsRead(projectId, notificationId);
