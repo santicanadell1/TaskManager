@@ -1,0 +1,12 @@
+﻿using Service.Models;
+using System.Collections.Generic;
+
+namespace Service;
+
+public interface IUserService
+{
+    void AddUser(UserDTO userDTO);
+    void UpdateUser(UserDTO userDTO);
+    List<UserDTO> GetUsers();
+    UserDTO GetUser(string email);
+}
