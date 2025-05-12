@@ -101,7 +101,7 @@ namespace Service.Test.ModelsTests
             Assert.IsNull(resultDTO.CriticalPathIds);
             Assert.IsNull(resultDTO.CriticalTaskIds);
             Assert.AreEqual(default(DateTime), resultDTO.EarliestStartDate);
-            Assert.AreEqual(default(DateTime), resultDTO);
+            Assert.AreEqual(default(DateTime), resultDTO.g);
         }
     }
 }
