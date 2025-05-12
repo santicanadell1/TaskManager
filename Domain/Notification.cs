@@ -4,10 +4,14 @@ namespace Domain
 {
     public class Notification
     {
-        public bool? read;
+        public bool read;
         public string description;
 
-        public bool? Read { get => read; set => read = value; }
+        public bool Read
+        {
+            get => read;
+            set => read = value;
+        }
 
         public string Description
         {
@@ -18,6 +22,7 @@ namespace Domain
                 {
                     throw new NotificationDescriptionException();
                 }
+
                 description = value;
             }
         }
@@ -27,11 +32,13 @@ namespace Domain
             read = true;
         }
 
-        public Notification(bool? read, string description)
+        public int Id { get; set; }
+
+
+        public Notification(bool read, string description)
         {
             this.Read = read;
             this.Description = description;
         }
-        
     }
 }

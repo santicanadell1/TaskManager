@@ -212,7 +212,7 @@ namespace Service
                 throw new ProjectNotFoundException();
             }
 
-            var cpmResult = _cpmService.CalculateCriticalPath(project.Tasks);
+            var cpmResult = _cpmService.CalculateCriticalPath(GetTasks(projectName));
 
             return new CpmResultDTO
             {
@@ -234,7 +234,7 @@ namespace Service
 
             try
             {
-                _cpmService.CalculateCriticalPath(project.Tasks);
+                _cpmService.CalculateCriticalPath(GetTasks(projectName));
 
             }
             catch (Exception)
