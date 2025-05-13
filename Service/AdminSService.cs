@@ -37,14 +37,18 @@ public class AdminSService : IAdminSService
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
-
+        AdminPService adminPService = new AdminPService(_database);
         var user = _userService.GetUser(userDTO.Email);
 
         if (user == null)
         {
             throw new UserNotFoundException();
         }
-
+        List<ProjectDTO> projects = adminPService.GetAllProjectsForUser(userDTO.Email);
+        foreach (var project in projects)
+        {
+            adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
+        }
         _database.users.Delete(user.Email);
     }
 
