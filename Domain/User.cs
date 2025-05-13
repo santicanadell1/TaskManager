@@ -12,6 +12,7 @@ namespace Domain
         public string password;
         public List<Rol> roles = new List<Rol>();
         public List<int> tasks = new List<int>();
+        private List<Notification> notifications = new List<Notification>();
         
 
         public string FirstName
@@ -61,6 +62,11 @@ namespace Domain
                 throw new UserPasswordException() : value; }
         }
 
+        public List<Notification> Notifications
+        {
+            get => notifications;
+            set => notifications = value;
+        }
         public List<Rol> Roles
         {
             get => roles;
@@ -88,7 +94,7 @@ namespace Domain
             }
         }
         
-        public List<Notification> Notifications { get; set; }
+        
 
         public User(string firstName, string lastName, string email, DateTime birthday, string password)
         {
@@ -150,6 +156,11 @@ namespace Domain
                 throw new UserTaskException("the task is not assigned to the user.");
             }
             tasks.Remove(taskId);
+        }
+
+        public void AddNotification(Notification notification)
+        {
+            notifications.Add(notification);
         }
         
         
