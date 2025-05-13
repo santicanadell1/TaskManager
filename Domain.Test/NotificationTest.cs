@@ -5,20 +5,26 @@ namespace Domain.Test
     [TestClass]
     public class NotificationTest
     {
+        private Project project;
+        [TestInitialize]
+        public void Initialize()
+        {
+             project = new Project("Project", "Description", DateTime.Today);
+        }
         [TestMethod]
         [ExpectedException(typeof(NotificationDescriptionException))]
         public void NewNotification_WhenDescriptionIsEmpty_ShouldThrowNotificationDescriptionException()
         {
             Notification not;
 
-            not = new Notification(false, "");
+            not = new Notification(false, "",project);
         }
 
         [TestMethod]
         public void MarkRead_ShouldSetReadToTrue()
         {
             Notification not;
-            not = new Notification(false, "Some description");
+            not = new Notification(false, "Some description",project);
 
 
             not.MarkRead();
@@ -31,13 +37,13 @@ namespace Domain.Test
         [ExpectedException(typeof(NotificationDescriptionException))]
         public void NewNotification_WhenDescriptionIsWhiteSpace_ShouldThrowNotificationDescriptionException()
         {
-            Notification not = new Notification(false, "    ");
+            Notification not = new Notification(false, "    ", project);
         }
 
         [TestMethod]
         public void NewNotification_WhenCreated_ShouldHaveReadAsFalse()
         {
-            Notification not = new Notification(false, "Some description");
+            Notification not = new Notification(false, "Some description", project);
 
 
             Assert.IsFalse(not.Read);
@@ -46,7 +52,7 @@ namespace Domain.Test
         [TestMethod]
         public void Description_WhenSetToValidValue_ThenNoExceptionThrown()
         {
-            Notification not = new Notification(false, "Valid description");
+            Notification not = new Notification(false, "Valid description",project);
 
 
             Assert.AreEqual("Valid description", not.Description);
@@ -55,13 +61,20 @@ namespace Domain.Test
         [TestMethod]
         public void Description_WhenChanged_ThenUpdatedSuccessfully()
         {
-            Notification not = new Notification(false, "Initial description");
+            Notification not = new Notification(false, "Initial description", project);
 
 
             not.Description = "Updated description";
 
 
             Assert.AreEqual("Updated description", not.Description);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotificationException))]
+        public void Project_WhenProjectIsNull_ThrowException()
+        {
+            Notification not = new Notification(false, "Initial description");
         }
     }
 }
