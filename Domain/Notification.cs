@@ -6,6 +6,7 @@ namespace Domain
     {
         public bool read;
         public string description;
+        private Project project;
 
         public bool Read
         {
@@ -27,6 +28,20 @@ namespace Domain
             }
         }
 
+        public Project Project
+        {
+            get => project;
+            set
+            {
+                if (value == null)
+                {
+                    throw new NotificationException("Project is null");
+                }
+                project = value;
+            }
+        }
+        
+
         public void MarkRead()
         {
             read = true;
@@ -35,10 +50,11 @@ namespace Domain
         public int Id { get; set; }
 
 
-        public Notification(bool read, string description)
+        public Notification(bool read, string description, Project project)
         {
             this.Read = read;
             this.Description = description;
+            this.Project = project;
         }
     }
 }

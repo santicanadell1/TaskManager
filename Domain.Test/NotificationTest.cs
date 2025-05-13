@@ -74,7 +74,7 @@ namespace Domain.Test
         [ExpectedException(typeof(NotificationException))]
         public void Project_WhenProjectIsNull_ThrowException()
         {
-            Notification not = new Notification(false, "Initial description");
+            Notification not = new Notification(false, "Initial description", null);
         }
     }
 }
