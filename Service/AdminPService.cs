@@ -122,10 +122,6 @@ public class AdminPService : IAdminPService
 
     public List<ProjectDTO> GetAllProjectsForUser(string Email)
     {
-        if (LoggedUser.Current.Roles.Contains(RolDTO.AdminSystem))
-        {
-            return GetAllProjects();
-        }
         List<ProjectDTO> projects = new List<ProjectDTO>();
         foreach (var project in _database.projects.GetAllProjects())
         {
