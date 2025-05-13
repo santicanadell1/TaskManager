@@ -5,6 +5,7 @@
 @inject NavigationManager Navigation
 @inject AdminSService AdminService
 @inject UserService UserService
+@inject Login LoginService
 @rendermode InteractiveServer
 
 <link href="styles/styleDeleteUser.css" rel="stylesheet"/>
@@ -136,7 +137,12 @@
 
             AdminService.DeleteUser(userToDelete);
             deleteSuccess = $"User {userToDelete.FirstName} {userToDelete.LastName} has been deleted successfully.";
-
+            if (userToDelete.Email == LoginService.GetLoggedUser().Email)
+            {
+                LoginService.Logout();
+                Navigation.NavigateTo("/login", forceLoad: true);
+                return;
+            }
             usersList = UserService.GetUsers();
             selectedUserEmail = "";
         }
