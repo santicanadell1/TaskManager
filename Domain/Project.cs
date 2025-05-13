@@ -52,7 +52,6 @@ namespace Domain
 
         public List<User> Members { get; set; } = new List<User>();
         public List<Task> Tasks { get; set; } = new List<Task>();
-        public List<Notification> Notifications { get; set; } = new List<Notification>();
         public User AdminProject { get; set; }
 
         public Project()
@@ -75,10 +74,6 @@ namespace Domain
         {
             Tasks.Add(task);
         }
-
-        public void AddNotification(Notification notification)
-        {
-            Notifications.Add(notification);
-        }
+        
     }
 }

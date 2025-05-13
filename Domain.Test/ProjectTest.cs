@@ -60,20 +60,7 @@ public class ProjectTest
 
         CollectionAssert.AreEqual(expectedMembers, actualMembers);
     }
-
-    [TestMethod]
-    public void GivenProject_WhenNotificationsAreSet_ThenNotificationsShouldBeCorrect()
-    {
-        var project = new Project();
-        var expectedNotifications = new List<Notification>();
-
-        project.Notifications = expectedNotifications;
-        List<Notification> actualNotifications = project.Notifications;
-
-        CollectionAssert.AreEqual(expectedNotifications, actualNotifications);
-    }
-
-
+    
     [TestMethod]
     public void GivenTaskList_WhenTasksAreAdded_ThenTaskListShouldContainCorrectTasks()
     {
@@ -157,16 +144,7 @@ public class ProjectTest
         project.AddTask(task1);
         Assert.IsTrue(project.Tasks.Contains(task1));
     }
-
-    [TestMethod]
-    public void GivenProject_WhenAddingANewNotification_ThenNotificationShouldBeAddedToProjectNotifications()
-    {
-        Project project = new Project();
-        Notification nortification1 = new Notification(false, "Some description", project);
-        project.AddNotification(nortification1);
-        Assert.IsTrue(project.Notifications.Contains(nortification1));
-    }
-
+    
     [TestMethod]
     public void CreateProject_With3parameters_ThenProjectShouldBeCreated()
     {
