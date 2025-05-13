@@ -104,7 +104,7 @@
         try
         {
             loginMailUser = Login.GetLoggedUser().Email;
-            projects = MemberPService.GetAllProjectsFromAMember(loginMailUser);
+            projects = AdminPService.GetAllProjectsForUser(loginMailUser);
         }
         catch (Exception ex)
         {
