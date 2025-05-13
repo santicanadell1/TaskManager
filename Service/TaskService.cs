@@ -165,14 +165,13 @@ namespace Service
                 throw new ProjectNotFoundException();
             }
 
+            // Primero crear todos los DTOs sin las dependencias
             var taskDTOs = project.Tasks.Select(t => new TaskDTO
             {
                 Title = t.Title,
                 Description = t.Description,
                 ExpectedStartDate = t.ExpectedStartDate,
                 Duration = t.Duration,
-                PreviousTasks = FromEntityList(t.PreviousTasks),
-                SameTimeTasks = FromEntityList(t.SameTimeTasks),
                 State = (StateDTO)t.State,
                 Resources = FromResourceEntityList(t.Resources),
                 Id = t.Id,
@@ -181,8 +180,36 @@ namespace Service
                 EndDate = t.EndDate,
                 LatestStart = t.LatestStart,
                 LatestFinish = t.LatestFinish,
-                Slack = t.Slack
+                Slack = t.Slack,
+                PreviousTasks = new List<TaskDTO>(),
+                SameTimeTasks = new List<TaskDTO>()
             }).ToList();
+
+            // Luego establecer las dependencias con referencias completas
+            var taskDict = taskDTOs.ToDictionary(t => t.Id);
+
+            foreach (var task in project.Tasks)
+            {
+                var taskDto = taskDict[task.Id];
+
+                // Agregar las referencias completas a las tareas previas
+                foreach (var prevTask in task.PreviousTasks)
+                {
+                    if (taskDict.ContainsKey(prevTask.Id))
+                    {
+                        taskDto.PreviousTasks.Add(taskDict[prevTask.Id]);
+                    }
+                }
+
+                // Agregar las referencias completas a las tareas simultáneas
+                foreach (var sameTask in task.SameTimeTasks)
+                {
+                    if (taskDict.ContainsKey(sameTask.Id))
+                    {
+                        taskDto.SameTimeTasks.Add(taskDict[sameTask.Id]);
+                    }
+                }
+            }
 
             return taskDTOs;
         }
@@ -235,7 +262,6 @@ namespace Service
             try
             {
                 _cpmService.CalculateCriticalPath(GetTasks(projectName));
-
             }
             catch (Exception)
             {
@@ -251,6 +277,7 @@ namespace Service
                 Description = task.Description,
                 ExpectedStartDate = task.ExpectedStartDate,
                 Duration = task.Duration,
+                // Usar el método minimalista para evitar ciclos
                 PreviousTasks = ToMinimalTaskDTOList(task.PreviousTasks),
                 SameTimeTasks = ToMinimalTaskDTOList(task.SameTimeTasks),
                 State = (StateDTO)task.State,
@@ -275,6 +302,7 @@ namespace Service
             {
                 Id = t.Id,
                 Title = t.Title
+                // Solo incluir ID y título para evitar ciclos
             }).ToList();
         }
 
@@ -296,6 +324,7 @@ namespace Service
                     ExpectedStartDate = task.ExpectedStartDate,
                     Duration = task.Duration,
                     State = (StateDTO)task.State,
+                    // No incluir PreviousTasks ni SameTimeTasks para evitar ciclos
                     PreviousTasks = new List<TaskDTO>(),
                     SameTimeTasks = new List<TaskDTO>(),
                     Resources = new List<ResourceDTO>()
@@ -369,4 +398,3 @@ namespace Service
         }
     }
 }
-
