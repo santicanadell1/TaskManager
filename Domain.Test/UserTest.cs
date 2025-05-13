@@ -272,14 +272,15 @@ namespace Domain.Test
             Assert.AreEqual(1,user.Notifications.Count);
         }
 
-
-
-
-
-
-   
-
-
+        [TestMethod]
+        public void RemoveNotification_WhenNotificationExists_ShouldBeDeletedCorrectly()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            user.AddNotification(new Notification(false, "Some description", new Project("Project", "Description", DateTime.Today)));
+            user.DeleteNotification(new Notification(false, "Some description", new Project("Project", "Description", DateTime.Today)));
+            
+            Assert.AreEqual(0,user.Notifications.Count);
+        }
         
     }
 }
