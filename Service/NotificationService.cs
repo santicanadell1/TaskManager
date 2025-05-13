@@ -17,18 +17,23 @@ public class NotificationService
         _database = database;
     }
 
-    private static NotificationDTO FromEntity(Notification notification)
+    private  NotificationDTO FromEntity(Notification notification)
     {
+        AdminPService projectService = new AdminPService(_database);
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.Read = notification.Read;
         notificationDTO.Description = notification.Description;
+        notificationDTO.Project = projectService.GetProjectByName(notification.Project.Name);
         notificationDTO.Id = notification.Id;
         return notificationDTO;
     }
 
-    private static Notification ToEntity(NotificationDTO notificationDTO)
+
+    private  Notification ToEntity(NotificationDTO notificationDTO)
     {
-        Notification notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description,);
+        Project project = _database.projects.GetProject(p=> p.Name == notificationDTO.Project.Name);
+        Notification notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description, project);
+        notification.Id = notificationDTO.Id;
         return notification;
     }
 
@@ -39,80 +44,39 @@ public class NotificationService
         {
             throw new UserNotFoundException();
         }
-
-        return user.Notifications.Select(n => FromEntity(n)).ToList();
-    }
-
-    public void AddNotificationToProject(string projectName, NotificationDTO notificationDTO)
-    {
-        Project project = _database.projects.GetProject(p => p.Name == projectName);
-        if (project == null)
+        List<NotificationDTO> notifications = new List<NotificationDTO>();
+        foreach (var notificationId in user.Notifications)
         {
-            throw new ProjectNotFoundException();
-        }
-
-        Notification notification = ToEntity(notificationDTO);
-
-        foreach (var member in project.Members)
-        {
-            if (member.Notifications == null)
+            var notification = _database.notifications.Get(n => n.Id == notificationId);
+            if (notification != null)
             {
-                member.Notifications = new List<Notification>();
+                notifications.Add(FromEntity(notification));
             }
-
-            var userNotification = new Notification(notification.Read, notification.Description)
-            {
-                Id = notification.Id
-            };
-
-            member.Notifications.Add(userNotification);
-
-            _database.users.Update(member.Email, member);
         }
 
-        project.Notifications.Add(notification);
-        _database.projects.UpdateProject(projectName, project);
+        return notifications;
     }
-
-    public void RemoveNotificationFromProject(string projectName, int idNotification)
+    public void CreateNotification(NotificationDTO notificationDTO)
     {
-        Project project = _database.projects.GetProject(p => p.Name == projectName);
-        if (project == null)
+        Notification notification = ToEntity(notificationDTO);
+        _database.notifications.AddNotification(notification);
+        Notification noti = _database.notifications.Get(n => n.description == notification.description);
+        foreach (var user in _database.projects.GetProject(p => p.Name == notification.Project.Name).Members)
         {
-            throw new ProjectNotFoundException();
+            AddNotificationToUser(user.Email, noti.Id);
         }
-
-        var notificationToRemove = project.Notifications.FirstOrDefault(n => n.Id == idNotification);
-        if (notificationToRemove != null)
-        {
-            project.Notifications.Remove(notificationToRemove);
-        }
-
-        _database.projects.UpdateProject(projectName, project);
     }
 
-    public void MarkNotificationAsRead(int idNotification, string userEmail)
+    public void AddNotificationToUser(string userEmail, int notificationId)
     {
         User user = _database.users.Get(u => u.Email == userEmail);
         if (user == null)
         {
             throw new UserNotFoundException();
         }
-
-        if (user.Notifications == null || !user.Notifications.Any())
-        {
-            throw new NotificationNotFoundException();
-        }
-
-        var notification = user.Notifications.FirstOrDefault(n => n.Id == idNotification);
-        if (notification == null)
-        {
-            throw new NotificationNotFoundException();
-        }
-
-        notification.MarkRead();
-        user.Notifications.Remove(notification);
-
-        _database.users.Update(userEmail, user);
+        user.Notifications.Add(notificationId);
+        _database.users.Update(user.Email, user);
     }
+    
+
 }

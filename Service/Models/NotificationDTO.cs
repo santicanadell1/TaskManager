@@ -11,7 +11,7 @@ public class NotificationDTO
     public String Description { get; set; }
     
     [Required(ErrorMessage = "Project is required.")]
-    public Project Project { get; set; }
+    public ProjectDTO Project { get; set; }
     
     public int Id { get; set; }
 }

@@ -9,22 +9,34 @@ public class NotificationServiceTest
 {
     private InMemoryDatabase dataAccess;
     private NotificationService _notificationService;
+    private AdminPService _adminService;
+    private Login _loginService;
+    private UserService _userService;
 
     [TestInitialize]
     public void SetUp()
     {
         dataAccess = new InMemoryDatabase();
         _notificationService = new NotificationService(dataAccess);
+        _adminService = new AdminPService(dataAccess);
+        _loginService = new Login(dataAccess);
+        _userService = new UserService(dataAccess);
         CreateAndAddUsers();
         CreateAndAddProjects();
     }
 
     private void CreateAndAddUsers()
     {
-        User user1 = new User("Name 1", "LastName 1", "Email1@example.com", DateTime.Today, "Password1");
-        User user2 = new User("Name2", "LastName2", "Email2@example.com", DateTime.Today, "Password2");
-        dataAccess.users.AddUser(user1);
-        dataAccess.users.AddUser(user2);
+        UserDTO user1 = new UserDTO{FirstName = "Name 1", LastName = "LastName 1", Email = "Email1@example.com", Birthday = DateTime.Today, Password = "Password1@"};
+        user1.Roles = new List<RolDTO> { RolDTO.AdminProject };
+        UserDTO user2 = new UserDTO
+        {
+            FirstName = "Name 2", LastName = "LastName 2", Email = "Email2@example.com", Birthday = DateTime.Today,
+            Password = "Password2@", Roles = new List<RolDTO> { }
+        };
+        _userService.AddUser(user1);
+        _userService.AddUser(user2);
+        _loginService.LoginUser("Email1@example.com", "Password1@");
     }
 
     private void CreateAndAddProjects()
@@ -38,7 +50,6 @@ public class NotificationServiceTest
             Description = "Description 1",
             StartDate = DateTime.Today,
             Members = new List<User> { user1, user2 },
-            Notifications = new List<Notification>()
         };
 
         Project project2 = new Project
@@ -47,7 +58,6 @@ public class NotificationServiceTest
             Description = "Description 2",
             StartDate = DateTime.Today,
             Members = new List<User> { user1 },
-            Notifications = new List<Notification>()
         };
 
         dataAccess.projects.AddProject(project1);
@@ -58,8 +68,8 @@ public class NotificationServiceTest
     public void GetNotificationsForUser_WhenUserHasNotifications_ThenReturnNotifications()
     {
         var userEmail = "Email1@example.com";
-        var notificationDTO = new NotificationDTO { Read = false, Description = "Test notification" };
-        _notificationService.AddNotificationToProject("Project 1", notificationDTO);
+        var notificationDTO = new NotificationDTO { Read = false, Description = "Test notification", Project = _adminService.GetProjectByName("Project 1")};
+        _notificationService.CreateNotification(notificationDTO);
 
         var result = _notificationService.GetNotificationsForUser(userEmail);
 
@@ -71,12 +81,8 @@ public class NotificationServiceTest
     public void AddNotificationToProject_WhenNotificationIsAdded_ThenNotificationShouldBeAddedToAllProjectMembers()
     {   
         var projectName = "Project 1";
-
-        _notificationService.AddNotificationToProject(projectName, notificationDTO);
-
-        var project = dataAccess.projects.GetProject(p => p.Name == projectName);
-        Assert.AreEqual(1, project.Notifications.Count);
-
+        var notificationDTO = new NotificationDTO { Read = false, Description = "New Project Notification", Project = _adminService.GetProjectByName(projectName) }; 
+        _notificationService.CreateNotification(notificationDTO);
         var user1 = dataAccess.users.Get(u => u.Email == "Email1@example.com");
         var user2 = dataAccess.users.Get(u => u.Email == "Email2@example.com");
 
@@ -84,45 +90,5 @@ public class NotificationServiceTest
         Assert.AreEqual(1, user2.Notifications.Count);
     }
 
-    [TestMethod]
-    public void RemoveNotificationFromProject_WhenNotificationExists_ThenNotificationShouldBeRemoved()
-    {
-        var notificationDTO = new NotificationDTO { Read = false, Description = "Notification to Remove" };
-        _notificationService.AddNotificationToProject("Project 1", notificationDTO);
-
-        var project = dataAccess.projects.GetProject(p => p.Name == "Project 1");
-        var notificationToRemove = project.Notifications.First(n => n.Description == "Notification to Remove");
-
-        _notificationService.RemoveNotificationFromProject("Project 1", notificationToRemove.Id);
-
-        var updatedProject = dataAccess.projects.GetProject(p => p.Name == "Project 1");
-        Assert.IsFalse(updatedProject.Notifications.Any(n => n.Description == "Notification to Remove"));
-    }
-
-    [TestMethod]
-    public void MarkNotificationAsRead_WhenNotificationExists_ThenMarkAsReadAndRemoveFromUser()
-    {
-        var notificationDTO = new NotificationDTO { Read = false, Description = "Test notification to mark as read" };
-        _notificationService.AddNotificationToProject("Project 1", notificationDTO);
-
-        var userEmail = "Email1@example.com";
-        var user = dataAccess.users.Get(u => u.Email == userEmail);
-        var notificationId = user.Notifications.First(n => n.Description == "Test notification to mark as read").Id;
-
-        _notificationService.MarkNotificationAsRead(notificationId, userEmail);
-
-        var updatedUser = dataAccess.users.Get(u => u.Email == userEmail);
-        Assert.AreEqual(0, updatedUser.Notifications.Count);
-        Assert.IsTrue(updatedUser.Notifications.All(n => n.Read == true));
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(NotificationNotFoundException))]
-    public void MarkNotificationAsRead_WhenNotificationDoesNotExist_ThenThrowException()
-    {
-        var userEmail = "Email1@example.com";
-        var invalidNotificationId = 999;
-
-        _notificationService.MarkNotificationAsRead(invalidNotificationId, userEmail);
-    }
+    
 }

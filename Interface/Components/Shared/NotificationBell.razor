@@ -82,7 +82,7 @@
             var loggedUser = LoginService.GetLoggedUser();
             if (loggedUser != null)
             {
-                NotificationService.MarkNotificationAsRead(notificationId, loggedUser.Email);
+                NotificationService.RemoveNotificationFromUser( loggedUser.Email, notificationId);
                 LoadNotifications();
             }
         }
