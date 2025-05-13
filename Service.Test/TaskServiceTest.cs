@@ -26,6 +26,9 @@ namespace Service.Test
         private Resource _resource2;
         private ResourceDTO _resourceDTO1;
         private ResourceDTO _resourceDTO2;
+        private UserDTO userDTO;
+        private UserService _userService;
+        private Login _login;
 
 
         [TestInitialize]
@@ -34,6 +37,7 @@ namespace Service.Test
             _database = new InMemoryDatabase();
             _cpmService = new CpmService();
             _taskService = new TaskService(_database, _cpmService);
+            _login = new Login(_database);
 
             _genericProject = new Project("Generic Project", "Description", DateTime.Now);
             _database.projects.AddProject(_genericProject);
@@ -106,6 +110,18 @@ namespace Service.Test
             _task2.State = Domain.State.DOING;
             _database.projects.AddTask("Generic Project", _task1);
             _database.projects.AddTask("Generic Project", _task2);
+            _userService = new UserService(_database);
+            userDTO = new UserDTO
+            {
+                FirstName = "Admin",
+                LastName = "User",
+                Email = "admin.user@example.com",
+                Birthday = DateTime.Parse("1990-01-01"),
+                Password = "Password123@",
+                Roles = new List<RolDTO> { RolDTO.AdminProject }
+            };
+            _userService.AddUser(userDTO);
+            _login.LoginUser(userDTO.Email, userDTO.Password);
         }
 
         [TestMethod]

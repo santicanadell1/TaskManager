@@ -95,6 +95,8 @@ namespace Service
 
         public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
         {
+            NotificationService _notificationService = new NotificationService(_database);
+            AdminPService projectService = new AdminPService(_database);
             var project = _database.projects.GetProject(p => p.Name == projectName);
             if (project == null)
             {
@@ -155,6 +157,17 @@ namespace Service
             _database.projects.UpdateTask(projectName, taskId, updatedTask);
 
             RecalculateCriticalPath(projectName);
+            CpmResultDTO cpmResult = GetCriticalPath(projectName);
+            if (cpmResult.CriticalTaskIds.Any(t => t == taskId))
+            {
+                NotificationDTO notificationDTO = new NotificationDTO()
+                {
+                    Read = false,
+                    Description = $"The task {updatedTask.Title} has been updated. The critical path has changed.",
+                    Project = projectService.GetProjectByName(projectName)
+                };
+                _notificationService.CreateNotification(notificationDTO);
+            }
         }
 
         public List<TaskDTO> GetTasks(string projectName)
