@@ -78,5 +78,13 @@ public class NotificationService
         _database.users.Update(user.Email, user);
     }
     
-
+    public void RemoveNotificationFromUser(string userEmail, int notificationId)
+    {
+        User user = _database.users.Get(u => u.Email == userEmail);
+        if (user == null)
+        {
+            throw new UserNotFoundException();
+        }
+        user.Notifications.Remove(notificationId);
+    }
 }
