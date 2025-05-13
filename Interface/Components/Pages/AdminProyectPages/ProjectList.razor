@@ -1279,7 +1279,16 @@
         if (!string.IsNullOrEmpty(selectedProjectName))
         {
             showAddMembersModal = true;
-            membersList = UserService.GetUsers();
+            var users = UserService.GetUsers();
+            var Members = new List<UserDTO>();
+            foreach (var user in users)
+            {
+                if (user.Roles.Contains(RolDTO.ProjectMember))
+                {
+                    Members.Add((user));
+                }
+            }
+            membersList = Members;
         }
         else
         {
