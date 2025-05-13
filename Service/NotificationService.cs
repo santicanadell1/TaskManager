@@ -1,6 +1,6 @@
 ﻿using DataAccess.ProjectRepositoryExceptions;
 using Domain.Exceptions;
-using Domain.Exceptions.UserRepositoryExceptions;
+using DataAccess.Exceptions.UserRepositoryExceptions;
 using Service.Models;
 
 namespace Service;

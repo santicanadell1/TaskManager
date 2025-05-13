@@ -1,4 +1,4 @@
-namespace Domain.Exceptions.UserRepositoryExceptions
+namespace DataAccess.Exceptions.UserRepositoryExceptions
 {
     public class UserRepositoryExceptions : Exception
     {

@@ -3,7 +3,7 @@ using Domain;
 using Domain.Exceptions;
 using Service.Exceptions;
 using Service.Models;
-using UserNotFoundException = Domain.Exceptions.UserRepositoryExceptions.UserNotFoundException;
+using UserNotFoundException = DataAccess.Exceptions.UserRepositoryExceptions.UserNotFoundException;
 
 namespace Service.Test;
 

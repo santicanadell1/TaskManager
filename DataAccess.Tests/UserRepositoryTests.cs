@@ -1,6 +1,6 @@
 namespace DataAccess.Test;
 using Domain;
-using Domain.Exceptions.UserRepositoryExceptions;
+using Exceptions.UserRepositoryExceptions;
 using global::DataAccess;
 
 [TestClass]

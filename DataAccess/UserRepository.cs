@@ -1,5 +1,5 @@
 ﻿using Domain;
-using Domain.Exceptions.UserRepositoryExceptions;
+using DataAccess.Exceptions.UserRepositoryExceptions;
 namespace DataAccess;
 
 public class UserRepository
