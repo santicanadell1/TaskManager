@@ -28,7 +28,7 @@ public class NotificationService
 
     private static Notification ToEntity(NotificationDTO notificationDTO)
     {
-        Notification notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description);
+        Notification notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description,);
         return notification;
     }
 

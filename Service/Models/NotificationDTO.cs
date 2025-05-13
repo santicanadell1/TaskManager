@@ -10,5 +10,8 @@ public class NotificationDTO
     [Required(ErrorMessage = "Description is required.")]
     public String Description { get; set; }
     
+    [Required(ErrorMessage = "Project is required.")]
+    public Project Project { get; set; }
+    
     public int Id { get; set; }
 }
