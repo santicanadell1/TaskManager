@@ -69,8 +69,7 @@ public class NotificationServiceTest
 
     [TestMethod]
     public void AddNotificationToProject_WhenNotificationIsAdded_ThenNotificationShouldBeAddedToAllProjectMembers()
-    {
-        var notificationDTO = new NotificationDTO { Read = false, Description = "New Project Notification" };
+    {   
         var projectName = "Project 1";
 
         _notificationService.AddNotificationToProject(projectName, notificationDTO);
