@@ -110,7 +110,6 @@ public class AdminPService : IAdminPService
 
     public ProjectDTO GetProjectByName(string projectName)
     {
-        CheckAdminProyectRole();
         var project = _database.projects.GetProject(p => p.Name == projectName);
         if (project == null)
         {
