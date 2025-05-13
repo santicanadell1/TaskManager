@@ -150,7 +150,7 @@ namespace Service
             );
             updatedTask.Id = task.Id;
 
-            updatedTask.State = task.State;
+            updatedTask.State = (State)taskDTO.State;
 
             _database.projects.UpdateTask(projectName, taskId, updatedTask);
 
