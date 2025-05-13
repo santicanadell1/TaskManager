@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/Users/santicanadell/.nuget/packages/": {}
+    "C:\\Users\\felid\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/santicanadell/Desktop/bsadjkhda/305108_282542_281987/Domain/Domain.csproj",
+      "projectUniqueName": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain\\Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "/Users/santicanadell/Desktop/bsadjkhda/305108_282542_281987/Domain/Domain.csproj",
-      "packagesPath": "/Users/santicanadell/.nuget/packages/",
-      "outputPath": "/Users/santicanadell/Desktop/bsadjkhda/305108_282542_281987/Domain/obj/",
+      "projectPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain\\Domain.csproj",
+      "packagesPath": "C:\\Users\\felid\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/santicanadell/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\felid\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -64,7 +64,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/santicanadell/.dotnet/sdk/8.0.406/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\felid\\.dotnet\\sdk\\8.0.406/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

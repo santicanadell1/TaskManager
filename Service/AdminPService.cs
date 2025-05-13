@@ -286,6 +286,10 @@ public class AdminPService : IAdminPService
     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
     {
         User user = _database.users.Get(u => u.Email == email);
+        if (user.Tasks == null)
+        {
+            return new List<TaskDTO>();
+        }
         CpmService cpmService = new CpmService();
         TaskService taskService = new TaskService(_database, cpmService);
         List<TaskDTO> returnList = new List<TaskDTO>();

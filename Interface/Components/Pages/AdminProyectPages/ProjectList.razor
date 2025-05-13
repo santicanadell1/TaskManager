@@ -1397,26 +1397,30 @@
     private void ShowAssignTaskModal(UserDTO member)
     {
         showMemberListModal = false;
-
-        selectedMemberId = member.Email;
+        selectedMemberId   = member.Email;
         selectedMemberName = $"{member.FirstName} {member.LastName}";
-
         try
         {
-            LoadTasks();
+            if (string.IsNullOrEmpty(selectedProjectName) || string.IsNullOrEmpty(selectedMemberId))
+                throw new Exception("Project name or member ID is null.");
 
-            assignedTasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+            LoadTasks();
+            assignedTasks = AdminPService
+                .GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+            if (assignedTasks == null)
+                assignedTasks = new List<TaskDTO>();
 
             assignTaskErrorMessage = string.Empty;
             assignTaskSuccessMessage = string.Empty;
-
             showAssignTaskToMemberModal = true;
         }
         catch (Exception ex)
         {
-            errorMessage = $"Error loading tasks: {ex.Message}";
+            assignTaskErrorMessage = $"Error loading tasks: {ex.Message}\n{ex.StackTrace}";
+            showAssignTaskToMemberModal = true;
         }
     }
+
 
     private void CloseAssignTaskToMemberModal(bool refreshData)
     {
