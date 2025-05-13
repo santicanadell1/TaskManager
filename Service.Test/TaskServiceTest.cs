@@ -1,7 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.ProjectRepositoryExceptions;
 using Domain;
-using Domain.Exceptions.TaskRepositoryExceptions;
+using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Service.Models;
 using System;

@@ -1,4 +1,4 @@
-﻿namespace Domain.Exceptions.TaskRepositoryExceptions
+﻿namespace DataAccess.Exceptions.TaskRepositoryExceptions
 {
     public class TaskRepositoryExceptions : Exception
     {

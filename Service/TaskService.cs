@@ -1,7 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.ProjectRepositoryExceptions;
 using Domain;
-using Domain.Exceptions.TaskRepositoryExceptions;
+using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Service.Models;
 using Task = Domain.Task;
 

@@ -1,6 +1,6 @@
 ﻿using DataAccess.ProjectRepositoryExceptions;
 using Domain;
-using Domain.Exceptions.TaskRepositoryExceptions;
+using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Task = Domain.Task;
 
 namespace DataAccess.Test;

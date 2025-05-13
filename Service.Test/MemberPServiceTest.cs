@@ -1,7 +1,7 @@
 ﻿using DataAccess;
 using Domain;
 using Domain.Exceptions;
-using Domain.Exceptions.TaskRepositoryExceptions;
+using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Service.MemberServiceException;
 using Service.Models;
 

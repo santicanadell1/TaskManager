@@ -1,6 +1,6 @@
 ﻿using Domain;
 using Task = Domain.Task;
-using TaskRepositoryExceptions = Domain.Exceptions.TaskRepositoryExceptions;
+using TaskRepositoryExceptions = DataAccess.Exceptions.TaskRepositoryExceptions;
 
 namespace DataAccess;
 
