@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using Domain;
 using Domain.Exceptions;
+using Domain.Exceptions.UserRepositoryExceptions;
 using Service;
 using Service.Models;
 
@@ -102,7 +103,18 @@ public class NotificationServiceTest
         Assert.AreEqual(2, user1.Notifications.Count);
         _notificationService.RemoveNotificationFromUser(user1.Email, user1.Notifications[0]);
         Assert.AreEqual(1, user1.Notifications.Count);
+    }
 
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void RemoveNotificationFromUser_WhenUserIsIncorrect_ThenThrowsException()
+    {
+        var projectName = "Project 1";
+        var notificationDTO = new NotificationDTO { Read = false, Description = "New Project Notification", Project = _adminService.GetProjectByName(projectName) }; 
+        var notificationDTO2 = new NotificationDTO { Read = false, Description = "New Project Notification 2", Project = _adminService.GetProjectByName(projectName) }; 
+        _notificationService.CreateNotification(notificationDTO);
+        _notificationService.CreateNotification(notificationDTO2);
+        _notificationService.RemoveNotificationFromUser("WrongEmail@example.com",1);
     }
 
     
