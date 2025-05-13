@@ -22,7 +22,7 @@ public class AdminSService : IAdminSService
     private void CheckAdminRole()
     {
         var currentUser = LoggedUser.Current;
-        if (currentUser == null || !currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminSystem)))
+        if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminSystem))
         {
             throw new UnauthorizedAdminAccessException();
         }

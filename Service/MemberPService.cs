@@ -45,7 +45,7 @@ public class MemberPService : IMemberPService
     {
         UserService UserService = new UserService(_database);
         UserDTO user = UserService.GetUser(email);
-        if (!user.Roles.Contains(ConvertToDTORole(Rol.ProjectMember)))
+        if (!user.Roles.Contains(RolDTO.ProjectMember))
         {
             throw new UserIsNotAMemberException();
         }

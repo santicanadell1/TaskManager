@@ -19,7 +19,7 @@ public class AdminPService : IAdminPService
     private void CheckAdminProyectRole()
     {
         var currentUser = LoggedUser.Current;
-        if (currentUser == null || !currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminProject)))
+        if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminProject))
         {
             throw new UnauthorizedAdminAccessException();
         }
@@ -122,7 +122,7 @@ public class AdminPService : IAdminPService
 
     public List<ProjectDTO> GetAllProjectsForUser(string Email)
     {
-        if (LoggedUser.Current.Roles.Contains((RolDTO)Rol.AdminSystem))
+        if (LoggedUser.Current.Roles.Contains(RolDTO.AdminSystem))
         {
             return GetAllProjects();
         }
