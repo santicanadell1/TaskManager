@@ -6,6 +6,7 @@
 @inject MemberPService MemberPService
 @inject AdminPService AdminPService
 @inject Login Login
+@rendermode InteractiveServer
 
 <link href="styles/styleTaskProjectMember.css" rel="stylesheet"/>
 
@@ -55,16 +56,8 @@
             </select>
         </div>
 
-        @if (taskStatus == "Done")
-        {
-            <div class="form-group mt-3">
-                <label for="executionDate">Execution Date</label>
-                <InputDate id="executionDate" class="form-control" @bind-Value="executionDate"/>
-            </div>
-        }
-
         <div class="form-group mt-3">
-            <label for="hoursWorked">Hours Worked</label>
+            <label for="hoursWorked">Days Worked</label>
             <InputNumber id="hoursWorked" class="form-control" @bind-Value="hoursWorked" min="0"/>
         </div>
 
@@ -78,7 +71,7 @@
     private string loginMailUser;
     private string selectedProjectId;
     private string selectedTaskId;
-    private string taskStatus = "ToDo";
+    private StateDTO taskStatus = StateDTO.TODO;
     private DateTime? executionDate = DateTime.Today;
     private int hoursWorked;
     private string errorMessage;
@@ -124,7 +117,7 @@
             if (!string.IsNullOrEmpty(selectedTaskId) && !string.IsNullOrEmpty(selectedProjectId))
             {
                 var task = TaskServiceClient.GetTask(selectedProjectId, int.Parse(selectedTaskId));
-                taskStatus = task.State.ToString();
+                taskStatus = task.State;
             }
         }
         catch (Exception ex)
@@ -141,7 +134,7 @@
             return;
         }
 
-        if (taskStatus == "Done" && executionDate == null)
+        if (taskStatus == StateDTO.DONE && executionDate == null)
         {
             errorMessage = "Please provide an execution date for completed tasks";
             return;
@@ -167,10 +160,10 @@
                 PreviousTasks = existingTask.PreviousTasks,
                 SameTimeTasks = existingTask.SameTimeTasks,
                 Resources = existingTask.Resources,
-                State = (StateDTO)Enum.Parse(typeof(StateDTO), taskStatus)
+                State = taskStatus
             };
 
-            StateDTO newStatus = (StateDTO)Enum.Parse(typeof(StateDTO), taskStatus);
+            StateDTO newStatus = taskStatus;
             MemberPService.ChangeTaskStatus(selectedProjectId, loginMailUser, taskDTO, newStatus);
 
             Navigation.NavigateTo("/success");
