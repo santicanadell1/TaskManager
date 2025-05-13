@@ -2,6 +2,7 @@
 @using Service.Models
 @inject NotificationService NotificationService
 @inject Login LoginService
+@inject NavigationManager NavManager
 @rendermode InteractiveServer
 
 <link href="styles/styleNotificationBell.css" rel="stylesheet"/>
@@ -49,6 +50,12 @@
     protected override void OnInitialized()
     {
         LoadNotifications();
+        NavManager.LocationChanged += OnLocationChanged;
+    }
+    private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs args)
+    {
+        LoadNotifications();
+        InvokeAsync(StateHasChanged);
     }
 
     private void LoadNotifications()
