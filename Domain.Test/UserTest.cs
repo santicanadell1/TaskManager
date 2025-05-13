@@ -267,7 +267,7 @@ namespace Domain.Test
         public void NewUser_WhenAddingNotification_ShouldBeAddedCorrectly()
         {
             User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-            user.AddNotification(new Notification(false, "Some description", new Project("Project", "Description", DateTime.Today)));
+            user.AddNotification(1);
             
             Assert.AreEqual(1,user.Notifications.Count);
         }
@@ -276,8 +276,8 @@ namespace Domain.Test
         public void RemoveNotification_WhenNotificationExists_ShouldBeDeletedCorrectly()
         {
             User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-            user.AddNotification(new Notification(false, "Some description", new Project("Project", "Description", DateTime.Today)));
-            user.DeleteNotification(new Notification(false, "Some description", new Project("Project", "Description", DateTime.Today)));
+            user.AddNotification(1);
+            user.RemoveNotification(1);
             
             Assert.AreEqual(0,user.Notifications.Count);
         }

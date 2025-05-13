@@ -12,7 +12,7 @@ namespace Domain
         public string password;
         public List<Rol> roles = new List<Rol>();
         public List<int> tasks = new List<int>();
-        private List<Notification> notifications = new List<Notification>();
+        private List<int> notifications = new List<int>();
         
 
         public string FirstName
@@ -62,7 +62,7 @@ namespace Domain
                 throw new UserPasswordException() : value; }
         }
 
-        public List<Notification> Notifications
+        public List<int> Notifications
         {
             get => notifications;
             set => notifications = value;
@@ -158,9 +158,14 @@ namespace Domain
             tasks.Remove(taskId);
         }
 
-        public void AddNotification(Notification notification)
+        public void AddNotification(int notificationId)
         {
-            notifications.Add(notification);
+            notifications.Add(notificationId);
+        }
+
+        public void RemoveNotification(int notificationId)
+        {
+            notifications.Remove(notificationId);
         }
         
         
