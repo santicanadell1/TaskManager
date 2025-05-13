@@ -12,6 +12,7 @@ namespace Domain
         public string password;
         public List<Rol> roles = new List<Rol>();
         public List<int> tasks = new List<int>();
+        
 
         public string FirstName
         {

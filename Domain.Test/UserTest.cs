@@ -263,6 +263,15 @@ namespace Domain.Test
             user.RemoveTask(2);
         }
 
+        [TestMethod]
+        public void NewUser_WhenAddingNotification_ShouldBeAddedCorrectly()
+        {
+            User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+            user.AddNotification(new Notification(false, "Some description", new Project("Project", "Description", DateTime.Today)));
+            
+            Assert.AreEqual(1,user.Notifications.Count);
+        }
+
 
 
 
