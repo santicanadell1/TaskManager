@@ -1,4 +1,4 @@
-namespace Service.Exceptions.UserServiceExceptions;
+namespace Service.Exceptions.LoginExceptions;
 
 public class InvalidLoginCredentialsException : LoginException
 {

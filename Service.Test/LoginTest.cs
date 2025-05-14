@@ -1,7 +1,7 @@
 using DataAccess;
 using Domain;
 using Service;
-using Service.Exceptions.UserServiceExceptions;
+using Service.Exceptions.LoginExceptions;
 using Service.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
