@@ -1,4 +1,4 @@
-namespace Domain.Exceptions.NotificationExceptions
+namespace Service.Exceptions.ResourceServiceExceptions
 {
     public class ResourceServiceException : Exception
     {

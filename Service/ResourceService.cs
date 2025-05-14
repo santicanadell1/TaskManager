@@ -4,6 +4,7 @@ using Domain;
 using Domain.Exceptions.NotificationExceptions;
 using Service.Models;
 using Service.Models.Exceptions;
+using Service.Exceptions.ResourceServiceExceptions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Service
