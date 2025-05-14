@@ -1,4 +1,4 @@
-﻿namespace Service.MemberServiceException;
+﻿namespace Service.Exceptions.MemberServiceExceptions;
 
 public class UserHasNoProjectsException:Exception
 {

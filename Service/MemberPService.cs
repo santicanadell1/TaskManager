@@ -2,7 +2,7 @@
 using Domain;
 using Domain.Exceptions.NotificationExceptions;
 using Service.Interfaces;
-using Service.MemberServiceException;
+using Service.Exceptions.MemberServiceExceptions;
 using Service.Models;
 using Service.Models.Exceptions;
 

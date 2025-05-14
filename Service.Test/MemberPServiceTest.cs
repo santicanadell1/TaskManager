@@ -2,7 +2,7 @@
 using Domain;
 using Domain.Exceptions.NotificationExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
-using Service.MemberServiceException;
+using Service.Exceptions.MemberServiceExceptions;
 using Service.Models;
 
 namespace Service.Test;
