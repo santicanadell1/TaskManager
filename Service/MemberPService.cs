@@ -69,16 +69,16 @@ public class MemberPService : IMemberPService
 
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
+        TaskService taskService = new TaskService(_database, new CpmService());
         CheckIsTaskOfTheUser((int)task.Id, email);
         foreach (var previousTask in task.PreviousTasks)
         {
-            if (!CheckIfTaskIsCompleted(previousTask))
+            TaskDTO previousTaskDTO = taskService.GetTask(projectName, (int)previousTask.Id);
+            if (!CheckIfTaskIsCompleted(previousTaskDTO))
             {
                 throw new TaskException("Task state can't be changed because it's previous tasks are not completed.");
             }
         }
-        CpmService cpmService = new CpmService();
-        TaskService taskService = new TaskService(_database, cpmService);
         task.State = status;
         taskService.UpdateTask(projectName, task.Id, task);
     }
