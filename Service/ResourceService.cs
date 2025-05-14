@@ -1,5 +1,5 @@
 using DataAccess;
-using DataAccess.ResourceRepositoryExceptions;
+using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using Domain;
 using Domain.Exceptions;
 using Service.Models;

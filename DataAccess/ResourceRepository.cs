@@ -1,4 +1,4 @@
-using DataAccess.ResourceRepositoryExceptions;
+using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using Domain;
 
 namespace DataAccess;

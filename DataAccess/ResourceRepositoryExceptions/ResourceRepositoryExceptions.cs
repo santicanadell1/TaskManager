@@ -1,4 +1,4 @@
-namespace DataAccess.ResourceRepositoryExceptions;
+namespace DataAccess.Exceptions.ResourceRepositoryExceptions;
 
 public class ResourceRepositoryExceptions : Exception
 {
