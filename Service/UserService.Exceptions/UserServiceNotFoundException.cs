@@ -1,4 +1,4 @@
-namespace Service.Exceptions
+namespace Service.Exceptions.UserServiceExceptions
 {
     public class UserServiceNotFoundException : UserServiceException
     {

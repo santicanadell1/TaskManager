@@ -2,7 +2,7 @@ using DataAccess;
 using Domain;
 using Domain.Exceptions.NotificationExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
-using Service.Exceptions;
+using Service.Exceptions.UserServiceExceptions;
 using Service.Models;
 
 namespace Service;
