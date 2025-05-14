@@ -1,6 +1,6 @@
 ﻿using DataAccess;
 using Domain;
-using Domain.Exceptions.NotificationExceptions;
+using Service.Exceptions.AdminPServiceExceptions;
 using Service.Interfaces;
 using Service.Exceptions.MemberServiceExceptions;
 using Service.Models;
