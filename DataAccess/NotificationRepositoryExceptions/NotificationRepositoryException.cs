@@ -1,4 +1,4 @@
-﻿namespace Domain.Exceptions.NotificationRepositoryExceptions
+﻿namespace DataAccess.Exceptions.NotificationRepositoryExceptions
 {
     public class NotificationRepositoryException : Exception
     {

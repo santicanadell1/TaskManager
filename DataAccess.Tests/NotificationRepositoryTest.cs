@@ -1,5 +1,5 @@
 using Domain;
-using Domain.Exceptions.NotificationRepositoryExceptions;
+using DataAccess.Exceptions.NotificationRepositoryExceptions;
 namespace DataAccess.Test;
 
 
