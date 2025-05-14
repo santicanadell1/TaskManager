@@ -66,7 +66,7 @@ public class AdminPServiceTests
         {
             Name = "New Project",
             Description = "Project Description",
-            StartDate = DateTime.Parse("2021-09-01"),
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };

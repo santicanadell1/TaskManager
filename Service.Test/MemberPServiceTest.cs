@@ -60,7 +60,7 @@ public class MemberPServiceTest
         {
             Name = "New Project",
             Description = "Project Description",
-            StartDate = DateTime.Parse("2021-09-01"),
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };
@@ -134,7 +134,7 @@ public class MemberPServiceTest
         {
             Name = "Second Project",
             Description = "Another project",
-            StartDate = DateTime.Parse("2022-01-01"),
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = new List<UserDTO> { UserDTO }
         };

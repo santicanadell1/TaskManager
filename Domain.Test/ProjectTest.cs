@@ -37,7 +37,7 @@ public class ProjectTest
     public void GivenProject_WhenStartDateIsSet_ThenStartDateShouldBeCorrect()
     {
         var project = new Project();
-        DateTime expectedStartDate = new DateTime(2025, 5, 1);
+        DateTime expectedStartDate = DateTime.Today;
 
 
         project.StartDate = expectedStartDate;
@@ -148,6 +148,6 @@ public class ProjectTest
     [TestMethod]
     public void CreateProject_With3parameters_ThenProjectShouldBeCreated()
     {
-        Project project = new Project("Project A", "This is a test project", DateTime.Parse("2022-09-01"));
+        Project project = new Project("Project A", "This is a test project", DateTime.Today);
     }
 }
