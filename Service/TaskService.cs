@@ -2,6 +2,7 @@
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Domain;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
+using Domain.Exceptions.TaskExceptions;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -26,6 +27,10 @@ namespace Service
                 throw new ProjectNotFoundException();
             }
 
+            if (taskDTO.ExpectedStartDate < project.StartDate)
+            {
+                throw new TaskException("The task's start date is before the project's start date.");
+            }
             var previousTasks = new List<Task>();
             var sameTimeTasks = new List<Task>();
 

@@ -367,7 +367,7 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now,
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };
@@ -393,7 +393,7 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now,
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };
@@ -418,7 +418,7 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now,
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };
@@ -442,7 +442,7 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now,
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };
@@ -473,7 +473,7 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now,
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };
@@ -499,7 +499,7 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now,
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };
@@ -525,7 +525,7 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now,
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };
@@ -561,7 +561,7 @@ public class AdminPServiceTests
         {
             Name = "Test Project",
             Description = "Test Description",
-            StartDate = DateTime.Now,
+            StartDate = DateTime.Today,
             AdminProyect = UserDTO,
             Members = members
         };
