@@ -1,4 +1,4 @@
-﻿namespace Domain.Exceptions.NotificationExceptions;
+﻿namespace Service.Exceptions.NotificationServiceExceptions;
 
 public class NotificationNotFoundException : NotificationServiceException
 {
