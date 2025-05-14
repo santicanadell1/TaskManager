@@ -3,6 +3,6 @@ namespace Domain.Exceptions.UserExceptions
     public class UserBirthdayException : UserException
     {
         public UserBirthdayException() 
-            : base("The user's birthday cannot be after today's date.") { }
+            : base("The user must be older than 18 years old.") { }
     }
 }

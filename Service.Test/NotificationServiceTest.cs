@@ -28,11 +28,11 @@ public class NotificationServiceTest
 
     private void CreateAndAddUsers()
     {
-        UserDTO user1 = new UserDTO{FirstName = "Name 1", LastName = "LastName 1", Email = "Email1@example.com", Birthday = DateTime.Today, Password = "Password1@"};
+        UserDTO user1 = new UserDTO{FirstName = "Name 1", LastName = "LastName 1", Email = "Email1@example.com", Birthday = DateTime.Today.AddYears(-18), Password = "Password1@"};
         user1.Roles = new List<RolDTO> { RolDTO.AdminProject };
         UserDTO user2 = new UserDTO
         {
-            FirstName = "Name 2", LastName = "LastName 2", Email = "Email2@example.com", Birthday = DateTime.Today,
+            FirstName = "Name 2", LastName = "LastName 2", Email = "Email2@example.com", Birthday = DateTime.Today.AddYears(-18),
             Password = "Password2@", Roles = new List<RolDTO> { }
         };
         _userService.AddUser(user1);
