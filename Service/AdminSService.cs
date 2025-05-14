@@ -1,6 +1,6 @@
 using DataAccess;
 using Domain;
-using Domain.Exceptions.NotificationExceptions;
+using Service.Exceptions.AdminSServiceExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Service;
 using Service.Exceptions.UserServiceExceptions;

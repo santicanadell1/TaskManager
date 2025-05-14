@@ -1,7 +1,7 @@
 using DataAccess;
 using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using Domain;
-using Domain.Exceptions.NotificationExceptions;
+using Service.Exceptions.AdminSServiceExceptions;
 using Service.Models;
 using Service.Models.Exceptions;
 using Service.Exceptions.ResourceServiceExceptions;
