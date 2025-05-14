@@ -1,6 +1,6 @@
 using System;
 
-namespace Domain.Exceptions.NotificationExceptions
+namespace Service.Exceptions.CPMServiceExceptions
 {
     public class CpmServiceException : Exception
     {

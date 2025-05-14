@@ -1,5 +1,5 @@
 using Domain;
-using Domain.Exceptions.NotificationExceptions;
+using Service.Exceptions.CPMServiceExceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Service;
 using System;
