@@ -1,5 +1,5 @@
 ﻿﻿using System.Text.RegularExpressions;
-using Domain.Exceptions.NotificationExceptions;
+using Domain.Exceptions.UserExceptions;
 
 namespace Domain
 {
