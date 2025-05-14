@@ -21,7 +21,7 @@ public class ProjectRepository
     {
         if (Projects.Any(p => p.Name == project.Name))
         {
-            throw new ProjectRepositoryExceptions.DuplicatedProjectsNameException();
+            throw new Exceptions.ProjectRepositoryExceptions.DuplicatedProjectsNameException();
         }
         else
         {
@@ -43,7 +43,7 @@ public class ProjectRepository
     {
         if (!Projects.Any(p => p.Name == name))
         {
-            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
         }
         else
         {
@@ -55,12 +55,12 @@ public class ProjectRepository
     {
         if (Projects.Any(p => p.Name == project.Name) && project.Name != name)
         {
-            throw new ProjectRepositoryExceptions.DuplicatedProjectsNameException();
+            throw new Exceptions.ProjectRepositoryExceptions.DuplicatedProjectsNameException();
         }
 
         if (!Projects.Any(p => p.Name == name))
         {
-            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
         }
 
         int index = Projects.FindIndex(p => p.Name == name);
@@ -72,7 +72,7 @@ public class ProjectRepository
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
         if (project == null)
         {
-            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
         }
 
         if (project.Tasks == null)
@@ -96,7 +96,7 @@ public class ProjectRepository
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
         if (project == null)
         {
-            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
         }
 
         int index = project.Tasks.FindIndex(t => t.Id == taskId);
@@ -113,7 +113,7 @@ public class ProjectRepository
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
         if (project == null)
         {
-            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
         }
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -130,7 +130,7 @@ public class ProjectRepository
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
         if (project == null)
         {
-            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
         }
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -153,7 +153,7 @@ public class ProjectRepository
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
         if (project == null)
         {
-            throw new ProjectRepositoryExceptions.ProjectNotFoundException();
+            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
         }
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);

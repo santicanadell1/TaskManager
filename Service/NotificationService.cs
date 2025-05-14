@@ -1,4 +1,4 @@
-﻿using DataAccess.ProjectRepositoryExceptions;
+﻿using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Domain.Exceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Service.Models;

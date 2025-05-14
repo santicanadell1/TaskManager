@@ -4,7 +4,7 @@ using DataAccess;
 using Domain;
 using System;
 using System.Collections.Generic;
-using DataAccess.ProjectRepositoryExceptions;
+using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Domain.Exceptions;
 using Task = System.Threading.Tasks.Task;
 

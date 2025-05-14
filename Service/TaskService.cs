@@ -1,5 +1,5 @@
 ﻿using DataAccess;
-using DataAccess.ProjectRepositoryExceptions;
+using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Domain;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Service.Models;

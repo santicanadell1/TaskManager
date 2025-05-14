@@ -1,4 +1,4 @@
-﻿namespace DataAccess.ProjectRepositoryExceptions;
+﻿namespace DataAccess.Exceptions.ProjectRepositoryExceptions;
 
 public class ProjectNotFoundException: Exception
 {

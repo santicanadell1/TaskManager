@@ -1,5 +1,5 @@
 ﻿using DataAccess;
-using DataAccess.ProjectRepositoryExceptions;
+using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Domain;
 using Domain.Exceptions;
 using Service;
