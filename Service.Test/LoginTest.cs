@@ -33,7 +33,8 @@ public class LoginTests
             FirstName = "John",
             LastName = "Doe",
             Password = password,
-            Roles = roles
+            Roles = roles,
+            Birthday = DateTime.Parse("1990-01-01"),
         };
 
         var userService = new UserService(_inMemoryDatabase);
@@ -61,6 +62,7 @@ public class LoginTests
             FirstName = "John",
             LastName = "Doe",
             Password = password,
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = roles
         };
 
@@ -92,6 +94,7 @@ public class LoginTests
             FirstName = "John",
             LastName = "Doe",
             Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = roles
         };
 
@@ -114,6 +117,7 @@ public class LoginTests
             FirstName = "John",
             LastName = "Doe",
             Password = password,
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = roles
         };
 
@@ -137,6 +141,7 @@ public class LoginTests
             FirstName = "John",
             LastName = "Doe",
             Password = password,
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = roles
         };
 
@@ -160,6 +165,7 @@ public class LoginTests
             FirstName = "John",
             LastName = "Doe",
             Password = password,
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = roles
         };
 
@@ -183,6 +189,7 @@ public class LoginTests
             FirstName = "John",
             LastName = "Doe",
             Password = password,
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = roles
         };
 
@@ -197,6 +204,7 @@ public class LoginTests
             FirstName = "John",
             LastName = "Doe",
             Password = password,
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
         _login.UpdateUser(userUpdate);

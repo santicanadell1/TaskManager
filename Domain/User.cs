@@ -51,10 +51,15 @@ namespace Domain
         public DateTime Birthday
         {
             get => birthday;
-            set { birthday = DateTime.Today.AddYears(-18) < value ? 
-                throw new UserBirthdayException() : value; }
+            set
+            {
+                if (DateTime.Today.AddYears(-18) < value || value < DateTime.Today.AddYears(-100))
+                {
+                    throw new UserBirthdayException();
+                }
+                birthday = value;
+            }
         }
-
         public string Password
         {
             get => password;

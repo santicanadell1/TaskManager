@@ -27,6 +27,7 @@ public class UserServiceTest
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = rols
         };
 
@@ -38,6 +39,7 @@ public class UserServiceTest
             LastName = "Doe",
             Email = "john.doe@example.com", 
             Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = rols
         };
 
@@ -58,6 +60,7 @@ public class UserServiceTest
             FirstName = "John",
             LastName = "Doe",
             Email = "nonexistent.user@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = rols,
         };
 
@@ -98,6 +101,7 @@ public class UserServiceTest
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = rols
         };
 
@@ -123,6 +127,7 @@ public class UserServiceTest
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = rols
         };
 
@@ -135,6 +140,7 @@ public class UserServiceTest
             LastName = "Dough",
             Email = "john.doe@example.com",
             Password = "NewPassword123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = rols
         };
 

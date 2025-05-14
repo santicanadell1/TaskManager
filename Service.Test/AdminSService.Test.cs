@@ -29,6 +29,7 @@ public class AdminSService_Test
             LastName = "User",
             Email = "admin.user@example.com",
             Password = "AdminPassword123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO> { RolDTO.AdminSystem }
         };
 
@@ -38,6 +39,7 @@ public class AdminSService_Test
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO>()
         };
         _userService.AddUser(adminUserDTO);
@@ -68,6 +70,7 @@ public class AdminSService_Test
             LastName = "User",
             Email = "nonexistent.user@example.com",
             Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO>()
         };
 
@@ -86,6 +89,7 @@ public class AdminSService_Test
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "OldPassword123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO>()
         };
 
@@ -106,6 +110,7 @@ public class AdminSService_Test
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO>()
         };
 
@@ -126,6 +131,7 @@ public class AdminSService_Test
             LastName = "Doe",
             Email = "john.doe@example.com",
             Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO>()
         };
 
