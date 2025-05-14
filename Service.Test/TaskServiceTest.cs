@@ -7,6 +7,7 @@ using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Exceptions.TaskExceptions;
 using Task = Domain.Task;
 
 namespace Service.Test
@@ -733,6 +734,21 @@ namespace Service.Test
 
 
             Assert.AreEqual(default(TimeSpan), taskDTO.Slack);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(TaskException))]
+        public void AddTask_ShouldThrowException_WhenTaskStartDateIsBeforeProjectsOne()
+        {
+            var taskDTO = new TaskDTO
+            {
+                Title = "Task with invalid start date",
+                Description = "Description",
+                ExpectedStartDate = DateTime.Now.AddDays(-2),
+                Duration = 3,
+                Resources = new List<ResourceDTO>()
+            };
+            _taskService.AddTask("Generic Project", taskDTO);
         }
     }
 }

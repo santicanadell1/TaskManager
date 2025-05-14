@@ -27,7 +27,7 @@ namespace Service
                 throw new ProjectNotFoundException();
             }
 
-            if (taskDTO.ExpectedStartDate < project.StartDate)
+            if (taskDTO.ExpectedStartDate.AddDays(1) <= project.StartDate)
             {
                 throw new TaskException("The task's start date is before the project's start date.");
             }
