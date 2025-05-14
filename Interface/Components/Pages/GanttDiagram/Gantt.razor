@@ -104,12 +104,12 @@
     window.initGantt = (ganttData, startDate, endDate, showCritical) => {
         console.log("InitGantt called with:", {ganttData, startDate, endDate, showCritical});
 
-        // Si ya está inicializado, destruir primero
+        
         if (ganttInitialized) {
             gantt.clearAll();
         }
 
-        // Configuración para hacer el diagrama de solo lectura
+       
         gantt.config.readonly = true;
         gantt.config.drag_move = false;
         gantt.config.drag_resize = false;
@@ -117,13 +117,13 @@
         gantt.config.drag_links = false;
         gantt.config.details_on_dblclick = false;
 
-        // Configuración de fechas
+       
         gantt.config.date_format = "%Y-%m-%d";
         gantt.config.start_date = new Date(startDate);
         gantt.config.end_date = new Date(endDate);
         gantt.config.show_progress = true;
 
-        // Configuración para prevenir el auto-resize
+       
         gantt.config.autosize = false;
         gantt.config.autosize_min_width = false;
 
