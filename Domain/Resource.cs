@@ -1,4 +1,4 @@
-﻿using Domain.Exceptions.NotificationExceptions;
+﻿using Domain.Exceptions.ResourceExceptions;
 
 namespace Domain
 {
