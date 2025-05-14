@@ -5,6 +5,7 @@
 @inject NavigationManager Navigation
 @inject AdminSService AdminService
 @inject UserService UserService
+@inject Login _login
 @rendermode InteractiveServer
 
 <link href="styles/styleAssignRol.css" rel="stylesheet"/>
@@ -140,6 +141,13 @@
 
             selectedUserEmail = "";
             ResetRoleSelections();
+
+            if (userToAssignRoles.Email == _login.GetLoggedUser().Email)
+            {
+                var userDto = UserService.GetUser(userToAssignRoles.Email);
+                _login.UpdateUser(userDto);
+                Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+            }
         }
         catch (Exception ex)
         {
