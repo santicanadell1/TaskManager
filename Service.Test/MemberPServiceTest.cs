@@ -72,6 +72,7 @@ public class MemberPServiceTest
             Description = "Description",
             Duration = 1,
             ExpectedStartDate = DateTime.Today,
+            State = StateDTO.DOING
         };
         TaskDTO task2 = new TaskDTO()
         {
@@ -186,19 +187,22 @@ public class MemberPServiceTest
     [ExpectedException(typeof(TaskException))]
     public void ChangeTaskStatus_ShouldThrowException_WhenPreviousTasksAreNotFinished()
     {
+        var task = _taskService.GetTasks("New Project").First();
         TaskDTO task3 = new TaskDTO()
         {
             Title = "Task 3",
             Description = "Description 3",
             Duration = 1,
             ExpectedStartDate = DateTime.Today,
-            PreviousTasks = new List<TaskDTO> { this.task }
+            PreviousTasks = new List<TaskDTO>{ task }
         };
         _taskService.AddTask("New Project", task3);
-        var task = _taskService.GetTasks("New Project").First();
-        var newState = StateDTO.DOING;
         
-        _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, task, newState);
+        AdminPService adminPService = new AdminPService(database);
+        StateDTO newState = StateDTO.DONE;
+        var newTask = _taskService.GetTasks("New Project").Find(t => t.Title == "Task 3");
+        adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)newTask.Id);
+        _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, newTask, newState);
     }
     
 

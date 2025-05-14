@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Domain;
+using Domain.Exceptions.TaskExceptions;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Interface;
 using Service.Exceptions.MemberServiceExceptions;
@@ -69,10 +70,22 @@ public class MemberPService : IMemberPService
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
         CheckIsTaskOfTheUser((int)task.Id, email);
+        foreach (var previousTask in task.PreviousTasks)
+        {
+            if (!CheckIfTaskIsCompleted(previousTask))
+            {
+                throw new TaskException("Task state can't be changed because it's previous tasks are not completed.");
+            }
+        }
         CpmService cpmService = new CpmService();
         TaskService taskService = new TaskService(_database, cpmService);
         task.State = status;
         taskService.UpdateTask(projectName, task.Id, task);
+    }
+
+    private bool CheckIfTaskIsCompleted(TaskDTO task)
+    {
+        return task.State == StateDTO.DONE;
     }
 
     public List<TaskDTO> GetAllTaskForAMember(string email)
