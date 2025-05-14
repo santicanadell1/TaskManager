@@ -1,4 +1,4 @@
-namespace Domain.Exceptions.NotificationExceptions
+namespace Domain.Exceptions.ProjectExceptions
 {
     public class ProjectException : Exception
     {
