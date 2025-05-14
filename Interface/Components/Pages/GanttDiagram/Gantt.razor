@@ -127,7 +127,7 @@
         gantt.config.autosize = false;
         gantt.config.autosize_min_width = false;
 
-        // Configuración de escala para mostrar solo un mes
+      
         gantt.config.scale_unit = "day";
         gantt.config.date_scale = "%d";
         gantt.config.scale_height = 50;
@@ -136,15 +136,15 @@
             {unit: "month", step: 1, format: "%F %Y"}
         ];
 
-        // Asegurar que el ancho mínimo de columna sea suficiente
+        
         gantt.config.min_column_width = 30;
         gantt.config.row_height = 28;
 
-        // Fijar el ancho de la grilla
+     
         gantt.config.grid_width = 350;
         gantt.config.grid_resize = false;
 
-        // Configuración de columnas con anchos fijos
+        
         gantt.config.columns = [
             {name: "text", label: "Task", width: 180, tree: true, resize: false},
             {name: "start_date", label: "Start", align: "center", width: 80, resize: false},
@@ -161,7 +161,7 @@
             }
         ];
 
-        // Templates para mostrar tareas críticas
+        
         gantt.templates.task_class = function (start, end, task) {
             if (showCritical && task.critical) {
                 return "gantt_critical_task";
@@ -176,12 +176,12 @@
             return "";
         };
 
-        // Template para el texto de la tarea
+      
         gantt.templates.task_text = function (start, end, task) {
             return task.text;
         };
 
-        // Prevenir la edición
+        
         gantt.attachEvent("onBeforeTaskChanged", function (id, mode, old_event) {
             return false;
         });
@@ -194,7 +194,7 @@
             return false;
         });
 
-        // Inicializar solo si no está inicializado
+      
         if (!ganttInitialized) {
             gantt.init("gantt_here");
             ganttInitialized = true;
