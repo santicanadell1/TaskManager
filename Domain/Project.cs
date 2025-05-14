@@ -46,6 +46,11 @@ namespace Domain
                     throw new ProjectStartDateException();
                 }
 
+                if (value < DateTime.Now)
+                {
+                    throw new ProjectException("The Start Date must be greater than the current date");
+                }
+
                 startDate = value;
             }
         }
