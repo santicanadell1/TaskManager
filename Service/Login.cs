@@ -106,4 +106,9 @@ public class Login : ILogin
 
         return roleDTOs;
     }
+
+    public void UpdateUser(UserDTO userDTO)
+    {
+        LoggedUser.Current = userDTO;
+    }
 }
