@@ -170,5 +170,38 @@ public class LoginTests
         
         Assert.IsTrue(_login.IsProjectMember());
     }
+    [TestMethod]
+    public void UpdateLogedUser_ShouldUpdateLoggedUser_WhenUserIsLoggedIn()
+    {
+        var email = "john.doe@example.com";
+        var password = "Password123@";
+        var roles = new List<RolDTO> { RolDTO.ProjectMember };
+
+        var userDTO = new UserDTO
+        {
+            Email = email,
+            FirstName = "John",
+            LastName = "Doe",
+            Password = password,
+            Roles = roles
+        };
+
+        var userService = new UserService(_inMemoryDatabase);
+        userService.AddUser(userDTO);
+
+        _login.LoginUser(email, password);
+        
+        var userUpdate = new UserDTO
+        {
+            Email = email,
+            FirstName = "John",
+            LastName = "Doe",
+            Password = password,
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
+        };
+        _login.UpdateUser(userUpdate);
+        Assert.IsFalse(_login.IsProjectMember());
+        Assert.IsTrue(_login.IsAdminProject());
+    }
     
 }
