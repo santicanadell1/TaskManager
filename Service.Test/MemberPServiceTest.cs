@@ -2,6 +2,7 @@
 using Domain;
 using Service.Exceptions.AdminPServiceExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
+using Domain.Exceptions.TaskExceptions;
 using Service.Exceptions.MemberServiceExceptions;
 using Service.Models;
 
@@ -179,6 +180,25 @@ public class MemberPServiceTest
         var newState = StateDTO.DOING;
         
         _memberPService.ChangeTaskStatus("New Project", User.Email, task, newState);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(TaskException))]
+    public void ChangeTaskStatus_ShouldThrowException_WhenPreviousTasksAreNotFinished()
+    {
+        TaskDTO task3 = new TaskDTO()
+        {
+            Title = "Task 3",
+            Description = "Description 3",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+            PreviousTasks = new List<TaskDTO> { this.task }
+        };
+        _taskService.AddTask("New Project", task3);
+        var task = _taskService.GetTasks("New Project").First();
+        var newState = StateDTO.DOING;
+        
+        _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, task, newState);
     }
     
 
