@@ -127,7 +127,7 @@
 
                         <div class="mb-3">
                             <label for="duration" class="form-label"><i class="bi bi-clock me-1"></i>Duration
-                                (hours)</label>
+                                (Days)</label>
                             <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration"/>
                         </div>
 
@@ -315,7 +315,7 @@
 
                         <div class="mb-3">
                             <label for="editDuration" class="form-label"><i class="bi bi-clock me-1"></i>Duration
-                                (hours)</label>
+                                (Days)</label>
                             <InputNumber id="editDuration" class="form-control"
                                          @bind-Value="selectedTaskToEdit.Duration"/>
                         </div>
@@ -669,7 +669,7 @@
                                         <td>@task.Title</td>
                                         <td>@task.Description</td>
                                         <td>@task.ExpectedStartDate.ToShortDateString()</td>
-                                        <td>@task.Duration hours</td>
+                                        <td>@task.Duration Days</td>
                                         <td>
                                             <span class="badge @GetStateClass(task.State)">@task.State</span>
                                         </td>
