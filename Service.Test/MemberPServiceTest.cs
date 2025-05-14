@@ -204,6 +204,31 @@ public class MemberPServiceTest
         adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)newTask.Id);
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, newTask, newState);
     }
+    [TestMethod]
+    public void ChangeTaskStatus_ShouldChangeState_WhenPreviousTasksAreFinished()
+    {
+        AdminPService adminPService = new AdminPService(database);
+        var task = _taskService.GetTasks("New Project").First();
+        adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)task.Id);
+        _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, task, StateDTO.DONE);
+        TaskDTO task3 = new TaskDTO()
+        {
+            Title = "Task 3",
+            Description = "Description 3",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Today,
+            PreviousTasks = new List<TaskDTO>{ task }
+        };
+        _taskService.AddTask("New Project", task3);
+        
+        
+        StateDTO newState = StateDTO.DONE;
+        var newTask = _taskService.GetTasks("New Project").Find(t => t.Title == "Task 3");
+        adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)newTask.Id);
+        _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, newTask, newState);
+        var updatedTask = _taskService.GetTask("New Project", 3);
+        Assert.AreEqual(StateDTO.DONE, updatedTask.State);
+    }
     
 
 }
