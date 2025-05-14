@@ -4,6 +4,7 @@ using Domain.Exceptions.NotificationExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Service.Exceptions.UserServiceExceptions;
 using Service.Models;
+using Service.Interface;
 
 namespace Service;
 

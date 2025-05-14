@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Text;
-using Service.Interfaces;
+using Service.Interface;
 
 public class PasswordManager : IPasswordManager
 {

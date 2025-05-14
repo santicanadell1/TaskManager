@@ -1,7 +1,7 @@
 ﻿using DataAccess;
 using Domain;
 using Service.Exceptions.AdminPServiceExceptions;
-using Service.Interfaces;
+using Service.Interface;
 using Service.Exceptions.MemberServiceExceptions;
 using Service.Models;
 using Service.Models.Exceptions;

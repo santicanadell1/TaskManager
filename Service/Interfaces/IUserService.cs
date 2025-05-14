@@ -1,7 +1,7 @@
 ﻿using Service.Models;
 using System.Collections.Generic;
 
-namespace Service;
+namespace Service.Interface;
 
 public interface IUserService
 {

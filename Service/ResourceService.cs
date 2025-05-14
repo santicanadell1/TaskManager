@@ -5,6 +5,7 @@ using Service.Exceptions.AdminSServiceExceptions;
 using Service.Models;
 using Service.Models.Exceptions;
 using Service.Exceptions.ResourceServiceExceptions;
+using Service.Interface;
 using Task = System.Threading.Tasks.Task;
 
 namespace Service

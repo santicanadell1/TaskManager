@@ -1,7 +1,7 @@
 ﻿using DataAccess;
 using Domain;
 using Service.Exceptions.LoginExceptions;
-using Service.Interfaces;
+using Service.Interface;
 using Service.Models;
 using Service.Models.Exceptions;
 

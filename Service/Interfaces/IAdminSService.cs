@@ -1,5 +1,6 @@
 ﻿using Service.Models;
 
+namespace Service.Interface;
 public interface IAdminSService
 {
     // User management

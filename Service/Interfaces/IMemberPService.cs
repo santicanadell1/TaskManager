@@ -1,6 +1,6 @@
 ﻿using Service.Models;
 
-namespace Service.Interfaces;
+namespace Service.Interface;
 
 public interface IMemberPService
 {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+namespace Service.Interface;
 public interface IAdminPService
 {
     // Project management
