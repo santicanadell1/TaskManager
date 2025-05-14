@@ -1,7 +1,7 @@
 using DataAccess;
 using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using Domain;
-using Domain.Exceptions;
+using Domain.Exceptions.NotificationExceptions;
 using Service.Models;
 using Task = Domain.Task;
 

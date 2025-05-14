@@ -1,4 +1,4 @@
-﻿using Domain.Exceptions;
+﻿using Domain.Exceptions.NotificationExceptions;
 using Domain;
 using Task = Domain.Task;
 

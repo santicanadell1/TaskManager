@@ -1,6 +1,6 @@
 using DataAccess;
 using Domain;
-using Domain.Exceptions;
+using Domain.Exceptions.NotificationExceptions;
 using Service.Exceptions;
 using Service.Models;
 using UserNotFoundException = DataAccess.Exceptions.UserRepositoryExceptions.UserNotFoundException;

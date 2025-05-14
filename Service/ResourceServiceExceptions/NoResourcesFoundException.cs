@@ -1,6 +1,6 @@
 using System.Runtime.Intrinsics.Arm;
 
-namespace Domain.Exceptions;
+namespace Domain.Exceptions.NotificationExceptions;
 
 public class NoResourcesFoundException : ResourceServiceException
 {

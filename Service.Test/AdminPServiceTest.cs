@@ -5,7 +5,7 @@ using Domain;
 using System;
 using System.Collections.Generic;
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
-using Domain.Exceptions;
+using Domain.Exceptions.NotificationExceptions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Service.Test;

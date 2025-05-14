@@ -1,5 +1,5 @@
 using Domain;
-using Domain.Exceptions;
+using Domain.Exceptions.NotificationExceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Service;
 using System;

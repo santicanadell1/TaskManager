@@ -1,4 +1,4 @@
-using Domain.Exceptions;
+using Domain.Exceptions.NotificationExceptions;
 
 namespace Domain.Test
 {
