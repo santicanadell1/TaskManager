@@ -200,7 +200,7 @@
             ganttInitialized = true;
         }
 
-        // Verificar si hay datos antes de parsear
+       
         if (ganttData && ganttData.data && ganttData.data.length > 0) {
             console.log("Parsing gantt data:", ganttData);
             gantt.parse(ganttData);
@@ -210,18 +210,18 @@
 
         gantt.render();
 
-        // Centrar la vista en el mes seleccionado sin cambiar el tamaño
+        
         setTimeout(() => {
             gantt.showDate(new Date(startDate));
         }, 100);
     };
 
     window.updateGanttView = function (startDate, endDate, showCritical, ganttData) {
-        // No limpiar todo, solo actualizar las fechas
+       
         gantt.config.start_date = new Date(startDate);
         gantt.config.end_date = new Date(endDate);
 
-        // Actualizar las clases CSS para mostrar/ocultar la ruta crítica
+       
         gantt.templates.task_class = function (start, end, task) {
             if (showCritical && task.critical) {
                 return "gantt_critical_task";
@@ -236,7 +236,7 @@
             return "";
         };
 
-        // No volver a parsear los datos si no es necesario
+        
         if (ganttData) {
             gantt.clearAll();
             gantt.parse(ganttData);
@@ -244,7 +244,7 @@
 
         gantt.render();
 
-        // Centrar la vista sin cambiar el tamaño
+        
         setTimeout(() => {
             gantt.showDate(new Date(startDate));
         }, 50);
