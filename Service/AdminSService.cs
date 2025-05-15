@@ -80,6 +80,13 @@ public class AdminSService : IAdminSService
         }
     }
 
+    public void ChangeToDefaultPassword(string email, string oldPassword)
+    {
+        CheckAdminRole();
+        string defaultPassword = "Password123#";
+        ChangePassword(email, defaultPassword, oldPassword);
+    }
+
     public void AssignRole(UserDTO userDTO, RolDTO role)
     {
         CheckAdminRole();

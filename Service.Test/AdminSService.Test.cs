@@ -140,9 +140,9 @@ public class AdminSService_Test
         _adminService.ChangePassword(userToUpdate.Email, newPassword, "Password123@");
     }
     [TestMethod]
-    [ExpectedException(typeof(InvalidUserPasswordException))]
     public void AdminService_ShouldChangePassword_WhenChangingToDefaultPassword()
     {
+        PasswordManager _passwordManager = new PasswordManager();
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
         var userToUpdate = new UserDTO
@@ -155,8 +155,8 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var newPassword = "Password123@";
-
         _adminService.ChangeToDefaultPassword(userToUpdate.Email, "Password123@");
+        var user = _userService.GetUser(userToUpdate.Email);
+        Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
     }
 }
