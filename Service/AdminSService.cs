@@ -87,6 +87,42 @@ public class AdminSService : IAdminSService
         ChangePassword(email, defaultPassword, oldPassword);
     }
 
+    public void ChangeCurrentUserPassword(string email, string oldPassword, string newPassword)
+    {
+        CheckIsCurrenUser(email);
+        var user = _userService.GetUser(email);
+
+
+        if (user == null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        if (user.Password != _passwordManager.HashPassword(oldPassword))
+        {
+            throw new InvalidOldPasswordException();
+        }
+
+        if (_passwordManager.IsValidPassword(newPassword))
+        {
+            user.Password = _passwordManager.HashPassword(newPassword);
+            _userService.UpdateUser(user);
+        }
+        else
+        {
+            throw new InvalidUserPasswordException();
+        }
+        
+    }
+
+    private void CheckIsCurrenUser(string email)
+    {
+        var currentUser = LoggedUser.Current;
+        if (currentUser == null || currentUser.Email != email)
+        {
+            throw new UnauthorizedAdminAccessException();
+        }
+    }
     public void AssignRole(UserDTO userDTO, RolDTO role)
     {
         CheckAdminRole();
