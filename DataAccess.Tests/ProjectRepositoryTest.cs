@@ -1,6 +1,6 @@
 ﻿using DataAccess.Exceptions.ProjectRepositoryExceptions;
-using Domain;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
+using Domain;
 using Task = Domain.Task;
 
 namespace DataAccess.Test;
@@ -21,7 +21,7 @@ public class ProjectRepositoryTest
     {
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
-        Project project = new Project();
+        var project = new Project();
         project.Name = "Project 1";
         projectRepository.AddProject(project);
         Assert.IsTrue(projectRepository.GetAllProjects().Contains(project));
@@ -33,7 +33,7 @@ public class ProjectRepositoryTest
     {
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
-        Project project = new Project();
+        var project = new Project();
         project.Name = "Project 1";
         projectRepository.AddProject(project);
         projectRepository.AddProject(project);
@@ -44,9 +44,9 @@ public class ProjectRepositoryTest
     {
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
-        Project project = new Project();
+        var project = new Project();
         project.Name = "Project 1";
-        Project project2 = new Project();
+        var project2 = new Project();
         project2.Name = "Project 2";
         projectRepository.AddProject(project);
         projectRepository.AddProject(project2);
@@ -58,9 +58,9 @@ public class ProjectRepositoryTest
     {
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
-        Project project = new Project();
+        var project = new Project();
         project.Name = "Project 1";
-        Project project2 = new Project();
+        var project2 = new Project();
         project2.Name = "Project 2";
         projectRepository.AddProject(project);
         projectRepository.AddProject(project2);
@@ -74,9 +74,9 @@ public class ProjectRepositoryTest
     {
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
-        Project project = new Project();
+        var project = new Project();
         project.Name = "Project 1";
-        Project project2 = new Project();
+        var project2 = new Project();
         project2.Name = "Project 2";
         projectRepository.AddProject(project);
         projectRepository.AddProject(project2);
@@ -89,10 +89,10 @@ public class ProjectRepositoryTest
     {
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
-        Project project = new Project();
+        var project = new Project();
         project.Name = "Project 1";
         project.Description = "Project 1 description";
-        Project project2 = new Project();
+        var project2 = new Project();
         project2.Name = "Project 1";
         project2.Description = "Project 2 description";
         projectRepository.AddProject(project);
@@ -106,13 +106,13 @@ public class ProjectRepositoryTest
     {
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
-        Project project = new Project();
+        var project = new Project();
         project.Name = "Project 1";
         project.Description = "Project 1 description";
-        Project project2 = new Project();
+        var project2 = new Project();
         project2.Name = "Project 2";
         project2.Description = "Project 2 description";
-        Project project3 = new Project();
+        var project3 = new Project();
         project3.Name = "Project 2";
         project3.Description = "Project 3 description";
         projectRepository.AddProject(project);
@@ -126,13 +126,13 @@ public class ProjectRepositoryTest
     {
         ProjectRepository projectRepository;
         projectRepository = new ProjectRepository();
-        Project project = new Project();
+        var project = new Project();
         project.Name = "Project 1";
         project.Description = "Project 1 description";
-        Project project2 = new Project();
+        var project2 = new Project();
         project2.Name = "Project 2";
         project2.Description = "Project 2 description";
-        Project project3 = new Project();
+        var project3 = new Project();
         projectRepository.AddProject(project);
         projectRepository.UpdateProject("Project 4", project2);
     }
@@ -140,11 +140,11 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void AddTask_WhenAddingNewTask_ShouldContainIt()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project();
+        var projectRepository = new ProjectRepository();
+        var project = new Project();
         project.Name = "Project 1";
 
-        Task task = new Task(
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -163,11 +163,11 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void UpdateTask_WhenUpdatingExistingTask_ShouldUpdateTaskDetails()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Task task = new Task(
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -181,7 +181,7 @@ public class ProjectRepositoryTest
 
         projectRepository.AddTask(project.Name, task);
 
-        Task updatedTask = new Task(
+        var updatedTask = new Task(
             "Updated Task 1",
             "Updated Task 1 description",
             DateTime.Now.AddDays(1),
@@ -207,11 +207,11 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void UpdateTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Task task = new Task(
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -223,7 +223,7 @@ public class ProjectRepositoryTest
         task.Id = 1;
         projectRepository.AddTask(project.Name, task);
 
-        Task updatedTask = new Task(
+        var updatedTask = new Task(
             "Updated Task 1",
             "Updated Task 1 description",
             DateTime.Now.AddDays(1),
@@ -241,11 +241,11 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(TaskNotFoundException))]
     public void UpdateTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Task task = new Task(
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -257,7 +257,7 @@ public class ProjectRepositoryTest
         task.Id = 1;
         projectRepository.AddTask(project.Name, task);
 
-        Task updatedTask = new Task(
+        var updatedTask = new Task(
             "Updated Task 1",
             "Updated Task 1 description",
             DateTime.Now.AddDays(1),
@@ -274,11 +274,11 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void RemoveTask_WhenTaskExists_ShouldRemoveTaskFromProject()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Task task = new Task(
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -300,11 +300,11 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(TaskNotFoundException))]
     public void RemoveTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Task task = new Task(
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -323,8 +323,8 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void AddPreviousTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Task task = new Task(
+        var projectRepository = new ProjectRepository();
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -335,7 +335,7 @@ public class ProjectRepositoryTest
         );
         task.Id = 1;
 
-        Task previousTask = new Task(
+        var previousTask = new Task(
             "Previous Task",
             "Previous Task description",
             DateTime.Now,
@@ -353,11 +353,11 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(TaskNotFoundException))]
     public void AddPreviousTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Task task = new Task(
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -368,7 +368,7 @@ public class ProjectRepositoryTest
         );
         task.Id = 1;
 
-        Task previousTask = new Task(
+        var previousTask = new Task(
             "Previous Task",
             "Previous Task description",
             DateTime.Now,
@@ -388,11 +388,11 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(TaskNotFoundException))]
     public void AddPreviousTask_WhenTaskNotPartOfProject_ShouldThrowTaskNotFoundException()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Task task = new Task(
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -403,7 +403,7 @@ public class ProjectRepositoryTest
         );
         task.Id = 1;
 
-        Task previousTask = new Task(
+        var previousTask = new Task(
             "Previous Task",
             "Previous Task description",
             DateTime.Now,
@@ -422,11 +422,11 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void AddPreviousTask_WhenTaskIsValid_ShouldAddPreviousTask()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Task task1 = new Task(
+        var task1 = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -437,7 +437,7 @@ public class ProjectRepositoryTest
         );
         task1.Id = 1;
 
-        Task task2 = new Task(
+        var task2 = new Task(
             "Task 2",
             "Task 2 description",
             DateTime.Now,
@@ -463,11 +463,11 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void AddResourceToTask_WhenTaskExists_ShouldAddResource()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Task task = new Task(
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -479,7 +479,7 @@ public class ProjectRepositoryTest
         task.Id = 1;
         projectRepository.AddTask(project.Name, task);
 
-        Resource resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
+        var resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
 
         projectRepository.AddResourceToTask(project.Name, task.Id, resource);
 
@@ -492,8 +492,8 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void AddResourceToTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Task task = new Task(
+        var projectRepository = new ProjectRepository();
+        var task = new Task(
             "Task 1",
             "Task 1 description",
             DateTime.Now,
@@ -504,7 +504,7 @@ public class ProjectRepositoryTest
         );
         task.Id = 1;
 
-        Resource resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
+        var resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
 
         projectRepository.AddResourceToTask("NonExistingProject", task.Id, resource);
     }
@@ -514,11 +514,11 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(TaskNotFoundException))]
     public void AddResourceToTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
-        ProjectRepository projectRepository = new ProjectRepository();
-        Project project = new Project() { Name = "Project 1" };
+        var projectRepository = new ProjectRepository();
+        var project = new Project { Name = "Project 1" };
         projectRepository.AddProject(project);
 
-        Resource resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
+        var resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
 
         projectRepository.AddResourceToTask(project.Name, 999, resource); // Task with ID 999 does not exist
     }

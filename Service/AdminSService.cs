@@ -1,30 +1,21 @@
 using DataAccess;
-using Service.Exceptions.AdminSServiceExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Service;
+using Service.Exceptions.AdminSServiceExceptions;
 using Service.Exceptions.UserServiceExceptions;
-using Service.Models;
 using Service.Interface;
+using Service.Models;
 
 public class AdminSService : IAdminSService
 {
     private readonly InMemoryDatabase _database;
-    private UserService _userService;
-    private PasswordManager _passwordManager = new PasswordManager();
+    private readonly PasswordManager _passwordManager = new();
+    private readonly UserService _userService;
 
     public AdminSService(InMemoryDatabase database)
     {
         _database = database;
         _userService = new UserService(_database);
-    }
-
-    private void CheckAdminRole()
-    {
-        var currentUser = LoggedUser.Current;
-        if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminSystem))
-        {
-            throw new UnauthorizedAdminAccessException();
-        }
     }
 
     public void CreateUser(UserDTO userDTO)
@@ -36,18 +27,12 @@ public class AdminSService : IAdminSService
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
-        AdminPService adminPService = new AdminPService(_database);
+        var adminPService = new AdminPService(_database);
         var user = _userService.GetUser(userDTO.Email);
 
-        if (user == null)
-        {
-            throw new UserNotFoundException();
-        }
-        List<ProjectDTO> projects = adminPService.GetAllProjectsForUser(userDTO.Email);
-        foreach (var project in projects)
-        {
-            adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
-        }
+        if (user == null) throw new UserNotFoundException();
+        var projects = adminPService.GetAllProjectsForUser(userDTO.Email);
+        foreach (var project in projects) adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
         _database.users.Delete(user.Email);
     }
 
@@ -57,15 +42,9 @@ public class AdminSService : IAdminSService
 
         var user = _userService.GetUser(email);
 
-        if (user == null)
-        {
-            throw new UserNotFoundException();
-        }
+        if (user == null) throw new UserNotFoundException();
 
-        if (user.Password != _passwordManager.HashPassword(oldPassword))
-        {
-            throw new InvalidOldPasswordException();
-        }
+        if (user.Password != _passwordManager.HashPassword(oldPassword)) throw new InvalidOldPasswordException();
 
         if (_passwordManager.IsValidPassword(newPassword))
         {
@@ -78,10 +57,30 @@ public class AdminSService : IAdminSService
         }
     }
 
+    public void AssignRole(UserDTO userDTO, RolDTO role)
+    {
+        CheckAdminRole();
+
+        var user = _userService.GetUser(userDTO.Email);
+
+        if (user == null) throw new UserNotFoundException();
+
+        user.Roles.Add(role);
+
+        _userService.UpdateUser(user);
+    }
+
+    private void CheckAdminRole()
+    {
+        var currentUser = LoggedUser.Current;
+        if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminSystem))
+            throw new UnauthorizedAdminAccessException();
+    }
+
     public void ChangeToDefaultPassword(string email, string oldPassword)
     {
         CheckAdminRole();
-        string defaultPassword = "Password123#";
+        var defaultPassword = "Password123#";
         ChangePassword(email, defaultPassword, oldPassword);
     }
 
@@ -91,15 +90,9 @@ public class AdminSService : IAdminSService
         var user = _userService.GetUser(email);
 
 
-        if (user == null)
-        {
-            throw new UserNotFoundException();
-        }
+        if (user == null) throw new UserNotFoundException();
 
-        if (user.Password != _passwordManager.HashPassword(oldPassword))
-        {
-            throw new InvalidOldPasswordException();
-        }
+        if (user.Password != _passwordManager.HashPassword(oldPassword)) throw new InvalidOldPasswordException();
 
         if (_passwordManager.IsValidPassword(newPassword))
         {
@@ -110,32 +103,11 @@ public class AdminSService : IAdminSService
         {
             throw new InvalidUserPasswordException();
         }
-        
     }
 
     private void CheckIsCurrenUser(string email)
     {
         var currentUser = LoggedUser.Current;
-        if (currentUser == null || currentUser.Email != email)
-        {
-            throw new UnauthorizedAdminAccessException();
-        }
+        if (currentUser == null || currentUser.Email != email) throw new UnauthorizedAdminAccessException();
     }
-    public void AssignRole(UserDTO userDTO, RolDTO role)
-    {
-        CheckAdminRole();
-
-        var user = _userService.GetUser(userDTO.Email);
-
-        if (user == null)
-        {
-            throw new UserNotFoundException();
-        }
-
-        user.Roles.Add(role);
-
-        _userService.UpdateUser(user);
-    }
-
-    
 }

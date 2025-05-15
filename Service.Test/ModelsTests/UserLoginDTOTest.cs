@@ -1,6 +1,7 @@
 using Service.Models;
 
 namespace Service.Test.ModelsTests;
+
 [TestClass]
 public class UserLoginDTOTest
 {
@@ -8,8 +9,8 @@ public class UserLoginDTOTest
     public void UserLoginDTO_WhenValidEmailAndPassword_ThenObjectIsCreated()
     {
         // arrange
-        string validEmail = "test@email.com";
-        string validPassword = "ValidPassword123";
+        var validEmail = "test@email.com";
+        var validPassword = "ValidPassword123";
 
         // act
         var userLogin = new UserLoginDTO(validEmail, validPassword);

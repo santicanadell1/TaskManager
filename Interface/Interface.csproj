@@ -23,13 +23,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-      <ProjectReference Include="..\Domain\Domain.csproj" />
-      <ProjectReference Include="..\Service\Service.csproj" />
+        <ProjectReference Include="..\DataAccess\DataAccess.csproj"/>
+        <ProjectReference Include="..\Domain\Domain.csproj"/>
+        <ProjectReference Include="..\Service\Service.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\GanttLibrary\" />
+        <Folder Include="wwwroot\GanttLibrary\"/>
     </ItemGroup>
 
 </Project>

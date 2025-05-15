@@ -2,8 +2,7 @@
 
 public class DuplicatedProjectsNameException : Exception
 {
-    public DuplicatedProjectsNameException():base("The project name already exists.")
+    public DuplicatedProjectsNameException() : base("The project name already exists.")
     {
-        
     }
 }

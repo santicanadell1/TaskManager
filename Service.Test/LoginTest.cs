@@ -1,15 +1,13 @@
 using DataAccess;
-using Domain;
 using Service;
 using Service.Exceptions.LoginExceptions;
 using Service.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 [TestClass]
 public class LoginTests
 {
-    private Login _login;
     private InMemoryDatabase _inMemoryDatabase;
+    private Login _login;
     private PasswordManager _passwordManager;
 
     [TestInitialize]
@@ -34,7 +32,7 @@ public class LoginTests
             LastName = "Doe",
             Password = password,
             Roles = roles,
-            Birthday = DateTime.Parse("1990-01-01"),
+            Birthday = DateTime.Parse("1990-01-01")
         };
 
         var userService = new UserService(_inMemoryDatabase);
@@ -79,7 +77,7 @@ public class LoginTests
         var loggedUserAfterLogout = _login.GetLoggedUser();
         Assert.IsNull(loggedUserAfterLogout);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(InvalidLoginCredentialsException))]
     public void Login_ShouldThrowInvalidLoginCredentialsException_WhenCredentialsAreIncorrect()
@@ -125,9 +123,10 @@ public class LoginTests
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
-        
+
         Assert.IsTrue(_login.IsAdminSystem());
     }
+
     [TestMethod]
     public void IsAdminProject_ShouldReturnTrue_WhenUserIsAdminProject()
     {
@@ -149,9 +148,10 @@ public class LoginTests
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
-        
+
         Assert.IsTrue(_login.IsAdminProject());
     }
+
     [TestMethod]
     public void IsProjectMember_ShouldReturnTrue_WhenUserIsProjectMember()
     {
@@ -173,9 +173,10 @@ public class LoginTests
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
-        
+
         Assert.IsTrue(_login.IsProjectMember());
     }
+
     [TestMethod]
     public void UpdateLogedUser_ShouldUpdateLoggedUser_WhenUserIsLoggedIn()
     {
@@ -197,7 +198,7 @@ public class LoginTests
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
-        
+
         var userUpdate = new UserDTO
         {
             Email = email,
@@ -211,5 +212,4 @@ public class LoginTests
         Assert.IsFalse(_login.IsProjectMember());
         Assert.IsTrue(_login.IsAdminProject());
     }
-    
 }

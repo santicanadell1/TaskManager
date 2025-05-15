@@ -1,5 +1,4 @@
 using DataAccess;
-using Domain;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Exceptions.UserServiceExceptions;
 using Service.Models;
@@ -10,8 +9,8 @@ namespace Service.Test;
 [TestClass]
 public class AdminSService_Test
 {
-    private InMemoryDatabase _database;
     private AdminSService _adminService;
+    private InMemoryDatabase _database;
     private Login _loginService;
     private UserService _userService;
 
@@ -44,7 +43,6 @@ public class AdminSService_Test
         };
         _userService.AddUser(adminUserDTO);
         _userService.AddUser(normalUserDTO);
-        
     }
 
     [TestMethod]
@@ -139,10 +137,11 @@ public class AdminSService_Test
 
         _adminService.ChangePassword(userToUpdate.Email, newPassword, "Password123@");
     }
+
     [TestMethod]
     public void AdminService_ShouldChangePassword_WhenChangingToDefaultPassword()
     {
-        PasswordManager _passwordManager = new PasswordManager();
+        var _passwordManager = new PasswordManager();
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
         var userToUpdate = new UserDTO
@@ -159,10 +158,11 @@ public class AdminSService_Test
         var user = _userService.GetUser(userToUpdate.Email);
         Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
     }
+
     [TestMethod]
     public void AdminService_ShouldChangePassword_WhenChangingUserPassword()
     {
-        PasswordManager _passwordManager = new PasswordManager();
+        var _passwordManager = new PasswordManager();
 
 
         var userToUpdate = new UserDTO

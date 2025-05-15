@@ -1,5 +1,4 @@
 ﻿using Service.Models;
-using System.Collections.Generic;
 
 namespace Service.Interface;
 

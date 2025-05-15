@@ -1,8 +1,9 @@
-namespace Domain.Exceptions.ResourceExceptions
+namespace Domain.Exceptions.ResourceExceptions;
+
+public class ResourceTypeException : ResourceException
 {
-    public class ResourceTypeException : ResourceException
+    public ResourceTypeException()
+        : base("The resource type cannot be empty.")
     {
-        public ResourceTypeException() 
-            : base("The resource type cannot be empty.") { }
     }
 }

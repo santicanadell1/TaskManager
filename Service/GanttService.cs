@@ -8,25 +8,28 @@ public class GanttService
     {
         var data = new List<GanttTask>();
         var links = new List<GanttLink>();
-        int linkId = 1;
-        
+        var linkId = 1;
+
         foreach (var task in allTasks)
         {
-            bool isInCriticalPath = criticalPath.Any(ct => ct.Id == task.Id);
-            double progress = GetProgress(task);
+            var isInCriticalPath = criticalPath.Any(ct => ct.Id == task.Id);
+            var progress = GetProgress(task);
             data.Add(new GanttTask
             {
                 id = task.Id ?? 0,
                 text = task.Title,
-                start_date = task.StartDate == default ? DateTime.Today.ToString("yyyy-MM-dd") : task.StartDate.ToString("yyyy-MM-dd"),
-                end_date = task.EndDate == default ? DateTime.Today.ToString("yyyy-MM-dd") : task.EndDate.ToString("yyyy-MM-dd"),
+                start_date = task.StartDate == default
+                    ? DateTime.Today.ToString("yyyy-MM-dd")
+                    : task.StartDate.ToString("yyyy-MM-dd"),
+                end_date = task.EndDate == default
+                    ? DateTime.Today.ToString("yyyy-MM-dd")
+                    : task.EndDate.ToString("yyyy-MM-dd"),
                 duration = task.Duration,
                 progress = progress,
                 critical = isInCriticalPath,
                 slack = task.Slack.TotalDays
             });
             foreach (var prev in task.PreviousTasks)
-            {
                 links.Add(new GanttLink
                 {
                     id = linkId++,
@@ -35,7 +38,6 @@ public class GanttService
                     type = "0",
                     critical = isInCriticalPath && criticalPath.Any(ct => ct.Id == prev.Id)
                 });
-            }
         }
 
         return new GanttData
@@ -61,6 +63,7 @@ public class GanttService
                 progress = 1.0;
                 break;
         }
+
         return progress;
     }
 }

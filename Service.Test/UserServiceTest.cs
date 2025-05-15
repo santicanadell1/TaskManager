@@ -1,6 +1,4 @@
 using DataAccess;
-using Domain;
-using Domain.Exceptions.NotificationExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Service.Exceptions.UserServiceExceptions;
 using Service.Models;
@@ -14,12 +12,12 @@ public class UserServiceTest
     [ExpectedException(typeof(InvalidUserEmailException))]
     public void AddUser_ShouldThrowException_WhenEmailIsNotUnique()
     {
-        List<RolDTO> rols = new List<RolDTO>();
+        var rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
 
-        UserRepository userRepository = new UserRepository();
+        var userRepository = new UserRepository();
 
-        UserService _userService = new UserService(new InMemoryDatabase());
+        var _userService = new UserService(new InMemoryDatabase());
 
         var userDTO1 = new UserDTO
         {
@@ -37,13 +35,13 @@ public class UserServiceTest
         {
             FirstName = "Jane",
             LastName = "Doe",
-            Email = "john.doe@example.com", 
+            Email = "john.doe@example.com",
             Password = "Password123@",
             Birthday = DateTime.Parse("1990-01-01"),
             Roles = rols
         };
 
-        _userService.AddUser(userDTO2); 
+        _userService.AddUser(userDTO2);
     }
 
     [TestMethod]
@@ -52,7 +50,7 @@ public class UserServiceTest
     {
         var userRepository = new UserRepository();
         var userService = new UserService(new InMemoryDatabase());
-        List<RolDTO> rols = new List<RolDTO>();
+        var rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
 
         var userToUpdate = new UserDTO
@@ -61,7 +59,7 @@ public class UserServiceTest
             LastName = "Doe",
             Email = "nonexistent.user@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
-            Roles = rols,
+            Roles = rols
         };
 
         userService.UpdateUser(userToUpdate);
@@ -76,24 +74,21 @@ public class UserServiceTest
 
         userService.GetUsers();
     }
-    
-    
-    
-    
+
+
     [TestMethod]
     [ExpectedException(typeof(UserNotFoundException))]
     public void GetUser_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
     {
-        var userRepository = new UserRepository(); 
+        var userRepository = new UserRepository();
         var userService = new UserService(new InMemoryDatabase());
 
-        userService.GetUser("nonexistent.user@example.com"); 
+        userService.GetUser("nonexistent.user@example.com");
     }
-    
+
     [TestMethod]
     public void AddUser_ShouldAddUser_WhenEmailIsUnique()
     {
-      
         var rols = new List<RolDTO> { RolDTO.ProjectMember };
         var userDTO = new UserDTO
         {
@@ -107,19 +102,18 @@ public class UserServiceTest
 
         var userService = new UserService(new InMemoryDatabase());
 
-        
+
         userService.AddUser(userDTO);
 
-       
+
         var users = userService.GetUsers();
         Assert.AreEqual(1, users.Count);
         Assert.AreEqual("john.doe@example.com", users[0].Email);
     }
-    
+
     [TestMethod]
     public void UpdateUser_ShouldUpdateUser_WhenUserExists()
     {
-        
         var rols = new List<RolDTO> { RolDTO.ProjectMember };
         var userDTO = new UserDTO
         {
@@ -144,17 +138,12 @@ public class UserServiceTest
             Roles = rols
         };
 
-        
+
         userService.UpdateUser(updatedUserDTO);
 
-        
+
         var updatedUser = userService.GetUser("john.doe@example.com");
         Assert.AreEqual("Johnny", updatedUser.FirstName);
         Assert.AreEqual("Dough", updatedUser.LastName);
     }
-
-
-
-
 }
-    

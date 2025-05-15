@@ -1,8 +1,9 @@
-﻿namespace DataAccess.Exceptions.NotificationRepositoryExceptions
+﻿namespace DataAccess.Exceptions.NotificationRepositoryExceptions;
+
+public class InvalidNotificationOperationException : NotificationRepositoryException
 {
-    public class InvalidNotificationOperationException : NotificationRepositoryException
+    public InvalidNotificationOperationException()
+        : base("Invalid operation performed on the notification.")
     {
-        public InvalidNotificationOperationException() 
-            : base("Invalid operation performed on the notification.") { }
     }
 }

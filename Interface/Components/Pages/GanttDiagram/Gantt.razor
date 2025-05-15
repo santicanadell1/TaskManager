@@ -1,6 +1,6 @@
 ﻿@page "/gantt"
-@using Service.Models
 @using Service
+@using Service.Models
 @inject IJSRuntime JS
 @inject AdminPService AdminPService
 @inject TaskService TaskService
@@ -63,7 +63,7 @@
                         <select @onchange="OnYearChanged"
                                 value="@selectedYear"
                                 class="form-select gantt-select">
-                            @for (int year = DateTime.Now.Year - 5; year <= DateTime.Now.Year + 5; year++)
+                            @for (var year = DateTime.Now.Year - 5; year <= DateTime.Now.Year + 5; year++)
                             {
                                 <option value="@year">@year</option>
                             }
@@ -131,7 +131,8 @@
         @if (SelectedTaskSlack.HasValue)
         {
             <div class="mt-2 alert alert-info">
-                <strong>Slack:</strong> The task can de delayed <strong>@SelectedTaskSlack.Value.ToString("0.0")</strong> days without affecting the project end date.
+                <strong>Slack:</strong> The task can de delayed
+                <strong>@SelectedTaskSlack.Value.ToString("0.0")</strong> days without affecting the project end date.
             </div>
         }
     </div>
@@ -258,8 +259,8 @@
     private List<ProjectDTO> projects;
     private string selectedProjectName;
     private GanttData ganttData = new();
-    private bool showGantt = false;
-    private bool showCriticalPath = false;
+    private bool showGantt;
+    private bool showCriticalPath;
     private int selectedMonth = DateTime.Now.Month;
     private int selectedYear = DateTime.Now.Year;
     private DateTime? EstimatedEndDate;
@@ -306,7 +307,7 @@
             ganttData = GanttService.Convert(tasks, cpm.CriticalPath);
 
             Console.WriteLine($"GanttData created - Tasks: {ganttData?.data?.Count ?? 0}, Links: {ganttData?.links?.Count ?? 0}");
-            
+
             if (tasks.Any())
             {
                 var minDate = tasks.Min(t => t.StartDate);
@@ -319,8 +320,7 @@
             EstimatedEndDate = tasks.Max(t => t.EndDate);
             CriticalTasks = ganttData.data.Where(t => t.critical).ToList();
             NonCriticalTasks = ganttData.data.Where(t => !t.critical).ToList();
-            SelectedTaskSlack = null; 
-
+            SelectedTaskSlack = null;
         }
         catch (Exception ex)
         {
@@ -331,7 +331,7 @@
 
     private async Task OnMonthChanged(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out int month))
+        if (int.TryParse(e.Value?.ToString(), out var month))
         {
             selectedMonth = month;
             await UpdateGanttView();
@@ -340,7 +340,7 @@
 
     private async Task OnYearChanged(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out int year))
+        if (int.TryParse(e.Value?.ToString(), out var year))
         {
             selectedYear = year;
             await UpdateGanttView();
@@ -389,9 +389,10 @@
                 showCriticalPath);
         }
     }
+
     private void OnNonCriticalTaskSelected(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out int taskId))
+        if (int.TryParse(e.Value?.ToString(), out var taskId))
         {
             var selected = NonCriticalTasks.FirstOrDefault(t => t.id == taskId);
             SelectedTaskSlack = selected?.slack;

@@ -1,9 +1,8 @@
-namespace Service.Exceptions.CPMServiceExceptions
+namespace Service.Exceptions.CPMServiceExceptions;
+
+public class CriticalPathCalculationException : CpmServiceException
 {
-    public class CriticalPathCalculationException : CpmServiceException
+    public CriticalPathCalculationException(string message) : base($"Error al calcular el camino crítico: {message}")
     {
-        public CriticalPathCalculationException(string message) : base($"Error al calcular el camino crítico: {message}")
-        {
-        }
     }
 }

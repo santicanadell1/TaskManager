@@ -1,4 +1,3 @@
-using Domain;
 using Service.Models;
 
 namespace Service.Test.ModelsTests;
@@ -9,30 +8,30 @@ public class TaskDTOTest
     [TestMethod]
     public void NewTask_WhenTitleIsNull_ThenTaskIsNotCreated()
     {
-        TaskDTO taskDTO = new TaskDTO { Title = null };
+        var taskDTO = new TaskDTO { Title = null };
         Assert.IsNull(taskDTO.Title);
     }
 
     [TestMethod]
     public void NewTask_WhenDescriptionIsNull_ThenTaskIsNotCreated()
     {
-        TaskDTO taskDTO = new TaskDTO { Description = null };
+        var taskDTO = new TaskDTO { Description = null };
         Assert.IsNull(taskDTO.Description);
     }
 
     [TestMethod]
     public void NewTask_WhenExpectedStartDateIsValid_ThenTaskIsCreated()
     {
-        DateTime validDate = new DateTime(2025, 5, 3);
-        TaskDTO taskDTO = new TaskDTO { ExpectedStartDate = validDate };
+        var validDate = new DateTime(2025, 5, 3);
+        var taskDTO = new TaskDTO { ExpectedStartDate = validDate };
         Assert.AreEqual(validDate, taskDTO.ExpectedStartDate);
     }
 
     [TestMethod]
     public void NewTask_WhenDurationIsValid_ThenTaskIsCreated()
     {
-        int validDuration = 5;
-        TaskDTO taskDTO = new TaskDTO { Duration = validDuration };
+        var validDuration = 5;
+        var taskDTO = new TaskDTO { Duration = validDuration };
         Assert.AreEqual(validDuration, taskDTO.Duration);
     }
 
@@ -41,11 +40,11 @@ public class TaskDTOTest
     {
         var previousTasks = new List<TaskDTO>
         {
-            new TaskDTO
+            new()
             {
                 Title = "Task 1", Description = "Description 1", ExpectedStartDate = DateTime.Now, Duration = 3
             },
-            new TaskDTO
+            new()
             {
                 Title = "Task 2", Description = "Description 2", ExpectedStartDate = DateTime.Now, Duration = 5
             }
@@ -63,11 +62,11 @@ public class TaskDTOTest
     {
         var sameTimeTasks = new List<TaskDTO>
         {
-            new TaskDTO
+            new()
             {
                 Title = "Task A", Description = "Description A", ExpectedStartDate = DateTime.Now, Duration = 3
             },
-            new TaskDTO
+            new()
             {
                 Title = "Task B", Description = "Description B", ExpectedStartDate = DateTime.Now, Duration = 2
             }
@@ -91,22 +90,22 @@ public class TaskDTOTest
         var taskDoing = new TaskDTO { State = stateDoing };
         var taskDone = new TaskDTO { State = stateDone };
 
-        Assert.AreEqual<StateDTO>(stateTodo, taskTodo.State);
-        Assert.AreEqual<StateDTO>(stateDoing, taskDoing.State);
-        Assert.AreEqual<StateDTO>(stateDone, taskDone.State);
+        Assert.AreEqual(stateTodo, taskTodo.State);
+        Assert.AreEqual(stateDoing, taskDoing.State);
+        Assert.AreEqual(stateDone, taskDone.State);
     }
 
     [TestMethod]
     public void NewTask_WhenIdIsSet_ThenIdIsAssigned()
     {
-        TaskDTO taskDTO = new TaskDTO { Id = 123 };
+        var taskDTO = new TaskDTO { Id = 123 };
         Assert.AreEqual(123, taskDTO.Id);
     }
 
     [TestMethod]
     public void NewTask_WhenIdIsNotSet_ThenIdIsNull()
     {
-        TaskDTO taskDTO = new TaskDTO();
+        var taskDTO = new TaskDTO();
         Assert.IsNull(taskDTO.Id);
     }
 
@@ -115,8 +114,8 @@ public class TaskDTOTest
     {
         var resources = new List<ResourceDTO>
         {
-            new ResourceDTO { Name = "Resource 1", Type = "Type 1", Description = "Description of Resource 1" },
-            new ResourceDTO { Name = "Resource 2", Type = "Type 2", Description = "Description of Resource 2" }
+            new() { Name = "Resource 1", Type = "Type 1", Description = "Description of Resource 1" },
+            new() { Name = "Resource 2", Type = "Type 2", Description = "Description of Resource 2" }
         };
 
         var taskDTO = new TaskDTO { Resources = resources };
@@ -126,121 +125,121 @@ public class TaskDTOTest
         Assert.AreEqual("Resource 1", taskDTO.Resources[0].Name);
         Assert.AreEqual("Resource 2", taskDTO.Resources[1].Name);
     }
-    
+
     [TestMethod]
     public void TaskDTO_WhenIsCriticalIsSet_ThenIsCriticalIsAssigned()
     {
-        bool isCritical = true;
-        TaskDTO taskDTO = new TaskDTO();
-            
+        var isCritical = true;
+        var taskDTO = new TaskDTO();
+
         taskDTO.IsCritical = isCritical;
-            
+
         Assert.AreEqual(isCritical, taskDTO.IsCritical);
     }
-    
+
     [TestMethod]
     public void TaskDTO_WhenStartDateIsSet_ThenStartDateIsAssigned()
     {
-        DateTime startDate = new DateTime(2025, 6, 15);
-        TaskDTO taskDTO = new TaskDTO();
-            
+        var startDate = new DateTime(2025, 6, 15);
+        var taskDTO = new TaskDTO();
+
         taskDTO.StartDate = startDate;
-            
+
         Assert.AreEqual(startDate, taskDTO.StartDate);
     }
-    
+
     [TestMethod]
     public void TaskDTO_WhenEndDateIsSet_ThenEndDateIsAssigned()
     {
-        DateTime endDate = new DateTime(2025, 6, 20);
-        TaskDTO taskDTO = new TaskDTO();
-            
+        var endDate = new DateTime(2025, 6, 20);
+        var taskDTO = new TaskDTO();
+
         taskDTO.EndDate = endDate;
-            
+
         Assert.AreEqual(endDate, taskDTO.EndDate);
     }
-    
+
     [TestMethod]
     public void TaskDTO_WhenLatestStartIsSet_ThenLatestStartIsAssigned()
     {
-        DateTime latestStart = new DateTime(2025, 6, 16);
-        TaskDTO taskDTO = new TaskDTO();
-            
+        var latestStart = new DateTime(2025, 6, 16);
+        var taskDTO = new TaskDTO();
+
         taskDTO.LatestStart = latestStart;
-            
+
         Assert.AreEqual(latestStart, taskDTO.LatestStart);
     }
-    
+
     [TestMethod]
     public void TaskDTO_WhenLatestFinishIsSet_ThenLatestFinishIsAssigned()
     {
-        DateTime latestFinish = new DateTime(2025, 6, 21);
-        TaskDTO taskDTO = new TaskDTO();
-            
+        var latestFinish = new DateTime(2025, 6, 21);
+        var taskDTO = new TaskDTO();
+
         taskDTO.LatestFinish = latestFinish;
-            
+
         Assert.AreEqual(latestFinish, taskDTO.LatestFinish);
     }
-    
+
     [TestMethod]
     public void TaskDTO_WhenSlackIsSet_ThenSlackIsAssigned()
     {
-        TimeSpan slack = TimeSpan.FromDays(2);
-        TaskDTO taskDTO = new TaskDTO();
-            
+        var slack = TimeSpan.FromDays(2);
+        var taskDTO = new TaskDTO();
+
         taskDTO.Slack = slack;
-            
+
         Assert.AreEqual(slack, taskDTO.Slack);
     }
-    
-      [TestMethod]
-        public void TaskDTO_DefaultValues_ShouldBeCorrect()
-        {
-            // Arrange & Act
-            TaskDTO taskDTO = new TaskDTO();
-            
-            // Assert
-            Assert.IsFalse(taskDTO.IsCritical, "Default value for IsCritical should be false");
-            Assert.AreEqual(default(DateTime), taskDTO.StartDate, "Default value for StartDate should be default(DateTime)");
-            Assert.AreEqual(default(DateTime), taskDTO.EndDate, "Default value for EndDate should be default(DateTime)");
-            Assert.AreEqual(default(DateTime), taskDTO.LatestStart, "Default value for LatestStart should be default(DateTime)");
-            Assert.AreEqual(default(DateTime), taskDTO.LatestFinish, "Default value for LatestFinish should be default(DateTime)");
-            Assert.AreEqual(default(TimeSpan), taskDTO.Slack, "Default value for Slack should be default(TimeSpan)");
-        }
 
-        [TestMethod]
-        public void TaskDTO_PropertiesCanBeSetInConstructor()
-        {
-            DateTime now = DateTime.Now;
-            DateTime startDate = now;
-            DateTime endDate = now.AddDays(5);
-            DateTime latestStart = now.AddDays(1);
-            DateTime latestFinish = now.AddDays(6);
-            TimeSpan slack = TimeSpan.FromDays(1);
-            
-            TaskDTO taskDTO = new TaskDTO
-            {
-                Title = "Test Task",
-                Description = "Test Description",
-                ExpectedStartDate = now,
-                Duration = 5,
-                IsCritical = true,
-                StartDate = startDate,
-                EndDate = endDate,
-                LatestStart = latestStart,
-                LatestFinish = latestFinish,
-                Slack = slack
-            };
-            
-            Assert.AreEqual("Test Task", taskDTO.Title);
-            Assert.AreEqual("Test Description", taskDTO.Description);
-            Assert.AreEqual(now, taskDTO.ExpectedStartDate);
-            Assert.AreEqual(5, taskDTO.Duration);
-            Assert.IsTrue(taskDTO.IsCritical);
-            Assert.AreEqual(startDate, taskDTO.StartDate);
-            Assert.AreEqual(endDate, taskDTO.EndDate);
-            Assert.AreEqual(latestStart, taskDTO.LatestStart);
-            Assert.AreEqual(latestFinish, taskDTO.LatestFinish);
-            Assert.AreEqual(slack, taskDTO.Slack);
-        }
+    [TestMethod]
+    public void TaskDTO_DefaultValues_ShouldBeCorrect()
+    {
+        // Arrange & Act
+        var taskDTO = new TaskDTO();
+
+        // Assert
+        Assert.IsFalse(taskDTO.IsCritical, "Default value for IsCritical should be false");
+        Assert.AreEqual(default, taskDTO.StartDate, "Default value for StartDate should be default(DateTime)");
+        Assert.AreEqual(default, taskDTO.EndDate, "Default value for EndDate should be default(DateTime)");
+        Assert.AreEqual(default, taskDTO.LatestStart, "Default value for LatestStart should be default(DateTime)");
+        Assert.AreEqual(default, taskDTO.LatestFinish, "Default value for LatestFinish should be default(DateTime)");
+        Assert.AreEqual(default, taskDTO.Slack, "Default value for Slack should be default(TimeSpan)");
     }
+
+    [TestMethod]
+    public void TaskDTO_PropertiesCanBeSetInConstructor()
+    {
+        var now = DateTime.Now;
+        var startDate = now;
+        var endDate = now.AddDays(5);
+        var latestStart = now.AddDays(1);
+        var latestFinish = now.AddDays(6);
+        var slack = TimeSpan.FromDays(1);
+
+        var taskDTO = new TaskDTO
+        {
+            Title = "Test Task",
+            Description = "Test Description",
+            ExpectedStartDate = now,
+            Duration = 5,
+            IsCritical = true,
+            StartDate = startDate,
+            EndDate = endDate,
+            LatestStart = latestStart,
+            LatestFinish = latestFinish,
+            Slack = slack
+        };
+
+        Assert.AreEqual("Test Task", taskDTO.Title);
+        Assert.AreEqual("Test Description", taskDTO.Description);
+        Assert.AreEqual(now, taskDTO.ExpectedStartDate);
+        Assert.AreEqual(5, taskDTO.Duration);
+        Assert.IsTrue(taskDTO.IsCritical);
+        Assert.AreEqual(startDate, taskDTO.StartDate);
+        Assert.AreEqual(endDate, taskDTO.EndDate);
+        Assert.AreEqual(latestStart, taskDTO.LatestStart);
+        Assert.AreEqual(latestFinish, taskDTO.LatestFinish);
+        Assert.AreEqual(slack, taskDTO.Slack);
+    }
+}

@@ -1,7 +1,6 @@
 ﻿@page "/users/create"
-@using Domain
-@using Service.Models
 @using Service
+@using Service.Models
 @inject NavigationManager Navigation
 @inject AdminSService AdminService
 @inject UserService UserService
@@ -87,11 +86,11 @@
 </div>
 
 @code {
-    private UserDTO _userDto = new UserDTO();
+    private UserDTO _userDto = new();
     private string confirmPassword;
-    private bool alertVisible = false;
+    private bool alertVisible;
     private string alertMessage = string.Empty;
-    private bool successVisible = false;
+    private bool successVisible;
     private string successMessage = string.Empty;
 
     private string passwordInputType = "password";
@@ -121,7 +120,7 @@
             Email = "",
             Password = "",
             Birthday = DateTime.Now,
-            Roles = new List<RolDTO>(),
+            Roles = new List<RolDTO>()
         };
     }
 

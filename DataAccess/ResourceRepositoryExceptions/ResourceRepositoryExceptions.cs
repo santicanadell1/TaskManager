@@ -9,6 +9,6 @@ public class ResourceRepositoryExceptions : Exception
 
     public override string ToString()
     {
-        return $"ResourceRepositoryExceptions: {this.GetType().Name} - {this.Message}";
+        return $"ResourceRepositoryExceptions: {GetType().Name} - {Message}";
     }
 }

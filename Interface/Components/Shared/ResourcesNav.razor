@@ -2,7 +2,8 @@
 <link href="styles/styleResourceCreate.css" rel="stylesheet"/>
 
 <div class="nav-item px-3">
-    <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center" @onclick="ToggleResources">
+    <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center"
+            @onclick="ToggleResources">
         <span>
             <i class="bi bi-box"></i> Resources
         </span>
@@ -28,5 +29,9 @@
 @code {
     private bool showResources = false;
 
-    private void ToggleResources() => showResources = !showResources;
+    private void ToggleResources()
+    {
+        showResources = !showResources;
+    }
+
 }

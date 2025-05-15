@@ -1,9 +1,8 @@
-namespace Service.Exceptions.CPMServiceExceptions
+namespace Service.Exceptions.CPMServiceExceptions;
+
+public class NullTaskListException : CpmServiceException
 {
-    public class NullTaskListException : CpmServiceException
+    public NullTaskListException() : base("La lista de tareas no puede ser nula")
     {
-        public NullTaskListException() : base("La lista de tareas no puede ser nula")
-        {
-        }
     }
 }

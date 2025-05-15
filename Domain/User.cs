@@ -1,178 +1,142 @@
-﻿﻿using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Domain.Exceptions.UserExceptions;
 
-namespace Domain
+namespace Domain;
+
+public class User
 {
-    public class User
+    private DateTime birthday;
+    private string email;
+    private string firstName;
+    private string lastName;
+    public string password;
+    public List<Rol> roles = new();
+    public List<int> tasks = new();
+
+
+    public User(string firstName, string lastName, string email, DateTime birthday, string password)
     {
-        private string firstName;
-        private string lastName;
-        private string email;
-        private DateTime birthday;
-        public string password;
-        public List<Rol> roles = new List<Rol>();
-        public List<int> tasks = new List<int>();
-        private List<int> notifications = new List<int>();
-        
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+        Birthday = birthday;
+        Password = password;
+        Roles = new List<Rol>();
+        Tasks = new List<int>();
+    }
 
-        public string FirstName
+    public User()
+    {
+    }
+
+
+    public string FirstName
+    {
+        get => firstName;
+        set =>
+            firstName = string.IsNullOrWhiteSpace(value) ? throw new UserFirstNameException() : value;
+    }
+
+    public string LastName
+    {
+        get => lastName;
+        set =>
+            lastName = string.IsNullOrWhiteSpace(value) ? throw new UserLastNameException() : value;
+    }
+
+    public string Email
+    {
+        get => email;
+        set
         {
-            get => firstName;
-            set { firstName = string.IsNullOrWhiteSpace(value) ? 
-                throw new UserFirstNameException() : value; }
-        }
+            if (string.IsNullOrWhiteSpace(value)) throw new UserEmailException();
 
-        public string LastName
+            email = IsValidEmail(value) ? value : throw new UserEmailException();
+        }
+    }
+
+    public DateTime Birthday
+    {
+        get => birthday;
+        set
         {
-            get => lastName;
-            set
-            {
-                lastName = string.IsNullOrWhiteSpace(value) ? 
-                    throw new UserLastNameException() : 
-                    value;
-            }
+            if (DateTime.Today.AddYears(-18) < value || value < DateTime.Today.AddYears(-100))
+                throw new UserBirthdayException();
+            birthday = value;
         }
+    }
 
-        public string Email
+    public string Password
+    {
+        get => password;
+        set =>
+            password = string.IsNullOrWhiteSpace(value) ? throw new UserPasswordException() : value;
+    }
+
+    public List<int> Notifications { get; set; } = new();
+
+    public List<Rol> Roles
+    {
+        get => roles;
+        set
         {
-            get => email;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new UserEmailException();
-                }
+            if (value == null) throw new UserRolesInvalidAssignmentException();
 
-                email = IsValidEmail(value) ? value : 
-                    throw new UserEmailException();
-            }
+            roles = value;
         }
+    }
 
-        public DateTime Birthday
+    public List<int> Tasks
+    {
+        get => tasks;
+        set
         {
-            get => birthday;
-            set
-            {
-                if (DateTime.Today.AddYears(-18) < value || value < DateTime.Today.AddYears(-100))
-                {
-                    throw new UserBirthdayException();
-                }
-                birthday = value;
-            }
+            if (value == null) tasks = new List<int>();
+            tasks = value;
         }
-        public string Password
-        {
-            get => password;
-            set { password = string.IsNullOrWhiteSpace(value) ? 
-                throw new UserPasswordException() : value; }
-        }
+    }
 
-        public List<int> Notifications
-        {
-            get => notifications;
-            set => notifications = value;
-        }
-        public List<Rol> Roles
-        {
-            get => roles;
-            set
-            {
-                if (value == null)
-                {
-                    throw new UserRolesInvalidAssignmentException();
-                }
-
-                roles = value;
-            }
-        }
-
-        public List<int> Tasks
-        {
-            get => tasks;
-            set
-            {
-                if (value == null)
-                {
-                    tasks = new List<int>();
-                }
-                tasks = value;
-            }
-        }
-        
-        
-
-        public User(string firstName, string lastName, string email, DateTime birthday, string password)
-        {
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.Email = email;
-            this.Birthday = birthday;
-            this.Password = password;
-            this.Roles = new List<Rol>();
-            this.Tasks = new List<int>();
-        }
-        
-        public User(){}
-
-        private bool IsValidEmail(string email)
-        {
-            string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
-            return Regex.IsMatch(email, emailPattern);
-        }
+    private bool IsValidEmail(string email)
+    {
+        var emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
+        return Regex.IsMatch(email, emailPattern);
+    }
 
 
-        public void AddRol(Rol rol)
-        {
-            if (roles.Contains(rol))
-            {
-                throw new UserRoleAlreadyExistsException(rol.ToString());
-            }
+    public void AddRol(Rol rol)
+    {
+        if (roles.Contains(rol)) throw new UserRoleAlreadyExistsException(rol.ToString());
 
-            roles.Add(rol);
-        }
+        roles.Add(rol);
+    }
 
-        public void RemoveRol(Rol rol)
-        {
-            if (!roles.Contains(rol))
-            {
-                throw new UserRoleNotFoundException(rol.ToString());
-            }
+    public void RemoveRol(Rol rol)
+    {
+        if (!roles.Contains(rol)) throw new UserRoleNotFoundException(rol.ToString());
 
-            roles.Remove(rol);
-        }
+        roles.Remove(rol);
+    }
 
-        public void AddTask(int taskId)
-        {
-            if (tasks == null)
-            {
-                Tasks = new List<int>();
-            }
-            if (tasks.Contains(taskId))
-            {
-                throw new UserTaskException("The task is already assigned to the user.");
-            }
-            tasks.Add(taskId);
-        }
+    public void AddTask(int taskId)
+    {
+        if (tasks == null) Tasks = new List<int>();
+        if (tasks.Contains(taskId)) throw new UserTaskException("The task is already assigned to the user.");
+        tasks.Add(taskId);
+    }
 
-        public void RemoveTask(int taskId)
-        {
-            if (!tasks.Contains(taskId))
-            {
-                throw new UserTaskException("the task is not assigned to the user.");
-            }
-            tasks.Remove(taskId);
-        }
+    public void RemoveTask(int taskId)
+    {
+        if (!tasks.Contains(taskId)) throw new UserTaskException("the task is not assigned to the user.");
+        tasks.Remove(taskId);
+    }
 
-        public void AddNotification(int notificationId)
-        {
-            notifications.Add(notificationId);
-        }
+    public void AddNotification(int notificationId)
+    {
+        Notifications.Add(notificationId);
+    }
 
-        public void RemoveNotification(int notificationId)
-        {
-            notifications.Remove(notificationId);
-        }
-        
-        
+    public void RemoveNotification(int notificationId)
+    {
+        Notifications.Remove(notificationId);
     }
 }

@@ -1,5 +1,4 @@
 ﻿@page "/users/delete"
-@using Domain
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
@@ -68,11 +67,11 @@
 </div>
 
 @code {
-    private List<UserDTO> usersList = new List<UserDTO>();
+    private List<UserDTO> usersList = new();
     private string selectedUserEmail = "";
     private string deleteError = "";
     private string deleteSuccess = "";
-    private bool showConfirmation = false;
+    private bool showConfirmation;
     private UserDTO userToDelete;
 
     protected override void OnInitialized()
@@ -140,9 +139,10 @@
             if (userToDelete.Email == LoginService.GetLoggedUser().Email)
             {
                 LoginService.Logout();
-                Navigation.NavigateTo("/login", forceLoad: true);
+                Navigation.NavigateTo("/login", true);
                 return;
             }
+
             usersList = UserService.GetUsers();
             selectedUserEmail = "";
         }

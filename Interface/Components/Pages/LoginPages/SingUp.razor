@@ -7,7 +7,7 @@
 
 <div class="login-container">
     <h3 class="login-title">Sign Up</h3>
-   
+
     <EditForm Model="@_userDto" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
@@ -79,13 +79,13 @@
 
 @code {
 
-    private UserDTO _userDto = new UserDTO();
+    private UserDTO _userDto = new();
     private string confirmPassword;
 
     private string logMessage;
     private string registerError;
 
-    private bool alertVisible = false;
+    private bool alertVisible;
     private string alertMessage = string.Empty;
 
     private string passwordInputType = "password";
@@ -115,7 +115,7 @@
         _userDto.Email = "";
         _userDto.Password = "";
         _userDto.Birthday = DateTime.Now;
-        _userDto.Roles= new List<RolDTO>();
+        _userDto.Roles = new List<RolDTO>();
     }
 
     private void HandleValidSubmit()

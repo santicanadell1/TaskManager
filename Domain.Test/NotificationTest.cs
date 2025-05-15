@@ -1,80 +1,81 @@
 using Domain.Exceptions.NotificationExceptions;
 
-namespace Domain.Test
+namespace Domain.Test;
+
+[TestClass]
+public class NotificationTest
 {
-    [TestClass]
-    public class NotificationTest
+    private Project project;
+
+    [TestInitialize]
+    public void Initialize()
     {
-        private Project project;
-        [TestInitialize]
-        public void Initialize()
-        {
-             project = new Project("Project", "Description", DateTime.Today);
-        }
-        [TestMethod]
-        [ExpectedException(typeof(NotificationDescriptionException))]
-        public void NewNotification_WhenDescriptionIsEmpty_ShouldThrowNotificationDescriptionException()
-        {
-            Notification not;
+        project = new Project("Project", "Description", DateTime.Today);
+    }
 
-            not = new Notification(false, "",project);
-        }
+    [TestMethod]
+    [ExpectedException(typeof(NotificationDescriptionException))]
+    public void NewNotification_WhenDescriptionIsEmpty_ShouldThrowNotificationDescriptionException()
+    {
+        Notification not;
 
-        [TestMethod]
-        public void MarkRead_ShouldSetReadToTrue()
-        {
-            Notification not;
-            not = new Notification(false, "Some description",project);
+        not = new Notification(false, "", project);
+    }
+
+    [TestMethod]
+    public void MarkRead_ShouldSetReadToTrue()
+    {
+        Notification not;
+        not = new Notification(false, "Some description", project);
 
 
-            not.MarkRead();
+        not.MarkRead();
 
 
-            Assert.IsTrue(not.Read);
-        }
+        Assert.IsTrue(not.Read);
+    }
 
-        [TestMethod]
-        [ExpectedException(typeof(NotificationDescriptionException))]
-        public void NewNotification_WhenDescriptionIsWhiteSpace_ShouldThrowNotificationDescriptionException()
-        {
-            Notification not = new Notification(false, "    ", project);
-        }
+    [TestMethod]
+    [ExpectedException(typeof(NotificationDescriptionException))]
+    public void NewNotification_WhenDescriptionIsWhiteSpace_ShouldThrowNotificationDescriptionException()
+    {
+        var not = new Notification(false, "    ", project);
+    }
 
-        [TestMethod]
-        public void NewNotification_WhenCreated_ShouldHaveReadAsFalse()
-        {
-            Notification not = new Notification(false, "Some description", project);
-
-
-            Assert.IsFalse(not.Read);
-        }
-
-        [TestMethod]
-        public void Description_WhenSetToValidValue_ThenNoExceptionThrown()
-        {
-            Notification not = new Notification(false, "Valid description",project);
+    [TestMethod]
+    public void NewNotification_WhenCreated_ShouldHaveReadAsFalse()
+    {
+        var not = new Notification(false, "Some description", project);
 
 
-            Assert.AreEqual("Valid description", not.Description);
-        }
+        Assert.IsFalse(not.Read);
+    }
 
-        [TestMethod]
-        public void Description_WhenChanged_ThenUpdatedSuccessfully()
-        {
-            Notification not = new Notification(false, "Initial description", project);
-
-
-            not.Description = "Updated description";
+    [TestMethod]
+    public void Description_WhenSetToValidValue_ThenNoExceptionThrown()
+    {
+        var not = new Notification(false, "Valid description", project);
 
 
-            Assert.AreEqual("Updated description", not.Description);
-        }
+        Assert.AreEqual("Valid description", not.Description);
+    }
 
-        [TestMethod]
-        [ExpectedException(typeof(NotificationException))]
-        public void Project_WhenProjectIsNull_ThrowException()
-        {
-            Notification not = new Notification(false, "Initial description", null);
-        }
+    [TestMethod]
+    public void Description_WhenChanged_ThenUpdatedSuccessfully()
+    {
+        var not = new Notification(false, "Initial description", project);
+
+
+        not.Description = "Updated description";
+
+
+        Assert.AreEqual("Updated description", not.Description);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(NotificationException))]
+    public void Project_WhenProjectIsNull_ThrowException()
+    {
+        var not = new Notification(false, "Initial description", null);
     }
 }

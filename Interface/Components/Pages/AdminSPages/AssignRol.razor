@@ -1,5 +1,4 @@
 ﻿@page "/users/roles"
-@using Domain
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
@@ -74,12 +73,12 @@
 </div>
 
 @code {
-    private List<UserDTO> usersList = new List<UserDTO>();
+    private List<UserDTO> usersList = new();
     private string selectedUserEmail = "";
     private string assignError = "";
     private string assignSuccess = "";
 
-    private Dictionary<RolDTO, bool> rolesSelected = new()
+    private readonly Dictionary<RolDTO, bool> rolesSelected = new()
     {
         { RolDTO.AdminSystem, false },
         { RolDTO.AdminProject, false },
@@ -119,14 +118,14 @@
 
         try
         {
-            bool anyRoleAssigned = false;
+            var anyRoleAssigned = false;
 
             foreach (var rolePair in rolesSelected)
             {
                 if (rolePair.Value)
                 {
                     AdminService.AssignRole(userToAssignRoles, rolePair.Key);
-                    
+
                     anyRoleAssigned = true;
                 }
             }
@@ -146,7 +145,7 @@
             {
                 var userDto = UserService.GetUser(userToAssignRoles.Email);
                 _login.UpdateUser(userDto);
-                Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+                Navigation.NavigateTo(Navigation.Uri, true);
             }
         }
         catch (Exception ex)

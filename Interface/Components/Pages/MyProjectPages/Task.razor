@@ -86,14 +86,14 @@
 </div>
 
 @code {
-    private List<TaskDTO> tasks = new List<TaskDTO>();
-    private List<ProjectDTO> projects = new List<ProjectDTO>();
+    private List<TaskDTO> tasks = new();
+    private List<ProjectDTO> projects = new();
     private string loginMailUser;
     private string selectedProjectId;
     private string selectedTaskId;
     private StateDTO taskStatus = StateDTO.TODO;
     private string taskStatusString = "ToDo";
-    private DateTime? executionDate = DateTime.Today;
+    private readonly DateTime? executionDate = DateTime.Today;
     private int hoursWorked;
     private string errorMessage;
     private string successMessage;
@@ -202,7 +202,7 @@
                 State = taskStatus
             };
 
-            StateDTO newStatus = taskStatus;
+            var newStatus = taskStatus;
             MemberPService.ChangeTaskStatus(selectedProjectId, loginMailUser, taskDTO, newStatus);
 
             successMessage = $"Task '{existingTask.Title}' has been successfully updated to {taskStatusString}!";
@@ -224,8 +224,7 @@
         successMessage = string.Empty;
         infoMessage = string.Empty;
     }
-
-    // Métodos auxiliares para conversión
+    
     private string ConvertEnumToString(StateDTO state)
     {
         return state switch

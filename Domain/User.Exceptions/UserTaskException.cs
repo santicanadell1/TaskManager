@@ -1,9 +1,8 @@
 ﻿namespace Domain.Exceptions.UserExceptions;
 
-public class UserTaskException:Exception
+public class UserTaskException : Exception
 {
-    public UserTaskException(String message) : base(message)
+    public UserTaskException(string message) : base(message)
     {
-        
     }
 }

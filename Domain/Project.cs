@@ -1,84 +1,71 @@
 using Domain.Exceptions.ProjectExceptions;
 
-namespace Domain
+namespace Domain;
+
+public class Project
 {
-    public class Project
+    private string description;
+    private string name;
+    private DateTime startDate;
+
+    public Project()
     {
-        private string name;
-        private string description;
-        private DateTime startDate;
+    }
 
-        public string Name
+    public Project(string name, string description, DateTime startDate)
+    {
+        Name = name;
+        Description = description;
+        StartDate = startDate;
+    }
+
+    public string Name
+    {
+        get => name;
+        set
         {
-            get => name;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ProjectNameException();
-                }
+            if (string.IsNullOrWhiteSpace(value)) throw new ProjectNameException();
 
-                name = value;
-            }
+            name = value;
         }
+    }
 
-        public string Description
+    public string Description
+    {
+        get => description;
+        set
         {
-            get => description;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ProjectDescriptionException();
-                }
+            if (string.IsNullOrWhiteSpace(value)) throw new ProjectDescriptionException();
 
-                description = value;
-            }
+            description = value;
         }
+    }
 
-        public DateTime StartDate
+    public DateTime StartDate
+    {
+        get => startDate;
+        set
         {
-            get => startDate;
-            set
-            {
-                if (value == default(DateTime))
-                {
-                    throw new ProjectStartDateException();
-                }
+            if (value == default) throw new ProjectStartDateException();
 
-                if (value < DateTime.Today)
-                {
-                    throw new ProjectException("The Start Date must be greater than the current date");
-                }
+            if (value < DateTime.Today)
+                throw new ProjectException("The Start Date must be greater than the current date");
 
-                startDate = value;
-            }
+            startDate = value;
         }
+    }
 
-        public List<User> Members { get; set; } = new List<User>();
-        public List<Task> Tasks { get; set; } = new List<Task>();
-        public User AdminProject { get; set; }
+    public List<User> Members { get; set; } = new();
+    public List<Task> Tasks { get; set; } = new();
+    public User AdminProject { get; set; }
 
-        public Project()
-        {
-        }
+    public void AddMember(User user)
+    {
+        Members.Add(user);
+    }
 
-        public Project(string name, string description, DateTime startDate)
-        {
-            Name = name;
-            Description = description;
-            StartDate = startDate;
-        }
-
-        public void AddMember(User user)
-        {
-            Members.Add(user);
-        }
-
-        public void AddTask(Task task)
-        {
-            Tasks.Add(task);
-        }
-        
+    public void AddTask(Task task)
+    {
+        Tasks.Add(task);
     }
 }

@@ -1,12 +1,12 @@
 ﻿@page "/project/options"
+@using Service
+@using Service.Models
 @inject NavigationManager Navigation
 @inject AdminPService AdminPService
 @inject TaskService TaskService
 @inject ResourceService ResourceService
 @inject UserService UserService
 @rendermode InteractiveServer
-@using Service
-@using Service.Models
 
 <link href="styles/styleProjectList.css" rel="stylesheet"/>
 <link href="styles/styleProjectModals.css" rel="stylesheet"/>
@@ -73,7 +73,6 @@
     </div>
 }
 
-<!-- Modal Create Task -->
 @if (showCreateTaskModal)
 {
     <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
@@ -131,7 +130,7 @@
                             <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration"/>
                         </div>
 
-                        <!-- Resource Checklist -->
+                        
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-tools me-1"></i>Select Resources</label>
                             <div class="resource-container">
@@ -142,7 +141,7 @@
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input"
                                                    id="@($"resource-{resource.Id}")"
-                                                   @onchange="(e) => ToggleResourceSelection(e, resource.Id)"
+                                                   @onchange="e => ToggleResourceSelection(e, resource.Id)"
                                                    checked="@selectedResourceIds.Contains(resource.Id)"/>
                                             <label class="form-check-label" for="@($"resource-{resource.Id}")">
                                                 @resource.Name
@@ -158,7 +157,7 @@
                             </div>
                         </div>
 
-                        <!-- Previous Tasks -->
+                        
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-arrow-left me-1"></i>Previous Tasks</label>
                             @if (taskList != null && taskList.Any())
@@ -198,15 +197,15 @@
                                     </div>
                                 </div>
 
-                                <!-- List of added previous tasks -->
+                                
                                 @if (previousTaskIds.Any())
                                 {
                                     <div class="mt-3">
                                         <h6><i class="bi bi-diagram-3 me-1"></i>Added Dependencies:</h6>
                                         <div class="list-group dependency-list">
-                                            @for (int i = 0; i < previousTaskIds.Count; i++)
+                                            @for (var i = 0; i < previousTaskIds.Count; i++)
                                             {
-                                                int index = i;
+                                                var index = i;
                                                 var taskId = previousTaskIds[i];
                                                 var depType = previousTaskDependencies[i];
                                                 var taskTitle = taskList.FirstOrDefault(t => t.Id == taskId)?.Title ?? "Unknown Task";
@@ -320,7 +319,7 @@
                                          @bind-Value="selectedTaskToEdit.Duration"/>
                         </div>
 
-                        <!-- Resource Checklist -->
+                        
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-tools me-1"></i>Select Resources</label>
                             <div class="resource-container">
@@ -331,7 +330,7 @@
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input"
                                                    id="@($"edit-resource-{resource.Id}")"
-                                                   @onchange="(e) => ToggleEditResourceSelection(e, resource.Id)"
+                                                   @onchange="e => ToggleEditResourceSelection(e, resource.Id)"
                                                    checked="@editSelectedResourceIds.Contains(resource.Id)"/>
                                             <label class="form-check-label" for="@($"edit-resource-{resource.Id}")">
                                                 @resource.Name
@@ -347,7 +346,7 @@
                             </div>
                         </div>
 
-                        <!-- Previous Tasks -->
+                        
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-arrow-left me-1"></i>Previous Tasks</label>
                             @if (taskList != null && taskList.Any())
@@ -388,15 +387,15 @@
                                     </div>
                                 </div>
 
-                                <!-- List of added previous tasks -->
+                                
                                 @if (editPreviousTaskIds.Any())
                                 {
                                     <div class="mt-3">
                                         <h6><i class="bi bi-diagram-3 me-1"></i>Added Dependencies:</h6>
                                         <div class="list-group dependency-list">
-                                            @for (int i = 0; i < editPreviousTaskIds.Count; i++)
+                                            @for (var i = 0; i < editPreviousTaskIds.Count; i++)
                                             {
-                                                int index = i;
+                                                var index = i;
                                                 var taskId = editPreviousTaskIds[i];
                                                 var depType = editPreviousTaskDependencies[i];
                                                 var taskTitle = taskList.FirstOrDefault(t => t.Id == taskId)?.Title ?? "Unknown Task";
@@ -447,7 +446,7 @@
     </div>
 }
 
-<!-- Modal Add Members -->
+
 @if (showAddMembersModal)
 {
     <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
@@ -487,7 +486,7 @@
                             {
                                 <div class="form-check member-item">
                                     <input type="checkbox" class="form-check-input" id="@member.Email"
-                                           @onchange="(e) => ToggleMemberSelection(e, member.Email)"/>
+                                           @onchange="e => ToggleMemberSelection(e, member.Email)"/>
                                     <label class="form-check-label" for="@member.Email">
                                         <i class="bi bi-person me-1"></i>@member.FirstName @member.LastName
                                     </label>
@@ -514,7 +513,7 @@
     </div>
 }
 
-<!-- Modal Assign Task to Member -->
+
 @if (showAssignTaskToMemberModal)
 {
     <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
@@ -550,7 +549,7 @@
                     }
 
                     <div class="row">
-                        <!-- Available Tasks Column -->
+                        
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header bg-light">
@@ -586,7 +585,7 @@
                             </div>
                         </div>
 
-                        <!-- Assigned Tasks Column -->
+                        
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header bg-light">
@@ -634,7 +633,7 @@
     </div>
 }
 
-<!-- Modal Task List -->
+
 @if (showTaskListModal)
 {
     <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
@@ -711,7 +710,7 @@
     </div>
 }
 
-<!-- Modal Member List -->
+
 @if (showMemberListModal)
 {
     <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
@@ -789,19 +788,19 @@
 
 @code {
 
-    private List<ProjectDTO> projects = new List<ProjectDTO>();
+    private List<ProjectDTO> projects = new();
     private string selectedProjectName;
-    private List<TaskDTO> taskList = new List<TaskDTO>();
-    private List<ResourceDTO> availableResources = new List<ResourceDTO>();
-    private List<UserDTO> membersList = new List<UserDTO>();
-    private List<UserDTO> membersProjectList = new List<UserDTO>();
+    private List<TaskDTO> taskList = new();
+    private List<ResourceDTO> availableResources = new();
+    private List<UserDTO> membersList = new();
+    private List<UserDTO> membersProjectList = new();
 
-    private bool showCreateTaskModal = false;
-    private bool showEditTaskModal = false;
-    private bool showAddMembersModal = false;
-    private bool showAssignTaskToMemberModal = false;
-    private bool showTaskListModal = false;
-    private bool showMemberListModal = false;
+    private bool showCreateTaskModal;
+    private bool showEditTaskModal;
+    private bool showAddMembersModal;
+    private bool showAssignTaskToMemberModal;
+    private bool showTaskListModal;
+    private bool showMemberListModal;
 
     private string errorMessage = string.Empty;
     private string taskErrorMessage = string.Empty;
@@ -813,26 +812,26 @@
     private string assignTaskErrorMessage = string.Empty;
     private string assignTaskSuccessMessage = string.Empty;
 
-    private TaskDTO newTask = new TaskDTO();
-    private HashSet<int?> selectedResourceIds = new HashSet<int?>();
-    private List<int?> previousTaskIds = new List<int?>();
-    private List<string> previousTaskDependencies = new List<string>();
-    private int? newPreviousTaskId = null;
+    private TaskDTO newTask = new();
+    private readonly HashSet<int?> selectedResourceIds = new();
+    private readonly List<int?> previousTaskIds = new();
+    private readonly List<string> previousTaskDependencies = new();
+    private int? newPreviousTaskId;
     private string newDependencyType = "FS";
 
-    private TaskDTO selectedTaskToEdit = null;
-    private HashSet<int?> editSelectedResourceIds = new HashSet<int?>();
-    private List<int?> editPreviousTaskIds = new List<int?>();
-    private List<string> editPreviousTaskDependencies = new List<string>();
-    private int? editNewPreviousTaskId = null;
+    private TaskDTO selectedTaskToEdit;
+    private readonly HashSet<int?> editSelectedResourceIds = new();
+    private readonly List<int?> editPreviousTaskIds = new();
+    private readonly List<string> editPreviousTaskDependencies = new();
+    private int? editNewPreviousTaskId;
     private string editNewDependencyType = "FS";
 
-    private HashSet<string> selectedEmails = new HashSet<string>();
+    private readonly HashSet<string> selectedEmails = new();
 
     private string selectedMemberId;
     private string selectedMemberName;
-    private List<TaskDTO> assignedTasks = new List<TaskDTO>();
-    private List<UserDTO> projectMembers = new List<UserDTO>();
+    private List<TaskDTO> assignedTasks = new();
+    private List<UserDTO> projectMembers = new();
 
     protected override void OnInitialized()
     {
@@ -947,7 +946,7 @@
                 PreviousTasks = new List<TaskDTO>(),
                 SameTimeTasks = new List<TaskDTO>(),
                 Resources = new List<ResourceDTO>(),
-                State = StateDTO.TODO, 
+                State = StateDTO.TODO,
                 Id = null
             };
 
@@ -1019,7 +1018,7 @@
             var previousTasksFS = new List<TaskDTO>();
             var sameTimeTasksSS = new List<TaskDTO>();
 
-            for (int i = 0; i < previousTaskIds.Count; i++)
+            for (var i = 0; i < previousTaskIds.Count; i++)
             {
                 if (previousTaskIds[i].HasValue)
                 {
@@ -1201,7 +1200,7 @@
             var previousTasksFS = new List<TaskDTO>();
             var sameTimeTasksSS = new List<TaskDTO>();
 
-            for (int i = 0; i < editPreviousTaskIds.Count; i++)
+            for (var i = 0; i < editPreviousTaskIds.Count; i++)
             {
                 if (editPreviousTaskIds[i].HasValue)
                 {
@@ -1288,9 +1287,10 @@
             {
                 if (user.Roles.Contains(RolDTO.ProjectMember))
                 {
-                    Members.Add((user));
+                    Members.Add(user);
                 }
             }
+
             membersList = Members;
         }
         else
@@ -1345,7 +1345,6 @@
             memberErrorMessage = "No members selected.";
             memberSuccessMessage = string.Empty;
         }
-
     }
 
     private void ShowTaskListModal()
@@ -1409,7 +1408,7 @@
     private void ShowAssignTaskModal(UserDTO member)
     {
         showMemberListModal = false;
-        selectedMemberId   = member.Email;
+        selectedMemberId = member.Email;
         selectedMemberName = $"{member.FirstName} {member.LastName}";
         try
         {

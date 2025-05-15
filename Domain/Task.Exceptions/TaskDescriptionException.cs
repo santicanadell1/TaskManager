@@ -1,8 +1,9 @@
-namespace Domain.Exceptions.TaskExceptions
+namespace Domain.Exceptions.TaskExceptions;
+
+public class TaskDescriptionException : TaskException
 {
-    public class TaskDescriptionException : TaskException
+    public TaskDescriptionException()
+        : base("Description cannot be empty or whitespace.")
     {
-        public TaskDescriptionException() 
-            : base("Description cannot be empty or whitespace.") { }
     }
 }

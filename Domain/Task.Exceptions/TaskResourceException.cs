@@ -1,8 +1,9 @@
-﻿namespace Domain.Exceptions.TaskExceptions
+﻿namespace Domain.Exceptions.TaskExceptions;
+
+public class TaskResourceException : TaskException
 {
-    public class TaskResourceException : TaskException
+    public TaskResourceException(string message)
+        : base(message)
     {
-        public TaskResourceException(string message) 
-            : base(message) { }
     }
 }

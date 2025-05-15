@@ -1,8 +1,9 @@
-namespace Domain.Exceptions.ResourceExceptions
+namespace Domain.Exceptions.ResourceExceptions;
+
+public class ResourceNameException : ResourceException
 {
-    public class ResourceNameException : ResourceException
+    public ResourceNameException()
+        : base("The resource name cannot be empty.")
     {
-        public ResourceNameException() 
-            : base("The resource name cannot be empty.") { }
     }
 }

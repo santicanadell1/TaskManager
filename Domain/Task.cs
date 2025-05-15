@@ -1,204 +1,142 @@
 ﻿using Domain.Exceptions.TaskExceptions;
-using System;
-using System.Collections.Generic;
 
-namespace Domain
+namespace Domain;
+
+public class Task
 {
-    public class Task
+    private string _description;
+    private int _duration;
+
+    private List<Task> _previousTasks;
+    private List<Resource> _resources;
+    private List<Task> _sameTimeTasks;
+    private State _state;
+    private string _title;
+
+    public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks,
+        List<Task> sameTimeTasks, List<Resource> resources)
     {
-        private string _title;
-        private string _description;
-        private DateTime _expectedStartDate;
-        private DateTime _startDate;
-        private DateTime _endDate;
-        private int _duration;
-        private List<Task> _previousTasks;
-        private List<Task> _sameTimeTasks;
-        private State _state;
-        private List<Resource> _resources;
+        Title = title;
+        Description = description;
+        ExpectedStartDate = startDate;
+        Duration = duration;
+        PreviousTasks = previousTasks ?? new List<Task>();
+        SameTimeTasks = sameTimeTasks ?? new List<Task>();
+        State = State.TODO;
+        Resources = resources ?? new List<Resource>();
 
-        private DateTime _latestStart;
-        private DateTime _latestFinish;
-        private TimeSpan _slack;
-        private bool _isCritical;
+        StartDate = startDate;
+        EndDate = startDate.AddDays(duration);
+        LatestStart = startDate;
+        LatestFinish = startDate.AddDays(duration);
+        Slack = TimeSpan.Zero;
+        IsCritical = false;
+    }
 
-        public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks,
-            List<Task> sameTimeTasks, List<Resource> resources)
+    public List<Resource> Resources
+    {
+        get => _resources;
+        set
         {
-            this.Title = title;
-            this.Description = description;
-            this.ExpectedStartDate = startDate;
-            this.Duration = duration;
-            this.PreviousTasks = previousTasks ?? new List<Task>();
-            this.SameTimeTasks = sameTimeTasks ?? new List<Task>();
-            this.State = State.TODO;
-            this.Resources = resources ?? new List<Resource>();
+            if (value == null) throw new TaskResourceException("Resources cannot be null ");
 
-            this.StartDate = startDate;
-            this.EndDate = startDate.AddDays(duration);
-            this.LatestStart = startDate;
-            this.LatestFinish = startDate.AddDays(duration);
-            this.Slack = TimeSpan.Zero;
-            this.IsCritical = false;
+            _resources = value;
         }
+    }
 
-        public List<Resource> Resources
+    public string Title
+    {
+        get => _title;
+        set
         {
-            get => _resources;
-            set
-            {
-                if (value == null)
-                {
-                    throw new TaskResourceException("Resources cannot be null ");
-                }
+            if (string.IsNullOrWhiteSpace(value)) throw new TaskTitleException();
 
-                _resources = value;
-            }
+            _title = value;
         }
+    }
 
-        public string Title
+    public string Description
+    {
+        get => _description;
+        set
         {
-            get => _title;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new TaskTitleException();
-                }
+            if (string.IsNullOrWhiteSpace(value)) throw new TaskDescriptionException();
 
-                _title = value;
-            }
+            _description = value;
         }
+    }
 
-        public string Description
+    public DateTime ExpectedStartDate { get; set; }
+
+    public DateTime StartDate { get; set; }
+
+    public DateTime EndDate { get; set; }
+
+    public DateTime LatestStart { get; set; }
+
+    public DateTime LatestFinish { get; set; }
+
+    public TimeSpan Slack { get; set; }
+
+    public bool IsCritical { get; set; }
+
+    public int Duration
+    {
+        get => _duration;
+        set
         {
-            get => _description;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new TaskDescriptionException();
-                }
+            if (value <= 0) throw new TaskDurationException();
 
-                _description = value;
-            }
+            _duration = value;
         }
+    }
 
-        public DateTime ExpectedStartDate
+    public List<Task> PreviousTasks
+    {
+        get => _previousTasks;
+        set
         {
-            get => _expectedStartDate;
-            set => _expectedStartDate = value;
+            if (value == null) throw new TaskPreviousTaskException("PreviousTasks cannot be null ");
+
+            _previousTasks = value;
         }
+    }
 
-        public DateTime StartDate
-        {
-            get => _startDate;
-            set => _startDate = value;
-        }
+    public List<Task> SameTimeTasks
+    {
+        get => _sameTimeTasks;
+        set => _sameTimeTasks = value ?? new List<Task>();
+    }
 
-        public DateTime EndDate
-        {
-            get => _endDate;
-            set => _endDate = value;
-        }
+    public State State { get; set; }
 
-        public DateTime LatestStart
-        {
-            get => _latestStart;
-            set => _latestStart = value;
-        }
-        public DateTime LatestFinish
-        {
-            get => _latestFinish;
-            set => _latestFinish = value;
-        }
-        public TimeSpan Slack
-        {
-            get => _slack;
-            set => _slack = value;
-        }
-        public bool IsCritical
-        {
-            get => _isCritical;
-            set => _isCritical = value;
-        }
-        
-        public int Duration
-        {
-            get => _duration;
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new TaskDurationException();
-                }
+    public int? Id { get; set; }
 
-                _duration = value;
-            }
-        }
+    public void AddPreviousTask(Task task)
+    {
+        if (task == null) throw new TaskResourceException("Task cannot be null.");
 
-        public List<Task> PreviousTasks
-        {
-            get => _previousTasks;
-            set
-            {
-                if (value == null)
-                {
-                    throw new TaskPreviousTaskException("PreviousTasks cannot be null ");
-                }
+        PreviousTasks.Add(task);
+    }
 
-                _previousTasks = value;
-            }
-        }
+    public void RemovePreviousTask(Task task)
+    {
+        if (task == null) throw new TaskResourceException("Task cannot be null.");
 
-        public void AddPreviousTask(Task task)
-        {
-            if (task == null)
-            {
-                throw new TaskResourceException("Task cannot be null.");
-            }
+        PreviousTasks.Remove(task);
+    }
 
-            PreviousTasks.Add(task);
-        }
+    public void AddSameTimeTask(Task task)
+    {
+        if (task == null) throw new TaskResourceException("Task cannot be null.");
 
-        public void RemovePreviousTask(Task task)
-        {
-            if (task == null)
-            {
-                throw new TaskResourceException("Task cannot be null.");
-            }
+        SameTimeTasks.Add(task);
+    }
 
-            PreviousTasks.Remove(task);
-        }
+    public void RemoveSameTimeTask(Task task)
+    {
+        if (task == null) throw new TaskResourceException("Task cannot be null.");
 
-        public List<Task> SameTimeTasks
-        {
-            get => _sameTimeTasks;
-            set => _sameTimeTasks = value ?? new List<Task>();
-        }
-
-        public void AddSameTimeTask(Task task)
-        {
-            if (task == null)
-            {
-                throw new TaskResourceException("Task cannot be null.");
-            }
-
-            SameTimeTasks.Add(task);
-        }
-
-        public void RemoveSameTimeTask(Task task)
-        {
-            if (task == null)
-            {
-                throw new TaskResourceException("Task cannot be null.");
-            }
-
-            SameTimeTasks.Remove(task);
-        }
-
-        public State State { get; set; }
-
-        public int? Id { get; set; }
+        SameTimeTasks.Remove(task);
     }
 }

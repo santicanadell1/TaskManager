@@ -1,20 +1,16 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.ComponentModel.DataAnnotations;
 using Service.Models;
-using System;
-using System.ComponentModel.DataAnnotations;
-using Domain;
 
 namespace Service.Test.ModelsTests;
 
 [TestClass]
 public class ProjectDTOTests
 {
-
     private UserDTO Admin;
 
-    private UserDTO User;
-
     private List<UserDTO> members;
+
+    private UserDTO User;
 
     [TestInitialize]
     public void Initialize()
@@ -52,8 +48,8 @@ public class ProjectDTOTests
             Members = members
         };
 
-        var validationResults = new System.Collections.Generic.List<ValidationResult>();
-        bool isValid =
+        var validationResults = new List<ValidationResult>();
+        var isValid =
             Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
 
         Assert.IsFalse(isValid);
@@ -72,8 +68,8 @@ public class ProjectDTOTests
             Members = members
         };
 
-        var validationResults = new System.Collections.Generic.List<ValidationResult>();
-        bool isValid =
+        var validationResults = new List<ValidationResult>();
+        var isValid =
             Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
 
         Assert.IsFalse(isValid);
@@ -92,8 +88,8 @@ public class ProjectDTOTests
             Members = members
         };
 
-        var validationResults = new System.Collections.Generic.List<ValidationResult>();
-        bool isValid =
+        var validationResults = new List<ValidationResult>();
+        var isValid =
             Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
 
         Assert.IsTrue(isValid);
@@ -110,8 +106,8 @@ public class ProjectDTOTests
             AdminProyect = Admin,
             Members = members
         };
-        Assert.IsTrue(projectDTO.StartDate == DateTime.Parse("2020-09-01") && projectDTO.Name == "Test Project" && projectDTO.Description == "Test Description" && projectDTO.AdminProyect == Admin && projectDTO.Members == members);
+        Assert.IsTrue(projectDTO.StartDate == DateTime.Parse("2020-09-01") && projectDTO.Name == "Test Project" &&
+                      projectDTO.Description == "Test Description" && projectDTO.AdminProyect == Admin &&
+                      projectDTO.Members == members);
     }
-
-
 }

@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Service.Interface;
 
 public class PasswordManager : IPasswordManager
@@ -16,6 +16,7 @@ public class PasswordManager : IPasswordManager
         var passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$";
         return Regex.IsMatch(password, passwordPattern);
     }
+
     public string HashPassword(string password)
     {
         using (var sha256Hash = SHA256.Create())
@@ -23,7 +24,7 @@ public class PasswordManager : IPasswordManager
             var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
             var builder = new StringBuilder();
             foreach (var b in
-                     bytes) builder.Append(b.ToString("x2")); 
+                     bytes) builder.Append(b.ToString("x2"));
 
             return builder.ToString();
         }

@@ -50,7 +50,7 @@
 </div>
 
 @code {
-    private List<ResourceDTO> resourcesList = new List<ResourceDTO>();
+    private List<ResourceDTO> resourcesList = new();
     private int? selectedResourceId;
     private string deleteError = string.Empty;
     private string deleteSuccess = string.Empty;
@@ -80,8 +80,8 @@
 
     private void DeleteResources()
     {
-        deleteError = ""; 
-        deleteSuccess = ""; 
+        deleteError = "";
+        deleteSuccess = "";
 
         if (selectedResourceId == null)
         {
@@ -95,7 +95,7 @@
             deleteSuccess = "Resource deleted successfully.";
 
             LoadResources();
-            selectedResourceId = null; 
+            selectedResourceId = null;
         }
         catch (Exception ex)
         {

@@ -1,9 +1,8 @@
-namespace Service.Exceptions.CPMServiceExceptions
+namespace Service.Exceptions.CPMServiceExceptions;
+
+public class InvalidTaskDependencyException : CpmServiceException
 {
-    public class InvalidTaskDependencyException : CpmServiceException
+    public InvalidTaskDependencyException(string message) : base($"Dependencia de tarea inválida: {message}")
     {
-        public InvalidTaskDependencyException(string message) : base($"Dependencia de tarea inválida: {message}")
-        {
-        }
     }
 }

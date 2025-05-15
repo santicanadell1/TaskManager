@@ -1,9 +1,8 @@
-namespace Service.Exceptions.UserServiceExceptions
+namespace Service.Exceptions.UserServiceExceptions;
+
+public class UserServiceNotFoundException : UserServiceException
 {
-    public class UserServiceNotFoundException : UserServiceException
+    public UserServiceNotFoundException() : base("User not found or does not exist.")
     {
-        public UserServiceNotFoundException() : base("User not found or does not exist.")
-        {
-        }
     }
 }

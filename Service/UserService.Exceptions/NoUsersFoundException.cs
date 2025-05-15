@@ -1,9 +1,8 @@
-namespace Service.Exceptions.UserServiceExceptions
+namespace Service.Exceptions.UserServiceExceptions;
+
+public class NoUsersFoundException : UserServiceException
 {
-    public class NoUsersFoundException : UserServiceException
+    public NoUsersFoundException() : base("The user list is empty or does not exist.")
     {
-        public NoUsersFoundException() : base("The user list is empty or does not exist.")
-        {
-        }
     }
 }

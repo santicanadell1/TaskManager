@@ -1,10 +1,9 @@
-﻿namespace Domain.Exceptions.TaskExceptions
+﻿namespace Domain.Exceptions.TaskExceptions;
+
+public class TaskPreviousTaskException : TaskException
 {
-    public class TaskPreviousTaskException : TaskException
+    public TaskPreviousTaskException(string message)
+        : base(message)
     {
-        public TaskPreviousTaskException(string message)
-            : base(message)
-        {
-        }
     }
 }

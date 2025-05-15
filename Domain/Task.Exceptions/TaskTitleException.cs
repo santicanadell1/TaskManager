@@ -1,8 +1,9 @@
-namespace Domain.Exceptions.TaskExceptions
+namespace Domain.Exceptions.TaskExceptions;
+
+public class TaskTitleException : TaskException
 {
-    public class TaskTitleException : TaskException
+    public TaskTitleException()
+        : base("Title cannot be empty or whitespace.")
     {
-        public TaskTitleException() 
-            : base("Title cannot be empty or whitespace.") { }
     }
 }

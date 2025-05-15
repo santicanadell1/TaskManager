@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using DataAccess.Exceptions.ProjectRepositoryExceptions;
+using Domain;
 using Task = Domain.Task;
 using TaskRepositoryExceptions = DataAccess.Exceptions.TaskRepositoryExceptions;
 
@@ -6,8 +7,8 @@ namespace DataAccess;
 
 public class ProjectRepository
 {
-    private List<Project> _projects;
     private static int _nextIdTask;
+    private List<Project> _projects;
 
     public ProjectRepository()
     {
@@ -19,14 +20,9 @@ public class ProjectRepository
 
     public void AddProject(Project project)
     {
-        if (Projects.Any(p => p.Name == project.Name))
-        {
-            throw new Exceptions.ProjectRepositoryExceptions.DuplicatedProjectsNameException();
-        }
-        else
-        {
-            Projects.Add(project);
-        }
+        if (Projects.Any(p => p.Name == project.Name)) throw new DuplicatedProjectsNameException();
+
+        Projects.Add(project);
     }
 
     public List<Project> GetAllProjects()
@@ -41,50 +37,32 @@ public class ProjectRepository
 
     public void RemoveProject(string name)
     {
-        if (!Projects.Any(p => p.Name == name))
-        {
-            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
-        }
-        else
-        {
-            Projects.Remove(Projects.Find(p => p.Name == name));
-        }
+        if (!Projects.Any(p => p.Name == name)) throw new ProjectNotFoundException();
+
+        Projects.Remove(Projects.Find(p => p.Name == name));
     }
 
     public void UpdateProject(string name, Project project)
     {
         if (Projects.Any(p => p.Name == project.Name) && project.Name != name)
-        {
-            throw new Exceptions.ProjectRepositoryExceptions.DuplicatedProjectsNameException();
-        }
+            throw new DuplicatedProjectsNameException();
 
-        if (!Projects.Any(p => p.Name == name))
-        {
-            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
-        }
+        if (!Projects.Any(p => p.Name == name)) throw new ProjectNotFoundException();
 
-        int index = Projects.FindIndex(p => p.Name == name);
+        var index = Projects.FindIndex(p => p.Name == name);
         Projects[index] = project;
     }
 
     public void AddTask(string projectName, Task task)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
-        if (project == null)
-        {
-            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
-        }
+        if (project == null) throw new ProjectNotFoundException();
 
-        if (project.Tasks == null)
-        {
-            project.Tasks = new List<Task>();
-        }
+        if (project.Tasks == null) project.Tasks = new List<Task>();
 
         if (project.Tasks.Any(t => t.Id == task.Id))
-        {
             throw new TaskRepositoryExceptions.TaskAlreadyExistsException(
                 $"Task with ID {task.Id} already exists in project {projectName}.");
-        }
 
         task.Id = _nextIdTask++;
         project.Tasks.Add(task);
@@ -94,16 +72,10 @@ public class ProjectRepository
     public void UpdateTask(string projectName, int? taskId, Task updatedTask)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
-        if (project == null)
-        {
-            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
-        }
+        if (project == null) throw new ProjectNotFoundException();
 
-        int index = project.Tasks.FindIndex(t => t.Id == taskId);
-        if (index == -1)
-        {
-            throw new TaskRepositoryExceptions.TaskNotFoundException();
-        }
+        var index = project.Tasks.FindIndex(t => t.Id == taskId);
+        if (index == -1) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         project.Tasks[index] = updatedTask;
     }
@@ -111,16 +83,10 @@ public class ProjectRepository
     public void RemoveTask(string projectName, int? taskId)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
-        if (project == null)
-        {
-            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
-        }
+        if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
-        if (task == null)
-        {
-            throw new TaskRepositoryExceptions.TaskNotFoundException();
-        }
+        if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         project.Tasks.Remove(task);
     }
@@ -128,22 +94,13 @@ public class ProjectRepository
     public void AddPreviousTask(string projectName, int? taskId, Task previousTask)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
-        if (project == null)
-        {
-            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
-        }
+        if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
-        if (task == null)
-        {
-            throw new TaskRepositoryExceptions.TaskNotFoundException();
-        }
+        if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
 
-        if (!project.Tasks.Contains(previousTask))
-        {
-            throw new TaskRepositoryExceptions.TaskNotFoundException();
-        }
+        if (!project.Tasks.Contains(previousTask)) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         task.AddPreviousTask(previousTask);
     }
@@ -151,21 +108,12 @@ public class ProjectRepository
     public void AddResourceToTask(string projectName, int? taskId, Resource resource)
     {
         var project = Projects.FirstOrDefault(p => p.Name == projectName);
-        if (project == null)
-        {
-            throw new Exceptions.ProjectRepositoryExceptions.ProjectNotFoundException();
-        }
+        if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
-        if (task == null)
-        {
-            throw new TaskRepositoryExceptions.TaskNotFoundException();
-        }
+        if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
-        if (task.Resources == null)
-        {
-            task.Resources = new List<Resource>();
-        }
+        if (task.Resources == null) task.Resources = new List<Resource>();
 
         task.Resources.Add(resource);
     }

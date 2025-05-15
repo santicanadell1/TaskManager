@@ -1,12 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Service.Models;
-using DataAccess;
-using Domain;
-using System;
-using System.Collections.Generic;
+﻿using DataAccess;
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Service.Exceptions.AdminPServiceExceptions;
-using Task = System.Threading.Tasks.Task;
+using Service.Models;
 
 namespace Service.Test;
 
@@ -14,14 +9,14 @@ namespace Service.Test;
 public class AdminPServiceTests
 {
     private InMemoryDatabase _database;
-    private global::AdminPService _service;
     private Login _login;
+    private AdminPService _service;
+    private TaskService _taskService;
     private UserService _userservice;
-    private UserDTO UserDTO;
     private UserDTO Admin;
     private List<UserDTO> members;
-    private TaskService _taskService;
-    
+    private UserDTO UserDTO;
+
 
     [TestInitialize]
     public void Setup()
@@ -56,7 +51,7 @@ public class AdminPServiceTests
 
         _userservice.AddUser(Admin);
         _userservice.AddUser(UserDTO);
-        _login.LoginUser(Admin.Email, Admin.Password); 
+        _login.LoginUser(Admin.Email, Admin.Password);
     }
 
     [TestMethod]
@@ -109,6 +104,7 @@ public class AdminPServiceTests
         Assert.IsTrue(project.Members.Count > 0);
         Assert.AreEqual("John", project.Members[1].FirstName);
     }
+
     [TestMethod]
     [ExpectedException(typeof(UserIsAlreadyAMemberException))]
     public void AssignMembersToProject_ShouldThrowException_WhenAddingAMemberThatAlreadyExists()
@@ -142,6 +138,7 @@ public class AdminPServiceTests
         Assert.IsTrue(project.Members.Count > 0);
         Assert.AreEqual("John", project.Members[1].FirstName);
     }
+
     [TestMethod]
     public void RemoveMembersFromProject_ShouldRemoveMember_WhenMemberExists()
     {
@@ -172,14 +169,15 @@ public class AdminPServiceTests
 
         Assert.IsTrue(project.Members.Count > 0);
         Assert.AreEqual("John", project.Members[1].FirstName);
-        
+
         _service.RemoveMemberFromProject(project.Name, "john.doe@example.com");
         _service.RemoveMemberFromProject(project.Name, "member.user@example.com");
-        
+
         project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
-        
+
         Assert.IsTrue(project.Members.Count == 0);
     }
+
     [TestMethod]
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void RemoveMembersFromProject_ShouldThrowException_WhenRemovingMemberFromAProjectThatNotExist()
@@ -196,9 +194,10 @@ public class AdminPServiceTests
         _service.CreateProject(projectDTO);
 
         var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
-        
+
         _service.RemoveMemberFromProject("Proyecto 1", "member.user@example.com");
     }
+
     [TestMethod]
     [ExpectedException(typeof(UserIsNotAMemberException))]
     public void RemoveMembersFromProject_ShouldThrowException_WhenRemovingMemberThatNotExists()
@@ -215,7 +214,7 @@ public class AdminPServiceTests
         _service.CreateProject(projectDTO);
 
         var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
-        
+
         _service.RemoveMemberFromProject(project.Name, "john.user@example.com");
     }
 
@@ -322,6 +321,7 @@ public class AdminPServiceTests
         Assert.AreEqual("Test Project", project.Name);
         Assert.AreEqual("Test Description", project.Description);
     }
+
     [TestMethod]
     public void GetAllProjectsForUsers_ShouldReturnListOfProjects_WhenUserIsAdminOrMember()
     {
@@ -342,10 +342,11 @@ public class AdminPServiceTests
         Assert.AreEqual("Test Project", project[0].Name);
         Assert.AreEqual("Test Description", project[0].Description);
     }
+
     [TestMethod]
     public void GetMembers_ShouldReturnListOfMembers_WhenProjectExist()
     {
-       var projectDTO = new ProjectDTO
+        var projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -353,13 +354,13 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-       _service.CreateProject(projectDTO);
-       var projectMembers = _service.GetMembers("Test Project");
-       Assert.IsNotNull(projectMembers);
-       Assert.AreEqual(1, projectMembers.Count);
-       Assert.AreEqual("User", projectMembers[0].FirstName);
+        _service.CreateProject(projectDTO);
+        var projectMembers = _service.GetMembers("Test Project");
+        Assert.IsNotNull(projectMembers);
+        Assert.AreEqual(1, projectMembers.Count);
+        Assert.AreEqual("User", projectMembers[0].FirstName);
     }
-    
+
     [TestMethod]
     public void AddTaskToMember_WhenUserIsMember_ShouldAddTaskToMember()
     {
@@ -372,19 +373,20 @@ public class AdminPServiceTests
             Members = members
         };
         _service.CreateProject(projectDTO);
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
         _taskService.AddTask("Test Project", task);
-        
-        _service.AddTaskToMember("Test Project","member.user@example.com" , 1);
-        
+
+        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
+
         Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Contains(1));
     }
+
     [TestMethod]
     [ExpectedException(typeof(UserIsNotAMemberException))]
     public void AddTaskToMember_WhenUserIsNotMember_ShouldThrowUserIsNotAMemberException()
@@ -398,18 +400,18 @@ public class AdminPServiceTests
             Members = members
         };
         _service.CreateProject(projectDTO);
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
         _taskService.AddTask("Test Project", task);
-        
-        _service.AddTaskToMember("Test Project","member1.user@example.com" , 1);
-        
+
+        _service.AddTaskToMember("Test Project", "member1.user@example.com", 1);
     }
+
     [TestMethod]
     [ExpectedException(typeof(TaskIsNotFromTheProjectException))]
     public void AddTaskToMember_WhenTaskIsNotFromTheProject_ShouldThrowException()
@@ -423,18 +425,18 @@ public class AdminPServiceTests
             Members = members
         };
         _service.CreateProject(projectDTO);
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
         _taskService.AddTask("Test Project", task);
-        
-        _service.AddTaskToMember("Test Project","member.user@example.com" , 2);
-        
-    }    
+
+        _service.AddTaskToMember("Test Project", "member.user@example.com", 2);
+    }
+
     [TestMethod]
     public void RemoveTaskFromMember_WhenUserIsMember_ShouldRemoveTaskFromMember()
     {
@@ -447,24 +449,24 @@ public class AdminPServiceTests
             Members = members
         };
         _service.CreateProject(projectDTO);
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
         _taskService.AddTask("Test Project", task);
-        
-        _service.AddTaskToMember("Test Project","member.user@example.com" , 1);
-        
+
+        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
+
         Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Contains(1));
-        
-        _service.RemoveTaskFromMember("Test Project","member.user@example.com" , 1);
-        
+
+        _service.RemoveTaskFromMember("Test Project", "member.user@example.com", 1);
+
         Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Count == 0);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(UserIsNotAMemberException))]
     public void RemoveTaskFromMember_WhenUserIsNotMember_ShouldThrowUserIsNotAMemberException()
@@ -478,19 +480,19 @@ public class AdminPServiceTests
             Members = members
         };
         _service.CreateProject(projectDTO);
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
         _taskService.AddTask("Test Project", task);
-        
-        _service.AddTaskToMember("Test Project","member.user@example.com" , 1);
-        _service.RemoveTaskFromMember("Test Project","member1.user@example.com" , 1);
-        
+
+        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _service.RemoveTaskFromMember("Test Project", "member1.user@example.com", 1);
     }
+
     [TestMethod]
     [ExpectedException(typeof(TaskIsNotFromTheProjectException))]
     public void RemoveTaskFromMember_WhenTaskIsNotFromTheProject_ShouldThrowException()
@@ -504,20 +506,19 @@ public class AdminPServiceTests
             Members = members
         };
         _service.CreateProject(projectDTO);
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
         _taskService.AddTask("Test Project", task);
-        
-        _service.AddTaskToMember("Test Project","member.user@example.com" , 1);
-        _service.RemoveTaskFromMember("Test Project","member.user@example.com" , 2);
-        
+
+        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _service.RemoveTaskFromMember("Test Project", "member.user@example.com", 2);
     }
-    
+
     [TestMethod]
     public void GetTasksForAMember_WhenGettingTasksForAMember_ShouldReturnListOfTasks()
     {
@@ -530,30 +531,31 @@ public class AdminPServiceTests
             Members = members
         };
         _service.CreateProject(projectDTO);
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
-        TaskDTO task2 = new TaskDTO()
+        var task2 = new TaskDTO
         {
             Title = "Task2",
             Description = "Description2",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
         _taskService.AddTask("Test Project", task);
         _taskService.AddTask("Test Project", task2);
-        
-        _service.AddTaskToMember("Test Project","member.user@example.com" ,1 );
-        _service.AddTaskToMember("Test Project","member.user@example.com" ,2 );
-        
-        List<TaskDTO> tasks = _service.GetAllTaskForAMember("member.user@example.com");
-        
+
+        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _service.AddTaskToMember("Test Project", "member.user@example.com", 2);
+
+        var tasks = _service.GetAllTaskForAMember("member.user@example.com");
+
         Assert.AreEqual(2, tasks.Count);
     }
+
     [TestMethod]
     public void GetTasksForAMemberInAProject_WhenGettingTasksForAMember_ShouldReturnListOfTasks()
     {
@@ -566,29 +568,28 @@ public class AdminPServiceTests
             Members = members
         };
         _service.CreateProject(projectDTO);
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
-        TaskDTO task2 = new TaskDTO()
+        var task2 = new TaskDTO
         {
             Title = "Task2",
             Description = "Description2",
             Duration = 1,
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today
         };
         _taskService.AddTask("Test Project", task);
         _taskService.AddTask("Test Project", task2);
-        
-        _service.AddTaskToMember("Test Project","member.user@example.com" ,1 );
-        _service.AddTaskToMember("Test Project","member.user@example.com" ,2 );
-        
-        List<TaskDTO> tasks = _service.GetAllTaskForAMemberInAProject("Test Project","member.user@example.com");
-        
+
+        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _service.AddTaskToMember("Test Project", "member.user@example.com", 2);
+
+        var tasks = _service.GetAllTaskForAMemberInAProject("Test Project", "member.user@example.com");
+
         Assert.AreEqual(2, tasks.Count);
     }
-    
 }

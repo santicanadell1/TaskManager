@@ -1,21 +1,19 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Service.Models
+namespace Service.Models;
+
+public class ProjectDTO
 {
-    public class ProjectDTO
-    {
-        [Required(ErrorMessage = "Project name is required.")]
-        public string Name { get; set; }
+    [Required(ErrorMessage = "Project name is required.")]
+    public string Name { get; set; }
 
-        [Required(ErrorMessage = "Project description is required.")]
-        public string Description { get; set; }
+    [Required(ErrorMessage = "Project description is required.")]
+    public string Description { get; set; }
 
-        [Required(ErrorMessage = "Project start date is required.")]
-        public DateTime StartDate { get; set; }
+    [Required(ErrorMessage = "Project start date is required.")]
+    public DateTime StartDate { get; set; }
 
-        public UserDTO? AdminProyect { get; set; }
-        
-        public List<UserDTO> Members { get; set; }
-    }
+    public UserDTO? AdminProyect { get; set; }
+
+    public List<UserDTO> Members { get; set; }
 }

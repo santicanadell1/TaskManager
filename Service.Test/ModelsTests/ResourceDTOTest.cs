@@ -11,7 +11,7 @@ public class ResourceDTOTest
     {
         var resourceDTO = new ResourceDTO
         {
-            Name = null,
+            Name = null
         };
 
         var validationResults = new List<ValidationResult>();
@@ -19,7 +19,6 @@ public class ResourceDTOTest
             Validator.TryValidateObject(resourceDTO, new ValidationContext(resourceDTO), validationResults, true);
 
         Assert.IsFalse(isValid);
-      
     }
 
     [TestMethod]
@@ -28,7 +27,7 @@ public class ResourceDTOTest
         var resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
-            Type = null,
+            Type = null
         };
 
         var validationResults = new List<ValidationResult>();
@@ -53,7 +52,5 @@ public class ResourceDTOTest
             Validator.TryValidateObject(resourceDTO, new ValidationContext(resourceDTO), validationResults, true);
 
         Assert.IsFalse(isValid);
-      
     }
-
 }

@@ -1,9 +1,8 @@
-﻿namespace Domain
+﻿namespace Domain;
+
+public enum Rol
 {
-    public enum Rol
-    {
-        AdminSystem,
-        ProjectMember,
-        AdminProject
-    }
+    AdminSystem,
+    ProjectMember,
+    AdminProject
 }

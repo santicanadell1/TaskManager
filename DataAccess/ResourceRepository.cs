@@ -5,8 +5,8 @@ namespace DataAccess;
 
 public class ResourceRepository
 {
-    private readonly List<Resource> _resources;
     private static int _nextId;
+    private readonly List<Resource> _resources;
 
     public ResourceRepository()
     {
@@ -21,10 +21,7 @@ public class ResourceRepository
 
     public void AddResource(Resource resource)
     {
-        if (resource == null)
-        {
-            throw new ResourceIsNullException();
-        }
+        if (resource == null) throw new ResourceIsNullException();
 
         resource.Id = _nextId++;
         _resources.Add(resource);
@@ -38,12 +35,9 @@ public class ResourceRepository
 
     public void Update(int? idToUpdate, Resource updatedResource)
     {
-        int index = _resources.FindIndex(resource => resource.Id == idToUpdate);
+        var index = _resources.FindIndex(resource => resource.Id == idToUpdate);
 
-        if (index == -1)
-        {
-            throw new ResourceNotFoundException();
-        }
+        if (index == -1) throw new ResourceNotFoundException();
 
         _resources[index] = updatedResource;
     }
@@ -52,10 +46,7 @@ public class ResourceRepository
     {
         var resource = _resources.FirstOrDefault(r => r.Id == idToDelete);
 
-        if (resource == null)
-        {
-            throw new ResourceNotFoundException();
-        }
+        if (resource == null) throw new ResourceNotFoundException();
 
         _resources.Remove(resource);
     }

@@ -1,13 +1,12 @@
-﻿namespace Service.Interface
+﻿namespace Service.Interface;
+
+public interface IPasswordManager
 {
-    public interface IPasswordManager
-    {
-        string getDefaultPassword();
+    string getDefaultPassword();
 
-        bool IsValidPassword(string password);
+    bool IsValidPassword(string password);
 
-        string HashPassword(string password);
+    string HashPassword(string password);
 
-        bool VerifyPassword(string plainPassword, string storedHash);
-    }
+    bool VerifyPassword(string plainPassword, string storedHash);
 }

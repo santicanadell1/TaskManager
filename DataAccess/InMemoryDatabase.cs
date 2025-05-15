@@ -1,12 +1,11 @@
-﻿using Domain;
-namespace DataAccess;
+﻿namespace DataAccess;
 
 public class InMemoryDatabase
 {
-    public UserRepository users;
     public NotificationRepository notifications;
     public ProjectRepository projects;
     public ResourceRepository resources;
+    public UserRepository users;
 
     public InMemoryDatabase()
     {

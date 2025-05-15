@@ -9,11 +9,11 @@ public class ProjectTest
     public void GivenProject_WhenNameIsSet_ThenNameShouldBeCorrect()
     {
         var project = new Project();
-        string expectedName = "Project A";
+        var expectedName = "Project A";
 
 
         project.Name = expectedName;
-        string actualName = project.Name;
+        var actualName = project.Name;
 
 
         Assert.AreEqual(expectedName, actualName);
@@ -23,11 +23,11 @@ public class ProjectTest
     public void GivenProject_WhenDescriptionIsSet_ThenDescriptionShouldBeCorrect()
     {
         var project = new Project();
-        string expectedDescription = "This is a test project";
+        var expectedDescription = "This is a test project";
 
 
         project.Description = expectedDescription;
-        string actualDescription = project.Description;
+        var actualDescription = project.Description;
 
 
         Assert.AreEqual(expectedDescription, actualDescription);
@@ -37,11 +37,11 @@ public class ProjectTest
     public void GivenProject_WhenStartDateIsSet_ThenStartDateShouldBeCorrect()
     {
         var project = new Project();
-        DateTime expectedStartDate = DateTime.Today;
+        var expectedStartDate = DateTime.Today;
 
 
         project.StartDate = expectedStartDate;
-        DateTime actualStartDate = project.StartDate;
+        var actualStartDate = project.StartDate;
 
 
         Assert.AreEqual(expectedStartDate, actualStartDate);
@@ -55,12 +55,12 @@ public class ProjectTest
 
 
         project.Members = expectedMembers;
-        List<User> actualMembers = project.Members;
+        var actualMembers = project.Members;
 
 
         CollectionAssert.AreEqual(expectedMembers, actualMembers);
     }
-    
+
     [TestMethod]
     public void GivenTaskList_WhenTasksAreAdded_ThenTaskListShouldContainCorrectTasks()
     {
@@ -118,15 +118,15 @@ public class ProjectTest
         var project = new Project();
 
 
-        project.StartDate = default(DateTime);
+        project.StartDate = default;
     }
 
     [TestMethod]
     public void GivenProject_WhenAddingANewUser_ThenUserShouldBeAddedToProjectMembers()
     {
-        Project project = new Project();
-        User user1 = new User();
-        User user2 = new User();
+        var project = new Project();
+        var user1 = new User();
+        var user2 = new User();
         project.AddMember(user1);
         project.AddMember(user2);
         Assert.IsTrue(project.Members.Contains(user1));
@@ -136,18 +136,18 @@ public class ProjectTest
     [TestMethod]
     public void GivenProject_WhenAddingANewTask_ThenTaskShouldBeAddedToProjectTasks()
     {
-        Project project = new Project();
-        DateTime startDate = DateTime.Now;
-        DateTime endDate = DateTime.Parse("2026-09-01");
+        var project = new Project();
+        var startDate = DateTime.Now;
+        var endDate = DateTime.Parse("2026-09-01");
         List<Task> previousTasks = new List<Task>();
-        Task task1 = new Task("Title", "Description", startDate, 1, previousTasks, null, null);
+        var task1 = new Task("Title", "Description", startDate, 1, previousTasks, null, null);
         project.AddTask(task1);
         Assert.IsTrue(project.Tasks.Contains(task1));
     }
-    
+
     [TestMethod]
     public void CreateProject_With3parameters_ThenProjectShouldBeCreated()
     {
-        Project project = new Project("Project A", "This is a test project", DateTime.Today);
+        var project = new Project("Project A", "This is a test project", DateTime.Today);
     }
 }

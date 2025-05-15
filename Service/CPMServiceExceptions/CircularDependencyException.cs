@@ -1,9 +1,8 @@
-namespace Service.Exceptions.CPMServiceExceptions
+namespace Service.Exceptions.CPMServiceExceptions;
+
+public class CircularDependencyException : CpmServiceException
 {
-    public class CircularDependencyException : CpmServiceException
+    public CircularDependencyException() : base("Se detectó una dependencia circular en las tareas")
     {
-        public CircularDependencyException() : base("Se detectó una dependencia circular en las tareas")
-        {
-        }
     }
 }

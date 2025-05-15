@@ -1,5 +1,3 @@
-using System.Runtime.Intrinsics.Arm;
-
 namespace Service.Exceptions.ResourceServiceExceptions;
 
 public class NoResourcesFoundException : ResourceServiceException

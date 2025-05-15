@@ -1,12 +1,13 @@
-namespace Domain.Exceptions.NotificationExceptions
-{
-    public class NotificationException : Exception
-    {
-        public NotificationException(string message) : base(message) { }
+namespace Domain.Exceptions.NotificationExceptions;
 
-        public override string ToString()
-        {
-            return $"NotificationException: {this.GetType().Name} - {this.Message}";
-        }
+public class NotificationException : Exception
+{
+    public NotificationException(string message) : base(message)
+    {
+    }
+
+    public override string ToString()
+    {
+        return $"NotificationException: {GetType().Name} - {Message}";
     }
 }

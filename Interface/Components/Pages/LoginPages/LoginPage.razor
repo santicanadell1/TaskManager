@@ -1,5 +1,4 @@
 ﻿@page "/login"
-@using Domain
 @using Service
 @using Service.Exceptions.LoginExceptions
 @using Service.Models
@@ -10,8 +9,8 @@
 
 <div class="login-container">
     <h3 class="login-title">Login</h3>
- 
-   
+
+
     @if (alertVisible)
     {
         <div class="d-flex justify-content-center align-items-center mt-2">
@@ -23,12 +22,12 @@
     }
 
     <EditForm Model="_userLoginDto" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
 
         <div class="form-group">
             <label for="userName">Email</label>
-            <InputText id="userName" class="form-control mt-1" @bind-Value="_userLoginDto.Email" />
+            <InputText id="userName" class="form-control mt-1" @bind-Value="_userLoginDto.Email"/>
         </div>
 
         <div class="form-group mt-3">
@@ -37,7 +36,7 @@
                 <InputText id="password"
                            type="@passwordInputType"
                            class="form-control mt-1"
-                           @bind-Value="_userLoginDto.Password" />
+                           @bind-Value="_userLoginDto.Password"/>
                 <button type="button" class="btn-eye" @onclick="TogglePasswordVisibility">
                     <i class="@passwordEyeIcon"></i>
                 </button>
@@ -58,9 +57,9 @@
     private string passwordInputType = "password";
     private string passwordEyeIcon = "fas fa-eye-slash";
     private string alertMessage = "";
-    private bool alertVisible = false;
+    private bool alertVisible;
 
-    private UserLoginDTO _userLoginDto = new UserLoginDTO("", "");
+    private readonly UserLoginDTO _userLoginDto = new("", "");
 
     private void TogglePasswordVisibility()
     {
@@ -74,7 +73,7 @@
         {
             LoginService.LoginUser(_userLoginDto.Email, _userLoginDto.Password);
 
-            Navigation.NavigateTo("/");  
+            Navigation.NavigateTo("/");
         }
         catch (InvalidLoginCredentialsException ex)
         {
@@ -87,4 +86,5 @@
     {
         alertVisible = !alertVisible;
     }
+
 }

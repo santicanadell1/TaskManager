@@ -54,15 +54,15 @@
 </div>
 
 @code {
-    private ProjectDTO newProjectDTO = new ProjectDTO();
-    private bool alertVisible = false;
-    private bool successVisible = false;
+    private ProjectDTO newProjectDTO = new();
+    private bool alertVisible;
+    private bool successVisible;
     private string alertMessage = string.Empty;
     private string successMessage = string.Empty;
 
     protected override void OnInitialized()
     {
-        newProjectDTO = new ProjectDTO()
+        newProjectDTO = new ProjectDTO
         {
             StartDate = DateTime.Now,
             Description = "",

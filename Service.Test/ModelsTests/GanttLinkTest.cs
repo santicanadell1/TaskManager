@@ -12,18 +12,21 @@ public class GanttLinkTest
         var type = link.type;
         Assert.AreEqual("0", type);
     }
+
     [TestMethod]
     public void GanttLink_WhenInitializingCritical_ShouldBeFalseByDefault()
     {
         var link = new GanttLink();
         Assert.IsFalse(link.critical);
     }
+
     [TestMethod]
     public void GanttLink_WhenInitializingAType_ShouldAllowCustomValue()
     {
         var link = new GanttLink { type = "2" };
         Assert.AreEqual("2", link.type);
     }
+
     [TestMethod]
     public void GanttLink_ShouldSetAllPropertiesCorrectly()
     {

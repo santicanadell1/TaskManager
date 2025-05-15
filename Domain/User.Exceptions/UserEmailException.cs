@@ -1,8 +1,9 @@
-namespace Domain.Exceptions.UserExceptions
+namespace Domain.Exceptions.UserExceptions;
+
+public class UserEmailException : UserException
 {
-    public class UserEmailException : UserException
+    public UserEmailException()
+        : base("The user's email cannot be empty or have an invalid format.")
     {
-        public UserEmailException() 
-            : base("The user's email cannot be empty or have an invalid format.") { }
     }
 }

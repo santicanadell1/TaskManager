@@ -1,21 +1,19 @@
 using DataAccess;
 using DataAccess.Exceptions.ResourceRepositoryExceptions;
-using Domain;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Models;
-using Task = Domain.Task;
 
 namespace Service.Test;
 
 [TestClass]
 public class ResourcesServiceTest
 {
-    private InMemoryDatabase _database;
-    private ResourceService _resourceService;
-    private Login _loginService;
-    private UserService _userService;
     private AdminPService _adminProjectService;
+    private InMemoryDatabase _database;
+    private Login _loginService;
+    private ResourceService _resourceService;
     private TaskService _taskService;
+    private UserService _userService;
 
     [TestInitialize]
     public void TestSetUp()
@@ -155,7 +153,7 @@ public class ResourcesServiceTest
         {
             Name = "Resource1",
             Type = "TypeA",
-            Description = "Description of Resource1",
+            Description = "Description of Resource1"
         };
 
         _resourceService.AddResource(resourceDTO);
@@ -188,14 +186,14 @@ public class ResourcesServiceTest
         {
             Name = "Resource1",
             Type = "TypeA",
-            Description = "Description of Resource1",
+            Description = "Description of Resource1"
         };
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
 
-        var addedResourceDto = new ResourceDTO()
+        var addedResourceDto = new ResourceDTO
         {
             Id = addedResource.Id,
             Name = addedResource.Name,
@@ -203,13 +201,13 @@ public class ResourcesServiceTest
             Description = addedResource.Description
         };
 
-        ProjectDTO project = new ProjectDTO();
+        var project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Title1",
             Description = "Description1",
@@ -217,7 +215,7 @@ public class ResourcesServiceTest
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>() { addedResourceDto }
+            Resources = new List<ResourceDTO> { addedResourceDto }
         };
 
         _adminProjectService.CreateProject(project);
@@ -251,33 +249,33 @@ public class ResourcesServiceTest
         {
             Name = "Resource1",
             Type = "TypeA",
-            Description = "Description of Resource1",
+            Description = "Description of Resource1"
         };
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
 
-        var addedResourceDto = new ResourceDTO()
+        var addedResourceDto = new ResourceDTO
         {
             Name = addedResource.Name,
             Type = addedResource.Type,
-            Description = addedResource.Description,
+            Description = addedResource.Description
         };
 
-        ProjectDTO project = new ProjectDTO();
+        var project = new ProjectDTO();
         project.Name = "Project 1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        ProjectDTO project2 = new ProjectDTO();
+        var project2 = new ProjectDTO();
         project2.Name = "Project 2";
         project2.Description = "Description of Project2";
         project2.StartDate = DateTime.Today;
         project2.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Title 1",
             Description = "Description1",
@@ -285,9 +283,9 @@ public class ResourcesServiceTest
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>() { addedResourceDto }
+            Resources = new List<ResourceDTO> { addedResourceDto }
         };
-        TaskDTO task2 = new TaskDTO()
+        var task2 = new TaskDTO
         {
             Title = "Title 2",
             Description = "Description2",
@@ -295,7 +293,7 @@ public class ResourcesServiceTest
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>() { addedResourceDto }
+            Resources = new List<ResourceDTO> { addedResourceDto }
         };
 
         _adminProjectService.CreateProject(project);
@@ -322,26 +320,26 @@ public class ResourcesServiceTest
         {
             Name = "Resource1",
             Type = "TypeA",
-            Description = "Description of Resource1",
+            Description = "Description of Resource1"
         };
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
-        var addedResourceDto = new ResourceDTO()
+        var addedResourceDto = new ResourceDTO
         {
             Name = addedResource.Name,
             Type = addedResource.Type,
-            Description = addedResource.Description,
+            Description = addedResource.Description
         };
 
-        ProjectDTO project = new ProjectDTO();
+        var project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Title1",
             Description = "Description1",
@@ -349,7 +347,7 @@ public class ResourcesServiceTest
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>() { addedResourceDto }
+            Resources = new List<ResourceDTO> { addedResourceDto }
         };
 
         _adminProjectService.CreateProject(project);
@@ -396,28 +394,28 @@ public class ResourcesServiceTest
         {
             Name = "Resource1",
             Type = "TypeA",
-            Description = "Description of Resource1",
+            Description = "Description of Resource1"
         };
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
 
-        var addedResourceDto = new ResourceDTO()
+        var addedResourceDto = new ResourceDTO
         {
             Id = addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
-            Description = addedResource.Description,
+            Description = addedResource.Description
         };
 
-        ProjectDTO project = new ProjectDTO();
+        var project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Title1",
             Description = "Description1",
@@ -425,7 +423,7 @@ public class ResourcesServiceTest
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>() { addedResourceDto }
+            Resources = new List<ResourceDTO> { addedResourceDto }
         };
 
         _adminProjectService.CreateProject(project);
@@ -448,33 +446,33 @@ public class ResourcesServiceTest
         {
             Name = "Resource1",
             Type = "TypeA",
-            Description = "Description of Resource1",
+            Description = "Description of Resource1"
         };
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
 
-        var addedResourceDto = new ResourceDTO()
+        var addedResourceDto = new ResourceDTO
         {
             Name = addedResource.Name,
             Type = addedResource.Type,
-            Description = addedResource.Description,
+            Description = addedResource.Description
         };
 
-        ProjectDTO project = new ProjectDTO();
+        var project = new ProjectDTO();
         project.Name = "Project 1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        ProjectDTO project2 = new ProjectDTO();
+        var project2 = new ProjectDTO();
         project2.Name = "Project 2";
         project2.Description = "Description of Project2";
         project2.StartDate = DateTime.Today;
         project2.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Title 1",
             Description = "Description1",
@@ -482,9 +480,9 @@ public class ResourcesServiceTest
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>() { addedResourceDto }
+            Resources = new List<ResourceDTO> { addedResourceDto }
         };
-        TaskDTO task2 = new TaskDTO()
+        var task2 = new TaskDTO
         {
             Title = "Title 2",
             Description = "Description2",
@@ -492,7 +490,7 @@ public class ResourcesServiceTest
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>() { addedResourceDto }
+            Resources = new List<ResourceDTO> { addedResourceDto }
         };
 
         _adminProjectService.CreateProject(project);
@@ -513,27 +511,27 @@ public class ResourcesServiceTest
         {
             Name = "Resource1",
             Type = "TypeA",
-            Description = "Description of Resource1",
+            Description = "Description of Resource1"
         };
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _database.resources.Get(r => r.Name == "Resource1");
 
-        var addedResourceDto = new ResourceDTO()
+        var addedResourceDto = new ResourceDTO
         {
             Name = addedResource.Name,
             Type = addedResource.Type,
-            Description = addedResource.Description,
+            Description = addedResource.Description
         };
 
-        ProjectDTO project = new ProjectDTO();
+        var project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        TaskDTO task = new TaskDTO()
+        var task = new TaskDTO
         {
             Title = "Title1",
             Description = "Description1",
@@ -541,7 +539,7 @@ public class ResourcesServiceTest
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>() { addedResourceDto }
+            Resources = new List<ResourceDTO> { addedResourceDto }
         };
 
         _adminProjectService.CreateProject(project);

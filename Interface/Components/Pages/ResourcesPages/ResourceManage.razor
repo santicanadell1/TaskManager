@@ -12,7 +12,7 @@
 
     <p>Click on a resource to edit:</p>
 
-    <!-- List of Resources -->
+    
     <div>
         @foreach (var resource in resourcesList)
         {
@@ -26,7 +26,7 @@
     </div>
 </div>
 
-<!-- Edit Resource Modal (Moved outside the main container) -->
+
 @if (showEditModal)
 {
     <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="editResourceModal"
@@ -68,7 +68,7 @@
     </div>
 }
 
-<!-- Success and Error Messages -->
+
 @if (!string.IsNullOrEmpty(successMessage))
 {
     <div class="alert alert-success mt-3">
@@ -89,9 +89,9 @@
 }
 
 @code {
-    private List<ResourceDTO> resourcesList = new List<ResourceDTO>();
+    private List<ResourceDTO> resourcesList = new();
     private ResourceDTO editingResource;
-    private bool showEditModal = false;
+    private bool showEditModal;
     private string successMessage = string.Empty;
     private string errorMessage = string.Empty;
 
@@ -150,4 +150,5 @@
         successMessage = string.Empty;
         errorMessage = string.Empty;
     }
+
 }

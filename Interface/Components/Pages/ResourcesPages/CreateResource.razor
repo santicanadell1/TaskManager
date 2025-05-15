@@ -54,15 +54,15 @@
 </div>
 
 @code {
-    private ResourceDTO newResource = new ResourceDTO();
-    private bool alertVisible = false;
+    private ResourceDTO newResource = new();
+    private bool alertVisible;
     private string alertMessage = string.Empty;
-    private bool successVisible = false;
+    private bool successVisible;
     private string successMessage = string.Empty;
 
     protected override void OnInitialized()
     {
-        newResource = new ResourceDTO()
+        newResource = new ResourceDTO
         {
             Description = "",
             Name = "",

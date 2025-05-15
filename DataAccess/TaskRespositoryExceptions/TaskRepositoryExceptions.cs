@@ -1,13 +1,14 @@
-﻿namespace DataAccess.Exceptions.TaskRepositoryExceptions
-{
-    public class TaskRepositoryExceptions : Exception
-    {
-        public TaskRepositoryExceptions(string message) 
-            : base(message) { }
+﻿namespace DataAccess.Exceptions.TaskRepositoryExceptions;
 
-        public override string ToString()
-        {
-            return $"TaskRepositoryExceptions: {this.GetType().Name} - {this.Message}";
-        }
+public class TaskRepositoryExceptions : Exception
+{
+    public TaskRepositoryExceptions(string message)
+        : base(message)
+    {
+    }
+
+    public override string ToString()
+    {
+        return $"TaskRepositoryExceptions: {GetType().Name} - {Message}";
     }
 }

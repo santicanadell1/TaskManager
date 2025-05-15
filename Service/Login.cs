@@ -10,7 +10,7 @@ namespace Service;
 public class Login : ILogin
 {
     private readonly InMemoryDatabase _database;
-    private PasswordManager _passwordManager = new PasswordManager();
+    private readonly PasswordManager _passwordManager = new();
 
     public Login(InMemoryDatabase database)
     {
@@ -24,11 +24,9 @@ public class Login : ILogin
 
     public void LoginUser(string email, string password)
     {
-        User? user = _database.users.Get(user => user.Email == email);
+        var user = _database.users.Get(user => user.Email == email);
         if (user == null || !_passwordManager.VerifyPassword(password, user.Password))
-        {
             throw new InvalidLoginCredentialsException();
-        }
 
         LoggedUser.Current = FromEntity(user);
     }
@@ -37,19 +35,6 @@ public class Login : ILogin
     public void Logout()
     {
         LoggedUser.Current = null;
-    }
-
-    private static UserDTO FromEntity(User user)
-    {
-        return new UserDTO()
-        {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Roles = ConvertToDTORoles(user.Roles),
-            Password = user.Password,
-            Birthday = user.Birthday
-        };
     }
 
     public bool IsAdminSystem()
@@ -65,6 +50,19 @@ public class Login : ILogin
     public bool IsProjectMember()
     {
         return LoggedUser.Current?.Roles.Contains(ConvertToDTORole(Rol.ProjectMember)) ?? false;
+    }
+
+    private static UserDTO FromEntity(User user)
+    {
+        return new UserDTO
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Roles = ConvertToDTORoles(user.Roles),
+            Password = user.Password,
+            Birthday = user.Birthday
+        };
     }
 
     private RolDTO ConvertToDTORole(Rol role)
@@ -87,7 +85,6 @@ public class Login : ILogin
         var roleDTOs = new List<RolDTO>();
 
         foreach (var role in roles)
-        {
             switch (role)
             {
                 case Rol.AdminSystem:
@@ -102,7 +99,6 @@ public class Login : ILogin
                 default:
                     throw new InvalidRolException();
             }
-        }
 
         return roleDTOs;
     }

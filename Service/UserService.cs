@@ -1,15 +1,16 @@
 using DataAccess;
-using Domain;
 using DataAccess.Exceptions.UserRepositoryExceptions;
+using Domain;
 using Service.Exceptions.UserServiceExceptions;
-using Service.Models;
 using Service.Interface;
+using Service.Models;
+
 namespace Service;
 
 public class UserService : IUserService
 {
     private readonly InMemoryDatabase _database;
-    private PasswordManager _passwordManager = new PasswordManager();
+    private readonly PasswordManager _passwordManager = new();
 
     public UserService(InMemoryDatabase database)
     {
@@ -18,17 +19,14 @@ public class UserService : IUserService
 
     public void AddUser(UserDTO userDTO)
     {
-        if (_database.users.GetAll().Count == 0)
-        {
-            userDTO.Roles.Add(RolDTO.AdminSystem);
-        }
+        if (_database.users.GetAll().Count == 0) userDTO.Roles.Add(RolDTO.AdminSystem);
         ValidateUserEmailAndPassword(userDTO);
         _database.users.AddUser(ToEntity(userDTO));
     }
 
     public void UpdateUser(UserDTO userDTO)
     {
-        User? user = GetUserObject(userDTO.Email);
+        var user = GetUserObject(userDTO.Email);
         user.FirstName = userDTO.FirstName;
         user.LastName = userDTO.LastName;
         user.Email = userDTO.Email;
@@ -43,26 +41,17 @@ public class UserService : IUserService
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (var user in _database.users.GetAll())
-        {
-            usersDTO.Add(FromEntity(user));
-        }
+        foreach (var user in _database.users.GetAll()) usersDTO.Add(FromEntity(user));
 
-        if (usersDTO.Count == 0)
-        {
-            throw new NoUsersFoundException();
-        }
+        if (usersDTO.Count == 0) throw new NoUsersFoundException();
 
         return usersDTO;
     }
 
     public UserDTO GetUser(string email)
     {
-        User? user = _database.users.Get(user => user.Email == email);
-        if (user == null)
-        {
-            throw new UserNotFoundException();
-        }
+        var user = _database.users.Get(user => user.Email == email);
+        if (user == null) throw new UserNotFoundException();
 
         return FromEntity(user);
     }
@@ -71,17 +60,10 @@ public class UserService : IUserService
     private void ValidateUserEmailAndPassword(UserDTO userDTO)
     {
         foreach (var user in _database.users.GetAll())
-        {
             if (user.Email == userDTO.Email)
-            {
                 throw new InvalidUserEmailException();
-            }
-        }
 
-        if (!_passwordManager.IsValidPassword(userDTO.Password))
-        {
-            throw new InvalidUserPasswordException();
-        }
+        if (!_passwordManager.IsValidPassword(userDTO.Password)) throw new InvalidUserPasswordException();
     }
 
     private User ToEntity(UserDTO userDTO)
@@ -100,18 +82,15 @@ public class UserService : IUserService
 
     private User GetUserObject(string email)
     {
-        User? user = _database.users.Get(user => user.Email == email);
-        if (user == null)
-        {
-            throw new UserNotFoundException();
-        }
+        var user = _database.users.Get(user => user.Email == email);
+        if (user == null) throw new UserNotFoundException();
 
         return user;
     }
 
     private UserDTO FromEntity(User user)
     {
-        return new UserDTO()
+        return new UserDTO
         {
             FirstName = user.FirstName,
             LastName = user.LastName,
@@ -128,7 +107,6 @@ public class UserService : IUserService
         var roles = new List<Rol>();
 
         foreach (var roleDTO in roleDTOs)
-        {
             switch (roleDTO)
             {
                 case RolDTO.AdminSystem:
@@ -141,7 +119,6 @@ public class UserService : IUserService
                     roles.Add(Rol.AdminProject);
                     break;
             }
-        }
 
         return roles;
     }
@@ -151,7 +128,6 @@ public class UserService : IUserService
         var roleDTOs = new List<RolDTO>();
 
         foreach (var role in roles)
-        {
             switch (role)
             {
                 case Rol.AdminSystem:
@@ -164,7 +140,6 @@ public class UserService : IUserService
                     roleDTOs.Add(RolDTO.AdminProject);
                     break;
             }
-        }
 
         return roleDTOs;
     }

@@ -26,7 +26,7 @@ main {
     .top-row {
         justify-content: space-between;
     }
-    
+
 }
 
 @media (min-width: 641px) {
@@ -46,7 +46,7 @@ main {
         top: 0;
         z-index: 1;
     }
-    
+
 
     .top-row, article {
         padding-left: 2rem !important;
@@ -76,7 +76,7 @@ main {
 .page .notification-bell {
     position: relative;
     display: inline-block;
-    margin-right: 15px; 
+    margin-right: 15px;
 }
 
 .page .notification-bell button {
