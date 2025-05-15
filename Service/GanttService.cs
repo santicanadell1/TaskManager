@@ -18,8 +18,8 @@ public class GanttService
             {
                 id = task.Id ?? 0,
                 text = task.Title,
-                start_date = task.StartDate.ToString("yyyy-MM-dd"),
-                end_date = task.EndDate.ToString("yyyy-MM-dd"),
+                start_date = task.StartDate == default ? DateTime.Today.ToString("yyyy-MM-dd") : task.StartDate.ToString("yyyy-MM-dd"),
+                end_date = task.EndDate == default ? DateTime.Today.ToString("yyyy-MM-dd") : task.EndDate.ToString("yyyy-MM-dd"),
                 duration = task.Duration,
                 progress = progress,
                 critical = isInCriticalPath,
