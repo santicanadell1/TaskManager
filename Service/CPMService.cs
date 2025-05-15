@@ -1,10 +1,5 @@
-using Domain;
 using Service.Exceptions.CPMServiceExceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Service.Models;
-using Task = Domain.Task;
 
 namespace Service
 {
@@ -80,13 +75,8 @@ namespace Service
 
         private void CalculateLateDates(List<TaskDTO> tasks)
         {
-            // Identificar tareas finales (sin sucesores)
             var finalTasks = tasks.Where(t => !IsSuccessorOfAny(t, tasks)).ToList();
-
-            // Determinar la fecha de finalización global del proyecto
             var projectEndDate = finalTasks.Max(t => t.EndDate);
-
-            // Establecer las fechas tardías de las tareas finales considerando la fecha global
             foreach (var finalTask in finalTasks)
             {
                 finalTask.LatestFinish = projectEndDate;
@@ -117,8 +107,6 @@ namespace Service
                     }
                     else
                     {
-                        // Este caso no debería ocurrir normalmente, ya que todas las tareas sin sucesores
-                        // ya deberían estar en processedTasks, pero se mantiene para robustez
                         task.LatestFinish = projectEndDate;
                     }
 
@@ -150,23 +138,15 @@ namespace Service
             {
                 throw new CriticalPathCalculationException("No critical tasks were found in the project");
             }
-
-            // Agrupar tareas críticas por cadenas conectadas
             var processedTasks = new HashSet<TaskDTO>();
-
-            // Encontrar todas las tareas críticas iniciales (sin predecesores críticos o sin predecesores)
             var initialCriticalTasks = criticalTasks
                 .Where(t => t.PreviousTasks.Count == 0 || !t.PreviousTasks.Any(p => p.IsCritical))
                 .OrderBy(t => t.StartDate)
                 .ToList();
-
-            // Si no hay tareas iniciales críticas, tomar la primera por fecha de inicio
             if (!initialCriticalTasks.Any())
             {
                 initialCriticalTasks.Add(criticalTasks.OrderBy(t => t.StartDate).First());
             }
-
-            // Procesar cada cadena crítica
             foreach (var initialTask in initialCriticalTasks)
             {
                 if (processedTasks.Contains(initialTask))
@@ -259,7 +239,6 @@ namespace Service
 
             if (!successors.Any())
             {
-                // Para tareas finales, usar la fecha de finalización global
                 var finalTasks = allTasks.Where(t => !IsSuccessorOfAny(t, allTasks)).ToList();
                 return finalTasks.Max(t => t.EndDate);
             }
