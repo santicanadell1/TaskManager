@@ -95,6 +95,46 @@
             <div id="gantt_here" class="gantt-chart-container"></div>
         </div>
     }
+    <div class="gantt-status-panel mt-4 p-3 border rounded shadow-sm bg-light">
+        <h5><i class="bi bi-info-circle me-2"></i>Project State</h5>
+
+        <div class="mb-2"><strong>Estimated End Date:</strong> @EstimatedEndDate?.ToString("dd/MM/yyyy")</div>
+
+        <div class="mb-2">
+            <strong>Critical Tasks:</strong>
+            @if (CriticalTasks.Any())
+            {
+                <ul>
+                    @foreach (var task in CriticalTasks)
+                    {
+                        <li>@task.text</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>There are no critical Tasks.</span>
+            }
+        </div>
+
+        <div class="mb-2">
+            <strong>Select not critical Task:</strong>
+            <select class="form-select" @onchange="OnNonCriticalTaskSelected">
+                <option value="">-- Select --</option>
+                @foreach (var task in NonCriticalTasks)
+                {
+                    <option value="@task.id">@task.text</option>
+                }
+            </select>
+        </div>
+
+        @if (SelectedTaskSlack.HasValue)
+        {
+            <div class="mt-2 alert alert-info">
+                <strong>Slack:</strong> The task can de delayed <strong>@SelectedTaskSlack.Value.ToString("0.0")</strong> days without affecting the project end date.
+            </div>
+        }
+    </div>
 </div>
 
 
@@ -259,6 +299,11 @@
     private bool showCriticalPath = false;
     private int selectedMonth = DateTime.Now.Month;
     private int selectedYear = DateTime.Now.Year;
+    private DateTime? EstimatedEndDate;
+    private List<GanttTask> CriticalTasks = new();
+    private List<GanttTask> NonCriticalTasks = new();
+    private double? SelectedTaskSlack;
+
 
     private readonly string currentUserEmail = LoggedUser.Current.Email;
 
@@ -309,6 +354,11 @@
 
             showGantt = true;
             StateHasChanged();
+            EstimatedEndDate = tasks.Max(t => t.EndDate);
+            CriticalTasks = ganttData.data.Where(t => t.critical).ToList();
+            NonCriticalTasks = ganttData.data.Where(t => !t.critical).ToList();
+            SelectedTaskSlack = null; // resetear selección anterior
+
         }
         catch (Exception ex)
         {
@@ -377,5 +427,18 @@
                 showCriticalPath);
         }
     }
+    private void OnNonCriticalTaskSelected(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int taskId))
+        {
+            var selected = NonCriticalTasks.FirstOrDefault(t => t.id == taskId);
+            SelectedTaskSlack = selected?.slack;
+        }
+        else
+        {
+            SelectedTaskSlack = null;
+        }
+    }
+
 
 }
