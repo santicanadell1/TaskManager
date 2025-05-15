@@ -7,9 +7,6 @@ using Service.Models;
 using Service.Models.Exceptions;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Interface;
-
-
-
 public class AdminPService : IAdminPService
 {
     private readonly InMemoryDatabase _database;
@@ -347,20 +344,5 @@ public class AdminPService : IAdminPService
         }
 
         return roleDTOs;
-    }
-
-    private RolDTO ConvertToDTORole(Rol role)
-    {
-        switch (role)
-        {
-            case Rol.AdminSystem:
-                return RolDTO.AdminSystem;
-            case Rol.ProjectMember:
-                return RolDTO.ProjectMember;
-            case Rol.AdminProject:
-                return RolDTO.AdminProject;
-            default:
-                throw new InvalidRolException();
-        }
     }
 }
