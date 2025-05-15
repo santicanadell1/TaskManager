@@ -1,11 +1,9 @@
 using DataAccess;
-using Domain;
 using Service.Exceptions.AdminSServiceExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Service;
 using Service.Exceptions.UserServiceExceptions;
 using Service.Models;
-using Service.Models.Exceptions;
 using Service.Interface;
 
 public class AdminSService : IAdminSService
