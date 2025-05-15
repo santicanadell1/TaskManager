@@ -159,4 +159,24 @@ public class AdminSService_Test
         var user = _userService.GetUser(userToUpdate.Email);
         Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
     }
+    [TestMethod]
+    public void AdminService_ShouldChangePassword_WhenChangingUserPassword()
+    {
+        PasswordManager _passwordManager = new PasswordManager();
+
+
+        var userToUpdate = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO>()
+        };
+        _loginService.LoginUser("john.doe@example.com", "Password123@");
+        _adminService.ChangeCurrentUserPassword(userToUpdate.Email, "Password123@", "Password123#");
+        var user = _userService.GetUser(userToUpdate.Email);
+        Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
+    }
 }
