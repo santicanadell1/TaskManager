@@ -7,7 +7,9 @@ public class Project
     private string description;
     private string name;
     private DateTime startDate;
-
+    public List<User> Members { get; set; } = new();
+    public List<Task> Tasks { get; set; } = new();
+    public User AdminProject { get; set; }
     public Project()
     {
     }
@@ -54,11 +56,6 @@ public class Project
             startDate = value;
         }
     }
-
-    public List<User> Members { get; set; } = new();
-    public List<Task> Tasks { get; set; } = new();
-    public User AdminProject { get; set; }
-
     public void AddMember(User user)
     {
         Members.Add(user);
