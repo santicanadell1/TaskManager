@@ -7,8 +7,8 @@ public class Notification
     public string description;
     private Project project;
     public bool read;
-
-
+    public int Id { get; set; }
+    
     public Notification(bool read, string description, Project project)
     {
         Read = read;
@@ -42,10 +42,6 @@ public class Notification
             project = value;
         }
     }
-
-    public int Id { get; set; }
-
-
     public void MarkRead()
     {
         read = true;
