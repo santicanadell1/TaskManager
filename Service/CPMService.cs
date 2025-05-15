@@ -27,10 +27,10 @@ namespace Service
             CalculateEarlyDates(tasks);
             CalculateLateDates(tasks);
             CalculateSlackAndCriticalTasks(tasks);
-            
+
             var criticalPath = FindCriticalPath(tasks);
             var projectDuration = CalculateProjectDuration(tasks);
-            
+
             return new CpmResult
             {
                 AllTasks = tasks,
@@ -80,11 +80,16 @@ namespace Service
 
         private void CalculateLateDates(List<TaskDTO> tasks)
         {
+            // Identificar tareas finales (sin sucesores)
             var finalTasks = tasks.Where(t => !IsSuccessorOfAny(t, tasks)).ToList();
 
+            // Determinar la fecha de finalización global del proyecto
+            var projectEndDate = finalTasks.Max(t => t.EndDate);
+
+            // Establecer las fechas tardías de las tareas finales considerando la fecha global
             foreach (var finalTask in finalTasks)
             {
-                finalTask.LatestFinish = finalTask.EndDate;
+                finalTask.LatestFinish = projectEndDate;
                 finalTask.LatestStart = finalTask.LatestFinish.AddDays(-finalTask.Duration);
             }
 
@@ -112,7 +117,9 @@ namespace Service
                     }
                     else
                     {
-                        task.LatestFinish = task.EndDate;
+                        // Este caso no debería ocurrir normalmente, ya que todas las tareas sin sucesores
+                        // ya deberían estar en processedTasks, pero se mantiene para robustez
+                        task.LatestFinish = projectEndDate;
                     }
 
                     task.LatestStart = task.LatestFinish.AddDays(-task.Duration);
@@ -144,33 +151,43 @@ namespace Service
                 throw new CriticalPathCalculationException("No critical tasks were found in the project");
             }
 
-            var currentTask = criticalTasks.FirstOrDefault(t => 
-                t.PreviousTasks.Count == 0 || 
-                !t.PreviousTasks.Any(p => p.IsCritical));
-
-            if (currentTask == null)
-            {
-                currentTask = criticalTasks.OrderBy(t => t.StartDate).First();
-            }
-
+            // Agrupar tareas críticas por cadenas conectadas
             var processedTasks = new HashSet<TaskDTO>();
 
-            while (currentTask != null)
+            // Encontrar todas las tareas críticas iniciales (sin predecesores críticos o sin predecesores)
+            var initialCriticalTasks = criticalTasks
+                .Where(t => t.PreviousTasks.Count == 0 || !t.PreviousTasks.Any(p => p.IsCritical))
+                .OrderBy(t => t.StartDate)
+                .ToList();
+
+            // Si no hay tareas iniciales críticas, tomar la primera por fecha de inicio
+            if (!initialCriticalTasks.Any())
             {
-                if (processedTasks.Contains(currentTask))
+                initialCriticalTasks.Add(criticalTasks.OrderBy(t => t.StartDate).First());
+            }
+
+            // Procesar cada cadena crítica
+            foreach (var initialTask in initialCriticalTasks)
+            {
+                if (processedTasks.Contains(initialTask))
+                    continue;
+
+                var currentTask = initialTask;
+                while (currentTask != null)
                 {
-                    break;
+                    if (processedTasks.Contains(currentTask))
+                        break;
+
+                    criticalPath.Add(currentTask);
+                    processedTasks.Add(currentTask);
+
+                    var nextTask = criticalTasks.FirstOrDefault(t =>
+                        t.PreviousTasks.Contains(currentTask) &&
+                        t.IsCritical &&
+                        !processedTasks.Contains(t));
+
+                    currentTask = nextTask;
                 }
-                
-                criticalPath.Add(currentTask);
-                processedTasks.Add(currentTask);
-                
-                var nextTask = criticalTasks.FirstOrDefault(t => 
-                    t.PreviousTasks.Contains(currentTask) && 
-                    t.IsCritical && 
-                    !processedTasks.Contains(t));
-                    
-                currentTask = nextTask;
             }
 
             return criticalPath;
@@ -215,7 +232,7 @@ namespace Service
         public DateTime CalculateLateStart(TaskDTO task, List<TaskDTO> allTasks)
         {
             var successors = GetSuccessors(task, allTasks);
-            
+
             if (!successors.Any())
             {
                 if (task.LatestStart != default(DateTime))
@@ -239,10 +256,12 @@ namespace Service
         public DateTime CalculateLateFinish(TaskDTO task, List<TaskDTO> allTasks)
         {
             var successors = GetSuccessors(task, allTasks);
-            
+
             if (!successors.Any())
             {
-                return task.EndDate;
+                // Para tareas finales, usar la fecha de finalización global
+                var finalTasks = allTasks.Where(t => !IsSuccessorOfAny(t, allTasks)).ToList();
+                return finalTasks.Max(t => t.EndDate);
             }
 
             return successors.Min(s => s.LatestStart);

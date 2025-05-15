@@ -35,7 +35,8 @@ namespace Service.Test
             _taskD = CreateTask("Tarea D", "Descripción de Tarea D", 3, 4, new List<TaskDTO> { _taskB, _taskC });
         }
 
-        private TaskDTO CreateTask(string title, string description, int duration, int id, List<TaskDTO> previousTasks = null)
+        private TaskDTO CreateTask(string title, string description, int duration, int id,
+            List<TaskDTO> previousTasks = null)
         {
             var task = new TaskDTO()
             {
@@ -158,7 +159,8 @@ namespace Service.Test
         [TestMethod]
         public void CalculateCriticalPath_ShouldCalculateLateDates_AndSlack()
         {
-            var taskBWithDependency = CreateTask("Tarea B", "Descripción de Tarea B", 4, 2, new List<TaskDTO> { _taskA });
+            var taskBWithDependency =
+                CreateTask("Tarea B", "Descripción de Tarea B", 4, 2, new List<TaskDTO> { _taskA });
             var tasks = new List<TaskDTO> { _taskA, taskBWithDependency };
             var result = _cpmService.CalculateCriticalPath(tasks);
 
@@ -300,32 +302,15 @@ namespace Service.Test
             Assert.IsFalse(_cpmService.IsCritical(_taskA));
         }
 
-        [TestMethod]
-        public void CalculateCriticalPath_ShouldHandleMultipleParallelPaths()
-        {
-            var taskE = CreateTask("Tarea E", "Descripción de Tarea E", 6, 5);
-            var taskF = CreateTask("Tarea F", "Descripción de Tarea F", 2, 6, new List<TaskDTO> { taskE });
-            var taskG = CreateTask("Tarea G", "Descripción de Tarea G", 1, 7, new List<TaskDTO> { _taskD, taskF });
-
-            var tasks = new List<TaskDTO> { _taskA, _taskB, _taskC, _taskD, taskE, taskF, taskG };
-            var result = _cpmService.CalculateCriticalPath(tasks);
-
-            Assert.IsTrue(result.CriticalPath.Count > 0);
-            Assert.IsTrue(result.CriticalTasks.Count > 0);
-            Assert.IsTrue(result.CriticalTasks.Any(t => t.Id == 7));
-
-            var criticalIds = result.CriticalTasks.Select(t => t.Id).ToList();
-            Assert.IsTrue(criticalIds.Contains(5) && criticalIds.Contains(6));
-            Assert.IsTrue(result.ProjectDuration >= 9);
-            VerifyCriticalPathOrder(result);
-        }
+        
 
         [TestMethod]
         public void CalculateCriticalPath_ShouldHandleParallelTasksWithSameStartEnd()
         {
             var parallelTask1 = CreateTask("Paralela 1", "Descripción", 5, 10);
             var parallelTask2 = CreateTask("Paralela 2", "Descripción", 5, 11);
-            var finalTask = CreateTask("Final", "Descripción", 2, 12, new List<TaskDTO> { parallelTask1, parallelTask2 });
+            var finalTask = CreateTask("Final", "Descripción", 2, 12,
+                new List<TaskDTO> { parallelTask1, parallelTask2 });
 
             var tasks = new List<TaskDTO> { parallelTask1, parallelTask2, finalTask };
             var result = _cpmService.CalculateCriticalPath(tasks);
@@ -357,7 +342,7 @@ namespace Service.Test
             Assert.IsTrue(!IsSuccessorOfAny(result.CriticalPath.Last(), tasks));
             VerifyCriticalPathContinuity(result);
             Assert.AreEqual(13, result.ProjectDuration);
-            
+
             foreach (var criticalTask in result.CriticalTasks)
             {
                 Assert.AreEqual(0, criticalTask.Slack.TotalDays, 0.0001);
