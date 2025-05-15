@@ -96,18 +96,5 @@ public class AdminSService : IAdminSService
         _userService.UpdateUser(user);
     }
 
-    private RolDTO ConvertToDTORole(Rol role)
-    {
-        switch (role)
-        {
-            case Rol.AdminSystem:
-                return RolDTO.AdminSystem;
-            case Rol.ProjectMember:
-                return RolDTO.ProjectMember;
-            case Rol.AdminProject:
-                return RolDTO.AdminProject;
-            default:
-                throw new InvalidRolException();
-        }
-    }
+    
 }
