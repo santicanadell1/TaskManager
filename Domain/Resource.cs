@@ -7,6 +7,7 @@ public class Resource
     public string description;
     public string name;
     public string type;
+    public int? Id { get; set; }
 
     public Resource(string name, string type, string description)
     {
@@ -29,5 +30,5 @@ public class Resource
 
     public string Description { get; set; }
 
-    public int? Id { get; set; }
+   
 }
