@@ -143,48 +143,31 @@
 
     window.initGantt = (ganttData, startDate, endDate, showCritical) => {
         console.log("InitGantt called with:", {ganttData, startDate, endDate, showCritical});
-
-        // Si ya está inicializado, destruir primero
         if (ganttInitialized) {
             gantt.clearAll();
         }
-
-        // Configuración para hacer el diagrama de solo lectura
         gantt.config.readonly = true;
         gantt.config.drag_move = false;
         gantt.config.drag_resize = false;
         gantt.config.drag_progress = false;
         gantt.config.drag_links = false;
         gantt.config.details_on_dblclick = false;
-
-        // Configuración de fechas
         gantt.config.date_format = "%Y-%m-%d";
         gantt.config.start_date = new Date(startDate);
         gantt.config.end_date = new Date(endDate);
         gantt.config.show_progress = true;
-
-        // Configuración para prevenir el auto-resize
         gantt.config.autosize = false;
         gantt.config.autosize_min_width = false;
-
-        // Configuración de escala para mostrar solo un mes
         gantt.config.scale_unit = "day";
         gantt.config.date_scale = "%d";
         gantt.config.scale_height = 50;
-
         gantt.config.subscales = [
             {unit: "month", step: 1, format: "%F %Y"}
         ];
-
-        // Asegurar que el ancho mínimo de columna sea suficiente
         gantt.config.min_column_width = 30;
         gantt.config.row_height = 28;
-
-        // Fijar el ancho de la grilla
         gantt.config.grid_width = 350;
         gantt.config.grid_resize = false;
-
-        // Configuración de columnas con anchos fijos
         gantt.config.columns = [
             {name: "text", label: "Task", width: 180, tree: true, resize: false},
             {name: "start_date", label: "Start", align: "center", width: 80, resize: false},
@@ -200,28 +183,21 @@
                 }
             }
         ];
-
-        // Templates para mostrar tareas críticas
         gantt.templates.task_class = function (start, end, task) {
             if (showCritical && task.critical) {
                 return "gantt_critical_task";
             }
             return "";
         };
-
         gantt.templates.link_class = function (link) {
             if (showCritical && link.critical) {
                 return "gantt_critical_link";
             }
             return "";
         };
-
-        // Template para el texto de la tarea
         gantt.templates.task_text = function (start, end, task) {
             return task.text;
         };
-
-        // Prevenir la edición
         gantt.attachEvent("onBeforeTaskChanged", function (id, mode, old_event) {
             return false;
         });
@@ -233,14 +209,10 @@
         gantt.attachEvent("onBeforeLinkAdd", function (id, link) {
             return false;
         });
-
-        // Inicializar solo si no está inicializado
         if (!ganttInitialized) {
             gantt.init("gantt_here");
             ganttInitialized = true;
         }
-
-        // Verificar si hay datos antes de parsear
         if (ganttData && ganttData.data && ganttData.data.length > 0) {
             console.log("Parsing gantt data:", ganttData);
             gantt.parse(ganttData);
@@ -250,18 +222,14 @@
 
         gantt.render();
 
-        // Centrar la vista en el mes seleccionado sin cambiar el tamaño
         setTimeout(() => {
             gantt.showDate(new Date(startDate));
         }, 100);
     };
 
     window.updateGanttView = function (startDate, endDate, showCritical, ganttData) {
-        // No limpiar todo, solo actualizar las fechas
         gantt.config.start_date = new Date(startDate);
         gantt.config.end_date = new Date(endDate);
-
-        // Actualizar las clases CSS para mostrar/ocultar la ruta crítica
         gantt.templates.task_class = function (start, end, task) {
             if (showCritical && task.critical) {
                 return "gantt_critical_task";
@@ -275,16 +243,11 @@
             }
             return "";
         };
-
-        // No volver a parsear los datos si no es necesario
         if (ganttData) {
             gantt.clearAll();
             gantt.parse(ganttData);
         }
-
         gantt.render();
-
-        // Centrar la vista sin cambiar el tamaño
         setTimeout(() => {
             gantt.showDate(new Date(startDate));
         }, 50);
@@ -343,8 +306,7 @@
             ganttData = GanttService.Convert(tasks, cpm.CriticalPath);
 
             Console.WriteLine($"GanttData created - Tasks: {ganttData?.data?.Count ?? 0}, Links: {ganttData?.links?.Count ?? 0}");
-
-            // Establecer el mes y año basado en las fechas del proyecto
+            
             if (tasks.Any())
             {
                 var minDate = tasks.Min(t => t.StartDate);
@@ -357,7 +319,7 @@
             EstimatedEndDate = tasks.Max(t => t.EndDate);
             CriticalTasks = ganttData.data.Where(t => t.critical).ToList();
             NonCriticalTasks = ganttData.data.Where(t => !t.critical).ToList();
-            SelectedTaskSlack = null; // resetear selección anterior
+            SelectedTaskSlack = null; 
 
         }
         catch (Exception ex)
