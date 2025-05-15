@@ -11,7 +11,7 @@
 <div class="login-container">
     <h3 class="login-title">Login</h3>
  
-    <!-- Custom alert for incorrect login with a close button -->
+   
     @if (alertVisible)
     {
         <div class="d-flex justify-content-center align-items-center mt-2">
@@ -85,6 +85,6 @@
 
     private void ToggleAlertVisibility()
     {
-        alertVisible = !alertVisible; // Toggles the visibility of the alert message
+        alertVisible = !alertVisible;
     }
 }
