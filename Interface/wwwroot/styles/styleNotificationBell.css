@@ -1,0 +1,145 @@
+﻿.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.sidebar {
+    background-image: linear-gradient(180deg, rgb(130, 167, 246) 0%, #3a0647 70%);
+}
+
+.top-row {
+    background-color: #3e3939;
+    border-bottom: 1px solid #cdafaf;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+
+@media (max-width: 640.98px) {
+    .top-row {
+        justify-content: space-between;
+    }
+
+}
+
+@media (min-width: 641px) {
+    .page {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+
+    .top-row, article {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(147, 79, 79, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+.page .notification-bell {
+    position: relative;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.page .notification-bell button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #007bff;
+    transition: transform 0.3s ease;
+}
+
+.page .notification-bell button:hover {
+    transform: scale(1.1);
+}
+
+.page .notification-bell .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 0.3rem;
+    font-size: 0.9rem;
+}
+
+.page .notifications-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+}
+
+.page .notifications-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.page .notifications-dropdown li {
+    padding: 10px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.page .notifications-dropdown li:last-child {
+    border-bottom: none;
+}
+
+.page .notifications-dropdown button {
+    border: none;
+    background: transparent;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.page .notification-bell button:focus + .notifications-dropdown,
+.page .notifications-dropdown:hover {
+    display: block;
+}

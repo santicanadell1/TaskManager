@@ -1,0 +1,250 @@
+﻿@page "/project/tasks"
+@using Service
+@using Service.Models
+@inject TaskService TaskServiceClient
+@inject NavigationManager Navigation
+@inject MemberPService MemberPService
+@inject AdminPService AdminPService
+@inject Login Login
+@rendermode InteractiveServer
+
+<link href="styles/styleTaskProjectMember.css" rel="stylesheet"/>
+
+<div class="project-member-container">
+    <h3>Update Task Status</h3>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> @errorMessage
+            <button type="button" class="btn-close" @onclick="() => errorMessage = string.Empty"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> @successMessage
+            <button type="button" class="btn-close" @onclick="() => successMessage = string.Empty"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(infoMessage))
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong>Info:</strong> @infoMessage
+            <button type="button" class="btn-close" @onclick="() => infoMessage = string.Empty"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="form-group">
+        <label for="projectSelect">Select Project</label>
+        <select id="projectSelect" class="form-control" @onchange="OnProjectChange">
+            <option value="">-- Select a Project --</option>
+            @foreach (var project in projects)
+            {
+                <option value="@project.Name">@project.Name</option>
+            }
+        </select>
+    </div>
+
+    @if (!string.IsNullOrEmpty(selectedProjectId))
+    {
+        <div class="form-group mt-3">
+            <label for="taskSelect">Select Task</label>
+            <select id="taskSelect" class="form-control" @onchange="OnTaskChange">
+                <option value="">-- Select a Task --</option>
+                @foreach (var task in tasks)
+                {
+                    <option value="@task.Id">@task.Title</option>
+                }
+            </select>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(selectedTaskId))
+    {
+        <div class="form-group mt-3">
+            <label for="taskStatus">Task Status</label>
+            <select id="taskStatus" class="form-control" @bind="taskStatusString" @bind:event="oninput">
+                <option value="ToDo">To Do</option>
+                <option value="Doing">Doing</option>
+                <option value="Done">Done</option>
+            </select>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="hoursWorked">Days Worked</label>
+            <InputNumber id="hoursWorked" class="form-control" @bind-Value="hoursWorked" min="0"/>
+        </div>
+
+        <button class="btn btn-primary mt-3" @onclick="async () => HandleSubmit()">Update Status</button>
+    }
+</div>
+
+@code {
+    private List<TaskDTO> tasks = new();
+    private List<ProjectDTO> projects = new();
+    private string loginMailUser;
+    private string selectedProjectId;
+    private string selectedTaskId;
+    private StateDTO taskStatus = StateDTO.TODO;
+    private string taskStatusString = "ToDo";
+    private readonly DateTime? executionDate = DateTime.Today;
+    private int hoursWorked;
+    private string errorMessage;
+    private string successMessage;
+    private string infoMessage;
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            loginMailUser = Login.GetLoggedUser().Email;
+            projects = AdminPService.GetAllProjectsForUser(loginMailUser);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading projects: {ex.Message}";
+        }
+    }
+
+    private void OnProjectChange(ChangeEventArgs e)
+    {
+        selectedProjectId = e.Value.ToString();
+        selectedTaskId = string.Empty;
+        ClearMessages();
+
+        if (!string.IsNullOrEmpty(selectedProjectId))
+        {
+            StateHasChanged();
+
+            try
+            {
+                tasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectId, loginMailUser);
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Error loading tasks: {ex.Message}";
+                tasks = new List<TaskDTO>();
+            }
+        }
+    }
+
+    private void OnTaskChange(ChangeEventArgs e)
+    {
+        selectedTaskId = e.Value.ToString();
+        ClearMessages();
+
+        try
+        {
+            if (!string.IsNullOrEmpty(selectedTaskId) && !string.IsNullOrEmpty(selectedProjectId))
+            {
+                StateHasChanged();
+
+                var task = TaskServiceClient.GetTask(selectedProjectId, int.Parse(selectedTaskId));
+                taskStatus = task.State;
+
+                taskStatusString = ConvertEnumToString(taskStatus);
+
+                infoMessage = string.Empty;
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading task details: {ex.Message}";
+        }
+    }
+
+    private void HandleSubmit()
+    {
+        ClearMessages();
+
+        if (string.IsNullOrEmpty(selectedTaskId))
+        {
+            errorMessage = "Please select a task";
+            return;
+        }
+
+        taskStatus = ConvertStringToEnum(taskStatusString);
+
+        if (taskStatus == StateDTO.DONE && executionDate == null)
+        {
+            errorMessage = "Please provide an execution date for completed tasks";
+            return;
+        }
+
+        if (hoursWorked <= 0)
+        {
+            errorMessage = "Days worked must be greater than 0";
+            return;
+        }
+
+        try
+        {
+            StateHasChanged();
+
+            var existingTask = TaskServiceClient.GetTask(selectedProjectId, int.Parse(selectedTaskId));
+
+            var taskDTO = new TaskDTO
+            {
+                Id = existingTask.Id,
+                Title = existingTask.Title,
+                Description = existingTask.Description,
+                ExpectedStartDate = existingTask.ExpectedStartDate,
+                Duration = existingTask.Duration,
+                PreviousTasks = existingTask.PreviousTasks,
+                SameTimeTasks = existingTask.SameTimeTasks,
+                Resources = existingTask.Resources,
+                State = taskStatus
+            };
+
+            var newStatus = taskStatus;
+            MemberPService.ChangeTaskStatus(selectedProjectId, loginMailUser, taskDTO, newStatus);
+
+            successMessage = $"Task '{existingTask.Title}' has been successfully updated to {taskStatusString}!";
+            infoMessage = string.Empty;
+
+
+            Navigation.NavigateTo("/project/tasks");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error updating task: {ex.Message}";
+            infoMessage = string.Empty;
+        }
+    }
+
+    private void ClearMessages()
+    {
+        errorMessage = string.Empty;
+        successMessage = string.Empty;
+        infoMessage = string.Empty;
+    }
+    
+    private string ConvertEnumToString(StateDTO state)
+    {
+        return state switch
+        {
+            StateDTO.TODO => "ToDo",
+            StateDTO.DOING => "Doing",
+            StateDTO.DONE => "Done",
+            _ => "ToDo"
+        };
+    }
+
+    private StateDTO ConvertStringToEnum(string stateString)
+    {
+        return stateString switch
+        {
+            "ToDo" => StateDTO.TODO,
+            "Doing" => StateDTO.DOING,
+            "Done" => StateDTO.DONE,
+            _ => StateDTO.TODO
+        };
+    }
+
+}

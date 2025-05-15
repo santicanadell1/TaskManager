@@ -1,0 +1,127 @@
+﻿/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease-in-out;
+}
+
+.modal.fade.show {
+    display: block;
+}
+
+.modal-dialog {
+    max-width: 700px;
+    margin: 5% auto;
+    transition: transform 0.3s ease-out;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.btn-close {
+    border: none;
+    font-size: 1.5rem;
+    color: #aaa;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    .btn-close:hover {
+        color: #000;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative; /* Ensure the header has a relative position to position the close button */
+        padding-right: 40px; /* Give enough space on the right for the close button */
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    .modal-body {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #ddd;
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 10px;
+    }
+
+    .modal-footer .btn {
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 20px;
+    }
+
+    /* Input Styles */
+
+    .form-control {
+        font-size: 1rem;
+        border-radius: 8px;
+        box-shadow: none;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+    /* Checkbox Styles */
+
+    .form-check-label {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .form-check-input {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Modal Animation */
+
+    .modal-dialog {
+        transform: translateY(-50px);
+    }
+
+    .modal.fade.show .modal-dialog {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+        .modal-dialog {
+            max-width: 90%;
+        }
+    }

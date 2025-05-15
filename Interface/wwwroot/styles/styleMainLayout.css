@@ -1,0 +1,69 @@
+.page .notification-bell {
+    position: relative;
+    display: inline-block;
+}
+
+.page .notification-bell button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #007bff;
+    transition: transform 0.3s ease;
+}
+
+.page .notification-bell button:hover {
+    transform: scale(1.1);
+}
+
+.page .notification-bell .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 0.3rem;
+    font-size: 0.9rem;
+}
+
+.page .notifications-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+}
+
+.page .notifications-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.page .notifications-dropdown li {
+    padding: 10px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.page .notifications-dropdown li:last-child {
+    border-bottom: none;
+}
+
+.page .notifications-dropdown button {
+    border: none;
+    background: transparent;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.page .notification-bell button:focus + .notifications-dropdown,
+.page .notifications-dropdown:hover {
+    display: block;
+}

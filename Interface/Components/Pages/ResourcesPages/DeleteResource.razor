@@ -1,0 +1,112 @@
+﻿@page "/resources/delete"
+@using Service
+@using Service.Models
+@inject NavigationManager Navigation
+@inject ResourceService ResourceService
+@rendermode InteractiveServer
+
+<link href="styles/styleDeleteResource.css" rel="stylesheet"/>
+
+<div class="delete-resource-container">
+    <h3 class="delete-resource-title">Delete Resource</h3>
+
+    <div class="form-group">
+        <label for="resourceSelect">Select a Resource to Delete</label>
+        <select id="resourceSelect" class="form-control mt-1" @bind="selectedResourceId">
+            <option value="">-- Select a Resource --</option>
+            @foreach (var resource in resourcesList)
+            {
+                <option value="@resource.Id">@resource.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="button" class="btn btn-danger" @onclick="DeleteResources"
+                disabled="@(selectedResourceId == null)">
+            Delete Resource
+        </button>
+    </div>
+
+    @if (!string.IsNullOrEmpty(deleteError))
+    {
+        <div class="alert alert-danger mt-3">
+            <strong>Error: </strong>@deleteError
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(deleteSuccess))
+    {
+        <div class="alert alert-success mt-3">
+            <strong>Success: </strong>@deleteSuccess
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    private List<ResourceDTO> resourcesList = new();
+    private int? selectedResourceId;
+    private string deleteError = string.Empty;
+    private string deleteSuccess = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        LoadResources();
+    }
+
+    private void LoadResources()
+    {
+        try
+        {
+            resourcesList = ResourceService.GetResources();
+            if (resourcesList == null || resourcesList.Count == 0)
+            {
+                deleteError = "No resources found.";
+                resourcesList = new List<ResourceDTO>();
+            }
+        }
+        catch (Exception ex)
+        {
+            deleteError = $"Error loading resources: {ex.Message}";
+            resourcesList = new List<ResourceDTO>();
+        }
+    }
+
+    private void DeleteResources()
+    {
+        deleteError = "";
+        deleteSuccess = "";
+
+        if (selectedResourceId == null)
+        {
+            deleteError = "Please select a resource to delete.";
+            return;
+        }
+
+        try
+        {
+            ResourceService.DeleteResource(selectedResourceId.Value);
+            deleteSuccess = "Resource deleted successfully.";
+
+            LoadResources();
+            selectedResourceId = null;
+        }
+        catch (Exception ex)
+        {
+            deleteError = $"An error occurred: {ex.Message}";
+        }
+    }
+
+    private void ToggleAlertVisibility()
+    {
+        deleteError = "";
+        deleteSuccess = "";
+    }
+
+}

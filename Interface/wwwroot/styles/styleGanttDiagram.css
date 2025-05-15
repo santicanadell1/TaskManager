@@ -1,0 +1,82 @@
+﻿.gantt-page-container {
+    padding: 20px;
+}
+
+.gantt-page-title {
+    margin-bottom: 20px;
+}
+
+.gantt-controls-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.gantt-label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.gantt-select {
+    margin-bottom: 10px;
+}
+
+.gantt-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.gantt-button {
+    white-space: nowrap;
+}
+
+.gantt-wrapper {
+    width: 100%;
+    height: 600px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.gantt-chart-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Prevenir que el gantt se desborde */
+#gantt_here {
+    max-width: 100%;
+    overflow: auto;
+}
+
+/* Estilos para el diagrama de Gantt */
+.gantt_task_progress {
+    display: none !important;
+}
+
+.gantt_critical_task .gantt_task_bar {
+    background-color: #e74c3c !important;
+    border: 2px solid #c0392b !important;
+}
+
+.gantt_critical_link {
+    stroke: #c0392b !important;
+    stroke-width: 3px !important;
+}
+
+.gantt_task_link.finish_to_start {
+    stroke: #2c3e50;
+    stroke-width: 2px;
+}
+
+.gantt_task_link.start_to_start {
+    stroke: #3498db;
+    stroke-width: 2px;
+}

@@ -1,0 +1,406 @@
+﻿@page "/gantt"
+@using Service
+@using Service.Models
+@inject IJSRuntime JS
+@inject AdminPService AdminPService
+@inject TaskService TaskService
+@inject CpmService CpmService
+@inject GanttService GanttService
+@rendermode InteractiveServer
+
+<link href="/GanttLibrary/codebase/dhtmlxgantt.css" rel="stylesheet"/>
+<script src="/GanttLibrary/codebase/dhtmlxgantt.js"></script>
+<link href="styles/styleGanttDiagram.css" rel="stylesheet"/>
+<div class="gantt-page-container">
+    <h3 class="gantt-page-title"><i class="bi bi-bar-chart-fill me-2"></i>Gantt Chart</h3>
+
+    @if (projects == null || projects.Count == 0)
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>There are no projects for this user.
+        </div>
+    }
+    else
+    {
+        <div class="gantt-controls-section">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="gantt-label">Select a Project:</label>
+                    <select @onchange="OnProjectSelected"
+                            class="form-select gantt-select">
+                        <option disabled selected value="">-- Select a project --</option>
+                        @foreach (var p in projects)
+                        {
+                            <option value="@p.Name">@p.Name</option>
+                        }
+                    </select>
+                </div>
+
+                @if (showGantt)
+                {
+                    <div class="col-md-2">
+                        <label class="gantt-label">Month:</label>
+                        <select @onchange="OnMonthChanged"
+                                value="@selectedMonth"
+                                class="form-select gantt-select">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="gantt-label">Year:</label>
+                        <select @onchange="OnYearChanged"
+                                value="@selectedYear"
+                                class="form-select gantt-select">
+                            @for (var year = DateTime.Now.Year - 5; year <= DateTime.Now.Year + 5; year++)
+                            {
+                                <option value="@year">@year</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label class="gantt-label">&nbsp;</label>
+                        <div class="gantt-buttons">
+                            <button class="btn @(showCriticalPath ? "btn-primary" : "btn-outline-primary") gantt-button"
+                                    @onclick="ToggleCriticalPath">
+                                <i class="bi bi-diagram-3 me-2"></i>
+                                @(showCriticalPath ? "Hide CPM" : "Show CPM")
+                            </button>
+                            <button class="btn btn-outline-secondary gantt-button ms-2"
+                                    @onclick="RefreshGantt">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @if (showGantt)
+    {
+        <div class="gantt-wrapper">
+            <div id="gantt_here" class="gantt-chart-container"></div>
+        </div>
+    }
+    <div class="gantt-status-panel mt-4 p-3 border rounded shadow-sm bg-light">
+        <h5><i class="bi bi-info-circle me-2"></i>Project State</h5>
+
+        <div class="mb-2"><strong>Estimated End Date:</strong> @EstimatedEndDate?.ToString("dd/MM/yyyy")</div>
+
+        <div class="mb-2">
+            <strong>Critical Tasks:</strong>
+            @if (CriticalTasks.Any())
+            {
+                <ul>
+                    @foreach (var task in CriticalTasks)
+                    {
+                        <li>@task.text</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>There are no critical Tasks.</span>
+            }
+        </div>
+
+        <div class="mb-2">
+            <strong>Select not critical Task:</strong>
+            <select class="form-select" @onchange="OnNonCriticalTaskSelected">
+                <option value="">-- Select --</option>
+                @foreach (var task in NonCriticalTasks)
+                {
+                    <option value="@task.id">@task.text</option>
+                }
+            </select>
+        </div>
+
+        @if (SelectedTaskSlack.HasValue)
+        {
+            <div class="mt-2 alert alert-info">
+                <strong>Slack:</strong> The task can de delayed
+                <strong>@SelectedTaskSlack.Value.ToString("0.0")</strong> days without affecting the project end date.
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    let ganttInitialized = false;
+
+    window.initGantt = (ganttData, startDate, endDate, showCritical) => {
+
+        if (ganttInitialized) {
+            gantt.clearAll();
+        }
+        gantt.config.readonly = true;
+        gantt.config.drag_move = false;
+        gantt.config.drag_resize = false;
+        gantt.config.drag_progress = false;
+        gantt.config.drag_links = false;
+        gantt.config.details_on_dblclick = false;
+        gantt.config.date_format = "%Y-%m-%d";
+        gantt.config.start_date = new Date(startDate);
+        gantt.config.end_date = new Date(endDate);
+        gantt.config.show_progress = true;
+        gantt.config.autosize = false;
+        gantt.config.autosize_min_width = false;
+        gantt.config.scale_unit = "day";
+        gantt.config.date_scale = "%d";
+        gantt.config.scale_height = 50;
+        gantt.config.subscales = [
+            {unit: "month", step: 1, format: "%F %Y"}
+        ];
+        gantt.config.min_column_width = 30;
+        gantt.config.row_height = 28;
+        gantt.config.grid_width = 350;
+        gantt.config.grid_resize = false;
+        gantt.config.columns = [
+            {name: "text", label: "Task", width: 180, tree: true, resize: false},
+            {name: "start_date", label: "Start", align: "center", width: 80, resize: false},
+            {name: "duration", label: "Duration", align: "center", width: 60, resize: false},
+            {
+                name: "slack",
+                label: "Slack",
+                align: "center",
+                width: 50,
+                resize: false,
+                template: function (task) {
+                    return task.slack ? task.slack.toFixed(1) : "0";
+                }
+            }
+        ];
+        gantt.templates.task_class = function (start, end, task) {
+            if (showCritical && task.critical) {
+                return "gantt_critical_task";
+            }
+            return "";
+        };
+        gantt.templates.link_class = function (link) {
+            if (showCritical && link.critical) {
+                return "gantt_critical_link";
+            }
+            return "";
+        };
+        gantt.templates.task_text = function (start, end, task) {
+            return task.text;
+        };
+        gantt.attachEvent("onBeforeTaskChanged", function (id, mode, old_event) {
+            return false;
+        });
+
+        gantt.attachEvent("onBeforeTaskDrag", function (id, mode, e) {
+            return false;
+        });
+
+        gantt.attachEvent("onBeforeLinkAdd", function (id, link) {
+            return false;
+        });
+        if (!ganttInitialized) {
+            gantt.init("gantt_here");
+            ganttInitialized = true;
+        }
+        if (ganttData && ganttData.data && ganttData.data.length > 0) {
+            gantt.parse(ganttData);
+        } else {
+            console.warn("No gantt data to parse");
+        }
+
+        gantt.render();
+
+        setTimeout(() => {
+            gantt.showDate(new Date(startDate));
+        }, 100);
+    };
+
+    window.updateGanttView = function (startDate, endDate, showCritical, ganttData) {
+        gantt.config.start_date = new Date(startDate);
+        gantt.config.end_date = new Date(endDate);
+        gantt.templates.task_class = function (start, end, task) {
+            if (showCritical && task.critical) {
+                return "gantt_critical_task";
+            }
+            return "";
+        };
+
+        gantt.templates.link_class = function (link) {
+            if (showCritical && link.critical) {
+                return "gantt_critical_link";
+            }
+            return "";
+        };
+        if (ganttData) {
+            gantt.clearAll();
+            gantt.parse(ganttData);
+        }
+        gantt.render();
+        setTimeout(() => {
+            gantt.showDate(new Date(startDate));
+        }, 50);
+    };
+</script>
+
+@code {
+    private List<ProjectDTO> projects;
+    private string selectedProjectName;
+    private GanttData ganttData = new();
+    private bool showGantt;
+    private bool showCriticalPath;
+    private int selectedMonth = DateTime.Now.Month;
+    private int selectedYear = DateTime.Now.Year;
+    private DateTime? EstimatedEndDate;
+    private List<GanttTask> CriticalTasks = new();
+    private List<GanttTask> NonCriticalTasks = new();
+    private double? SelectedTaskSlack;
+
+
+    private readonly string currentUserEmail = LoggedUser.Current.Email;
+
+    protected override void OnInitialized()
+    {
+        projects = AdminPService
+                       .GetAllProjectsForUser(currentUserEmail)
+                   ?? new List<ProjectDTO>();
+    }
+
+    private async Task OnProjectSelected(ChangeEventArgs e)
+    {
+        selectedProjectName = e.Value?.ToString();
+        if (string.IsNullOrWhiteSpace(selectedProjectName))
+            return;
+
+        await LoadGanttData();
+    }
+
+    private async Task LoadGanttData()
+    {
+        try
+        {
+            var tasks = TaskService.GetTasks(selectedProjectName);
+            Console.WriteLine($"Tasks loaded: {tasks?.Count ?? 0}");
+
+            if (tasks == null || !tasks.Any())
+            {
+                Console.WriteLine("No tasks found for project: " + selectedProjectName);
+                ganttData = new GanttData { data = new List<GanttTask>(), links = new List<GanttLink>() };
+                showGantt = true;
+                StateHasChanged();
+                return;
+            }
+
+            var cpm = CpmService.CalculateCriticalPath(tasks);
+            ganttData = GanttService.Convert(tasks, cpm.CriticalPath);
+
+            Console.WriteLine($"GanttData created - Tasks: {ganttData?.data?.Count ?? 0}, Links: {ganttData?.links?.Count ?? 0}");
+
+            if (tasks.Any())
+            {
+                var minDate = tasks.Min(t => t.StartDate);
+                selectedMonth = minDate.Month;
+                selectedYear = minDate.Year;
+            }
+
+            showGantt = true;
+            StateHasChanged();
+            EstimatedEndDate = tasks.Max(t => t.EndDate);
+            CriticalTasks = ganttData.data.Where(t => t.critical).ToList();
+            NonCriticalTasks = ganttData.data.Where(t => !t.critical).ToList();
+            SelectedTaskSlack = null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading gantt data: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+        }
+    }
+
+    private async Task OnMonthChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var month))
+        {
+            selectedMonth = month;
+            await UpdateGanttView();
+        }
+    }
+
+    private async Task OnYearChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var year))
+        {
+            selectedYear = year;
+            await UpdateGanttView();
+        }
+    }
+
+    private async Task UpdateGanttView()
+    {
+        if (showGantt)
+        {
+            var startDate = new DateTime(selectedYear, selectedMonth, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+
+            await JS.InvokeVoidAsync("updateGanttView",
+                startDate.ToString("yyyy-MM-dd"),
+                endDate.ToString("yyyy-MM-dd"),
+                showCriticalPath,
+                ganttData);
+        }
+    }
+
+    private async Task ToggleCriticalPath()
+    {
+        showCriticalPath = !showCriticalPath;
+        await UpdateGanttView();
+    }
+
+    private async Task RefreshGantt()
+    {
+        await LoadGanttData();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (showGantt && ganttData != null && ganttData.data != null && ganttData.data.Any())
+        {
+            var startDate = new DateTime(selectedYear, selectedMonth, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+
+            Console.WriteLine($"OnAfterRenderAsync - firstRender: {firstRender}, showGantt: {showGantt}, tasks: {ganttData.data.Count}");
+
+            await JS.InvokeVoidAsync("initGantt",
+                ganttData,
+                startDate.ToString("yyyy-MM-dd"),
+                endDate.ToString("yyyy-MM-dd"),
+                showCriticalPath);
+        }
+    }
+
+    private void OnNonCriticalTaskSelected(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var taskId))
+        {
+            var selected = NonCriticalTasks.FirstOrDefault(t => t.id == taskId);
+            SelectedTaskSlack = selected?.slack;
+        }
+        else
+        {
+            SelectedTaskSlack = null;
+        }
+    }
+
+
+}
