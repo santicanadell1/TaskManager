@@ -143,7 +143,7 @@
     let ganttInitialized = false;
 
     window.initGantt = (ganttData, startDate, endDate, showCritical) => {
-        console.log("InitGantt called with:", {ganttData, startDate, endDate, showCritical});
+
         if (ganttInitialized) {
             gantt.clearAll();
         }
@@ -215,7 +215,6 @@
             ganttInitialized = true;
         }
         if (ganttData && ganttData.data && ganttData.data.length > 0) {
-            console.log("Parsing gantt data:", ganttData);
             gantt.parse(ganttData);
         } else {
             console.warn("No gantt data to parse");
