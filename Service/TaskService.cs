@@ -279,12 +279,27 @@ namespace Service
 
             try
             {
-                _cpmService.CalculateCriticalPath(GetTasks(projectName));
+                var updatedTasks = _cpmService.CalculateCriticalPath(GetTasks(projectName)).AllTasks;
+
+                foreach (var updatedDTO in updatedTasks)
+                {
+                    var originalTask = project.Tasks.FirstOrDefault(t => t.Id == updatedDTO.Id);
+                    if (originalTask != null)
+                    {
+                        originalTask.IsCritical = updatedDTO.IsCritical;
+                        originalTask.StartDate = updatedDTO.StartDate;
+                        originalTask.EndDate = updatedDTO.EndDate;
+                        originalTask.LatestStart = updatedDTO.LatestStart;
+                        originalTask.LatestFinish = updatedDTO.LatestFinish;
+                        originalTask.Slack = updatedDTO.Slack;
+                    }
+                }
             }
             catch (Exception)
             {
             }
         }
+
 
         private TaskDTO FromEntity(Task task)
         {
