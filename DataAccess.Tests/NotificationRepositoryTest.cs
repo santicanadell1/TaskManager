@@ -10,7 +10,6 @@ public class NotificationRepositoryTest
     public void NewNotificationRepository_WhenRepositoryIsCreated_ShouldNotBeNull()
     {
         NotificationRepository notificationRepository;
-
         notificationRepository = new NotificationRepository();
 
         Assert.IsNotNull(notificationRepository);
@@ -22,7 +21,7 @@ public class NotificationRepositoryTest
         var notificationRepository = new NotificationRepository();
         var notification = new Notification(false, "New notification", new Project());
 
-        notificationRepository.Add(notification);
+        notificationRepository.AddNotification(notification);
 
         Assert.IsTrue(notificationRepository.GetAll().Contains(notification));
     }
@@ -33,8 +32,8 @@ public class NotificationRepositoryTest
         var notificationRepository = new NotificationRepository();
         var notification1 = new Notification(false, "New notification", new Project());
         var notification2 = new Notification(true, "Another notification", new Project());
-        notificationRepository.Add(notification1);
-        notificationRepository.Add(notification2);
+        notificationRepository.AddNotification(notification1);
+        notificationRepository.AddNotification(notification2);
 
         var notification3 = notificationRepository.Get(n => n.Description == "New notification");
 
@@ -47,7 +46,7 @@ public class NotificationRepositoryTest
         var notificationRepository = new NotificationRepository();
         var notification1 = new Notification(false, "Old notification", new Project());
         var notification2 = new Notification(true, "Updated notification", new Project());
-        notificationRepository.Add(notification1);
+        notificationRepository.AddNotification(notification1);
 
         notificationRepository.Update(notification1, notification2);
 
@@ -61,7 +60,7 @@ public class NotificationRepositoryTest
         var notificationRepository = new NotificationRepository();
         var notification1 = new Notification(false, "Old notification", new Project());
         var notification2 = new Notification(true, "Updated notification", new Project());
-        notificationRepository.Add(notification1);
+        notificationRepository.AddNotification(notification1);
 
         var notification3 = new Notification(false, "Nonexistent notification", new Project());
         notificationRepository.Update(notification3, notification2);
@@ -73,8 +72,8 @@ public class NotificationRepositoryTest
         var notificationRepository = new NotificationRepository();
         var notification1 = new Notification(false, "Notification to be deleted", new Project());
         var notification2 = new Notification(true, "Another notification", new Project());
-        notificationRepository.Add(notification1);
-        notificationRepository.Add(notification2);
+        notificationRepository.AddNotification(notification1);
+        notificationRepository.AddNotification(notification2);
 
         notificationRepository.Delete(notification1);
 

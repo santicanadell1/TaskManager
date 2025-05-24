@@ -1,53 +1,88 @@
 using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
 
 public class ResourceRepository
 {
     private static int _nextId;
-    private readonly List<Resource> _resources;
+    protected readonly AppDbContext _db;
 
-    public ResourceRepository()
+    public ResourceRepository(AppDbContext db)
     {
-        _resources = new List<Resource>();
         _nextId = 1;
+        _db = db;
     }
 
     public List<Resource> GetAll()
     {
-        return _resources.ToList();
+        return _db.Set<Resource>().ToList();
     }
 
     public void AddResource(Resource resource)
     {
         if (resource == null) throw new ResourceIsNullException();
-
-        resource.Id = _nextId++;
-        _resources.Add(resource);
+        try
+        {
+            _db.Set<Resource>().Add(resource);
+            _db.SaveChanges();
+            resource.Id = _nextId++;
+        }
+        catch (DbUpdateException e)
+        {
+            throw new ResourceIsNullException();
+        }
     }
 
     public Resource? Get(Func<Resource, bool> filter)
     {
-        return _resources.FirstOrDefault(filter);
+        return _db.Set<Resource>().FirstOrDefault(filter);
     }
 
 
     public void Update(int? idToUpdate, Resource updatedResource)
     {
-        var index = _resources.FindIndex(resource => resource.Id == idToUpdate);
+        if (idToUpdate == null)
+        {
+            throw new ResourceNotFoundException();
+        }
 
-        if (index == -1) throw new ResourceNotFoundException();
+        if (updatedResource == null)
+        {
+            throw new ResourceNotFoundException();
+        }
 
-        _resources[index] = updatedResource;
+        var existingResource = _db.Resources.Find(idToUpdate);
+
+        if (existingResource == null)
+        {
+            throw new ResourceNotFoundException();
+        }
+
+        try
+        {
+            _db.Entry(existingResource).CurrentValues.SetValues(updatedResource);
+            _db.SaveChanges();
+        }
+        catch (DbUpdateException e)
+        {
+            throw new ResourceNotFoundException();
+        }
     }
+
 
     public void Delete(int? idToDelete)
     {
-        var resource = _resources.FirstOrDefault(r => r.Id == idToDelete);
-
-        if (resource == null) throw new ResourceNotFoundException();
-
-        _resources.Remove(resource);
+        try
+        {
+            var existingResource = _db.Resources.Find(idToDelete);
+            _db.Set<Resource>().Remove(existingResource);
+            _db.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            throw new ResourceNotFoundException();
+        }
     }
 }
