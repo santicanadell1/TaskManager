@@ -7,9 +7,9 @@ namespace Service;
 
 public class NotificationService
 {
-    private readonly InMemoryDatabase _database;
+    private readonly AppDbContext _database;
 
-    public NotificationService(InMemoryDatabase database)
+    public NotificationService(AppDbContext database)
     {
         _database = database;
     }

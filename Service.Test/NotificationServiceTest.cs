@@ -11,12 +11,12 @@ public class NotificationServiceTest
     private Login _loginService;
     private NotificationService _notificationService;
     private UserService _userService;
-    private InMemoryDatabase dataAccess;
+    private AppDbContext dataAccess;
 
     [TestInitialize]
     public void SetUp()
     {
-        dataAccess = new InMemoryDatabase();
+        dataAccess = new AppDbContext();
         _notificationService = new NotificationService(dataAccess);
         _adminService = new AdminPService(dataAccess);
         _loginService = new Login(dataAccess);

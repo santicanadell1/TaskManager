@@ -9,10 +9,10 @@ namespace Service;
 
 public class Login : ILogin
 {
-    private readonly InMemoryDatabase _database;
+    private readonly AppDbContext _database;
     private readonly PasswordManager _passwordManager = new();
 
-    public Login(InMemoryDatabase database)
+    public Login(AppDbContext database)
     {
         _database = database;
     }

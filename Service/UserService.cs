@@ -9,10 +9,10 @@ namespace Service;
 
 public class UserService : IUserService
 {
-    private readonly InMemoryDatabase _database;
+    private readonly AppDbContext _database;
     private readonly PasswordManager _passwordManager = new();
 
-    public UserService(InMemoryDatabase database)
+    public UserService(AppDbContext database)
     {
         _database = database;
     }

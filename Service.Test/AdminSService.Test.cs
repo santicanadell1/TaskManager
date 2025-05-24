@@ -10,14 +10,14 @@ namespace Service.Test;
 public class AdminSService_Test
 {
     private AdminSService _adminService;
-    private InMemoryDatabase _database;
+    private AppDbContext _database;
     private Login _loginService;
     private UserService _userService;
 
     [TestInitialize]
     public void TestSetUp()
     {
-        _database = new InMemoryDatabase();
+        _database = new AppDbContext();
         _adminService = new AdminSService(_database);
         _loginService = new Login(_database);
         _userService = new UserService(_database);

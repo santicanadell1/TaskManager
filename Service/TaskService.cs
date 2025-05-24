@@ -11,9 +11,9 @@ namespace Service;
 public class TaskService
 {
     private readonly CpmService _cpmService;
-    private readonly InMemoryDatabase _database;
+    private readonly AppDbContext _database;
 
-    public TaskService(InMemoryDatabase database, CpmService cpmService)
+    public TaskService(AppDbContext database, CpmService cpmService)
     {
         _database = database;
         _cpmService = cpmService;

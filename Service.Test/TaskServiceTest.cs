@@ -12,7 +12,7 @@ namespace Service.Test;
 public class TaskServiceTest
 {
     private CpmService _cpmService;
-    private InMemoryDatabase _database;
+    private AppDbContext _database;
     private Project _genericProject;
     private Login _login;
     private Resource _resource1;
@@ -31,7 +31,7 @@ public class TaskServiceTest
     [TestInitialize]
     public void Setup()
     {
-        _database = new InMemoryDatabase();
+        _database = new AppDbContext();
         _cpmService = new CpmService();
         _taskService = new TaskService(_database, _cpmService);
         _login = new Login(_database);

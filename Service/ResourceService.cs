@@ -11,9 +11,9 @@ namespace Service;
 
 public class ResourceService : IResourceService
 {
-    private readonly InMemoryDatabase _database;
+    private readonly AppDbContext _database;
 
-    public ResourceService(InMemoryDatabase database)
+    public ResourceService(AppDbContext database)
     {
         _database = database;
     }

@@ -15,7 +15,7 @@ public class MemberPServiceTest
     private TaskService _taskService;
     private UserService _userservice;
     private UserDTO Admin;
-    private InMemoryDatabase database;
+    private AppDbContext database;
     private List<UserDTO> members;
     private TaskDTO task;
     private UserDTO UserDTO;
@@ -23,7 +23,7 @@ public class MemberPServiceTest
     [TestInitialize]
     public void Initialize()
     {
-        database = new InMemoryDatabase();
+        database = new AppDbContext();
         _memberPService = new MemberPService(database);
         _taskService = new TaskService(database, new CpmService());
         _adminPService = new AdminPService(database);

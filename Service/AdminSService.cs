@@ -8,11 +8,11 @@ using Service.Models;
 
 public class AdminSService : IAdminSService
 {
-    private readonly InMemoryDatabase _database;
+    private readonly AppDbContext _database;
     private readonly PasswordManager _passwordManager = new();
     private readonly UserService _userService;
 
-    public AdminSService(InMemoryDatabase database)
+    public AdminSService(AppDbContext database)
     {
         _database = database;
         _userService = new UserService(_database);

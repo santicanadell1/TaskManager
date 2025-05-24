@@ -6,15 +6,15 @@ using Service.Models;
 [TestClass]
 public class LoginTests
 {
-    private InMemoryDatabase _inMemoryDatabase;
+    private AppDbContext _appDbContext;
     private Login _login;
     private PasswordManager _passwordManager;
 
     [TestInitialize]
     public void Setup()
     {
-        _inMemoryDatabase = new InMemoryDatabase();
-        _login = new Login(_inMemoryDatabase);
+        _appDbContext = new AppDbContext();
+        _login = new Login(_appDbContext);
         _passwordManager = new PasswordManager();
     }
 
@@ -35,7 +35,7 @@ public class LoginTests
             Birthday = DateTime.Parse("1990-01-01")
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_appDbContext);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -64,7 +64,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_appDbContext);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -96,7 +96,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_appDbContext);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -119,7 +119,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_appDbContext);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -144,7 +144,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_appDbContext);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -169,7 +169,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_appDbContext);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -194,7 +194,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_appDbContext);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);

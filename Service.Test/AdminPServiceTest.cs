@@ -8,7 +8,7 @@ namespace Service.Test;
 [TestClass]
 public class AdminPServiceTests
 {
-    private InMemoryDatabase _database;
+    private AppDbContext _database;
     private Login _login;
     private AdminPService _service;
     private TaskService _taskService;
@@ -21,7 +21,7 @@ public class AdminPServiceTests
     [TestInitialize]
     public void Setup()
     {
-        _database = new InMemoryDatabase();
+        _database = new AppDbContext();
         _service = new AdminPService(_database);
         _userservice = new UserService(_database);
         _login = new Login(_database);

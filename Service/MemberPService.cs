@@ -9,9 +9,9 @@ namespace Service;
 
 public class MemberPService : IMemberPService
 {
-    private readonly InMemoryDatabase _database;
+    private readonly AppDbContext _database;
 
-    public MemberPService(InMemoryDatabase database)
+    public MemberPService(AppDbContext database)
     {
         _database = database;
     }

@@ -9,7 +9,7 @@ namespace Service.Test;
 public class ResourcesServiceTest
 {
     private AdminPService _adminProjectService;
-    private InMemoryDatabase _database;
+    private AppDbContext _database;
     private Login _loginService;
     private ResourceService _resourceService;
     private TaskService _taskService;
@@ -18,7 +18,7 @@ public class ResourcesServiceTest
     [TestInitialize]
     public void TestSetUp()
     {
-        _database = new InMemoryDatabase();
+        _database = new AppDbContext();
         _loginService = new Login(_database);
         _userService = new UserService(_database);
         _resourceService = new ResourceService(_database);

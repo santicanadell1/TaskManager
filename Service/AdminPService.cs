@@ -9,9 +9,9 @@ using Service.Models;
 
 public class AdminPService : IAdminPService
 {
-    private readonly InMemoryDatabase _database;
+    private readonly AppDbContext _database;
 
-    public AdminPService(InMemoryDatabase database)
+    public AdminPService(AppDbContext database)
     {
         _database = database;
     }
