@@ -1,5 +1,6 @@
 using DataAccess;
 using Interface.Components;
+using Microsoft.EntityFrameworkCore;
 using Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,12 @@ builder.Services.AddScoped<NotificationService>();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDbContext<AppDbContext>(
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        providerOptions => providerOptions.EnableRetryOnFailure())
+);
 
 var app = builder.Build();
 
