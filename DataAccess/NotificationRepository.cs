@@ -1,66 +1,62 @@
 using DataAccess.Exceptions.NotificationRepositoryExceptions;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
 
 public class NotificationRepository
 {
     private static int _nextId;
-    private readonly List<Notification> _notifications;
+    protected readonly AppDbContext _db;
 
-    public NotificationRepository()
+    public NotificationRepository(AppDbContext db)
     {
-        _notifications = new List<Notification>();
+        _db = db;
         _nextId = 1;
     }
 
     public List<Notification> GetAll()
     {
-        return _notifications.ToList();
+        return _db.Set<Notification>().ToList();
     }
 
-    public void AddNotification(Notification notification)
+    public void Add(Notification notification)
     {
         notification.Id = _nextId++;
-        _notifications.Add(notification);
+        _db.Set<Notification>().Add(notification);
+        _db.SaveChanges();
     }
 
     public Notification? Get(Func<Notification, bool> filter)
     {
-        return _notifications.FirstOrDefault(filter);
+        return _db.Set<Notification>().FirstOrDefault(filter);
     }
 
     public void Update(Notification oldNotification, Notification newNotification)
     {
-        var index = -1;
-
-
-        for (var i = 0; i < _notifications.Count; i++)
-            if (_notifications[i] == oldNotification)
-            {
-                index = i;
-                break;
-            }
-
-        if (index == -1) throw new NotificationNotFoundException();
-
-
-        _notifications[index] = newNotification;
+        try
+        {
+            var existingNotification = _db.Notifications.Find(oldNotification.Id);
+            _db.Entry(existingNotification).CurrentValues.SetValues(newNotification);
+            _db.SaveChanges();
+        }
+        catch (DbUpdateException e)
+        {
+            throw new NotificationNotFoundException();
+        }
     }
+
 
     public void Delete(Notification notification)
     {
-        var index = -1;
-
-        for (var i = 0; i < _notifications.Count; i++)
-            if (_notifications[i] == notification)
-            {
-                index = i;
-                break;
-            }
-
-        if (index == -1) throw new NotificationNotFoundException();
-
-        _notifications.RemoveAt(index);
+        try
+        {
+            _db.Set<Notification>().Remove(notification);
+            _db.SaveChanges();
+        }
+        catch (DbUpdateException e)
+        {
+            throw new NotificationNotFoundException();
+        }
     }
 }
