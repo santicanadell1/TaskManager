@@ -7,11 +7,12 @@ namespace DataAccess.Test;
 public class ResourceRepositoryTests
 {
     private ResourceRepository _resourceRepository;
+    protected readonly AppDbContext _db;
 
     [TestInitialize]
     public void Setup()
     {
-        _resourceRepository = new ResourceRepository();
+        _resourceRepository = new ResourceRepository(_db);
     }
 
     [TestMethod]

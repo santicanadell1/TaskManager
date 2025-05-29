@@ -13,14 +13,15 @@ public class AdminSService_Test
     private AppDbContext _database;
     private Login _loginService;
     private UserService _userService;
+    private UserRepository _userRepository;
+    private ProjectRepository _projectRepository;
 
     [TestInitialize]
     public void TestSetUp()
     {
-        _database = new AppDbContext();
-        _adminService = new AdminSService(_database);
-        _loginService = new Login(_database);
-        _userService = new UserService(_database);
+        _adminService = new AdminSService(_userRepository,_projectRepository);
+        _loginService = new Login(_userRepository);
+        _userService = new UserService(_userRepository);
 
         var adminUserDTO = new UserDTO
         {

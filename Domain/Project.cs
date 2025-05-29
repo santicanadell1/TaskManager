@@ -56,6 +56,17 @@ public class Project
             startDate = value;
         }
     }
+    
+    public string? Id
+    {
+        get => Name;  
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value)) throw new ProjectNameException();
+            Name = value;  
+        }
+    }   
+    
     public void AddMember(User user)
     {
         Members.Add(user);

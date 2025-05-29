@@ -15,6 +15,8 @@ public class Notification
         Description = description;
         Project = project;
     }
+    
+    public Notification(){}
 
     public bool Read
     {

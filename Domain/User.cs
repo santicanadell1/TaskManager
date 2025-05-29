@@ -95,6 +95,16 @@ public class User
             tasks = value;
         }
     }
+    
+    public string? Id
+    {
+        get => Email;  
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value)) throw new UserEmailException();
+            Email = value;  
+        }
+    }  
 
     private bool IsValidEmail(string email)
     {

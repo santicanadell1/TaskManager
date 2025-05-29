@@ -9,12 +9,12 @@ public class LoginTests
     private AppDbContext _appDbContext;
     private Login _login;
     private PasswordManager _passwordManager;
+    private UserRepository _userRepository;
 
     [TestInitialize]
     public void Setup()
     {
-        _appDbContext = new AppDbContext();
-        _login = new Login(_appDbContext);
+        _login = new Login(_userRepository);
         _passwordManager = new PasswordManager();
     }
 
@@ -35,7 +35,7 @@ public class LoginTests
             Birthday = DateTime.Parse("1990-01-01")
         };
 
-        var userService = new UserService(_appDbContext);
+        var userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -64,7 +64,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_appDbContext);
+        var userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -96,7 +96,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_appDbContext);
+        var userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -119,7 +119,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_appDbContext);
+        var userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -144,7 +144,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_appDbContext);
+        var userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -169,7 +169,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_appDbContext);
+        var userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -194,7 +194,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_appDbContext);
+        var userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);

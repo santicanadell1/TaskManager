@@ -12,15 +12,17 @@ public class NotificationServiceTest
     private NotificationService _notificationService;
     private UserService _userService;
     private AppDbContext dataAccess;
+    private UserRepository _userRepository;
+    private ProjectRepository _projectRepository;
+    private NotificationRepository _notificationRepository;
 
     [TestInitialize]
     public void SetUp()
     {
-        dataAccess = new AppDbContext();
-        _notificationService = new NotificationService(dataAccess);
-        _adminService = new AdminPService(dataAccess);
-        _loginService = new Login(dataAccess);
-        _userService = new UserService(dataAccess);
+        _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository);;
+        _adminService = new AdminPService(_userRepository, _projectRepository,_notificationRepository);;
+        _loginService = new Login(_userRepository);
+        _userService = new UserService(_userRepository);
         CreateAndAddUsers();
         CreateAndAddProjects();
     }
@@ -46,8 +48,8 @@ public class NotificationServiceTest
 
     private void CreateAndAddProjects()
     {
-        var user1 = dataAccess.users.Get(u => u.Email == "Email1@example.com");
-        var user2 = dataAccess.users.Get(u => u.Email == "Email2@example.com");
+        var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
+        var user2 = _userRepository.Get(u => u.Email == "Email2@example.com");
 
         var project1 = new Project
         {
@@ -65,8 +67,8 @@ public class NotificationServiceTest
             Members = new List<User> { user1 }
         };
 
-        dataAccess.projects.AddProject(project1);
-        dataAccess.projects.AddProject(project2);
+        _projectRepository.AddProject(project1);
+        _projectRepository.AddProject(project2);
     }
 
     [TestMethod]
@@ -93,8 +95,8 @@ public class NotificationServiceTest
             Project = _adminService.GetProjectByName(projectName)
         };
         _notificationService.CreateNotification(notificationDTO);
-        var user1 = dataAccess.users.Get(u => u.Email == "Email1@example.com");
-        var user2 = dataAccess.users.Get(u => u.Email == "Email2@example.com");
+        var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
+        var user2 = _userRepository.Get(u => u.Email == "Email2@example.com");
 
         Assert.AreEqual(1, user1.Notifications.Count);
         Assert.AreEqual(1, user2.Notifications.Count);
@@ -116,7 +118,7 @@ public class NotificationServiceTest
         };
         _notificationService.CreateNotification(notificationDTO);
         _notificationService.CreateNotification(notificationDTO2);
-        var user1 = dataAccess.users.Get(u => u.Email == "Email1@example.com");
+        var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
         Assert.AreEqual(2, user1.Notifications.Count);
         _notificationService.RemoveNotificationFromUser(user1.Email, user1.Notifications[0]);
         Assert.AreEqual(1, user1.Notifications.Count);

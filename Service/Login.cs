@@ -9,12 +9,12 @@ namespace Service;
 
 public class Login : ILogin
 {
-    private readonly AppDbContext _database;
+    private readonly UserRepository _userRepository;
     private readonly PasswordManager _passwordManager = new();
 
-    public Login(AppDbContext database)
+    public Login(UserRepository userRepository)
     {
-        _database = database;
+        _userRepository = userRepository;
     }
 
     public UserDTO GetLoggedUser()
@@ -24,7 +24,7 @@ public class Login : ILogin
 
     public void LoginUser(string email, string password)
     {
-        var user = _database.users.Get(user => user.Email == email);
+        var user = _userRepository.Get(user => user.Email == email);
         if (user == null || !_passwordManager.VerifyPassword(password, user.Password))
             throw new InvalidLoginCredentialsException();
 

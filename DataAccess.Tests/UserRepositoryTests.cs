@@ -6,18 +6,20 @@ namespace DataAccess.Test;
 [TestClass]
 public class UserRepositoryTests
 {
+    
+    protected readonly AppDbContext _db;
     [TestMethod]
     public void NewUserRepository_WhenRepositoryIsCreated_ShouldNotBeNull()
     {
         UserRepository userRepository;
-        userRepository = new UserRepository();
+        userRepository = new UserRepository(_db);
         Assert.IsNotNull(userRepository);
     }
 
     [TestMethod]
     public void AddNewUser_WhenAddNewUser_ListShouldContainUser()
     {
-        var userRepository = new UserRepository();
+        var userRepository = new UserRepository(_db);
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18),
             "Password");
         userRepository.AddUser(user);
@@ -28,7 +30,7 @@ public class UserRepositoryTests
     [ExpectedException(typeof(UserEmailIsDuplicatedException))]
     public void AddNewUser_IfUserEmailAlreadyExists_ShouldThrowUseEmailIsDuplicatedException()
     {
-        var userRepository = new UserRepository();
+        var userRepository = new UserRepository(_db);
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18),
             "Password");
         var user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Today.AddYears(-18),
@@ -40,7 +42,7 @@ public class UserRepositoryTests
     [TestMethod]
     public void AddNewUser_WhenGettingAUser_ShouldReturnUser()
     {
-        var userRepository = new UserRepository();
+        var userRepository = new UserRepository(_db);
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18),
             "Password");
         var user2 = new User("First Name 2", "Last Name 2", "Email2@email.com", DateTime.Today.AddYears(-18),
@@ -54,7 +56,7 @@ public class UserRepositoryTests
     [TestMethod]
     public void updateAUser_WhenGettingTheUser_ShouldBeDifferentFromTheOriginalUser()
     {
-        var userRepository = new UserRepository();
+        var userRepository = new UserRepository(_db);
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18),
             "Password");
         var user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Today.AddYears(-18),
@@ -68,7 +70,7 @@ public class UserRepositoryTests
     [ExpectedException(typeof(UserNotFoundException))]
     public void updateAUser_WhenEmailIsNotFound_ThrowUserNotFoundException()
     {
-        var userRepository = new UserRepository();
+        var userRepository = new UserRepository(_db);
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18),
             "Password");
         var user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Today.AddYears(-18),
@@ -81,7 +83,7 @@ public class UserRepositoryTests
     [ExpectedException(typeof(UserEmailIsDuplicatedException))]
     public void updateAUser_WhenEmailAlreadyExists_ThrowUserEmailIsDuplicatedException()
     {
-        var userRepository = new UserRepository();
+        var userRepository = new UserRepository(_db);
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18),
             "Password");
         var user2 = new User("First Name 2", "Last Name 2", "Email2@email.com", DateTime.Today.AddYears(-18),
@@ -96,7 +98,7 @@ public class UserRepositoryTests
     [TestMethod]
     public void DeleteAUser_WhenGettingTheUser_ShouldBeNull()
     {
-        var userRepository = new UserRepository();
+        var userRepository = new UserRepository(_db);
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18),
             "Password");
         var user2 = new User("First Name 2", "Last Name 2", "Email2@email.com", DateTime.Today.AddYears(-18),

@@ -16,16 +16,18 @@ public class AdminPServiceTests
     private UserDTO Admin;
     private List<UserDTO> members;
     private UserDTO UserDTO;
+    private UserRepository _userRepository;
+    private ProjectRepository _projectRepository;
+    private NotificationRepository _notificationRepository;
 
 
     [TestInitialize]
     public void Setup()
     {
-        _database = new AppDbContext();
-        _service = new AdminPService(_database);
-        _userservice = new UserService(_database);
-        _login = new Login(_database);
-        _taskService = new TaskService(_database, new CpmService());
+        _service = new AdminPService(_userRepository,_projectRepository, _notificationRepository);
+        _userservice = new UserService(_userRepository);
+        _login = new Login(_userRepository);
+        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository, new CpmService());
 
         Admin = new UserDTO
         {
@@ -68,7 +70,7 @@ public class AdminPServiceTests
 
         _service.CreateProject(projectDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
         Assert.AreEqual("New Project", project.Name);
     }
@@ -87,7 +89,7 @@ public class AdminPServiceTests
 
         _service.CreateProject(projectDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
         var userDTO = new UserDTO
         {
@@ -120,7 +122,7 @@ public class AdminPServiceTests
 
         _service.CreateProject(projectDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
         var userDTO = new UserDTO
         {
@@ -153,7 +155,7 @@ public class AdminPServiceTests
 
         _service.CreateProject(projectDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
         var userDTO = new UserDTO
         {
@@ -173,7 +175,7 @@ public class AdminPServiceTests
         _service.RemoveMemberFromProject(project.Name, "john.doe@example.com");
         _service.RemoveMemberFromProject(project.Name, "member.user@example.com");
 
-        project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
         Assert.IsTrue(project.Members.Count == 0);
     }
@@ -193,7 +195,7 @@ public class AdminPServiceTests
 
         _service.CreateProject(projectDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
         _service.RemoveMemberFromProject("Proyecto 1", "member.user@example.com");
     }
@@ -213,7 +215,7 @@ public class AdminPServiceTests
 
         _service.CreateProject(projectDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
         _service.RemoveMemberFromProject(project.Name, "john.user@example.com");
     }
@@ -232,12 +234,12 @@ public class AdminPServiceTests
 
         _service.CreateProject(projectDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
 
         _service.RemoveProject("New Project");
 
-        project = _database.projects.GetProject(p => p.Name == "New Project");
+        project = _projectRepository.GetProject(p => p.Name == "New Project");
         Assert.IsNull(project);
     }
 
@@ -256,7 +258,7 @@ public class AdminPServiceTests
 
         _service.CreateProject(projectDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
 
         var updatedDTO = new ProjectDTO

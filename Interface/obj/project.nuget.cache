@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zKUtsnamgHc=",
+  "dgSpecHash": "8bndSsT2NzeXqS5dF6zGUAO/2FMfuC13eXbUcqKTHEWdInTs5rRSpEmdZyoaCFzDcvZ1Jb2eYWV9mxGWyAD5iw==",
   "success": true,
-  "projectFilePath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Interface\\Interface.csproj",
+  "projectFilePath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Interface\\Interface.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

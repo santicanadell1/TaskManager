@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "khNzypR/iLQ=",
+  "dgSpecHash": "Y6FAT8sdR3bT2qW02aLCwDFHGk9kLLJjlufk25Wd3riK1IbKcRmfXVW7OYk152iFvnE8rxyEhmxA/YkaX8G1Lg==",
   "success": true,
-  "projectFilePath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj",
+  "projectFilePath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

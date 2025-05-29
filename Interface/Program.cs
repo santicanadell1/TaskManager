@@ -5,7 +5,6 @@ using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<AppDbContext>();
 builder.Services.AddScoped<Login>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AdminSService>();
@@ -16,6 +15,14 @@ builder.Services.AddScoped<MemberPService>();
 builder.Services.AddScoped<CpmService>();
 builder.Services.AddScoped<GanttService>();
 builder.Services.AddScoped<NotificationService>();
+
+builder.Services.AddScoped<NotificationRepository>();
+builder.Services.AddScoped<ProjectRepository>();
+builder.Services.AddScoped<ResourceRepository>();
+builder.Services.AddScoped<UserRepository>();
+
+
+
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

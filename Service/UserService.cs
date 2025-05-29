@@ -9,19 +9,19 @@ namespace Service;
 
 public class UserService : IUserService
 {
-    private readonly AppDbContext _database;
+    private readonly UserRepository _userRepository;
     private readonly PasswordManager _passwordManager = new();
 
-    public UserService(AppDbContext database)
+    public UserService(UserRepository userRepository)
     {
-        _database = database;
+        _userRepository = userRepository;
     }
 
     public void AddUser(UserDTO userDTO)
     {
-        if (_database.users.GetAll().Count == 0) userDTO.Roles.Add(RolDTO.AdminSystem);
+        if (_userRepository.GetAll().Count == 0) userDTO.Roles.Add(RolDTO.AdminSystem);
         ValidateUserEmailAndPassword(userDTO);
-        _database.users.AddUser(ToEntity(userDTO));
+        _userRepository.AddUser(ToEntity(userDTO));
     }
 
     public void UpdateUser(UserDTO userDTO)
@@ -34,14 +34,14 @@ public class UserService : IUserService
         user.Birthday = userDTO.Birthday;
         user.Password = userDTO.Password;
         user.Tasks = userDTO.Tasks;
-        _database.users.Update(user.Email, user);
+        _userRepository.Update(user.Email, user);
     }
 
     public List<UserDTO> GetUsers()
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (var user in _database.users.GetAll()) usersDTO.Add(FromEntity(user));
+        foreach (var user in _userRepository.GetAll()) usersDTO.Add(FromEntity(user));
 
         if (usersDTO.Count == 0) throw new NoUsersFoundException();
 
@@ -50,7 +50,7 @@ public class UserService : IUserService
 
     public UserDTO GetUser(string email)
     {
-        var user = _database.users.Get(user => user.Email == email);
+        var user = _userRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
         return FromEntity(user);
@@ -59,7 +59,7 @@ public class UserService : IUserService
 
     private void ValidateUserEmailAndPassword(UserDTO userDTO)
     {
-        foreach (var user in _database.users.GetAll())
+        foreach (var user in _userRepository.GetAll())
             if (user.Email == userDTO.Email)
                 throw new InvalidUserEmailException();
 
@@ -82,7 +82,7 @@ public class UserService : IUserService
 
     private User GetUserObject(string email)
     {
-        var user = _database.users.Get(user => user.Email == email);
+        var user = _userRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
         return user;

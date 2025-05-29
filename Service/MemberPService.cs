@@ -9,17 +9,21 @@ namespace Service;
 
 public class MemberPService : IMemberPService
 {
-    private readonly AppDbContext _database;
+    private readonly UserRepository _userRepository;
+    private readonly ProjectRepository _projectRepository;
+    private readonly NotificationRepository _notificationRepository;
 
-    public MemberPService(AppDbContext database)
+    public MemberPService(UserRepository userRepository, ProjectRepository _projectRepository,NotificationRepository notificationRepository)
     {
-        _database = database;
+        _projectRepository = _projectRepository;
+        _userRepository = userRepository;
+        _notificationRepository = notificationRepository;
     }
 
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)
     {
-        var adminPService = new AdminPService(_database);
-        var userService = new UserService(_database);
+        var adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository);
+        var userService = new UserService(_userRepository);
         var projectsFromMember = new List<ProjectDTO>();
         var projects = adminPService.GetAllProjects();
         var user = userService.GetUser(email);
@@ -35,7 +39,7 @@ public class MemberPService : IMemberPService
 
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
-        var taskService = new TaskService(_database, new CpmService());
+        var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository,new CpmService());
         CheckIsTaskOfTheUser((int)task.Id, email);
         foreach (var previousTask in task.PreviousTasks)
         {
@@ -50,14 +54,14 @@ public class MemberPService : IMemberPService
 
     private void CheckUserRole(string email)
     {
-        var UserService = new UserService(_database);
+        var UserService = new UserService(_userRepository);
         var user = UserService.GetUser(email);
         if (!user.Roles.Contains(RolDTO.ProjectMember)) throw new UserIsNotAMemberException();
     }
 
     private void CheckIsTaskOfTheUser(int taskId, string email)
     {
-        var user = _database.users.Get(u => u.Email == email);
+        var user = _userRepository.Get(u => u.Email == email);
         if (user == null) throw new TaskCantBeModifiedByUserException();
 
         var taskIds = user.Tasks ?? new List<int>();

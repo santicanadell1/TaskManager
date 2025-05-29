@@ -123,4 +123,6 @@ public class Task
 
         SameTimeTasks.Remove(task);
     }
+    
+    public Task(){}
 }

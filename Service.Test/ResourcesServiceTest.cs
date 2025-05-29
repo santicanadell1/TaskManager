@@ -14,16 +14,19 @@ public class ResourcesServiceTest
     private ResourceService _resourceService;
     private TaskService _taskService;
     private UserService _userService;
+    private UserRepository _userRepository;
+    private ProjectRepository _projectRepository;
+    private NotificationRepository _notificationRepository;
+    private ResourceRepository _resourceRepository;
 
     [TestInitialize]
     public void TestSetUp()
     {
-        _database = new AppDbContext();
-        _loginService = new Login(_database);
-        _userService = new UserService(_database);
-        _resourceService = new ResourceService(_database);
-        _adminProjectService = new AdminPService(_database);
-        _taskService = new TaskService(_database, new CpmService());
+        _loginService = new Login(_userRepository);
+        _userService = new UserService(_userRepository);
+        _resourceService = new ResourceService(_resourceRepository,_projectRepository);
+        _adminProjectService = new AdminPService(_userRepository, _projectRepository, _notificationRepository);;
+        _taskService = new TaskService(_projectRepository, _notificationRepository,_userRepository,new CpmService());
         var adminSUserDTO = new UserDTO
         {
             FirstName = "AdminSystem",
@@ -82,7 +85,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var resource = _database.resources.Get(r => r.Name == "Resource1");
+        var resource = _resourceRepository.Get(r => r.Name == "Resource1");
         Assert.IsNotNull(resource);
         Assert.AreEqual("Resource1", resource.Name);
         Assert.AreEqual("TypeA", resource.Type);
@@ -101,7 +104,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
         var resource = _resourceService.Get(addedResource.Id);
 
@@ -158,7 +161,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
         var updatedResourceDTO = new ResourceDTO
         {
@@ -169,7 +172,7 @@ public class ResourcesServiceTest
 
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
 
-        var resource = _database.resources.Get(r =>
+        var resource = _resourceRepository.Get(r =>
             r.Name == updatedResourceDTO.Name && r.Type == updatedResourceDTO.Type &&
             r.Description == updatedResourceDTO.Description);
 
@@ -191,7 +194,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
         var addedResourceDto = new ResourceDTO
         {
@@ -230,7 +233,7 @@ public class ResourcesServiceTest
 
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
 
-        var resource = _database.resources.Get(r =>
+        var resource = _resourceRepository.Get(r =>
             r.Name == updatedResourceDTO.Name && r.Type == updatedResourceDTO.Type &&
             r.Description == updatedResourceDTO.Description);
 
@@ -254,7 +257,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
         var addedResourceDto = new ResourceDTO
         {
@@ -325,7 +328,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
         var addedResourceDto = new ResourceDTO
         {
             Name = addedResource.Name,
@@ -377,12 +380,12 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var addedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
+        var addedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNotNull(addedResource);
 
         _resourceService.DeleteResource(addedResource.Id);
 
-        var deletedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
+        var deletedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
 
@@ -399,7 +402,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
         var addedResourceDto = new ResourceDTO
         {
@@ -433,7 +436,7 @@ public class ResourcesServiceTest
 
         _resourceService.DeleteResource(addedResource.Id);
 
-        var deletedResource = _database.resources.Get(r => r.Name == resourceDTO.Name);
+        var deletedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
 
@@ -451,7 +454,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
         var addedResourceDto = new ResourceDTO
         {
@@ -516,7 +519,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _database.resources.Get(r => r.Name == "Resource1");
+        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
         var addedResourceDto = new ResourceDTO
         {

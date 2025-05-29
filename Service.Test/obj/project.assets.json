@@ -3759,11 +3759,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
+      "projectUniqueName": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
       "projectName": "Service.Test",
-      "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
+      "projectPath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
       "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service.Test\\obj\\",
+      "outputPath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service.Test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3780,8 +3780,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj": {
-              "projectPath": "D:\\all data\\OneDrive\\OneDrive\\Desktop\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj"
+            "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj": {
+              "projectPath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj"
             }
           }
         }

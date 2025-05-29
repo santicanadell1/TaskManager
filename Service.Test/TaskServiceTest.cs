@@ -26,18 +26,19 @@ public class TaskServiceTest
     private TaskService _taskService;
     private UserService _userService;
     private UserDTO userDTO;
-
+    private ProjectRepository _projectRepository;
+    private NotificationRepository _notificationRepository;
+    private UserRepository _userRepository;
 
     [TestInitialize]
     public void Setup()
     {
-        _database = new AppDbContext();
         _cpmService = new CpmService();
-        _taskService = new TaskService(_database, _cpmService);
-        _login = new Login(_database);
+        _taskService = new TaskService(_projectRepository, _notificationRepository,_userRepository, _cpmService);
+        _login = new Login(_userRepository);
 
         _genericProject = new Project("Generic Project", "Description", DateTime.Now);
-        _database.projects.AddProject(_genericProject);
+        _projectRepository.AddProject(_genericProject);
 
         _resource1 = new Resource("Resource 1", "Type 1", "Description 1") { Id = 1 };
         _resource2 = new Resource("Resource 2", "Type 2", "Description 2") { Id = 2 };
@@ -105,9 +106,9 @@ public class TaskServiceTest
         );
         _task2.Id = 2;
         _task2.State = State.DOING;
-        _database.projects.AddTask("Generic Project", _task1);
-        _database.projects.AddTask("Generic Project", _task2);
-        _userService = new UserService(_database);
+        _projectRepository.AddTask("Generic Project", _task1);
+        _projectRepository.AddTask("Generic Project", _task2);
+        _userService = new UserService(_userRepository);
         userDTO = new UserDTO
         {
             FirstName = "Admin",
@@ -137,7 +138,7 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", taskDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var tasks = project.Tasks;
         Assert.AreEqual(3, tasks.Count);
         Assert.AreEqual("Test Task", tasks[2].Title);
@@ -178,7 +179,7 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", taskDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Task with Dependencies");
 
         Assert.IsNotNull(addedTask);
@@ -207,7 +208,7 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", taskDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Task with Same Time Tasks");
 
         Assert.IsNotNull(addedTask);
@@ -221,7 +222,7 @@ public class TaskServiceTest
     {
         _taskService.DeleteTask("Generic Project", _task1.Id);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         Assert.AreEqual(1, project.Tasks.Count);
         Assert.AreEqual("Task 2", project.Tasks[0].Title);
     }
@@ -258,7 +259,7 @@ public class TaskServiceTest
 
         _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
 
         Assert.AreEqual("Updated Task 1", updatedTask.Title);
@@ -312,7 +313,7 @@ public class TaskServiceTest
 
         _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
 
         Assert.AreEqual(1, updatedTask.SameTimeTasks.Count);
@@ -338,7 +339,7 @@ public class TaskServiceTest
 
         _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
 
         Assert.AreEqual(1, updatedTask.Resources.Count);
@@ -361,7 +362,7 @@ public class TaskServiceTest
 
         _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
 
         Assert.AreEqual(0, updatedTask.PreviousTasks.Count);
@@ -383,7 +384,7 @@ public class TaskServiceTest
 
         _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
 
         Assert.AreEqual(0, updatedTask.SameTimeTasks.Count);
@@ -486,7 +487,7 @@ public class TaskServiceTest
         );
         taskWithDependencies.Id = 3;
 
-        _database.projects.AddTask("Generic Project", taskWithDependencies);
+        _projectRepository.AddTask("Generic Project", taskWithDependencies);
 
         var taskDTO = _taskService.GetTask("Generic Project", taskWithDependencies.Id);
 
@@ -514,9 +515,9 @@ public class TaskServiceTest
 
         task.State = State.DONE;
 
-        _database.projects.AddTask("Generic Project", task);
+        _projectRepository.AddTask("Generic Project", task);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Mapping Test Task");
 
         Assert.IsNotNull(addedTask, "La tarea no se agregó correctamente al proyecto");
@@ -562,7 +563,7 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", complexDTO);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Complex Mapping DTO");
 
         Assert.IsNotNull(addedTask);
@@ -590,7 +591,7 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", taskX);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var taskXEntity = project.Tasks.FirstOrDefault(t => t.Title == "Task X");
 
         var taskY = new TaskDTO
@@ -628,11 +629,11 @@ public class TaskServiceTest
         var taskC = new Task("Task C", "Description C", DateTime.Now, 3, new List<Task>(), new List<Task>(),
             new List<Resource>());
 
-        _database.projects.AddTask("Generic Project", taskA);
-        _database.projects.AddTask("Generic Project", taskB);
-        _database.projects.AddTask("Generic Project", taskC);
+        _projectRepository.AddTask("Generic Project", taskA);
+        _projectRepository.AddTask("Generic Project", taskB);
+        _projectRepository.AddTask("Generic Project", taskC);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var addedTaskA = project.Tasks.FirstOrDefault(t => t.Title == "Task A");
         var addedTaskB = project.Tasks.FirstOrDefault(t => t.Title == "Task B");
         var addedTaskC = project.Tasks.FirstOrDefault(t => t.Title == "Task C");
@@ -663,7 +664,7 @@ public class TaskServiceTest
 
         _taskService.UpdateTask("Generic Project", addedTaskC.Id, updateDTO);
 
-        project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var updatedTaskC = project.Tasks.FirstOrDefault(t => t.Id == addedTaskC.Id);
 
         Assert.IsNotNull(updatedTaskC);
@@ -700,9 +701,9 @@ public class TaskServiceTest
         );
         specialTask.State = State.DONE;
 
-        _database.projects.AddTask("Generic Project", specialTask);
+        _projectRepository.AddTask("Generic Project", specialTask);
 
-        var project = _database.projects.GetProject(p => p.Name == "Generic Project");
+        var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var addedSpecialTask = project.Tasks.FirstOrDefault(t => t.Title == "Special Task for List Mapping");
 
         Assert.IsNotNull(addedSpecialTask, "La tarea no se agregó correctamente al proyecto");

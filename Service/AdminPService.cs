@@ -9,30 +9,35 @@ using Service.Models;
 
 public class AdminPService : IAdminPService
 {
-    private readonly AppDbContext _database;
+    private readonly UserRepository _userRepository;
+    private readonly ProjectRepository _projectRepository;
+    private readonly NotificationRepository _notificationRepository;
 
-    public AdminPService(AppDbContext database)
+    public AdminPService(UserRepository userRepository, ProjectRepository projectRepository,
+        NotificationRepository notificationRepository)
     {
-        _database = database;
+        _userRepository = userRepository;
+        _projectRepository = projectRepository;
+        _notificationRepository = notificationRepository;
     }
 
     public void CreateProject(ProjectDTO projectDTO)
     {
         CheckAdminProyectRole();
-        var existingProject = _database.projects.GetProject(p => p.Name == projectDTO.Name);
+        var existingProject = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
         if (existingProject != null) throw new DuplicatedProjectsNameException();
 
         var newProject = ToEntity(projectDTO);
         newProject.AdminProject = ToEntity(LoggedUser.Current);
 
-        _database.projects.AddProject(newProject);
+        _projectRepository.AddProject(newProject);
     }
 
 
     public void AssignMembersToProject(string projectName, List<UserDTO> membersDTO)
     {
         CheckAdminProyectRole();
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         foreach (var memberDTO in membersDTO)
@@ -44,37 +49,37 @@ public class AdminPService : IAdminPService
             project.AddMember(user);
         }
 
-        _database.projects.UpdateProject(projectName, project);
+        _projectRepository.UpdateProject(projectName, project);
     }
 
     public void RemoveMemberFromProject(string projectName, string memberEmail)
     {
         CheckAdminProyectRole();
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         if (project.Members.Find(m => m.Email == memberEmail) == null) throw new UserIsNotAMemberException();
 
         project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
-        _database.projects.UpdateProject(projectName, project);
+        _projectRepository.UpdateProject(projectName, project);
     }
 
     public void RemoveProject(string projectName)
     {
         CheckAdminProyectRole();
-        _database.projects.RemoveProject(projectName);
+        _projectRepository.RemoveProject(projectName);
     }
 
     public void UpdateProject(string projectNameToUpdate, ProjectDTO updatedProjectDTO)
     {
         CheckAdminProyectRole();
-        _database.projects.UpdateProject(projectNameToUpdate, ToEntity(updatedProjectDTO));
+        _projectRepository.UpdateProject(projectNameToUpdate, ToEntity(updatedProjectDTO));
     }
 
     public List<ProjectDTO> GetAllProjects()
     {
         CheckAdminProyectRole();
-        var projects = _database.projects.GetAllProjects();
+        var projects = _projectRepository.GetAllProjects();
         List<ProjectDTO> projectDTOs = new List<ProjectDTO>();
         foreach (var project in projects) projectDTOs.Add(FromEntity(project));
 
@@ -83,7 +88,7 @@ public class AdminPService : IAdminPService
 
     public ProjectDTO GetProjectByName(string projectName)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         return FromEntity(project);
@@ -92,7 +97,7 @@ public class AdminPService : IAdminPService
     public List<ProjectDTO> GetAllProjectsForUser(string Email)
     {
         List<ProjectDTO> projects = new List<ProjectDTO>();
-        foreach (var project in _database.projects.GetAllProjects())
+        foreach (var project in _projectRepository.GetAllProjects())
             if (project.AdminProject.Email == Email || project.Members.Any(m => m.Email == Email))
                 projects.Add(FromEntity(project));
 
@@ -114,37 +119,37 @@ public class AdminPService : IAdminPService
     {
         CheckAdminProyectRole();
         var project = GetProjectByName(projectName);
-        var projectEntity = _database.projects.GetProject(p => p.Name == projectName);
+        var projectEntity = _projectRepository.GetProject(p => p.Name == projectName);
         if (project.Members.Find(m => m.Email == memberEmail) == null) throw new UserIsNotAMemberException();
 
         if (projectEntity.Tasks.Find(m => m.Id == taskID) == null) throw new TaskIsNotFromTheProjectException();
 
-        var userEntity = _database.users.Get(u => u.Email == memberEmail);
+        var userEntity = _userRepository.Get(u => u.Email == memberEmail);
         userEntity.AddTask(taskID);
-        _database.users.Update(memberEmail, userEntity);
+        _userRepository.Update(memberEmail, userEntity);
     }
 
     public void RemoveTaskFromMember(string projectName, string memberEmail, int taskID)
     {
         CheckAdminProyectRole();
         var project = GetProjectByName(projectName);
-        var projectEntity = _database.projects.GetProject(p => p.Name == projectName);
+        var projectEntity = _projectRepository.GetProject(p => p.Name == projectName);
         if (project.Members.Find(m => m.Email == memberEmail) == null) throw new UserIsNotAMemberException();
 
         if (projectEntity.Tasks.Find(m => m.Id == taskID) == null) throw new TaskIsNotFromTheProjectException();
 
-        var userEntity = _database.users.Get(u => u.Email == memberEmail);
+        var userEntity = _userRepository.Get(u => u.Email == memberEmail);
         userEntity.RemoveTask(taskID);
-        _database.users.Update(memberEmail, userEntity);
+        _userRepository.Update(memberEmail, userEntity);
     }
 
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
-        var user = _database.users.Get(u => u.Email == email);
+        var user = _userRepository.Get(u => u.Email == email);
         var cpmService = new CpmService();
-        var taskService = new TaskService(_database, cpmService);
+        var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService);
         var returnList = new List<TaskDTO>();
-        foreach (var project in _database.projects.GetAllProjects())
+        foreach (var project in _projectRepository.GetAllProjects())
         {
             var tasks = taskService.GetTasks(project.Name);
             foreach (var task in tasks)
@@ -158,10 +163,10 @@ public class AdminPService : IAdminPService
 
     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
     {
-        var user = _database.users.Get(u => u.Email == email);
+        var user = _userRepository.Get(u => u.Email == email);
         if (user.Tasks == null) return new List<TaskDTO>();
         var cpmService = new CpmService();
-        var taskService = new TaskService(_database, cpmService);
+        var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService);
         var returnList = new List<TaskDTO>();
         var tasks = taskService.GetTasks(projectName);
         foreach (var task in tasks)
