@@ -12,18 +12,6 @@
           "bin/placeholder/Domain.dll": {}
         }
       }
-    },
-    "net8.0/win-x64": {
-      "Domain/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v8.0",
-        "compile": {
-          "bin/placeholder/Domain.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Domain.dll": {}
-        }
-      }
     }
   },
   "libraries": {
@@ -39,19 +27,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\felid\\.nuget\\packages\\": {}
+    "/home/felidelgado10/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
+      "projectUniqueName": "/home/felidelgado10/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj",
       "projectName": "DataAccess",
-      "projectPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
-      "packagesPath": "C:\\Users\\felid\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\DataAccess\\obj\\",
+      "projectPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj",
+      "packagesPath": "/home/felidelgado10/.nuget/packages/",
+      "outputPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/DataAccess/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\felid\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/felidelgado10/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -63,8 +51,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\felid\\OneDrive\\Escritorio\\Facultad\\Semestre 5\\DA1\\305108_282542_281987\\Domain\\Domain.csproj"
+            "/home/felidelgado10/RiderProjects/305108_282542_281987/Domain/Domain.csproj": {
+              "projectPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/Domain/Domain.csproj"
             }
           }
         }
@@ -99,12 +87,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\felid\\.dotnet\\sdk\\8.0.406/PortableRuntimeIdentifierGraph.json"
-      }
-    },
-    "runtimes": {
-      "win-x64": {
-        "#import": []
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

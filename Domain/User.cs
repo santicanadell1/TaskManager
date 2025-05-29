@@ -11,7 +11,7 @@ public class User
     private string lastName;
     public string password;
     public List<Rol> roles = new();
-    public List<int> tasks = new();
+    public List<Task> tasks = new();
 
 
     public User(string firstName, string lastName, string email, DateTime birthday, string password)
@@ -22,7 +22,7 @@ public class User
         Birthday = birthday;
         Password = password;
         Roles = new List<Rol>();
-        Tasks = new List<int>();
+        Tasks = new List<Task>();
     }
 
     public User()
@@ -86,12 +86,12 @@ public class User
         }
     }
 
-    public List<int> Tasks
+    public List<Task> Tasks
     {
         get => tasks;
         set
         {
-            if (value == null) tasks = new List<int>();
+            if (value == null) tasks = new List<Task>();
             tasks = value;
         }
     }
@@ -117,17 +117,17 @@ public class User
         roles.Remove(rol);
     }
 
-    public void AddTask(int taskId)
+    public void AddTask(Task task)
     {
-        if (tasks == null) Tasks = new List<int>();
-        if (tasks.Contains(taskId)) throw new UserTaskException("The task is already assigned to the user.");
-        tasks.Add(taskId);
+        if (tasks == null) Tasks = new List<Task>();
+        if (tasks.Any(t=> t.Id == task.Id)) throw new UserTaskException("The task is already assigned to the user.");
+        tasks.Add(task);
     }
 
-    public void RemoveTask(int taskId)
+    public void RemoveTask(Task task)
     {
-        if (!tasks.Contains(taskId)) throw new UserTaskException("the task is not assigned to the user.");
-        tasks.Remove(taskId);
+        if (!tasks.Any(t => t.Id == task.Id)) throw new UserTaskException("the task is not assigned to the user.");
+        tasks.Remove(task);
     }
 
     public void AddNotification(int notificationId)

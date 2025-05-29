@@ -5,6 +5,17 @@ namespace Domain.Test;
 [TestClass]
 public class UserTest
 {
+    private Task task1;
+    private Task task2;
+
+    [TestInitialize]
+    public void Initialize()
+    {
+        task1 = new Task("Title1", "Description1", DateTime.Now, 3,new List<Task>(), new List<Task>(), new List<Resource>());
+        task1.Id = 1;
+        task2 = new Task("Title2", "Description2", DateTime.Now, 3,new List<Task>(), new List<Task>(), new List<Resource>());
+        task2.Id = 2;
+    }
     [TestMethod]
     public void NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated()
     {
@@ -71,7 +82,7 @@ public class UserTest
     public void NewUser_WhenDateIsAfterToday_ThenThrowUserBirthdayException()
     {
         User user;
-        var birthday = DateTime.Parse("20/07/2026");
+        var birthday = DateTime.Today.AddDays(1);;
 
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
     }
@@ -229,7 +240,7 @@ public class UserTest
     public void NewUser_WhenAddingTaskID_ThenTaskIdIsAdded()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddTask(1);
+        user.AddTask(task1);
 
         Assert.AreEqual(1, user.Tasks.Count);
     }
@@ -239,16 +250,16 @@ public class UserTest
     public void AddTask_WhenAddingTaskWithTheSameId_ThenTaskThrowsException()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddTask(1);
-        user.AddTask(1);
+        user.AddTask(task1);
+        user.AddTask(task1);
     }
 
     [TestMethod]
     public void RemoveTask_WhenRemovingTask_ThenTaskIsRemoved()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddTask(1);
-        user.RemoveTask(1);
+        user.AddTask(task1);
+        user.RemoveTask(task1);
 
         Assert.AreEqual(0, user.Tasks.Count);
     }
@@ -258,7 +269,7 @@ public class UserTest
     public void RemoveTask_WhenRemovingTaskThatIsNotInTheList_ThenThrowsException()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.RemoveTask(2);
+        user.RemoveTask(task2);
     }
 
     [TestMethod]
