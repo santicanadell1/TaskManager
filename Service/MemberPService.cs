@@ -4,6 +4,8 @@ using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.MemberServiceExceptions;
 using Service.Interface;
 using Service.Models;
+using Domain;
+using Task = Domain.Task;
 
 namespace Service;
 
@@ -60,8 +62,8 @@ public class MemberPService : IMemberPService
         var user = _database.users.Get(u => u.Email == email);
         if (user == null) throw new TaskCantBeModifiedByUserException();
 
-        var taskIds = user.Tasks ?? new List<int>();
-        if (taskIds.Count == 0 || !taskIds.Contains(taskId)) throw new TaskCantBeModifiedByUserException();
+        var tasks = user.Tasks ?? new List<Task>();
+        if (tasks.Count == 0 || !tasks.Any(t=> t.Id == taskId)) throw new TaskCantBeModifiedByUserException();
     }
 
     private bool CheckIfTaskIsCompleted(TaskDTO task)

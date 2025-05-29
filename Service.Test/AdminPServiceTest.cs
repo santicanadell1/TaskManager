@@ -384,7 +384,7 @@ public class AdminPServiceTests
 
         _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
 
-        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Contains(1));
+        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t=> t.Id == 1));
     }
 
     [TestMethod]
@@ -460,7 +460,7 @@ public class AdminPServiceTests
 
         _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
 
-        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Contains(1));
+        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t=> t.Id == 1));
 
         _service.RemoveTaskFromMember("Test Project", "member.user@example.com", 1);
 

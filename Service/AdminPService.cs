@@ -120,7 +120,8 @@ public class AdminPService : IAdminPService
         if (projectEntity.Tasks.Find(m => m.Id == taskID) == null) throw new TaskIsNotFromTheProjectException();
 
         var userEntity = _database.users.Get(u => u.Email == memberEmail);
-        userEntity.AddTask(taskID);
+        var task = projectEntity.Tasks.Find(m => m.Id == taskID);
+        userEntity.AddTask(task);
         _database.users.Update(memberEmail, userEntity);
     }
 
@@ -134,7 +135,8 @@ public class AdminPService : IAdminPService
         if (projectEntity.Tasks.Find(m => m.Id == taskID) == null) throw new TaskIsNotFromTheProjectException();
 
         var userEntity = _database.users.Get(u => u.Email == memberEmail);
-        userEntity.RemoveTask(taskID);
+        var task = projectEntity.Tasks.Find(m => m.Id == taskID);
+        userEntity.RemoveTask(task);
         _database.users.Update(memberEmail, userEntity);
     }
 
@@ -148,7 +150,7 @@ public class AdminPService : IAdminPService
         {
             var tasks = taskService.GetTasks(project.Name);
             foreach (var task in tasks)
-                if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+                if (task.Id.HasValue && user.Tasks.Any(t=> t.Id == task.Id))
                     returnList.Add(task);
         }
 
@@ -165,8 +167,12 @@ public class AdminPService : IAdminPService
         var returnList = new List<TaskDTO>();
         var tasks = taskService.GetTasks(projectName);
         foreach (var task in tasks)
-            if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+        {
+            if (task.Id.HasValue && user.Tasks.Any((t => t.Id == task.Id)))
+            {
                 returnList.Add(task);
+            }
+        }
 
         return returnList;
     }
