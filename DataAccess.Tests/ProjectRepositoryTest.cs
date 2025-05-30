@@ -69,8 +69,8 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void DeleteProject_WhenGettingProject_ShouldBeNull()
     {
-        var project = new Project { Name = "Project 1" };
-        var project2 = new Project { Name = "Project 2" };
+        var project = new Project { Name = "Project 1",Description = "Project 1 description"  };
+        var project2 = new Project { Name = "Project 2" , Description = "Project 2 description"};
         _projectRepository.AddProject(project);
         _projectRepository.AddProject(project2);
         _context.SaveChanges();
