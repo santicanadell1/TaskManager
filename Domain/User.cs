@@ -73,7 +73,7 @@ public class User
             password = string.IsNullOrWhiteSpace(value) ? throw new UserPasswordException() : value;
     }
 
-    public List<int> Notifications { get; set; } = new();
+    public List<int?> Notifications { get; set; } = new();
 
     public List<Rol> Roles
     {
@@ -140,7 +140,7 @@ public class User
         tasks.Remove(taskId);
     }
 
-    public void AddNotification(int notificationId)
+    public void AddNotification(int? notificationId)
     {
         Notifications.Add(notificationId);
     }

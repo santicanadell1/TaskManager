@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Y6FAT8sdR3bT2qW02aLCwDFHGk9kLLJjlufk25Wd3riK1IbKcRmfXVW7OYk152iFvnE8rxyEhmxA/YkaX8G1Lg==",
+  "dgSpecHash": "szzOGxxpeOSR7sJjFx5q/wayHgdVZ+IX8qNssmME1U9MvjEG754pRoHQ1mRFqqCVG/iAvS1SS9r6T13dWMrgGw==",
   "success": true,
   "projectFilePath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj",
   "expectedPackageFiles": [
@@ -13,6 +13,7 @@
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\microsoft.entityframeworkcore\\8.0.16\\microsoft.entityframeworkcore.8.0.16.nupkg.sha512",
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\8.0.16\\microsoft.entityframeworkcore.abstractions.8.0.16.nupkg.sha512",
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\8.0.16\\microsoft.entityframeworkcore.analyzers.8.0.16.nupkg.sha512",
+    "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\8.0.16\\microsoft.entityframeworkcore.inmemory.8.0.16.nupkg.sha512",
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\8.0.16\\microsoft.entityframeworkcore.relational.8.0.16.nupkg.sha512",
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\8.0.16\\microsoft.entityframeworkcore.sqlserver.8.0.16.nupkg.sha512",
     "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\8.0.0\\microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",

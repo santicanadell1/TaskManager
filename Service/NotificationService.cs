@@ -61,7 +61,7 @@ public class NotificationService
             AddNotificationToUser(user.Email, noti.Id);
     }
 
-    public void AddNotificationToUser(string userEmail, int notificationId)
+    public void AddNotificationToUser(string userEmail, int? notificationId)
     {
         var user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
@@ -69,7 +69,7 @@ public class NotificationService
         _userRepository.Update(user.Email, user);
     }
 
-    public void RemoveNotificationFromUser(string userEmail, int notificationId)
+    public void RemoveNotificationFromUser(string userEmail, int? notificationId)
     {
         var user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();

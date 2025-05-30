@@ -33,6 +33,12 @@ builder.Services.AddDbContext<AppDbContext>(
         providerOptions => providerOptions.EnableRetryOnFailure())
 );
 
+builder.Services.AddDbContextFactory<AppDbContext>(
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        providerOptions => providerOptions.EnableRetryOnFailure())
+);
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

@@ -7,12 +7,21 @@ namespace DataAccess.Test;
 public class ResourceRepositoryTests
 {
     private ResourceRepository _resourceRepository;
-    protected readonly AppDbContext _db;
+    private AppDbContext _context;
+    private InMemoryAppContextFactory _contextFactory;
 
     [TestInitialize]
     public void Setup()
     {
-        _resourceRepository = new ResourceRepository(_db);
+        _contextFactory = new InMemoryAppContextFactory();
+        _context = _contextFactory.CreateDbContext();
+        _resourceRepository = new ResourceRepository(_context);
+    }
+
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _context.Database.EnsureDeleted();
     }
 
     [TestMethod]
@@ -33,7 +42,6 @@ public class ResourceRepositoryTests
         Assert.IsNotNull(addedResource);
         Assert.AreEqual(resource.Name, addedResource?.Name);
     }
-
 
     [TestMethod]
     public void Update_ShouldUpdateResource_WhenResourceExists()
