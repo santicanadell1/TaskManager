@@ -67,7 +67,7 @@ public class ProjectRepository
         _db.SaveChanges();
     }
 
-    public void UpdateTask(string projectName, int taskId, Task updatedTask)
+    public void UpdateTask(string projectName, int? taskId, Task updatedTask)
     {
         var project = _db.Set<Project>().FirstOrDefault(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
@@ -79,7 +79,7 @@ public class ProjectRepository
         _db.SaveChanges();
     }
 
-    public void RemoveTask(string projectName, int taskId)
+    public void RemoveTask(string projectName, int? taskId)
     {
         var project = _db.Set<Project>().FirstOrDefault(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
@@ -91,7 +91,7 @@ public class ProjectRepository
         _db.SaveChanges();
     }
 
-    public void AddPreviousTask(string projectName, int taskId, Task previousTask)
+    public void AddPreviousTask(string projectName, int? taskId, Task previousTask)
     {
         var project = _db.Set<Project>().FirstOrDefault(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
@@ -105,7 +105,7 @@ public class ProjectRepository
         _db.SaveChanges();
     }
 
-    public void AddResourceToTask(string projectName, int taskId, Resource resource)
+    public void AddResourceToTask(string projectName, int? taskId, Resource resource)
     {
         var project = _db.Set<Project>().FirstOrDefault(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
