@@ -93,19 +93,24 @@ public class ProjectRepositoryTest
         _projectRepository.RemoveProject(project.Name);
         _context.SaveChanges();
     }
-
+    
     [TestMethod]
     public void UpdateProject_WhenGettingProject_ShouldBeDifferentFromTheOriginalProject()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
-        var project2 = new Project { Name = "Project 1", Description = "Project 2 description" };
+        var project2 = new Project { Name = "Project 1", Description = "Updated Project description" };  
         _projectRepository.AddProject(project);
         _context.SaveChanges();
+    
         _projectRepository.UpdateProject(project.Name, project2);
         _context.SaveChanges();
-        Assert.AreNotEqual(_projectRepository.GetProject(p => p.Name == "Project 1"), project);
+    
+        var updatedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+    
+        Assert.AreNotEqual(project.Description, updatedProject.Description);  
+        Assert.AreEqual(project.Name, updatedProject.Name);  
     }
-
+    
     [TestMethod]
     [ExpectedException(typeof(DuplicatedProjectsNameException))]
     public void updateProject_WhenNameIsDuplicated_ShouldThrowDuplicatedNameException()
@@ -135,7 +140,7 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void AddTask_WhenAddingNewTask_ShouldContainIt()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1" , Description = "Project 1 Description"};
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddProject(project);
         _context.SaveChanges();
@@ -147,7 +152,7 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void UpdateTask_WhenUpdatingExistingTask_ShouldUpdateTaskDetails()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1" , Description = "Project 1 Description"};
         _projectRepository.AddProject(project);
         _context.SaveChanges();
 
@@ -206,7 +211,7 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void RemoveTask_WhenTaskExists_ShouldRemoveTaskFromProject()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description"};
         _projectRepository.AddProject(project);
         _context.SaveChanges();
 

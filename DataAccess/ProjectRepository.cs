@@ -52,9 +52,10 @@ public class ProjectRepository
         var existingProject = _db.Set<Project>().FirstOrDefault(p => p.Name == name);
         if (existingProject == null) throw new ProjectNotFoundException();
 
-        _db.Entry(existingProject).CurrentValues.SetValues(project);
-        _db.SaveChanges();
+        existingProject.Description = project.Description; 
+        _db.SaveChanges(); 
     }
+
 
     public void AddTask(string projectName, Task task)
     {
