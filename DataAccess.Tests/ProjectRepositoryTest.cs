@@ -34,22 +34,26 @@ public class ProjectRepositoryTest
     [TestMethod]
     public void NewProject_WhenAddingNewProject_ListShouldContainIt()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 description" }; 
         _projectRepository.AddProject(project);
         _context.SaveChanges();
         Assert.IsTrue(_projectRepository.GetAllProjects().Contains(project));
     }
 
+
     [TestMethod]
     [ExpectedException(typeof(DuplicatedProjectsNameException))]
     public void AddNewProject_WhenAddingDuplicatedProject_ShouldThrowDuplicatedNameException()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         _projectRepository.AddProject(project);
         _context.SaveChanges();
-        _projectRepository.AddProject(project);
-        _context.SaveChanges();
+    
+        var duplicateProject = new Project { Name = "Project 1", Description = "Project 1 description" };
+        _projectRepository.AddProject(duplicateProject);
+        _context.SaveChanges();  
     }
+
 
     [TestMethod]
     public void AddNewProject_WhenGettingProject_ShouldReturnProject()
