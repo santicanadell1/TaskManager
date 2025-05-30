@@ -35,6 +35,7 @@ public class UserRepositoryTests
     {
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
         _userRepository.AddUser(user);
+        _context.SaveChanges();
         Assert.IsTrue(_userRepository.GetAll().Contains(user));
     }
 
@@ -46,6 +47,7 @@ public class UserRepositoryTests
         var user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
         _userRepository.AddUser(user);
         _userRepository.AddUser(user2);
+        _context.SaveChanges();
     }
 
     [TestMethod]
@@ -55,6 +57,8 @@ public class UserRepositoryTests
         var user2 = new User("First Name 2", "Last Name 2", "Email2@email.com", DateTime.Today.AddYears(-18), "Password");
         _userRepository.AddUser(user);
         _userRepository.AddUser(user2);
+        _context.SaveChanges();
+
         var user3 = _userRepository.Get(u => u.Email == "Email1@email.com");
         Assert.AreEqual(user, user3);
     }
@@ -65,7 +69,10 @@ public class UserRepositoryTests
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
         var user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
         _userRepository.AddUser(user);
+        _context.SaveChanges();
         _userRepository.Update(user.Email, user2);
+        _context.SaveChanges();
+
         Assert.AreNotEqual(user, _userRepository.Get(u => u.Email == "Email1@email.com"));
     }
 
@@ -76,7 +83,9 @@ public class UserRepositoryTests
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
         var user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
         _userRepository.AddUser(user);
+        _context.SaveChanges();
         _userRepository.Update("EmailDiferente@email.com", user2);
+        _context.SaveChanges();
     }
 
     [TestMethod]
@@ -88,7 +97,11 @@ public class UserRepositoryTests
         var user3 = new User("First Name 3", "Last Name 3", "Email2@email.com", DateTime.Today.AddYears(-18), "Password");
         _userRepository.AddUser(user);
         _userRepository.AddUser(user2);
+        _context.SaveChanges();
+
         _userRepository.Update("Email1@email.com", user3);
+        _context.SaveChanges();
+
     }
 
     [TestMethod]
@@ -98,7 +111,11 @@ public class UserRepositoryTests
         var user2 = new User("First Name 2", "Last Name 2", "Email2@email.com", DateTime.Today.AddYears(-18), "Password");
         _userRepository.AddUser(user);
         _userRepository.AddUser(user2);
+        _context.SaveChanges();
+
         _userRepository.Delete(user.Email);
+        _context.SaveChanges();
+
         Assert.IsNull(_userRepository.Get(u => u.Email == "Email1@email.com"));
     }
 }

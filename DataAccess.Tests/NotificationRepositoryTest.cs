@@ -35,6 +35,7 @@ public class NotificationRepositoryTest
     {
         var notification = new Notification(false, "New notification", new Project());
         _notificationRepository.Add(notification);
+        _context.SaveChanges();
         Assert.IsTrue(_notificationRepository.GetAll().Count == 1);
         Assert.IsTrue(_notificationRepository.GetAll().Contains(notification));
     }
@@ -46,7 +47,8 @@ public class NotificationRepositoryTest
         var notification2 = new Notification(true, "Another notification", new Project());
         _notificationRepository.Add(notification1);
         _notificationRepository.Add(notification2);
-
+        _context.SaveChanges();
+        
         var notification = _notificationRepository.Get(n => n.Description == "New notification");
 
         Assert.AreEqual(notification1, notification);
@@ -58,8 +60,10 @@ public class NotificationRepositoryTest
         var notification1 = new Notification(false, "Old notification", new Project());
         var notification2 = new Notification(true, "Updated notification", new Project());
         _notificationRepository.Add(notification1);
+        _context.SaveChanges();
 
         _notificationRepository.Update(notification1, notification2);
+        _context.SaveChanges();
 
         Assert.AreNotEqual(notification1, _notificationRepository.Get(n => n.Description == "Updated notification"));
     }
@@ -71,9 +75,12 @@ public class NotificationRepositoryTest
         var notification1 = new Notification(false, "Old notification", new Project());
         var notification2 = new Notification(true, "Updated notification", new Project());
         _notificationRepository.Add(notification1);
+        _context.SaveChanges();
 
         var notification3 = new Notification(false, "Nonexistent notification", new Project());
         _notificationRepository.Update(notification3, notification2);
+        _context.SaveChanges();
+
     }
 
     [TestMethod]
@@ -83,8 +90,10 @@ public class NotificationRepositoryTest
         var notification2 = new Notification(true, "Another notification", new Project());
         _notificationRepository.Add(notification1);
         _notificationRepository.Add(notification2);
+        _context.SaveChanges();
 
         _notificationRepository.Delete(notification1);
+        _context.SaveChanges();
 
         Assert.IsNull(_notificationRepository.Get(n => n.Description == "Notification to be deleted"));
     }
