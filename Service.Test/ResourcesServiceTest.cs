@@ -9,7 +9,7 @@ namespace Service.Test;
 public class ResourcesServiceTest
 {
     private AdminPService _adminProjectService;
-    private AppDbContext _database;
+    private AppDbContext _context;
     private Login _loginService;
     private ResourceService _resourceService;
     private TaskService _taskService;
@@ -23,12 +23,30 @@ public class ResourcesServiceTest
     [TestInitialize]
     public void TestSetUp()
     {
+        
+        var contextFactory = new InMemoryAppContextFactory();
+        _context = contextFactory.CreateDbContext();
+        
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+        
+        _userRepository = new UserRepository(_context);
+        _projectRepository = new ProjectRepository(_context);
+        _notificationRepository = new NotificationRepository(_context);
+        _taskRepository = new TaskRepository(_context);
+        _resourceRepository = new ResourceRepository(_context);
+        
+        
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
         _resourceService = new ResourceService(_resourceRepository,_projectRepository);
         _adminProjectService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
-        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, new CpmService(),
+        
+        CpmService cpmService = new CpmService();
+        
+        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
             _taskRepository);
+        
         var adminSUserDTO = new UserDTO
         {
             FirstName = "AdminSystem",

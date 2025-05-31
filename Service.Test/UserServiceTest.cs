@@ -8,7 +8,34 @@ namespace Service.Test;
 [TestClass]
 public class UserServiceTest
 {
+    private AppDbContext _context;
+    private Login _loginService;
+    private UserService _userService;
+    
     private UserRepository _userRepository;
+    
+    
+    [TestInitialize]
+    public void TestSetUp()
+    {
+        var contextFactory = new InMemoryAppContextFactory();
+        var context = contextFactory.CreateDbContext();
+        
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+        
+        _userRepository = new UserRepository(context);
+        
+        _userService = new UserService(_userRepository);
+        _loginService = new Login(_userRepository);
+    }
+
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _context.Database.EnsureDeleted();
+    }
+    
     [TestMethod]
     [ExpectedException(typeof(InvalidUserEmailException))]
     public void AddUser_ShouldThrowException_WhenEmailIsNotUnique()
@@ -47,7 +74,6 @@ public class UserServiceTest
     [ExpectedException(typeof(UserNotFoundException))]
     public void UpdateUser_ShouldThrowException_WhenUserDoesNotExist()
     {
-        var userService = new UserService(_userRepository);
         var rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
 
@@ -60,16 +86,14 @@ public class UserServiceTest
             Roles = rols
         };
 
-        userService.UpdateUser(userToUpdate);
+        _userService.UpdateUser(userToUpdate);
     }
 
     [TestMethod]
     [ExpectedException(typeof(NoUsersFoundException))]
     public void GetUsers_ShouldThrowException_WhenNoUsersExist()
     {
-        var userService = new UserService(_userRepository);
-
-        userService.GetUsers();
+        _userService.GetUsers();
     }
 
 
@@ -77,9 +101,7 @@ public class UserServiceTest
     [ExpectedException(typeof(UserNotFoundException))]
     public void GetUser_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
     {
-        var userService = new UserService(_userRepository);
-
-        userService.GetUser("nonexistent.user@example.com");
+        _userService.GetUser("nonexistent.user@example.com");
     }
 
     [TestMethod]
@@ -96,13 +118,10 @@ public class UserServiceTest
             Roles = rols
         };
 
-        var userService = new UserService(_userRepository);
+        _userService.AddUser(userDTO);
 
 
-        userService.AddUser(userDTO);
-
-
-        var users = userService.GetUsers();
+        var users = _userService.GetUsers();
         Assert.AreEqual(1, users.Count);
         Assert.AreEqual("john.doe@example.com", users[0].Email);
     }
@@ -121,8 +140,7 @@ public class UserServiceTest
             Roles = rols
         };
 
-        var userService = new UserService(_userRepository);
-        userService.AddUser(userDTO);
+        _userService.AddUser(userDTO);
 
         var updatedUserDTO = new UserDTO
         {
@@ -135,10 +153,10 @@ public class UserServiceTest
         };
 
 
-        userService.UpdateUser(updatedUserDTO);
+        _userService.UpdateUser(updatedUserDTO);
 
 
-        var updatedUser = userService.GetUser("john.doe@example.com");
+        var updatedUser = _userService.GetUser("john.doe@example.com");
         Assert.AreEqual("Johnny", updatedUser.FirstName);
         Assert.AreEqual("Dough", updatedUser.LastName);
     }
