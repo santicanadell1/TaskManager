@@ -8,9 +8,9 @@ namespace Service.Test;
 [TestClass]
 public class AdminPServiceTests
 {
-    private AppDbContext _database;
+    private AppDbContext _context;
     private Login _login;
-    private AdminPService _service;
+    private AdminPService _adminPservice;
     private TaskService _taskService;
     private UserService _userservice;
     private UserDTO Admin;
@@ -25,10 +25,23 @@ public class AdminPServiceTests
     [TestInitialize]
     public void Setup()
     {
-        _service = new AdminPService(_userRepository,_projectRepository, _notificationRepository, _taskRepository);
+        var contextFactory = new InMemoryAppContextFactory();
+        _context = contextFactory.CreateDbContext();
+        
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+        
+        _userRepository = new UserRepository(_context);
+        _projectRepository = new ProjectRepository(_context);
+        _notificationRepository = new NotificationRepository(_context);
+        _taskRepository = new TaskRepository(_context);
+        
+        _adminPservice = new AdminPService(_userRepository,_projectRepository, _notificationRepository, _taskRepository);
         _userservice = new UserService(_userRepository);
         _login = new Login(_userRepository);
-        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository, new CpmService(), _taskRepository);
+        
+        CpmService cpmService = new CpmService();
+        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository, cpmService, _taskRepository);
 
         Admin = new UserDTO
         {
@@ -57,6 +70,12 @@ public class AdminPServiceTests
         _login.LoginUser(Admin.Email, Admin.Password);
     }
 
+    [TestCleanup]
+    public void Cleanup()
+    {
+        _context?.Database.EnsureDeleted();
+    }
+
     [TestMethod]
     public void CreateProject_ShouldAddProjectToDatabase_WhenValid()
     {
@@ -69,7 +88,7 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
         var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
@@ -88,7 +107,7 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
         var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
@@ -102,7 +121,7 @@ public class AdminPServiceTests
             Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
-        _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+        _adminPservice.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
 
         Assert.IsTrue(project.Members.Count > 0);
         Assert.AreEqual("John", project.Members[1].FirstName);
@@ -121,7 +140,7 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
         var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
@@ -135,8 +154,8 @@ public class AdminPServiceTests
             Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
-        _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
-        _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+        _adminPservice.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+        _adminPservice.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
 
         Assert.IsTrue(project.Members.Count > 0);
         Assert.AreEqual("John", project.Members[1].FirstName);
@@ -154,7 +173,7 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
         var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
@@ -168,13 +187,13 @@ public class AdminPServiceTests
             Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
-        _service.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+        _adminPservice.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
 
         Assert.IsTrue(project.Members.Count > 0);
         Assert.AreEqual("John", project.Members[1].FirstName);
 
-        _service.RemoveMemberFromProject(project.Name, "john.doe@example.com");
-        _service.RemoveMemberFromProject(project.Name, "member.user@example.com");
+        _adminPservice.RemoveMemberFromProject(project.Name, "john.doe@example.com");
+        _adminPservice.RemoveMemberFromProject(project.Name, "member.user@example.com");
 
         project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
@@ -194,11 +213,11 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
         var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
-        _service.RemoveMemberFromProject("Proyecto 1", "member.user@example.com");
+        _adminPservice.RemoveMemberFromProject("Proyecto 1", "member.user@example.com");
     }
 
     [TestMethod]
@@ -214,11 +233,11 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
         var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
 
-        _service.RemoveMemberFromProject(project.Name, "john.user@example.com");
+        _adminPservice.RemoveMemberFromProject(project.Name, "john.user@example.com");
     }
 
     [TestMethod]
@@ -233,12 +252,12 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
         var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
 
-        _service.RemoveProject("New Project");
+        _adminPservice.RemoveProject("New Project");
 
         project = _projectRepository.GetProject(p => p.Name == "New Project");
         Assert.IsNull(project);
@@ -257,7 +276,7 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
         var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
@@ -271,7 +290,7 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.UpdateProject("Old Project", updatedDTO);
+        _adminPservice.UpdateProject("Old Project", updatedDTO);
     }
 
     [TestMethod]
@@ -294,10 +313,10 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO1);
-        _service.CreateProject(projectDTO2);
+        _adminPservice.CreateProject(projectDTO1);
+        _adminPservice.CreateProject(projectDTO2);
 
-        var projects = _service.GetAllProjects();
+        var projects = _adminPservice.GetAllProjects();
 
         Assert.AreEqual(2, projects.Count);
         Assert.AreEqual("Project 1", projects[0].Name);
@@ -316,9 +335,9 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
-        var project = _service.GetProjectByName("Test Project");
+        var project = _adminPservice.GetProjectByName("Test Project");
 
         Assert.IsNotNull(project);
         Assert.AreEqual("Test Project", project.Name);
@@ -337,9 +356,9 @@ public class AdminPServiceTests
             Members = members
         };
 
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
 
-        var project = _service.GetAllProjectsForUser(UserDTO.Email);
+        var project = _adminPservice.GetAllProjectsForUser(UserDTO.Email);
 
         Assert.IsNotNull(project);
         Assert.AreEqual("Test Project", project[0].Name);
@@ -357,8 +376,8 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        _service.CreateProject(projectDTO);
-        var projectMembers = _service.GetMembers("Test Project");
+        _adminPservice.CreateProject(projectDTO);
+        var projectMembers = _adminPservice.GetMembers("Test Project");
         Assert.IsNotNull(projectMembers);
         Assert.AreEqual(1, projectMembers.Count);
         Assert.AreEqual("User", projectMembers[0].FirstName);
@@ -375,7 +394,7 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
         var task = new TaskDTO
         {
             Title = "Task1",
@@ -385,7 +404,7 @@ public class AdminPServiceTests
         };
         _taskService.AddTask("Test Project", task);
 
-        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
 
         Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t=> t.Id == 1));
     }
@@ -402,7 +421,7 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
         var task = new TaskDTO
         {
             Title = "Task1",
@@ -412,7 +431,7 @@ public class AdminPServiceTests
         };
         _taskService.AddTask("Test Project", task);
 
-        _service.AddTaskToMember("Test Project", "member1.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member1.user@example.com", 1);
     }
 
     [TestMethod]
@@ -427,7 +446,9 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        _service.CreateProject(projectDTO);
+        
+        _adminPservice.CreateProject(projectDTO);
+        
         var task = new TaskDTO
         {
             Title = "Task1",
@@ -435,9 +456,10 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
+        
         _taskService.AddTask("Test Project", task);
 
-        _service.AddTaskToMember("Test Project", "member.user@example.com", 2);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);
     }
 
     [TestMethod]
@@ -451,7 +473,7 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
         var task = new TaskDTO
         {
             Title = "Task1",
@@ -461,11 +483,11 @@ public class AdminPServiceTests
         };
         _taskService.AddTask("Test Project", task);
 
-        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
 
         Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t=> t.Id == 1));
 
-        _service.RemoveTaskFromMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", 1);
 
         Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Count == 0);
     }
@@ -482,7 +504,7 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
         var task = new TaskDTO
         {
             Title = "Task1",
@@ -492,8 +514,8 @@ public class AdminPServiceTests
         };
         _taskService.AddTask("Test Project", task);
 
-        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
-        _service.RemoveTaskFromMember("Test Project", "member1.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.RemoveTaskFromMember("Test Project", "member1.user@example.com", 1);
     }
 
     [TestMethod]
@@ -508,7 +530,7 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
         var task = new TaskDTO
         {
             Title = "Task1",
@@ -518,8 +540,8 @@ public class AdminPServiceTests
         };
         _taskService.AddTask("Test Project", task);
 
-        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
-        _service.RemoveTaskFromMember("Test Project", "member.user@example.com", 2);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", 2);
     }
 
     [TestMethod]
@@ -533,7 +555,7 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
         var task = new TaskDTO
         {
             Title = "Task1",
@@ -551,10 +573,10 @@ public class AdminPServiceTests
         _taskService.AddTask("Test Project", task);
         _taskService.AddTask("Test Project", task2);
 
-        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
-        _service.AddTaskToMember("Test Project", "member.user@example.com", 2);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);
 
-        var tasks = _service.GetAllTaskForAMember("member.user@example.com");
+        var tasks = _adminPservice.GetAllTaskForAMember("member.user@example.com");
 
         Assert.AreEqual(2, tasks.Count);
     }
@@ -570,7 +592,7 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        _service.CreateProject(projectDTO);
+        _adminPservice.CreateProject(projectDTO);
         var task = new TaskDTO
         {
             Title = "Task1",
@@ -588,10 +610,10 @@ public class AdminPServiceTests
         _taskService.AddTask("Test Project", task);
         _taskService.AddTask("Test Project", task2);
 
-        _service.AddTaskToMember("Test Project", "member.user@example.com", 1);
-        _service.AddTaskToMember("Test Project", "member.user@example.com", 2);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);
 
-        var tasks = _service.GetAllTaskForAMemberInAProject("Test Project", "member.user@example.com");
+        var tasks = _adminPservice.GetAllTaskForAMemberInAProject("Test Project", "member.user@example.com");
 
         Assert.AreEqual(2, tasks.Count);
     }

@@ -10,7 +10,7 @@ namespace Service.Test;
 public class AdminSService_Test
 {
     private AdminSService _adminService;
-    private AppDbContext _database;
+    private AppDbContext _context;
     private Login _loginService;
     private UserService _userService;
     private UserRepository _userRepository;
@@ -20,6 +20,16 @@ public class AdminSService_Test
     [TestInitialize]
     public void TestSetUp()
     {
+        var contextFactory = new InMemoryAppContextFactory();
+        _context = contextFactory.CreateDbContext();
+        
+        _userRepository = new UserRepository(_context);
+        _projectRepository = new ProjectRepository(_context);
+        _taskRepository = new TaskRepository(_context);
+        
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+        
         _adminService = new AdminSService(_userRepository,_projectRepository,_taskRepository);
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
@@ -45,6 +55,12 @@ public class AdminSService_Test
         };
         _userService.AddUser(adminUserDTO);
         _userService.AddUser(normalUserDTO);
+    }
+
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _context?.Database.EnsureDeleted();
     }
 
     [TestMethod]

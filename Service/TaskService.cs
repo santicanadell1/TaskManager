@@ -16,7 +16,8 @@ public class TaskService
     private readonly NotificationRepository _notificationRepository;
     private readonly TaskRepository _taskRepository;
 
-    public TaskService(ProjectRepository projectRepository, NotificationRepository notificationRepository, UserRepository userRepository,CpmService cpmService, TaskRepository taskRepository)
+    public TaskService(ProjectRepository projectRepository, NotificationRepository notificationRepository,
+        UserRepository userRepository, CpmService cpmService, TaskRepository taskRepository)
     {
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
@@ -31,7 +32,10 @@ public class TaskService
         if (project == null) throw new ProjectNotFoundException();
 
         if (taskDTO.ExpectedStartDate.AddDays(1) <= project.StartDate)
+        {
             throw new TaskException("The task's start date is before the project's start date.");
+        }
+
         var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
 
@@ -82,8 +86,10 @@ public class TaskService
 
     public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
     {
-        var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
-        var projectService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository);
+        var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository,
+            _taskRepository);
+        var projectService =
+            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
         var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
