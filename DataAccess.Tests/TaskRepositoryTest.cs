@@ -77,7 +77,7 @@ public class TaskRepositoryTest
 
     [TestMethod]
     [ExpectedException(typeof(TaskNotFoundException))]
-    public void Update_ThrowsTaskNotFoundException_WhenUpdatedTaskIsNull()
+    public void Update_ThrowsTaskNotFoundException_WhenIdDoesNotExist()
     {
         _taskRepository.Update(1,_task);
     }
