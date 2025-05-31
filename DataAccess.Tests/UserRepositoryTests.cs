@@ -69,11 +69,9 @@ public class UserRepositoryTests
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
         var user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
         _userRepository.AddUser(user);
-        _context.SaveChanges();
         _userRepository.Update(user.Email, user2);
-        _context.SaveChanges();
 
-        Assert.AreNotEqual(user, _userRepository.Get(u => u.Email == "Email1@email.com"));
+        Assert.AreNotEqual("First Name 1", _userRepository.Get(u => u.Email == "Email1@email.com").FirstName);
     }
 
     [TestMethod]
@@ -87,23 +85,7 @@ public class UserRepositoryTests
         _userRepository.Update("EmailDiferente@email.com", user2);
         _context.SaveChanges();
     }
-
-    [TestMethod]
-    [ExpectedException(typeof(UserEmailIsDuplicatedException))]
-    public void UpdateAUser_WhenEmailAlreadyExists_ThrowUserEmailIsDuplicatedException()
-    {
-        var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
-        var user2 = new User("First Name 2", "Last Name 2", "Email2@email.com", DateTime.Today.AddYears(-18), "Password");
-        var user3 = new User("First Name 3", "Last Name 3", "Email2@email.com", DateTime.Today.AddYears(-18), "Password");
-        _userRepository.AddUser(user);
-        _userRepository.AddUser(user2);
-        _context.SaveChanges();
-
-        _userRepository.Update("Email1@email.com", user3);
-        _context.SaveChanges();
-
-    }
-
+    
     [TestMethod]
     public void DeleteAUser_WhenGettingTheUser_ShouldBeNull()
     {

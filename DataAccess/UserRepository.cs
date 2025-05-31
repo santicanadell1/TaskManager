@@ -21,14 +21,24 @@ public class UserRepository
     public void AddUser(User user)
     {
         if (user == null) throw new UserNotFoundException();
+        validateDuplicateEmail(user.Email);
+        
         try
         {
             _db.Set<User>().Add(user);
             _db.SaveChanges();
         }
-        catch (DbUpdateException e)
+        catch (Exception)
         {
             throw new UserNotFoundException();
+        }
+    }
+
+    private void validateDuplicateEmail(string email)
+    {
+        if (_db.Set<User>().ToList().Any(u => u.Email == email))
+        {
+            throw new UserEmailIsDuplicatedException();
         }
     }
 
@@ -37,9 +47,9 @@ public class UserRepository
         return _db.Set<User>().FirstOrDefault(filter);
     }
 
-    public void Update(string email, User user)
+    public void Update(string email, User updatedUser)
     {
-        if (user == null)
+        if (updatedUser == null)
         {
             throw new UserNotFoundException();
         }
@@ -50,17 +60,25 @@ public class UserRepository
         {
             throw new UserNotFoundException();
         }
+        
+
+        existingUser.FirstName = updatedUser.FirstName;
+        existingUser.LastName = updatedUser.LastName;
+        existingUser.Password = updatedUser.Password;
+        existingUser.Roles = updatedUser.Roles;
+        existingUser.Tasks = updatedUser.Tasks;
+        existingUser.Notifications = updatedUser.Notifications;
 
         try
         {
-            _db.Entry(existingUser).CurrentValues.SetValues(user);
             _db.SaveChanges();
         }
-        catch (DbUpdateException e)
+        catch (DbUpdateException)
         {
             throw new UserNotFoundException();
         }
     }
+
 
     public void Delete(string email)
     {
