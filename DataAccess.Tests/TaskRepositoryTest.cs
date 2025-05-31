@@ -1,3 +1,5 @@
+using DataAccess.Exceptions.TaskRepositoryExceptions;
+
 namespace DataAccess.Test;
 using Domain;
 [TestClass]
@@ -29,5 +31,12 @@ public class TaskRepositoryTest
         
         _taskRepository.Add(_task);
         Assert.AreEqual(1, _taskRepository.GetAll().Count);;
+    }
+    [TestMethod]
+    [ExpectedException(typeof(TaskAlreadyExistsException))]
+    public void AddTask_ThrowsTaskTitleIsDuplicatedException_WhenTitleAlreadyExists()
+    {
+        _taskRepository.Add(_task);
+        _taskRepository.Add(_task);
     }
 }
