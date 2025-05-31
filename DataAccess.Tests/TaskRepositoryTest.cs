@@ -39,4 +39,14 @@ public class TaskRepositoryTest
         _taskRepository.Add(_task);
         _taskRepository.Add(_task);
     }
+    [TestMethod]
+    public void Get_ReturnsMatchingTask_WhenFilterMatches()
+    {
+        _taskRepository.Add(_task);
+        var found = _taskRepository.Get(t => t.Title == "Beta");
+        Assert.IsNotNull(found);
+        Assert.AreEqual("Task1", found!.Title);
+        Assert.AreEqual("Description1", found.Description);
+    }
+
 }
