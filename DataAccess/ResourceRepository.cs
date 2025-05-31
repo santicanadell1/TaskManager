@@ -43,12 +43,7 @@ public class ResourceRepository
 
     public void Update(int? idToUpdate, Resource updatedResource)
     {
-        if (idToUpdate == null)
-        {
-            throw new ResourceNotFoundException();
-        }
-
-        if (updatedResource == null)
+        if (idToUpdate == null || updatedResource == null)
         {
             throw new ResourceNotFoundException();
         }
@@ -60,16 +55,20 @@ public class ResourceRepository
             throw new ResourceNotFoundException();
         }
 
+        existingResource.Name = updatedResource.Name;
+        existingResource.Type = updatedResource.Type;
+        existingResource.Description = updatedResource.Description;
+
         try
         {
-            _db.Entry(existingResource).CurrentValues.SetValues(updatedResource);
             _db.SaveChanges();
         }
-        catch (DbUpdateException e)
+        catch (DbUpdateException)
         {
             throw new ResourceNotFoundException();
         }
     }
+
 
 
     public void Delete(int? idToDelete)
