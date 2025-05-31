@@ -82,5 +82,13 @@ public class TaskRepositoryTest
         _taskRepository.Update(1,_task);
     }
 
+    [TestMethod]
+    public void Delete_RemovesTask_WhenIdExists()
+    {
+        _taskRepository.Add(_task);
+        Assert.AreEqual(1, _taskRepository.GetAll().Count);
+        _taskRepository.Delete(1);
+        Assert.AreEqual(0, _taskRepository.GetAll().Count);
+    }
 
 }
