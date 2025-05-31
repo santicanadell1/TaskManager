@@ -1,6 +1,7 @@
 ﻿using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 using Task = Domain.Task;
 
 namespace DataAccess.Test;
@@ -16,6 +17,10 @@ public class ProjectRepositoryTest
     {
         var contextFactory = new InMemoryAppContextFactory();
         _context = contextFactory.CreateDbContext();
+        
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+        
         _projectRepository = new ProjectRepository(_context);
     }
 
@@ -37,10 +42,10 @@ public class ProjectRepositoryTest
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" }; 
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
-        Assert.IsTrue(_projectRepository.GetAllProjects().Contains(project));
+        
+        var projects = _projectRepository.GetAllProjects();
+        Assert.IsTrue(projects.Any(p => p.Name == "Project 1"));
     }
-
 
     [TestMethod]
     [ExpectedException(typeof(DuplicatedProjectsNameException))]
@@ -48,35 +53,37 @@ public class ProjectRepositoryTest
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
     
         var duplicateProject = new Project { Name = "Project 1", Description = "Project 1 description" };
         _projectRepository.AddProject(duplicateProject);
-        _context.SaveChanges();  
     }
-
 
     [TestMethod]
     public void AddNewProject_WhenGettingProject_ShouldReturnProject()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
-        var project2 = new Project { Name = "Project 2" , Description = "Project 2 description"};
+        var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
+        
         _projectRepository.AddProject(project);
         _projectRepository.AddProject(project2);
-        _context.SaveChanges();
-        Assert.AreEqual(_projectRepository.GetProject(u => u.Name == "Project 2"), project2);
+        
+        var foundProject = _projectRepository.GetProject(u => u.Name == "Project 2");
+        Assert.IsNotNull(foundProject);
+        Assert.AreEqual("Project 2", foundProject.Name);
+        Assert.AreEqual("Project 2 description", foundProject.Description);
     }
 
     [TestMethod]
     public void DeleteProject_WhenGettingProject_ShouldBeNull()
     {
-        var project = new Project { Name = "Project 1",Description = "Project 1 description"  };
-        var project2 = new Project { Name = "Project 2" , Description = "Project 2 description"};
+        var project = new Project { Name = "Project 1", Description = "Project 1 description" };
+        var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
+        
         _projectRepository.AddProject(project);
         _projectRepository.AddProject(project2);
-        _context.SaveChanges();
+        
         _projectRepository.RemoveProject(project.Name);
-        _context.SaveChanges();
+        
         Assert.IsNull(_projectRepository.GetProject(p => p.Name == "Project 1"));
     }
 
@@ -85,31 +92,29 @@ public class ProjectRepositoryTest
     public void DeleteProject_WhenDeletingAgain_ShouldThrowProjectNotFoundException()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
-        var project2 = new Project { Name = "Project 2" , Description = "Project 2 description"};
+        var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
+        
         _projectRepository.AddProject(project);
         _projectRepository.AddProject(project2);
-        _context.SaveChanges();
+        
         _projectRepository.RemoveProject(project.Name);
-        _context.SaveChanges();
-        _projectRepository.RemoveProject(project.Name);
-        _context.SaveChanges();
+        _projectRepository.RemoveProject(project.Name); // Debería lanzar excepción
     }
     
     [TestMethod]
     public void UpdateProject_WhenGettingProject_ShouldBeDifferentFromTheOriginalProject()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
-        var project2 = new Project { Name = "Project 1", Description = "Updated Project description" };  
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
+        
+        var updatedProject = new Project { Name = "Project 1", Description = "Updated Project description" };  
+        _projectRepository.UpdateProject(project.Name, updatedProject);
     
-        _projectRepository.UpdateProject(project.Name, project2);
-        _context.SaveChanges();
+        var retrievedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
     
-        var updatedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
-    
-        Assert.AreNotEqual(project.Description, updatedProject.Description);  
-        Assert.AreEqual(project.Name, updatedProject.Name);  
+        Assert.IsNotNull(retrievedProject);
+        Assert.AreEqual("Updated Project description", retrievedProject.Description);  
+        Assert.AreEqual("Project 1", retrievedProject.Name);  
     }
     
     [TestMethod]
@@ -118,12 +123,11 @@ public class ProjectRepositoryTest
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
-        var project3 = new Project { Name = "Project 2", Description = "Project 3 description" };
         _projectRepository.AddProject(project);
         _projectRepository.AddProject(project2);
-        _context.SaveChanges();
+        
+        var project3 = new Project { Name = "Project 2", Description = "Project 3 description" };
         _projectRepository.UpdateProject(project.Name, project3);
-        _context.SaveChanges();
     }
 
     [TestMethod]
@@ -133,9 +137,8 @@ public class ProjectRepositoryTest
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
+        
         _projectRepository.UpdateProject("Project 4", project2);
-        _context.SaveChanges();
     }
 
     [TestMethod]
