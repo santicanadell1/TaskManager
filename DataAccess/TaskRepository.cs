@@ -42,5 +42,9 @@ public class TaskRepository
     {
         return _db.Set<Task>().ToList();
     }
+    public Task? Get(Func<Task, bool> filter)
+    {
+        return _db.Set<Task>().FirstOrDefault(filter);
+    }
     
 }
