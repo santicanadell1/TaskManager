@@ -22,7 +22,8 @@ public class ProjectRepositoryTest
     [TestCleanup]
     public void CleanUp()
     {
-        _context.Database.EnsureDeleted();
+        _context?.Database.EnsureDeleted();
+        _context?.Dispose();
     }
 
     [TestMethod]
@@ -171,23 +172,20 @@ public class ProjectRepositoryTest
         Assert.AreEqual(State.DOING, taskInProject.State);
         Assert.AreEqual(10, taskInProject.Duration);
     }
-
+    
     [TestMethod]
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void UpdateTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
+        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
-        _context.SaveChanges();
 
-        var updatedTask = new Task("Updated Task 1", "Updated Task 1 description", DateTime.Now.AddDays(1), 10, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
+        var updatedTask = new Task("Updated Task 1", "Updated Task 1 description", DateTime.Now.AddDays(1), 10, new List<Task>(), new List<Task>(), new List<Resource>());
 
-        _projectRepository.UpdateTask("NonExistingProject", task.Id, updatedTask);
-        _context.SaveChanges();
+        _projectRepository.UpdateTask("NonExistingProject", 1, updatedTask);
     }
 
     [TestMethod]
