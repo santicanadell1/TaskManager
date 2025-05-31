@@ -11,7 +11,7 @@ public class NotificationServiceTest
     private Login _loginService;
     private NotificationService _notificationService;
     private UserService _userService;
-    private AppDbContext dataAccess;
+    private AppDbContext _context;
     private UserRepository _userRepository;
     private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
@@ -20,6 +20,17 @@ public class NotificationServiceTest
     [TestInitialize]
     public void SetUp()
     {
+        var contextFactory = new InMemoryAppContextFactory();
+        _context = contextFactory.CreateDbContext();
+
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+        
+        _userRepository = new UserRepository(_context);
+        _projectRepository = new ProjectRepository(_context);
+        _notificationRepository = new NotificationRepository(_context);
+        _taskRepository = new TaskRepository(_context);
+        
         _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
         _adminService = new AdminPService(_userRepository, _projectRepository,_notificationRepository, _taskRepository);
         _loginService = new Login(_userRepository);
@@ -95,7 +106,9 @@ public class NotificationServiceTest
             Read = false, Description = "New Project Notification",
             Project = _adminService.GetProjectByName(projectName)
         };
+        
         _notificationService.CreateNotification(notificationDTO);
+        
         var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
         var user2 = _userRepository.Get(u => u.Email == "Email2@example.com");
 
