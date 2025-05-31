@@ -39,7 +39,10 @@ public class MemberPService : IMemberPService
 
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)
     {
-
+        if (!_userRepository.Get(u => u.Email == email).Roles.Contains(Rol.ProjectMember))
+        {
+            throw new UserIsNotAMemberException();
+        }
         var projectsFromMember = new List<ProjectDTO>();
         var projects = _adminPService.GetAllProjects();
 
