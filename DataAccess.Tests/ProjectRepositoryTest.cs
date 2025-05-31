@@ -28,7 +28,6 @@ public class ProjectRepositoryTest
     public void CleanUp()
     {
         _context?.Database.EnsureDeleted();
-        _context?.Dispose();
     }
 
     [TestMethod]
@@ -98,7 +97,7 @@ public class ProjectRepositoryTest
         _projectRepository.AddProject(project2);
         
         _projectRepository.RemoveProject(project.Name);
-        _projectRepository.RemoveProject(project.Name); // Debería lanzar excepción
+        _projectRepository.RemoveProject(project.Name); g
     }
     
     [TestMethod]

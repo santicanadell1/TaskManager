@@ -99,7 +99,10 @@ public void AddTask(string projectName, Task task)
         task.Description = updatedTask.Description;
         task.State = updatedTask.State;
         task.Duration = updatedTask.Duration;
-        
+        task.ExpectedStartDate = updatedTask.ExpectedStartDate;
+        task.PreviousTasks = updatedTask.PreviousTasks;
+        task.SameTimeTasks = updatedTask.SameTimeTasks;
+        task.Resources = updatedTask.Resources;
         
         _db.SaveChanges();
     }
