@@ -31,7 +31,15 @@ public class AdminPService : IAdminPService
         if (existingProject != null) throw new DuplicatedProjectsNameException();
 
         var newProject = ToEntity(projectDTO);
-        newProject.AdminProject = ToEntity(LoggedUser.Current);
+        if (projectDTO.AdminProyect != null)
+        {
+            var adminFromDb = _userRepository.Get(u => u.Email == projectDTO.AdminProyect.Email);
+            newProject.AdminProject = adminFromDb;
+        }
+        else
+        {
+            newProject.AdminProject = _userRepository.Get(u => u.Email == LoggedUser.Current.Email);
+        }
 
         _projectRepository.AddProject(newProject);
     }
@@ -212,26 +220,30 @@ public class AdminPService : IAdminPService
     }
 
 
-        public Project ToEntity(ProjectDTO projectDTO)
+    public Project ToEntity(ProjectDTO projectDTO)
+    {
+        var project = new Project
         {
-            List<User> members = new List<User>();
-            if (projectDTO.Members != null)
+            Name = projectDTO.Name,
+            Description = projectDTO.Description,
+            StartDate = projectDTO.StartDate,
+            Members = new List<User>()
+        };
+
+        if (projectDTO.Members != null)
+        {
+            foreach (var memberDTO in projectDTO.Members)
             {
-                foreach (var memberDTO in projectDTO.Members)
+                var memberFromDb = _userRepository.Get(u => u.Email == memberDTO.Email);
+                if (memberFromDb != null)
                 {
-                    members.Add(ToEntity(memberDTO));
+                    project.Members.Add(memberFromDb);
                 }
             }
-
-            return new Project
-            {
-                Name = projectDTO.Name,
-                Description = projectDTO.Description,
-                StartDate = projectDTO.StartDate,
-                AdminProject = projectDTO.AdminProyect != null ? ToEntity(projectDTO.AdminProyect) : null,
-                Members = members
-            };
         }
+
+        return project;
+    }
 
     private User ToEntity(UserDTO userDTO)
     {
