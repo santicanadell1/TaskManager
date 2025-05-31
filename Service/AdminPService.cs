@@ -231,7 +231,7 @@ public class AdminPService : IAdminPService
     }
 
 
-    public Project ToEntity(ProjectDTO projectDTO)
+    private Project ToEntity(ProjectDTO projectDTO)
     {
         var project = new Project
         {

@@ -17,9 +17,9 @@ public class ProjectRepository
 
     public void AddProject(Project project)
     {
-        if (_db.Set<Project>().Any(p => p.Name == project.Name)) 
+        if (_db.Set<Project>().Any(p => p.Name == project.Name))
             throw new DuplicatedProjectsNameException();
-        
+
         _db.Set<Project>().Add(project);
         _db.SaveChanges();
     }
@@ -28,9 +28,9 @@ public class ProjectRepository
     {
         return _db.Set<Project>()
             .Include(p => p.Tasks)
-                .ThenInclude(t => t.Resources)
+            .ThenInclude(t => t.Resources)
             .Include(p => p.Tasks)
-                .ThenInclude(t => t.PreviousTasks)
+            .ThenInclude(t => t.PreviousTasks)
             .ToList();
     }
 
@@ -38,9 +38,9 @@ public class ProjectRepository
     {
         return _db.Set<Project>()
             .Include(p => p.Tasks)
-                .ThenInclude(t => t.Resources)
+            .ThenInclude(t => t.Resources)
             .Include(p => p.Tasks)
-                .ThenInclude(t => t.PreviousTasks)
+            .ThenInclude(t => t.PreviousTasks)
             .FirstOrDefault(filter);
     }
 
@@ -49,7 +49,7 @@ public class ProjectRepository
         var project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .FirstOrDefault(p => p.Name == name);
-            
+
         if (project == null) throw new ProjectNotFoundException();
 
         _db.Set<Project>().Remove(project);
@@ -65,16 +65,16 @@ public class ProjectRepository
         if (existingProject == null) throw new ProjectNotFoundException();
 
         existingProject.Description = project.Description;
-        existingProject.Name = project.Name; 
-        _db.SaveChanges(); 
+        existingProject.Name = project.Name;
+        _db.SaveChanges();
     }
 
-public void AddTask(string projectName, Task task)
+    public void AddTask(string projectName, Task task)
     {
         var project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .FirstOrDefault(p => p.Name == projectName);
-            
+
         if (project == null) throw new ProjectNotFoundException();
 
         project.Tasks.Add(task);
@@ -85,11 +85,11 @@ public void AddTask(string projectName, Task task)
     {
         var project = _db.Set<Project>()
             .Include(p => p.Tasks)
-                .ThenInclude(t => t.Resources)
+            .ThenInclude(t => t.Resources)
             .Include(p => p.Tasks)
-                .ThenInclude(t => t.PreviousTasks)
+            .ThenInclude(t => t.PreviousTasks)
             .FirstOrDefault(p => p.Name == projectName);
-            
+
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -103,7 +103,7 @@ public void AddTask(string projectName, Task task)
         task.PreviousTasks = updatedTask.PreviousTasks;
         task.SameTimeTasks = updatedTask.SameTimeTasks;
         task.Resources = updatedTask.Resources;
-        
+
         _db.SaveChanges();
     }
 
@@ -112,7 +112,7 @@ public void AddTask(string projectName, Task task)
         var project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .FirstOrDefault(p => p.Name == projectName);
-            
+
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -126,15 +126,15 @@ public void AddTask(string projectName, Task task)
     {
         var project = _db.Set<Project>()
             .Include(p => p.Tasks)
-                .ThenInclude(t => t.PreviousTasks)
+            .ThenInclude(t => t.PreviousTasks)
             .FirstOrDefault(p => p.Name == projectName);
-            
+
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
-        if (!project.Tasks.Contains(previousTask)) 
+        if (!project.Tasks.Contains(previousTask))
             throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         task.AddPreviousTask(previousTask);
@@ -145,9 +145,9 @@ public void AddTask(string projectName, Task task)
     {
         var project = _db.Set<Project>()
             .Include(p => p.Tasks)
-                .ThenInclude(t => t.Resources)
+            .ThenInclude(t => t.Resources)
             .FirstOrDefault(p => p.Name == projectName);
-            
+
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
