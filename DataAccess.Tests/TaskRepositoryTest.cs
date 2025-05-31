@@ -49,4 +49,16 @@ public class TaskRepositoryTest
         Assert.AreEqual("Description1", found.Description);
     }
 
+    [TestMethod]
+    public void Update_UpdatesAllFields_WhenTaskExists()
+    {
+        _taskRepository.Add(_task);
+        var Id = _taskRepository.Get(t=>t.Title == "Task1").Id;
+        _taskRepository.Update(Id, _task2);
+        var found = _taskRepository.Get(t => t.Id == Id);
+        Assert.IsNotNull(found);
+        Assert.AreEqual("Task2", found.Title);
+        Assert.AreEqual("Description2", found.Description);
+    }
+
 }
