@@ -14,6 +14,7 @@ public class MemberPService : IMemberPService
     private readonly UserRepository _userRepository;
     private readonly ProjectRepository _projectRepository;
     private readonly NotificationRepository _notificationRepository;
+    private readonly TaskRepository _taskRepository;
 
     public MemberPService(UserRepository userRepository, ProjectRepository _projectRepository,NotificationRepository notificationRepository)
     {

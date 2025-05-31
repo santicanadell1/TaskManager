@@ -16,11 +16,12 @@ public class AdminSService : IAdminSService
     private readonly TaskRepository _taskRepository;
     
 
-public AdminSService(UserRepository userRepository, ProjectRepository projectRepository)
+public AdminSService(UserRepository userRepository, ProjectRepository projectRepository, TaskRepository taskRepository)
     {
         _userRepository = userRepository;
         _projectRepository = projectRepository;
         _userService = new UserService(_userRepository);
+        _taskRepository = taskRepository;
     }
 
     public void CreateUser(UserDTO userDTO)
