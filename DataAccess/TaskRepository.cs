@@ -74,8 +74,23 @@ public class TaskRepository
         }
         catch (Exception e)
         {
-            throw new TaskNotFoundException();
+            throw new TaskRepositoryExceptions("The task can't be updated");
         }
     }
-    
+    public void Delete(int id)
+    {
+        try
+        {
+            var existingTask = _db.Tasks.Find(id);
+            if (existingTask == null)
+                throw new TaskNotFoundException();
+
+            _db.Set<Task>().Remove(existingTask);
+            _db.SaveChanges();
+        }
+        catch (Exception)
+        {
+            throw new TaskRepositoryExceptions("The task can't be deleted");
+        }
+    }
 }
