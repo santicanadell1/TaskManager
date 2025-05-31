@@ -37,10 +37,18 @@ public class NotificationRepository
         try
         {
             var existingNotification = _db.Notifications.Find(oldNotification.Id);
-            _db.Entry(existingNotification).CurrentValues.SetValues(newNotification);
+            if (existingNotification == null)
+            {
+                throw new NotificationNotFoundException();
+            }
+
+            existingNotification.Description = newNotification.Description;
+            existingNotification.Read = newNotification.Read;
+            existingNotification.Project = newNotification.Project;
+
             _db.SaveChanges();
         }
-        catch (DbUpdateException e)
+        catch (Exception)
         {
             throw new NotificationNotFoundException();
         }
