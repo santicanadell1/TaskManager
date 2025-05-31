@@ -1,5 +1,6 @@
 ﻿using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 using Task = Domain.Task;
 using TaskRepositoryExceptions = DataAccess.Exceptions.TaskRepositoryExceptions;
 
@@ -7,13 +8,11 @@ namespace DataAccess;
 
 public class ProjectRepository
 {
-    private static int _nextIdTask;
     protected readonly AppDbContext _db;
 
     public ProjectRepository(AppDbContext db)
     {
         _db = db;
-        _nextIdTask = 1;
     }
 
     public void AddProject(Project project)
@@ -27,17 +26,30 @@ public class ProjectRepository
 
     public List<Project> GetAllProjects()
     {
-        return _db.Set<Project>().ToList();
+        return _db.Set<Project>()
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.Resources)
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.PreviousTasks)
+            .ToList();
     }
 
     public Project? GetProject(Func<Project, bool> filter)
     {
-        return _db.Set<Project>().FirstOrDefault(filter);
+        return _db.Set<Project>()
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.Resources)
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.PreviousTasks)
+            .FirstOrDefault(filter);
     }
 
     public void RemoveProject(string name)
     {
-        var project = _db.Set<Project>().FirstOrDefault(p => p.Name == name);
+        var project = _db.Set<Project>()
+            .Include(p => p.Tasks)
+            .FirstOrDefault(p => p.Name == name);
+            
         if (project == null) throw new ProjectNotFoundException();
 
         _db.Set<Project>().Remove(project);
@@ -52,7 +64,8 @@ public class ProjectRepository
         var existingProject = _db.Set<Project>().FirstOrDefault(p => p.Name == name);
         if (existingProject == null) throw new ProjectNotFoundException();
 
-        existingProject.Description = project.Description; 
+        existingProject.Description = project.Description;
+        existingProject.Name = project.Name; 
         _db.SaveChanges(); 
     }
 
