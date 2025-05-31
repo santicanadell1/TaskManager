@@ -19,12 +19,12 @@ public class UserServiceTest
     public void TestSetUp()
     {
         var contextFactory = new InMemoryAppContextFactory();
-        var context = contextFactory.CreateDbContext();
+        var _context = contextFactory.CreateDbContext();
         
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
         
-        _userRepository = new UserRepository(context);
+        _userRepository = new UserRepository(_context);
         
         _userService = new UserService(_userRepository);
         _loginService = new Login(_userRepository);
@@ -33,7 +33,7 @@ public class UserServiceTest
     [TestCleanup]
     public void CleanUp()
     {
-        _context.Database.EnsureDeleted();
+        _context?.Database.EnsureDeleted();
     }
     
     [TestMethod]
