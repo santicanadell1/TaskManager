@@ -6,7 +6,7 @@ using Service.Models;
 [TestClass]
 public class LoginTests
 {
-    private AppDbContext _appDbContext;
+    private AppDbContext _context;
     private Login _login;
     private PasswordManager _passwordManager;
     private UserRepository _userRepository;
@@ -14,8 +14,22 @@ public class LoginTests
     [TestInitialize]
     public void Setup()
     {
+        var contextFactory = new InMemoryAppContextFactory();
+        _context = contextFactory.CreateDbContext();
+
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+        
+        _userRepository = new UserRepository(_context);
+        
         _login = new Login(_userRepository);
         _passwordManager = new PasswordManager();
+    }
+
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _context?.Database.EnsureDeleted();
     }
 
     [TestMethod]
