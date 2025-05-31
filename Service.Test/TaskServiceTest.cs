@@ -12,7 +12,7 @@ namespace Service.Test;
 public class TaskServiceTest
 {
     private CpmService _cpmService;
-    private AppDbContext _database;
+    private AppDbContext _context;
     private Project _genericProject;
     private Login _login;
     private Resource _resource1;
@@ -34,6 +34,18 @@ public class TaskServiceTest
     [TestInitialize]
     public void Setup()
     {
+        var contextFactory = new InMemoryAppContextFactory();
+        _context = contextFactory.CreateDbContext();
+        
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+        
+        _projectRepository = new ProjectRepository(_context);
+        _notificationRepository = new NotificationRepository(_context);
+        _userRepository = new UserRepository(_context);
+        _taskRepository = new TaskRepository(_context);
+        
+        
         _cpmService = new CpmService();
         _taskService = new TaskService(_projectRepository, _notificationRepository,_userRepository, _cpmService, _taskRepository);
         _login = new Login(_userRepository);
