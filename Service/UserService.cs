@@ -84,6 +84,8 @@ public class UserService : IUserService
     private List<Task> getTasksEntity(List<TaskDTO> tasks)
     {
         List<Task> ret = new List<Task>();
+        if (tasks == null) return ret;
+    
         foreach (var task in tasks)
         {
             ret.Add(ToEntityTask(task));
@@ -91,6 +93,7 @@ public class UserService : IUserService
 
         return ret;
     }
+
     private Task ToEntityTask(TaskDTO taskDTO)
     {
         return new Task(

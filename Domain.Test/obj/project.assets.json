@@ -1013,19 +1013,19 @@
     ]
   },
   "packageFolders": {
-    "/home/felidelgado10/.nuget/packages/": {}
+    "/home/feli/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/felidelgado10/RiderProjects/305108_282542_281987/Domain.Test/Domain.Test.csproj",
+      "projectUniqueName": "/home/feli/RiderProjects/305108_282542_281987/Domain.Test/Domain.Test.csproj",
       "projectName": "Domain.Test",
-      "projectPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/Domain.Test/Domain.Test.csproj",
-      "packagesPath": "/home/felidelgado10/.nuget/packages/",
-      "outputPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/Domain.Test/obj/",
+      "projectPath": "/home/feli/RiderProjects/305108_282542_281987/Domain.Test/Domain.Test.csproj",
+      "packagesPath": "/home/feli/.nuget/packages/",
+      "outputPath": "/home/feli/RiderProjects/305108_282542_281987/Domain.Test/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/felidelgado10/.nuget/NuGet/NuGet.Config"
+        "/home/feli/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1037,8 +1037,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/felidelgado10/RiderProjects/305108_282542_281987/Domain/Domain.csproj": {
-              "projectPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/Domain/Domain.csproj"
+            "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj": {
+              "projectPath": "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj"
             }
           }
         }
@@ -1091,7 +1091,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/home/feli/.dotnet/sdk/8.0.410/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
