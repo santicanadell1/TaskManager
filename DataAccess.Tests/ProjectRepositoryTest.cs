@@ -148,7 +148,6 @@ public class ProjectRepositoryTest
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
         
-        // Refrescar el proyecto desde la BD para obtener las tareas
         var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
         Assert.IsNotNull(refreshedProject);
         Assert.IsTrue(refreshedProject.Tasks.Any(t => t.Title == "Task 1"));
@@ -166,7 +165,6 @@ public class ProjectRepositoryTest
         };
         _projectRepository.AddTask(project.Name, task);
 
-        // Obtener el ID real del task insertado
         var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
         var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
         
@@ -177,7 +175,6 @@ public class ProjectRepositoryTest
         
         _projectRepository.UpdateTask(project.Name, insertedTask.Id, updatedTask);
 
-        // Verificar cambios
         var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
         var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask.Id);
         
@@ -227,13 +224,11 @@ public class ProjectRepositoryTest
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
 
-        // Obtener el ID real del task
         var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
         var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
 
         _projectRepository.RemoveTask(project.Name, insertedTask.Id);
 
-        // Verificar que la tarea fue removida
         var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
         var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask.Id);
         Assert.IsNull(taskInProject);
@@ -307,14 +302,12 @@ public class ProjectRepositoryTest
         _projectRepository.AddTask(project.Name, task1);
         _projectRepository.AddTask(project.Name, task2);
 
-        // Obtener los IDs reales
         var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
         var insertedTask1 = refreshedProject.Tasks.First(t => t.Title == "Task 1");
         var insertedTask2 = refreshedProject.Tasks.First(t => t.Title == "Task 2");
 
         _projectRepository.AddPreviousTask(project.Name, insertedTask1.Id, insertedTask2);
 
-        // Verificar que se agregó la tarea previa
         var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
         var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask1.Id);
         
@@ -332,14 +325,12 @@ public class ProjectRepositoryTest
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
 
-        // Obtener el ID real del task
         var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
         var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
 
         var resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
         _projectRepository.AddResourceToTask(project.Name, insertedTask.Id, resource);
 
-        // Verificar que se agregó el recurso
         var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
         var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask.Id);
         
