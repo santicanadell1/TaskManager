@@ -39,9 +39,8 @@ public class NotificationService
         var user = _database.users.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
         var notifications = new List<NotificationDTO>();
-        foreach (var notificationId in user.Notifications)
+        foreach (var notification in user.Notifications)
         {
-            var notification = _database.notifications.Get(n => n.Id == notificationId);
             if (notification != null) notifications.Add(FromEntity(notification));
         }
 
@@ -54,14 +53,17 @@ public class NotificationService
         _database.notifications.AddNotification(notification);
         var noti = _database.notifications.Get(n => n.description == notification.description);
         foreach (var user in _database.projects.GetProject(p => p.Name == notification.Project.Name).Members)
+        {
             AddNotificationToUser(user.Email, noti.Id);
+        }
     }
 
     public void AddNotificationToUser(string userEmail, int notificationId)
     {
         var user = _database.users.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
-        user.Notifications.Add(notificationId);
+        Notification notification = _database.notifications.Get(n => n.Id == notificationId);
+        user.Notifications.Add(notification);
         _database.users.Update(user.Email, user);
     }
 
@@ -69,6 +71,7 @@ public class NotificationService
     {
         var user = _database.users.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
-        user.Notifications.Remove(notificationId);
+        Notification notification = _database.notifications.Get(n => n.Id == notificationId);
+        user.Notifications.Remove(notification);
     }
 }

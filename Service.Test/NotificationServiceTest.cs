@@ -118,7 +118,7 @@ public class NotificationServiceTest
         _notificationService.CreateNotification(notificationDTO2);
         var user1 = dataAccess.users.Get(u => u.Email == "Email1@example.com");
         Assert.AreEqual(2, user1.Notifications.Count);
-        _notificationService.RemoveNotificationFromUser(user1.Email, user1.Notifications[0]);
+        _notificationService.RemoveNotificationFromUser(user1.Email, user1.Notifications[0].Id);
         Assert.AreEqual(1, user1.Notifications.Count);
     }
 
