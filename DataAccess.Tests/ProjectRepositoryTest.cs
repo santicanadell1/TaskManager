@@ -97,7 +97,7 @@ public class ProjectRepositoryTest
         _projectRepository.AddProject(project2);
         
         _projectRepository.RemoveProject(project.Name);
-        _projectRepository.RemoveProject(project.Name); g
+        _projectRepository.RemoveProject(project.Name); 
     }
     
     [TestMethod]
