@@ -6,6 +6,7 @@ using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Interface;
 using Service.Models;
+using Task = System.Threading.Tasks.Task;
 
 public class AdminPService : IAdminPService
 {
@@ -150,7 +151,7 @@ public class AdminPService : IAdminPService
     {
         var user = _userRepository.Get(u => u.Email == email);
         var cpmService = new CpmService();
-        var taskService = new TaskService(_taskRepository, cpmService);
+        var taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository,cpmService,_taskRepository);
         var returnList = new List<TaskDTO>();
         foreach (var project in _projectRepository.GetAllProjects())
         {
@@ -169,7 +170,7 @@ public class AdminPService : IAdminPService
         var user = _userRepository.Get(u => u.Email == email);
         if (user.Tasks == null) return new List<TaskDTO>();
         var cpmService = new CpmService();
-        var taskService = new TaskService(_taskRepository, cpmService);
+        var taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository,cpmService,_taskRepository);
         var returnList = new List<TaskDTO>();
         var tasks = taskService.GetTasks(projectName);
         foreach (var task in tasks)
