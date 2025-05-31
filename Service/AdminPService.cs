@@ -32,15 +32,7 @@ public class AdminPService : IAdminPService
         if (existingProject != null) throw new DuplicatedProjectsNameException();
 
         var newProject = ToEntity(projectDTO);
-        if (projectDTO.AdminProyect != null)
-        {
-            var adminFromDb = _userRepository.Get(u => u.Email == projectDTO.AdminProyect.Email);
-            newProject.AdminProject = adminFromDb;
-        }
-        else
-        {
-            newProject.AdminProject = _userRepository.Get(u => u.Email == LoggedUser.Current.Email);
-        }
+        SetProjectAdmin(newProject, projectDTO);
 
         _projectRepository.AddProject(newProject);
     }
@@ -85,7 +77,15 @@ public class AdminPService : IAdminPService
     public void UpdateProject(string projectNameToUpdate, ProjectDTO updatedProjectDTO)
     {
         CheckAdminProyectRole();
-        _projectRepository.UpdateProject(projectNameToUpdate, ToEntity(updatedProjectDTO));
+        var existingProject = _projectRepository.GetProject(p => p.Name == projectNameToUpdate);
+        if (existingProject == null) throw new ProjectNotFoundException();
+
+        var updatedProject = ToEntity(updatedProjectDTO);
+
+        updatedProject.Id = existingProject.Id;
+        SetProjectAdmin(updatedProject, updatedProjectDTO);
+
+        _projectRepository.UpdateProject(projectNameToUpdate, updatedProject);
     }
 
     public List<ProjectDTO> GetAllProjects()
@@ -323,5 +323,18 @@ public class AdminPService : IAdminPService
             }
 
         return roleDTOs;
+    }
+
+    private void SetProjectAdmin(Project project, ProjectDTO projectDTO)
+    {
+        if (projectDTO.AdminProyect != null)
+        {
+            var adminFromDb = _userRepository.Get(u => u.Email == projectDTO.AdminProyect.Email);
+            project.AdminProject = adminFromDb;
+        }
+        else
+        {
+            project.AdminProject = _userRepository.Get(u => u.Email == LoggedUser.Current.Email);
+        }
     }
 }
