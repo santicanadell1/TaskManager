@@ -22,14 +22,15 @@ public class MemberPServiceTest
     private UserRepository _userRepository;
     private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
+    private TaskRepository _taskRepository;
     
 
     [TestInitialize]
     public void Initialize()
     {
-        _memberPService = new MemberPService(_userRepository, _projectRepository, _notificationRepository);;
-        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository,new CpmService());
-        _adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository);;
+        _memberPService = new MemberPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
+        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository,new CpmService(), _taskRepository);
+        _adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
         _login = new Login(_userRepository);
         _userservice = new UserService(_userRepository);
         Admin = new UserDTO
@@ -157,7 +158,7 @@ public class MemberPServiceTest
     [TestMethod]
     public void ChangeTaskStatus_WhenUserIsMember_ThenStateIsUpdated()
     {
-        var adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository);;
+        var adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository,_taskRepository);
         var newState = StateDTO.DONE;
         task = _taskService.GetTask("New Project", 1);
         adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)task.Id);
@@ -203,7 +204,7 @@ public class MemberPServiceTest
         };
         _taskService.AddTask("New Project", task3);
 
-        var adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository);
+        var adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
         var newState = StateDTO.DONE;
         var newTask = _taskService.GetTasks("New Project").Find(t => t.Title == "Task 3");
         adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)newTask.Id);
@@ -213,7 +214,7 @@ public class MemberPServiceTest
     [TestMethod]
     public void ChangeTaskStatus_ShouldChangeState_WhenPreviousTasksAreFinished()
     {
-        var adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository);;
+        var adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
         var task = _taskService.GetTasks("New Project").First();
         adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)task.Id);
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, task, StateDTO.DONE);

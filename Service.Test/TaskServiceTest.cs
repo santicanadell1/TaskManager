@@ -29,12 +29,13 @@ public class TaskServiceTest
     private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
     private UserRepository _userRepository;
+    private TaskRepository _taskRepository;
 
     [TestInitialize]
     public void Setup()
     {
         _cpmService = new CpmService();
-        _taskService = new TaskService(_projectRepository, _notificationRepository,_userRepository, _cpmService);
+        _taskService = new TaskService(_projectRepository, _notificationRepository,_userRepository, _cpmService, _taskRepository);
         _login = new Login(_userRepository);
 
         _genericProject = new Project("Generic Project", "Description", DateTime.Now);

@@ -19,15 +19,16 @@ public class AdminPServiceTests
     private UserRepository _userRepository;
     private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
+    private TaskRepository _taskRepository;
 
 
     [TestInitialize]
     public void Setup()
     {
-        _service = new AdminPService(_userRepository,_projectRepository, _notificationRepository);
+        _service = new AdminPService(_userRepository,_projectRepository, _notificationRepository, _taskRepository);
         _userservice = new UserService(_userRepository);
         _login = new Login(_userRepository);
-        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository, new CpmService());
+        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository, new CpmService(), _taskRepository);
 
         Admin = new UserDTO
         {

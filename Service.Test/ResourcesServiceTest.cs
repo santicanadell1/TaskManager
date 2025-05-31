@@ -18,6 +18,7 @@ public class ResourcesServiceTest
     private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
     private ResourceRepository _resourceRepository;
+    private TaskRepository _taskRepository;
 
     [TestInitialize]
     public void TestSetUp()
@@ -25,8 +26,9 @@ public class ResourcesServiceTest
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
         _resourceService = new ResourceService(_resourceRepository,_projectRepository);
-        _adminProjectService = new AdminPService(_userRepository, _projectRepository, _notificationRepository);;
-        _taskService = new TaskService(_projectRepository, _notificationRepository,_userRepository,new CpmService());
+        _adminProjectService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
+        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, new CpmService(),
+            _taskRepository);
         var adminSUserDTO = new UserDTO
         {
             FirstName = "AdminSystem",

@@ -15,11 +15,12 @@ public class AdminSService_Test
     private UserService _userService;
     private UserRepository _userRepository;
     private ProjectRepository _projectRepository;
+    private TaskRepository _taskRepository;
 
     [TestInitialize]
     public void TestSetUp()
     {
-        _adminService = new AdminSService(_userRepository,_projectRepository);
+        _adminService = new AdminSService(_userRepository,_projectRepository,_taskRepository);
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
 
