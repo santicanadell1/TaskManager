@@ -16,6 +16,7 @@ public class AdminSService_Test
     private UserRepository _userRepository;
     private ProjectRepository _projectRepository;
     private TaskRepository _taskRepository;
+    private ResourceRepository _resourceRepository;
 
     [TestInitialize]
     public void TestSetUp()
@@ -26,11 +27,12 @@ public class AdminSService_Test
         _userRepository = new UserRepository(_context);
         _projectRepository = new ProjectRepository(_context);
         _taskRepository = new TaskRepository(_context);
+        _resourceRepository = new ResourceRepository(_context);
         
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
         
-        _adminService = new AdminSService(_userRepository,_projectRepository,_taskRepository);
+        _adminService = new AdminSService(_userRepository,_projectRepository,_taskRepository, _resourceRepository);
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
 

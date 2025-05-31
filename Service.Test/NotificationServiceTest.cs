@@ -16,12 +16,14 @@ public class NotificationServiceTest
     private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
     private TaskRepository _taskRepository;
+    private ResourceRepository _resourceRepository;
 
     [TestInitialize]
     public void SetUp()
     {
-        _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
-        _adminService = new AdminPService(_userRepository, _projectRepository,_notificationRepository, _taskRepository);
+        _userRepository = new UserRepository(dataAccess);
+        _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository, _taskRepository, _resourceRepository);
+        _adminService = new AdminPService(_userRepository, _projectRepository,_notificationRepository, _taskRepository, _resourceRepository);
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
         CreateAndAddUsers();

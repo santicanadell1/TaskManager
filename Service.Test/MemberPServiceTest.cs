@@ -23,6 +23,7 @@ public class MemberPServiceTest
     private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
     private TaskRepository _taskRepository;
+    private ResourceRepository _resourceRepository;
     
 
     [TestInitialize]
@@ -38,13 +39,14 @@ public class MemberPServiceTest
         _projectRepository = new ProjectRepository(_context);
         _notificationRepository = new NotificationRepository(_context);
         _taskRepository = new TaskRepository(_context);
+        _resourceRepository = new ResourceRepository(_context);
         
-        _memberPService = new MemberPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
+        _memberPService = new MemberPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository, _resourceRepository);
         
         CpmService cpmService = new CpmService();
         
-        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository,cpmService, _taskRepository);
-        _adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
+        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository,cpmService, _taskRepository, _resourceRepository);
+        _adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository, _resourceRepository);
         _login = new Login(_userRepository);
         _userservice = new UserService(_userRepository);
         
@@ -228,7 +230,7 @@ public class MemberPServiceTest
         };
         _taskService.AddTask("New Project", task3);
 
-        var adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
+        var adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository, _resourceRepository);;
         var newState = StateDTO.DONE;
         var newTask = _taskService.GetTasks("New Project").Find(t => t.Title == "Task 3");
         adminPService.AddTaskToMember("New Project", UserDTO.Email, (int)newTask.Id);
