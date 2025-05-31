@@ -75,4 +75,12 @@ public class TaskRepositoryTest
         Assert.AreEqual("Description3", found.Description);
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(TaskNotFoundException))]
+    public void Update_ThrowsTaskNotFoundException_WhenUpdatedTaskIsNull()
+    {
+        _taskRepository.Update(1,_task);
+    }
+
+
 }
