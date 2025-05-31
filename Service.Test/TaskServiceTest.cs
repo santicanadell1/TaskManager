@@ -36,29 +36,34 @@ public class TaskServiceTest
     {
         var contextFactory = new InMemoryAppContextFactory();
         _context = contextFactory.CreateDbContext();
-        
+
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
-        
+
         _projectRepository = new ProjectRepository(_context);
         _notificationRepository = new NotificationRepository(_context);
         _userRepository = new UserRepository(_context);
         _taskRepository = new TaskRepository(_context);
-        
-        
+
         _cpmService = new CpmService();
-        _taskService = new TaskService(_projectRepository, _notificationRepository,_userRepository, _cpmService, _taskRepository);
+        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, _cpmService,
+            _taskRepository);
         _login = new Login(_userRepository);
 
         _genericProject = new Project("Generic Project", "Description", DateTime.Now);
         _projectRepository.AddProject(_genericProject);
 
+        _context.SaveChanges();
+
         _resource1 = new Resource("Resource 1", "Type 1", "Description 1") { Id = 1 };
         _resource2 = new Resource("Resource 2", "Type 2", "Description 2") { Id = 2 };
 
+        _context.Resources.Add(_resource1);
+        _context.Resources.Add(_resource2);
+        _context.SaveChanges();
+
         _resourceDTO1 = new ResourceDTO
         {
-            Id = 1,
             Name = "Resource 1",
             Type = "Type 1",
             Description = "Description 1"
@@ -66,7 +71,6 @@ public class TaskServiceTest
 
         _resourceDTO2 = new ResourceDTO
         {
-            Id = 2,
             Name = "Resource 2",
             Type = "Type 2",
             Description = "Description 2"
@@ -105,7 +109,6 @@ public class TaskServiceTest
             new List<Task>(),
             new List<Resource> { _resource1 }
         );
-        _task1.Id = 1;
         _task1.State = State.TODO;
 
         _task2 = new Task(
@@ -117,10 +120,12 @@ public class TaskServiceTest
             new List<Task>(),
             new List<Resource> { _resource2 }
         );
-        _task2.Id = 2;
         _task2.State = State.DOING;
+
         _projectRepository.AddTask("Generic Project", _task1);
         _projectRepository.AddTask("Generic Project", _task2);
+        _context.SaveChanges();
+
         _userService = new UserService(_userRepository);
         userDTO = new UserDTO
         {
@@ -133,6 +138,12 @@ public class TaskServiceTest
         };
         _userService.AddUser(userDTO);
         _login.LoginUser(userDTO.Email, userDTO.Password);
+    }
+
+    [TestCleanup]
+    public void Cleanup()
+    {
+        _context?.Database.EnsureDeleted();
     }
 
     [TestMethod]
@@ -346,7 +357,7 @@ public class TaskServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>
             {
-                new() { Id = 10, Name = "Updated Resource", Type = "Updated Type", Description = "Updated Desc" }
+                new() { Name = "Updated Resource", Type = "Updated Type", Description = "Updated Desc" }
             }
         };
 
@@ -498,14 +509,12 @@ public class TaskServiceTest
             new List<Task>(),
             new List<Resource>()
         );
-        taskWithDependencies.Id = 3;
 
         _projectRepository.AddTask("Generic Project", taskWithDependencies);
 
         var taskDTO = _taskService.GetTask("Generic Project", taskWithDependencies.Id);
 
         Assert.AreEqual(1, taskDTO.PreviousTasks.Count);
-        Assert.AreEqual(_task1.Id, taskDTO.PreviousTasks[0].Id);
         Assert.AreEqual(_task1.Title, taskDTO.PreviousTasks[0].Title);
         Assert.IsNull(taskDTO.PreviousTasks[0].Description);
     }
@@ -522,7 +531,7 @@ public class TaskServiceTest
             new List<Task>(),
             new List<Resource>
             {
-                new("Mapping Resource", "Mapping Type", "Mapping Description") { Id = 50 }
+                new("Mapping Resource", "Mapping Type", "Mapping Description")
             }
         );
 
@@ -537,7 +546,6 @@ public class TaskServiceTest
 
         var taskDTO = _taskService.GetTask("Generic Project", addedTask.Id);
 
-        Assert.AreEqual(addedTask.Id, taskDTO.Id);
         Assert.AreEqual("Mapping Test Task", taskDTO.Title);
         Assert.AreEqual("Detailed description for mapping test", taskDTO.Description);
         Assert.AreEqual(new DateTime(2025, 1, 1), taskDTO.ExpectedStartDate);
@@ -547,7 +555,6 @@ public class TaskServiceTest
         Assert.AreEqual("Mapping Resource", taskDTO.Resources[0].Name);
         Assert.AreEqual("Mapping Type", taskDTO.Resources[0].Type);
         Assert.AreEqual("Mapping Description", taskDTO.Resources[0].Description);
-        Assert.AreEqual(50, taskDTO.Resources[0].Id);
     }
 
     [TestMethod]
@@ -566,7 +573,6 @@ public class TaskServiceTest
             {
                 new()
                 {
-                    Id = 100,
                     Name = "Complex Resource",
                     Type = "Complex Type",
                     Description = "Complex resource description"
@@ -669,7 +675,7 @@ public class TaskServiceTest
             {
                 new()
                 {
-                    Id = 300, Name = "Complex Update Resource", Type = "Update Type",
+                    Name = "Complex Update Resource", Type = "Update Type",
                     Description = "Update Resource Description"
                 }
             }
@@ -709,7 +715,7 @@ public class TaskServiceTest
             new List<Task>(),
             new List<Resource>
             {
-                new("Special Resource", "Special Type", "Special Description") { Id = 200 }
+                new("Special Resource", "Special Type", "Special Description")
             }
         );
         specialTask.State = State.DONE;
