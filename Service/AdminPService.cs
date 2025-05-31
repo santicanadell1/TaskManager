@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
+using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service;
 using Service.Exceptions.AdminPServiceExceptions;
@@ -129,14 +130,19 @@ public class AdminPService : IAdminPService
     public void AddTaskToMember(string projectName, string memberEmail, int taskID)
     {
         CheckAdminProyectRole();
-        var project = GetProjectByName(projectName);
         var projectEntity = _projectRepository.GetProject(p => p.Name == projectName);
-        if (project.Members.Find(m => m.Email == memberEmail) == null) throw new UserIsNotAMemberException();
+        if (projectEntity == null) throw new ProjectNotFoundException();
 
-        if (projectEntity.Tasks.Find(m => m.Id == taskID) == null) throw new TaskIsNotFromTheProjectException();
+        if (projectEntity.Members == null || !projectEntity.Members.Any(m => m.Email == memberEmail))
+            throw new UserIsNotAMemberException();
+
+        if (projectEntity.Tasks == null || !projectEntity.Tasks.Any(t => t.Id == taskID))
+            throw new TaskIsNotFromTheProjectException();
 
         var userEntity = _userRepository.Get(u => u.Email == memberEmail);
-        var task = projectEntity.Tasks.Find(m => m.Id == taskID);
+        if (userEntity == null) throw new UserNotFoundException();
+
+        var task = projectEntity.Tasks.Find(t => t.Id == taskID);
         userEntity.AddTask(task);
         _userRepository.Update(memberEmail, userEntity);
     }
@@ -144,14 +150,19 @@ public class AdminPService : IAdminPService
     public void RemoveTaskFromMember(string projectName, string memberEmail, int taskID)
     {
         CheckAdminProyectRole();
-        var project = GetProjectByName(projectName);
         var projectEntity = _projectRepository.GetProject(p => p.Name == projectName);
-        if (project.Members.Find(m => m.Email == memberEmail) == null) throw new UserIsNotAMemberException();
+        if (projectEntity == null) throw new ProjectNotFoundException();
 
-        if (projectEntity.Tasks.Find(m => m.Id == taskID) == null) throw new TaskIsNotFromTheProjectException();
+        if (projectEntity.Members == null || !projectEntity.Members.Any(m => m.Email == memberEmail))
+            throw new UserIsNotAMemberException();
+
+        if (projectEntity.Tasks == null || !projectEntity.Tasks.Any(t => t.Id == taskID))
+            throw new TaskIsNotFromTheProjectException();
 
         var userEntity = _userRepository.Get(u => u.Email == memberEmail);
-        var task = projectEntity.Tasks.Find(m => m.Id == taskID);
+        if (userEntity == null) throw new UserNotFoundException();
+
+        var task = projectEntity.Tasks.Find(t => t.Id == taskID);
         userEntity.RemoveTask(task);
         _userRepository.Update(memberEmail, userEntity);
     }
