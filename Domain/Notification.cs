@@ -7,7 +7,7 @@ public class Notification
     public string description;
     private Project project;
     public bool read;
-    public int Id { get; set; }
+    public int? Id { get; set; }
     
     public Notification(bool read, string description, Project project)
     {
@@ -15,6 +15,8 @@ public class Notification
         Description = description;
         Project = project;
     }
+    
+    public Notification(){}
 
     public bool Read
     {

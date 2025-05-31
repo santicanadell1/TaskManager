@@ -11,11 +11,13 @@ namespace Service;
 
 public class ResourceService : IResourceService
 {
-    private readonly InMemoryDatabase _database;
+    private readonly ResourceRepository _resourceRepository;
+    private readonly ProjectRepository _projectRepository;
 
-    public ResourceService(InMemoryDatabase database)
+    public ResourceService(ResourceRepository resourceRepository, ProjectRepository projectRepository)
     {
-        _database = database;
+        _projectRepository = projectRepository;
+        _resourceRepository = resourceRepository;
     }
 
     public void AddResource(ResourceDTO resourceDTO)
@@ -23,7 +25,7 @@ public class ResourceService : IResourceService
         if (isAdminSystem())
         {
             var resource = ToEntity(resourceDTO);
-            _database.resources.AddResource(resource);
+            _resourceRepository.AddResource(resource);
         }
         else
         {
@@ -33,7 +35,7 @@ public class ResourceService : IResourceService
 
     public ResourceDTO Get(int? id)
     {
-        var resource = _database.resources.Get(r => r.Id == id);
+        var resource = _resourceRepository.Get(r => r.Id == id);
 
         if (resource == null) throw new ResourceNotFoundException();
 
@@ -44,7 +46,7 @@ public class ResourceService : IResourceService
     {
         List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
 
-        foreach (var resource in _database.resources.GetAll()) resourcesDTO.Add(FromEntity(resource));
+        foreach (var resource in _resourceRepository.GetAll()) resourcesDTO.Add(FromEntity(resource));
 
         if (resourcesDTO.Count == 0) throw new NoResourcesFoundException();
 
@@ -58,7 +60,7 @@ public class ResourceService : IResourceService
 
         var updatedResource = ToEntity(updatedResourceDTO);
 
-        _database.resources.Update(id, updatedResource);
+        _resourceRepository.Update(id, updatedResource);
     }
 
     public void DeleteResource(int? id)
@@ -66,7 +68,7 @@ public class ResourceService : IResourceService
         isAbleToModifyResource(GetResourceObject(id));
         try
         {
-            _database.resources.Delete(id);
+            _resourceRepository.Delete(id);
         }
         catch (Exception ex)
         {
@@ -76,7 +78,7 @@ public class ResourceService : IResourceService
 
     private Resource GetResourceObject(int? id)
     {
-        var resource = _database.resources.Get(r => r.Id == id);
+        var resource = _resourceRepository.Get(r => r.Id == id);
 
         if (resource == null) throw new ResourceNotFoundException();
 
@@ -125,7 +127,7 @@ public class ResourceService : IResourceService
 
     private List<Project> GetProjectsThatAreUsingResource(Resource resource)
     {
-        var projects = _database.projects.GetAllProjects();
+        var projects = _projectRepository.GetAllProjects();
         List<Project> projectsThatAreUsingResource = new List<Project>();
         foreach (var project in projects)
         foreach (var task in project.Tasks)

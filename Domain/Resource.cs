@@ -15,6 +15,8 @@ public class Resource
         Type = type;
         Description = description;
     }
+    
+    public Resource(){}
 
     public string Name
     {

@@ -11,17 +11,21 @@ namespace Service;
 public class TaskService
 {
     private readonly CpmService _cpmService;
-    private readonly InMemoryDatabase _database;
+    private readonly ProjectRepository _projectRepository;
+    private readonly UserRepository _userRepository;
+    private readonly NotificationRepository _notificationRepository;
 
-    public TaskService(InMemoryDatabase database, CpmService cpmService)
+    public TaskService(ProjectRepository projectRepository, NotificationRepository notificationRepository, UserRepository userRepository,CpmService cpmService)
     {
-        _database = database;
+        _projectRepository = projectRepository;
+        _notificationRepository = notificationRepository;
+        _userRepository = userRepository;
         _cpmService = cpmService;
     }
 
     public void AddTask(string projectName, TaskDTO taskDTO)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         if (taskDTO.ExpectedStartDate.AddDays(1) <= project.StartDate)
@@ -55,29 +59,29 @@ public class TaskService
             ToResourceEntityList(taskDTO.Resources)
         );
 
-        _database.projects.AddTask(projectName, task);
+        _projectRepository.AddTask(projectName, task);
 
         RecalculateCriticalPath(projectName);
     }
 
     public void DeleteTask(string projectName, int? taskId)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) throw new TaskNotFoundException();
 
-        _database.projects.RemoveTask(projectName, task.Id);
+        _projectRepository.RemoveTask(projectName, task.Id);
 
         RecalculateCriticalPath(projectName);
     }
 
     public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
     {
-        var _notificationService = new NotificationService(_database);
-        var projectService = new AdminPService(_database);
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository);;
+        var projectService = new AdminPService(_userRepository,_projectRepository,_notificationRepository);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -114,7 +118,7 @@ public class TaskService
 
         updatedTask.State = (State)taskDTO.State;
 
-        _database.projects.UpdateTask(projectName, taskId, updatedTask);
+        _projectRepository.UpdateTask(projectName, taskId, updatedTask);
 
         RecalculateCriticalPath(projectName);
         var cpmResult = GetCriticalPath(projectName);
@@ -132,7 +136,7 @@ public class TaskService
 
     public List<TaskDTO> GetTasks(string projectName)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var taskDTOs = project.Tasks.Select(t => new TaskDTO
@@ -174,7 +178,7 @@ public class TaskService
 
     public TaskDTO GetTask(string projectName, int? taskId)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -185,7 +189,7 @@ public class TaskService
 
     public CpmResultDTO GetCriticalPath(string projectName)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var cpmResult = _cpmService.CalculateCriticalPath(GetTasks(projectName));
@@ -202,7 +206,7 @@ public class TaskService
 
     private void RecalculateCriticalPath(string projectName)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null || project.Tasks.Count == 0) return;
 
         try

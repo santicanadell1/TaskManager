@@ -1,5 +1,6 @@
 ﻿using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 using Task = Domain.Task;
 using TaskRepositoryExceptions = DataAccess.Exceptions.TaskRepositoryExceptions;
 
@@ -7,107 +8,146 @@ namespace DataAccess;
 
 public class ProjectRepository
 {
-    private static int _nextIdTask;
-    private List<Project> _projects;
+    protected readonly AppDbContext _db;
 
-    public ProjectRepository()
+    public ProjectRepository(AppDbContext db)
     {
-        Projects = new List<Project>();
-        _nextIdTask = 1;
+        _db = db;
     }
-
-    public List<Project> Projects { get; set; }
 
     public void AddProject(Project project)
     {
-        if (Projects.Any(p => p.Name == project.Name)) throw new DuplicatedProjectsNameException();
-
-        Projects.Add(project);
+        if (_db.Set<Project>().Any(p => p.Name == project.Name)) 
+            throw new DuplicatedProjectsNameException();
+        
+        _db.Set<Project>().Add(project);
+        _db.SaveChanges();
     }
 
     public List<Project> GetAllProjects()
     {
-        return Projects;
+        return _db.Set<Project>()
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.Resources)
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.PreviousTasks)
+            .ToList();
     }
 
     public Project? GetProject(Func<Project, bool> filter)
     {
-        return Projects.FirstOrDefault(filter);
+        return _db.Set<Project>()
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.Resources)
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.PreviousTasks)
+            .FirstOrDefault(filter);
     }
 
     public void RemoveProject(string name)
     {
-        if (!Projects.Any(p => p.Name == name)) throw new ProjectNotFoundException();
+        var project = _db.Set<Project>()
+            .Include(p => p.Tasks)
+            .FirstOrDefault(p => p.Name == name);
+            
+        if (project == null) throw new ProjectNotFoundException();
 
-        Projects.Remove(Projects.Find(p => p.Name == name));
+        _db.Set<Project>().Remove(project);
+        _db.SaveChanges();
     }
 
     public void UpdateProject(string name, Project project)
     {
-        if (Projects.Any(p => p.Name == project.Name) && project.Name != name)
+        if (_db.Set<Project>().Any(p => p.Name == project.Name) && project.Name != name)
             throw new DuplicatedProjectsNameException();
 
-        if (!Projects.Any(p => p.Name == name)) throw new ProjectNotFoundException();
+        var existingProject = _db.Set<Project>().FirstOrDefault(p => p.Name == name);
+        if (existingProject == null) throw new ProjectNotFoundException();
 
-        var index = Projects.FindIndex(p => p.Name == name);
-        Projects[index] = project;
+        existingProject.Description = project.Description;
+        existingProject.Name = project.Name; 
+        _db.SaveChanges(); 
     }
 
-    public void AddTask(string projectName, Task task)
+public void AddTask(string projectName, Task task)
     {
-        var project = Projects.FirstOrDefault(p => p.Name == projectName);
+        var project = _db.Set<Project>()
+            .Include(p => p.Tasks)
+            .FirstOrDefault(p => p.Name == projectName);
+            
         if (project == null) throw new ProjectNotFoundException();
 
-        if (project.Tasks == null) project.Tasks = new List<Task>();
-
-        if (project.Tasks.Any(t => t.Id == task.Id))
-            throw new TaskRepositoryExceptions.TaskAlreadyExistsException(
-                $"Task with ID {task.Id} already exists in project {projectName}.");
-
-        task.Id = _nextIdTask++;
         project.Tasks.Add(task);
+        _db.SaveChanges();
     }
-
 
     public void UpdateTask(string projectName, int? taskId, Task updatedTask)
     {
-        var project = Projects.FirstOrDefault(p => p.Name == projectName);
+        var project = _db.Set<Project>()
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.Resources)
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.PreviousTasks)
+            .FirstOrDefault(p => p.Name == projectName);
+            
         if (project == null) throw new ProjectNotFoundException();
 
-        var index = project.Tasks.FindIndex(t => t.Id == taskId);
-        if (index == -1) throw new TaskRepositoryExceptions.TaskNotFoundException();
+        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
-        project.Tasks[index] = updatedTask;
+        task.Title = updatedTask.Title;
+        task.Description = updatedTask.Description;
+        task.State = updatedTask.State;
+        task.Duration = updatedTask.Duration;
+        task.ExpectedStartDate = updatedTask.ExpectedStartDate;
+        task.PreviousTasks = updatedTask.PreviousTasks;
+        task.SameTimeTasks = updatedTask.SameTimeTasks;
+        task.Resources = updatedTask.Resources;
+        
+        _db.SaveChanges();
     }
 
     public void RemoveTask(string projectName, int? taskId)
     {
-        var project = Projects.FirstOrDefault(p => p.Name == projectName);
+        var project = _db.Set<Project>()
+            .Include(p => p.Tasks)
+            .FirstOrDefault(p => p.Name == projectName);
+            
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         project.Tasks.Remove(task);
+        _db.SaveChanges();
     }
 
     public void AddPreviousTask(string projectName, int? taskId, Task previousTask)
     {
-        var project = Projects.FirstOrDefault(p => p.Name == projectName);
+        var project = _db.Set<Project>()
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.PreviousTasks)
+            .FirstOrDefault(p => p.Name == projectName);
+            
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
-
-        if (!project.Tasks.Contains(previousTask)) throw new TaskRepositoryExceptions.TaskNotFoundException();
+        if (!project.Tasks.Contains(previousTask)) 
+            throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         task.AddPreviousTask(previousTask);
+        _db.SaveChanges();
     }
 
     public void AddResourceToTask(string projectName, int? taskId, Resource resource)
     {
-        var project = Projects.FirstOrDefault(p => p.Name == projectName);
+        var project = _db.Set<Project>()
+            .Include(p => p.Tasks)
+                .ThenInclude(t => t.Resources)
+            .FirstOrDefault(p => p.Name == projectName);
+            
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -116,5 +156,6 @@ public class ProjectRepository
         if (task.Resources == null) task.Resources = new List<Resource>();
 
         task.Resources.Add(resource);
+        _db.SaveChanges();
     }
 }

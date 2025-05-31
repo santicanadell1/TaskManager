@@ -8,14 +8,17 @@ using Service.Models;
 
 public class AdminSService : IAdminSService
 {
-    private readonly InMemoryDatabase _database;
+    private readonly UserRepository _userRepository;
+    private readonly ProjectRepository _projectRepository;
     private readonly PasswordManager _passwordManager = new();
     private readonly UserService _userService;
+    private readonly NotificationRepository _notificationRepository;
 
-    public AdminSService(InMemoryDatabase database)
+public AdminSService(UserRepository userRepository, ProjectRepository projectRepository)
     {
-        _database = database;
-        _userService = new UserService(_database);
+        _userRepository = userRepository;
+        _projectRepository = projectRepository;
+        _userService = new UserService(_userRepository);
     }
 
     public void CreateUser(UserDTO userDTO)
@@ -27,13 +30,13 @@ public class AdminSService : IAdminSService
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
-        var adminPService = new AdminPService(_database);
+        var adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository);
         var user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
         var projects = adminPService.GetAllProjectsForUser(userDTO.Email);
         foreach (var project in projects) adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
-        _database.users.Delete(user.Email);
+        _userRepository.Delete(user.Email);
     }
 
     public void ChangePassword(string email, string newPassword, string oldPassword)

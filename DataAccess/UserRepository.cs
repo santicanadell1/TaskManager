@@ -1,46 +1,96 @@
 ﻿using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
 
 public class UserRepository
 {
-    private readonly List<User> _users;
+    protected readonly AppDbContext _db;
 
-    public UserRepository()
+    public UserRepository(AppDbContext db)
     {
-        _users = new List<User>();
+        _db = db;
     }
 
     public List<User> GetAll()
     {
-        return _users.ToList();
+        return _db.Set<User>().ToList();
     }
 
     public void AddUser(User user)
     {
-        if (_users.Any(u => u.Email == user.Email)) throw new UserEmailIsDuplicatedException();
-        _users.Add(user);
+        if (user == null) throw new UserNotFoundException();
+        validateDuplicateEmail(user.Email);
+        
+        try
+        {
+            _db.Set<User>().Add(user);
+            _db.SaveChanges();
+        }
+        catch (Exception)
+        {
+            throw new UserNotFoundException();
+        }
+    }
+
+    private void validateDuplicateEmail(string email)
+    {
+        if (_db.Set<User>().ToList().Any(u => u.Email == email))
+        {
+            throw new UserEmailIsDuplicatedException();
+        }
     }
 
     public User? Get(Func<User, bool> filter)
     {
-        return _users.FirstOrDefault(filter);
+        return _db.Set<User>().FirstOrDefault(filter);
     }
 
-    public void Update(string email, User user)
+    public void Update(string email, User updatedUser)
     {
-        if (!_users.Any(u => u.Email == email)) throw new UserNotFoundException();
-        if (_users.Any(u => u.Email == user.Email) && user.Email != email) throw new UserEmailIsDuplicatedException();
-        var index = _users.FindIndex(u => u.Email == email);
+        if (updatedUser == null)
+        {
+            throw new UserNotFoundException();
+        }
 
-        _users[index] = user;
+        var existingUser = _db.Users.Find(email);
+
+        if (existingUser == null)
+        {
+            throw new UserNotFoundException();
+        }
+        
+
+        existingUser.FirstName = updatedUser.FirstName;
+        existingUser.LastName = updatedUser.LastName;
+        existingUser.Password = updatedUser.Password;
+        existingUser.Roles = updatedUser.Roles;
+        existingUser.Tasks = updatedUser.Tasks;
+        existingUser.Notifications = updatedUser.Notifications;
+
+        try
+        {
+            _db.SaveChanges();
+        }
+        catch (DbUpdateException)
+        {
+            throw new UserNotFoundException();
+        }
     }
+
 
     public void Delete(string email)
     {
-        var index = _users.FindIndex(u => u.Email == email);
-        if (index == -1) throw new UserNotFoundException();
-        _users.RemoveAt(index);
+        try
+        {
+            var existingUser = _db.Users.Find(email);
+            _db.Set<User>().Remove(existingUser);
+            _db.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            throw new UserNotFoundException();
+        }
     }
 }

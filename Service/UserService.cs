@@ -4,25 +4,24 @@ using Domain;
 using Service.Exceptions.UserServiceExceptions;
 using Service.Interface;
 using Service.Models;
-using Task = Domain.Task;
 
 namespace Service;
 
 public class UserService : IUserService
 {
-    private readonly InMemoryDatabase _database;
+    private readonly UserRepository _userRepository;
     private readonly PasswordManager _passwordManager = new();
 
-    public UserService(InMemoryDatabase database)
+    public UserService(UserRepository userRepository)
     {
-        _database = database;
+        _userRepository = userRepository;
     }
 
     public void AddUser(UserDTO userDTO)
     {
-        if (_database.users.GetAll().Count == 0) userDTO.Roles.Add(RolDTO.AdminSystem);
+        if (_userRepository.GetAll().Count == 0) userDTO.Roles.Add(RolDTO.AdminSystem);
         ValidateUserEmailAndPassword(userDTO);
-        _database.users.AddUser(ToEntity(userDTO));
+        _userRepository.AddUser(ToEntity(userDTO));
     }
 
     public void UpdateUser(UserDTO userDTO)
@@ -34,15 +33,15 @@ public class UserService : IUserService
         user.Roles = ConvertToDomainRoles(userDTO.Roles);
         user.Birthday = userDTO.Birthday;
         user.Password = userDTO.Password;
-        user.Tasks = getTasksEntity(userDTO.Tasks);
-        _database.users.Update(user.Email, user);
+        user.Tasks = userDTO.Tasks;
+        _userRepository.Update(user.Email, user);
     }
 
     public List<UserDTO> GetUsers()
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (var user in _database.users.GetAll()) usersDTO.Add(FromEntity(user));
+        foreach (var user in _userRepository.GetAll()) usersDTO.Add(FromEntity(user));
 
         if (usersDTO.Count == 0) throw new NoUsersFoundException();
 
@@ -51,7 +50,7 @@ public class UserService : IUserService
 
     public UserDTO GetUser(string email)
     {
-        var user = _database.users.Get(user => user.Email == email);
+        var user = _userRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
         return FromEntity(user);
@@ -60,7 +59,7 @@ public class UserService : IUserService
 
     private void ValidateUserEmailAndPassword(UserDTO userDTO)
     {
-        foreach (var user in _database.users.GetAll())
+        foreach (var user in _userRepository.GetAll())
             if (user.Email == userDTO.Email)
                 throw new InvalidUserEmailException();
 
@@ -77,63 +76,13 @@ public class UserService : IUserService
             Password = _passwordManager.HashPassword(userDTO.Password),
             Birthday = userDTO.Birthday,
             Roles = ConvertToDomainRoles(userDTO.Roles),
-            Tasks = getTasksEntity(userDTO.Tasks)
+            Tasks = userDTO.Tasks
         };
     }
 
-    private List<Task> getTasksEntity(List<TaskDTO> tasks)
-    {
-        List<Task> ret = new List<Task>();
-        if (tasks == null) return ret;
-    
-        foreach (var task in tasks)
-        {
-            ret.Add(ToEntityTask(task));
-        }
-
-        return ret;
-    }
-
-    private Task ToEntityTask(TaskDTO taskDTO)
-    {
-        return new Task(
-            taskDTO.Title,
-            taskDTO.Description,
-            taskDTO.ExpectedStartDate,
-            taskDTO.Duration,
-            ToEntityList(taskDTO.PreviousTasks),
-            ToEntityList(taskDTO.SameTimeTasks),
-            ToResourceEntityList(taskDTO.Resources)
-        );
-    }
-
-    private List<Task> ToEntityList(List<TaskDTO> taskDTOs)
-    {
-        if (taskDTOs == null) return new List<Task>();
-
-        var tasks = new List<Task>();
-        foreach (var taskDTO in taskDTOs)
-        {
-            tasks.Add(ToEntityTask(taskDTO));
-        }
-
-        return tasks;
-    }
-
-    private List<Resource> ToResourceEntityList(List<ResourceDTO> resourceDTOs)
-    {
-        if (resourceDTOs == null) return new List<Resource>();
-
-        var resources = new List<Resource>();
-        foreach (var resourceDTO in resourceDTOs)
-            resources.Add(new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
-                { Id = resourceDTO.Id });
-
-        return resources;
-    }
     private User GetUserObject(string email)
     {
-        var user = _database.users.Get(user => user.Email == email);
+        var user = _userRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
         return user;
@@ -149,7 +98,7 @@ public class UserService : IUserService
             Roles = ConvertToDTORoles(user.Roles),
             Password = user.Password,
             Birthday = user.Birthday,
-            Tasks = FromEntityList(user.Tasks)
+            Tasks = user.Tasks
         };
     }
 
@@ -194,71 +143,4 @@ public class UserService : IUserService
 
         return roleDTOs;
     }
-
-    private List<TaskDTO> FromEntityList(List<Task> tasks)
-    {
-        List<TaskDTO> taskDTOs = new List<TaskDTO>();
-        foreach (var task in tasks) taskDTOs.Add(FromEntityTask(task));
-        return taskDTOs;
-    }
-    private TaskDTO FromEntityTask(Task task)
-    {
-        return new TaskDTO
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description,
-            ExpectedStartDate = task.ExpectedStartDate,
-            Duration = task.Duration,
-            PreviousTasks = ToTaskDTOList(task.PreviousTasks),
-            SameTimeTasks = ToTaskDTOList(task.SameTimeTasks),
-            State = (StateDTO)task.State,
-            Resources = FromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
-            IsCritical = task.IsCritical,
-            StartDate = task.StartDate,
-            EndDate = task.EndDate,
-            LatestStart = task.LatestStart,
-            LatestFinish = task.LatestFinish,
-            Slack = task.Slack
-        };
-    }
-
-    private List<TaskDTO> ToTaskDTOList(List<Task> tasks)
-    {
-        if (tasks == null) return new List<TaskDTO>();
-
-        return tasks.Select(task => new TaskDTO
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description,
-            ExpectedStartDate = task.ExpectedStartDate,
-            Duration = task.Duration,
-            PreviousTasks = ToTaskDTOList(task.PreviousTasks),
-            SameTimeTasks = ToTaskDTOList(task.SameTimeTasks),
-            State = (StateDTO)task.State,
-            Resources = FromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
-            IsCritical = task.IsCritical,
-            StartDate = task.StartDate,
-            EndDate = task.EndDate,
-            LatestStart = task.LatestStart,
-            LatestFinish = task.LatestFinish,
-            Slack = task.Slack
-        }).ToList();
-    }
-    private List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
-    {
-        var resourceDTOs = new List<ResourceDTO>();
-        foreach (var resource in resources)
-            resourceDTOs.Add(new ResourceDTO
-            {
-                Name = resource.Name,
-                Type = resource.Type,
-                Description = resource.Description,
-                Id = resource.Id
-            });
-
-        return resourceDTOs;
-    }
-
 }

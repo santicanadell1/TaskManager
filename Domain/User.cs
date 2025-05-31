@@ -73,7 +73,7 @@ public class User
             password = string.IsNullOrWhiteSpace(value) ? throw new UserPasswordException() : value;
     }
 
-    public List<int> Notifications { get; set; } = new();
+    public List<int?> Notifications { get; set; } = new();
 
     public List<Rol> Roles
     {
@@ -95,6 +95,16 @@ public class User
             tasks = value;
         }
     }
+    
+    public string? Id
+    {
+        get => Email;  
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value)) throw new UserEmailException();
+            Email = value;  
+        }
+    }  
 
     private bool IsValidEmail(string email)
     {
@@ -130,7 +140,7 @@ public class User
         tasks.Remove(task);
     }
 
-    public void AddNotification(int notificationId)
+    public void AddNotification(int? notificationId)
     {
         Notifications.Add(notificationId);
     }

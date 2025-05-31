@@ -8,16 +8,15 @@ namespace Service.Test;
 [TestClass]
 public class UserServiceTest
 {
+    private UserRepository _userRepository;
     [TestMethod]
     [ExpectedException(typeof(InvalidUserEmailException))]
     public void AddUser_ShouldThrowException_WhenEmailIsNotUnique()
     {
         var rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
-
-        var userRepository = new UserRepository();
-
-        var _userService = new UserService(new InMemoryDatabase());
+        
+        var _userService = new UserService(_userRepository);
 
         var userDTO1 = new UserDTO
         {
@@ -48,8 +47,7 @@ public class UserServiceTest
     [ExpectedException(typeof(UserNotFoundException))]
     public void UpdateUser_ShouldThrowException_WhenUserDoesNotExist()
     {
-        var userRepository = new UserRepository();
-        var userService = new UserService(new InMemoryDatabase());
+        var userService = new UserService(_userRepository);
         var rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
 
@@ -69,8 +67,7 @@ public class UserServiceTest
     [ExpectedException(typeof(NoUsersFoundException))]
     public void GetUsers_ShouldThrowException_WhenNoUsersExist()
     {
-        var userRepository = new UserRepository();
-        var userService = new UserService(new InMemoryDatabase());
+        var userService = new UserService(_userRepository);
 
         userService.GetUsers();
     }
@@ -80,8 +77,7 @@ public class UserServiceTest
     [ExpectedException(typeof(UserNotFoundException))]
     public void GetUser_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
     {
-        var userRepository = new UserRepository();
-        var userService = new UserService(new InMemoryDatabase());
+        var userService = new UserService(_userRepository);
 
         userService.GetUser("nonexistent.user@example.com");
     }
@@ -100,7 +96,7 @@ public class UserServiceTest
             Roles = rols
         };
 
-        var userService = new UserService(new InMemoryDatabase());
+        var userService = new UserService(_userRepository);
 
 
         userService.AddUser(userDTO);
@@ -125,7 +121,7 @@ public class UserServiceTest
             Roles = rols
         };
 
-        var userService = new UserService(new InMemoryDatabase());
+        var userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         var updatedUserDTO = new UserDTO

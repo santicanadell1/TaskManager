@@ -1,10 +1,10 @@
 using DataAccess;
 using Interface.Components;
+using Microsoft.EntityFrameworkCore;
 using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<InMemoryDatabase>();
 builder.Services.AddScoped<Login>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AdminSService>();
@@ -16,8 +16,29 @@ builder.Services.AddScoped<CpmService>();
 builder.Services.AddScoped<GanttService>();
 builder.Services.AddScoped<NotificationService>();
 
+builder.Services.AddScoped<NotificationRepository>();
+builder.Services.AddScoped<ProjectRepository>();
+builder.Services.AddScoped<ResourceRepository>();
+builder.Services.AddScoped<UserRepository>();
+
+
+
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+/*
+builder.Services.AddDbContext<AppDbContext>(
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        providerOptions => providerOptions.EnableRetryOnFailure())
+);*/
+
+builder.Services.AddDbContextFactory<AppDbContext>(
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        providerOptions => providerOptions.EnableRetryOnFailure())
+);
 
 var app = builder.Build();
 
