@@ -15,39 +15,46 @@ public class MemberPService : IMemberPService
     private readonly ProjectRepository _projectRepository;
     private readonly NotificationRepository _notificationRepository;
     private readonly TaskRepository _taskRepository;
-    
+
     private readonly AdminPService _adminPService;
     private readonly UserService _userService;
     private readonly TaskService _taskService;
     private readonly CpmService _cpmService;
 
-    public MemberPService(UserRepository userRepository, ProjectRepository projectRepository, NotificationRepository notificationRepository, TaskRepository taskRepository)
+    public MemberPService(UserRepository userRepository, ProjectRepository projectRepository,
+        NotificationRepository notificationRepository, TaskRepository taskRepository)
     {
         _userRepository = userRepository;
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
         _taskRepository = taskRepository;
-        
+
         _cpmService = new CpmService();
-        _adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
+        _adminPService =
+            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
         _userService = new UserService(_userRepository);
-        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, _cpmService, _taskRepository);
+        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, _cpmService,
+            _taskRepository);
     }
 
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)
     {
+
         var projectsFromMember = new List<ProjectDTO>();
         var projects = _adminPService.GetAllProjects();
-        var user = _userService.GetUser(email);
-        CheckUserRole(email);
-        
+
         foreach (var project in projects)
         {
-            if (project.Members.Any(m => m.Email == user.Email))
+            bool isProjectMember = project.Members != null && project.Members.Any(m => m.Email == email);
+            bool isProjectAdmin = project.AdminProyect != null && project.AdminProyect.Email == email;
+
+            if (isProjectMember || isProjectAdmin)
+            {
                 projectsFromMember.Add(project);
+            }
         }
 
-        if (projectsFromMember.Count == 0) 
+        if (projectsFromMember.Count == 0)
             throw new UserHasNoProjectsException();
 
         return projectsFromMember;
@@ -56,16 +63,17 @@ public class MemberPService : IMemberPService
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
         CheckIsTaskOfTheUser((int)task.Id, email);
-        
+
         var currentTask = _taskService.GetTask(projectName, (int)task.Id);
-        
+
         if (currentTask.PreviousTasks != null && currentTask.PreviousTasks.Count > 0)
         {
             foreach (var previousTask in currentTask.PreviousTasks)
             {
                 var previousTaskDTO = _taskService.GetTask(projectName, (int)previousTask.Id);
                 if (!CheckIfTaskIsCompleted(previousTaskDTO))
-                    throw new TaskException("Task state can't be changed because it's previous tasks are not completed.");
+                    throw new TaskException(
+                        "Task state can't be changed because it's previous tasks are not completed.");
             }
         }
 
@@ -76,18 +84,18 @@ public class MemberPService : IMemberPService
     private void CheckUserRole(string email)
     {
         var user = _userService.GetUser(email);
-        if (!user.Roles.Contains(RolDTO.ProjectMember)) 
+        if (!user.Roles.Contains(RolDTO.ProjectMember))
             throw new UserIsNotAMemberException();
     }
 
     private void CheckIsTaskOfTheUser(int taskId, string email)
     {
         var user = _userRepository.Get(u => u.Email == email);
-        if (user == null) 
+        if (user == null)
             throw new TaskCantBeModifiedByUserException();
 
         var tasks = user.Tasks ?? new List<Task>();
-        if (tasks.Count == 0 || !tasks.Any(t => t.Id == taskId)) 
+        if (tasks.Count == 0 || !tasks.Any(t => t.Id == taskId))
             throw new TaskCantBeModifiedByUserException();
     }
 
