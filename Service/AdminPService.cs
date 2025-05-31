@@ -12,16 +12,17 @@ public class AdminPService : IAdminPService
     private readonly UserRepository _userRepository;
     private readonly ProjectRepository _projectRepository;
     private readonly NotificationRepository _notificationRepository;
+    private readonly TaskRepository _taskRepository;
 
     public AdminPService(UserRepository userRepository, ProjectRepository projectRepository,
-        NotificationRepository notificationRepository)
+        NotificationRepository notificationRepository, TaskRepository taskRepository)
     {
         _userRepository = userRepository;
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
+        _taskRepository = taskRepository;
     }
-
-    public void CreateProject(ProjectDTO projectDTO)
+     public void CreateProject(ProjectDTO projectDTO)
     {
         CheckAdminProyectRole();
         var existingProject = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
@@ -125,7 +126,8 @@ public class AdminPService : IAdminPService
         if (projectEntity.Tasks.Find(m => m.Id == taskID) == null) throw new TaskIsNotFromTheProjectException();
 
         var userEntity = _userRepository.Get(u => u.Email == memberEmail);
-        userEntity.AddTask(taskID);
+        var task = projectEntity.Tasks.Find(m => m.Id == taskID);
+        userEntity.AddTask(task);
         _userRepository.Update(memberEmail, userEntity);
     }
 
@@ -139,7 +141,8 @@ public class AdminPService : IAdminPService
         if (projectEntity.Tasks.Find(m => m.Id == taskID) == null) throw new TaskIsNotFromTheProjectException();
 
         var userEntity = _userRepository.Get(u => u.Email == memberEmail);
-        userEntity.RemoveTask(taskID);
+        var task = projectEntity.Tasks.Find(m => m.Id == taskID);
+        userEntity.RemoveTask(task);
         _userRepository.Update(memberEmail, userEntity);
     }
 
@@ -147,13 +150,13 @@ public class AdminPService : IAdminPService
     {
         var user = _userRepository.Get(u => u.Email == email);
         var cpmService = new CpmService();
-        var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService);
+        var taskService = new TaskService(_taskRepository, cpmService);
         var returnList = new List<TaskDTO>();
         foreach (var project in _projectRepository.GetAllProjects())
         {
             var tasks = taskService.GetTasks(project.Name);
             foreach (var task in tasks)
-                if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+                if (task.Id.HasValue && user.Tasks.Any(t=> t.Id == task.Id))
                     returnList.Add(task);
         }
 
@@ -166,12 +169,16 @@ public class AdminPService : IAdminPService
         var user = _userRepository.Get(u => u.Email == email);
         if (user.Tasks == null) return new List<TaskDTO>();
         var cpmService = new CpmService();
-        var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService);
+        var taskService = new TaskService(_taskRepository, cpmService);
         var returnList = new List<TaskDTO>();
         var tasks = taskService.GetTasks(projectName);
         foreach (var task in tasks)
-            if (task.Id.HasValue && user.Tasks.Contains((int)task.Id))
+        {
+            if (task.Id.HasValue && user.Tasks.Any((t => t.Id == task.Id)))
+            {
                 returnList.Add(task);
+            }
+        }
 
         return returnList;
     }
