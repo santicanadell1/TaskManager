@@ -82,7 +82,7 @@ public class TaskService
 
     public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
     {
-        var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository);;
+        var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
         var projectService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository);
         var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();

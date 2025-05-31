@@ -10,17 +10,19 @@ public class NotificationService
     private readonly ProjectRepository _projectRepository;
     private readonly UserRepository _userRepository;
     private readonly  NotificationRepository _notificationRepository;
+    private readonly TaskRepository _taskRepository;
 
-    public NotificationService(UserRepository userRepository, ProjectRepository projectRepository,NotificationRepository notificationRepository)
+    public NotificationService(UserRepository userRepository, ProjectRepository projectRepository,NotificationRepository notificationRepository, TaskRepository taskRepository)
     {
         _userRepository = userRepository;
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
+        _taskRepository = taskRepository;
     }
 
     private NotificationDTO FromEntity(Notification notification)
     {
-        var projectService = new AdminPService(_userRepository,_projectRepository,_notificationRepository);
+        var projectService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository);
         var notificationDTO = new NotificationDTO();
         notificationDTO.Read = notification.Read;
         notificationDTO.Description = notification.Description;
