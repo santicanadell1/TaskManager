@@ -14,13 +14,15 @@ public class TaskService
     private readonly ProjectRepository _projectRepository;
     private readonly UserRepository _userRepository;
     private readonly NotificationRepository _notificationRepository;
+    private readonly TaskRepository _taskRepository;
 
-    public TaskService(ProjectRepository projectRepository, NotificationRepository notificationRepository, UserRepository userRepository,CpmService cpmService)
+    public TaskService(ProjectRepository projectRepository, NotificationRepository notificationRepository, UserRepository userRepository,CpmService cpmService, TaskRepository taskRepository)
     {
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
         _userRepository = userRepository;
         _cpmService = cpmService;
+        _taskRepository = taskRepository;
     }
 
     public void AddTask(string projectName, TaskDTO taskDTO)
@@ -73,6 +75,7 @@ public class TaskService
         if (task == null) throw new TaskNotFoundException();
 
         _projectRepository.RemoveTask(projectName, task.Id);
+        _taskRepository.Delete((int)task.Id);
 
         RecalculateCriticalPath(projectName);
     }
@@ -80,7 +83,7 @@ public class TaskService
     public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
     {
         var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository);;
-        var projectService = new AdminPService(_userRepository,_projectRepository,_notificationRepository);
+        var projectService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository);
         var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
@@ -264,28 +267,6 @@ public class TaskService
             Id = t.Id,
             Title = t.Title
         }).ToList();
-    }
-
-    private List<TaskDTO> FromEntityList(List<Task> tasks)
-    {
-        if (tasks == null) return new List<TaskDTO>();
-
-        var taskDTOs = new List<TaskDTO>();
-        foreach (var task in tasks)
-            taskDTOs.Add(new TaskDTO
-            {
-                Id = task.Id,
-                Title = task.Title,
-                Description = task.Description,
-                ExpectedStartDate = task.ExpectedStartDate,
-                Duration = task.Duration,
-                State = (StateDTO)task.State,
-                PreviousTasks = new List<TaskDTO>(),
-                SameTimeTasks = new List<TaskDTO>(),
-                Resources = new List<ResourceDTO>()
-            });
-
-        return taskDTOs;
     }
 
     private List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
