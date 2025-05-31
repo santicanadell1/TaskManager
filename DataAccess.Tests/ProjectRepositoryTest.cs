@@ -140,42 +140,55 @@ public class ProjectRepositoryTest
         
         _projectRepository.UpdateProject("Project 4", project2);
     }
-
-    [TestMethod]
+ [TestMethod]
     public void AddTask_WhenAddingNewTask_ShouldContainIt()
     {
-        var project = new Project { Name = "Project 1" , Description = "Project 1 Description"};
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
+        
+        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
-        _context.SaveChanges();
-        Assert.IsTrue(project.Tasks.Contains(task));
+        
+        // Refrescar el proyecto desde la BD para obtener las tareas
+        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        Assert.IsNotNull(refreshedProject);
+        Assert.IsTrue(refreshedProject.Tasks.Any(t => t.Title == "Task 1"));
     }
 
     [TestMethod]
     public void UpdateTask_WhenUpdatingExistingTask_ShouldUpdateTaskDetails()
     {
-        var project = new Project { Name = "Project 1" , Description = "Project 1 Description"};
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1, State = State.TODO };
+        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>())
+        {
+            State = State.TODO
+        };
         _projectRepository.AddTask(project.Name, task);
-        _context.SaveChanges();
 
-        var updatedTask = new Task("Updated Task 1", "Updated Task 1 description", DateTime.Now.AddDays(1), 10, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1, State = State.DOING };
-        _projectRepository.UpdateTask(project.Name, task.Id, updatedTask);
-        _context.SaveChanges();
+        // Obtener el ID real del task insertado
+        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
+        
+        var updatedTask = new Task("Updated Task 1", "Updated Task 1 description", DateTime.Now.AddDays(1), 10, new List<Task>(), new List<Task>(), new List<Resource>())
+        {
+            State = State.DOING
+        };
+        
+        _projectRepository.UpdateTask(project.Name, insertedTask.Id, updatedTask);
 
-        var taskInProject = project.Tasks.FirstOrDefault(t => t.Id == task.Id);
+        // Verificar cambios
+        var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask.Id);
+        
         Assert.IsNotNull(taskInProject);
         Assert.AreEqual("Updated Task 1", taskInProject.Title);
         Assert.AreEqual("Updated Task 1 description", taskInProject.Description);
         Assert.AreEqual(State.DOING, taskInProject.State);
         Assert.AreEqual(10, taskInProject.Duration);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void UpdateTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
@@ -195,35 +208,35 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(TaskNotFoundException))]
     public void UpdateTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
+        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
-        _context.SaveChanges();
 
-        var updatedTask = new Task("Updated Task 1", "Updated Task 1 description", DateTime.Now.AddDays(1), 10, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
+        var updatedTask = new Task("Updated Task 1", "Updated Task 1 description", DateTime.Now.AddDays(1), 10, new List<Task>(), new List<Task>(), new List<Resource>());
 
         _projectRepository.UpdateTask(project.Name, 999, updatedTask);
-        _context.SaveChanges();
     }
 
     [TestMethod]
     public void RemoveTask_WhenTaskExists_ShouldRemoveTaskFromProject()
     {
-        var project = new Project { Name = "Project 1", Description = "Project 1 Description"};
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
+        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
-        _context.SaveChanges();
 
-        _projectRepository.RemoveTask(project.Name, task.Id);
-        _context.SaveChanges();
+        // Obtener el ID real del task
+        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
 
-        var taskInProject = project.Tasks.FirstOrDefault(t => t.Id == task.Id);
+        _projectRepository.RemoveTask(project.Name, insertedTask.Id);
+
+        // Verificar que la tarea fue removida
+        var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask.Id);
         Assert.IsNull(taskInProject);
     }
 
@@ -231,131 +244,128 @@ public class ProjectRepositoryTest
     [ExpectedException(typeof(TaskNotFoundException))]
     public void RemoveTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
+        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
-        _context.SaveChanges();
 
         _projectRepository.RemoveTask(project.Name, 999);
-        _context.SaveChanges();
     }
 
     [TestMethod]
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void AddPreviousTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
     {
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
-        var previousTask = new Task("Previous Task", "Previous Task description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 2 };
+        var previousTask = new Task("Previous Task", "Previous Task description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>());
 
-        _projectRepository.AddPreviousTask("NonExistingProject", task.Id, previousTask);
-        _context.SaveChanges();
+        _projectRepository.AddPreviousTask("NonExistingProject", 1, previousTask);
     }
 
     [TestMethod]
     [ExpectedException(typeof(TaskNotFoundException))]
     public void AddPreviousTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
-        var previousTask = new Task("Previous Task", "Previous Task description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 2 };
-
+        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
-        _context.SaveChanges();
+
+        var previousTask = new Task("Previous Task", "Previous Task description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>());
 
         _projectRepository.AddPreviousTask(project.Name, 999, previousTask);
-        _context.SaveChanges();
     }
 
     [TestMethod]
     [ExpectedException(typeof(TaskNotFoundException))]
     public void AddPreviousTask_WhenTaskNotPartOfProject_ShouldThrowTaskNotFoundException()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
-        var previousTask = new Task("Previous Task", "Previous Task description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 2 };
-
+        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
-        _context.SaveChanges();
 
-        _projectRepository.AddPreviousTask(project.Name, task.Id, previousTask);
-        _context.SaveChanges();
+        // Obtener el ID real del task
+        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
+
+        var previousTask = new Task("Previous Task", "Previous Task description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>());
+
+        _projectRepository.AddPreviousTask(project.Name, insertedTask.Id, previousTask);
     }
 
     [TestMethod]
     public void AddPreviousTask_WhenTaskIsValid_ShouldAddPreviousTask()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
-        var task1 = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
-        var task2 = new Task("Task 2", "Task 2 description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 2 };
+        var task1 = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
+        var task2 = new Task("Task 2", "Task 2 description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>());
 
         _projectRepository.AddTask(project.Name, task1);
         _projectRepository.AddTask(project.Name, task2);
-        _context.SaveChanges();
 
-        _projectRepository.AddPreviousTask(project.Name, task1.Id, task2);
-        _context.SaveChanges();
+        // Obtener los IDs reales
+        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var insertedTask1 = refreshedProject.Tasks.First(t => t.Title == "Task 1");
+        var insertedTask2 = refreshedProject.Tasks.First(t => t.Title == "Task 2");
 
-        var taskInProject = project.Tasks.FirstOrDefault(t => t.Id == task1.Id);
+        _projectRepository.AddPreviousTask(project.Name, insertedTask1.Id, insertedTask2);
+
+        // Verificar que se agregó la tarea previa
+        var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask1.Id);
+        
         Assert.IsNotNull(taskInProject);
         Assert.AreEqual(1, taskInProject.PreviousTasks.Count);
-        Assert.AreEqual(task2.Id, taskInProject.PreviousTasks[0].Id);
+        Assert.AreEqual(insertedTask2.Id, taskInProject.PreviousTasks[0].Id);
     }
 
     [TestMethod]
     public void AddResourceToTask_WhenTaskExists_ShouldAddResource()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
+        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
-        _context.SaveChanges();
+
+        // Obtener el ID real del task
+        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
 
         var resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
+        _projectRepository.AddResourceToTask(project.Name, insertedTask.Id, resource);
 
-        _projectRepository.AddResourceToTask(project.Name, task.Id, resource);
-        _context.SaveChanges();
-
-        var taskInProject = project.Tasks.FirstOrDefault(t => t.Id == task.Id);
+        // Verificar que se agregó el recurso
+        var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask.Id);
+        
         Assert.IsNotNull(taskInProject);
-        Assert.IsTrue(taskInProject.Resources.Contains(resource));
+        Assert.IsTrue(taskInProject.Resources.Any(r => r.Name == "Resource 1"));
     }
 
     [TestMethod]
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void AddResourceToTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
     {
-        var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>()) { Id = 1 };
         var resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
 
-        _projectRepository.AddResourceToTask("NonExistingProject", task.Id, resource);
-        _context.SaveChanges();
+        _projectRepository.AddResourceToTask("NonExistingProject", 1, resource);
     }
 
     [TestMethod]
     [ExpectedException(typeof(TaskNotFoundException))]
     public void AddResourceToTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
-        var project = new Project { Name = "Project 1" };
+        var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
         _projectRepository.AddProject(project);
-        _context.SaveChanges();
 
         var resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
 
         _projectRepository.AddResourceToTask(project.Name, 999, resource);
-        _context.SaveChanges();
     }
 }
