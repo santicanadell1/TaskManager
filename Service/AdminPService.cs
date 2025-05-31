@@ -23,7 +23,8 @@ public class AdminPService : IAdminPService
         _notificationRepository = notificationRepository;
         _taskRepository = taskRepository;
     }
-     public void CreateProject(ProjectDTO projectDTO)
+
+    public void CreateProject(ProjectDTO projectDTO)
     {
         CheckAdminProyectRole();
         var existingProject = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
@@ -151,13 +152,14 @@ public class AdminPService : IAdminPService
     {
         var user = _userRepository.Get(u => u.Email == email);
         var cpmService = new CpmService();
-        var taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository,cpmService,_taskRepository);
+        var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
+            _taskRepository);
         var returnList = new List<TaskDTO>();
         foreach (var project in _projectRepository.GetAllProjects())
         {
             var tasks = taskService.GetTasks(project.Name);
             foreach (var task in tasks)
-                if (task.Id.HasValue && user.Tasks.Any(t=> t.Id == task.Id))
+                if (task.Id.HasValue && user.Tasks.Any(t => t.Id == task.Id))
                     returnList.Add(task);
         }
 
@@ -170,7 +172,8 @@ public class AdminPService : IAdminPService
         var user = _userRepository.Get(u => u.Email == email);
         if (user.Tasks == null) return new List<TaskDTO>();
         var cpmService = new CpmService();
-        var taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository,cpmService,_taskRepository);
+        var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
+            _taskRepository);
         var returnList = new List<TaskDTO>();
         var tasks = taskService.GetTasks(projectName);
         foreach (var task in tasks)
@@ -209,22 +212,26 @@ public class AdminPService : IAdminPService
     }
 
 
-    public Project ToEntity(ProjectDTO projectDTO)
-    {
-        List<User> members = new List<User>();
-        if (projectDTO.Members != null)
-            foreach (var memberDTO in projectDTO.Members)
-                members.Add(ToEntity(memberDTO));
-
-        return new Project
+        public Project ToEntity(ProjectDTO projectDTO)
         {
-            Name = projectDTO.Name,
-            Description = projectDTO.Description,
-            StartDate = projectDTO.StartDate,
-            AdminProject = projectDTO.AdminProyect != null ? ToEntity(projectDTO.AdminProyect) : null,
-            Members = members
-        };
-    }
+            List<User> members = new List<User>();
+            if (projectDTO.Members != null)
+            {
+                foreach (var memberDTO in projectDTO.Members)
+                {
+                    members.Add(ToEntity(memberDTO));
+                }
+            }
+
+            return new Project
+            {
+                Name = projectDTO.Name,
+                Description = projectDTO.Description,
+                StartDate = projectDTO.StartDate,
+                AdminProject = projectDTO.AdminProyect != null ? ToEntity(projectDTO.AdminProyect) : null,
+                Members = members
+            };
+        }
 
     private User ToEntity(UserDTO userDTO)
     {

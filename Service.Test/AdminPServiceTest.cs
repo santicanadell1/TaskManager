@@ -21,27 +21,29 @@ public class AdminPServiceTests
     private NotificationRepository _notificationRepository;
     private TaskRepository _taskRepository;
 
-
     [TestInitialize]
     public void Setup()
     {
         var contextFactory = new InMemoryAppContextFactory();
         _context = contextFactory.CreateDbContext();
-        
+
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
-        
+
         _userRepository = new UserRepository(_context);
         _projectRepository = new ProjectRepository(_context);
         _notificationRepository = new NotificationRepository(_context);
         _taskRepository = new TaskRepository(_context);
-        
-        _adminPservice = new AdminPService(_userRepository,_projectRepository, _notificationRepository, _taskRepository);
+
         _userservice = new UserService(_userRepository);
         _login = new Login(_userRepository);
-        
-        CpmService cpmService = new CpmService();
-        _taskService = new TaskService(_projectRepository,_notificationRepository,_userRepository, cpmService, _taskRepository);
+
+        var cpmService = new CpmService();
+        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
+            _taskRepository);
+
+        _adminPservice = new AdminPService(_userRepository, _projectRepository,
+            _notificationRepository, _taskRepository);
 
         Admin = new UserDTO
         {
@@ -84,7 +86,6 @@ public class AdminPServiceTests
             Name = "New Project",
             Description = "Project Description",
             StartDate = DateTime.Today,
-            AdminProyect = UserDTO,
             Members = members
         };
 
@@ -406,7 +407,7 @@ public class AdminPServiceTests
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
 
-        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t=> t.Id == 1));
+        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t => t.Id == 1));
     }
 
     [TestMethod]
@@ -431,7 +432,7 @@ public class AdminPServiceTests
         };
         _taskService.AddTask("Test Project", task);
 
-        _adminPservice.AddTaskToMember("Test Project", "member1.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member1.user@example.com", (int)task.Id);
     }
 
     [TestMethod]
@@ -446,9 +447,9 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        
+
         _adminPservice.CreateProject(projectDTO);
-        
+
         var task = new TaskDTO
         {
             Title = "Task1",
@@ -456,7 +457,7 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        
+
         _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);
@@ -485,7 +486,7 @@ public class AdminPServiceTests
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
 
-        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t=> t.Id == 1));
+        Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t => t.Id == 1));
 
         _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", 1);
 
