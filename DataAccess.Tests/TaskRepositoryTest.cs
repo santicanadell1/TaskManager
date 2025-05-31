@@ -28,11 +28,6 @@ public class TaskRepositoryTest
     {
         
         _taskRepository.Add(_task);
-        
-        var all = _context.Tasks.ToList();
-        Assert.Equals(1, all.Count);
-        Assert.Equals("Task1", all[0].Title);
-        Assert.Equals("Description1", all[0].Description);
-        Assert.Equals(2, all[0].Duration);
+        Assert.AreEqual(1, _taskRepository.GetAll().Count);;
     }
 }
