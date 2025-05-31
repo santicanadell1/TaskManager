@@ -71,7 +71,7 @@ public class UserTest
     public void NewUser_WhenDateIsAfterToday_ThenThrowUserBirthdayException()
     {
         User user;
-        var birthday = DateTime.Parse("20/07/2026");
+        var birthday = DateTime.Today.AddDays(1);;
 
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
     }
@@ -265,7 +265,8 @@ public class UserTest
     public void NewUser_WhenAddingNotification_ShouldBeAddedCorrectly()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddNotification(1);
+        var notification = new Notification(false, "Some description", new Project());
+        user.AddNotification(notification);
 
         Assert.AreEqual(1, user.Notifications.Count);
     }
@@ -274,8 +275,9 @@ public class UserTest
     public void RemoveNotification_WhenNotificationExists_ShouldBeDeletedCorrectly()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddNotification(1);
-        user.RemoveNotification(1);
+        var notification = new Notification(false, "Some description", new Project());
+        user.AddNotification(notification);
+        user.RemoveNotification(notification);
 
         Assert.AreEqual(0, user.Notifications.Count);
     }
