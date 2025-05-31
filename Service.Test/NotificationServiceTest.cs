@@ -111,6 +111,9 @@ public class NotificationServiceTest
         
         var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
         var user2 = _userRepository.Get(u => u.Email == "Email2@example.com");
+        
+        var project = _projectRepository.GetProject(p => p.Name == "Project 1");
+        Assert.AreEqual(2, project.Members.Count);  // Verifica que haya dos miembros
 
         Assert.AreEqual(1, user1.Notifications.Count);
         Assert.AreEqual(1, user2.Notifications.Count);

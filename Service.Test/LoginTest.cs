@@ -26,6 +26,12 @@ public class LoginTests
         _passwordManager = new PasswordManager();
     }
 
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _context?.Database.EnsureDeleted();
+    }
+
     [TestMethod]
     public void Login_ShouldLoginSuccessfully_WithValidCredentials()
     {
