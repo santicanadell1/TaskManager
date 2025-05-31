@@ -60,6 +60,19 @@ public class TaskRepositoryTest
         Assert.AreEqual("Task2", found.Title);
         Assert.AreEqual("Description2", found.Description);
     }
-
+    
+    [TestMethod]
+    public void Update_UpdatesAllFields_Test2()
+    {
+        Task _task3 = new Task("Task3","Description3",DateTime.Today, 2, new List<Task>(),new List<Task>(),new List<Resource>());
+        _taskRepository.Add(_task);
+        _taskRepository.Add(_task2);
+        int Id = (int)_taskRepository.Get(t=>t.Title == "Task2").Id;
+        _taskRepository.Update(Id, _task3);
+        var found = _taskRepository.Get(t => t.Id == 2);
+        Assert.IsNotNull(found);
+        Assert.AreEqual("Task3", found.Title);
+        Assert.AreEqual("Description3", found.Description);
+    }
 
 }
