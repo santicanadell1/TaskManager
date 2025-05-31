@@ -16,16 +16,17 @@ public class MemberPService : IMemberPService
     private readonly NotificationRepository _notificationRepository;
     private readonly TaskRepository _taskRepository;
 
-    public MemberPService(UserRepository userRepository, ProjectRepository _projectRepository,NotificationRepository notificationRepository)
+    public MemberPService(UserRepository userRepository, ProjectRepository _projectRepository,NotificationRepository notificationRepository, TaskRepository taskRepository)
     {
         _projectRepository = _projectRepository;
         _userRepository = userRepository;
         _notificationRepository = notificationRepository;
+        _taskRepository = taskRepository;
     }
 
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)
     {
-        var adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository);
+        var adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository);
         var userService = new UserService(_userRepository);
         var projectsFromMember = new List<ProjectDTO>();
         var projects = adminPService.GetAllProjects();
@@ -42,7 +43,7 @@ public class MemberPService : IMemberPService
 
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
-        var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository,new CpmService());
+        var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository,new CpmService(), _taskRepository);
         CheckIsTaskOfTheUser((int)task.Id, email);
         foreach (var previousTask in task.PreviousTasks)
         {
