@@ -15,31 +15,35 @@ public class MemberPService : IMemberPService
     private readonly ProjectRepository _projectRepository;
     private readonly NotificationRepository _notificationRepository;
     private readonly TaskRepository _taskRepository;
-
     private readonly AdminPService _adminPService;
     private readonly UserService _userService;
     private readonly TaskService _taskService;
     private readonly CpmService _cpmService;
+    private readonly ResourceRepository _resourceRepository;
 
     public MemberPService(UserRepository userRepository, ProjectRepository projectRepository,
-        NotificationRepository notificationRepository, TaskRepository taskRepository)
+        NotificationRepository notificationRepository, TaskRepository taskRepository, ResourceRepository resourceRepository)
     {
         _userRepository = userRepository;
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
         _taskRepository = taskRepository;
+        _resourceRepository = resourceRepository;
 
         _cpmService = new CpmService();
         _adminPService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
+            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository, _resourceRepository);
         _userService = new UserService(_userRepository);
         _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, _cpmService,
-            _taskRepository);
+            _taskRepository, _resourceRepository);;
     }
 
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)
     {
-
+        if (!_userRepository.Get(u => u.Email == email).Roles.Contains(Rol.ProjectMember))
+        {
+            throw new UserIsNotAMemberException();
+        }
         var projectsFromMember = new List<ProjectDTO>();
         var projects = _adminPService.GetAllProjects();
 

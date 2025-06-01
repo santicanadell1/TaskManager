@@ -11,11 +11,13 @@ public class NotificationServiceTest
     private Login _loginService;
     private NotificationService _notificationService;
     private UserService _userService;
-    private AppDbContext _context;
+    private AppDbContext dataAccess;
     private UserRepository _userRepository;
     private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
     private TaskRepository _taskRepository;
+    private AppDbContext _context;
+    private ResourceRepository _resourceRepository;
 
     [TestInitialize]
     public void SetUp()
@@ -30,9 +32,10 @@ public class NotificationServiceTest
         _projectRepository = new ProjectRepository(_context);
         _notificationRepository = new NotificationRepository(_context);
         _taskRepository = new TaskRepository(_context);
-        
-        _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
-        _adminService = new AdminPService(_userRepository, _projectRepository,_notificationRepository, _taskRepository);
+        _userRepository = new UserRepository(dataAccess);
+        _resourceRepository = new ResourceRepository(_context);
+        _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository, _taskRepository, _resourceRepository);
+        _adminService = new AdminPService(_userRepository, _projectRepository,_notificationRepository, _taskRepository, _resourceRepository);
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
         CreateAndAddUsers();
