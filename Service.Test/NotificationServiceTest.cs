@@ -38,6 +38,12 @@ public class NotificationServiceTest
         CreateAndAddUsers();
         CreateAndAddProjects();
     }
+    
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _context?.Database.EnsureDeleted();
+    }
 
     private void CreateAndAddUsers()
     {
@@ -113,7 +119,8 @@ public class NotificationServiceTest
         var user2 = _userRepository.Get(u => u.Email == "Email2@example.com");
         
         var project = _projectRepository.GetProject(p => p.Name == "Project 1");
-        Assert.AreEqual(2, project.Members.Count);  // Verifica que haya dos miembros
+        Assert.AreEqual(user1.Id, project.Members[0].Id);  // Verifica que haya dos miembros
+        Assert.AreEqual(user2.Id, project.Members[1].Id);  // Verifica que haya dos miembros
 
         Assert.AreEqual(1, user1.Notifications.Count);
         Assert.AreEqual(1, user2.Notifications.Count);
