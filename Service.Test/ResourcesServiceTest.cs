@@ -40,12 +40,12 @@ public class ResourcesServiceTest
         _userService = new UserService(_userRepository);
         _resourceService = new ResourceService(_resourceRepository, _projectRepository);
         _adminProjectService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
+            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,_resourceRepository);
 
         CpmService cpmService = new CpmService();
 
         _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository);
+            _taskRepository,_resourceRepository);
 
         var adminSUserDTO = new UserDTO
         {

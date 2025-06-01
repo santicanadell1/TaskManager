@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
+using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
 using Domain.Exceptions.TaskExceptions;
@@ -15,15 +16,17 @@ public class TaskService
     private readonly UserRepository _userRepository;
     private readonly NotificationRepository _notificationRepository;
     private readonly TaskRepository _taskRepository;
+    private readonly ResourceRepository _resourceRepository;
 
     public TaskService(ProjectRepository projectRepository, NotificationRepository notificationRepository,
-        UserRepository userRepository, CpmService cpmService, TaskRepository taskRepository)
+        UserRepository userRepository, CpmService cpmService, TaskRepository taskRepository, ResourceRepository resourceRepository)
     {
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
         _userRepository = userRepository;
         _cpmService = cpmService;
         _taskRepository = taskRepository;
+        _resourceRepository = resourceRepository;
     }
 
     public void AddTask(string projectName, TaskDTO taskDTO)
@@ -89,7 +92,7 @@ public class TaskService
         var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository
             );
         var projectService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
+            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,_resourceRepository);
         var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
@@ -319,9 +322,12 @@ public class TaskService
 
         var resources = new List<Resource>();
         foreach (var resourceDTO in resourceDTOs)
-            resources.Add(new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
-                { Id = resourceDTO.Id });
-
+        {
+            var existing = _resourceRepository.Get(r => r.Id == resourceDTO.Id);
+            if (existing == null)
+                throw new ResourceNotFoundException();
+            resources.Add(existing);
+        }
         return resources;
     }
 }

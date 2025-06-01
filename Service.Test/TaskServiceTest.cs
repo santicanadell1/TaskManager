@@ -30,6 +30,7 @@ public class TaskServiceTest
     private NotificationRepository _notificationRepository;
     private UserRepository _userRepository;
     private TaskRepository _taskRepository;
+    private ResourceRepository _resourceRepository;
 
     [TestInitialize]
     public void Setup()
@@ -44,10 +45,11 @@ public class TaskServiceTest
         _notificationRepository = new NotificationRepository(_context);
         _userRepository = new UserRepository(_context);
         _taskRepository = new TaskRepository(_context);
+        _resourceRepository = new ResourceRepository(_context);
 
         _cpmService = new CpmService();
         _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, _cpmService,
-            _taskRepository);
+            _taskRepository, _resourceRepository);
         _login = new Login(_userRepository);
 
         _genericProject = new Project("Generic Project", "Description", DateTime.Now);
