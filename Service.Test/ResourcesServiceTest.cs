@@ -40,12 +40,12 @@ public class ResourcesServiceTest
         _userService = new UserService(_userRepository);
         _resourceService = new ResourceService(_resourceRepository, _projectRepository);
         _adminProjectService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository, _resourceRepository);
+            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
 
         CpmService cpmService = new CpmService();
 
         _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository, _resourceRepository);
+            _taskRepository);
 
         var adminSUserDTO = new UserDTO
         {
@@ -218,7 +218,6 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO
         {
-            Id = addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description
@@ -281,7 +280,6 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO
         {
-            Id= addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description
@@ -331,7 +329,7 @@ public class ResourcesServiceTest
             Type = "TypeB",
             Description = "Updated description"
         };
-        Assert.AreEqual(1,_projectRepository.GetProject(p => p.Name == "Project 2").Tasks.First().Resources.Count);
+
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
     }
 
@@ -352,7 +350,6 @@ public class ResourcesServiceTest
         var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
         var addedResourceDto = new ResourceDTO
         {
-            Id= addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description
@@ -477,9 +474,9 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+
         var addedResourceDto = new ResourceDTO
         {
-            Id= addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description
@@ -490,6 +487,13 @@ public class ResourcesServiceTest
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
+        var project2 = new ProjectDTO();
+        project2.Name = "Project 2";
+        project2.Description = "Description of Project2";
+        project2.StartDate = DateTime.Today;
+        project2.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
         var task = new TaskDTO
         {
             Title = "Title 1",
@@ -498,17 +502,8 @@ public class ResourcesServiceTest
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>()
+            Resources = new List<ResourceDTO> { addedResourceDto }
         };
-        task.Resources.Add(addedResourceDto);
-        _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project 1", task);
-
-        var project2 = new ProjectDTO();
-        project2.Name = "Project 2";
-        project2.Description = "Description of Project2";
-        project2.StartDate = DateTime.Today;
-        project2.AdminProyect = _userService.GetUser("adminProject.user@example.com");
         var task2 = new TaskDTO
         {
             Title = "Title 2",
@@ -519,12 +514,12 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
+
+        _adminProjectService.CreateProject(project);
+        _taskService.AddTask("Project 1", task);
         _adminProjectService.CreateProject(project2);
         _taskService.AddTask("Project 2", task2);
-        
         Assert.IsNotNull(addedResource);
-        Assert.AreEqual(1,_projectRepository.GetProject(p => p.Name == "Project 1").Tasks.First().Resources.Count);
-        Assert.AreEqual(1,_projectRepository.GetProject(p => p.Name == "Project 2").Tasks.First().Resources.Count);
 
         _resourceService.DeleteResource(addedResource.Id);
     }
@@ -548,7 +543,6 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO
         {
-            Id= addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description

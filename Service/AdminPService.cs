@@ -15,16 +15,14 @@ public class AdminPService : IAdminPService
     private readonly ProjectRepository _projectRepository;
     private readonly NotificationRepository _notificationRepository;
     private readonly TaskRepository _taskRepository;
-    private readonly ResourceRepository _resourceRepository;
 
     public AdminPService(UserRepository userRepository, ProjectRepository projectRepository,
-        NotificationRepository notificationRepository, TaskRepository taskRepository, ResourceRepository resourceRepository)
+        NotificationRepository notificationRepository, TaskRepository taskRepository)
     {
         _userRepository = userRepository;
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
         _taskRepository = taskRepository;
-        _resourceRepository = resourceRepository;
     }
 
     public void CreateProject(ProjectDTO projectDTO)
@@ -174,7 +172,7 @@ public class AdminPService : IAdminPService
         var user = _userRepository.Get(u => u.Email == email);
         var cpmService = new CpmService();
         var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository, _resourceRepository);
+            _taskRepository);
         var returnList = new List<TaskDTO>();
         foreach (var project in _projectRepository.GetAllProjects())
         {
@@ -194,7 +192,7 @@ public class AdminPService : IAdminPService
         if (user.Tasks == null) return new List<TaskDTO>();
         var cpmService = new CpmService();
         var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository, _resourceRepository);
+            _taskRepository);
         var returnList = new List<TaskDTO>();
         var tasks = taskService.GetTasks(projectName);
         foreach (var task in tasks)

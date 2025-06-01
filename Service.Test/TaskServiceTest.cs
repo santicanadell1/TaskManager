@@ -30,7 +30,6 @@ public class TaskServiceTest
     private NotificationRepository _notificationRepository;
     private UserRepository _userRepository;
     private TaskRepository _taskRepository;
-    private ResourceRepository _resourceRepository;
 
     [TestInitialize]
     public void Setup()
@@ -45,11 +44,10 @@ public class TaskServiceTest
         _notificationRepository = new NotificationRepository(_context);
         _userRepository = new UserRepository(_context);
         _taskRepository = new TaskRepository(_context);
-        _resourceRepository = new ResourceRepository(_context);
 
         _cpmService = new CpmService();
         _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, _cpmService,
-            _taskRepository, _resourceRepository);
+            _taskRepository);
         _login = new Login(_userRepository);
 
         _genericProject = new Project("Generic Project", "Description", DateTime.Now);
@@ -60,8 +58,9 @@ public class TaskServiceTest
         _resource1 = new Resource("Resource 1", "Type 1", "Description 1") { Id = 1 };
         _resource2 = new Resource("Resource 2", "Type 2", "Description 2") { Id = 2 };
 
-        _resourceRepository.AddResource(_resource1);
-        _resourceRepository.AddResource(_resource2);
+        _context.Resources.Add(_resource1);
+        _context.Resources.Add(_resource2);
+        _context.SaveChanges();
 
         _resourceDTO1 = new ResourceDTO
         {
@@ -561,8 +560,6 @@ public class TaskServiceTest
     [TestMethod]
     public void AddTask_ShouldCorrectlyMapDTOToEntity_TestingToEntity()
     {
-        var complexResource = new Resource("Complex Resource", "Complex Type", "Complex Description");
-        _resourceRepository.AddResource(complexResource);
         var complexDTO = new TaskDTO
         {
             Title = "Complex Mapping DTO",
@@ -576,9 +573,9 @@ public class TaskServiceTest
             {
                 new()
                 {
-                    Name = complexResource.Name,
-                    Type = complexResource.Type,
-                    Description = complexResource.Description
+                    Name = "Complex Resource",
+                    Type = "Complex Type",
+                    Description = "Complex resource description"
                 }
             }
         };

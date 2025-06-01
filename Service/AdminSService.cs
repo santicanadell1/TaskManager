@@ -14,16 +14,14 @@ public class AdminSService : IAdminSService
     private readonly UserService _userService;
     private readonly NotificationRepository _notificationRepository;
     private readonly TaskRepository _taskRepository;
-    private readonly ResourceRepository _resourceRepository;
     
 
-public AdminSService(UserRepository userRepository, ProjectRepository projectRepository, TaskRepository taskRepository, ResourceRepository resourceRepository)
+public AdminSService(UserRepository userRepository, ProjectRepository projectRepository, TaskRepository taskRepository)
     {
         _userRepository = userRepository;
         _projectRepository = projectRepository;
         _userService = new UserService(_userRepository);
         _taskRepository = taskRepository;
-        _resourceRepository = resourceRepository;
     }
 
     public void CreateUser(UserDTO userDTO)
@@ -35,7 +33,7 @@ public AdminSService(UserRepository userRepository, ProjectRepository projectRep
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
-        var adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository, _resourceRepository);
+        var adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository);
         var user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();

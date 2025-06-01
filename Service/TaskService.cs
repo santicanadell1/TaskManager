@@ -1,6 +1,5 @@
 ﻿using DataAccess;
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
-using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
 using Domain.Exceptions.TaskExceptions;
@@ -16,17 +15,15 @@ public class TaskService
     private readonly UserRepository _userRepository;
     private readonly NotificationRepository _notificationRepository;
     private readonly TaskRepository _taskRepository;
-    private readonly ResourceRepository _resourceRepository;
 
     public TaskService(ProjectRepository projectRepository, NotificationRepository notificationRepository,
-        UserRepository userRepository, CpmService cpmService, TaskRepository taskRepository, ResourceRepository resourceRepository)
+        UserRepository userRepository, CpmService cpmService, TaskRepository taskRepository)
     {
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
         _userRepository = userRepository;
         _cpmService = cpmService;
         _taskRepository = taskRepository;
-        _resourceRepository = resourceRepository;
     }
 
     public void AddTask(string projectName, TaskDTO taskDTO)
@@ -89,10 +86,10 @@ public class TaskService
 
     public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
     {
-        var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository,
-            _taskRepository, _resourceRepository);
+        var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository
+            );
         var projectService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository, _resourceRepository);
+            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository);
         var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
@@ -322,14 +319,9 @@ public class TaskService
 
         var resources = new List<Resource>();
         foreach (var resourceDTO in resourceDTOs)
-        {
-            var existing = _resourceRepository.Get(r => r.Id == resourceDTO.Id);
-            if (existing == null)
-                throw new ResourceNotFoundException();
-            resources.Add(existing);
-        }
+            resources.Add(new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
+                { Id = resourceDTO.Id });
+
         return resources;
     }
-
-
 }

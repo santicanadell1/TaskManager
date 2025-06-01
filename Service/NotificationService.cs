@@ -2,6 +2,7 @@
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service.Models;
+using Task = Domain.Task;
 
 namespace Service;
 
@@ -9,36 +10,106 @@ public class NotificationService
 {
     private readonly ProjectRepository _projectRepository;
     private readonly UserRepository _userRepository;
-    private readonly  NotificationRepository _notificationRepository;
-    private readonly TaskRepository _taskRepository;
-    private readonly ResourceRepository _resourceRepository;
+    private readonly NotificationRepository _notificationRepository;
 
-    public NotificationService(UserRepository userRepository, ProjectRepository projectRepository,NotificationRepository notificationRepository, TaskRepository taskRepository, ResourceRepository resourceRepository)
+    public NotificationService(UserRepository userRepository, ProjectRepository projectRepository,
+        NotificationRepository notificationRepository)
     {
         _userRepository = userRepository;
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
-        _taskRepository = taskRepository;
-        _resourceRepository = resourceRepository;
     }
 
     private NotificationDTO FromEntity(Notification notification)
     {
-        var projectService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository, _resourceRepository);
-        var notificationDTO = new NotificationDTO();
-        notificationDTO.Read = notification.Read;
-        notificationDTO.Description = notification.Description;
-        notificationDTO.Project = projectService.GetProjectByName(notification.Project.Name);
-        notificationDTO.Id = notification.Id;
+        var notificationDTO = new NotificationDTO
+        {
+            Id = notification.Id,
+            Read = notification.Read,
+            Description = notification.Description,
+            Project = FromEntitySimple(notification.Project)
+        };
+
         return notificationDTO;
     }
 
+    private ProjectDTO FromEntitySimple(Project project)
+    {
+        return new ProjectDTO
+        {
+            Name = project.Name,
+            Description = project.Description,
+            StartDate = project.StartDate,
+            Members = project.Members?.Select(member => FromEntitySimple(member)).ToList() ?? new List<UserDTO>(),
+            AdminProyect = project.AdminProject != null ? FromEntitySimple(project.AdminProject) : null
+        };
+    }
+
+    private UserDTO FromEntitySimple(User user)
+    {
+        return new UserDTO
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Roles = ConvertToDTORoles(user.Roles),
+            Password = user.Password,
+            Birthday = user.Birthday
+        };
+    }
+
+    private List<RolDTO> ConvertToDTORoles(List<Rol> roles)
+    {
+        var rolDTOs = new List<RolDTO>();
+
+        if (roles != null)
+        {
+            foreach (var role in roles)
+                switch (role)
+                {
+                    case Rol.AdminSystem:
+                        rolDTOs.Add(RolDTO.AdminSystem);
+                        break;
+                    case Rol.ProjectMember:
+                        rolDTOs.Add(RolDTO.ProjectMember);
+                        break;
+                    case Rol.AdminProject:
+                        rolDTOs.Add(RolDTO.AdminProject);
+                        break;
+                }
+        }
+
+        return rolDTOs;
+    }
+
+    private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
+    {
+        var roles = new List<Rol>();
+
+        if (roleDTOs != null)
+        {
+            foreach (var roleDTO in roleDTOs)
+                switch (roleDTO)
+                {
+                    case RolDTO.AdminSystem:
+                        roles.Add(Rol.AdminSystem);
+                        break;
+                    case RolDTO.ProjectMember:
+                        roles.Add(Rol.ProjectMember);
+                        break;
+                    case RolDTO.AdminProject:
+                        roles.Add(Rol.AdminProject);
+                        break;
+                }
+        }
+
+        return roles;
+    }
 
     private Notification ToEntity(NotificationDTO notificationDTO)
     {
         var project = _projectRepository.GetProject(p => p.Name == notificationDTO.Project.Name);
         var notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description, project);
-        notification.Id = notificationDTO.Id;
         return notification;
     }
 
@@ -46,11 +117,15 @@ public class NotificationService
     {
         var user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
+
         var notifications = new List<NotificationDTO>();
         foreach (var notificationId in user.Notifications)
         {
             var notification = _notificationRepository.Get(n => n.Id == notificationId);
-            if (notification != null) notifications.Add(FromEntity(notification));
+            if (notification != null)
+            {
+                notifications.Add(FromEntity(notification));
+            }
         }
 
         return notifications;
@@ -60,23 +135,50 @@ public class NotificationService
     {
         var notification = ToEntity(notificationDTO);
         _notificationRepository.Add(notification);
-        var noti = _notificationRepository.Get(n => n.description == notification.description);
-        foreach (var user in _projectRepository.GetProject(p => p.Name == notification.Project.Name).Members)
-            AddNotificationToUser(user.Email, noti.Id);
+
+        var createdNotification = _notificationRepository.Get(n =>
+            n.Description == notification.Description &&
+            n.Project.Id == notification.Project.Id);
+
+        if (createdNotification == null)
+        {
+            throw new InvalidOperationException("Failed to create notification");
+        }
+
+        var project = _projectRepository.GetProject(p => p.Name == notification.Project.Name);
+
+        foreach (var user in project.Members)
+        {
+            AddNotificationToUser(user.Email, createdNotification.Id);
+        }
     }
 
     public void AddNotificationToUser(string userEmail, int? notificationId)
     {
         var user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
-        user.Notifications.Add(notificationId);
-        _userRepository.Update(user.Email, user);
+
+        if (user.Notifications == null)
+        {
+            user.Notifications = new List<int?>();
+        }
+
+        if (!user.Notifications.Contains(notificationId))
+        {
+            user.Notifications.Add(notificationId);
+            _userRepository.Update(user.Email, user);
+        }
     }
 
     public void RemoveNotificationFromUser(string userEmail, int? notificationId)
     {
         var user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
-        user.Notifications.Remove(notificationId);
+
+        if (user.Notifications != null)
+        {
+            user.Notifications.Remove(notificationId);
+            _userRepository.Update(user.Email, user);
+        }
     }
 }

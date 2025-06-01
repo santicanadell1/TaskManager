@@ -20,7 +20,6 @@ public class AdminPServiceTests
     private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
     private TaskRepository _taskRepository;
-    private ResourceRepository _resourceRepository;
 
     [TestInitialize]
     public void Setup()
@@ -35,17 +34,16 @@ public class AdminPServiceTests
         _projectRepository = new ProjectRepository(_context);
         _notificationRepository = new NotificationRepository(_context);
         _taskRepository = new TaskRepository(_context);
-        _resourceRepository = new ResourceRepository(_context);
 
         _userservice = new UserService(_userRepository);
         _login = new Login(_userRepository);
 
         var cpmService = new CpmService();
         _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository, _resourceRepository);
+            _taskRepository);
 
         _adminPservice = new AdminPService(_userRepository, _projectRepository,
-            _notificationRepository, _taskRepository, _resourceRepository);
+            _notificationRepository, _taskRepository);
 
         Admin = new UserDTO
         {
