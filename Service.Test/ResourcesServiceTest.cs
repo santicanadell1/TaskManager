@@ -218,6 +218,7 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO
         {
+            Id = addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description
@@ -280,6 +281,7 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO
         {
+            Id = addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description
@@ -350,6 +352,7 @@ public class ResourcesServiceTest
         var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
         var addedResourceDto = new ResourceDTO
         {
+            Id = addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description
@@ -477,6 +480,7 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO
         {
+            Id = addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description
@@ -543,6 +547,7 @@ public class ResourcesServiceTest
 
         var addedResourceDto = new ResourceDTO
         {
+            Id = addedResource.Id,
             Name = addedResource.Name,
             Type = addedResource.Type,
             Description = addedResource.Description
