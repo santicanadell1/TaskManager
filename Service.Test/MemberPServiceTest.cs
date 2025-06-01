@@ -124,7 +124,7 @@ public class MemberPServiceTest
     }
 
     [TestMethod]
-    [ExpectedException(typeof(UserIsNotAMemberException))]
+    [ExpectedException(typeof(UserHasNoProjectsException))]
     public void GetAllProjectsForMember_WhenUserHasNoProjectMemberRole_ThenThrowPermissionException()
     {
         var user = new UserDTO
