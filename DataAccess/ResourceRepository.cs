@@ -6,12 +6,10 @@ namespace DataAccess;
 
 public class ResourceRepository
 {
-    private static int _nextId;
     protected readonly AppDbContext _db;
 
     public ResourceRepository(AppDbContext db)
     {
-        _nextId = 1;
         _db = db;
     }
 
@@ -27,7 +25,6 @@ public class ResourceRepository
         {
             _db.Set<Resource>().Add(resource);
             _db.SaveChanges();
-            resource.Id = _nextId++;
         }
         catch (DbUpdateException e)
         {
