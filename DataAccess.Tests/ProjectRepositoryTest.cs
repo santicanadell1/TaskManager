@@ -106,7 +106,7 @@ public class ProjectRepositoryTest
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         _projectRepository.AddProject(project);
         
-        var updatedProject = new Project { Name = "Project 1", Description = "Updated Project description" };  
+        var updatedProject = new Project { Name = "Project 1", Description = "Updated Project description", StartDate = DateTime.Parse("2026-01-01")};  
         _projectRepository.UpdateProject(project.Name, updatedProject);
     
         var retrievedProject = _projectRepository.GetProject(p => p.Name == "Project 1");

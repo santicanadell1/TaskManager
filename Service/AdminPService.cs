@@ -224,6 +224,7 @@ public class AdminPService : IAdminPService
 
         return new ProjectDTO
         {
+            Id = project.Id,
             Name = project.Name,
             Description = project.Description,
             StartDate = project.StartDate,
@@ -237,6 +238,7 @@ public class AdminPService : IAdminPService
     {
         var project = new Project
         {
+            Id = projectDTO.Id,
             Name = projectDTO.Name,
             Description = projectDTO.Description,
             StartDate = projectDTO.StartDate,

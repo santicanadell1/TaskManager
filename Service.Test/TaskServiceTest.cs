@@ -31,6 +31,7 @@ public class TaskServiceTest
     private UserRepository _userRepository;
     private TaskRepository _taskRepository;
     private ResourceRepository _resourceRepository;
+    private ResourceService _resourceService;
 
     [TestInitialize]
     public void Setup()
@@ -51,19 +52,11 @@ public class TaskServiceTest
         _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, _cpmService,
             _taskRepository, _resourceRepository);
         _login = new Login(_userRepository);
+        _resourceService = new ResourceService(_resourceRepository,_projectRepository);
 
         _genericProject = new Project("Generic Project", "Description", DateTime.Now);
         _projectRepository.AddProject(_genericProject);
-
-        _context.SaveChanges();
-
-        _resource1 = new Resource("Resource 1", "Type 1", "Description 1") { Id = 1 };
-        _resource2 = new Resource("Resource 2", "Type 2", "Description 2") { Id = 2 };
-
-        _context.Resources.Add(_resource1);
-        _context.Resources.Add(_resource2);
-        _context.SaveChanges();
-
+        
         _resourceDTO1 = new ResourceDTO
         {
             Name = "Resource 1",
@@ -77,6 +70,10 @@ public class TaskServiceTest
             Type = "Type 2",
             Description = "Description 2"
         };
+        
+        _resourceService.AddResource(_resourceDTO1);
+        _resourceService.AddResource(_resourceDTO2);
+        
 
         _taskDTO1 = new TaskDTO
         {
@@ -123,6 +120,9 @@ public class TaskServiceTest
             new List<Resource> { _resource2 }
         );
         _task2.State = State.DOING;
+        
+        _taskService.CreateTask(_taskDTO1);
+        _taskService.CreateTask(_taskDTO2);
 
         _projectRepository.AddTask("Generic Project", _task1);
         _projectRepository.AddTask("Generic Project", _task2);
@@ -161,8 +161,9 @@ public class TaskServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>()
         };
-
-        _taskService.AddTask("Generic Project", taskDTO);
+        _taskService.CreateTask(taskDTO);
+        var id = _taskRepository.Get(t=> t.Title == "Test Task").Id;
+        _taskService.AddTask("Generic Project", id);
 
         var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var tasks = project.Tasks;
@@ -181,8 +182,9 @@ public class TaskServiceTest
             ExpectedStartDate = DateTime.Now.AddDays(1),
             Duration = 5
         };
-
-        _taskService.AddTask("Non-Existent Project", taskDTO);
+        _taskService.CreateTask(taskDTO);
+        var id = _taskRepository.Get(t=> t.Title == "Test Task").Id;
+        _taskService.AddTask("Non-Existent Project", id);
     }
 
     [TestMethod]
@@ -196,14 +198,16 @@ public class TaskServiceTest
             Duration = 2,
             PreviousTasks = new List<TaskDTO>
             {
-                new() { Id = _task1.Id },
-                new() { Id = _task2.Id }
+                 _taskDTO1,_taskDTO2 
             },
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>()
         };
+        
+        _taskService.CreateTask(taskDTO);
+        var id = _taskRepository.Get(t=> t.Title == "Task with Dependencies").Id;
 
-        _taskService.AddTask("Generic Project", taskDTO);
+        _taskService.AddTask("Generic Project", id);
 
         var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Task with Dependencies");
@@ -231,8 +235,9 @@ public class TaskServiceTest
             },
             Resources = new List<ResourceDTO>()
         };
-
-        _taskService.AddTask("Generic Project", taskDTO);
+        _taskService.CreateTask(taskDTO);
+        var id = _taskRepository.Get(t=> t.Title == "Task with Same Time Tasks").Id;
+        _taskService.AddTask("Generic Project", id);
 
         var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Task with Same Time Tasks");
@@ -581,8 +586,11 @@ public class TaskServiceTest
                 }
             }
         };
+        
+        _taskService.CreateTask(complexDTO);
+        var id = _taskRepository.Get(t=> t.Title == "Complex Mapping DTO").Id;
 
-        _taskService.AddTask("Generic Project", complexDTO);
+        _taskService.AddTask("Generic Project", id);
 
         var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Complex Mapping DTO");
@@ -609,8 +617,9 @@ public class TaskServiceTest
             Duration = 3,
             Resources = new List<ResourceDTO>()
         };
-
-        _taskService.AddTask("Generic Project", taskX);
+        _taskService.CreateTask(taskX);
+        var id = _taskRepository.Get(t=> t.Title == "Task X").Id;
+        _taskService.AddTask("Generic Project", id);
 
         var project = _projectRepository.GetProject(p => p.Name == "Generic Project");
         var taskXEntity = project.Tasks.FirstOrDefault(t => t.Title == "Task X");
@@ -625,8 +634,9 @@ public class TaskServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>()
         };
-
-        _taskService.AddTask("Generic Project", taskY);
+        _taskService.CreateTask(taskY);
+        var id1 = _taskRepository.Get(t=> t.Title == "Task Y").Id;
+        _taskService.AddTask("Generic Project", id1);
 
         var taskYEntity = project.Tasks.FirstOrDefault(t => t.Title == "Task Y");
 
@@ -765,6 +775,9 @@ public class TaskServiceTest
             Duration = 3,
             Resources = new List<ResourceDTO>()
         };
-        _taskService.AddTask("Generic Project", taskDTO);
+        
+        _taskService.CreateTask(taskDTO);
+        var id = _taskRepository.Get(t=> t.Title == "Task with invalid start date").Id;
+        _taskService.AddTask("Generic Project", id);
     }
 }

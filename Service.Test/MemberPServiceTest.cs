@@ -104,8 +104,13 @@ public class MemberPServiceTest
             ExpectedStartDate = DateTime.Today
         };
         
-        _taskService.AddTask("New Project", task);
-        _taskService.AddTask("New Project", task2);
+        _taskService.CreateTask(task2);
+        _taskService.CreateTask(task);
+        var id1 = _taskRepository.Get(t => t.Title == "Task1").Id;
+        var id2 = _taskRepository.Get(t => t.Title == "Task2").Id;
+        
+        _taskService.AddTask("New Project", id1);
+        _taskService.AddTask("New Project", id2);
     }
     
     [TestCleanup]
@@ -228,7 +233,11 @@ public class MemberPServiceTest
             ExpectedStartDate = DateTime.Today,
             PreviousTasks = new List<TaskDTO> { task }
         };
-        _taskService.AddTask("New Project", task3);
+        
+        _taskService.CreateTask(task3);
+        
+        var id = _taskRepository.Get(t => t.Title == "Task 3").Id;
+        _taskService.AddTask("New Project", id);
 
         var adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,_resourceRepository);
         var newState = StateDTO.DONE;
@@ -253,7 +262,9 @@ public class MemberPServiceTest
             PreviousTasks = new List<TaskDTO> { task }
         };
         
-        _taskService.AddTask("New Project", task3);
+        var id = _taskRepository.Get(t => t.Title == "Task 3").Id;
+        
+        _taskService.AddTask("New Project", id);
 
 
         var newState = StateDTO.DONE;

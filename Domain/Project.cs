@@ -10,6 +10,7 @@ public class Project
     public List<User> Members { get; set; } = new();
     public List<Task> Tasks { get; set; } = new();
     public User AdminProject { get; set; }
+
     public Project()
     {
     }
@@ -56,17 +57,10 @@ public class Project
             startDate = value;
         }
     }
-    
-    public string? Id
-    {
-        get => Name;  
-        set
-        {
-            if (string.IsNullOrWhiteSpace(value)) throw new ProjectNameException();
-            Name = value;  
-        }
-    }   
-    
+
+    public int? Id { get; set; }
+
+
     public void AddMember(User user)
     {
         Members.Add(user);

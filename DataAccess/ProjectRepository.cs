@@ -36,12 +36,7 @@ public class ProjectRepository
 
     public Project? GetProject(Func<Project, bool> filter)
     {
-        return _db.Set<Project>()
-            .Include(p => p.Tasks)
-            .ThenInclude(t => t.Resources)
-            .Include(p => p.Tasks)
-            .ThenInclude(t => t.PreviousTasks)
-            .FirstOrDefault(filter);
+        return _db.Set<Project>().FirstOrDefault(filter);
     }
 
     public void RemoveProject(string name)
@@ -66,6 +61,11 @@ public class ProjectRepository
 
         existingProject.Description = project.Description;
         existingProject.Name = project.Name;
+        existingProject.Tasks = project.Tasks;
+        existingProject.StartDate = project.StartDate;
+        existingProject.AdminProject = project.AdminProject;
+        existingProject.Members = project.Members;
+
         _db.SaveChanges();
     }
 

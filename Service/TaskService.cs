@@ -19,7 +19,8 @@ public class TaskService
     private readonly ResourceRepository _resourceRepository;
 
     public TaskService(ProjectRepository projectRepository, NotificationRepository notificationRepository,
-        UserRepository userRepository, CpmService cpmService, TaskRepository taskRepository, ResourceRepository resourceRepository)
+        UserRepository userRepository, CpmService cpmService, TaskRepository taskRepository,
+        ResourceRepository resourceRepository)
     {
         _projectRepository = projectRepository;
         _notificationRepository = notificationRepository;
@@ -29,12 +30,19 @@ public class TaskService
         _resourceRepository = resourceRepository;
     }
 
-    public void AddTask(string projectName, TaskDTO taskDTO)
+    public void CreateTask(TaskDTO taskDTO)
+    {
+        Task task = ToEntity(taskDTO);
+        _taskRepository.Add(task);
+    }
+
+    public void AddTask(string projectName, int? taskId)
     {
         var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
+        var task = _taskRepository.Get(t => t.Id == taskId);
 
-        if (taskDTO.ExpectedStartDate.AddDays(1) <= project.StartDate)
+        if (task.ExpectedStartDate.AddDays(1) <= project.StartDate)
         {
             throw new TaskException("The task's start date is before the project's start date.");
         }
@@ -42,31 +50,21 @@ public class TaskService
         var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
 
-        if (taskDTO.PreviousTasks != null)
-            foreach (var prevTaskDTO in taskDTO.PreviousTasks)
+        if (task.PreviousTasks != null)
+            foreach (var prevTaskDTO in task.PreviousTasks)
                 if (prevTaskDTO.Id.HasValue)
                 {
                     var existingTask = project.Tasks.FirstOrDefault(t => t.Id == prevTaskDTO.Id);
                     if (existingTask != null) previousTasks.Add(existingTask);
                 }
 
-        if (taskDTO.SameTimeTasks != null)
-            foreach (var sameTaskDTO in taskDTO.SameTimeTasks)
+        if (task.SameTimeTasks != null)
+            foreach (var sameTaskDTO in task.SameTimeTasks)
                 if (sameTaskDTO.Id.HasValue)
                 {
                     var existingTask = project.Tasks.FirstOrDefault(t => t.Id == sameTaskDTO.Id);
                     if (existingTask != null) sameTimeTasks.Add(existingTask);
                 }
-
-        var task = new Task(
-            taskDTO.Title,
-            taskDTO.Description,
-            taskDTO.ExpectedStartDate,
-            taskDTO.Duration,
-            previousTasks,
-            sameTimeTasks,
-            ToResourceEntityList(taskDTO.Resources)
-        );
 
         _projectRepository.AddTask(projectName, task);
 
@@ -90,9 +88,10 @@ public class TaskService
     public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
     {
         var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository
-            );
+        );
         var projectService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,_resourceRepository);
+            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,
+                _resourceRepository);
         var project = _projectRepository.GetProject(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
@@ -326,8 +325,10 @@ public class TaskService
             var existing = _resourceRepository.Get(r => r.Id == resourceDTO.Id);
             if (existing == null)
                 throw new ResourceNotFoundException();
+            existing.Id = resourceDTO.Id;
             resources.Add(existing);
         }
+
         return resources;
     }
 }

@@ -240,9 +240,12 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
-
+        
+        _taskService.CreateTask(task);
+        var id = _taskRepository.Get(t=> t.Title == "Title1").Id;
+        
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project1", task);
+        _taskService.AddTask("Project1", id);
         
         var updatedResourceDTO = new ResourceDTO
         {
@@ -319,11 +322,15 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
-
+        _taskService.CreateTask(task);
+        var id = _taskRepository.Get(t=> t.Title == "Title 1").Id;
+        _taskService.CreateTask(task2);
+        var id2 = _taskRepository.Get(t=> t.Title == "Title 2").Id;
+        
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project 1", task);
+        _taskService.AddTask("Project 1", id);
         _adminProjectService.CreateProject(project2);
-        _taskService.AddTask("Project 2", task2);
+        _taskService.AddTask("Project 2", id2);
 
         var updatedResourceDTO = new ResourceDTO
         {
@@ -374,9 +381,10 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
-
+        _taskService.CreateTask(task);
+        var id = _taskRepository.Get(t=> t.Title == "Title1").Id;
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project1", task);
+        _taskService.AddTask("Project1", id);
 
         var updatedResourceDTO = new ResourceDTO
         {
@@ -446,8 +454,9 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>()
         };
-
-        _taskService.AddTask("Project1", task);
+        _taskService.CreateTask(task);
+        var id = _taskRepository.Get(t=> t.Title == "Title1").Id;
+        _taskService.AddTask("Project1", id);
 
         var projectEntity = _projectRepository.GetProject(p => p.Name == "Project1");
         var taskEntity = projectEntity.Tasks.First(t => t.Title == "Title1");
@@ -475,6 +484,7 @@ public class ResourcesServiceTest
         };
 
         _resourceService.AddResource(resourceDTO);
+        _loginService.Logout();
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
@@ -518,13 +528,17 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
+        _taskService.CreateTask(task);
+        var id = _taskRepository.Get(t=> t.Title == "Title 1").Id;
+        _taskService.CreateTask(task2);
+        var id2 = _taskRepository.Get(t=> t.Title == "Title 2").Id;
 
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project 1", task);
+        _taskService.AddTask("Project 1", id);
         _adminProjectService.CreateProject(project2);
-        _taskService.AddTask("Project 2", task2);
-        Assert.IsNotNull(addedResource);
+        _taskService.AddTask("Project 2", id2);
 
+    
         _resourceService.DeleteResource(addedResource.Id);
     }
 
@@ -570,10 +584,11 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
-
+        _taskService.CreateTask(task);
+        var id = _taskRepository.Get(t=> t.Title == "Title1").Id;
         _adminProjectService.CreateProject(project);
 
-        _taskService.AddTask("Project1", task);
+        _taskService.AddTask("Project1", id);
 
         Assert.IsNotNull(addedResource);
         _loginService.LoginUser("adminProject2.user@example.com", "AdminPassword123@");
