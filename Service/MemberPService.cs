@@ -64,9 +64,9 @@ public class MemberPService : IMemberPService
 
     public void ChangeTaskStatus(string projectName, string email, TaskDTO task, StateDTO status)
     {
-        CheckIsTaskOfTheUser((int)task.Id, email);
+        CheckIsTaskOfTheUser(task.Id, email);
 
-        var currentTask = _taskService.GetTask(projectName, (int)task.Id);
+        var currentTask = _taskService.GetTask(projectName, task.Id);
 
         if (currentTask.PreviousTasks != null && currentTask.PreviousTasks.Count > 0)
         {
@@ -90,7 +90,7 @@ public class MemberPService : IMemberPService
             throw new UserIsNotAMemberException();
     }
 
-    private void CheckIsTaskOfTheUser(int taskId, string email)
+    private void CheckIsTaskOfTheUser(int? taskId, string email)
     {
         var user = _userRepository.Get(u => u.Email == email);
         if (user == null)

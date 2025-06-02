@@ -66,7 +66,9 @@ public class TaskService
                     if (existingTask != null) sameTimeTasks.Add(existingTask);
                 }
 
-        _projectRepository.AddTask(projectName, task);
+        project.Tasks.Add(task);
+
+        _projectRepository.Update(project);
 
         RecalculateCriticalPath(projectName);
     }
@@ -80,7 +82,8 @@ public class TaskService
         if (task == null) throw new TaskNotFoundException();
 
         _projectRepository.RemoveTask(projectName, task.Id);
-        _taskRepository.Delete((int)task.Id);
+        var taskEntity = _taskRepository.Get(t => t.Id == task.Id);
+        _taskRepository.Delete(taskEntity);
 
         RecalculateCriticalPath(projectName);
     }

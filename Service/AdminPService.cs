@@ -130,7 +130,7 @@ public class AdminPService : IAdminPService
         return memberDTOs;
     }
 
-    public void AddTaskToMember(string projectName, string memberEmail, int taskID)
+    public void AddTaskToMember(string projectName, string memberEmail, int? taskID)
     {
         CheckAdminProyectRole();
         var projectEntity = _projectRepository.Get(p => p.Name == projectName);
@@ -150,7 +150,7 @@ public class AdminPService : IAdminPService
         _userRepository.Update(userEntity);
     }
 
-    public void RemoveTaskFromMember(string projectName, string memberEmail, int taskID)
+    public void RemoveTaskFromMember(string projectName, string memberEmail, int? taskID)
     {
         CheckAdminProyectRole();
         var projectEntity = _projectRepository.Get(p => p.Name == projectName);

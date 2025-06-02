@@ -41,7 +41,8 @@ public AdminSService(UserRepository userRepository, ProjectRepository projectRep
         if (user == null) throw new UserNotFoundException();
         var projects = adminPService.GetAllProjectsForUser(userDTO.Email);
         foreach (var project in projects) adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
-        _userRepository.Delete(user.Email);
+        var userEntity = _userRepository.Get(u => u.Email == userDTO.Email);
+        _userRepository.Delete(userEntity);
     }
 
     public void ChangePassword(string email, string newPassword, string oldPassword)

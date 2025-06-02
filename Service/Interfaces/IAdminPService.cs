@@ -16,8 +16,8 @@ public interface IAdminPService
     void AssignMembersToProject(string projectName, List<UserDTO> membersDTO);
     void RemoveMemberFromProject(string projectName, string memberEmail);
     List<UserDTO> GetMembers(string projectName);
-    void AddTaskToMember(string projectName, string memberEmail, int taskID);
-    void RemoveTaskFromMember(string projectName, string memberEmail, int taskID);
+    void AddTaskToMember(string projectName, string memberEmail, int? taskID);
+    void RemoveTaskFromMember(string projectName, string memberEmail, int? taskID);
 
     
     List<TaskDTO> GetAllTaskForAMember(string email);
