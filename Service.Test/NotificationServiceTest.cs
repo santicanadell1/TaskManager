@@ -86,8 +86,8 @@ public class NotificationServiceTest
             Members = new List<User> { savedUser1Entity }
         };
 
-        _projectRepository.AddProject(project1);
-        _projectRepository.AddProject(project2);
+        _projectRepository.Add(project1);
+        _projectRepository.Add(project2);
     }
 
     [TestMethod]
@@ -108,7 +108,7 @@ public class NotificationServiceTest
     public void AddNotificationToProject_WhenNotificationIsAdded_ThenNotificationShouldBeAddedToAllProjectMembers()
     {
         var projectName = "Project 1";
-        var project = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var project = _projectRepository.Get(p => p.Name == "Project 1");
 
         var notificationDTO = new NotificationDTO
         {
@@ -122,7 +122,7 @@ public class NotificationServiceTest
         var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
         var user2 = _userRepository.Get(u => u.Email == "Email2@example.com");
 
-        project = _projectRepository.GetProject(p => p.Name == "Project 1");
+        project = _projectRepository.Get(p => p.Name == "Project 1");
 
         Assert.AreEqual(2, project.Members.Count);
         Assert.AreEqual(1, user1.Notifications.Count);

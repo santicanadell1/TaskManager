@@ -127,7 +127,7 @@ public class ResourceService : IResourceService
 
     private List<Project> GetProjectsThatAreUsingResource(Resource resource)
     {
-        var projects = _projectRepository.GetAllProjects();
+        var projects = _projectRepository.GetAll();
         List<Project> projectsThatAreUsingResource = new List<Project>();
         foreach (var project in projects)
         foreach (var task in project.Tasks)

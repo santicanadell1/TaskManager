@@ -40,9 +40,9 @@ public class ProjectRepositoryTest
     public void NewProject_WhenAddingNewProject_ListShouldContainIt()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" }; 
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
         
-        var projects = _projectRepository.GetAllProjects();
+        var projects = _projectRepository.GetAll();
         Assert.IsTrue(projects.Any(p => p.Name == "Project 1"));
     }
 
@@ -51,10 +51,10 @@ public class ProjectRepositoryTest
     public void AddNewProject_WhenAddingDuplicatedProject_ShouldThrowDuplicatedNameException()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
     
         var duplicateProject = new Project { Name = "Project 1", Description = "Project 1 description" };
-        _projectRepository.AddProject(duplicateProject);
+        _projectRepository.Add(duplicateProject);
     }
 
     [TestMethod]
@@ -63,10 +63,10 @@ public class ProjectRepositoryTest
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
         
-        _projectRepository.AddProject(project);
-        _projectRepository.AddProject(project2);
+        _projectRepository.Add(project);
+        _projectRepository.Add(project2);
         
-        var foundProject = _projectRepository.GetProject(u => u.Name == "Project 2");
+        var foundProject = _projectRepository.Get(u => u.Name == "Project 2");
         Assert.IsNotNull(foundProject);
         Assert.AreEqual("Project 2", foundProject.Name);
         Assert.AreEqual("Project 2 description", foundProject.Description);
@@ -78,12 +78,12 @@ public class ProjectRepositoryTest
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
         
-        _projectRepository.AddProject(project);
-        _projectRepository.AddProject(project2);
+        _projectRepository.Add(project);
+        _projectRepository.Add(project2);
         
-        _projectRepository.RemoveProject(project.Name);
+        _projectRepository.Delete(project.Name);
         
-        Assert.IsNull(_projectRepository.GetProject(p => p.Name == "Project 1"));
+        Assert.IsNull(_projectRepository.Get(p => p.Name == "Project 1"));
     }
 
     [TestMethod]
@@ -93,23 +93,23 @@ public class ProjectRepositoryTest
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
         
-        _projectRepository.AddProject(project);
-        _projectRepository.AddProject(project2);
+        _projectRepository.Add(project);
+        _projectRepository.Add(project2);
         
-        _projectRepository.RemoveProject(project.Name);
-        _projectRepository.RemoveProject(project.Name); 
+        _projectRepository.Delete(project.Name);
+        _projectRepository.Delete(project.Name); 
     }
     
     [TestMethod]
     public void UpdateProject_WhenGettingProject_ShouldBeDifferentFromTheOriginalProject()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
         
         var updatedProject = new Project { Name = "Project 1", Description = "Updated Project description", StartDate = DateTime.Parse("2026-01-01")};  
-        _projectRepository.UpdateProject(project.Name, updatedProject);
+        _projectRepository.Update(updatedProject);
     
-        var retrievedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var retrievedProject = _projectRepository.Get(p => p.Name == "Project 1");
     
         Assert.IsNotNull(retrievedProject);
         Assert.AreEqual("Updated Project description", retrievedProject.Description);  
@@ -122,11 +122,11 @@ public class ProjectRepositoryTest
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
-        _projectRepository.AddProject(project);
-        _projectRepository.AddProject(project2);
+        _projectRepository.Add(project);
+        _projectRepository.Add(project2);
         
         var project3 = new Project { Name = "Project 2", Description = "Project 3 description" };
-        _projectRepository.UpdateProject(project.Name, project3);
+        _projectRepository.Update(project3);
     }
 
     [TestMethod]
@@ -135,20 +135,20 @@ public class ProjectRepositoryTest
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 description" };
         var project2 = new Project { Name = "Project 2", Description = "Project 2 description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
         
-        _projectRepository.UpdateProject("Project 4", project2);
+        _projectRepository.Update(project2);
     }
  [TestMethod]
     public void AddTask_WhenAddingNewTask_ShouldContainIt()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
         
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
         
-        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var refreshedProject = _projectRepository.Get(p => p.Name == "Project 1");
         Assert.IsNotNull(refreshedProject);
         Assert.IsTrue(refreshedProject.Tasks.Any(t => t.Title == "Task 1"));
     }
@@ -157,7 +157,7 @@ public class ProjectRepositoryTest
     public void UpdateTask_WhenUpdatingExistingTask_ShouldUpdateTaskDetails()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>())
         {
@@ -165,7 +165,7 @@ public class ProjectRepositoryTest
         };
         _projectRepository.AddTask(project.Name, task);
 
-        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var refreshedProject = _projectRepository.Get(p => p.Name == "Project 1");
         var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
         
         var updatedTask = new Task("Updated Task 1", "Updated Task 1 description", DateTime.Now.AddDays(1), 10, new List<Task>(), new List<Task>(), new List<Resource>())
@@ -175,7 +175,7 @@ public class ProjectRepositoryTest
         
         _projectRepository.UpdateTask(project.Name, insertedTask.Id, updatedTask);
 
-        var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var finalProject = _projectRepository.Get(p => p.Name == "Project 1");
         var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask.Id);
         
         Assert.IsNotNull(taskInProject);
@@ -190,7 +190,7 @@ public class ProjectRepositoryTest
     public void UpdateTask_WhenProjectNotFound_ShouldThrowProjectNotFoundException()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
@@ -205,7 +205,7 @@ public class ProjectRepositoryTest
     public void UpdateTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
@@ -219,17 +219,17 @@ public class ProjectRepositoryTest
     public void RemoveTask_WhenTaskExists_ShouldRemoveTaskFromProject()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
 
-        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var refreshedProject = _projectRepository.Get(p => p.Name == "Project 1");
         var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
 
         _projectRepository.RemoveTask(project.Name, insertedTask.Id);
 
-        var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var finalProject = _projectRepository.Get(p => p.Name == "Project 1");
         var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask.Id);
         Assert.IsNull(taskInProject);
     }
@@ -239,7 +239,7 @@ public class ProjectRepositoryTest
     public void RemoveTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
@@ -261,7 +261,7 @@ public class ProjectRepositoryTest
     public void AddPreviousTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
@@ -276,13 +276,13 @@ public class ProjectRepositoryTest
     public void AddPreviousTask_WhenTaskNotPartOfProject_ShouldThrowTaskNotFoundException()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
 
         // Obtener el ID real del task
-        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var refreshedProject = _projectRepository.Get(p => p.Name == "Project 1");
         var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
 
         var previousTask = new Task("Previous Task", "Previous Task description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>());
@@ -294,7 +294,7 @@ public class ProjectRepositoryTest
     public void AddPreviousTask_WhenTaskIsValid_ShouldAddPreviousTask()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var task1 = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         var task2 = new Task("Task 2", "Task 2 description", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>());
@@ -302,13 +302,13 @@ public class ProjectRepositoryTest
         _projectRepository.AddTask(project.Name, task1);
         _projectRepository.AddTask(project.Name, task2);
 
-        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var refreshedProject = _projectRepository.Get(p => p.Name == "Project 1");
         var insertedTask1 = refreshedProject.Tasks.First(t => t.Title == "Task 1");
         var insertedTask2 = refreshedProject.Tasks.First(t => t.Title == "Task 2");
 
         _projectRepository.AddPreviousTask(project.Name, insertedTask1.Id, insertedTask2);
 
-        var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var finalProject = _projectRepository.Get(p => p.Name == "Project 1");
         var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask1.Id);
         
         Assert.IsNotNull(taskInProject);
@@ -320,18 +320,18 @@ public class ProjectRepositoryTest
     public void AddResourceToTask_WhenTaskExists_ShouldAddResource()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var task = new Task("Task 1", "Task 1 description", DateTime.Now, 5, new List<Task>(), new List<Task>(), new List<Resource>());
         _projectRepository.AddTask(project.Name, task);
 
-        var refreshedProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var refreshedProject = _projectRepository.Get(p => p.Name == "Project 1");
         var insertedTask = refreshedProject.Tasks.First(t => t.Title == "Task 1");
 
         var resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
         _projectRepository.AddResourceToTask(project.Name, insertedTask.Id, resource);
 
-        var finalProject = _projectRepository.GetProject(p => p.Name == "Project 1");
+        var finalProject = _projectRepository.Get(p => p.Name == "Project 1");
         var taskInProject = finalProject.Tasks.FirstOrDefault(t => t.Id == insertedTask.Id);
         
         Assert.IsNotNull(taskInProject);
@@ -352,7 +352,7 @@ public class ProjectRepositoryTest
     public void AddResourceToTask_WhenTaskNotFound_ShouldThrowTaskNotFoundException()
     {
         var project = new Project { Name = "Project 1", Description = "Project 1 Description" };
-        _projectRepository.AddProject(project);
+        _projectRepository.Add(project);
 
         var resource = new Resource("Resource 1", "Type 1", "Description of Resource 1");
 

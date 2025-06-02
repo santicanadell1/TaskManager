@@ -38,7 +38,7 @@ public class TaskService
 
     public void AddTask(string projectName, int? taskId)
     {
-        var project = _projectRepository.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
         var task = _taskRepository.Get(t => t.Id == taskId);
 
@@ -73,7 +73,7 @@ public class TaskService
 
     public void DeleteTask(string projectName, int? taskId)
     {
-        var project = _projectRepository.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -92,7 +92,7 @@ public class TaskService
         var projectService =
             new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,
                 _resourceRepository);
-        var project = _projectRepository.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -147,7 +147,7 @@ public class TaskService
 
     public List<TaskDTO> GetTasks(string projectName)
     {
-        var project = _projectRepository.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var taskDTOs = project.Tasks.Select(t => new TaskDTO
@@ -189,7 +189,7 @@ public class TaskService
 
     public TaskDTO GetTask(string projectName, int? taskId)
     {
-        var project = _projectRepository.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -200,7 +200,7 @@ public class TaskService
 
     public CpmResultDTO GetCriticalPath(string projectName)
     {
-        var project = _projectRepository.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         var cpmResult = _cpmService.CalculateCriticalPath(GetTasks(projectName));
@@ -217,7 +217,7 @@ public class TaskService
 
     private void RecalculateCriticalPath(string projectName)
     {
-        var project = _projectRepository.GetProject(p => p.Name == projectName);
+        var project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null || project.Tasks.Count == 0) return;
 
         try

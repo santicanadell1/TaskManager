@@ -93,7 +93,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
         Assert.AreEqual("New Project", project.Name);
     }
@@ -112,7 +112,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
 
         var userDTO = new UserDTO
         {
@@ -145,7 +145,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
 
         var userDTO = new UserDTO
         {
@@ -178,7 +178,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
 
         var userDTO = new UserDTO
         {
@@ -198,7 +198,7 @@ public class AdminPServiceTests
         _adminPservice.RemoveMemberFromProject(project.Name, "john.doe@example.com");
         _adminPservice.RemoveMemberFromProject(project.Name, "member.user@example.com");
 
-        project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
+        project = _projectRepository.Get(p => p.Name == projectDTO.Name);
 
         Assert.IsTrue(project.Members.Count == 0);
     }
@@ -218,7 +218,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
 
         _adminPservice.RemoveMemberFromProject("Proyecto 1", "member.user@example.com");
     }
@@ -238,7 +238,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
 
         _adminPservice.RemoveMemberFromProject(project.Name, "john.user@example.com");
     }
@@ -257,12 +257,12 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
 
         _adminPservice.RemoveProject("New Project");
 
-        project = _projectRepository.GetProject(p => p.Name == "New Project");
+        project = _projectRepository.Get(p => p.Name == "New Project");
         Assert.IsNull(project);
     }
 
@@ -281,7 +281,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.GetProject(p => p.Name == projectDTO.Name);
+        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
 
         var updatedDTO = new ProjectDTO

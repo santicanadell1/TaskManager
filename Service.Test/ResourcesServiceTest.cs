@@ -458,7 +458,7 @@ public class ResourcesServiceTest
         var id = _taskRepository.Get(t=> t.Title == "Title1").Id;
         _taskService.AddTask("Project1", id);
 
-        var projectEntity = _projectRepository.GetProject(p => p.Name == "Project1");
+        var projectEntity = _projectRepository.Get(p => p.Name == "Project1");
         var taskEntity = projectEntity.Tasks.First(t => t.Title == "Title1");
         var resourceEntity = _resourceRepository.Get(r => r.Id == addedResource.Id);
 

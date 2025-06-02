@@ -6,7 +6,7 @@ using TaskRepositoryExceptions = DataAccess.Exceptions.TaskRepositoryExceptions;
 
 namespace DataAccess;
 
-public class ProjectRepository
+public class ProjectRepository:IRepository<Project>
 {
     protected readonly AppDbContext _db;
 
@@ -15,7 +15,7 @@ public class ProjectRepository
         _db = db;
     }
 
-    public void AddProject(Project project)
+    public void Add(Project project)
     {
         if (_db.Set<Project>().Any(p => p.Name == project.Name))
             throw new DuplicatedProjectsNameException();
@@ -24,7 +24,7 @@ public class ProjectRepository
         _db.SaveChanges();
     }
 
-    public List<Project> GetAllProjects()
+    public List<Project> GetAll()
     {
         return _db.Set<Project>()
             .Include(p => p.Tasks)
@@ -34,16 +34,16 @@ public class ProjectRepository
             .ToList();
     }
 
-    public Project? GetProject(Func<Project, bool> filter)
+    public Project? Get(Func<Project, bool> filter)
     {
         return _db.Set<Project>().FirstOrDefault(filter);
     }
 
-    public void RemoveProject(string name)
+    public void Delete(Project projectE)
     {
         var project = _db.Set<Project>()
             .Include(p => p.Tasks)
-            .FirstOrDefault(p => p.Name == name);
+            .FirstOrDefault(p => p.Name == projectE.Name);
 
         if (project == null) throw new ProjectNotFoundException();
 
@@ -51,12 +51,12 @@ public class ProjectRepository
         _db.SaveChanges();
     }
 
-    public void UpdateProject(string name, Project project)
+    public void Update(Project project)
     {
-        if (_db.Set<Project>().Any(p => p.Name == project.Name) && project.Name != name)
+        if (_db.Set<Project>().Any(p => p.Name == project.Name  && project.Id != p.Id))
             throw new DuplicatedProjectsNameException();
 
-        var existingProject = _db.Set<Project>().FirstOrDefault(p => p.Name == name);
+        var existingProject = _db.Set<Project>().FirstOrDefault(p => p.Id == project.Id);
         if (existingProject == null) throw new ProjectNotFoundException();
 
         existingProject.Description = project.Description;

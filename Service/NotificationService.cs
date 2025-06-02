@@ -108,7 +108,7 @@ public class NotificationService
 
     private Notification ToEntity(NotificationDTO notificationDTO)
     {
-        var project = _projectRepository.GetProject(p => p.Name == notificationDTO.Project.Name);
+        var project = _projectRepository.Get(p => p.Name == notificationDTO.Project.Name);
         var notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description, project);
         return notification;
     }
@@ -145,7 +145,7 @@ public class NotificationService
             throw new InvalidOperationException("Failed to create notification");
         }
 
-        var project = _projectRepository.GetProject(p => p.Name == notification.Project.Name);
+        var project = _projectRepository.Get(p => p.Name == notification.Project.Name);
 
         foreach (var user in project.Members)
         {
