@@ -4,15 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
 
-public class NotificationRepository
+public class NotificationRepository:IRepository<Notification>
 {
-    private static int _nextId;
     protected readonly AppDbContext _db;
 
     public NotificationRepository(AppDbContext db)
     {
         _db = db;
-        _nextId = 1;
     }
 
     public List<Notification> GetAll()
@@ -22,7 +20,6 @@ public class NotificationRepository
 
     public void Add(Notification notification)
     {
-        notification.Id = _nextId++;
         _db.Set<Notification>().Add(notification);
         _db.SaveChanges();
     }
@@ -32,11 +29,11 @@ public class NotificationRepository
         return _db.Set<Notification>().FirstOrDefault(filter);
     }
 
-    public void Update(Notification oldNotification, Notification newNotification)
+    public void Update(Notification newNotification)
     {
         try
         {
-            var existingNotification = _db.Notifications.Find(oldNotification.Id);
+            var existingNotification = _db.Notifications.Find(newNotification.Id);
             if (existingNotification == null)
             {
                 throw new NotificationNotFoundException();

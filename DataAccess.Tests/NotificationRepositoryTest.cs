@@ -65,7 +65,7 @@ public class NotificationRepositoryTest
         var notification2 = new Notification(true, "Updated notification", project);
         _notificationRepository.Add(notification1);
 
-        _notificationRepository.Update(notification1, notification2);
+        _notificationRepository.Update(notification2);
 
         var updatedNotification = _notificationRepository.Get(n => n.Description == "Updated notification");
 
@@ -85,7 +85,7 @@ public class NotificationRepositoryTest
         _notificationRepository.Add(notification1);
 
         var notification3 = new Notification(false, "Nonexistent notification", project);
-        _notificationRepository.Update(notification3, notification2);
+        _notificationRepository.Update(notification2);
     }
 
     [TestMethod]
