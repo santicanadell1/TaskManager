@@ -65,6 +65,8 @@ public class TaskRepository : IRepository<Task>
         existingTask.SameTimeTasks = updatedTask.SameTimeTasks ?? new List<Task>();
         existingTask.Resources = updatedTask.Resources ?? new List<Resource>();
 
+        
+        
         try
         {
             _db.SaveChanges();
