@@ -25,7 +25,7 @@ public class ResourceService : IResourceService
         if (isAdminSystem())
         {
             var resource = ToEntity(resourceDTO);
-            _resourceRepository.AddResource(resource);
+            _resourceRepository.Add(resource);
         }
         else
         {
@@ -60,7 +60,7 @@ public class ResourceService : IResourceService
 
         var updatedResource = ToEntity(updatedResourceDTO);
 
-        _resourceRepository.Update(id, updatedResource);
+        _resourceRepository.Update(updatedResource);
     }
 
     public void DeleteResource(int? id)
@@ -68,7 +68,8 @@ public class ResourceService : IResourceService
         isAbleToModifyResource(GetResourceObject(id));
         try
         {
-            _resourceRepository.Delete(id);
+            var res = _resourceRepository.Get(r=>r.Id == id);
+            _resourceRepository.Delete(res);
         }
         catch (Exception ex)
         {

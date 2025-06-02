@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
 
-public class ResourceRepository
+public class ResourceRepository:IRepository<Resource>
 {
     protected readonly AppDbContext _db;
 
@@ -18,7 +18,7 @@ public class ResourceRepository
         return _db.Set<Resource>().ToList();
     }
 
-    public void AddResource(Resource resource)
+    public void Add(Resource resource)
     {
         if (resource == null) throw new ResourceIsNullException();
         try
@@ -38,14 +38,14 @@ public class ResourceRepository
     }
 
 
-    public void Update(int? idToUpdate, Resource updatedResource)
+    public void Update(Resource updatedResource)
     {
-        if (idToUpdate == null || updatedResource == null)
+        if (updatedResource == null)
         {
             throw new ResourceNotFoundException();
         }
 
-        var existingResource = _db.Resources.Find(idToUpdate);
+        var existingResource = _db.Resources.Find(updatedResource.Id);
 
         if (existingResource == null)
         {
@@ -68,11 +68,11 @@ public class ResourceRepository
 
 
 
-    public void Delete(int? idToDelete)
+    public void Delete(Resource resource)
     {
         try
         {
-            var existingResource = _db.Resources.Find(idToDelete);
+            var existingResource = _db.Resources.Find(resource.Id);
             _db.Set<Resource>().Remove(existingResource);
             _db.SaveChanges();
         }

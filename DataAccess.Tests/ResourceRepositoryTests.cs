@@ -36,7 +36,7 @@ public class ResourceRepositoryTests
     {
         var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
 
-        _resourceRepository.AddResource(resource);
+        _resourceRepository.Add(resource);
 
         var addedResource = _resourceRepository.Get(r => r.Name == resource.Name);
         Assert.IsNotNull(addedResource);
@@ -47,10 +47,11 @@ public class ResourceRepositoryTests
     public void Update_ShouldUpdateResource_WhenResourceExists()
     {
         var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
-        _resourceRepository.AddResource(resource);
+        _resourceRepository.Add(resource);
 
         var updatedResource = new Resource("Resource1.v1", "TypeB", "Updated Description");
-        _resourceRepository.Update(resource.Id, updatedResource);
+        updatedResource.Id = _resourceRepository.Get(r => r.Name == resource.Name).Id;
+        _resourceRepository.Update(updatedResource);
 
         var result = _resourceRepository.Get(r =>
             r.Name == updatedResource.Name && r.Description == updatedResource.Description &&
@@ -66,7 +67,7 @@ public class ResourceRepositoryTests
     [ExpectedException(typeof(ResourceNotFoundException))]
     public void Delete_ShouldThrowException_WhenResourceDoesNotExist()
     {
-        _resourceRepository.Delete(999);
+        _resourceRepository.Delete(new Resource());
     }
 
     [TestMethod]
@@ -74,13 +75,14 @@ public class ResourceRepositoryTests
     public void Delete_ShouldThrowException_WhenAddingNullResourceAfterDeletion()
     {
         var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
-        _resourceRepository.AddResource(resource);
+        _resourceRepository.Add(resource);
+        resource.Id = _resourceRepository.Get(r => r.Name == resource.Name).Id;
 
-        _resourceRepository.Delete(resource.Id);
+        _resourceRepository.Delete(resource);
 
         var deletedResource = _resourceRepository.Get(r => r.Name == resource.Name);
 
-        _resourceRepository.AddResource(deletedResource);
+        _resourceRepository.Add(deletedResource);
 
     }
 }
