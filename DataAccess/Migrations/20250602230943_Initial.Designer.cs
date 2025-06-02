@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250530220320_Initial")]
+    [Migration("20250602230943_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -37,8 +37,8 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Read")
                         .HasColumnType("bit");
@@ -52,11 +52,14 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Domain.Project", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("AdminProjectId")
-                        .HasColumnType("nvarchar(450)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<int>("AdminProjectId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -136,8 +139,8 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("LatestStart")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
 
                     b.Property<TimeSpan>("Slack")
                         .HasColumnType("time");
@@ -152,17 +155,25 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<DateTime>("Birthday")
                         .HasColumnType("datetime2");
@@ -187,14 +198,10 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Roles")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Tasks")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -224,7 +231,9 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Domain.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Project");
                 });
@@ -233,7 +242,9 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Domain.User", "AdminProject")
                         .WithMany()
-                        .HasForeignKey("AdminProjectId");
+                        .HasForeignKey("AdminProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AdminProject");
                 });
@@ -250,6 +261,10 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.Project", null)
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId");
+
+                    b.HasOne("Domain.User", null)
+                        .WithMany("Tasks")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -284,6 +299,11 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Domain.Task", b =>
                 {
                     b.Navigation("Resources");
+                });
+
+            modelBuilder.Entity("Domain.User", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }

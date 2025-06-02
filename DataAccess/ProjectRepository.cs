@@ -65,6 +65,7 @@ public class ProjectRepository:IRepository<Project>
         existingProject.StartDate = project.StartDate;
         existingProject.AdminProject = project.AdminProject;
         existingProject.Members = project.Members;
+        existingProject.Id = project.Id;
 
         _db.SaveChanges();
     }

@@ -11,21 +11,21 @@ public class UserServiceTest
     private AppDbContext _context;
     private Login _loginService;
     private UserService _userService;
-    
+
     private UserRepository _userRepository;
-    
-    
+
+
     [TestInitialize]
     public void TestSetUp()
     {
         var contextFactory = new InMemoryAppContextFactory();
         var _context = contextFactory.CreateDbContext();
-        
+
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
-        
+
         _userRepository = new UserRepository(_context);
-        
+
         _userService = new UserService(_userRepository);
         _loginService = new Login(_userRepository);
     }
@@ -35,14 +35,14 @@ public class UserServiceTest
     {
         _context?.Database.EnsureDeleted();
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(InvalidUserEmailException))]
     public void AddUser_ShouldThrowException_WhenEmailIsNotUnique()
     {
         var rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
-        
+
         var _userService = new UserService(_userRepository);
 
         var userDTO1 = new UserDTO
@@ -142,6 +142,9 @@ public class UserServiceTest
 
         _userService.AddUser(userDTO);
 
+        int? id = _userRepository.Get(user => user.Email == userDTO.Email).Id;
+        
+        
         var updatedUserDTO = new UserDTO
         {
             FirstName = "Johnny",
@@ -149,7 +152,8 @@ public class UserServiceTest
             Email = "john.doe@example.com",
             Password = "NewPassword123@",
             Birthday = DateTime.Parse("1990-01-01"),
-            Roles = rols
+            Roles = rols,
+            Id = id
         };
 
 

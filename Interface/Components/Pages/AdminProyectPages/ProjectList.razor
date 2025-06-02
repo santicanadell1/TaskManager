@@ -1051,7 +1051,7 @@
                 .Where(r => r != null && r.Id.HasValue && selectedResourceIds.Contains(r.Id))
                 .ToList() ?? new List<ResourceDTO>();
 
-            TaskService.AddTask(selectedProjectName, newTask);
+            TaskService.AddTask(selectedProjectName, newTask.Id);
             taskSuccessMessage = "Task created successfully!";
             taskErrorMessage = string.Empty;
 

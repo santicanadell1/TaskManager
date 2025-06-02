@@ -54,7 +54,7 @@ public class UserRepository:IRepository<User>
             throw new UserNotFoundException();
         }
 
-        var existingUser = _db.Users.Find(updatedUser.Email);
+        var existingUser = _db.Users.FirstOrDefault(u =>  u.Email == updatedUser.Email);
 
         if (existingUser == null)
         {
@@ -84,7 +84,7 @@ public class UserRepository:IRepository<User>
     {
         try
         {
-            var existingUser = _db.Users.Find(user.Email);
+            var existingUser = _db.Users.FirstOrDefault(u => u.Email == user.Email);
             _db.Set<User>().Remove(existingUser);
             _db.SaveChanges();
         }

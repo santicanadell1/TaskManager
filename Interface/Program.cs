@@ -20,25 +20,23 @@ builder.Services.AddScoped<NotificationRepository>();
 builder.Services.AddScoped<ProjectRepository>();
 builder.Services.AddScoped<ResourceRepository>();
 builder.Services.AddScoped<UserRepository>();
-
-
+builder.Services.AddScoped<TaskRepository>();
 
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-/*
-builder.Services.AddDbContext<AppDbContext>(
-    options => options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        providerOptions => providerOptions.EnableRetryOnFailure())
-);*/
 
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    providerOptions => providerOptions.EnableRetryOnFailure())
+);
+/*
 builder.Services.AddDbContextFactory<AppDbContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         providerOptions => providerOptions.EnableRetryOnFailure())
-);
+);*/
 
 var app = builder.Build();
 

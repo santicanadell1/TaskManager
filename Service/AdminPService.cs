@@ -18,7 +18,8 @@ public class AdminPService : IAdminPService
     private readonly ResourceRepository _resourceRepository;
 
     public AdminPService(UserRepository userRepository, ProjectRepository projectRepository,
-        NotificationRepository notificationRepository, TaskRepository taskRepository, ResourceRepository resourceRepository)
+        NotificationRepository notificationRepository, TaskRepository taskRepository,
+        ResourceRepository resourceRepository)
     {
         _userRepository = userRepository;
         _projectRepository = projectRepository;
@@ -73,7 +74,7 @@ public class AdminPService : IAdminPService
     public void RemoveProject(string projectName)
     {
         CheckAdminProyectRole();
-        var project = _projectRepository.Get(p=> p.Name == projectName);
+        var project = _projectRepository.Get(p => p.Name == projectName);
         _projectRepository.Delete(project);
     }
 
@@ -175,7 +176,7 @@ public class AdminPService : IAdminPService
         var user = _userRepository.Get(u => u.Email == email);
         var cpmService = new CpmService();
         var taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository,_resourceRepository);
+            _taskRepository, _resourceRepository);
         var returnList = new List<TaskDTO>();
         foreach (var project in _projectRepository.GetAll())
         {
@@ -263,15 +264,18 @@ public class AdminPService : IAdminPService
 
     private User ToEntity(UserDTO userDTO)
     {
-        return new User
+        var user = new User
         {
             FirstName = userDTO.FirstName,
             LastName = userDTO.LastName,
             Email = userDTO.Email,
             Birthday = userDTO.Birthday,
             Password = userDTO.Password,
-            Roles = ConvertToDomainRoles(userDTO.Roles)
+            Roles = ConvertToDomainRoles(userDTO.Roles),
+            Id = userDTO.Id
         };
+
+        return user;
     }
 
 
@@ -279,6 +283,7 @@ public class AdminPService : IAdminPService
     {
         return new UserDTO
         {
+            Id = user.Id,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,

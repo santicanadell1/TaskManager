@@ -70,6 +70,7 @@ public class UserService : IUserService
     {
         return new User
         {
+            Id = userDTO.Id,
             Email = userDTO.Email,
             FirstName = userDTO.FirstName,
             LastName = userDTO.LastName,
@@ -142,6 +143,7 @@ public class UserService : IUserService
     {
         return new UserDTO
         {
+            Id = user.Id,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,

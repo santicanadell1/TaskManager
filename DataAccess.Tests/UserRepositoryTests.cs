@@ -67,11 +67,17 @@ public class UserRepositoryTests
     public void UpdateAUser_WhenGettingTheUser_ShouldBeDifferentFromTheOriginalUser()
     {
         var user = new User("First Name 1", "Last Name 1", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
-        var user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
         _userRepository.Add(user);
+
+        var addedUser = _userRepository.Get(u => u.Email == "Email1@email.com");
+    
+        var user2 = new User("First Name 2", "Last Name 2", "Email1@email.com", DateTime.Today.AddYears(-18), "Password");
+        user2.Id = addedUser.Id; 
+    
         _userRepository.Update(user2);
 
         Assert.AreNotEqual("First Name 1", _userRepository.Get(u => u.Email == "Email1@email.com").FirstName);
+        Assert.AreEqual("First Name 2", _userRepository.Get(u => u.Email == "Email1@email.com").FirstName);
     }
 
     [TestMethod]

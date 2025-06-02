@@ -95,16 +95,8 @@ public class User
             tasks = value;
         }
     }
-    
-    public string? Id
-    {
-        get => Email;  
-        set
-        {
-            if (string.IsNullOrWhiteSpace(value)) throw new UserEmailException();
-            Email = value;  
-        }
-    }  
+
+    public int? Id { get; set; }
 
     private bool IsValidEmail(string email)
     {
@@ -130,7 +122,7 @@ public class User
     public void AddTask(Task task)
     {
         if (tasks == null) Tasks = new List<Task>();
-        if (tasks.Any(t=> t.Id == task.Id)) throw new UserTaskException("The task is already assigned to the user.");
+        if (tasks.Any(t => t.Id == task.Id)) throw new UserTaskException("The task is already assigned to the user.");
         tasks.Add(task);
     }
 
