@@ -2782,19 +2782,19 @@
     ]
   },
   "packageFolders": {
-    "/home/felidelgado10/.nuget/packages/": {}
+    "C:\\Users\\santi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/felidelgado10/RiderProjects/305108_282542_281987/Service/Service.csproj",
+      "projectUniqueName": "C:\\Users\\santi\\OneDrive\\Escritorio\\dis\\305108_282542_281987\\Service\\Service.csproj",
       "projectName": "Service",
-      "projectPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/Service/Service.csproj",
-      "packagesPath": "/home/felidelgado10/.nuget/packages/",
-      "outputPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/Service/obj/",
+      "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\dis\\305108_282542_281987\\Service\\Service.csproj",
+      "packagesPath": "C:\\Users\\santi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\dis\\305108_282542_281987\\Service\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/felidelgado10/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\santi\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -2806,11 +2806,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/felidelgado10/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj": {
-              "projectPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj"
+            "C:\\Users\\santi\\OneDrive\\Escritorio\\dis\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\dis\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
             },
-            "/home/felidelgado10/RiderProjects/305108_282542_281987/Domain/Domain.csproj": {
-              "projectPath": "/home/felidelgado10/RiderProjects/305108_282542_281987/Domain/Domain.csproj"
+            "C:\\Users\\santi\\OneDrive\\Escritorio\\dis\\305108_282542_281987\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\dis\\305108_282542_281987\\Domain\\Domain.csproj"
             }
           }
         }
@@ -2845,7 +2845,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.407/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

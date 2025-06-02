@@ -4,7 +4,7 @@ using Task = Domain.Task;
 
 namespace DataAccess;
 
-public class TaskRepository
+public class TaskRepository : IRepository<Task>
 {
     protected readonly AppDbContext _db;
 
@@ -77,11 +77,11 @@ public class TaskRepository
             throw new TaskRepositoryExceptions("The task can't be updated");
         }
     }
-    public void Delete(int id)
+    public void Delete(Task task)
     {
         try
         {
-            var existingTask = _db.Tasks.Find(id);
+            var existingTask = _db.Tasks.Find(task);
             if (existingTask == null)
                 throw new TaskNotFoundException();
 
