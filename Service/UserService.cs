@@ -17,6 +17,7 @@ public class UserService : IUserService
     {
         _userRepository = userRepository;
     }
+
     public void AddUser(UserDTO userDTO)
     {
         if (_userRepository.GetAll().Count == 0) userDTO.Roles.Add(RolDTO.AdminSystem);
@@ -26,7 +27,17 @@ public class UserService : IUserService
 
     public void UpdateUser(UserDTO userDTO)
     {
-        var user = GetUserObject(userDTO.Email);
+        User user;
+        if (userDTO.Id.HasValue)
+        {
+            user = _userRepository.Get(u => u.Id == userDTO.Id);
+            if (user == null) throw new UserNotFoundException();
+        }
+        else
+        {
+            user = GetUserObject(userDTO.Email);
+        }
+
         user.FirstName = userDTO.FirstName;
         user.LastName = userDTO.LastName;
         user.Email = userDTO.Email;
@@ -85,7 +96,7 @@ public class UserService : IUserService
     {
         List<Task> ret = new List<Task>();
         if (tasks == null) return ret;
-    
+
         foreach (var task in tasks)
         {
             ret.Add(ToEntityTask(task));
@@ -131,6 +142,7 @@ public class UserService : IUserService
 
         return resources;
     }
+
     private User GetUserObject(string email)
     {
         var user = _userRepository.Get(user => user.Email == email);
@@ -202,6 +214,7 @@ public class UserService : IUserService
         foreach (var task in tasks) taskDTOs.Add(FromEntityTask(task));
         return taskDTOs;
     }
+
     private TaskDTO FromEntityTask(Task task)
     {
         return new TaskDTO
@@ -247,6 +260,7 @@ public class UserService : IUserService
             Slack = task.Slack
         }).ToList();
     }
+
     private List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
     {
         var resourceDTOs = new List<ResourceDTO>();
