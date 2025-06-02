@@ -80,8 +80,8 @@ public class ProjectRepositoryTest
         
         _projectRepository.Add(project);
         _projectRepository.Add(project2);
-        
-        _projectRepository.Delete(project.Name);
+        var p = _projectRepository.Get(p => p.Name == "Project 1");
+        _projectRepository.Delete(p);
         
         Assert.IsNull(_projectRepository.Get(p => p.Name == "Project 1"));
     }
@@ -95,9 +95,10 @@ public class ProjectRepositoryTest
         
         _projectRepository.Add(project);
         _projectRepository.Add(project2);
+        var p = _projectRepository.Get(p => p.Name == "Project 1");
         
-        _projectRepository.Delete(project.Name);
-        _projectRepository.Delete(project.Name); 
+        _projectRepository.Delete(p);
+        _projectRepository.Delete(p); 
     }
     
     [TestMethod]
