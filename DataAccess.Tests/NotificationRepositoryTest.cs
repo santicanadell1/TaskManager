@@ -64,6 +64,7 @@ public class NotificationRepositoryTest
         var notification1 = new Notification(false, "Old notification", project);
         var notification2 = new Notification(true, "Updated notification", project);
         _notificationRepository.Add(notification1);
+        notification2.Id = _notificationRepository.Get(n => n.Description == "Old notification").Id;
 
         _notificationRepository.Update(notification2);
 
