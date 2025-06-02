@@ -129,9 +129,9 @@ public class TaskService
             ToResourceEntityList(taskDTO.Resources)
         );
         updatedTask.Id = task.Id;
-
         updatedTask.State = (State)taskDTO.State;
-
+        _taskRepository.Update(updatedTask);
+        updatedTask = _taskRepository.Get(t => t.Id == taskId);
         _projectRepository.UpdateTask(projectName, taskId, updatedTask);
 
         RecalculateCriticalPath(projectName);
@@ -297,7 +297,7 @@ public class TaskService
 
     private Task ToEntity(TaskDTO taskDTO)
     {
-        return new Task(
+        var TaskEntity = new Task(
             taskDTO.Title,
             taskDTO.Description,
             taskDTO.ExpectedStartDate,
@@ -306,6 +306,8 @@ public class TaskService
             ToEntityList(taskDTO.SameTimeTasks),
             ToResourceEntityList(taskDTO.Resources)
         );
+        TaskEntity.State = (State)taskDTO.State;
+        return TaskEntity;
     }
 
     private List<Task> ToEntityList(List<TaskDTO> taskDTOs)

@@ -56,6 +56,18 @@ public class TaskServiceTest
 
         _genericProject = new Project("Generic Project", "Description", DateTime.Now);
         _projectRepository.Add(_genericProject);
+        _userService = new UserService(_userRepository);
+        userDTO = new UserDTO
+        {
+            FirstName = "Admin",
+            LastName = "User",
+            Email = "admin.user@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "Password123@",
+            Roles = new List<RolDTO> { RolDTO.AdminProject }
+        };
+        _userService.AddUser(userDTO);
+        _login.LoginUser(userDTO.Email, userDTO.Password);
         
         _resourceDTO1 = new ResourceDTO
         {
@@ -73,6 +85,8 @@ public class TaskServiceTest
         
         _resourceService.AddResource(_resourceDTO1);
         _resourceService.AddResource(_resourceDTO2);
+        _resourceDTO1.Id = _resourceRepository.Get(r => r.Name == "Resource 1").Id;
+        _resourceDTO2.Id = _resourceRepository.Get(r => r.Name == "Resource 2").Id;
         
 
         _taskDTO1 = new TaskDTO
@@ -109,7 +123,8 @@ public class TaskServiceTest
             new List<Resource> { _resource1 }
         );
         _task1.State = State.TODO;
-
+        _taskService.CreateTask(_taskDTO1);
+        
         _task2 = new Task(
             _taskDTO2.Title,
             _taskDTO2.Description,
@@ -120,26 +135,16 @@ public class TaskServiceTest
             new List<Resource> { _resource2 }
         );
         _task2.State = State.DOING;
-        
-        _taskService.CreateTask(_taskDTO1);
         _taskService.CreateTask(_taskDTO2);
+        
+        var task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        var task2 = _taskRepository.Get(t => t.Title == "Task 2");
 
-        _projectRepository.AddTask("Generic Project", _task1);
-        _projectRepository.AddTask("Generic Project", _task2);
+        _projectRepository.AddTask("Generic Project", task1);
+        _projectRepository.AddTask("Generic Project", task2);
         _context.SaveChanges();
 
-        _userService = new UserService(_userRepository);
-        userDTO = new UserDTO
-        {
-            FirstName = "Admin",
-            LastName = "User",
-            Email = "admin.user@example.com",
-            Birthday = DateTime.Parse("1990-01-01"),
-            Password = "Password123@",
-            Roles = new List<RolDTO> { RolDTO.AdminProject }
-        };
-        _userService.AddUser(userDTO);
-        _login.LoginUser(userDTO.Email, userDTO.Password);
+
     }
 
     [TestCleanup]
@@ -190,6 +195,8 @@ public class TaskServiceTest
     [TestMethod]
     public void AddTask_ShouldAddTaskWithPreviousTasks_WhenPreviousTasksExist()
     {
+        var taskDTO1 = _taskService.GetTask("Generic Project",_taskRepository.Get(t=> t.Title == "Task 1").Id);;
+        var taskDTO2 = _taskService.GetTask("Generic Project",_taskRepository.Get(t=> t.Title == "Task 2").Id);;
         var taskDTO = new TaskDTO
         {
             Title = "Task with Dependencies",
@@ -198,7 +205,7 @@ public class TaskServiceTest
             Duration = 2,
             PreviousTasks = new List<TaskDTO>
             {
-                 _taskDTO1,_taskDTO2 
+                taskDTO1,taskDTO2 
             },
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>()
@@ -214,13 +221,15 @@ public class TaskServiceTest
 
         Assert.IsNotNull(addedTask);
         Assert.AreEqual(2, addedTask.PreviousTasks.Count);
-        Assert.IsTrue(addedTask.PreviousTasks.Any(t => t.Id == _task1.Id));
-        Assert.IsTrue(addedTask.PreviousTasks.Any(t => t.Id == _task2.Id));
+        Assert.IsTrue(addedTask.PreviousTasks.Any(t => t.Id == taskDTO1.Id));
+        Assert.IsTrue(addedTask.PreviousTasks.Any(t => t.Id == taskDTO2.Id));
     }
 
     [TestMethod]
     public void AddTask_ShouldAddTaskWithSameTimeTasks_WhenSameTimeTasksExist()
     {
+        var taskDTO1 = _taskService.GetTask("Generic Project",_taskRepository.Get(t=> t.Title == "Task 1").Id);;
+        var taskDTO2 = _taskService.GetTask("Generic Project",_taskRepository.Get(t=> t.Title == "Task 2").Id);;
         var taskDTO = new TaskDTO
         {
             Title = "Task with Same Time Tasks",
@@ -230,8 +239,8 @@ public class TaskServiceTest
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>
             {
-                new() { Id = _task1.Id },
-                new() { Id = _task2.Id }
+                taskDTO1,
+                taskDTO2
             },
             Resources = new List<ResourceDTO>()
         };
@@ -251,7 +260,8 @@ public class TaskServiceTest
     [TestMethod]
     public void DeleteTask_ShouldDeleteTask_WhenTaskExists()
     {
-        _taskService.DeleteTask("Generic Project", _task1.Id);
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        _taskService.DeleteTask("Generic Project", Task1.Id);
 
         var project = _projectRepository.Get(p => p.Name == "Generic Project");
         Assert.AreEqual(1, project.Tasks.Count);
@@ -276,6 +286,7 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldUpdateTask_WhenTaskExists()
     {
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
         var updateDTO = new TaskDTO
         {
             Title = "Updated Task 1",
@@ -285,13 +296,13 @@ public class TaskServiceTest
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
             State = StateDTO.TODO,
-            Resources = new List<ResourceDTO>()
+            Resources = new List<ResourceDTO>(),
+            Id = Task1.Id
         };
 
-        _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
-
-        var project = _projectRepository.Get(p => p.Name == "Generic Project");
-        var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
+        _taskService.UpdateTask("Generic Project", Task1.Id, updateDTO);
+        
+        var updatedTask = _taskService.GetTask("Generic Project", Task1.Id);
 
         Assert.AreEqual("Updated Task 1", updatedTask.Title);
         Assert.AreEqual("Updated Description", updatedTask.Description);
@@ -331,6 +342,8 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldUpdateTaskWithSameTimeTasks()
     {
+        var Task2 = _taskRepository.Get(t => t.Title == "Task 2");
+        var Task2DTO = _taskService.GetTask("Generic Project", Task2.Id);
         var updateDTO = new TaskDTO
         {
             Title = "Updated Task with Same Time",
@@ -338,22 +351,25 @@ public class TaskServiceTest
             ExpectedStartDate = DateTime.Now,
             Duration = 3,
             PreviousTasks = new List<TaskDTO>(),
-            SameTimeTasks = new List<TaskDTO> { new() { Id = _task2.Id } },
+            SameTimeTasks = new List<TaskDTO> { Task2DTO},
             Resources = new List<ResourceDTO>()
         };
-
-        _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
-
-        var project = _projectRepository.Get(p => p.Name == "Generic Project");
-        var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        _taskService.UpdateTask("Generic Project", Task1.Id, updateDTO);
+        
+        var updatedTask = _taskService.GetTask("Generic Project", Task1.Id);
 
         Assert.AreEqual(1, updatedTask.SameTimeTasks.Count);
-        Assert.AreEqual(_task2.Id, updatedTask.SameTimeTasks[0].Id);
+        Assert.AreEqual(Task2.Id, updatedTask.SameTimeTasks[0].Id);
     }
 
     [TestMethod]
     public void UpdateTask_ShouldUpdateTaskWithResources()
     {
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        _resourceService.AddResource(new() { Name = "Updated Resource", Type = "Updated Type", Description = "Updated Desc" });
+        var UpdatedResource = _resourceRepository.Get(r=> r.Name == "Updated Resource");
+        var UpdatedResourceDTO = _resourceService.Get(UpdatedResource.Id);
         var updateDTO = new TaskDTO
         {
             Title = "Updated Task with Resources",
@@ -364,14 +380,13 @@ public class TaskServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>
             {
-                new() { Name = "Updated Resource", Type = "Updated Type", Description = "Updated Desc" }
+                UpdatedResourceDTO
             }
         };
 
-        _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
-
-        var project = _projectRepository.Get(p => p.Name == "Generic Project");
-        var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
+        _taskService.UpdateTask("Generic Project", Task1.Id, updateDTO);
+        
+        var updatedTask = _taskService.GetTask("Generic Project", Task1.Id);
 
         Assert.AreEqual(1, updatedTask.Resources.Count);
         Assert.AreEqual("Updated Resource", updatedTask.Resources[0].Name);
@@ -380,21 +395,23 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
     {
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        var Task1DTO = _taskService.GetTask("Generic Project", Task1.Id);
         var updateDTO = new TaskDTO
         {
             Title = "Updated Task Self Reference",
             Description = "Description",
             ExpectedStartDate = DateTime.Now,
             Duration = 3,
-            PreviousTasks = new List<TaskDTO> { new() { Id = _task1.Id } },
+            PreviousTasks = new List<TaskDTO> { Task1DTO },
             SameTimeTasks = new List<TaskDTO>(),
-            Resources = new List<ResourceDTO>()
+            Resources = new List<ResourceDTO>(),
+            Id = Task1.Id
         };
 
-        _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
-
-        var project = _projectRepository.Get(p => p.Name == "Generic Project");
-        var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
+        _taskService.UpdateTask("Generic Project", Task1.Id, updateDTO);
+        
+        var updatedTask = _taskService.GetTask("Generic Project", Task1.Id);
 
         Assert.AreEqual(0, updatedTask.PreviousTasks.Count);
     }
@@ -402,6 +419,8 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldIgnoreSelfInSameTimeTasks()
     {
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        var Task1DTO = _taskService.GetTask("Generic Project", Task1.Id);
         var updateDTO = new TaskDTO
         {
             Title = "Updated Task Self Reference",
@@ -409,14 +428,13 @@ public class TaskServiceTest
             ExpectedStartDate = DateTime.Now,
             Duration = 3,
             PreviousTasks = new List<TaskDTO>(),
-            SameTimeTasks = new List<TaskDTO> { new() { Id = _task1.Id } },
+            SameTimeTasks = new List<TaskDTO> { Task1DTO },
             Resources = new List<ResourceDTO>()
         };
 
-        _taskService.UpdateTask("Generic Project", _task1.Id, updateDTO);
-
-        var project = _projectRepository.Get(p => p.Name == "Generic Project");
-        var updatedTask = project.Tasks.FirstOrDefault(t => t.Id == _task1.Id);
+        _taskService.UpdateTask("Generic Project", Task1.Id, updateDTO);
+        
+        var updatedTask = _taskService.GetTask("Generic Project", Task1.Id);
 
         Assert.AreEqual(0, updatedTask.SameTimeTasks.Count);
     }
@@ -434,7 +452,8 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTask_WhenTaskExists()
     {
-        var taskDTO = _taskService.GetTask("Generic Project", _task1.Id);
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        var taskDTO = _taskService.GetTask("Generic Project", Task1.Id);
 
         Assert.AreEqual("Task 1", taskDTO.Title);
         Assert.AreEqual("Description of Task 1", taskDTO.Description);
@@ -486,7 +505,8 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTaskWithResources()
     {
-        var taskDTO = _taskService.GetTask("Generic Project", _task1.Id);
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        var taskDTO = _taskService.GetTask("Generic Project", Task1.Id);
 
         Assert.AreEqual(1, taskDTO.Resources.Count);
         Assert.AreEqual("Resource 1", taskDTO.Resources[0].Name);
@@ -497,29 +517,32 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTaskWithCorrectState()
     {
-        var taskDTO = _taskService.GetTask("Generic Project", _task1.Id);
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        var taskDTO = _taskService.GetTask("Generic Project", Task1.Id);
         Assert.AreEqual(StateDTO.TODO, taskDTO.State);
-
-        var taskDTO2 = _taskService.GetTask("Generic Project", _task2.Id);
+        var Task2 = _taskRepository.Get(t => t.Title == "Task 2");
+        var taskDTO2 = _taskService.GetTask("Generic Project", Task2.Id);
         Assert.AreEqual(StateDTO.DOING, taskDTO2.State);
     }
 
     [TestMethod]
     public void GetTask_ShouldReturnTaskWithMinimalPreviousTasks()
     {
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
         var taskWithDependencies = new Task(
             "Task with Dependencies",
             "Description",
             DateTime.Now,
             3,
-            new List<Task> { _task1 },
+            new List<Task> { Task1 },
             new List<Task>(),
             new List<Resource>()
         );
-
+        _taskRepository.Add(taskWithDependencies);
         _projectRepository.AddTask("Generic Project", taskWithDependencies);
+        var Task2 = _taskRepository.Get(t => t.Title == "Task with Dependencies");
 
-        var taskDTO = _taskService.GetTask("Generic Project", taskWithDependencies.Id);
+        var taskDTO = _taskService.GetTask("Generic Project", Task2.Id);
 
         Assert.AreEqual(1, taskDTO.PreviousTasks.Count);
         Assert.AreEqual(_task1.Title, taskDTO.PreviousTasks[0].Title);
@@ -567,6 +590,7 @@ public class TaskServiceTest
     [TestMethod]
     public void AddTask_ShouldCorrectlyMapDTOToEntity_TestingToEntity()
     {
+        var resourceDto = _resourceService.Get(1);
         var complexDTO = new TaskDTO
         {
             Title = "Complex Mapping DTO",
@@ -578,12 +602,7 @@ public class TaskServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>
             {
-                new()
-                {
-                    Name = "Complex Resource",
-                    Type = "Complex Type",
-                    Description = "Complex resource description"
-                }
+                resourceDto
             }
         };
         
@@ -601,9 +620,9 @@ public class TaskServiceTest
         Assert.AreEqual(new DateTime(2025, 6, 15), addedTask.ExpectedStartDate);
         Assert.AreEqual(9, addedTask.Duration);
         Assert.AreEqual(1, addedTask.Resources.Count);
-        Assert.AreEqual("Complex Resource", addedTask.Resources[0].Name);
-        Assert.AreEqual("Complex Type", addedTask.Resources[0].Type);
-        Assert.AreEqual("Complex resource description", addedTask.Resources[0].Description);
+        Assert.AreEqual(resourceDto.Name, addedTask.Resources[0].Name);
+        Assert.AreEqual(resourceDto.Type, addedTask.Resources[0].Type);
+        Assert.AreEqual(resourceDto.Description, addedTask.Resources[0].Description);
     }
 
     [TestMethod]
@@ -622,7 +641,7 @@ public class TaskServiceTest
         _taskService.AddTask("Generic Project", id);
 
         var project = _projectRepository.Get(p => p.Name == "Generic Project");
-        var taskXEntity = project.Tasks.FirstOrDefault(t => t.Title == "Task X");
+        var taskXEntity = _taskService.GetTask("Generic Project", id);
 
         var taskY = new TaskDTO
         {
@@ -630,7 +649,7 @@ public class TaskServiceTest
             Description = "Task Y Description",
             ExpectedStartDate = DateTime.Now.AddDays(3),
             Duration = 2,
-            PreviousTasks = new List<TaskDTO> { new() { Id = taskXEntity.Id } },
+            PreviousTasks = new List<TaskDTO> { taskXEntity },
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>()
         };
@@ -659,22 +678,34 @@ public class TaskServiceTest
             new List<Resource>());
         var taskC = new Task("Task C", "Description C", DateTime.Now, 3, new List<Task>(), new List<Task>(),
             new List<Resource>());
-
+        _taskRepository.Add(taskA);
+        _taskRepository.Add(taskB);
+        _taskRepository.Add(taskC);
+        taskA = _taskRepository.Get(t => t.Title == "Task A");
+        taskB = _taskRepository.Get(t => t.Title == "Task B");
+        taskC = _taskRepository.Get(t => t.Title == "Task C");
+        
         _projectRepository.AddTask("Generic Project", taskA);
         _projectRepository.AddTask("Generic Project", taskB);
         _projectRepository.AddTask("Generic Project", taskC);
-
-        var project = _projectRepository.Get(p => p.Name == "Generic Project");
-        var addedTaskA = project.Tasks.FirstOrDefault(t => t.Title == "Task A");
-        var addedTaskB = project.Tasks.FirstOrDefault(t => t.Title == "Task B");
-        var addedTaskC = project.Tasks.FirstOrDefault(t => t.Title == "Task C");
+        
+        var addedTaskA = _taskService.GetTask("Generic Project", taskA.Id);
+        var addedTaskB = _taskService.GetTask("Generic Project", taskB.Id);
+        var addedTaskC = _taskService.GetTask("Generic Project", taskC.Id);
+  
 
         Assert.IsNotNull(addedTaskA, "Task A no se agregó correctamente");
         Assert.IsNotNull(addedTaskB, "Task B no se agregó correctamente");
         Assert.IsNotNull(addedTaskC, "Task C no se agregó correctamente");
 
         var originalState = (StateDTO)(int)addedTaskC.State;
-
+        _resourceRepository.Add(new()
+        {
+            Name = "Complex Update Resource", Type = "Update Type",
+            Description = "Update Resource Description"
+        });
+        var resource = _resourceRepository.Get(r => r.Name == "Complex Update Resource");
+        var resourceDTO = _resourceService.Get(resource.Id);
         var updateDTO = new TaskDTO
         {
             Title = "Updated Task C",
@@ -685,18 +716,13 @@ public class TaskServiceTest
             SameTimeTasks = new List<TaskDTO> { new() { Id = addedTaskB.Id } },
             Resources = new List<ResourceDTO>
             {
-                new()
-                {
-                    Name = "Complex Update Resource", Type = "Update Type",
-                    Description = "Update Resource Description"
-                }
+                resourceDTO
             }
         };
 
         _taskService.UpdateTask("Generic Project", addedTaskC.Id, updateDTO);
-
-        project = _projectRepository.Get(p => p.Name == "Generic Project");
-        var updatedTaskC = project.Tasks.FirstOrDefault(t => t.Id == addedTaskC.Id);
+        
+        var updatedTaskC = _taskService.GetTask("Generic Project", addedTaskC.Id);
 
         Assert.IsNotNull(updatedTaskC);
         Assert.AreEqual("Updated Task C", updatedTaskC.Title);
@@ -757,7 +783,8 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTaskWithCpmProperties()
     {
-        var taskDTO = _taskService.GetTask("Generic Project", _task1.Id);
+        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        var taskDTO = _taskService.GetTask("Generic Project", Task1.Id);
 
 
         Assert.AreEqual(default, taskDTO.Slack);
