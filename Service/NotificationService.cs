@@ -166,7 +166,7 @@ public class NotificationService
         if (!user.Notifications.Contains(notificationId))
         {
             user.Notifications.Add(notificationId);
-            _userRepository.Update(user.Email, user);
+            _userRepository.Update(user);
         }
     }
 
@@ -178,7 +178,7 @@ public class NotificationService
         if (user.Notifications != null)
         {
             user.Notifications.Remove(notificationId);
-            _userRepository.Update(user.Email, user);
+            _userRepository.Update(user);
         }
     }
 }

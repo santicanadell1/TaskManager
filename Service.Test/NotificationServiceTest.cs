@@ -64,8 +64,8 @@ public class NotificationServiceTest
             Roles = new List<Rol> { Rol.ProjectMember }
         };
 
-        _userRepository.AddUser(user1);
-        _userRepository.AddUser(user2);
+        _userRepository.Add(user1);
+        _userRepository.Add(user2);
 
         var savedUser1Entity = _userRepository.Get(u => u.Email == "Email1@example.com");
         var savedUser2Entity = _userRepository.Get(u => u.Email == "Email2@example.com");

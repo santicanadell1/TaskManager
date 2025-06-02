@@ -147,7 +147,7 @@ public class AdminPService : IAdminPService
 
         var task = _taskRepository.Get(t => t.Id == taskID);
         userEntity.Tasks.Add(task);
-        _userRepository.Update(memberEmail, userEntity);
+        _userRepository.Update(userEntity);
     }
 
     public void RemoveTaskFromMember(string projectName, string memberEmail, int taskID)
@@ -167,7 +167,7 @@ public class AdminPService : IAdminPService
 
         var task = projectEntity.Tasks.Find(t => t.Id == taskID);
         userEntity.RemoveTask(task);
-        _userRepository.Update(memberEmail, userEntity);
+        _userRepository.Update(userEntity);
     }
 
     public List<TaskDTO> GetAllTaskForAMember(string email)

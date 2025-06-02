@@ -21,7 +21,7 @@ public class UserService : IUserService
     {
         if (_userRepository.GetAll().Count == 0) userDTO.Roles.Add(RolDTO.AdminSystem);
         ValidateUserEmailAndPassword(userDTO);
-        _userRepository.AddUser(ToEntity(userDTO));
+        _userRepository.Add(ToEntity(userDTO));
     }
 
     public void UpdateUser(UserDTO userDTO)
@@ -34,7 +34,7 @@ public class UserService : IUserService
         user.Birthday = userDTO.Birthday;
         user.Password = userDTO.Password;
         user.Tasks = getTasksEntity(userDTO.Tasks);
-        _userRepository.Update(user.Email, user);
+        _userRepository.Update(user);
     }
 
     public List<UserDTO> GetUsers()
