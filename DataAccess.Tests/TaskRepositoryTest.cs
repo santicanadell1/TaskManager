@@ -74,15 +74,26 @@ public class TaskRepositoryTest
     [TestMethod]
     public void Update_UpdatesAllFields_Test2()
     {
-        Task _task3 = new Task("Task3", "Description3", DateTime.Today, 2, new List<Task>(), new List<Task>(), new List<Resource>());
         _taskRepository.Add(_task);
         _taskRepository.Add(_task2);
-        _taskRepository.Update(_task3);  
-        var found = _taskRepository.Get(t => t.Id == _task3.Id);
+
+        int taskId = (int)_taskRepository.Get(t => t.Title == "Task2").Id;
+
+        Assert.IsTrue(taskId > 0, "Task ID was not assigned correctly.");
+
+        Task _task3 = new Task("Task3", "Description3", DateTime.Today, 2, new List<Task>(), new List<Task>(), new List<Resource>());
+        _task3.Id = taskId;  
+
+        _taskRepository.Update(_task3);
+
+        var found = _taskRepository.Get(t => t.Id == taskId);
+
         Assert.IsNotNull(found);
+
         Assert.AreEqual("Task3", found.Title);
         Assert.AreEqual("Description3", found.Description);
     }
+
 
 
     [TestMethod]
