@@ -67,7 +67,7 @@ public class TaskRepositoryTest
         Task _task3 = new Task("Task3","Description3",DateTime.Today, 2, new List<Task>(),new List<Task>(),new List<Resource>());
         _taskRepository.Add(_task);
         _taskRepository.Add(_task2);
-        int Id = (int)_taskRepository.Get(t=>t.Title == "Task2").Id;
+        _task2.Id = (int)_task3.Id;
         _taskRepository.Update(_task3);
         var found = _taskRepository.Get(t => t.Id == 2);
         Assert.IsNotNull(found);
@@ -87,7 +87,7 @@ public class TaskRepositoryTest
     {
         _taskRepository.Add(_task);
         Assert.AreEqual(1, _taskRepository.GetAll().Count);
-        _taskRepository.Delete(1);
+        _taskRepository.Delete(_task);
         Assert.AreEqual(0, _taskRepository.GetAll().Count);
     }
 

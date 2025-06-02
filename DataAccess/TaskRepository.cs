@@ -46,10 +46,6 @@ public class TaskRepository : IRepository<Task>
     }
     public void Update(Task updatedTask)
     {
-        if (_db.Set<Task>().Any(t =>t.Id == updatedTask.Id))
-            throw new TaskNotFoundException();
-        
-
         var existingTask = _db.Tasks.FirstOrDefault(t => t.Id == updatedTask.Id);
         if (existingTask == null)
             throw new TaskNotFoundException();
@@ -82,7 +78,7 @@ public class TaskRepository : IRepository<Task>
     {
         try
         {
-            var existingTask = _db.Tasks.Find(task);
+            var existingTask = _db.Tasks.Find(task.Id);
             if (existingTask == null)
                 throw new TaskNotFoundException();
 
