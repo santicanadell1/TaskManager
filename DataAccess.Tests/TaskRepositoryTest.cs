@@ -53,27 +53,37 @@ public class TaskRepositoryTest
     public void Update_UpdatesAllFields_WhenTaskExists()
     {
         _taskRepository.Add(_task);
-        int Id = (int)_taskRepository.Get(t=>t.Title == "Task1").Id;
+
+        int taskId = (int)_taskRepository.Get(t => t.Title == "Task1").Id;
+
+        Assert.IsTrue(taskId > 0, "Task ID was not assigned correctly.");
+
+        _task2.Id = taskId;  
+
         _taskRepository.Update(_task2);
-        var found = _taskRepository.Get(t => t.Id == 1);
+
+        var found = _taskRepository.Get(t => t.Id == taskId);
+
         Assert.IsNotNull(found);
+
         Assert.AreEqual("Task2", found.Title);
         Assert.AreEqual("Description2", found.Description);
     }
+
     
     [TestMethod]
     public void Update_UpdatesAllFields_Test2()
     {
-        Task _task3 = new Task("Task3","Description3",DateTime.Today, 2, new List<Task>(),new List<Task>(),new List<Resource>());
+        Task _task3 = new Task("Task3", "Description3", DateTime.Today, 2, new List<Task>(), new List<Task>(), new List<Resource>());
         _taskRepository.Add(_task);
         _taskRepository.Add(_task2);
-        _task2.Id = (int)_task3.Id;
-        _taskRepository.Update(_task3);
-        var found = _taskRepository.Get(t => t.Id == 2);
+        _taskRepository.Update(_task3);  
+        var found = _taskRepository.Get(t => t.Id == _task3.Id);
         Assert.IsNotNull(found);
         Assert.AreEqual("Task3", found.Title);
         Assert.AreEqual("Description3", found.Description);
     }
+
 
     [TestMethod]
     [ExpectedException(typeof(TaskNotFoundException))]
