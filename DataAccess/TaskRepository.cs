@@ -44,12 +44,13 @@ public class TaskRepository : IRepository<Task>
     {
         return _db.Set<Task>().FirstOrDefault(filter);
     }
-    public void Update(int id, Task updatedTask)
+    public void Update(Task updatedTask)
     {
-        if (updatedTask == null)
+        if (_db.Set<Task>().Any(t =>t.Id == updatedTask.Id))
             throw new TaskNotFoundException();
+        
 
-        var existingTask = _db.Tasks.Find(id);
+        var existingTask = _db.Tasks.FirstOrDefault(t => t.Id == updatedTask.Id);
         if (existingTask == null)
             throw new TaskNotFoundException();
         

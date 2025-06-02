@@ -54,7 +54,7 @@ public class TaskRepositoryTest
     {
         _taskRepository.Add(_task);
         int Id = (int)_taskRepository.Get(t=>t.Title == "Task1").Id;
-        _taskRepository.Update(Id, _task2);
+        _taskRepository.Update(_task2);
         var found = _taskRepository.Get(t => t.Id == 1);
         Assert.IsNotNull(found);
         Assert.AreEqual("Task2", found.Title);
@@ -68,7 +68,7 @@ public class TaskRepositoryTest
         _taskRepository.Add(_task);
         _taskRepository.Add(_task2);
         int Id = (int)_taskRepository.Get(t=>t.Title == "Task2").Id;
-        _taskRepository.Update(Id, _task3);
+        _taskRepository.Update(_task3);
         var found = _taskRepository.Get(t => t.Id == 2);
         Assert.IsNotNull(found);
         Assert.AreEqual("Task3", found.Title);
@@ -79,7 +79,7 @@ public class TaskRepositoryTest
     [ExpectedException(typeof(TaskNotFoundException))]
     public void Update_ThrowsTaskNotFoundException_WhenIdDoesNotExist()
     {
-        _taskRepository.Update(1,_task);
+        _taskRepository.Update(_task);
     }
 
     [TestMethod]
