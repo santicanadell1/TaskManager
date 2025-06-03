@@ -139,7 +139,7 @@ public class NotificationService
 
         var createdNotification = _notificationRepository.Get(n =>
             n.Description == notificationDTO.Description &&
-            n.Project.Id == notificationDTO.Project.Id);
+            n.Project.Name == notificationDTO.Project.Name);
 
         if (createdNotification == null)
         {
@@ -147,10 +147,13 @@ public class NotificationService
         }
 
         var project = _projectRepository.Get(p => p.Name == notification.Project.Name);
-
-        foreach (var user in project.Members)
+    
+        if (project?.Members != null)
         {
-            AddNotificationToUser(user.Email, (int)createdNotification.Id);
+            foreach (var user in project.Members)
+            {
+                AddNotificationToUser(user.Email, (int)createdNotification.Id);
+            }
         }
     }
 

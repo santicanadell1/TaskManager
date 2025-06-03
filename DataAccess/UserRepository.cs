@@ -44,7 +44,11 @@ public class UserRepository:IRepository<User>
 
     public User? Get(Func<User, bool> filter)
     {
-        return _db.Set<User>().FirstOrDefault(filter);
+        return _db.Set<User>()
+            .Include(u => u.Notifications) 
+            .ThenInclude(n => n.Project) 
+            .Include(u => u.Tasks) 
+            .FirstOrDefault(filter);
     }
 
     public void Update(User updatedUser)

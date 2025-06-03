@@ -26,7 +26,10 @@ public class NotificationRepository:IRepository<Notification>
 
     public Notification? Get(Func<Notification, bool> filter)
     {
-        return _db.Set<Notification>().FirstOrDefault(filter);
+        return _db.Set<Notification>()
+            .Include(n => n.Project)         
+            .ThenInclude(p => p.Members)       
+            .FirstOrDefault(filter);
     }
 
     public void Update(Notification newNotification)
