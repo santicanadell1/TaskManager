@@ -627,7 +627,7 @@ public class TaskServiceTest
 
         var project = _projectRepository.Get(p => p.Name == "Generic Project");
         var taskXEntity = _taskService.GetTask("Generic Project", taskX.Title);
-
+        
         var taskY = new TaskDTO
         {
             Title = "Task Y",
@@ -644,12 +644,12 @@ public class TaskServiceTest
         var taskYEntity = project.Tasks.FirstOrDefault(t => t.Title == "Task Y");
 
         Assert.AreEqual(1, taskYEntity.PreviousTasks.Count);
-        Assert.AreEqual(taskXEntity.Id, taskYEntity.PreviousTasks[0].Id);
+        Assert.AreEqual(taskXEntity.Title, taskYEntity.PreviousTasks[0].Title);
 
         var taskYDTO = _taskService.GetTask("Generic Project", taskYEntity.Title);
 
         Assert.AreEqual(1, taskYDTO.PreviousTasks.Count);
-        Assert.AreEqual(taskXEntity.Id, taskYDTO.PreviousTasks[0].Id);
+        Assert.AreEqual(taskXEntity.Title, taskYDTO.PreviousTasks[0].Title);
         Assert.AreEqual("Task X", taskYDTO.PreviousTasks[0].Title);
     }
 
