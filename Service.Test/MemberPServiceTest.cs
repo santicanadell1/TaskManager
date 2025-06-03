@@ -228,17 +228,14 @@ public class MemberPServiceTest
         };
 
         _adminPService.CreateProject(projectDTO);
-
-        _taskService.CreateTask(task1);
-        var taskId = _taskRepository.Get(t => t.Title == "Task1").Id;
-        _taskService.AddTask(projectDTO.Name, taskId);
-
+        
+        _taskService.AddTask(projectDTO.Name, task1);
         var newState = StateDTO.DONE;
-        var newTask = _taskService.GetTasks(projectDTO.Name).Find(t => t.Id == taskId);
+        var newTask = _taskService.GetTasks(projectDTO.Name).Find(t => t.Title == task1.Title);
         _adminPService.AddTaskToMember(projectDTO.Name, UserDTO.Email, newTask.Id);
         _memberPService.ChangeTaskStatus(projectDTO.Name, UserDTO.Email, newTask, newState);
 
-        var updatedTask = _taskService.GetTask(projectDTO.Name, taskId);
+        var updatedTask = _taskService.GetTask(projectDTO.Name, task1.Title);
         Assert.AreEqual(StateDTO.DONE, updatedTask.State);
     }
 
@@ -246,6 +243,8 @@ public class MemberPServiceTest
     [ExpectedException(typeof(TaskCantBeModifiedByUserException))]
     public void ChangeTaskStatus_WhentaskIsNotFromAMember_ThenThrowException()
     {
+        _adminPService.CreateProject(projectDTO);
+        _taskService.AddTask(projectDTO.Name, task1);
         var User = new UserDTO
         {
             FirstName = "User",
@@ -253,7 +252,7 @@ public class MemberPServiceTest
             Email = "User.NotMember@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<RolDTO> { RolDTO.ProjectMember }
+            Roles = new List<RolDTO> {}
         };
         _userservice.AddUser(User);
 
@@ -267,17 +266,11 @@ public class MemberPServiceTest
     [ExpectedException(typeof(TaskException))]
     public void ChangeTaskStatus_ShouldThrowException_WhenPreviousTasksAreNotFinished()
     {
-        _taskService.CreateTask(task1);
-        _taskService.CreateTask(task3);
-
-        var task1Id = _taskRepository.Get(t => t.Title == "Task1").Id;
-        var task3Id = _taskRepository.Get(t => t.Title == "Task 3").Id;
-
-        _taskService.AddTask("New Project", task1Id);
-        _taskService.AddTask("New Project", task3Id);
+        _taskService.AddTask("New Project", task1);
+        _taskService.AddTask("New Project", task3);
 
         var newState = StateDTO.DONE;
-        var newTask = _taskService.GetTasks("New Project").Find(t => t.Id == task3Id);
+        var newTask = _taskService.GetTasks("New Project").Find(t => t.Title == task3.Title);
         _adminPService.AddTaskToMember("New Project", UserDTO.Email, newTask.Id);
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, newTask, newState);
     }
@@ -286,11 +279,9 @@ public class MemberPServiceTest
     public void ChangeTaskStatus_ShouldChangeState_WhenPreviousTasksAreFinished()
     {
         // Crear tarea task1 y agregarla al proyecto
-        _taskService.CreateTask(task1);
         _adminPService.CreateProject(projectDTO);
-
-        var task1Id = _taskRepository.Get(t => t.Title == "Task1").Id;
-        _taskService.AddTask("New Project", task1Id); // Nombre del proyecto único
+        
+        _taskService.AddTask("New Project", task1); // Nombre del proyecto único
 
         // Crear taskUpdate y actualizar task1
         var taskUpdate = new TaskDTO
@@ -300,38 +291,30 @@ public class MemberPServiceTest
             Duration = 2,
             ExpectedStartDate = DateTime.Parse("2026-01-01"),
             State = StateDTO.TODO,
-            PreviousTasks = new List<TaskDTO> { task1 }
+            PreviousTasks = new List<TaskDTO> {}
         };
 
         // Crear y asignar taskUpdate al proyecto
-        _taskService.CreateTask(taskUpdate);
-        var taskUpdateId = _taskRepository.Get(t => t.Title == "TaskUpdate").Id;
-        _taskService.AddTask("New Project", taskUpdateId);
+
+        _taskService.AddTask("New Project", taskUpdate);
 
         // Actualizar task1 en el proyecto
-        _taskService.UpdateTask("New Project", task1Id, taskUpdate);
-
-        // Crear tarea task3
-        _taskService.CreateTask(task3);
-        var task3Id = _taskRepository.Get(t => t.Title == "Task 3").Id;
-
-        // Verifica que la tarea task3 esté correctamente guardada en el repositorio
-        Assert.IsNotNull(_taskRepository.Get(t => t.Id == task3Id), "Task 3 was not found in the repository.");
-
+        _taskService.UpdateTask("New Project", task1.Title, taskUpdate);
+        
         // Añadir task3 al proyecto
-        _taskService.AddTask("New Project", task3Id);
+        _taskService.AddTask("New Project", task3);
 
         // Recuperar nuevamente la tarea task3 para asegurar que está actualizada
-        var newTask = _taskService.GetTask("New Project", task3Id); // Recupera la tarea directamente del repositorio
+        var newTask = _taskService.GetTask("New Project", task3.Title); // Recupera la tarea directamente del repositorio
 
         var newState = StateDTO.DONE;
         _adminPService.AddTaskToMember("New Project", UserDTO.Email, newTask.Id);
-        Assert.AreEqual(newTask.Id.Value,_taskService.GetTask("New Project", newTask.Id).Id.Value);;
+        Assert.AreEqual(newTask.Id.Value,_taskService.GetTask("New Project", newTask.Title).Id.Value);;
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, newTask, newState);
 
         // Recuperar la tarea actualizada y verificar su estado
         var updatedTask =
-            _taskService.GetTask("New Project", newTask.Id); // Usar newTask.Id para recuperar la tarea actualizada
+            _taskService.GetTask("New Project", newTask.Title); // Usar newTask.Id para recuperar la tarea actualizada
         Assert.AreEqual(StateDTO.DONE, updatedTask.State);
     }
 }

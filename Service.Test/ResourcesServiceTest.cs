@@ -241,11 +241,8 @@ public class ResourcesServiceTest
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
         
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Title1").Id;
-        
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project1", id);
+        _taskService.AddTask("Project1", task);
         
         var updatedResourceDTO = new ResourceDTO
         {
@@ -322,15 +319,12 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Title 1").Id;
-        _taskService.CreateTask(task2);
-        var id2 = _taskRepository.Get(t=> t.Title == "Title 2").Id;
+
         
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project 1", id);
+        _taskService.AddTask("Project 1", task);
         _adminProjectService.CreateProject(project2);
-        _taskService.AddTask("Project 2", id2);
+        _taskService.AddTask("Project 2", task2);
 
         var updatedResourceDTO = new ResourceDTO
         {
@@ -381,10 +375,8 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Title1").Id;
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project1", id);
+        _taskService.AddTask("Project1", task);
 
         var updatedResourceDTO = new ResourceDTO
         {
@@ -454,9 +446,7 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO>()
         };
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Title1").Id;
-        _taskService.AddTask("Project1", id);
+        _taskService.AddTask("Project1", task);
 
         var projectEntity = _projectRepository.Get(p => p.Name == "Project1");
         var taskEntity = projectEntity.Tasks.First(t => t.Title == "Title1");
@@ -528,15 +518,11 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Title 1").Id;
-        _taskService.CreateTask(task2);
-        var id2 = _taskRepository.Get(t=> t.Title == "Title 2").Id;
 
         _adminProjectService.CreateProject(project);
-        _taskService.AddTask("Project 1", id);
+        _taskService.AddTask("Project 1", task);
         _adminProjectService.CreateProject(project2);
-        _taskService.AddTask("Project 2", id2);
+        _taskService.AddTask("Project 2", task2);
 
     
         _resourceService.DeleteResource(addedResource.Id);
@@ -584,11 +570,9 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Title1").Id;
         _adminProjectService.CreateProject(project);
 
-        _taskService.AddTask("Project1", id);
+        _taskService.AddTask("Project1", task);
 
         Assert.IsNotNull(addedResource);
         _loginService.LoginUser("adminProject2.user@example.com", "AdminPassword123@");

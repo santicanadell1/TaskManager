@@ -406,9 +406,7 @@ public class AdminPServiceTests
             ExpectedStartDate = DateTime.Today
         };
         
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Task1").Id;
-        _taskService.AddTask("Test Project", id);
+        _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
 
@@ -435,9 +433,7 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Task1").Id;
-        _taskService.AddTask("Test Project", id);
+        _taskService.AddTask("Test Project", task);
         
         var addedTasks = _taskService.GetTasks("Test Project");
         var addedTask = addedTasks.FirstOrDefault(t => t.Title == "Task1");
@@ -468,9 +464,8 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Task1").Id;
-        _taskService.AddTask("Test Project", id);
+
+        _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);
     }
@@ -495,9 +490,7 @@ public class AdminPServiceTests
             ExpectedStartDate = DateTime.Today
         };
         
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Task1").Id;
-        _taskService.AddTask("Test Project", id);
+        _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
 
@@ -529,9 +522,7 @@ public class AdminPServiceTests
             ExpectedStartDate = DateTime.Today
         };
         
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Task1").Id;
-        _taskService.AddTask("Test Project", id);
+        _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
         _adminPservice.RemoveTaskFromMember("Test Project", "member1.user@example.com", 1);
@@ -558,9 +549,8 @@ public class AdminPServiceTests
             ExpectedStartDate = DateTime.Today
         };
         
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Task1").Id;
-        _taskService.AddTask("Test Project", id);
+
+        _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
         _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", 2);
@@ -593,14 +583,9 @@ public class AdminPServiceTests
             ExpectedStartDate = DateTime.Today
         };
         
-        _taskService.CreateTask(task);
-        _taskService.CreateTask(task2);
         
-        var id = _taskRepository.Get(t=> t.Title == "Task1").Id;
-        var id2 = _taskRepository.Get(t=> t.Title == "Task2").Id;
-        
-        _taskService.AddTask("Test Project", id);
-        _taskService.AddTask("Test Project", id2);
+        _taskService.AddTask("Test Project", task);
+        _taskService.AddTask("Test Project", task2);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);
@@ -636,12 +621,9 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        _taskService.CreateTask(task);
-        var id = _taskRepository.Get(t=> t.Title == "Task1").Id;
-        _taskService.CreateTask(task2);
-        var id2 = _taskRepository.Get(t=> t.Title == "Task2").Id;
-        _taskService.AddTask("Test Project", id);
-        _taskService.AddTask("Test Project", id2);
+
+        _taskService.AddTask("Test Project", task);
+        _taskService.AddTask("Test Project", task2);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);

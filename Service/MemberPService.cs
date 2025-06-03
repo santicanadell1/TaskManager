@@ -66,13 +66,13 @@ public class MemberPService : IMemberPService
     {
         CheckIsTaskOfTheUser(task.Id, email);
 
-        var currentTask = _taskService.GetTask(projectName, task.Id);
+        var currentTask = _taskService.GetTask(projectName, task.Title);
 
         if (currentTask.PreviousTasks != null && currentTask.PreviousTasks.Count > 0)
         {
             foreach (var previousTask in currentTask.PreviousTasks)
             {
-                var previousTaskDTO = _taskService.GetTask(projectName, (int)previousTask.Id);
+                var previousTaskDTO = _taskService.GetTask(projectName, previousTask.Title);
                 if (!CheckIfTaskIsCompleted(previousTaskDTO))
                     throw new TaskException(
                         "Task state can't be changed because it's previous tasks are not completed.");
@@ -80,7 +80,7 @@ public class MemberPService : IMemberPService
         }
 
         currentTask.State = status;
-        _taskService.UpdateTask(projectName, currentTask.Id, currentTask);
+        _taskService.UpdateTask(projectName, currentTask.Title, currentTask);
     }
 
     private void CheckUserRole(string email)
