@@ -276,7 +276,8 @@ public class UserTest
     public void NewUser_WhenAddingNotification_ShouldBeAddedCorrectly()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddNotification(1);
+        var notification = new Notification(false, "Some description", new Project());
+        user.AddNotification(notification);
 
         Assert.AreEqual(1, user.Notifications.Count);
     }
@@ -285,8 +286,9 @@ public class UserTest
     public void RemoveNotification_WhenNotificationExists_ShouldBeDeletedCorrectly()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddNotification(1);
-        user.RemoveNotification(1);
+        var notification = new Notification(false, "Some description", new Project());
+        user.AddNotification(notification);
+        user.RemoveNotification(notification);
 
         Assert.AreEqual(0, user.Notifications.Count);
     }

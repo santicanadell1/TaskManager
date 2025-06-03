@@ -119,13 +119,9 @@ public class NotificationService
         if (user == null) throw new UserNotFoundException();
 
         var notifications = new List<NotificationDTO>();
-        foreach (var notificationId in user.Notifications)
+        foreach (var notification in user.Notifications)
         {
-            var notification = _notificationRepository.Get(n => n.Id == notificationId);
-            if (notification != null)
-            {
-                notifications.Add(FromEntity(notification));
-            }
+            if (notification != null) notifications.Add(FromEntity(notification));
         }
 
         return notifications;
