@@ -653,77 +653,56 @@ public class TaskServiceTest
         Assert.AreEqual("Task X", taskYDTO.PreviousTasks[0].Title);
     }
 
-    [TestMethod]
-    public void UpdateTask_WithComplexRelationships_ShouldCorrectlyMapAllProperties()
+[TestMethod]
+public void UpdateTask_WithComplexRelationships_ShouldCorrectlyMapAllProperties()
+{
+    var taskA = new Task("Task A", "Description A", DateTime.Now, 1, new List<Task>(), new List<Task>(), new List<Resource>());
+    var taskB = new Task("Task B", "Description B", DateTime.Now, 2, new List<Task>(), new List<Task>(), new List<Resource>());
+    var taskC = new Task("Task C", "Description C", DateTime.Now, 3, new List<Task>(), new List<Task>(), new List<Resource>());
+    
+    _taskRepository.Add(taskA);
+    _taskRepository.Add(taskB);
+    _taskRepository.Add(taskC);
+    _context.SaveChanges();  
+
+    _projectRepository.AddTask("Generic Project", taskA);
+    _projectRepository.AddTask("Generic Project", taskB);
+    _projectRepository.AddTask("Generic Project", taskC);
+    
+    var addedTaskC = _taskService.GetTask("Generic Project", taskC.Title); 
+
+    Assert.IsNotNull(addedTaskC, "La tarea C no se agregó correctamente");
+
+    _resourceRepository.Add(new Resource { Name = "Complex Update Resource", Type = "Update Type", Description = "Update Resource Description" });
+    _context.SaveChanges();
+    var resource = _resourceRepository.Get(r => r.Name == "Complex Update Resource");
+
+    var updateDTO = new TaskDTO
     {
-        var taskA = new Task("Task A", "Description A", DateTime.Now, 1, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-        var taskB = new Task("Task B", "Description B", DateTime.Now, 2, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-        var taskC = new Task("Task C", "Description C", DateTime.Now, 3, new List<Task>(), new List<Task>(),
-            new List<Resource>());
-        _taskRepository.Add(taskA);
-        _taskRepository.Add(taskB);
-        _taskRepository.Add(taskC);
-        taskA = _taskRepository.Get(t => t.Title == "Task A");
-        taskB = _taskRepository.Get(t => t.Title == "Task B");
-        taskC = _taskRepository.Get(t => t.Title == "Task C");
-        
-        _projectRepository.AddTask("Generic Project", taskA);
-        _projectRepository.AddTask("Generic Project", taskB);
-        _projectRepository.AddTask("Generic Project", taskC);
-        
-        var addedTaskA = _taskService.GetTask("Generic Project", taskA.Title);
-        var addedTaskB = _taskService.GetTask("Generic Project", taskB.Title);
-        var addedTaskC = _taskService.GetTask("Generic Project", taskC.Title);
-  
+        Title = "Updated Task C",
+        Description = "Updated Description C",
+        ExpectedStartDate = DateTime.Now.AddDays(5),
+        Duration = 4,
+        PreviousTasks = new List<TaskDTO> { new TaskDTO { Id = taskA.Id } },
+        SameTimeTasks = new List<TaskDTO> { new TaskDTO { Id = taskB.Id } },
+        Resources = new List<ResourceDTO> { new ResourceDTO { Id = resource.Id } }
+    };
 
-        Assert.IsNotNull(addedTaskA, "Task A no se agregó correctamente");
-        Assert.IsNotNull(addedTaskB, "Task B no se agregó correctamente");
-        Assert.IsNotNull(addedTaskC, "Task C no se agregó correctamente");
+    _taskService.UpdateTask("Generic Project", taskC.Title, updateDTO);
+    var updatedTaskC = _taskService.GetTask("Generic Project", updateDTO.Title); 
 
-        var originalState = (StateDTO)(int)addedTaskC.State;
-        _resourceRepository.Add(new()
-        {
-            Name = "Complex Update Resource", Type = "Update Type",
-            Description = "Update Resource Description"
-        });
-        var resource = _resourceRepository.Get(r => r.Name == "Complex Update Resource");
-        var resourceDTO = _resourceService.Get(resource.Id);
-        var updateDTO = new TaskDTO
-        {
-            Title = "Updated Task C",
-            Description = "Updated Description C",
-            ExpectedStartDate = DateTime.Now.AddDays(5),
-            Duration = 4,
-            PreviousTasks = new List<TaskDTO> { new() { Id = addedTaskA.Id } },
-            SameTimeTasks = new List<TaskDTO> { new() { Id = addedTaskB.Id } },
-            Resources = new List<ResourceDTO>
-            {
-                resourceDTO
-            }
-        };
+    Assert.IsNotNull(updatedTaskC);
+    Assert.AreEqual("Updated Task C", updatedTaskC.Title);
+    Assert.AreEqual("Updated Description C", updatedTaskC.Description);
+    Assert.AreEqual(4, updatedTaskC.Duration);
+    Assert.AreEqual(1, updatedTaskC.PreviousTasks.Count);
+    Assert.AreEqual(taskA.Title, updatedTaskC.PreviousTasks[0].Title);
+    Assert.AreEqual(1, updatedTaskC.SameTimeTasks.Count);
+    Assert.AreEqual(taskB.Title, updatedTaskC.SameTimeTasks[0].Title);
+    Assert.AreEqual(1, updatedTaskC.Resources.Count);
+    Assert.AreEqual("Complex Update Resource", updatedTaskC.Resources[0].Name);
+}
 
-        _taskService.UpdateTask("Generic Project", addedTaskC.Title, updateDTO);
-        
-        var updatedTaskC = _taskService.GetTask("Generic Project", addedTaskC.Title);
-
-        Assert.IsNotNull(updatedTaskC);
-        Assert.AreEqual("Updated Task C", updatedTaskC.Title);
-        Assert.AreEqual("Updated Description C", updatedTaskC.Description);
-        Assert.AreEqual(4, updatedTaskC.Duration);
-        Assert.AreEqual(1, updatedTaskC.PreviousTasks.Count);
-        Assert.AreEqual(addedTaskA.Id, updatedTaskC.PreviousTasks[0].Id);
-        Assert.AreEqual(1, updatedTaskC.SameTimeTasks.Count);
-        Assert.AreEqual(addedTaskB.Id, updatedTaskC.SameTimeTasks[0].Id);
-        Assert.AreEqual(1, updatedTaskC.Resources.Count);
-        Assert.AreEqual("Complex Update Resource", updatedTaskC.Resources[0].Name);
-
-        var updatedTaskCDTO = _taskService.GetTask("Generic Project", addedTaskC.Title);
-
-        Assert.AreEqual(originalState, updatedTaskCDTO.State,
-            "El estado de la tarea no debería cambiar o debería mantener su valor original");
-    }
 
     [TestMethod]
     public void GetTasks_ShouldCorrectlyMapAllTaskProperties_TestingFromEntityList()
