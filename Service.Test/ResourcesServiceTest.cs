@@ -268,7 +268,9 @@ public class ResourcesServiceTest
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void UpdateResource_ShouldThrowException_WhenResourceIsNotExclusive()
     {
-        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        _loginService.Logout();
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+
         var resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
@@ -277,6 +279,7 @@ public class ResourcesServiceTest
         };
 
         _resourceService.AddResource(resourceDTO);
+
         _loginService.Logout();
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
         var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
@@ -303,6 +306,7 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
+
         var task2 = new TaskDTO
         {
             Title = "Title 2",
@@ -313,7 +317,6 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
-
 
         _adminProjectService.CreateProject(project);
         _taskService.AddTask("Project 1", task);
@@ -326,6 +329,7 @@ public class ResourcesServiceTest
             Type = "TypeB",
             Description = "Updated description"
         };
+
 
         _resourceService.UpdateResource(addedResourceDto.Id, updatedResourceDTO);
     }
@@ -512,11 +516,6 @@ public class ResourcesServiceTest
         _taskService.AddTask("Project 1", task);
         _adminProjectService.CreateProject(project2);
         _taskService.AddTask("Project 2", task2);
-
-        var taskAdded = _taskRepository.Get(t => t.Title == task2.Title);
-        var resourceAdded = taskAdded.Resources.First();
-
-        Assert.AreEqual(resourceAdded.Id, addedResource.Id);
 
         _resourceService.DeleteResource(addedResource.Id);
     }

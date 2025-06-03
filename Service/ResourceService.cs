@@ -56,10 +56,10 @@ public class ResourceService : IResourceService
     public void UpdateResource(int? id, ResourceDTO updatedResourceDTO)
     {
         isAbleToModifyResource(GetResourceObject(id));
-        var resourceToUpdate = GetResourceObject(id);
 
         var updatedResource = ToEntity(updatedResourceDTO);
-
+        updatedResource.Id = id.Value;
+        
         _resourceRepository.Update(updatedResource);
     }
 
@@ -68,7 +68,7 @@ public class ResourceService : IResourceService
         isAbleToModifyResource(GetResourceObject(id));
         try
         {
-            var res = _resourceRepository.Get(r=>r.Id == id);
+            var res = _resourceRepository.Get(r => r.Id == id);
             _resourceRepository.Delete(res);
         }
         catch (Exception ex)
@@ -131,12 +131,16 @@ public class ResourceService : IResourceService
         var projects = _projectRepository.GetAll();
         List<Project> projectsThatAreUsingResource = new List<Project>();
         foreach (var project in projects)
-        foreach (var task in project.Tasks)
-            if (task.Resources.Any(r => r.Id == resource.Id))
+        {
+            foreach (var task in project.Tasks)
             {
-                projectsThatAreUsingResource.Add(project);
-                break;
+                if (task.Resources.Any(r => r.Id == resource.Id))
+                {
+                    projectsThatAreUsingResource.Add(project);
+                    break;
+                }
             }
+        }
 
         return projectsThatAreUsingResource;
     }

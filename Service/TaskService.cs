@@ -370,7 +370,6 @@ public class TaskService
             var existing = _resourceRepository.Get(r => r.Id == resourceDTO.Id);
             if (existing == null)
                 throw new ResourceNotFoundException();
-            //existing.Id = resourceDTO.Id;
             resources.Add(existing);
         }
 
