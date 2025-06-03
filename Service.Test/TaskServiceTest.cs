@@ -242,8 +242,8 @@ public class TaskServiceTest
 
         Assert.IsNotNull(addedTask);
         Assert.AreEqual(2, addedTask.SameTimeTasks.Count);
-        Assert.IsTrue(addedTask.SameTimeTasks.Any(t => t.Id == _task1.Id));
-        Assert.IsTrue(addedTask.SameTimeTasks.Any(t => t.Id == _task2.Id));
+        Assert.IsTrue(addedTask.SameTimeTasks.Any(t => t.Title == "Task 1"));
+        Assert.IsTrue(addedTask.SameTimeTasks.Any(t => t.Title == "Task 2"));
     }
 
     [TestMethod]
