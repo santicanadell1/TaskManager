@@ -36,58 +36,60 @@ public class NotificationServiceTest
 
         _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository);
         _adminService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,_resourceRepository);
+            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,
+                _resourceRepository);
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
+        _adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository,_taskRepository,_resourceRepository);
         CreateAndAddProjectsAndUsers();
     }
 
     private void CreateAndAddProjectsAndUsers()
     {
-        var user1 = new User
+        var user1 = new UserDTO()
         {
-            FirstName = "Name 1", 
-            LastName = "LastName 1", 
+            FirstName = "Name 1",
+            LastName = "LastName 1",
             Email = "Email1@example.com",
-            Birthday = DateTime.Today.AddYears(-18), 
+            Birthday = DateTime.Today.AddYears(-18),
             Password = "Password1@",
-            Roles = new List<Rol> { Rol.ProjectMember, Rol.AdminProject }
+            Roles = new List<RolDTO> { RolDTO.ProjectMember, RolDTO.AdminProject }
         };
-        
-        var user2 = new User
+
+        var user2 = new UserDTO()
         {
-            FirstName = "Name 2", 
-            LastName = "LastName 2", 
+            FirstName = "Name 2",
+            LastName = "LastName 2",
             Email = "Email2@example.com",
             Birthday = DateTime.Today.AddYears(-18),
-            Password = "Password2@", 
-            Roles = new List<Rol> { Rol.ProjectMember }
+            Password = "Password2@",
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
 
-        _userRepository.Add(user1);
-        _userRepository.Add(user2);
-
-        var savedUser1Entity = _userRepository.Get(u => u.Email == "Email1@example.com");
-        var savedUser2Entity = _userRepository.Get(u => u.Email == "Email2@example.com");
-
-        var project1 = new Project()
+        _userService.AddUser(user1);
+        _userService.AddUser(user2);
+        
+        _loginService.LoginUser(user1.Email, user1.Password);
+        
+        var project1 = new ProjectDTO()
         {
             Name = "Project 1",
             Description = "Description 1",
             StartDate = DateTime.Today,
-            Members = new List<User> { savedUser1Entity, savedUser2Entity }
         };
 
-        var project2 = new Project()
+        var project2 = new ProjectDTO()
         {
             Name = "Project 2",
             Description = "Description 2",
             StartDate = DateTime.Today,
-            Members = new List<User> { savedUser1Entity }
         };
 
-        _projectRepository.Add(project1);
-        _projectRepository.Add(project2);
+        _adminPService.CreateProject(project1);
+        _adminPService.CreateProject(project2);
+
+        _adminPService.AssignMembersToProject(project1.Name, new List<UserDTO> { user1, user2 });
+        _adminPService.AssignMembersToProject(project2.Name, new List<UserDTO> { user1 });
     }
 
     [TestMethod]
@@ -112,7 +114,7 @@ public class NotificationServiceTest
 
         var notificationDTO = new NotificationDTO
         {
-            Read = false, 
+            Read = false,
             Description = "New Project Notification",
             Project = _adminService.GetProjectByName(projectName)
         };
@@ -135,25 +137,26 @@ public class NotificationServiceTest
         var projectName = "Project 1";
         var notificationDTO = new NotificationDTO
         {
-            Read = false, 
+            Read = false,
             Description = "New Project Notification",
             Project = _adminService.GetProjectByName(projectName)
         };
         var notificationDTO2 = new NotificationDTO
         {
-            Read = false, 
+            Read = false,
             Description = "New Project Notification 2",
             Project = _adminService.GetProjectByName(projectName)
         };
-        
+
         _notificationService.CreateNotification(notificationDTO);
         _notificationService.CreateNotification(notificationDTO2);
-        
+
         var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
+        
         Assert.AreEqual(2, user1.Notifications.Count);
-        
+
         _notificationService.RemoveNotificationFromUser(user1.Email, user1.Notifications[0].Id);
-        
+
         user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
         Assert.AreEqual(1, user1.Notifications.Count);
     }
@@ -165,17 +168,17 @@ public class NotificationServiceTest
         var projectName = "Project 1";
         var notificationDTO = new NotificationDTO
         {
-            Read = false, 
+            Read = false,
             Description = "New Project Notification",
             Project = _adminService.GetProjectByName(projectName)
         };
         var notificationDTO2 = new NotificationDTO
         {
-            Read = false, 
+            Read = false,
             Description = "New Project Notification 2",
             Project = _adminService.GetProjectByName(projectName)
         };
-        
+
         _notificationService.CreateNotification(notificationDTO);
         _notificationService.CreateNotification(notificationDTO2);
         _notificationService.RemoveNotificationFromUser("WrongEmail@example.com", 1);

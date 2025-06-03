@@ -82,36 +82,11 @@ public class NotificationService
 
         return rolDTOs;
     }
-
-    private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
-    {
-        var roles = new List<Rol>();
-
-        if (roleDTOs != null)
-        {
-            foreach (var roleDTO in roleDTOs)
-                switch (roleDTO)
-                {
-                    case RolDTO.AdminSystem:
-                        roles.Add(Rol.AdminSystem);
-                        break;
-                    case RolDTO.ProjectMember:
-                        roles.Add(Rol.ProjectMember);
-                        break;
-                    case RolDTO.AdminProject:
-                        roles.Add(Rol.AdminProject);
-                        break;
-                }
-        }
-
-        return roles;
-    }
-
+    
     private Notification ToEntity(NotificationDTO notificationDTO)
     {
         var project = _projectRepository.Get(p => p.Name == notificationDTO.Project.Name);
         var notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description, project);
-        notification.Id = notificationDTO.Id;
         return notification;
     }
 
@@ -121,9 +96,12 @@ public class NotificationService
         if (user == null) throw new UserNotFoundException();
 
         var notifications = new List<NotificationDTO>();
-        foreach (var notification in user.Notifications)
+        if (user.Notifications != null)
         {
-            if (notification != null) notifications.Add(FromEntity(notification));
+            foreach (var notification in user.Notifications)
+            {
+                if (notification != null) notifications.Add(FromEntity(notification));
+            }
         }
 
         return notifications;
@@ -161,11 +139,15 @@ public class NotificationService
             user.Notifications = new List<Notification>();
         }
 
-        Notification includeNotification = user.Notifications.Find(n => n.Id == notificationId);
-        if (includeNotification == null)
+        var notificationToAdd = _notificationRepository.Get(n => n.Id == notificationId);
+        if (notificationToAdd != null)
         {
-            user.Notifications.Add(includeNotification);
-            _userRepository.Update(user);
+            bool alreadyExists = user.Notifications.Any(n => n.Id == notificationId);
+            if (!alreadyExists)
+            {
+                user.Notifications.Add(notificationToAdd);
+                _userRepository.Update(user);
+            }
         }
     }
 
@@ -186,6 +168,10 @@ public class NotificationService
             {
                 throw new NotificationNotFoundException();
             }
+        }
+        else
+        {
+            throw new NotificationNotFoundException();
         }
     }
 }
