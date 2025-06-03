@@ -50,7 +50,7 @@ public class TaskService
 
     public TaskDTO GetTask(string title)
     {
-        return FromEntity(_taskRepository.Get(t=>t.Title==title));
+        return FromEntity(_taskRepository.Get(t => t.Title == title));
     }
 
     public List<TaskDTO> GetTasks()
@@ -60,6 +60,7 @@ public class TaskService
         {
             tasks.Add(FromEntity(task));
         }
+
         return tasks;
     }
 
@@ -71,6 +72,7 @@ public class TaskService
         {
             throw new TaskException("The task's start date is before the project's start date.");
         }
+
         /*var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
 
@@ -339,6 +341,11 @@ public class TaskService
             ToEntityList(taskDTO.SameTimeTasks),
             ToResourceEntityList(taskDTO.Resources)
         );
+        if (TaskEntity.Id.HasValue)
+        {
+            TaskEntity.Id = taskDTO.Id;
+        }
+
         TaskEntity.State = (State)taskDTO.State;
         return TaskEntity;
     }
@@ -363,7 +370,7 @@ public class TaskService
             var existing = _resourceRepository.Get(r => r.Id == resourceDTO.Id);
             if (existing == null)
                 throw new ResourceNotFoundException();
-            existing.Id = resourceDTO.Id;
+            //existing.Id = resourceDTO.Id;
             resources.Add(existing);
         }
 
