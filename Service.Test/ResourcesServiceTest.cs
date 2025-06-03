@@ -519,8 +519,7 @@ public class ResourcesServiceTest
 
         _resourceService.DeleteResource(addedResource.Id);
     }
-
-
+    
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void DeleteResource_ShouldThrowExceptin_WhenResourceIsNotExclusiveForTheAdmin()
