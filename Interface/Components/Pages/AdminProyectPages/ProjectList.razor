@@ -1051,7 +1051,7 @@
                 .Where(r => r != null && r.Id.HasValue && selectedResourceIds.Contains(r.Id))
                 .ToList() ?? new List<ResourceDTO>();
 
-            TaskService.AddTask(selectedProjectName, newTask.Id);
+            TaskService.AddTask(selectedProjectName, newTask);
             taskSuccessMessage = "Task created successfully!";
             taskErrorMessage = string.Empty;
 
@@ -1225,7 +1225,7 @@
                 .Where(r => r.Id.HasValue && editSelectedResourceIds.Contains(r.Id))
                 .ToList();
 
-            TaskService.UpdateTask(selectedProjectName, selectedTaskToEdit.Id, selectedTaskToEdit);
+            TaskService.UpdateTask(selectedProjectName, selectedTaskToEdit.Title, selectedTaskToEdit);
             editTaskSuccessMessage = "Task updated successfully!";
             editTaskErrorMessage = string.Empty;
 
@@ -1267,7 +1267,7 @@
     {
         try
         {
-            TaskService.DeleteTask(selectedProjectName, task.Id);
+            TaskService.DeleteTask(selectedProjectName, task.Title);
             LoadTasks();
         }
         catch (Exception ex)
@@ -1446,7 +1446,7 @@
     {
         try
         {
-            AdminPService.AddTaskToMember(selectedProjectName, selectedMemberId, (int)task.Id);
+            AdminPService.AddTaskToMember(selectedProjectName, selectedMemberId, task.Title);
             assignTaskSuccessMessage = $"Task '{task.Title}' assigned successfully";
             assignTaskErrorMessage = string.Empty;
 
@@ -1463,7 +1463,7 @@
     {
         try
         {
-            AdminPService.RemoveTaskFromMember(selectedProjectName, selectedMemberId, (int)task.Id);
+            AdminPService.RemoveTaskFromMember(selectedProjectName, selectedMemberId, task.Title);
             assignTaskSuccessMessage = $"Task '{task.Title}' removed successfully";
             assignTaskErrorMessage = string.Empty;
 
