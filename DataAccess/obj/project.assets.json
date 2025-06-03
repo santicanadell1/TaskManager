@@ -4048,6 +4048,7 @@
     "net8.0": [
       "Domain >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 8.0.16",
+      "Microsoft.EntityFrameworkCore.Abstractions >= 8.0.16",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.16",
       "Microsoft.EntityFrameworkCore.InMemory >= 8.0.16",
       "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.16",
@@ -4103,6 +4104,10 @@
         "targetAlias": "net8.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[8.0.16, )"
+          },
+          "Microsoft.EntityFrameworkCore.Abstractions": {
             "target": "Package",
             "version": "[8.0.16, )"
           },

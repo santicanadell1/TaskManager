@@ -1008,6 +1008,7 @@
         "dependencies": {
           "Domain": "1.0.0",
           "Microsoft.EntityFrameworkCore": "8.0.16",
+          "Microsoft.EntityFrameworkCore.Abstractions": "8.0.16",
           "Microsoft.EntityFrameworkCore.InMemory": "8.0.16",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.16"
         },

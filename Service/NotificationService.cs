@@ -82,11 +82,36 @@ public class NotificationService
 
         return rolDTOs;
     }
-    
+
+    private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
+    {
+        var roles = new List<Rol>();
+
+        if (roleDTOs != null)
+        {
+            foreach (var roleDTO in roleDTOs)
+                switch (roleDTO)
+                {
+                    case RolDTO.AdminSystem:
+                        roles.Add(Rol.AdminSystem);
+                        break;
+                    case RolDTO.ProjectMember:
+                        roles.Add(Rol.ProjectMember);
+                        break;
+                    case RolDTO.AdminProject:
+                        roles.Add(Rol.AdminProject);
+                        break;
+                }
+        }
+
+        return roles;
+    }
+
     private Notification ToEntity(NotificationDTO notificationDTO)
     {
         var project = _projectRepository.Get(p => p.Name == notificationDTO.Project.Name);
         var notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description, project);
+        notification.Id = notificationDTO.Id;
         return notification;
     }
 
@@ -113,8 +138,8 @@ public class NotificationService
         _notificationRepository.Add(notification);
 
         var createdNotification = _notificationRepository.Get(n =>
-            n.Description == notification.Description &&
-            n.Project.Id == notification.Project.Id);
+            n.Description == notificationDTO.Description &&
+            n.Project.Id == notificationDTO.Project.Id);
 
         if (createdNotification == null)
         {
@@ -125,11 +150,11 @@ public class NotificationService
 
         foreach (var user in project.Members)
         {
-            AddNotificationToUser(user.Email, createdNotification.Id);
+            AddNotificationToUser(user.Email, (int)createdNotification.Id);
         }
     }
 
-    public void AddNotificationToUser(string userEmail, int? notificationId)
+    public void AddNotificationToUser(string userEmail, int notificationId)
     {
         var user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
