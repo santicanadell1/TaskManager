@@ -408,7 +408,7 @@ public class AdminPServiceTests
         
         _taskService.AddTask("Test Project", task);
 
-        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
 
         Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t => t.Id == 1));
     }
@@ -438,7 +438,7 @@ public class AdminPServiceTests
         var addedTasks = _taskService.GetTasks("Test Project");
         var addedTask = addedTasks.FirstOrDefault(t => t.Title == "Task1");
 
-        _adminPservice.AddTaskToMember("Test Project", "member1.user@example.com", addedTask.Id.Value);
+        _adminPservice.AddTaskToMember("Test Project", "member1.user@example.com", addedTask.Title);
         
     }
 
@@ -467,7 +467,7 @@ public class AdminPServiceTests
 
         _taskService.AddTask("Test Project", task);
 
-        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", "task2");
     }
 
     [TestMethod]
@@ -492,11 +492,11 @@ public class AdminPServiceTests
         
         _taskService.AddTask("Test Project", task);
 
-        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
 
         Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Any(t => t.Id == 1));
 
-        _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", 1);
+        _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", task.Title);
 
         Assert.IsTrue(_userservice.GetUser("member.user@example.com").Tasks.Count == 0);
     }
@@ -524,8 +524,8 @@ public class AdminPServiceTests
         
         _taskService.AddTask("Test Project", task);
 
-        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
-        _adminPservice.RemoveTaskFromMember("Test Project", "member1.user@example.com", 1);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
+        _adminPservice.RemoveTaskFromMember("Test Project", "member1.user@example.com", task.Title);
     }
 
     [TestMethod]
@@ -552,8 +552,8 @@ public class AdminPServiceTests
 
         _taskService.AddTask("Test Project", task);
 
-        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
-        _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", 2);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
+        _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", task.Title);
     }
 
     [TestMethod]
@@ -587,8 +587,8 @@ public class AdminPServiceTests
         _taskService.AddTask("Test Project", task);
         _taskService.AddTask("Test Project", task2);
 
-        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
-        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task2.Title);
 
         var tasks = _adminPservice.GetAllTaskForAMember("member.user@example.com");
 
@@ -625,8 +625,8 @@ public class AdminPServiceTests
         _taskService.AddTask("Test Project", task);
         _taskService.AddTask("Test Project", task2);
 
-        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 1);
-        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", 2);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
+        _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task2.Title);
 
         var tasks = _adminPservice.GetAllTaskForAMemberInAProject("Test Project", "member.user@example.com");
 
