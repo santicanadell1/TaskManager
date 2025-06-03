@@ -72,32 +72,7 @@ public class TaskService
         {
             throw new TaskException("The task's start date is before the project's start date.");
         }
-
-        /*var previousTasks = new List<Task>();
-        var sameTimeTasks = new List<Task>();
-
-        if (taskDTO.PreviousTasks != null)
-            foreach (var prevTaskDTO in taskDTO.PreviousTasks)
-                if (prevTaskDTO.Id.HasValue)
-                {
-                    var existingTask = project.Tasks.FirstOrDefault(t => t.Title == prevTaskDTO.Title);
-                    if (existingTask != null)
-                    {
-                        previousTasks.Add(existingTask);
-                    }
-                    else
-                    {
-                        throw new TaskNotFoundException();
-                    }
-                }
-
-        if (taskDTO.SameTimeTasks != null)
-            foreach (var sameTaskDTO in taskDTO.SameTimeTasks)
-                if (sameTaskDTO.Id.HasValue)
-                {
-                    var existingTask = project.Tasks.FirstOrDefault(t => t.Title == sameTaskDTO.Title);
-                    if (existingTask != null) sameTimeTasks.Add(existingTask);
-                }*/
+        
         CreateTask(taskDTO);
         var task = _taskRepository.Get(t => t.Title == taskDTO.Title);
 

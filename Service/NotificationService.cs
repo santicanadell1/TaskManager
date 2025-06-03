@@ -135,8 +135,8 @@ public class NotificationService
         _notificationRepository.Add(notification);
 
         var createdNotification = _notificationRepository.Get(n =>
-            n.Description == notification.Description &&
-            n.Project.Id == notification.Project.Id);
+            n.Description == notificationDTO.Description &&
+            n.Project.Id == notificationDTO.Project.Id);
 
         if (createdNotification == null)
         {
@@ -147,11 +147,11 @@ public class NotificationService
 
         foreach (var user in project.Members)
         {
-            AddNotificationToUser(user.Email, createdNotification.Id);
+            AddNotificationToUser(user.Email, (int)createdNotification.Id);
         }
     }
 
-    public void AddNotificationToUser(string userEmail, int? notificationId)
+    public void AddNotificationToUser(string userEmail, int notificationId)
     {
         var user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
@@ -164,6 +164,7 @@ public class NotificationService
         Notification includeNotification = user.Notifications.Find(n => n.Id == notificationId);
         if (includeNotification == null)
         {
+            includeNotification = _notificationRepository.Get(n => n.Id == notificationId);
             user.Notifications.Add(includeNotification);
             _userRepository.Update(user);
         }
