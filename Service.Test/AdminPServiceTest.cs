@@ -553,7 +553,7 @@ public class AdminPServiceTests
         _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
-        _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", task.Title);
+        _adminPservice.RemoveTaskFromMember("Test Project", "member.user@example.com", "task2");
     }
 
     [TestMethod]
