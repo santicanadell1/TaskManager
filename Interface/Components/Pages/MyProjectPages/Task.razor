@@ -59,7 +59,7 @@
                 <option value="">-- Select a Task --</option>
                 @foreach (var task in tasks)
                 {
-                    <option value="@task.Id">@task.Title</option>
+                    <option value="@task.Title">@task.Title</option>
                 }
             </select>
         </div>
@@ -144,8 +144,7 @@
             if (!string.IsNullOrEmpty(selectedTaskId) && !string.IsNullOrEmpty(selectedProjectId))
             {
                 StateHasChanged();
-
-                var task = TaskServiceClient.GetTask(selectedProjectId, int.Parse(selectedTaskId));
+                var task = TaskServiceClient.GetTask(selectedProjectId, selectedTaskId);
                 taskStatus = task.State;
 
                 taskStatusString = ConvertEnumToString(taskStatus);
@@ -187,7 +186,7 @@
         {
             StateHasChanged();
 
-            var existingTask = TaskServiceClient.GetTask(selectedProjectId, int.Parse(selectedTaskId));
+            var existingTask = TaskServiceClient.GetTask(selectedProjectId, selectedTaskId);
 
             var taskDTO = new TaskDTO
             {

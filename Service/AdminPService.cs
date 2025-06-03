@@ -131,7 +131,7 @@ public class AdminPService : IAdminPService
         return memberDTOs;
     }
 
-    public void AddTaskToMember(string projectName, string memberEmail, int? taskID)
+    public void AddTaskToMember(string projectName, string memberEmail, string title)
     {
         CheckAdminProyectRole();
         var projectEntity = _projectRepository.Get(p => p.Name == projectName);
@@ -140,18 +140,18 @@ public class AdminPService : IAdminPService
         if (projectEntity.Members == null || !projectEntity.Members.Any(m => m.Email == memberEmail))
             throw new UserIsNotAMemberException();
 
-        if (projectEntity.Tasks == null || !projectEntity.Tasks.Any(t => t.Id == taskID))
+        if (projectEntity.Tasks == null || !projectEntity.Tasks.Any(t => t.Title == title))
             throw new TaskIsNotFromTheProjectException();
 
         var userEntity = _userRepository.Get(u => u.Email == memberEmail);
         if (userEntity == null) throw new UserNotFoundException();
 
-        var task = _taskRepository.Get(t => t.Id == taskID);
+        var task = _taskRepository.Get(t => t.Title == title);
         userEntity.Tasks.Add(task);
         _userRepository.Update(userEntity);
     }
 
-    public void RemoveTaskFromMember(string projectName, string memberEmail, int? taskID)
+    public void RemoveTaskFromMember(string projectName, string memberEmail, string title)
     {
         CheckAdminProyectRole();
         var projectEntity = _projectRepository.Get(p => p.Name == projectName);
@@ -160,13 +160,13 @@ public class AdminPService : IAdminPService
         if (projectEntity.Members == null || !projectEntity.Members.Any(m => m.Email == memberEmail))
             throw new UserIsNotAMemberException();
 
-        if (projectEntity.Tasks == null || !projectEntity.Tasks.Any(t => t.Id == taskID))
+        if (projectEntity.Tasks == null || !projectEntity.Tasks.Any(t => t.Title == title))
             throw new TaskIsNotFromTheProjectException();
 
         var userEntity = _userRepository.Get(u => u.Email == memberEmail);
         if (userEntity == null) throw new UserNotFoundException();
 
-        var task = projectEntity.Tasks.Find(t => t.Id == taskID);
+        var task = projectEntity.Tasks.Find(t => t.Title == title);
         userEntity.RemoveTask(task);
         _userRepository.Update(userEntity);
     }
