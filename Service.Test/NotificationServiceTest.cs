@@ -152,7 +152,7 @@ public class NotificationServiceTest
         var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
         Assert.AreEqual(2, user1.Notifications.Count);
         
-        _notificationService.RemoveNotificationFromUser(user1.Email, user1.Notifications[0]);
+        _notificationService.RemoveNotificationFromUser(user1.Email, user1.Notifications[0].Id);
         
         user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
         Assert.AreEqual(1, user1.Notifications.Count);

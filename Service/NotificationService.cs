@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using DataAccess.Exceptions.NotificationRepositoryExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service.Models;
@@ -110,6 +111,7 @@ public class NotificationService
     {
         var project = _projectRepository.Get(p => p.Name == notificationDTO.Project.Name);
         var notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description, project);
+        notification.Id = notificationDTO.Id;
         return notification;
     }
 
@@ -156,12 +158,13 @@ public class NotificationService
 
         if (user.Notifications == null)
         {
-            user.Notifications = new List<int?>();
+            user.Notifications = new List<Notification>();
         }
 
-        if (!user.Notifications.Contains(notificationId))
+        Notification includeNotification = user.Notifications.Find(n => n.Id == notificationId);
+        if (includeNotification == null)
         {
-            user.Notifications.Add(notificationId);
+            user.Notifications.Add(includeNotification);
             _userRepository.Update(user);
         }
     }
@@ -173,8 +176,16 @@ public class NotificationService
 
         if (user.Notifications != null)
         {
-            user.Notifications.Remove(notificationId);
-            _userRepository.Update(user);
+            Notification includeNotification = user.Notifications.Find(n => n.Id == notificationId);
+            if (includeNotification != null)
+            {
+                user.Notifications.Remove(includeNotification);
+                _userRepository.Update(user);
+            }
+            else
+            {
+                throw new NotificationNotFoundException();
+            }
         }
     }
 }
