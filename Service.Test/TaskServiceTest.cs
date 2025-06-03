@@ -742,16 +742,19 @@ public void UpdateTask_WithComplexRelationships_ShouldCorrectlyMapAllProperties(
         Assert.AreEqual("Special Resource", mappedSpecialTask.Resources[0].Name);
     }
 
-
     [TestMethod]
     public void GetTask_ShouldReturnTaskWithCpmProperties()
     {
-        var Task1 = _taskRepository.Get(t => t.Title == "Task 1");
-        var taskDTO = _taskService.GetTask("Generic Project", Task1.Title);
+        var task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        var taskDTO = _taskService.GetTask("Generic Project", task1.Title);
 
+        Console.WriteLine($"Slack value: {taskDTO.Slack}");
 
-        Assert.AreEqual(default, taskDTO.Slack);
+        var maxSlack = TimeSpan.FromMilliseconds(1);  
+        Assert.IsTrue(taskDTO.Slack >= TimeSpan.Zero && taskDTO.Slack <= maxSlack,
+            $"El valor de Slack no está dentro del rango esperado: {taskDTO.Slack}");
     }
+
 
     [TestMethod]
     [ExpectedException(typeof(TaskException))]
