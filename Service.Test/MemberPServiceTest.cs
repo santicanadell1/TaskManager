@@ -281,20 +281,20 @@ public class MemberPServiceTest
     public void ChangeTaskStatus_ShouldChangeState_WhenPreviousTasksAreFinished()
     {
         _adminPService.CreateProject(projectDTO);
-        _taskService.AddTask("New Project", task1);
-        var task = _taskService.GetTask("New Project", task1.Title);
-        _adminPService.AddTaskToMember("New Project", UserDTO.Email, task.Title);
-        _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, task1, StateDTO.DONE);
-        _taskService.AddTask("New Project", task3);
-        var newTask = _taskService.GetTask("New Project", task3.Title); 
-
+        _taskService.AddTask(projectDTO.Name, task1);
         var newState = StateDTO.DONE;
+        var newTask = _taskService.GetTasks(projectDTO.Name).Find(t => t.Title == task1.Title);
+        _adminPService.AddTaskToMember(projectDTO.Name, UserDTO.Email, newTask.Title);
+        _memberPService.ChangeTaskStatus(projectDTO.Name, UserDTO.Email, newTask, newState);
+        
+        _taskService.AddTask("New Project", task3);
+        newTask = _taskService.GetTask("New Project", task3.Title); 
+        
         _adminPService.AddTaskToMember("New Project", UserDTO.Email, newTask.Title);
         Assert.AreEqual(newTask.Id.Value,_taskService.GetTask("New Project", newTask.Title).Id.Value);;
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, newTask, newState);
-
-        // Recuperar la tarea actualizada y verificar su estado
-        var updatedTask = _taskService.GetTask("New Project", newTask.Title); // Usar newTask.Id para recuperar la tarea actualizada
+        
+        var updatedTask = _taskService.GetTask("New Project", newTask.Title); 
         Assert.AreEqual(StateDTO.DONE, updatedTask.State);
     }
 }
