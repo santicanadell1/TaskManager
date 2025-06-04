@@ -40,10 +40,16 @@ public class NotificationServiceTest
                 _resourceRepository);
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
-        _adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository,_taskRepository,_resourceRepository);
+        _adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository,
+            _taskRepository, _resourceRepository);
         CreateAndAddProjectsAndUsers();
     }
 
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _context?.Database.EnsureDeleted();
+    }
     private void CreateAndAddProjectsAndUsers()
     {
         var user1 = new UserDTO()
@@ -68,9 +74,9 @@ public class NotificationServiceTest
 
         _userService.AddUser(user1);
         _userService.AddUser(user2);
-        
+
         _loginService.LoginUser(user1.Email, user1.Password);
-        
+
         var project1 = new ProjectDTO()
         {
             Name = "Project 1",
@@ -97,7 +103,11 @@ public class NotificationServiceTest
     {
         var userEmail = "Email1@example.com";
         var notificationDTO = new NotificationDTO
-            { Read = false, Description = "Test notification", Project = _adminService.GetProjectByName("Project 1") };
+        {
+            Read = false,
+            Description = "Test notification",
+            Project = _adminService.GetProjectByName("Project 1")
+        };
         _notificationService.CreateNotification(notificationDTO);
 
         var result = _notificationService.GetNotificationsForUser(userEmail);
@@ -118,14 +128,12 @@ public class NotificationServiceTest
             Description = "New Project Notification",
             Project = _adminService.GetProjectByName(projectName)
         };
-
+        
         _notificationService.CreateNotification(notificationDTO);
-
+        
         var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
         var user2 = _userRepository.Get(u => u.Email == "Email2@example.com");
-
-        project = _projectRepository.Get(p => p.Name == "Project 1");
-
+        
         Assert.AreEqual(2, project.Members.Count);
         Assert.AreEqual(1, user1.Notifications.Count);
         Assert.AreEqual(1, user2.Notifications.Count);
@@ -147,12 +155,11 @@ public class NotificationServiceTest
             Description = "New Project Notification 2",
             Project = _adminService.GetProjectByName(projectName)
         };
-
         _notificationService.CreateNotification(notificationDTO);
         _notificationService.CreateNotification(notificationDTO2);
 
         var user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
-        
+
         Assert.AreEqual(2, user1.Notifications.Count);
 
         _notificationService.RemoveNotificationFromUser(user1.Email, user1.Notifications[0].Id);

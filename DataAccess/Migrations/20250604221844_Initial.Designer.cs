@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250602233617_Initial")]
+    [Migration("20250604221844_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,21 @@ namespace DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ConcurrentTasks", b =>
+                {
+                    b.Property<int>("ConcurrentTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ConcurrentTaskId", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("ConcurrentTasks");
+                });
 
             modelBuilder.Entity("Domain.Notification", b =>
                 {
@@ -95,16 +110,11 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TaskId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
 
                     b.ToTable("Resources");
                 });
@@ -155,14 +165,9 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Tasks");
                 });
@@ -190,16 +195,9 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Notifications")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Roles")
                         .IsRequired()
@@ -207,24 +205,97 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
-
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TaskTask", b =>
+            modelBuilder.Entity("ProjectMembers", b =>
                 {
-                    b.Property<int>("PreviousTasksId")
+                    b.Property<int>("MembersId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SameTimeTasksId")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.HasKey("PreviousTasksId", "SameTimeTasksId");
+                    b.HasKey("MembersId", "ProjectId");
 
-                    b.HasIndex("SameTimeTasksId");
+                    b.HasIndex("ProjectId");
 
-                    b.ToTable("TaskTask");
+                    b.ToTable("ProjectMembers");
+                });
+
+            modelBuilder.Entity("TaskDependencies", b =>
+                {
+                    b.Property<int>("DependentTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PreviousTaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DependentTaskId", "PreviousTaskId");
+
+                    b.HasIndex("PreviousTaskId");
+
+                    b.ToTable("TaskDependencies");
+                });
+
+            modelBuilder.Entity("TaskResources", b =>
+                {
+                    b.Property<int>("ResourcesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ResourcesId", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("TaskResources");
+                });
+
+            modelBuilder.Entity("UserNotifications", b =>
+                {
+                    b.Property<int>("NotificationsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NotificationsId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserNotifications");
+                });
+
+            modelBuilder.Entity("UserTasks", b =>
+                {
+                    b.Property<int>("TasksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TasksId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserTasks");
+                });
+
+            modelBuilder.Entity("ConcurrentTasks", b =>
+                {
+                    b.HasOne("Domain.Task", null)
+                        .WithMany()
+                        .HasForeignKey("ConcurrentTaskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Task", null)
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Notification", b =>
@@ -232,7 +303,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Project");
@@ -243,65 +314,96 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.User", "AdminProject")
                         .WithMany()
                         .HasForeignKey("AdminProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AdminProject");
                 });
 
-            modelBuilder.Entity("Domain.Resource", b =>
-                {
-                    b.HasOne("Domain.Task", null)
-                        .WithMany("Resources")
-                        .HasForeignKey("TaskId");
-                });
-
             modelBuilder.Entity("Domain.Task", b =>
                 {
                     b.HasOne("Domain.Project", null)
                         .WithMany("Tasks")
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("Domain.User", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Domain.User", b =>
+            modelBuilder.Entity("ProjectMembers", b =>
                 {
+                    b.HasOne("Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("MembersId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Project", null)
-                        .WithMany("Members")
-                        .HasForeignKey("ProjectId");
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("TaskTask", b =>
+            modelBuilder.Entity("TaskDependencies", b =>
                 {
                     b.HasOne("Domain.Task", null)
                         .WithMany()
-                        .HasForeignKey("PreviousTasksId")
+                        .HasForeignKey("DependentTaskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Task", null)
+                        .WithMany()
+                        .HasForeignKey("PreviousTaskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TaskResources", b =>
+                {
+                    b.HasOne("Domain.Resource", null)
+                        .WithMany()
+                        .HasForeignKey("ResourcesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Task", null)
                         .WithMany()
-                        .HasForeignKey("SameTimeTasksId")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserNotifications", b =>
+                {
+                    b.HasOne("Domain.Notification", null)
+                        .WithMany()
+                        .HasForeignKey("NotificationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserTasks", b =>
+                {
+                    b.HasOne("Domain.Task", null)
+                        .WithMany()
+                        .HasForeignKey("TasksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Project", b =>
-                {
-                    b.Navigation("Members");
-
-                    b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("Domain.Task", b =>
-                {
-                    b.Navigation("Resources");
-                });
-
-            modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Navigation("Tasks");
                 });

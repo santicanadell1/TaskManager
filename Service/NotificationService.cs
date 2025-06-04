@@ -109,9 +109,19 @@ public class NotificationService
 
     private Notification ToEntity(NotificationDTO notificationDTO)
     {
-        var project = _projectRepository.Get(p => p.Name == notificationDTO.Project.Name);
-        var notification = new Notification((bool)notificationDTO.Read, notificationDTO.Description, project);
-        notification.Id = notificationDTO.Id;
+        Project project = _projectRepository.Get(p => p.Name == notificationDTO.Project.Name);
+
+        if (project == null)
+        {
+            throw new InvalidOperationException($"Project '{notificationDTO.Project.Name}' not found");
+        }
+
+        Notification notification = new Notification(
+            notificationDTO.Read ?? false,
+            notificationDTO.Description,
+            project
+        );
+
         return notification;
     }
 
@@ -138,8 +148,8 @@ public class NotificationService
         _notificationRepository.Add(notification);
 
         var createdNotification = _notificationRepository.Get(n =>
-            n.Description == notificationDTO.Description &&
-            n.Project.Name == notificationDTO.Project.Name);
+            n.Description == notification.Description &&
+            n.Project.Name == notification.Project.Name);
 
         if (createdNotification == null)
         {
@@ -147,30 +157,25 @@ public class NotificationService
         }
 
         var project = _projectRepository.Get(p => p.Name == notification.Project.Name);
-    
+
         if (project?.Members != null)
         {
             foreach (var user in project.Members)
             {
-                AddNotificationToUser(user.Email, (int)createdNotification.Id);
+                AddNotificationToUser(user.Email, createdNotification.Id);
             }
         }
     }
 
-    public void AddNotificationToUser(string userEmail, int notificationId)
+    public void AddNotificationToUser(string userEmail, int? notificationId)
     {
         var user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
-        if (user.Notifications == null)
-        {
-            user.Notifications = new List<Notification>();
-        }
-
         var notificationToAdd = _notificationRepository.Get(n => n.Id == notificationId);
         if (notificationToAdd != null)
         {
-            bool alreadyExists = user.Notifications.Any(n => n.Id == notificationId);
+            bool alreadyExists = user.Notifications.Any(n => n.Id == notificationToAdd.Id);
             if (!alreadyExists)
             {
                 user.Notifications.Add(notificationToAdd);
