@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/home/feli/.nuget/packages/": {}
+    "/Users/santicanadell/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj",
+      "projectUniqueName": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Domain/Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj",
-      "packagesPath": "/home/feli/.nuget/packages/",
-      "outputPath": "/home/feli/RiderProjects/305108_282542_281987/Domain/obj/",
+      "projectPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Domain/Domain.csproj",
+      "packagesPath": "/Users/santicanadell/.nuget/packages/",
+      "outputPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Domain/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/feli/.nuget/NuGet/NuGet.Config"
+        "/Users/santicanadell/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -38,6 +38,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -59,7 +64,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.116/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.410/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

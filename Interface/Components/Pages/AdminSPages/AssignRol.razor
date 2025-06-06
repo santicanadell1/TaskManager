@@ -1,4 +1,5 @@
 ﻿@page "/users/roles"
+@using Domain
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
@@ -16,7 +17,7 @@
         <label for="userSelect">Select a User</label>
         <select id="userSelect" class="form-control mt-1" @bind="selectedUserEmail">
             <option value="">-- Select a User --</option>
-            @foreach (var user in usersList)
+            @foreach (UserDTO user in usersList)
             {
                 <option value="@user.Email">@user.FirstName @user.LastName</option>
             }
@@ -108,7 +109,7 @@
             return;
         }
 
-        var userToAssignRoles = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
+        UserDTO? userToAssignRoles = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
 
         if (userToAssignRoles == null)
         {
@@ -118,7 +119,7 @@
 
         try
         {
-            var anyRoleAssigned = false;
+            Boolean anyRoleAssigned = false;
 
             foreach (var rolePair in rolesSelected)
             {
@@ -143,7 +144,7 @@
 
             if (userToAssignRoles.Email == _login.GetLoggedUser().Email)
             {
-                var userDto = UserService.GetUser(userToAssignRoles.Email);
+                UserDTO userDto = UserService.GetUser(userToAssignRoles.Email);
                 _login.UpdateUser(userDto);
                 Navigation.NavigateTo(Navigation.Uri, true);
             }
