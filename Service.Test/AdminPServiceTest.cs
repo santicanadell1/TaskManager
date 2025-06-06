@@ -102,7 +102,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void AssignMembersToProject_ShouldAddMembers_WhenValid()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "New Project",
             Description = "Project Description",
@@ -113,9 +113,9 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
 
-        var userDTO = new UserDTO
+        UserDTO userDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
