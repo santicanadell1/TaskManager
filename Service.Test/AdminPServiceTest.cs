@@ -300,7 +300,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void GetAllProjects_ShouldReturnAllProjects()
     {
-        var projectDTO1 = new ProjectDTO
+        ProjectDTO projectDTO1 = new ProjectDTO
         {
             Name = "Project 1",
             Description = "Description 1",
@@ -308,7 +308,7 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
-        var projectDTO2 = new ProjectDTO
+        ProjectDTO projectDTO2 = new ProjectDTO
         {
             Name = "Project 2",
             Description = "Description 2",
@@ -320,7 +320,7 @@ public class AdminPServiceTests
         _adminPservice.CreateProject(projectDTO1);
         _adminPservice.CreateProject(projectDTO2);
 
-        var projects = _adminPservice.GetAllProjects();
+        List<ProjectDTO> projects = _adminPservice.GetAllProjects();
 
         Assert.AreEqual(2, projects.Count);
         Assert.AreEqual("Project 1", projects[0].Name);
