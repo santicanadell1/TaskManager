@@ -1,7 +1,9 @@
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 
 namespace DataAccess.Test;
+
 using Domain;
+
 [TestClass]
 public class TaskRepositoryTest
 {
@@ -17,21 +19,26 @@ public class TaskRepositoryTest
         _contextFactory = new InMemoryAppContextFactory();
         _context = _contextFactory.CreateDbContext();
         _taskRepository = new TaskRepository(_context);
-        _task = new Task("Task1", "Description1", DateTime.Today, 2, new List<Task>(), new List<Task>(),new List<Resource>());
-        _task2 = new Task("Task2","Description2",DateTime.Today, 2, new List<Task>(),new List<Task>(),new List<Resource>());
+        _task = new Task("Task1", "Description1", DateTime.Today, 2, new List<Task>(), new List<Task>(),
+            new List<Resource>());
+        _task2 = new Task("Task2", "Description2", DateTime.Today, 2, new List<Task>(), new List<Task>(),
+            new List<Resource>());
     }
+
     [TestCleanup]
     public void CleanUp()
     {
         _context.Database.EnsureDeleted();
     }
+
     [TestMethod]
     public void AddTask_AddsTask_WhenValidTaskIsPassed()
     {
-        
         _taskRepository.Add(_task);
-        Assert.AreEqual(1, _taskRepository.GetAll().Count);;
+        Assert.AreEqual(1, _taskRepository.GetAll().Count);
+        ;
     }
+
     [TestMethod]
     [ExpectedException(typeof(TaskAlreadyExistsException))]
     public void AddTask_ThrowsTaskTitleIsDuplicatedException_WhenTitleAlreadyExists()
@@ -39,11 +46,12 @@ public class TaskRepositoryTest
         _taskRepository.Add(_task);
         _taskRepository.Add(_task);
     }
+
     [TestMethod]
     public void Get_ReturnsMatchingTask_WhenFilterMatches()
     {
         _taskRepository.Add(_task);
-        var found = _taskRepository.Get(t => t.Title == "Task1");
+        Task found = _taskRepository.Get(t => t.Title == "Task1");
         Assert.IsNotNull(found);
         Assert.AreEqual("Task1", found!.Title);
         Assert.AreEqual("Description1", found.Description);
@@ -58,11 +66,11 @@ public class TaskRepositoryTest
 
         Assert.IsTrue(taskId > 0, "Task ID was not assigned correctly.");
 
-        _task2.Id = taskId;  
+        _task2.Id = taskId;
 
         _taskRepository.Update(_task2);
 
-        var found = _taskRepository.Get(t => t.Id == taskId);
+        Task found = _taskRepository.Get(t => t.Id == taskId);
 
         Assert.IsNotNull(found);
 
@@ -70,7 +78,7 @@ public class TaskRepositoryTest
         Assert.AreEqual("Description2", found.Description);
     }
 
-    
+
     [TestMethod]
     public void Update_UpdatesAllFields_Test2()
     {
@@ -81,19 +89,19 @@ public class TaskRepositoryTest
 
         Assert.IsTrue(taskId > 0, "Task ID was not assigned correctly.");
 
-        Task _task3 = new Task("Task3", "Description3", DateTime.Today, 2, new List<Task>(), new List<Task>(), new List<Resource>());
-        _task3.Id = taskId;  
+        Task _task3 = new Task("Task3", "Description3", DateTime.Today, 2, new List<Task>(), new List<Task>(),
+            new List<Resource>());
+        _task3.Id = taskId;
 
         _taskRepository.Update(_task3);
 
-        var found = _taskRepository.Get(t => t.Id == taskId);
+        Task found = _taskRepository.Get(t => t.Id == taskId);
 
         Assert.IsNotNull(found);
 
         Assert.AreEqual("Task3", found.Title);
         Assert.AreEqual("Description3", found.Description);
     }
-
 
 
     [TestMethod]
@@ -111,5 +119,4 @@ public class TaskRepositoryTest
         _taskRepository.Delete(_task);
         Assert.AreEqual(0, _taskRepository.GetAll().Count);
     }
-
 }
