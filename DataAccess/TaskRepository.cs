@@ -12,6 +12,7 @@ public class TaskRepository : IRepository<Task>
     {
         _db = db;
     }
+
     public void Add(Task task)
     {
         if (task == null)
@@ -29,6 +30,7 @@ public class TaskRepository : IRepository<Task>
             throw new TaskRepositoryExceptions("The task can't be added");
         }
     }
+
     private void ValidateDuplicateTitle(string title)
     {
         if (_db.Set<Task>().Any(t => t.Title == title))
@@ -36,20 +38,23 @@ public class TaskRepository : IRepository<Task>
             throw new TaskAlreadyExistsException(title);
         }
     }
+
     public List<Task> GetAll()
     {
         return _db.Set<Task>().ToList();
     }
+
     public Task? Get(Func<Task, bool> filter)
     {
         return _db.Set<Task>().FirstOrDefault(filter);
     }
+
     public void Update(Task updatedTask)
     {
-        var existingTask = _db.Tasks.FirstOrDefault(t => t.Id == updatedTask.Id);
+        Task? existingTask = _db.Tasks.FirstOrDefault(t => t.Id == updatedTask.Id);
         if (existingTask == null)
             throw new TaskNotFoundException();
-        
+
         existingTask.Title = updatedTask.Title;
         existingTask.Description = updatedTask.Description;
         existingTask.Duration = updatedTask.Duration;
@@ -65,8 +70,6 @@ public class TaskRepository : IRepository<Task>
         existingTask.SameTimeTasks = updatedTask.SameTimeTasks ?? new List<Task>();
         existingTask.Resources = updatedTask.Resources ?? new List<Resource>();
 
-        
-        
         try
         {
             _db.SaveChanges();
@@ -76,11 +79,12 @@ public class TaskRepository : IRepository<Task>
             throw new TaskRepositoryExceptions("The task can't be updated");
         }
     }
+
     public void Delete(Task task)
     {
         try
         {
-            var existingTask = _db.Tasks.Find(task.Id);
+            Task? existingTask = _db.Tasks.Find(task.Id);
             if (existingTask == null)
                 throw new TaskNotFoundException();
 

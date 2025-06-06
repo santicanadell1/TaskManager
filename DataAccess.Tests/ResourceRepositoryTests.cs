@@ -27,18 +27,18 @@ public class ResourceRepositoryTests
     [TestMethod]
     public void GetAll_ShouldReturnEmptyList_WhenNoResourcesAdded()
     {
-        var resources = _resourceRepository.GetAll();
+        List<Resource> resources = _resourceRepository.GetAll();
         Assert.AreEqual(0, resources.Count);
     }
 
     [TestMethod]
     public void AddResource_ShouldAddResource_WhenValidResourceIsProvided()
     {
-        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
+        Resource resource = new Resource("Resource1", "TypeA", "Description of Resource1");
 
         _resourceRepository.Add(resource);
 
-        var addedResource = _resourceRepository.Get(r => r.Name == resource.Name);
+        Resource addedResource = _resourceRepository.Get(r => r.Name == resource.Name);
         Assert.IsNotNull(addedResource);
         Assert.AreEqual(resource.Name, addedResource?.Name);
     }
@@ -46,14 +46,14 @@ public class ResourceRepositoryTests
     [TestMethod]
     public void Update_ShouldUpdateResource_WhenResourceExists()
     {
-        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
+        Resource resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.Add(resource);
 
-        var updatedResource = new Resource("Resource1.v1", "TypeB", "Updated Description");
+        Resource updatedResource = new Resource("Resource1.v1", "TypeB", "Updated Description");
         updatedResource.Id = _resourceRepository.Get(r => r.Name == resource.Name).Id;
         _resourceRepository.Update(updatedResource);
 
-        var result = _resourceRepository.Get(r =>
+        Resource result = _resourceRepository.Get(r =>
             r.Name == updatedResource.Name && r.Description == updatedResource.Description &&
             r.Type == updatedResource.Type);
 
@@ -74,15 +74,14 @@ public class ResourceRepositoryTests
     [ExpectedException(typeof(ResourceIsNullException))]
     public void Delete_ShouldThrowException_WhenAddingNullResourceAfterDeletion()
     {
-        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
+        Resource resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.Add(resource);
         resource.Id = _resourceRepository.Get(r => r.Name == resource.Name).Id;
 
         _resourceRepository.Delete(resource);
 
-        var deletedResource = _resourceRepository.Get(r => r.Name == resource.Name);
+        Resource deletedResource = _resourceRepository.Get(r => r.Name == resource.Name);
 
         _resourceRepository.Add(deletedResource);
-
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
 
-public class UserRepository:IRepository<User>
+public class UserRepository : IRepository<User>
 {
     protected readonly AppDbContext _db;
 
@@ -22,7 +22,7 @@ public class UserRepository:IRepository<User>
     {
         if (user == null) throw new UserNotFoundException();
         validateDuplicateEmail(user.Email);
-        
+
         try
         {
             _db.Set<User>().Add(user);
@@ -45,9 +45,9 @@ public class UserRepository:IRepository<User>
     public User? Get(Func<User, bool> filter)
     {
         return _db.Set<User>()
-            .Include(u => u.Notifications) 
-            .ThenInclude(n => n.Project) 
-            .Include(u => u.Tasks) 
+            .Include(u => u.Notifications)
+            .ThenInclude(n => n.Project)
+            .Include(u => u.Tasks)
             .FirstOrDefault(filter);
     }
 
@@ -58,13 +58,12 @@ public class UserRepository:IRepository<User>
             throw new UserNotFoundException();
         }
 
-        var existingUser = _db.Users.FirstOrDefault(u =>  u.Email == updatedUser.Email);
+        User? existingUser = _db.Users.FirstOrDefault(u => u.Email == updatedUser.Email);
 
         if (existingUser == null)
         {
             throw new UserNotFoundException();
         }
-        
 
         existingUser.FirstName = updatedUser.FirstName;
         existingUser.LastName = updatedUser.LastName;

@@ -45,7 +45,7 @@ public class ResourceRepository:IRepository<Resource>
             throw new ResourceNotFoundException();
         }
 
-        var existingResource = _db.Resources.Find(updatedResource.Id);
+        Resource? existingResource = _db.Resources.Find(updatedResource.Id);
 
         if (existingResource == null)
         {
