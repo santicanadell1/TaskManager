@@ -23,6 +23,7 @@ public class MemberPServiceTest
     private NotificationRepository _notificationRepository;
     private TaskRepository _taskRepository;
     private ResourceRepository _resourceRepository;
+    private InMemoryAppContextFactory _contextFactory;
 
 
     private TaskDTO task1;
@@ -33,8 +34,8 @@ public class MemberPServiceTest
     [TestInitialize]
     public void Initialize()
     {
-        var contextFactory = new InMemoryAppContextFactory();
-        _context = contextFactory.CreateDbContext();
+        _contextFactory = new InMemoryAppContextFactory();
+        _context = _contextFactory.CreateDbContext();
 
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
@@ -129,7 +130,7 @@ public class MemberPServiceTest
     [TestMethod]
     public void GetAllProjectsForMember_WhenMemberIsAssigned_ThenReturnProjects()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Project 1",
             Description = "Project Description",
@@ -140,7 +141,7 @@ public class MemberPServiceTest
 
         _adminPService.CreateProject(projectDTO);
 
-        var result = _memberPService.GetAllProjectsFromAMember(UserDTO.Email);
+        List<ProjectDTO> result = _memberPService.GetAllProjectsFromAMember(UserDTO.Email);
 
         Assert.AreEqual(1, result.Count);
         Assert.AreEqual(projectDTO.Name, result[0].Name);
@@ -150,7 +151,7 @@ public class MemberPServiceTest
     [ExpectedException(typeof(UserHasNoProjectsException))]
     public void GetAllProjectsForMember_WhenUserHasNoProjectMemberRole_ThenThrowPermissionException()
     {
-        var user = new UserDTO
+        UserDTO user = new UserDTO
         {
             FirstName = "NoRole",
             LastName = "User",
@@ -169,7 +170,7 @@ public class MemberPServiceTest
     [ExpectedException(typeof(UserHasNoProjectsException))]
     public void GetAllProjectsForMember_WhenUserHasNoProjects_ThenThrowNoProjectsException()
     {
-        var user = new UserDTO
+        UserDTO user = new UserDTO
         {
             FirstName = "Another",
             LastName = "Member",
@@ -187,9 +188,9 @@ public class MemberPServiceTest
     [TestMethod]
     public void GetAllProjectsForMember_WhenUserHasMultipleProjects_ThenReturnAllProjects()
     {
-        var projectDTO1 = new ProjectDTO
+        ProjectDTO projectDTO1 = new ProjectDTO
         {
-            Name = "Project 1", // Usamos nombre único para evitar conflictos
+            Name = "Project 1",
             Description = "Project Description",
             StartDate = DateTime.Today,
             AdminProyect = UserDTO,
@@ -198,9 +199,9 @@ public class MemberPServiceTest
 
         _adminPService.CreateProject(projectDTO1);
 
-        var projectDTO2 = new ProjectDTO
+        ProjectDTO projectDTO2 = new ProjectDTO
         {
-            Name = "Project 2", // Nombre único
+            Name = "Project 2",
             Description = "Another project",
             StartDate = DateTime.Today,
             AdminProyect = UserDTO,
@@ -209,7 +210,7 @@ public class MemberPServiceTest
 
         _adminPService.CreateProject(projectDTO2);
 
-        var result = _memberPService.GetAllProjectsFromAMember(UserDTO.Email);
+        List<ProjectDTO> result = _memberPService.GetAllProjectsFromAMember(UserDTO.Email);
 
         Assert.AreEqual(2, result.Count);
         Assert.IsTrue(result.Any(p => p.Name == projectDTO1.Name));
@@ -219,7 +220,7 @@ public class MemberPServiceTest
     [TestMethod]
     public void ChangeTaskStatus_WhenUserIsMember_ThenStateIsUpdated()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Project 3",
             Description = "Project Description",
@@ -229,14 +230,14 @@ public class MemberPServiceTest
         };
 
         _adminPService.CreateProject(projectDTO);
-        
+
         _taskService.AddTask(projectDTO.Name, task1);
-        var newState = StateDTO.DONE;
-        var newTask = _taskService.GetTasks(projectDTO.Name).Find(t => t.Title == task1.Title);
+        StateDTO newState = StateDTO.DONE;
+        TaskDTO newTask = _taskService.GetTasks(projectDTO.Name).Find(t => t.Title == task1.Title);
         _adminPService.AddTaskToMember(projectDTO.Name, UserDTO.Email, newTask.Title);
         _memberPService.ChangeTaskStatus(projectDTO.Name, UserDTO.Email, newTask, newState);
 
-        var updatedTask = _taskService.GetTask(projectDTO.Name, task1.Title);
+        TaskDTO updatedTask = _taskService.GetTask(projectDTO.Name, task1.Title);
         Assert.AreEqual(StateDTO.DONE, updatedTask.State);
     }
 
@@ -246,19 +247,19 @@ public class MemberPServiceTest
     {
         _adminPService.CreateProject(projectDTO);
         _taskService.AddTask(projectDTO.Name, task1);
-        var User = new UserDTO
+        UserDTO User = new UserDTO
         {
             FirstName = "User",
             LastName = "NotMember",
             Email = "User.NotMember@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
             Password = "Password123@",
-            Roles = new List<RolDTO> {}
+            Roles = new List<RolDTO> { }
         };
         _userservice.AddUser(User);
 
-        var task = _taskService.GetTasks("New Project").First();
-        var newState = StateDTO.DOING;
+        TaskDTO task = _taskService.GetTasks("New Project").First();
+        StateDTO newState = StateDTO.DOING;
 
         _memberPService.ChangeTaskStatus("New Project", User.Email, task, newState);
     }
@@ -271,8 +272,8 @@ public class MemberPServiceTest
         _taskService.AddTask("New Project", task1);
         _taskService.AddTask("New Project", task3);
 
-        var newState = StateDTO.DONE;
-        var newTask = _taskService.GetTasks("New Project").Find(t => t.Title == task3.Title);
+        StateDTO newState = StateDTO.DONE;
+        TaskDTO newTask = _taskService.GetTasks("New Project").Find(t => t.Title == task3.Title);
         _adminPService.AddTaskToMember("New Project", UserDTO.Email, newTask.Title);
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, newTask, newState);
     }
@@ -282,19 +283,20 @@ public class MemberPServiceTest
     {
         _adminPService.CreateProject(projectDTO);
         _taskService.AddTask(projectDTO.Name, task1);
-        var newState = StateDTO.DONE;
-        var newTask = _taskService.GetTasks(projectDTO.Name).Find(t => t.Title == task1.Title);
+        StateDTO newState = StateDTO.DONE;
+        TaskDTO newTask = _taskService.GetTasks(projectDTO.Name).Find(t => t.Title == task1.Title);
         _adminPService.AddTaskToMember(projectDTO.Name, UserDTO.Email, newTask.Title);
         _memberPService.ChangeTaskStatus(projectDTO.Name, UserDTO.Email, newTask, newState);
-        
+
         _taskService.AddTask("New Project", task3);
-        newTask = _taskService.GetTask("New Project", task3.Title); 
-        
+        newTask = _taskService.GetTask("New Project", task3.Title);
+
         _adminPService.AddTaskToMember("New Project", UserDTO.Email, newTask.Title);
-        Assert.AreEqual(newTask.Id.Value,_taskService.GetTask("New Project", newTask.Title).Id.Value);;
+        Assert.AreEqual(newTask.Id.Value, _taskService.GetTask("New Project", newTask.Title).Id.Value);
+
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, newTask, newState);
-        
-        var updatedTask = _taskService.GetTask("New Project", newTask.Title); 
+
+        TaskDTO updatedTask = _taskService.GetTask("New Project", newTask.Title);
         Assert.AreEqual(StateDTO.DONE, updatedTask.State);
     }
 }

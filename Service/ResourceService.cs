@@ -6,6 +6,7 @@ using Service.Exceptions.ResourceServiceExceptions;
 using Service.Interface;
 using Service.Models;
 using Service.Models.Exceptions;
+using Task = Domain.Task;
 
 namespace Service;
 
@@ -24,7 +25,7 @@ public class ResourceService : IResourceService
     {
         if (isAdminSystem())
         {
-            var resource = ToEntity(resourceDTO);
+            Resource resource = ToEntity(resourceDTO);
             _resourceRepository.Add(resource);
         }
         else
@@ -35,7 +36,7 @@ public class ResourceService : IResourceService
 
     public ResourceDTO Get(int? id)
     {
-        var resource = _resourceRepository.Get(r => r.Id == id);
+        Resource resource = _resourceRepository.Get(r => r.Id == id);
 
         if (resource == null) throw new ResourceNotFoundException();
 
@@ -46,7 +47,7 @@ public class ResourceService : IResourceService
     {
         List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
 
-        foreach (var resource in _resourceRepository.GetAll()) resourcesDTO.Add(FromEntity(resource));
+        foreach (Resource resource in _resourceRepository.GetAll()) resourcesDTO.Add(FromEntity(resource));
 
         if (resourcesDTO.Count == 0) throw new NoResourcesFoundException();
 
@@ -57,9 +58,9 @@ public class ResourceService : IResourceService
     {
         isAbleToModifyResource(GetResourceObject(id));
 
-        var updatedResource = ToEntity(updatedResourceDTO);
+        Resource updatedResource = ToEntity(updatedResourceDTO);
         updatedResource.Id = id.Value;
-        
+
         _resourceRepository.Update(updatedResource);
     }
 
@@ -68,7 +69,7 @@ public class ResourceService : IResourceService
         isAbleToModifyResource(GetResourceObject(id));
         try
         {
-            var res = _resourceRepository.Get(r => r.Id == id);
+            Resource? res = _resourceRepository.Get(r => r.Id == id);
             _resourceRepository.Delete(res);
         }
         catch (Exception ex)
@@ -79,7 +80,7 @@ public class ResourceService : IResourceService
 
     private Resource GetResourceObject(int? id)
     {
-        var resource = _resourceRepository.Get(r => r.Id == id);
+        Resource resource = _resourceRepository.Get(r => r.Id == id);
 
         if (resource == null) throw new ResourceNotFoundException();
 
@@ -100,7 +101,7 @@ public class ResourceService : IResourceService
 
     private Resource ToEntity(ResourceDTO resourceDTO)
     {
-        var resource = new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
+        Resource resource = new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
         {
             Id = resourceDTO.Id
         };
@@ -109,7 +110,7 @@ public class ResourceService : IResourceService
 
     private void isAbleToModifyResource(Resource resource)
     {
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
 
         if (currentUser == null) throw new UnauthorizedAdminAccessException();
 
@@ -122,17 +123,17 @@ public class ResourceService : IResourceService
 
     private bool isAdminSystem()
     {
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
         return currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminSystem));
     }
 
     private List<Project> GetProjectsThatAreUsingResource(Resource resource)
     {
-        var projects = _projectRepository.GetAll();
+        List<Project> projects = _projectRepository.GetAll();
         List<Project> projectsThatAreUsingResource = new List<Project>();
-        foreach (var project in projects)
+        foreach (Project project in projects)
         {
-            foreach (var task in project.Tasks)
+            foreach (Task task in project.Tasks)
             {
                 if (task.Resources.Any(r => r.Id == resource.Id))
                 {
@@ -147,12 +148,12 @@ public class ResourceService : IResourceService
 
     private bool isExclusive(Resource resource)
     {
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
         List<Project> projects = GetProjectsThatAreUsingResource(resource);
         if (projects.Count == 0) return false;
-        var currentUserIsAdmin = currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminProject));
-        var isUsedByOneProject = projects.Count == 1;
-        var projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
+        bool currentUserIsAdmin = currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminProject));
+        bool isUsedByOneProject = projects.Count == 1;
+        bool projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
         return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
     }
 

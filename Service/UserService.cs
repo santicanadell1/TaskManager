@@ -52,7 +52,7 @@ public class UserService : IUserService
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (var user in _userRepository.GetAll()) usersDTO.Add(FromEntity(user));
+        foreach (User user in _userRepository.GetAll()) usersDTO.Add(FromEntity(user));
 
         if (usersDTO.Count == 0) throw new NoUsersFoundException();
 
@@ -61,7 +61,7 @@ public class UserService : IUserService
 
     public UserDTO GetUser(string email)
     {
-        var user = _userRepository.Get(user => user.Email == email);
+        User user = _userRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
         return FromEntity(user);
@@ -70,7 +70,7 @@ public class UserService : IUserService
 
     private void ValidateUserEmailAndPassword(UserDTO userDTO)
     {
-        foreach (var user in _userRepository.GetAll())
+        foreach (User user in _userRepository.GetAll())
             if (user.Email == userDTO.Email)
                 throw new InvalidUserEmailException();
 
@@ -97,7 +97,7 @@ public class UserService : IUserService
         List<Task> ret = new List<Task>();
         if (tasks == null) return ret;
 
-        foreach (var task in tasks)
+        foreach (TaskDTO task in tasks)
         {
             ret.Add(ToEntityTask(task));
         }
@@ -122,8 +122,8 @@ public class UserService : IUserService
     {
         if (taskDTOs == null) return new List<Task>();
 
-        var tasks = new List<Task>();
-        foreach (var taskDTO in taskDTOs)
+        List<Task> tasks = new List<Task>();
+        foreach (TaskDTO taskDTO in taskDTOs)
         {
             tasks.Add(ToEntityTask(taskDTO));
         }
@@ -135,8 +135,8 @@ public class UserService : IUserService
     {
         if (resourceDTOs == null) return new List<Resource>();
 
-        var resources = new List<Resource>();
-        foreach (var resourceDTO in resourceDTOs)
+        List<Resource> resources = new List<Resource>();
+        foreach (ResourceDTO resourceDTO in resourceDTOs)
             resources.Add(new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
                 { Id = resourceDTO.Id });
 
@@ -145,7 +145,7 @@ public class UserService : IUserService
 
     private User GetUserObject(string email)
     {
-        var user = _userRepository.Get(user => user.Email == email);
+        User user = _userRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
         return user;
@@ -168,9 +168,9 @@ public class UserService : IUserService
 
     private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
     {
-        var roles = new List<Rol>();
+        List<Rol> roles = new List<Rol>();
 
-        foreach (var roleDTO in roleDTOs)
+        foreach (RolDTO roleDTO in roleDTOs)
             switch (roleDTO)
             {
                 case RolDTO.AdminSystem:
@@ -189,9 +189,9 @@ public class UserService : IUserService
 
     private List<RolDTO> ConvertToDTORoles(List<Rol> roles)
     {
-        var roleDTOs = new List<RolDTO>();
+        List<RolDTO> roleDTOs = new List<RolDTO>();
 
-        foreach (var role in roles)
+        foreach (Rol role in roles)
             switch (role)
             {
                 case Rol.AdminSystem:
@@ -211,7 +211,7 @@ public class UserService : IUserService
     private List<TaskDTO> FromEntityList(List<Task> tasks)
     {
         List<TaskDTO> taskDTOs = new List<TaskDTO>();
-        foreach (var task in tasks) taskDTOs.Add(FromEntityTask(task));
+        foreach (Task task in tasks) taskDTOs.Add(FromEntityTask(task));
         return taskDTOs;
     }
 
@@ -263,8 +263,8 @@ public class UserService : IUserService
 
     private List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
     {
-        var resourceDTOs = new List<ResourceDTO>();
-        foreach (var resource in resources)
+        List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
+        foreach (Resource resource in resources)
             resourceDTOs.Add(new ResourceDTO
             {
                 Name = resource.Name,

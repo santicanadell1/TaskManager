@@ -8,7 +8,7 @@ public class GanttServiceTestTests
     [TestMethod]
     public void Convert_WhenCreatingGanttTask_ShouldAssignProgressCorrectlyBasedOnState()
     {
-        var tasks = new List<TaskDTO>
+        List<TaskDTO> tasks = new List<TaskDTO>
         {
             new()
             {
@@ -26,7 +26,7 @@ public class GanttServiceTestTests
                 Duration = 1, Slack = TimeSpan.Zero, PreviousTasks = new List<TaskDTO>()
             }
         };
-        var result = GanttService.Convert(tasks, new List<TaskDTO>());
+        GanttData result = GanttService.Convert(tasks, new List<TaskDTO>());
         Assert.AreEqual(0.0, result.data.First(t => t.id == 1).progress);
         Assert.AreEqual(0.5, result.data.First(t => t.id == 2).progress);
         Assert.AreEqual(1.0, result.data.First(t => t.id == 3).progress);
@@ -35,7 +35,7 @@ public class GanttServiceTestTests
     [TestMethod]
     public void Convert_WhenCratingGanttTask_ShouldHandleCriticalPathAndSlackCorrectly()
     {
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Id = 1,
             Title = "Crítica",
@@ -46,7 +46,7 @@ public class GanttServiceTestTests
             Slack = TimeSpan.Zero,
             PreviousTasks = new List<TaskDTO>()
         };
-        var nonCriticalTask = new TaskDTO
+        TaskDTO nonCriticalTask = new TaskDTO
         {
             Id = 2,
             Title = "Opcional",
@@ -57,9 +57,9 @@ public class GanttServiceTestTests
             Slack = TimeSpan.FromDays(2),
             PreviousTasks = new List<TaskDTO> { task }
         };
-        var result = GanttService.Convert(new List<TaskDTO> { task, nonCriticalTask }, new List<TaskDTO> { task });
-        var ganttTask1 = result.data.First(t => t.id == 1);
-        var ganttTask2 = result.data.First(t => t.id == 2);
+        GanttData result = GanttService.Convert(new List<TaskDTO> { task, nonCriticalTask }, new List<TaskDTO> { task });
+        GanttTask ganttTask1 = result.data.First(t => t.id == 1);
+        GanttTask ganttTask2 = result.data.First(t => t.id == 2);
         Assert.IsTrue(ganttTask1.critical);
         Assert.IsFalse(ganttTask2.critical);
         Assert.AreEqual(2.0, ganttTask2.slack);
@@ -69,7 +69,7 @@ public class GanttServiceTestTests
     [TestMethod]
     public void Convert_ShouldCreateCorrectTasksAndLinks_WithCriticalFlag()
     {
-        var task1 = new TaskDTO
+        TaskDTO task1 = new TaskDTO
         {
             Id = 1,
             Title = "Inicio",
@@ -80,7 +80,7 @@ public class GanttServiceTestTests
             Slack = TimeSpan.Zero,
             PreviousTasks = new List<TaskDTO>()
         };
-        var task2 = new TaskDTO
+        TaskDTO task2 = new TaskDTO
         {
             Id = 2,
             Title = "Diseño",
@@ -91,20 +91,20 @@ public class GanttServiceTestTests
             Slack = TimeSpan.FromDays(1),
             PreviousTasks = new List<TaskDTO> { task1 }
         };
-        var allTasks = new List<TaskDTO> { task1, task2 };
-        var criticalPath = new List<TaskDTO> { task1, task2 };
-        var result = GanttService.Convert(allTasks, criticalPath);
+        List<TaskDTO> allTasks = new List<TaskDTO> { task1, task2 };
+        List<TaskDTO> criticalPath = new List<TaskDTO> { task1, task2 };
+        GanttData result = GanttService.Convert(allTasks, criticalPath);
         Assert.AreEqual(2, result.data.Count);
         Assert.AreEqual(1, result.links.Count);
-        var ganttTask1 = result.data.First(t => t.id == 1);
-        var ganttTask2 = result.data.First(t => t.id == 2);
+        GanttTask ganttTask1 = result.data.First(t => t.id == 1);
+        GanttTask ganttTask2 = result.data.First(t => t.id == 2);
         Assert.AreEqual("Inicio", ganttTask1.text);
         Assert.AreEqual("2025-05-01", ganttTask1.start_date);
         Assert.AreEqual("2025-05-02", ganttTask1.end_date);
         Assert.AreEqual(1.0, ganttTask2.progress, 0.01);
         Assert.IsTrue(ganttTask2.critical);
         Assert.AreEqual(1, ganttTask2.slack);
-        var link = result.links.First();
+        GanttLink link = result.links.First();
         Assert.AreEqual(1, link.source);
         Assert.AreEqual(2, link.target);
         Assert.AreEqual("0", link.type);

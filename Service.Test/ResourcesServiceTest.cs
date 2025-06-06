@@ -1,7 +1,9 @@
 using DataAccess;
 using DataAccess.Exceptions.ResourceRepositoryExceptions;
+using Domain;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Models;
+using Task = Domain.Task;
 
 namespace Service.Test;
 
@@ -19,12 +21,13 @@ public class ResourcesServiceTest
     private NotificationRepository _notificationRepository;
     private ResourceRepository _resourceRepository;
     private TaskRepository _taskRepository;
+    private InMemoryAppContextFactory _contextFactory;
 
     [TestInitialize]
     public void TestSetUp()
     {
-        var contextFactory = new InMemoryAppContextFactory();
-        _context = contextFactory.CreateDbContext();
+        _contextFactory = new InMemoryAppContextFactory();
+        _context = _contextFactory.CreateDbContext();
 
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
@@ -48,7 +51,7 @@ public class ResourcesServiceTest
         _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
             _taskRepository, _resourceRepository);
 
-        var adminSUserDTO = new UserDTO
+        UserDTO adminSUserDTO = new UserDTO
         {
             FirstName = "AdminSystem",
             LastName = "User",
@@ -57,7 +60,7 @@ public class ResourcesServiceTest
             Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO> { RolDTO.AdminSystem }
         };
-        var adminPUserDTO = new UserDTO
+        UserDTO adminPUserDTO = new UserDTO
         {
             FirstName = "AdminProject",
             LastName = "User",
@@ -68,7 +71,7 @@ public class ResourcesServiceTest
         };
 
 
-        var adminPUserDTO2 = new UserDTO
+        UserDTO adminPUserDTO2 = new UserDTO
         {
             FirstName = "AdminProject2",
             LastName = "User2",
@@ -78,7 +81,7 @@ public class ResourcesServiceTest
             Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
-        var normalUserDTO = new UserDTO
+        UserDTO normalUserDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -97,7 +100,7 @@ public class ResourcesServiceTest
     public void AddResource_ShouldAddResource_WhenValidDTO()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -106,7 +109,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var resource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource resource = _resourceRepository.Get(r => r.Name == "Resource1");
         Assert.IsNotNull(resource);
         Assert.AreEqual("Resource1", resource.Name);
         Assert.AreEqual("TypeA", resource.Type);
@@ -116,7 +119,7 @@ public class ResourcesServiceTest
     [TestMethod]
     public void Get_ShouldReturnResource_WhenResourceExists()
     {
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -125,9 +128,9 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
-        var resource = _resourceService.Get(addedResource.Id);
+        ResourceDTO resource = _resourceService.Get(addedResource.Id);
 
         Assert.IsNotNull(resource);
         Assert.AreEqual("Resource1", resource.Name);
@@ -145,14 +148,14 @@ public class ResourcesServiceTest
     [TestMethod]
     public void GetResources_ShouldReturnAllResources_WhenResourcesExist()
     {
-        var resourceDTO1 = new ResourceDTO
+        ResourceDTO resourceDTO1 = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
             Description = "Description of Resource1"
         };
 
-        var resourceDTO2 = new ResourceDTO
+        ResourceDTO resourceDTO2 = new ResourceDTO
         {
             Name = "Resource2",
             Type = "TypeB",
@@ -162,7 +165,7 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO1);
         _resourceService.AddResource(resourceDTO2);
 
-        var resources = _resourceService.GetResources();
+        List<ResourceDTO> resources = _resourceService.GetResources();
 
         Assert.AreEqual(2, resources.Count);
         Assert.IsTrue(resources.Exists(r => r.Name == "Resource1"));
@@ -173,7 +176,7 @@ public class ResourcesServiceTest
     public void UpdateResource_ShouldUpdateResource_WhenResourceExists()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -182,9 +185,9 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
-        var updatedResourceDTO = new ResourceDTO
+        ResourceDTO updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeB",
@@ -193,7 +196,7 @@ public class ResourcesServiceTest
 
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
 
-        var resource = _resourceRepository.Get(r =>
+        Resource resource = _resourceRepository.Get(r =>
             r.Name == updatedResourceDTO.Name && r.Type == updatedResourceDTO.Type &&
             r.Description == updatedResourceDTO.Description);
 
@@ -206,7 +209,7 @@ public class ResourcesServiceTest
     public void UpdateResource_ShouldUpdateResource_WhenResourceIsExclusive()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -215,9 +218,9 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
-        var addedResourceDto = new ResourceDTO
+        ResourceDTO addedResourceDto = new ResourceDTO
         {
             Id = addedResource.Id,
             Name = addedResource.Name,
@@ -225,13 +228,13 @@ public class ResourcesServiceTest
             Description = addedResource.Description
         };
 
-        var project = new ProjectDTO();
+        ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Title1",
             Description = "Description1",
@@ -245,7 +248,7 @@ public class ResourcesServiceTest
         _adminProjectService.CreateProject(project);
         _taskService.AddTask("Project1", task);
 
-        var updatedResourceDTO = new ResourceDTO
+        ResourceDTO updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeB",
@@ -254,7 +257,7 @@ public class ResourcesServiceTest
 
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
 
-        var resource = _resourceRepository.Get(r =>
+        Resource resource = _resourceRepository.Get(r =>
             r.Name == updatedResourceDTO.Name && r.Type == updatedResourceDTO.Type &&
             r.Description == updatedResourceDTO.Description);
 
@@ -271,7 +274,7 @@ public class ResourcesServiceTest
         _loginService.Logout();
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
 
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -282,21 +285,21 @@ public class ResourcesServiceTest
 
         _loginService.Logout();
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
-        var addedResourceDto = _resourceService.Get(addedResource.Id);
+        ResourceDTO addedResourceDto = _resourceService.Get(addedResource.Id);
 
-        var project = new ProjectDTO();
+        ProjectDTO project = new ProjectDTO();
         project.Name = "Project 1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
 
-        var project2 = new ProjectDTO();
+        ProjectDTO project2 = new ProjectDTO();
         project2.Name = "Project 2";
         project2.Description = "Description of Project2";
         project2.StartDate = DateTime.Today;
 
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Title 1",
             Description = "Description1",
@@ -307,7 +310,7 @@ public class ResourcesServiceTest
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
 
-        var task2 = new TaskDTO
+        TaskDTO task2 = new TaskDTO
         {
             Title = "Title 2",
             Description = "Description2",
@@ -323,7 +326,7 @@ public class ResourcesServiceTest
         _adminProjectService.CreateProject(project2);
         _taskService.AddTask("Project 2", task2);
 
-        var updatedResourceDTO = new ResourceDTO
+        ResourceDTO updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeB",
@@ -339,7 +342,7 @@ public class ResourcesServiceTest
     public void UpdateResource_ShouldThrowException_WhenResourceIsNotExclusiveForTheAdmin()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -348,8 +351,8 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
-        var addedResourceDto = new ResourceDTO
+        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        ResourceDTO addedResourceDto = new ResourceDTO
         {
             Id = addedResource.Id,
             Name = addedResource.Name,
@@ -357,13 +360,13 @@ public class ResourcesServiceTest
             Description = addedResource.Description
         };
 
-        var project = new ProjectDTO();
+        ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Title1",
             Description = "Description1",
@@ -376,7 +379,7 @@ public class ResourcesServiceTest
         _adminProjectService.CreateProject(project);
         _taskService.AddTask("Project1", task);
 
-        var updatedResourceDTO = new ResourceDTO
+        ResourceDTO updatedResourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeB",
@@ -391,7 +394,7 @@ public class ResourcesServiceTest
     public void DeleteResource_ShouldDeleteResource_WhenResourceExists()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "ResourceToDelete",
             Type = "TypeA",
@@ -400,12 +403,12 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        var addedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
+        Resource addedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNotNull(addedResource);
 
         _resourceService.DeleteResource(addedResource.Id);
 
-        var deletedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
+        Resource deletedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
 
@@ -413,7 +416,7 @@ public class ResourcesServiceTest
     public void DeleteResource_ShouldDeleteResource_WhenResourceIsExclusive()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -424,9 +427,9 @@ public class ResourcesServiceTest
         _context.ChangeTracker.Clear();
 
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
-        var project = new ProjectDTO();
+        ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
@@ -434,7 +437,7 @@ public class ResourcesServiceTest
 
         _adminProjectService.CreateProject(project);
 
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Title1",
             Description = "Description1",
@@ -446,16 +449,16 @@ public class ResourcesServiceTest
         };
         _taskService.AddTask("Project1", task);
 
-        var projectEntity = _projectRepository.Get(p => p.Name == "Project1");
-        var taskEntity = projectEntity.Tasks.First(t => t.Title == "Title1");
-        var resourceEntity = _resourceRepository.Get(r => r.Id == addedResource.Id);
+        Project projectEntity = _projectRepository.Get(p => p.Name == "Project1");
+        Task taskEntity = projectEntity.Tasks.First(t => t.Title == "Title1");
+        Resource resourceEntity = _resourceRepository.Get(r => r.Id == addedResource.Id);
 
         taskEntity.Resources.Add(resourceEntity);
         _context.SaveChanges();
 
         _resourceService.DeleteResource(addedResource.Id);
 
-        var deletedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
+        Resource deletedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
 
@@ -466,7 +469,7 @@ public class ResourcesServiceTest
         _loginService.Logout();
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
 
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -476,21 +479,21 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         _loginService.Logout();
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
-        var addedResourceDto = _resourceService.Get(addedResource.Id);
+        ResourceDTO addedResourceDto = _resourceService.Get(addedResource.Id);
 
-        var project = new ProjectDTO();
+        ProjectDTO project = new ProjectDTO();
         project.Name = "Project 1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
 
-        var project2 = new ProjectDTO();
+        ProjectDTO project2 = new ProjectDTO();
         project2.Name = "Project 2";
         project2.Description = "Description of Project2";
         project2.StartDate = DateTime.Today;
 
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Title 1",
             Description = "Description1",
@@ -501,7 +504,7 @@ public class ResourcesServiceTest
             Resources = new List<ResourceDTO> { addedResourceDto }
         };
 
-        var task2 = new TaskDTO
+        TaskDTO task2 = new TaskDTO
         {
             Title = "Title 2",
             Description = "Description2",
@@ -519,13 +522,13 @@ public class ResourcesServiceTest
 
         _resourceService.DeleteResource(addedResource.Id);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void DeleteResource_ShouldThrowExceptin_WhenResourceIsNotExclusiveForTheAdmin()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -535,9 +538,9 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
 
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
 
-        var addedResourceDto = new ResourceDTO
+        ResourceDTO addedResourceDto = new ResourceDTO
         {
             Id = addedResource.Id,
             Name = addedResource.Name,
@@ -546,13 +549,13 @@ public class ResourcesServiceTest
         };
 
 
-        var project = new ProjectDTO();
+        ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
         project.Description = "Description of Project1";
         project.StartDate = DateTime.Today;
         project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
 
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Title1",
             Description = "Description1",

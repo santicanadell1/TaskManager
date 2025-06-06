@@ -8,22 +8,21 @@ public class LoginTests
 {
     private AppDbContext _context;
     private Login _login;
-    private PasswordManager _passwordManager;
     private UserRepository _userRepository;
+    private InMemoryAppContextFactory _contextFactory;
 
     [TestInitialize]
     public void Setup()
     {
-        var contextFactory = new InMemoryAppContextFactory();
-        _context = contextFactory.CreateDbContext();
+        _contextFactory = new InMemoryAppContextFactory();
+        _context = _contextFactory.CreateDbContext();
 
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
-        
+
         _userRepository = new UserRepository(_context);
-        
+
         _login = new Login(_userRepository);
-        _passwordManager = new PasswordManager();
     }
 
     [TestCleanup]
@@ -35,11 +34,11 @@ public class LoginTests
     [TestMethod]
     public void Login_ShouldLoginSuccessfully_WithValidCredentials()
     {
-        var email = "john.doe@example.com";
-        var password = "Password123@";
-        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
+        string email = "john.doe@example.com";
+        string password = "Password123@";
+        List<RolDTO> roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
-        var userDTO = new UserDTO
+        UserDTO userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
@@ -49,12 +48,12 @@ public class LoginTests
             Birthday = DateTime.Parse("1990-01-01")
         };
 
-        var userService = new UserService(_userRepository);
+        UserService userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
 
-        var loggedUser = _login.GetLoggedUser();
+        UserDTO loggedUser = _login.GetLoggedUser();
         Assert.IsNotNull(loggedUser);
         Assert.AreEqual("John", loggedUser.FirstName);
         Assert.AreEqual("Doe", loggedUser.LastName);
@@ -64,11 +63,11 @@ public class LoginTests
     [TestMethod]
     public void Logout_ShouldLogoutSuccessfully_WhenUserIsLoggedIn()
     {
-        var email = "john.doe@example.com";
-        var password = "Password123@";
-        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
+        string email = "john.doe@example.com";
+        string password = "Password123@";
+        List<RolDTO> roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
-        var userDTO = new UserDTO
+        UserDTO userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
@@ -78,17 +77,17 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_userRepository);
+        UserService userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
 
-        var loggedUserBeforeLogout = _login.GetLoggedUser();
+        UserDTO loggedUserBeforeLogout = _login.GetLoggedUser();
         Assert.IsNotNull(loggedUserBeforeLogout);
 
         _login.Logout();
 
-        var loggedUserAfterLogout = _login.GetLoggedUser();
+        UserDTO loggedUserAfterLogout = _login.GetLoggedUser();
         Assert.IsNull(loggedUserAfterLogout);
     }
 
@@ -96,11 +95,11 @@ public class LoginTests
     [ExpectedException(typeof(InvalidLoginCredentialsException))]
     public void Login_ShouldThrowInvalidLoginCredentialsException_WhenCredentialsAreIncorrect()
     {
-        var email = "john.doe@example.com";
-        var password = "WrongPassword@";
-        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
+        string email = "john.doe@example.com";
+        string password = "WrongPassword@";
+        List<RolDTO> roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
-        var userDTO = new UserDTO
+        UserDTO userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
@@ -110,7 +109,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_userRepository);
+        UserService userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -119,11 +118,11 @@ public class LoginTests
     [TestMethod]
     public void IsAdminSystem_ShouldReturnTrue_WhenUserIsAdminSystem()
     {
-        var email = "john.doe@example.com";
-        var password = "Password123@";
-        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
+        string email = "john.doe@example.com";
+        string password = "Password123@";
+        List<RolDTO> roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
-        var userDTO = new UserDTO
+        UserDTO userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
@@ -133,7 +132,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_userRepository);
+        UserService userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -144,11 +143,11 @@ public class LoginTests
     [TestMethod]
     public void IsAdminProject_ShouldReturnTrue_WhenUserIsAdminProject()
     {
-        var email = "john.doe@example.com";
-        var password = "Password123@";
-        var roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
+        string email = "john.doe@example.com";
+        string password = "Password123@";
+        List<RolDTO> roles = new List<RolDTO> { RolDTO.AdminSystem, RolDTO.AdminProject };
 
-        var userDTO = new UserDTO
+        UserDTO userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
@@ -158,7 +157,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_userRepository);
+        UserService userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -169,11 +168,11 @@ public class LoginTests
     [TestMethod]
     public void IsProjectMember_ShouldReturnTrue_WhenUserIsProjectMember()
     {
-        var email = "john.doe@example.com";
-        var password = "Password123@";
-        var roles = new List<RolDTO> { RolDTO.ProjectMember };
+        string email = "john.doe@example.com";
+        string password = "Password123@";
+        List<RolDTO> roles = new List<RolDTO> { RolDTO.ProjectMember };
 
-        var userDTO = new UserDTO
+        UserDTO userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
@@ -183,7 +182,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_userRepository);
+        UserService userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -194,11 +193,11 @@ public class LoginTests
     [TestMethod]
     public void UpdateLogedUser_ShouldUpdateLoggedUser_WhenUserIsLoggedIn()
     {
-        var email = "john.doe@example.com";
-        var password = "Password123@";
-        var roles = new List<RolDTO> { RolDTO.ProjectMember };
+        string email = "john.doe@example.com";
+        string password = "Password123@";
+        List<RolDTO> roles = new List<RolDTO> { RolDTO.ProjectMember };
 
-        var userDTO = new UserDTO
+        UserDTO userDTO = new UserDTO
         {
             Email = email,
             FirstName = "John",
@@ -208,12 +207,12 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_userRepository);
+        UserService userService = new UserService(_userRepository);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
 
-        var userUpdate = new UserDTO
+        UserDTO userUpdate = new UserDTO
         {
             Email = email,
             FirstName = "John",
