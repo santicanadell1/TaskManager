@@ -330,7 +330,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void GetProjectByName_ShouldReturnProject_WhenProjectExists()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -341,7 +341,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _adminPservice.GetProjectByName("Test Project");
+        ProjectDTO project = _adminPservice.GetProjectByName("Test Project");
 
         Assert.IsNotNull(project);
         Assert.AreEqual("Test Project", project.Name);
