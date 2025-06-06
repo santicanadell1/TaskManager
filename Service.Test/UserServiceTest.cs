@@ -9,17 +9,16 @@ namespace Service.Test;
 public class UserServiceTest
 {
     private AppDbContext _context;
-    private Login _loginService;
     private UserService _userService;
+    private InMemoryAppContextFactory _contextFactory;
 
     private UserRepository _userRepository;
-
 
     [TestInitialize]
     public void TestSetUp()
     {
-        var contextFactory = new InMemoryAppContextFactory();
-        var _context = contextFactory.CreateDbContext();
+        _contextFactory = new InMemoryAppContextFactory();
+        _context = _contextFactory.CreateDbContext();
 
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
@@ -27,7 +26,6 @@ public class UserServiceTest
         _userRepository = new UserRepository(_context);
 
         _userService = new UserService(_userRepository);
-        _loginService = new Login(_userRepository);
     }
 
     [TestCleanup]
@@ -40,12 +38,12 @@ public class UserServiceTest
     [ExpectedException(typeof(InvalidUserEmailException))]
     public void AddUser_ShouldThrowException_WhenEmailIsNotUnique()
     {
-        var rols = new List<RolDTO>();
+        List<RolDTO> rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
 
-        var _userService = new UserService(_userRepository);
+        UserService _userService = new UserService(_userRepository);
 
-        var userDTO1 = new UserDTO
+        UserDTO userDTO1 = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -57,7 +55,7 @@ public class UserServiceTest
 
         _userService.AddUser(userDTO1);
 
-        var userDTO2 = new UserDTO
+        UserDTO userDTO2 = new UserDTO
         {
             FirstName = "Jane",
             LastName = "Doe",
@@ -74,10 +72,10 @@ public class UserServiceTest
     [ExpectedException(typeof(UserNotFoundException))]
     public void UpdateUser_ShouldThrowException_WhenUserDoesNotExist()
     {
-        var rols = new List<RolDTO>();
+        List<RolDTO> rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -107,8 +105,8 @@ public class UserServiceTest
     [TestMethod]
     public void AddUser_ShouldAddUser_WhenEmailIsUnique()
     {
-        var rols = new List<RolDTO> { RolDTO.ProjectMember };
-        var userDTO = new UserDTO
+        List<RolDTO> rols = new List<RolDTO> { RolDTO.ProjectMember };
+        UserDTO userDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -121,7 +119,7 @@ public class UserServiceTest
         _userService.AddUser(userDTO);
 
 
-        var users = _userService.GetUsers();
+        List<UserDTO> users = _userService.GetUsers();
         Assert.AreEqual(1, users.Count);
         Assert.AreEqual("john.doe@example.com", users[0].Email);
     }
@@ -129,8 +127,8 @@ public class UserServiceTest
     [TestMethod]
     public void UpdateUser_ShouldUpdateUser_WhenUserExists()
     {
-        var rols = new List<RolDTO> { RolDTO.ProjectMember };
-        var userDTO = new UserDTO
+        List<RolDTO> rols = new List<RolDTO> { RolDTO.ProjectMember };
+        UserDTO userDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -143,9 +141,9 @@ public class UserServiceTest
         _userService.AddUser(userDTO);
 
         int? id = _userRepository.Get(user => user.Email == userDTO.Email).Id;
-        
-        
-        var updatedUserDTO = new UserDTO
+
+
+        UserDTO updatedUserDTO = new UserDTO
         {
             FirstName = "Johnny",
             LastName = "Dough",
@@ -160,7 +158,7 @@ public class UserServiceTest
         _userService.UpdateUser(updatedUserDTO);
 
 
-        var updatedUser = _userService.GetUser("john.doe@example.com");
+        UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
         Assert.AreEqual("Johnny", updatedUser.FirstName);
         Assert.AreEqual("Dough", updatedUser.LastName);
     }
