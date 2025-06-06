@@ -390,7 +390,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void AddTaskToMember_WhenUserIsMember_ShouldAddTaskToMember()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -399,7 +399,7 @@ public class AdminPServiceTests
             Members = members
         };
         _adminPservice.CreateProject(projectDTO);
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
