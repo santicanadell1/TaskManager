@@ -36,7 +36,7 @@ public class NotificationRepository:IRepository<Notification>
     {
         try
         {
-            var existingNotification = _db.Notifications.Find(newNotification.Id);
+            Notification existingNotification = _db.Notifications.Find(newNotification.Id);
             if (existingNotification == null)
             {
                 throw new NotificationNotFoundException();
