@@ -1,5 +1,6 @@
 using DataAccess;
 using DataAccess.Exceptions.UserRepositoryExceptions;
+using Domain;
 using Service;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Exceptions.UserServiceExceptions;
@@ -35,12 +36,12 @@ public AdminSService(UserRepository userRepository, ProjectRepository projectRep
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
-        var adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository,_resourceRepository);
-        var user = _userService.GetUser(userDTO.Email);
+        AdminPService adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository,_resourceRepository);
+        UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
         var projects = adminPService.GetAllProjectsForUser(userDTO.Email);
-        foreach (var project in projects) adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
+        foreach (ProjectDTO project in projects) adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
         var userEntity = _userRepository.Get(u => u.Email == userDTO.Email);
         _userRepository.Delete(userEntity);
     }
@@ -49,7 +50,7 @@ public AdminSService(UserRepository userRepository, ProjectRepository projectRep
     {
         CheckAdminRole();
 
-        var user = _userService.GetUser(email);
+        UserDTO user = _userService.GetUser(email);
 
         if (user == null) throw new UserNotFoundException();
 
@@ -70,7 +71,7 @@ public AdminSService(UserRepository userRepository, ProjectRepository projectRep
     {
         CheckAdminRole();
 
-        var user = _userService.GetUser(userDTO.Email);
+        UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
 
@@ -89,14 +90,14 @@ public AdminSService(UserRepository userRepository, ProjectRepository projectRep
     public void ChangeToDefaultPassword(string email, string oldPassword)
     {
         CheckAdminRole();
-        var defaultPassword = "Password123#";
+        string defaultPassword = "Password123#";
         ChangePassword(email, defaultPassword, oldPassword);
     }
 
     public void ChangeCurrentUserPassword(string email, string oldPassword, string newPassword)
     {
         CheckIsCurrenUser(email);
-        var user = _userService.GetUser(email);
+        UserDTO user = _userService.GetUser(email);
 
 
         if (user == null) throw new UserNotFoundException();
@@ -116,7 +117,7 @@ public AdminSService(UserRepository userRepository, ProjectRepository projectRep
 
     private void CheckIsCurrenUser(string email)
     {
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
         if (currentUser == null || currentUser.Email != email) throw new UnauthorizedAdminAccessException();
     }
 }

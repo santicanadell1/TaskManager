@@ -22,7 +22,7 @@ public class AdminSService_Test
     [TestInitialize]
     public void TestSetUp()
     {
-        var contextFactory = new InMemoryAppContextFactory();
+        InMemoryAppContextFactory contextFactory = new InMemoryAppContextFactory();
         _context = contextFactory.CreateDbContext();
         
         _userRepository = new UserRepository(_context);
@@ -36,7 +36,7 @@ public class AdminSService_Test
         _loginService = new Login(_userRepository);
         _userService = new UserService(_userRepository);
 
-        var adminUserDTO = new UserDTO
+        UserDTO adminUserDTO = new UserDTO
         {
             FirstName = "Admin",
             LastName = "User",
@@ -46,7 +46,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO> { RolDTO.AdminSystem }
         };
 
-        var normalUserDTO = new UserDTO
+        UserDTO normalUserDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -70,7 +70,7 @@ public class AdminSService_Test
     public void AdminService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotAdmin()
     {
         _loginService.LoginUser("john.doe@example.com", "Password123@");
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
 
         _adminService.CreateUser(currentUser);
     }
@@ -80,9 +80,8 @@ public class AdminSService_Test
     public void AdminService_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-        var currentUser = LoggedUser.Current;
 
-        var userToDeleteDTO = new UserDTO
+        UserDTO userToDeleteDTO = new UserDTO
         {
             FirstName = "Nonexistent",
             LastName = "User",
@@ -101,7 +100,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("john.doe@example.com", "Password123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -111,7 +110,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var newPassword = "NewPassword456@";
+        string newPassword = "NewPassword456@";
 
         _adminService.ChangePassword(userToUpdate.Email, newPassword, userToUpdate.Password);
     }
@@ -122,7 +121,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("john.doe@example.com", "Password123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -132,7 +131,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var roleToAssign = RolDTO.ProjectMember;
+        RolDTO roleToAssign = RolDTO.ProjectMember;
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
     }
@@ -143,7 +142,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -153,7 +152,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var newPassword = "abcD1";
+        string newPassword = "abcD1";
 
         _adminService.ChangePassword(userToUpdate.Email, newPassword, "Password123@");
     }
@@ -161,10 +160,10 @@ public class AdminSService_Test
     [TestMethod]
     public void AdminService_ShouldChangePassword_WhenChangingToDefaultPassword()
     {
-        var _passwordManager = new PasswordManager();
+        PasswordManager _passwordManager = new PasswordManager();
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -175,17 +174,17 @@ public class AdminSService_Test
         };
 
         _adminService.ChangeToDefaultPassword(userToUpdate.Email, "Password123@");
-        var user = _userService.GetUser(userToUpdate.Email);
+        UserDTO user = _userService.GetUser(userToUpdate.Email);
         Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
     }
 
     [TestMethod]
     public void AdminService_ShouldChangePassword_WhenChangingUserPassword()
     {
-        var _passwordManager = new PasswordManager();
+        PasswordManager _passwordManager = new PasswordManager();
 
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -196,7 +195,7 @@ public class AdminSService_Test
         };
         _loginService.LoginUser("john.doe@example.com", "Password123@");
         _adminService.ChangeCurrentUserPassword(userToUpdate.Email, "Password123@", "Password123#");
-        var user = _userService.GetUser(userToUpdate.Email);
+        UserDTO user = _userService.GetUser(userToUpdate.Email);
         Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
     }
 }
