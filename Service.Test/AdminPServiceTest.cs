@@ -271,7 +271,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void UpdateProject_ShouldUpdateProject_WhenValid()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Old Project",
             Description = "Old Description",
@@ -282,10 +282,10 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
 
-        var updatedDTO = new ProjectDTO
+        ProjectDTO updatedDTO = new ProjectDTO
         {
             Name = "Updated Project",
             Description = "Updated Description",
