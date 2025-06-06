@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
+using Domain;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Models;
 
@@ -25,7 +26,7 @@ public class AdminPServiceTests
     [TestInitialize]
     public void Setup()
     {
-        var contextFactory = new InMemoryAppContextFactory();
+        InMemoryAppContextFactory contextFactory = new InMemoryAppContextFactory();
         _context = contextFactory.CreateDbContext();
 
         _context.Database.EnsureDeleted();
@@ -40,7 +41,7 @@ public class AdminPServiceTests
         _userservice = new UserService(_userRepository);
         _login = new Login(_userRepository);
 
-        var cpmService = new CpmService();
+        CpmService cpmService = new CpmService();
         _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
             _taskRepository,_resourceRepository);
 
@@ -83,7 +84,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void CreateProject_ShouldAddProjectToDatabase_WhenValid()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "New Project",
             Description = "Project Description",
@@ -93,7 +94,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
         Assert.AreEqual("New Project", project.Name);
     }
