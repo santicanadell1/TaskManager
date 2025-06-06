@@ -436,8 +436,8 @@ public class AdminPServiceTests
         };
         _taskService.AddTask("Test Project", task);
         
-        var addedTasks = _taskService.GetTasks("Test Project");
-        var addedTask = addedTasks.FirstOrDefault(t => t.Title == "Task1");
+        List<TaskDTO> addedTasks = _taskService.GetTasks("Test Project");
+        TaskDTO addedTask = addedTasks.FirstOrDefault(t => t.Title == "Task1");
 
         _adminPservice.AddTaskToMember("Test Project", "member1.user@example.com", addedTask.Title);
         
