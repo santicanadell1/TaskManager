@@ -208,7 +208,7 @@ public class AdminPServiceTests
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void RemoveMembersFromProject_ShouldThrowException_WhenRemovingMemberFromAProjectThatNotExist()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "New Project",
             Description = "Project Description",
@@ -219,7 +219,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
 
         _adminPservice.RemoveMemberFromProject("Proyecto 1", "member.user@example.com");
     }
