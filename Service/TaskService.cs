@@ -55,7 +55,7 @@ public class TaskService
 
     public List<TaskDTO> GetTasks()
     {
-        var tasks = new List<TaskDTO>();
+        List<TaskDTO> tasks = new List<TaskDTO>();
         foreach (Task task in _taskRepository.GetAll())
         {
             tasks.Add(FromEntity(task));
@@ -66,7 +66,7 @@ public class TaskService
 
     public void AddTask(string projectName, TaskDTO taskDTO)
     {
-        var project = _projectRepository.Get(p => p.Name == projectName);
+        Project project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
         if (taskDTO.ExpectedStartDate.AddDays(1) <= project.StartDate)
         {
@@ -74,7 +74,7 @@ public class TaskService
         }
         
         CreateTask(taskDTO);
-        var task = _taskRepository.Get(t => t.Title == taskDTO.Title);
+        Task task = _taskRepository.Get(t => t.Title == taskDTO.Title);
 
         project.Tasks.Add(task);
 
@@ -85,14 +85,14 @@ public class TaskService
 
     public void DeleteTask(string projectName, string title)
     {
-        var project = _projectRepository.Get(p => p.Name == projectName);
+        Project project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        var task = project.Tasks.FirstOrDefault(t => t.Title == title);
+        Task task = project.Tasks.FirstOrDefault(t => t.Title == title);
         if (task == null) throw new TaskNotFoundException();
 
-        _projectRepository.RemoveTask(projectName, task.Id);
-        var taskEntity = _taskRepository.Get(t => t.Title == title);
+        _projectRepository.RemoveTask(projectName, task.Id); 
+        Task taskEntity = _taskRepository.Get(t => t.Title == title);
         _taskRepository.Delete(taskEntity);
 
         RecalculateCriticalPath(projectName);
@@ -100,36 +100,35 @@ public class TaskService
 
     public void UpdateTask(string projectName, string title, TaskDTO taskDTO)
     {
-        var _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository
+        NotificationService _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository
         );
-        var projectService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,
+        AdminPService projectService = new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,
                 _resourceRepository);
-        var project = _projectRepository.Get(p => p.Name == projectName);
+        Project project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        var task = project.Tasks.FirstOrDefault(t => t.Title == title);
+        Task task = project.Tasks.FirstOrDefault(t => t.Title == title);
         if (task == null) throw new TaskNotFoundException();
 
-        var previousTasks = new List<Task>();
+        List<Task> previousTasks = new List<Task>();
         if (taskDTO.PreviousTasks != null)
-            foreach (var prevTaskDTO in taskDTO.PreviousTasks)
+            foreach (TaskDTO prevTaskDTO in taskDTO.PreviousTasks)
                 if (prevTaskDTO.Id.HasValue)
                 {
-                    var existingTask = project.Tasks.FirstOrDefault(t => t.Id == prevTaskDTO.Id);
+                    Task existingTask = project.Tasks.FirstOrDefault(t => t.Id == prevTaskDTO.Id);
                     if (existingTask != null && existingTask.Title != title) previousTasks.Add(existingTask);
                 }
 
-        var sameTimeTasks = new List<Task>();
+        List<Task> sameTimeTasks = new List<Task>();
         if (taskDTO.SameTimeTasks != null)
-            foreach (var sameTaskDTO in taskDTO.SameTimeTasks)
+            foreach (TaskDTO sameTaskDTO in taskDTO.SameTimeTasks)
                 if (sameTaskDTO.Id.HasValue)
                 {
-                    var existingTask = project.Tasks.FirstOrDefault(t => t.Id == sameTaskDTO.Id);
+                    Task existingTask = project.Tasks.FirstOrDefault(t => t.Id == sameTaskDTO.Id);
                     if (existingTask != null && existingTask.Title != title) sameTimeTasks.Add(existingTask);
                 }
 
-        var updatedTask = new Task(
+        Task updatedTask = new Task(
             taskDTO.Title,
             taskDTO.Description,
             taskDTO.ExpectedStartDate,
@@ -145,10 +144,10 @@ public class TaskService
         _projectRepository.UpdateTask(projectName, updatedTask.Id, updatedTask);
 
         RecalculateCriticalPath(projectName);
-        var cpmResult = GetCriticalPath(projectName);
+        CpmResultDTO cpmResult = GetCriticalPath(projectName);
         if (cpmResult.CriticalTaskIds.Any(t => t == updatedTask.Id))
         {
-            var notificationDTO = new NotificationDTO
+            NotificationDTO notificationDTO = new NotificationDTO
             {
                 Read = false,
                 Description = $"The task {updatedTask.Title} has been updated. The critical path has changed.",
@@ -160,10 +159,10 @@ public class TaskService
 
     public List<TaskDTO> GetTasks(string projectName)
     {
-        var project = _projectRepository.Get(p => p.Name == projectName);
+        Project project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        var taskDTOs = project.Tasks.Select(t => new TaskDTO
+        List<TaskDTO> taskDTOs = project.Tasks.Select(t => new TaskDTO
         {
             Title = t.Title,
             Description = t.Description,
@@ -182,17 +181,17 @@ public class TaskService
             SameTimeTasks = new List<TaskDTO>()
         }).ToList();
 
-        var taskDict = taskDTOs.ToDictionary(t => t.Id);
+        Dictionary<int?,TaskDTO> taskDict = taskDTOs.ToDictionary(t => t.Id);
 
-        foreach (var task in project.Tasks)
+        foreach (Task task in project.Tasks)
         {
-            var taskDto = taskDict[task.Id];
+            TaskDTO taskDto = taskDict[task.Id];
 
-            foreach (var prevTask in task.PreviousTasks)
+            foreach (Task prevTask in task.PreviousTasks)
                 if (taskDict.ContainsKey(prevTask.Id))
                     taskDto.PreviousTasks.Add(taskDict[prevTask.Id]);
 
-            foreach (var sameTask in task.SameTimeTasks)
+            foreach (Task sameTask in task.SameTimeTasks)
                 if (taskDict.ContainsKey(sameTask.Id))
                     taskDto.SameTimeTasks.Add(taskDict[sameTask.Id]);
         }
@@ -202,10 +201,10 @@ public class TaskService
 
     public TaskDTO GetTask(string projectName, string title)
     {
-        var project = _projectRepository.Get(p => p.Name == projectName);
+        Project project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        var task = project.Tasks.FirstOrDefault(t => t.Title == title);
+        Task task = project.Tasks.FirstOrDefault(t => t.Title == title);
         if (task == null) throw new TaskNotFoundException();
 
         return FromEntity(task);
@@ -213,10 +212,10 @@ public class TaskService
 
     public CpmResultDTO GetCriticalPath(string projectName)
     {
-        var project = _projectRepository.Get(p => p.Name == projectName);
+        Project project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        var cpmResult = _cpmService.CalculateCriticalPath(GetTasks(projectName));
+        CpmResult cpmResult = _cpmService.CalculateCriticalPath(GetTasks(projectName));
 
         return new CpmResultDTO
         {
@@ -230,16 +229,16 @@ public class TaskService
 
     private void RecalculateCriticalPath(string projectName)
     {
-        var project = _projectRepository.Get(p => p.Name == projectName);
+        Project project = _projectRepository.Get(p => p.Name == projectName);
         if (project == null || project.Tasks.Count == 0) return;
 
         try
         {
-            var updatedTasks = _cpmService.CalculateCriticalPath(GetTasks(projectName)).AllTasks;
+            List<TaskDTO> updatedTasks = _cpmService.CalculateCriticalPath(GetTasks(projectName)).AllTasks;
 
-            foreach (var updatedDTO in updatedTasks)
+            foreach (TaskDTO updatedDTO in updatedTasks)
             {
-                var originalTask = project.Tasks.FirstOrDefault(t => t.Id == updatedDTO.Id);
+                Task originalTask = project.Tasks.FirstOrDefault(t => t.Id == updatedDTO.Id);
                 if (originalTask != null)
                 {
                     originalTask.IsCritical = updatedDTO.IsCritical;
@@ -292,8 +291,8 @@ public class TaskService
 
     private List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
     {
-        var resourceDTOs = new List<ResourceDTO>();
-        foreach (var resource in resources)
+        List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
+        foreach (Resource resource in resources)
             resourceDTOs.Add(new ResourceDTO
             {
                 Name = resource.Name,
@@ -307,7 +306,7 @@ public class TaskService
 
     private Task ToEntity(TaskDTO taskDTO)
     {
-        var TaskEntity = new Task(
+        Task TaskEntity = new Task(
             taskDTO.Title,
             taskDTO.Description,
             taskDTO.ExpectedStartDate,
@@ -329,8 +328,8 @@ public class TaskService
     {
         if (taskDTOs == null) return new List<Task>();
 
-        var tasks = new List<Task>();
-        foreach (var taskDTO in taskDTOs) tasks.Add(ToEntity(taskDTO));
+        List<Task> tasks = new List<Task>();
+        foreach (TaskDTO taskDTO in taskDTOs) tasks.Add(ToEntity(taskDTO));
 
         return tasks;
     }
@@ -339,10 +338,10 @@ public class TaskService
     {
         if (resourceDTOs == null) return new List<Resource>();
 
-        var resources = new List<Resource>();
-        foreach (var resourceDTO in resourceDTOs)
+        List<Resource> resources = new List<Resource>();
+        foreach (ResourceDTO resourceDTO in resourceDTOs)
         {
-            var existing = _resourceRepository.Get(r => r.Id == resourceDTO.Id);
+            Resource existing = _resourceRepository.Get(r => r.Id == resourceDTO.Id);
             if (existing == null)
                 throw new ResourceNotFoundException();
             resources.Add(existing);
