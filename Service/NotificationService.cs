@@ -23,7 +23,7 @@ public class NotificationService
 
     private NotificationDTO FromEntity(Notification notification)
     {
-        var notificationDTO = new NotificationDTO
+        NotificationDTO notificationDTO = new NotificationDTO
         {
             Id = notification.Id,
             Read = notification.Read,
@@ -61,11 +61,11 @@ public class NotificationService
 
     private List<RolDTO> ConvertToDTORoles(List<Rol> roles)
     {
-        var rolDTOs = new List<RolDTO>();
+        List<RolDTO> rolDTOs = new List<RolDTO>();
 
         if (roles != null)
         {
-            foreach (var role in roles)
+            foreach (Rol role in roles)
                 switch (role)
                 {
                     case Rol.AdminSystem:
@@ -85,11 +85,11 @@ public class NotificationService
 
     private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
     {
-        var roles = new List<Rol>();
+        List<Rol> roles = new List<Rol>();
 
         if (roleDTOs != null)
         {
-            foreach (var roleDTO in roleDTOs)
+            foreach (RolDTO roleDTO in roleDTOs)
                 switch (roleDTO)
                 {
                     case RolDTO.AdminSystem:
@@ -127,13 +127,13 @@ public class NotificationService
 
     public List<NotificationDTO> GetNotificationsForUser(string userEmail)
     {
-        var user = _userRepository.Get(u => u.Email == userEmail);
+        User user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
-        var notifications = new List<NotificationDTO>();
+        List<NotificationDTO> notifications = new List<NotificationDTO>();
         if (user.Notifications != null)
         {
-            foreach (var notification in user.Notifications)
+            foreach (Notification notification in user.Notifications)
             {
                 if (notification != null) notifications.Add(FromEntity(notification));
             }
@@ -144,10 +144,10 @@ public class NotificationService
 
     public void CreateNotification(NotificationDTO notificationDTO)
     {
-        var notification = ToEntity(notificationDTO);
+        Notification notification = ToEntity(notificationDTO);
         _notificationRepository.Add(notification);
 
-        var createdNotification = _notificationRepository.Get(n =>
+        Notification createdNotification = _notificationRepository.Get(n =>
             n.Description == notification.Description &&
             n.Project.Name == notification.Project.Name);
 
@@ -156,11 +156,11 @@ public class NotificationService
             throw new InvalidOperationException("Failed to create notification");
         }
 
-        var project = _projectRepository.Get(p => p.Name == notification.Project.Name);
+        Project project = _projectRepository.Get(p => p.Name == notification.Project.Name);
 
         if (project?.Members != null)
         {
-            foreach (var user in project.Members)
+            foreach (User user in project.Members)
             {
                 AddNotificationToUser(user.Email, createdNotification.Id);
             }
@@ -169,10 +169,10 @@ public class NotificationService
 
     public void AddNotificationToUser(string userEmail, int? notificationId)
     {
-        var user = _userRepository.Get(u => u.Email == userEmail);
+        User user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
-        var notificationToAdd = _notificationRepository.Get(n => n.Id == notificationId);
+        Notification notificationToAdd = _notificationRepository.Get(n => n.Id == notificationId);
         if (notificationToAdd != null)
         {
             bool alreadyExists = user.Notifications.Any(n => n.Id == notificationToAdd.Id);
@@ -186,7 +186,7 @@ public class NotificationService
 
     public void RemoveNotificationFromUser(string userEmail, int? notificationId)
     {
-        var user = _userRepository.Get(u => u.Email == userEmail);
+        User user = _userRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
         if (user.Notifications != null)
