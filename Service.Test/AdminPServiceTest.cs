@@ -372,7 +372,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void GetMembers_ShouldReturnListOfMembers_WhenProjectExist()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -381,7 +381,7 @@ public class AdminPServiceTests
             Members = members
         };
         _adminPservice.CreateProject(projectDTO);
-        var projectMembers = _adminPservice.GetMembers("Test Project");
+        List<UserDTO> projectMembers = _adminPservice.GetMembers("Test Project");
         Assert.IsNotNull(projectMembers);
         Assert.AreEqual(1, projectMembers.Count);
         Assert.AreEqual("User", projectMembers[0].FirstName);
