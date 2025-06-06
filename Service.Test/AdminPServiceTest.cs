@@ -447,7 +447,7 @@ public class AdminPServiceTests
     [ExpectedException(typeof(TaskIsNotFromTheProjectException))]
     public void AddTaskToMember_WhenTaskIsNotFromTheProject_ShouldThrowException()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -458,7 +458,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
