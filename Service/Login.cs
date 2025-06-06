@@ -24,7 +24,7 @@ public class Login : ILogin
 
     public void LoginUser(string email, string password)
     {
-        var user = _userRepository.Get(user => user.Email == email);
+        User user = _userRepository.Get(user => user.Email == email);
         if (user == null || !_passwordManager.VerifyPassword(password, user.Password))
             throw new InvalidLoginCredentialsException();
 
@@ -82,9 +82,9 @@ public class Login : ILogin
 
     private static List<RolDTO> ConvertToDTORoles(List<Rol> roles)
     {
-        var roleDTOs = new List<RolDTO>();
+        List<RolDTO> roleDTOs = new List<RolDTO>();
 
-        foreach (var role in roles)
+        foreach (Rol role in roles)
             switch (role)
             {
                 case Rol.AdminSystem:

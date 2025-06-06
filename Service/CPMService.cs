@@ -17,8 +17,8 @@ public class CpmService
         CalculateLateDates(tasks);
         CalculateSlackAndCriticalTasks(tasks);
 
-        var criticalPath = FindCriticalPath(tasks);
-        var projectDuration = CalculateProjectDuration(tasks);
+        List<TaskDTO> criticalPath = FindCriticalPath(tasks);
+        int projectDuration = CalculateProjectDuration(tasks);
 
         return new CpmResult
         {
@@ -31,17 +31,17 @@ public class CpmService
 
     private void CalculateEarlyDates(List<TaskDTO> tasks)
     {
-        var processedTasks = new HashSet<TaskDTO>();
-        var remainingTasks = new Queue<TaskDTO>(tasks);
-        var iterationCount = 0;
-        var maxIterations = tasks.Count * tasks.Count;
+        HashSet<TaskDTO> processedTasks = new HashSet<TaskDTO>();
+        Queue<TaskDTO> remainingTasks = new Queue<TaskDTO>(tasks);
+        int iterationCount = 0;
+        int maxIterations = tasks.Count * tasks.Count;
 
         while (remainingTasks.Count > 0)
         {
             iterationCount++;
             if (iterationCount > maxIterations) throw new CircularDependencyException();
 
-            var task = remainingTasks.Dequeue();
+            TaskDTO task = remainingTasks.Dequeue();
 
             if (task.PreviousTasks.All(p => processedTasks.Contains(p)))
             {
@@ -62,26 +62,26 @@ public class CpmService
 
     private void CalculateLateDates(List<TaskDTO> tasks)
     {
-        var finalTasks = tasks.Where(t => !IsSuccessorOfAny(t, tasks)).ToList();
-        var projectEndDate = finalTasks.Max(t => t.EndDate);
-        foreach (var finalTask in finalTasks)
+        List<TaskDTO> finalTasks = tasks.Where(t => !IsSuccessorOfAny(t, tasks)).ToList();
+        DateTime projectEndDate = finalTasks.Max(t => t.EndDate);
+        foreach (TaskDTO finalTask in finalTasks)
         {
             finalTask.LatestFinish = projectEndDate;
             finalTask.LatestStart = finalTask.LatestFinish.AddDays(-finalTask.Duration);
         }
 
-        var processedTasks = new HashSet<TaskDTO>(finalTasks);
-        var remainingTasks = new Queue<TaskDTO>(tasks.Except(finalTasks));
-        var iterationCount = 0;
-        var maxIterations = tasks.Count * tasks.Count;
+        HashSet<TaskDTO> processedTasks = new HashSet<TaskDTO>(finalTasks);
+        Queue<TaskDTO> remainingTasks = new Queue<TaskDTO>(tasks.Except(finalTasks));
+        int iterationCount = 0;
+        int maxIterations = tasks.Count * tasks.Count;
 
         while (remainingTasks.Count > 0)
         {
             iterationCount++;
             if (iterationCount > maxIterations) throw new CircularDependencyException();
 
-            var task = remainingTasks.Dequeue();
-            var successors = GetSuccessors(task, tasks);
+            TaskDTO task = remainingTasks.Dequeue();
+            List<TaskDTO> successors = GetSuccessors(task, tasks);
 
             if (successors.All(s => processedTasks.Contains(s)))
             {
@@ -102,7 +102,7 @@ public class CpmService
 
     private void CalculateSlackAndCriticalTasks(List<TaskDTO> tasks)
     {
-        foreach (var task in tasks)
+        foreach (TaskDTO task in tasks)
         {
             task.Slack = task.LatestStart - task.StartDate;
             task.IsCritical = Math.Abs(task.Slack.TotalDays) < SLACK_TOLERANCE;
@@ -111,23 +111,23 @@ public class CpmService
 
     private List<TaskDTO> FindCriticalPath(List<TaskDTO> tasks)
     {
-        var criticalPath = new List<TaskDTO>();
-        var criticalTasks = tasks.Where(t => t.IsCritical).ToList();
+        List<TaskDTO> criticalPath = new List<TaskDTO>();
+        List<TaskDTO> criticalTasks = tasks.Where(t => t.IsCritical).ToList();
 
         if (!criticalTasks.Any())
             throw new CriticalPathCalculationException("No critical tasks were found in the project");
-        var processedTasks = new HashSet<TaskDTO>();
-        var initialCriticalTasks = criticalTasks
+        HashSet<TaskDTO> processedTasks = new HashSet<TaskDTO>();
+        List<TaskDTO> initialCriticalTasks = criticalTasks
             .Where(t => t.PreviousTasks.Count == 0 || !t.PreviousTasks.Any(p => p.IsCritical))
             .OrderBy(t => t.StartDate)
             .ToList();
         if (!initialCriticalTasks.Any()) initialCriticalTasks.Add(criticalTasks.OrderBy(t => t.StartDate).First());
-        foreach (var initialTask in initialCriticalTasks)
+        foreach (TaskDTO initialTask in initialCriticalTasks)
         {
             if (processedTasks.Contains(initialTask))
                 continue;
 
-            var currentTask = initialTask;
+            TaskDTO currentTask = initialTask;
             while (currentTask != null)
             {
                 if (processedTasks.Contains(currentTask))
@@ -136,7 +136,7 @@ public class CpmService
                 criticalPath.Add(currentTask);
                 processedTasks.Add(currentTask);
 
-                var nextTask = criticalTasks.FirstOrDefault(t =>
+                TaskDTO nextTask = criticalTasks.FirstOrDefault(t =>
                     t.PreviousTasks.Contains(currentTask) &&
                     t.IsCritical &&
                     !processedTasks.Contains(t));
@@ -163,8 +163,8 @@ public class CpmService
         if (!tasks.Any())
             return 0;
 
-        var earliestStart = tasks.Min(t => t.StartDate);
-        var latestFinish = tasks.Max(t => t.EndDate);
+        DateTime earliestStart = tasks.Min(t => t.StartDate);
+        DateTime latestFinish = tasks.Max(t => t.EndDate);
 
         return (int)(latestFinish - earliestStart).TotalDays;
     }
@@ -183,7 +183,7 @@ public class CpmService
 
     public DateTime CalculateLateStart(TaskDTO task, List<TaskDTO> allTasks)
     {
-        var successors = GetSuccessors(task, allTasks);
+        List<TaskDTO> successors = GetSuccessors(task, allTasks);
 
         if (!successors.Any())
         {
@@ -194,17 +194,17 @@ public class CpmService
             return task.ExpectedStartDate;
         }
 
-        var earliestSuccessorStart = successors.Min(s => s.LatestStart);
+        DateTime earliestSuccessorStart = successors.Min(s => s.LatestStart);
         return earliestSuccessorStart.AddDays(-task.Duration);
     }
 
     public DateTime CalculateLateFinish(TaskDTO task, List<TaskDTO> allTasks)
     {
-        var successors = GetSuccessors(task, allTasks);
+        List<TaskDTO> successors = GetSuccessors(task, allTasks);
 
         if (!successors.Any())
         {
-            var finalTasks = allTasks.Where(t => !IsSuccessorOfAny(t, allTasks)).ToList();
+            List<TaskDTO> finalTasks = allTasks.Where(t => !IsSuccessorOfAny(t, allTasks)).ToList();
             return finalTasks.Max(t => t.EndDate);
         }
 
