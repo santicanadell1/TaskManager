@@ -3,6 +3,7 @@ using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Domain;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace Service.Test;
 
@@ -474,7 +475,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void RemoveTaskFromMember_WhenUserIsMember_ShouldRemoveTaskFromMember()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -483,7 +484,7 @@ public class AdminPServiceTests
             Members = members
         };
         _adminPservice.CreateProject(projectDTO);
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
@@ -506,7 +507,7 @@ public class AdminPServiceTests
     [ExpectedException(typeof(UserIsNotAMemberException))]
     public void RemoveTaskFromMember_WhenUserIsNotMember_ShouldThrowUserIsNotAMemberException()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -515,7 +516,7 @@ public class AdminPServiceTests
             Members = members
         };
         _adminPservice.CreateProject(projectDTO);
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
