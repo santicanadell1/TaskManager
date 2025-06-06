@@ -418,7 +418,7 @@ public class AdminPServiceTests
     [ExpectedException(typeof(UserIsNotAMemberException))]
     public void AddTaskToMember_WhenUserIsNotMember_ShouldThrowUserIsNotAMemberException()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -427,7 +427,7 @@ public class AdminPServiceTests
             Members = members
         };
         _adminPservice.CreateProject(projectDTO);
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
