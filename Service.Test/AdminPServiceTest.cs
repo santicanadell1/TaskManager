@@ -351,7 +351,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void GetAllProjectsForUsers_ShouldReturnListOfProjects_WhenUserIsAdminOrMember()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -362,7 +362,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _adminPservice.GetAllProjectsForUser(UserDTO.Email);
+        List<ProjectDTO> project = _adminPservice.GetAllProjectsForUser(UserDTO.Email);
 
         Assert.IsNotNull(project);
         Assert.AreEqual("Test Project", project[0].Name);
