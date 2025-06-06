@@ -600,7 +600,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void GetTasksForAMemberInAProject_WhenGettingTasksForAMember_ShouldReturnListOfTasks()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "Test Project",
             Description = "Test Description",
@@ -609,14 +609,14 @@ public class AdminPServiceTests
             Members = members
         };
         _adminPservice.CreateProject(projectDTO);
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "Task1",
             Description = "Description",
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        var task2 = new TaskDTO
+        TaskDTO task2 = new TaskDTO
         {
             Title = "Task2",
             Description = "Description2",
@@ -630,7 +630,7 @@ public class AdminPServiceTests
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task2.Title);
 
-        var tasks = _adminPservice.GetAllTaskForAMemberInAProject("Test Project", "member.user@example.com");
+        List<TaskDTO> tasks = _adminPservice.GetAllTaskForAMemberInAProject("Test Project", "member.user@example.com");
 
         Assert.AreEqual(2, tasks.Count);
     }
