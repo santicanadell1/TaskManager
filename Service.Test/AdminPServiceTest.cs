@@ -228,7 +228,7 @@ public class AdminPServiceTests
     [ExpectedException(typeof(UserIsNotAMemberException))]
     public void RemoveMembersFromProject_ShouldThrowException_WhenRemovingMemberThatNotExists()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "New Project",
             Description = "Project Description",
@@ -239,7 +239,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
 
         _adminPservice.RemoveMemberFromProject(project.Name, "john.user@example.com");
     }
