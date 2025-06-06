@@ -3788,37 +3788,35 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\": {}
+    "/Users/santicanadell/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
+      "projectUniqueName": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Service.Test/Service.Test.csproj",
       "projectName": "Service.Test",
-      "projectPath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service.Test\\Service.Test.csproj",
-      "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service.Test\\obj\\",
+      "projectPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Service.Test/Service.Test.csproj",
+      "packagesPath": "/Users/santicanadell/.nuget/packages/",
+      "outputPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Service.Test/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/santicanadell/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
+            "/Users/santicanadell/Desktop/GIt/305108_282542_281987/DataAccess/DataAccess.csproj": {
+              "projectPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/DataAccess/DataAccess.csproj"
             },
-            "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj": {
-              "projectPath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Service\\Service.csproj"
+            "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Service/Service.csproj": {
+              "projectPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Service/Service.csproj"
             }
           }
         }
@@ -3871,7 +3869,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.410/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
