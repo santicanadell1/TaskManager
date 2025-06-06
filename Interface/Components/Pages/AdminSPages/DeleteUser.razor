@@ -1,4 +1,5 @@
 ﻿@page "/users/delete"
+@using Domain
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
@@ -16,7 +17,7 @@
         <label for="userSelect">Select a User to Delete</label>
         <select id="userSelect" class="form-control mt-1" @bind="selectedUserEmail">
             <option value="">-- Select a User --</option>
-            @foreach (var user in usersList)
+            @foreach (UserDTO user in usersList)
             {
                 <option value="@user.Email">@user.FirstName @user.LastName</option>
             }
