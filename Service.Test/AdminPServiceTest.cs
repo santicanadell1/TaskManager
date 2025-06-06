@@ -247,7 +247,7 @@ public class AdminPServiceTests
     [TestMethod]
     public void RemoveProject_ShouldRemoveProject_WhenValid()
     {
-        var projectDTO = new ProjectDTO
+        ProjectDTO projectDTO = new ProjectDTO
         {
             Name = "New Project",
             Description = "Project Description",
@@ -258,7 +258,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        var project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
 
         _adminPservice.RemoveProject("New Project");
