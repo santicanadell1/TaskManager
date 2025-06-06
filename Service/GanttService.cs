@@ -6,14 +6,14 @@ public class GanttService
 {
     public static GanttData Convert(List<TaskDTO> allTasks, List<TaskDTO> criticalPath)
     {
-        var data = new List<GanttTask>();
-        var links = new List<GanttLink>();
-        var linkId = 1;
+        List<GanttTask> data = new List<GanttTask>();
+        List<GanttLink> links = new List<GanttLink>();
+        int linkId = 1;
 
-        foreach (var task in allTasks)
+        foreach (TaskDTO task in allTasks)
         {
-            var isInCriticalPath = criticalPath.Any(ct => ct.Id == task.Id);
-            var progress = GetProgress(task);
+            bool isInCriticalPath = criticalPath.Any(ct => ct.Id == task.Id);
+            double progress = GetProgress(task);
             data.Add(new GanttTask
             {
                 id = task.Id ?? 0,
@@ -29,7 +29,7 @@ public class GanttService
                 critical = isInCriticalPath,
                 slack = task.Slack.TotalDays
             });
-            foreach (var prev in task.PreviousTasks)
+            foreach (TaskDTO prev in task.PreviousTasks)
                 links.Add(new GanttLink
                 {
                     id = linkId++,
