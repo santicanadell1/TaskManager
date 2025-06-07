@@ -166,8 +166,7 @@ public class AdminPService : IAdminPService
     {
         User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
         CpmService cpmService = new CpmService();
-        TaskService taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository, _resourceRepository);
+        TaskService taskService = new TaskService(_repositoryManager);
         List<TaskDTO> returnList = new List<TaskDTO>();
         foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
         {
@@ -186,8 +185,7 @@ public class AdminPService : IAdminPService
         User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
         if (user.Tasks == null) return new List<TaskDTO>();
         CpmService cpmService = new CpmService();
-        TaskService taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository, _resourceRepository);
+        TaskService taskService = new TaskService(_repositoryManager);
         List<TaskDTO> returnList = new List<TaskDTO>();
         List<TaskDTO> tasks = taskService.GetTasks(projectName);
         foreach (TaskDTO task in tasks)
