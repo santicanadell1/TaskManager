@@ -9,22 +9,15 @@ using Service.Models;
 
 public class AdminSService : IAdminSService
 {
-    private readonly UserRepository _userRepository;
-    private readonly ProjectRepository _projectRepository;
+    private readonly IRepositoryManager _repositoryManager;
     private readonly PasswordManager _passwordManager = new();
     private readonly UserService _userService;
-    private readonly NotificationRepository _notificationRepository;
-    private readonly TaskRepository _taskRepository;
-    private readonly ResourceRepository _resourceRepository;
-    
 
-public AdminSService(UserRepository userRepository, ProjectRepository projectRepository, TaskRepository taskRepository, ResourceRepository resourceRepository)
+
+    public AdminSService(IRepositoryManager repositoryManager)
     {
-        _userRepository = userRepository;
-        _projectRepository = projectRepository;
-        _userService = new UserService(_userRepository);
-        _taskRepository = taskRepository;
-        _resourceRepository = resourceRepository;
+        _repositoryManager = repositoryManager;
+        _userService = new UserService(repositoryManager);
     }
 
     public void CreateUser(UserDTO userDTO)
@@ -36,14 +29,14 @@ public AdminSService(UserRepository userRepository, ProjectRepository projectRep
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
-        AdminPService adminPService = new AdminPService(_userRepository,_projectRepository,_notificationRepository, _taskRepository,_resourceRepository);
+        AdminPService adminPService = new AdminPService(_repositoryManager);
         UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
-        var projects = adminPService.GetAllProjectsForUser(userDTO.Email);
+        List<ProjectDTO> projects = adminPService.GetAllProjectsForUser(userDTO.Email);
         foreach (ProjectDTO project in projects) adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
-        var userEntity = _userRepository.Get(u => u.Email == userDTO.Email);
-        _userRepository.Delete(userEntity);
+        User userEntity = _repositoryManager.UserRepository.Get(u => u.Email == userDTO.Email);
+        _repositoryManager.UserRepository.Delete(userEntity);
     }
 
     public void ChangePassword(string email, string newPassword, string oldPassword)
@@ -82,7 +75,7 @@ public AdminSService(UserRepository userRepository, ProjectRepository projectRep
 
     private void CheckAdminRole()
     {
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminSystem))
             throw new UnauthorizedAdminAccessException();
     }
