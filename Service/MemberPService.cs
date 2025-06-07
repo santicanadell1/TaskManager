@@ -11,34 +11,21 @@ namespace Service;
 
 public class MemberPService : IMemberPService
 {
-    private readonly UserRepository _userRepository;
-    private readonly ProjectRepository _projectRepository;
-    private readonly NotificationRepository _notificationRepository;
-    private readonly TaskRepository _taskRepository;
-    private readonly ResourceRepository _resourceRepository;
-
     private readonly AdminPService _adminPService;
     private readonly UserService _userService;
     private readonly TaskService _taskService;
     private readonly CpmService _cpmService;
+    private readonly IRepositoryManager _repositoryManager;
 
-    public MemberPService(UserRepository userRepository, ProjectRepository projectRepository,
-        NotificationRepository notificationRepository, TaskRepository taskRepository,
-        ResourceRepository resourceRepository)
+    public MemberPService(IRepositoryManager repositoryManager)
     {
-        _userRepository = userRepository;
-        _projectRepository = projectRepository;
-        _notificationRepository = notificationRepository;
-        _taskRepository = taskRepository;
-        _resourceRepository = resourceRepository;
+        _repositoryManager = repositoryManager;
 
         _cpmService = new CpmService();
         _adminPService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,
-                _resourceRepository);
-        _userService = new UserService(_userRepository);
-        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, _cpmService,
-            _taskRepository, _resourceRepository);
+            new AdminPService(_repositoryManager);
+        _userService = new UserService(_repositoryManager);
+        _taskService = new TaskService(_repositoryManager);
     }
 
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)
@@ -93,7 +80,7 @@ public class MemberPService : IMemberPService
 
     private void CheckIsTaskOfTheUser(int? taskId, string email)
     {
-        User user = _userRepository.Get(u => u.Email == email);
+        User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
         if (user == null)
             throw new TaskCantBeModifiedByUserException();
 

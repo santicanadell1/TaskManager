@@ -1,6 +1,8 @@
 using DataAccess;
+using Domain;
 using Service;
 using Service.Exceptions.LoginExceptions;
+using Service.Interface;
 using Service.Models;
 
 [TestClass]
@@ -8,8 +10,8 @@ public class LoginTests
 {
     private AppDbContext _context;
     private Login _login;
-    private UserRepository _userRepository;
     private InMemoryAppContextFactory _contextFactory;
+    private IRepositoryManager _repositoryManager;
 
     [TestInitialize]
     public void Setup()
@@ -19,10 +21,10 @@ public class LoginTests
 
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
-
-        _userRepository = new UserRepository(_context);
-
-        _login = new Login(_userRepository);
+        
+        _repositoryManager = new RepositoryManager(_context);
+        
+        _login = new Login(_repositoryManager);
     }
 
     [TestCleanup]
@@ -48,7 +50,7 @@ public class LoginTests
             Birthday = DateTime.Parse("1990-01-01")
         };
 
-        UserService userService = new UserService(_userRepository);
+        UserService userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -77,7 +79,7 @@ public class LoginTests
             Roles = roles
         };
 
-        UserService userService = new UserService(_userRepository);
+        UserService userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -109,7 +111,7 @@ public class LoginTests
             Roles = roles
         };
 
-        UserService userService = new UserService(_userRepository);
+        UserService userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -132,7 +134,7 @@ public class LoginTests
             Roles = roles
         };
 
-        UserService userService = new UserService(_userRepository);
+        UserService userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -157,7 +159,7 @@ public class LoginTests
             Roles = roles
         };
 
-        UserService userService = new UserService(_userRepository);
+        UserService userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -182,7 +184,7 @@ public class LoginTests
             Roles = roles
         };
 
-        UserService userService = new UserService(_userRepository);
+        UserService userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -207,7 +209,7 @@ public class LoginTests
             Roles = roles
         };
 
-        UserService userService = new UserService(_userRepository);
+        UserService userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
