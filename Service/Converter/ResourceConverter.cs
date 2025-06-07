@@ -1,3 +1,5 @@
+using DataAccess;
+using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using Domain;
 using Service.Models;
 
@@ -5,6 +7,13 @@ namespace Service.Converter;
 
 public class ResourceConverter : IConverter<Resource, ResourceDTO>
 {
+    private IRepositoryManager _repositoryManager;
+
+    public ResourceConverter(IRepositoryManager repositoryManager)
+    {
+        _repositoryManager = repositoryManager;
+    }
+
     public ResourceDTO FromEntity(Resource resource)
     {
         return new ResourceDTO
@@ -22,5 +31,65 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
         {
             Id = resourceDTO.Id
         };
+    }
+
+    public List<Resource> ConvertToResourceEntityList(List<ResourceDTO> resourceDTOs)
+    {
+        if (resourceDTOs == null) return new List<Resource>();
+
+        List<Resource> resources = new List<Resource>();
+        foreach (var resourceDTO in resourceDTOs)
+        {
+            Resource existing = _repositoryManager.ResourceRepository.Get(r => r.Id == resourceDTO.Id);
+            if (existing == null)
+                throw new ResourceNotFoundException();
+            resources.Add(existing);
+        }
+
+        return resources;
+    }
+
+    public List<ResourceDTO> ConvertFromResourceEntityList(List<Resource> resources)
+    {
+        if (resources == null) return new List<ResourceDTO>();
+
+        return resources.Select(resource => new ResourceDTO
+        {
+            Id = resource.Id,
+            Name = resource.Name,
+            Type = resource.Type,
+            Description = resource.Description
+        }).ToList();
+    }
+
+    public List<Resource> ToResourceEntityList(List<ResourceDTO> resourceDTOs)
+    {
+        if (resourceDTOs == null) return new List<Resource>();
+
+        List<Resource> resources = new List<Resource>();
+        foreach (ResourceDTO resourceDTO in resourceDTOs)
+        {
+            Resource existing = _repositoryManager.ResourceRepository.Get(r => r.Id == resourceDTO.Id);
+            if (existing == null)
+                throw new ResourceNotFoundException();
+            resources.Add(existing);
+        }
+
+        return resources;
+    }
+
+    public List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
+    {
+        List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
+        foreach (Resource resource in resources)
+            resourceDTOs.Add(new ResourceDTO
+            {
+                Name = resource.Name,
+                Type = resource.Type,
+                Description = resource.Description,
+                Id = resource.Id
+            });
+
+        return resourceDTOs;
     }
 }

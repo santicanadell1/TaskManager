@@ -4,6 +4,7 @@ using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
 using Domain.Exceptions.TaskExceptions;
+using Service.Converter;
 using Service.Converters;
 using Service.Models;
 using Task = Domain.Task;
@@ -14,37 +15,44 @@ public class TaskService
 {
     private readonly CpmService _cpmService;
     private readonly IRepositoryManager _repositoryManager;
-    private readonly NotificationConverter _notificationConverter;
+    private readonly ResourceConverter _resourceConverter;
+    private readonly RolConverter _rolConverter;
+    private readonly TaskConverter _taskConverter;
+    private readonly UserConverter _userConverter;
+    private readonly ProjectConverter _projectConverter;
 
-    public TaskService(IRepositoryManager repositoryManager, CpmService cpmService, NotificationConverter notificationConverter)
+    public TaskService(IRepositoryManager repositoryManager, CpmService cpmService)
     {
         _repositoryManager = repositoryManager;
-        _cpmService = cpmService;
-        _notificationConverter = notificationConverter;  
+        _rolConverter = new RolConverter();
+        _resourceConverter = new ResourceConverter(_repositoryManager);
+        _taskConverter = new TaskConverter(_repositoryManager, _resourceConverter);
+        _userConverter = new UserConverter(_repositoryManager, _rolConverter, _taskConverter);
+        _projectConverter = new ProjectConverter(_repositoryManager, _userConverter);
     }
 
 
     private void CreateTask(TaskDTO taskDTO)
     {
-        Task task = ToEntity(taskDTO);
+        Task task = _taskConverter.ToEntity(taskDTO);
         _repositoryManager.TaskRepository.Add(task);
     }
 
     public void UpdateTask(TaskDTO taskDTO)
     {
-        Task task = ToEntity(taskDTO);
+        Task task = _taskConverter.ToEntity(taskDTO);
         _repositoryManager.TaskRepository.Update(task);
     }
 
     public void DeleteTask(TaskDTO taskDTO)
     {
-        Task task = ToEntity(taskDTO);
+        Task task = _taskConverter.ToEntity(taskDTO);
         _repositoryManager.TaskRepository.Delete(task);
     }
 
     public TaskDTO GetTask(string title)
     {
-        return FromEntity(_repositoryManager.TaskRepository.Get(t => t.Title == title));
+        return _taskConverter.FromEntity(_repositoryManager.TaskRepository.Get(t => t.Title == title));
     }
 
     public List<TaskDTO> GetTasks()
@@ -52,7 +60,7 @@ public class TaskService
         List<TaskDTO> tasks = new List<TaskDTO>();
         foreach (Task task in _repositoryManager.TaskRepository.GetAll())
         {
-            tasks.Add(FromEntity(task));
+            tasks.Add(_taskConverter.FromEntity(task));
         }
 
         return tasks;
@@ -94,8 +102,8 @@ public class TaskService
 
     public void UpdateTask(string projectName, string title, TaskDTO taskDTO)
     {
-        NotificationService _notificationService = new NotificationService(_repositoryManager, _notificationConverter);
-        AdminPService projectService = new AdminPService(_repositoryManager, _notificationConverter);
+        NotificationService _notificationService = new NotificationService(_repositoryManager);
+        AdminPService projectService = new AdminPService(_repositoryManager);
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
@@ -127,7 +135,7 @@ public class TaskService
             taskDTO.Duration,
             previousTasks,
             sameTimeTasks,
-            ToResourceEntityList(taskDTO.Resources)
+            _resourceConverter.ToResourceEntityList(taskDTO.Resources)
         );
         updatedTask.Id = task.Id;
         updatedTask.State = (State)taskDTO.State;
@@ -161,7 +169,7 @@ public class TaskService
             ExpectedStartDate = t.ExpectedStartDate,
             Duration = t.Duration,
             State = (StateDTO)t.State,
-            Resources = FromResourceEntityList(t.Resources),
+            Resources = _resourceConverter.FromResourceEntityList(t.Resources),
             Id = t.Id,
             IsCritical = t.IsCritical,
             StartDate = t.StartDate,
@@ -199,7 +207,7 @@ public class TaskService
         Task task = project.Tasks.FirstOrDefault(t => t.Title == title);
         if (task == null) throw new TaskNotFoundException();
 
-        return FromEntity(task);
+        return _taskConverter.FromEntity(task);
     }
 
     public CpmResultDTO GetCriticalPath(string projectName)
@@ -247,29 +255,6 @@ public class TaskService
         }
     }
 
-
-    private TaskDTO FromEntity(Task task)
-    {
-        return new TaskDTO
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description,
-            ExpectedStartDate = task.ExpectedStartDate,
-            Duration = task.Duration,
-            PreviousTasks = ToMinimalTaskDTOList(task.PreviousTasks),
-            SameTimeTasks = ToMinimalTaskDTOList(task.SameTimeTasks),
-            State = (StateDTO)task.State,
-            Resources = FromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
-            IsCritical = task.IsCritical,
-            StartDate = task.StartDate,
-            EndDate = task.EndDate,
-            LatestStart = task.LatestStart,
-            LatestFinish = task.LatestFinish,
-            Slack = task.Slack
-        };
-    }
-
     private List<TaskDTO> ToMinimalTaskDTOList(List<Task> tasks)
     {
         if (tasks == null) return new List<TaskDTO>();
@@ -279,66 +264,5 @@ public class TaskService
             Id = t.Id,
             Title = t.Title
         }).ToList();
-    }
-
-    private List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
-    {
-        List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
-        foreach (Resource resource in resources)
-            resourceDTOs.Add(new ResourceDTO
-            {
-                Name = resource.Name,
-                Type = resource.Type,
-                Description = resource.Description,
-                Id = resource.Id
-            });
-
-        return resourceDTOs;
-    }
-
-    private Task ToEntity(TaskDTO taskDTO)
-    {
-        Task TaskEntity = new Task(
-            taskDTO.Title,
-            taskDTO.Description,
-            taskDTO.ExpectedStartDate,
-            taskDTO.Duration,
-            ToEntityList(taskDTO.PreviousTasks),
-            ToEntityList(taskDTO.SameTimeTasks),
-            ToResourceEntityList(taskDTO.Resources)
-        );
-        if (TaskEntity.Id.HasValue)
-        {
-            TaskEntity.Id = taskDTO.Id;
-        }
-
-        TaskEntity.State = (State)taskDTO.State;
-        return TaskEntity;
-    }
-
-    private List<Task> ToEntityList(List<TaskDTO> taskDTOs)
-    {
-        if (taskDTOs == null) return new List<Task>();
-
-        List<Task> tasks = new List<Task>();
-        foreach (TaskDTO taskDTO in taskDTOs) tasks.Add(ToEntity(taskDTO));
-
-        return tasks;
-    }
-
-    private List<Resource> ToResourceEntityList(List<ResourceDTO> resourceDTOs)
-    {
-        if (resourceDTOs == null) return new List<Resource>();
-
-        List<Resource> resources = new List<Resource>();
-        foreach (ResourceDTO resourceDTO in resourceDTOs)
-        {
-            Resource existing = _repositoryManager.ResourceRepository.Get(r => r.Id == resourceDTO.Id);
-            if (existing == null)
-                throw new ResourceNotFoundException();
-            resources.Add(existing);
-        }
-
-        return resources;
     }
 }

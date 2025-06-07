@@ -8,9 +8,10 @@ public class ProjectConverter : IConverter<Project, ProjectDTO>
     private readonly IRepositoryManager _repositoryManager;
     private readonly UserConverter _userConverter;
 
-    public ProjectConverter(IRepositoryManager repositoryManager)
+    public ProjectConverter(IRepositoryManager repositoryManager, UserConverter userConverter)
     {
         _repositoryManager = repositoryManager;
+        _userConverter = userConverter;
     }
 
     public Project ToEntity(ProjectDTO projectDTO)
@@ -45,7 +46,7 @@ public class ProjectConverter : IConverter<Project, ProjectDTO>
         if (project.Members != null)
         {
             foreach (User member in project.Members)
-                memberDTOs.Add(_userConverter.FromEntity(member)); // explícito
+                memberDTOs.Add(_userConverter.FromEntity(member)); 
         }
 
         return new ProjectDTO

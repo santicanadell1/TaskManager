@@ -9,10 +9,12 @@ namespace Service.Converter;
 public class TaskConverter : IConverter<Task, TaskDTO>
 {
     private readonly IRepositoryManager _repositoryManager;
+    private ResourceConverter _resourceConverter;
 
-    public TaskConverter(IRepositoryManager repositoryManager)
+    public TaskConverter(IRepositoryManager repositoryManager, ResourceConverter resourceConverter)
     {
         _repositoryManager = repositoryManager;
+        _resourceConverter = resourceConverter;
     }
 
     public Task ToEntity(TaskDTO taskDTO)
@@ -24,7 +26,7 @@ public class TaskConverter : IConverter<Task, TaskDTO>
             taskDTO.Duration,
             ConvertToEntityList(taskDTO.PreviousTasks),
             ConvertToEntityList(taskDTO.SameTimeTasks),
-            ConvertToResourceEntityList(taskDTO.Resources)
+            _resourceConverter.ConvertToResourceEntityList(taskDTO.Resources)
         );
 
         taskEntity.Id = taskDTO.Id;
@@ -45,7 +47,7 @@ public class TaskConverter : IConverter<Task, TaskDTO>
             PreviousTasks = ToMinimalTaskDTOList(task.PreviousTasks),
             SameTimeTasks = ToMinimalTaskDTOList(task.SameTimeTasks),
             State = (StateDTO)task.State,
-            Resources = ConvertFromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
+            Resources = _resourceConverter.ConvertFromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
             IsCritical = task.IsCritical,
             StartDate = task.StartDate,
             EndDate = task.EndDate,
@@ -74,35 +76,6 @@ public class TaskConverter : IConverter<Task, TaskDTO>
         {
             Id = t.Id,
             Title = t.Title
-        }).ToList();
-    }
-
-    private List<Resource> ConvertToResourceEntityList(List<ResourceDTO> resourceDTOs)
-    {
-        if (resourceDTOs == null) return new List<Resource>();
-
-        List<Resource> resources = new List<Resource>();
-        foreach (var resourceDTO in resourceDTOs)
-        {
-            Resource existing = _repositoryManager.ResourceRepository.Get(r => r.Id == resourceDTO.Id);
-            if (existing == null)
-                throw new ResourceNotFoundException();
-            resources.Add(existing);
-        }
-
-        return resources;
-    }
-
-    private List<ResourceDTO> ConvertFromResourceEntityList(List<Resource> resources)
-    {
-        if (resources == null) return new List<ResourceDTO>();
-
-        return resources.Select(resource => new ResourceDTO
-        {
-            Id = resource.Id,
-            Name = resource.Name,
-            Type = resource.Type,
-            Description = resource.Description
         }).ToList();
     }
 }

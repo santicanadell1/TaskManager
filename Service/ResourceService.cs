@@ -1,6 +1,7 @@
 using DataAccess;
 using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using Domain;
+using Service.Converter;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Exceptions.ResourceServiceExceptions;
 using Service.Interface;
@@ -13,17 +14,21 @@ namespace Service;
 public class ResourceService : IResourceService
 {
     private readonly IRepositoryManager _repositoryManager;
+    private readonly ResourceConverter _resourceConverter;
+    private readonly RolConverter _rolConverter;
 
     public ResourceService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
+        _rolConverter = new RolConverter();
+        _resourceConverter = new ResourceConverter(_repositoryManager);
     }
 
     public void AddResource(ResourceDTO resourceDTO)
     {
         if (isAdminSystem())
         {
-            Resource resource = ToEntity(resourceDTO);
+            Resource resource = _resourceConverter.ToEntity(resourceDTO);
             _repositoryManager.ResourceRepository.Add(resource);
         }
         else
@@ -38,14 +43,15 @@ public class ResourceService : IResourceService
 
         if (resource == null) throw new ResourceNotFoundException();
 
-        return FromEntity(resource);
+        return _resourceConverter.FromEntity(resource);
     }
 
     public List<ResourceDTO> GetResources()
     {
         List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
 
-        foreach (Resource resource in _repositoryManager.ResourceRepository.GetAll()) resourcesDTO.Add(FromEntity(resource));
+        foreach (Resource resource in _repositoryManager.ResourceRepository.GetAll())
+            resourcesDTO.Add(_resourceConverter.FromEntity(resource));
 
         if (resourcesDTO.Count == 0) throw new NoResourcesFoundException();
 
@@ -56,7 +62,7 @@ public class ResourceService : IResourceService
     {
         isAbleToModifyResource(GetResourceObject(id));
 
-        Resource updatedResource = ToEntity(updatedResourceDTO);
+        Resource updatedResource = _resourceConverter.ToEntity(updatedResourceDTO);
         updatedResource.Id = id.Value;
 
         _repositoryManager.ResourceRepository.Update(updatedResource);
@@ -85,36 +91,16 @@ public class ResourceService : IResourceService
         return resource;
     }
 
-
-    private ResourceDTO FromEntity(Resource resource)
-    {
-        return new ResourceDTO
-        {
-            Name = resource.Name,
-            Type = resource.Type,
-            Description = resource.Description,
-            Id = resource.Id
-        };
-    }
-
-    private Resource ToEntity(ResourceDTO resourceDTO)
-    {
-        Resource resource = new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
-        {
-            Id = resourceDTO.Id
-        };
-        return resource;
-    }
-
     private void isAbleToModifyResource(Resource resource)
     {
         UserDTO currentUser = LoggedUser.Current;
 
         if (currentUser == null) throw new UnauthorizedAdminAccessException();
 
-        if (currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminSystem))) return;
+        if (currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminSystem))) return;
 
-        if (currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminProject)) && isExclusive(resource)) return;
+        if (currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminProject)) &&
+            isExclusive(resource)) return;
 
         throw new UnauthorizedAdminAccessException();
     }
@@ -122,7 +108,7 @@ public class ResourceService : IResourceService
     private bool isAdminSystem()
     {
         UserDTO currentUser = LoggedUser.Current;
-        return currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminSystem));
+        return currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminSystem));
     }
 
     private List<Project> GetProjectsThatAreUsingResource(Resource resource)
@@ -149,24 +135,9 @@ public class ResourceService : IResourceService
         UserDTO currentUser = LoggedUser.Current;
         List<Project> projects = GetProjectsThatAreUsingResource(resource);
         if (projects.Count == 0) return false;
-        bool currentUserIsAdmin = currentUser.Roles.Contains(ConvertToDTORole(Rol.AdminProject));
+        bool currentUserIsAdmin = currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminProject));
         bool isUsedByOneProject = projects.Count == 1;
         bool projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
         return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
-    }
-
-    private RolDTO ConvertToDTORole(Rol role)
-    {
-        switch (role)
-        {
-            case Rol.AdminSystem:
-                return RolDTO.AdminSystem;
-            case Rol.ProjectMember:
-                return RolDTO.ProjectMember;
-            case Rol.AdminProject:
-                return RolDTO.AdminProject;
-            default:
-                throw new InvalidRolException();
-        }
     }
 }

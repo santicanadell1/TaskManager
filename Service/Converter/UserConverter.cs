@@ -12,6 +12,12 @@ public class UserConverter : IConverter<User, UserDTO>
     private readonly TaskConverter _taskConverter;
     private readonly PasswordManager _passwordManager = new();
 
+    public UserConverter(IRepositoryManager repositoryManager, RolConverter rolConverter, TaskConverter taskConverter)
+    {
+        _repositoryManager = repositoryManager;
+        _rolConverter = rolConverter;
+        _taskConverter = taskConverter;
+    }
 
     public UserDTO FromEntity(User user)
     {
@@ -27,7 +33,7 @@ public class UserConverter : IConverter<User, UserDTO>
             Tasks = FromEntityList(user.Tasks)
         };
     }
-    
+
     public User ToEntity(UserDTO userDTO)
     {
         return new User
@@ -42,19 +48,15 @@ public class UserConverter : IConverter<User, UserDTO>
             Tasks = getTasksEntity(userDTO.Tasks)
         };
     }
-    
+
     public List<Task> getTasksEntity(List<TaskDTO> taskDTOs)
     {
         return taskDTOs?.Select(dto => _taskConverter.ToEntity(dto)).ToList() ?? new List<Task>();
     }
 
-    
+
     public List<TaskDTO> FromEntityList(List<Task> tasks)
     {
         return tasks.Select(t => _taskConverter.FromEntity(t)).ToList();
     }
-
-
-
-
 }

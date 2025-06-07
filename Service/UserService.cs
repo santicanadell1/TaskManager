@@ -105,44 +105,6 @@ public class UserService : IUserService
         return ret;
     }
 
-    private Task ToEntityTask(TaskDTO taskDTO)
-    {
-        return new Task(
-            taskDTO.Title,
-            taskDTO.Description,
-            taskDTO.ExpectedStartDate,
-            taskDTO.Duration,
-            ToEntityList(taskDTO.PreviousTasks),
-            ToEntityList(taskDTO.SameTimeTasks),
-            ToResourceEntityList(taskDTO.Resources)
-        );
-    }
-
-    private List<Task> ToEntityList(List<TaskDTO> taskDTOs)
-    {
-        if (taskDTOs == null) return new List<Task>();
-
-        List<Task> tasks = new List<Task>();
-        foreach (TaskDTO taskDTO in taskDTOs)
-        {
-            tasks.Add(ToEntityTask(taskDTO));
-        }
-
-        return tasks;
-    }
-
-    private List<Resource> ToResourceEntityList(List<ResourceDTO> resourceDTOs)
-    {
-        if (resourceDTOs == null) return new List<Resource>();
-
-        List<Resource> resources = new List<Resource>();
-        foreach (ResourceDTO resourceDTO in resourceDTOs)
-            resources.Add(new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
-                { Id = resourceDTO.Id });
-
-        return resources;
-    }
-
     private User GetUserObject(string email)
     {
         User user = _repositoryManager.UserRepository.Get(user => user.Email == email);

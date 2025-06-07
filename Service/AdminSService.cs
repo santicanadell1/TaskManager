@@ -31,7 +31,7 @@ public class AdminSService : IAdminSService
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
-        AdminPService adminPService = new AdminPService(_repositoryManager, _notificationConverter);
+        AdminPService adminPService = new AdminPService(_repositoryManager);
         UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();

@@ -28,4 +28,19 @@ public class RolConverter
                 _ => throw new ArgumentException("RolDTO desconocido")
             }).ToList();
     }
+
+    public RolDTO ConvertToDTORole(Rol role)
+    {
+        switch (role)
+        {
+            case Rol.AdminSystem:
+                return RolDTO.AdminSystem;
+            case Rol.ProjectMember:
+                return RolDTO.ProjectMember;
+            case Rol.AdminProject:
+                return RolDTO.AdminProject;
+            default:
+                throw new ArgumentException("Invalid role");
+        }
+    }
 }
