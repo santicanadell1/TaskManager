@@ -54,11 +54,17 @@ public class AdminPService : IAdminPService
 
         foreach (UserDTO memberDTO in membersDTO)
         {
-            User user = _userConverter.ToEntity(memberDTO);
+            if (project.Members.Any(u => u.Email == memberDTO.Email)) 
+            {
+                throw new UserIsAlreadyAMemberException();
+            }
+            User existingUser = _repositoryManager.UserRepository.Get(u => u.Email == memberDTO.Email);
+            if (existingUser == null) 
+            {
+                throw new UserNotFoundException();
+            }
 
-            if (project.Members.Any(u => u.Email == user.Email)) throw new UserIsAlreadyAMemberException();
-
-            project.AddMember(user);
+            project.AddMember(existingUser);
         }
 
         _repositoryManager.ProjectRepository.Update(project);
