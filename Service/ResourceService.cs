@@ -12,13 +12,11 @@ namespace Service;
 
 public class ResourceService : IResourceService
 {
-    private readonly ResourceRepository _resourceRepository;
-    private readonly ProjectRepository _projectRepository;
+    private readonly IRepositoryManager _repositoryManager;
 
-    public ResourceService(ResourceRepository resourceRepository, ProjectRepository projectRepository)
+    public ResourceService(IRepositoryManager repositoryManager)
     {
-        _projectRepository = projectRepository;
-        _resourceRepository = resourceRepository;
+        _repositoryManager = repositoryManager;
     }
 
     public void AddResource(ResourceDTO resourceDTO)
@@ -26,7 +24,7 @@ public class ResourceService : IResourceService
         if (isAdminSystem())
         {
             Resource resource = ToEntity(resourceDTO);
-            _resourceRepository.Add(resource);
+            _repositoryManager.ResourceRepository.Add(resource);
         }
         else
         {
@@ -36,7 +34,7 @@ public class ResourceService : IResourceService
 
     public ResourceDTO Get(int? id)
     {
-        Resource resource = _resourceRepository.Get(r => r.Id == id);
+        Resource resource = _repositoryManager.ResourceRepository.Get(r => r.Id == id);
 
         if (resource == null) throw new ResourceNotFoundException();
 
@@ -47,7 +45,7 @@ public class ResourceService : IResourceService
     {
         List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
 
-        foreach (Resource resource in _resourceRepository.GetAll()) resourcesDTO.Add(FromEntity(resource));
+        foreach (Resource resource in _repositoryManager.ResourceRepository.GetAll()) resourcesDTO.Add(FromEntity(resource));
 
         if (resourcesDTO.Count == 0) throw new NoResourcesFoundException();
 
@@ -61,7 +59,7 @@ public class ResourceService : IResourceService
         Resource updatedResource = ToEntity(updatedResourceDTO);
         updatedResource.Id = id.Value;
 
-        _resourceRepository.Update(updatedResource);
+        _repositoryManager.ResourceRepository.Update(updatedResource);
     }
 
     public void DeleteResource(int? id)
@@ -69,8 +67,8 @@ public class ResourceService : IResourceService
         isAbleToModifyResource(GetResourceObject(id));
         try
         {
-            Resource? res = _resourceRepository.Get(r => r.Id == id);
-            _resourceRepository.Delete(res);
+            Resource? res = _repositoryManager.ResourceRepository.Get(r => r.Id == id);
+            _repositoryManager.ResourceRepository.Delete(res);
         }
         catch (Exception ex)
         {
@@ -80,7 +78,7 @@ public class ResourceService : IResourceService
 
     private Resource GetResourceObject(int? id)
     {
-        Resource resource = _resourceRepository.Get(r => r.Id == id);
+        Resource resource = _repositoryManager.ResourceRepository.Get(r => r.Id == id);
 
         if (resource == null) throw new ResourceNotFoundException();
 
@@ -129,7 +127,7 @@ public class ResourceService : IResourceService
 
     private List<Project> GetProjectsThatAreUsingResource(Resource resource)
     {
-        List<Project> projects = _projectRepository.GetAll();
+        List<Project> projects = _repositoryManager.ProjectRepository.GetAll();
         List<Project> projectsThatAreUsingResource = new List<Project>();
         foreach (Project project in projects)
         {

@@ -16,12 +16,8 @@ public class ResourcesServiceTest
     private ResourceService _resourceService;
     private TaskService _taskService;
     private UserService _userService;
-    private UserRepository _userRepository;
-    private ProjectRepository _projectRepository;
-    private NotificationRepository _notificationRepository;
-    private ResourceRepository _resourceRepository;
-    private TaskRepository _taskRepository;
     private InMemoryAppContextFactory _contextFactory;
+    private IRepositoryManager _repositoryManager;
 
     [TestInitialize]
     public void TestSetUp()
@@ -32,24 +28,17 @@ public class ResourcesServiceTest
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
 
-        _userRepository = new UserRepository(_context);
-        _projectRepository = new ProjectRepository(_context);
-        _notificationRepository = new NotificationRepository(_context);
-        _taskRepository = new TaskRepository(_context);
-        _resourceRepository = new ResourceRepository(_context);
-
-
-        _loginService = new Login(_userRepository);
-        _userService = new UserService(_userRepository);
-        _resourceService = new ResourceService(_resourceRepository, _projectRepository);
+        _repositoryManager = new RepositoryManager(_context);
+        
+        _loginService = new Login(_repositoryManager);
+        _userService = new UserService(_repositoryManager);
+        _resourceService = new ResourceService(_repositoryManager);
         _adminProjectService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,
-                _resourceRepository);
+            new AdminPService(_repositoryManager);
 
         CpmService cpmService = new CpmService();
 
-        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository, _resourceRepository);
+        _taskService = new TaskService(_repositoryManager);
 
         UserDTO adminSUserDTO = new UserDTO
         {
@@ -109,7 +98,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        Resource resource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource resource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
         Assert.IsNotNull(resource);
         Assert.AreEqual("Resource1", resource.Name);
         Assert.AreEqual("TypeA", resource.Type);
@@ -128,7 +117,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
 
         ResourceDTO resource = _resourceService.Get(addedResource.Id);
 
@@ -185,7 +174,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
 
         ResourceDTO updatedResourceDTO = new ResourceDTO
         {
@@ -196,7 +185,7 @@ public class ResourcesServiceTest
 
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
 
-        Resource resource = _resourceRepository.Get(r =>
+        Resource resource = _repositoryManager.ResourceRepository.Get(r =>
             r.Name == updatedResourceDTO.Name && r.Type == updatedResourceDTO.Type &&
             r.Description == updatedResourceDTO.Description);
 
@@ -218,7 +207,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
 
         ResourceDTO addedResourceDto = new ResourceDTO
         {
@@ -257,7 +246,7 @@ public class ResourcesServiceTest
 
         _resourceService.UpdateResource(addedResource.Id, updatedResourceDTO);
 
-        Resource resource = _resourceRepository.Get(r =>
+        Resource resource = _repositoryManager.ResourceRepository.Get(r =>
             r.Name == updatedResourceDTO.Name && r.Type == updatedResourceDTO.Type &&
             r.Description == updatedResourceDTO.Description);
 
@@ -285,7 +274,7 @@ public class ResourcesServiceTest
 
         _loginService.Logout();
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
 
         ResourceDTO addedResourceDto = _resourceService.Get(addedResource.Id);
 
@@ -351,7 +340,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
         ResourceDTO addedResourceDto = new ResourceDTO
         {
             Id = addedResource.Id,
@@ -403,12 +392,12 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
 
-        Resource addedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNotNull(addedResource);
 
         _resourceService.DeleteResource(addedResource.Id);
 
-        Resource deletedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
+        Resource deletedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
 
@@ -427,7 +416,7 @@ public class ResourcesServiceTest
         _context.ChangeTracker.Clear();
 
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
 
         ProjectDTO project = new ProjectDTO();
         project.Name = "Project1";
@@ -449,16 +438,16 @@ public class ResourcesServiceTest
         };
         _taskService.AddTask("Project1", task);
 
-        Project projectEntity = _projectRepository.Get(p => p.Name == "Project1");
+        Project projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project1");
         Task taskEntity = projectEntity.Tasks.First(t => t.Title == "Title1");
-        Resource resourceEntity = _resourceRepository.Get(r => r.Id == addedResource.Id);
+        Resource resourceEntity = _repositoryManager.ResourceRepository.Get(r => r.Id == addedResource.Id);
 
         taskEntity.Resources.Add(resourceEntity);
         _context.SaveChanges();
 
         _resourceService.DeleteResource(addedResource.Id);
 
-        Resource deletedResource = _resourceRepository.Get(r => r.Name == resourceDTO.Name);
+        Resource deletedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == resourceDTO.Name);
         Assert.IsNull(deletedResource);
     }
 
@@ -479,7 +468,7 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
         _loginService.Logout();
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
 
         ResourceDTO addedResourceDto = _resourceService.Get(addedResource.Id);
 
@@ -538,7 +527,7 @@ public class ResourcesServiceTest
         _resourceService.AddResource(resourceDTO);
 
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        Resource addedResource = _resourceRepository.Get(r => r.Name == "Resource1");
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
 
         ResourceDTO addedResourceDto = new ResourceDTO
         {
