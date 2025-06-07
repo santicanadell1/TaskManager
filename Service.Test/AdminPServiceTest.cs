@@ -31,10 +31,10 @@ public class AdminPServiceTests
         _context.Database.EnsureCreated();
 
         _repositoryManager = new RepositoryManager(_context);
-        
+
         CpmService cpmService = new CpmService();
-        _taskService = new TaskService(_repositoryManager, cpmService);  
-        _adminPservice = new AdminPService(_repositoryManager);  
+        _taskService = new TaskService(_repositoryManager, cpmService);
+        _adminPservice = new AdminPService(_repositoryManager);
 
         _userservice = new UserService(_repositoryManager);
         _login = new Login(_repositoryManager);
@@ -104,22 +104,33 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
-
-        UserDTO userDTO = new UserDTO
+        UserDTO newUserDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
             Email = "john.doe@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
-            Password = "password123",
-            Roles = new List<RolDTO> { RolDTO.AdminProject }
+            Password = "Password123!",
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
 
-        _adminPservice.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+        UserService userService = new UserService(_repositoryManager);
+        userService.AddUser(newUserDTO);
 
-        Assert.IsTrue(project.Members.Count > 0);
-        Assert.AreEqual("John", project.Members[1].FirstName);
+        Project projectBeforeAdd = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
+        int initialMemberCount = projectBeforeAdd.Members?.Count ?? 0;
+
+        _adminPservice.AssignMembersToProject(projectDTO.Name, new List<UserDTO> { newUserDTO });
+
+        Project projectAfterAdd = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
+
+        Assert.IsNotNull(projectAfterAdd.Members, "Members list should not be null");
+        Assert.AreEqual(initialMemberCount + 1, projectAfterAdd.Members.Count, "Should have one more member");
+
+        User addedUser = projectAfterAdd.Members.FirstOrDefault(m => m.Email == "john.doe@example.com");
+        Assert.IsNotNull(addedUser, "John should be found in the members list");
+        Assert.AreEqual("John", addedUser.FirstName, "First name should match");
+        Assert.AreEqual("Doe", addedUser.LastName, "Last name should match");
     }
 
     [TestMethod]
@@ -137,23 +148,28 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
-
         UserDTO userDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
             Email = "john.doe@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
-            Password = "password123",
-            Roles = new List<RolDTO> { RolDTO.AdminProject }
+            Password = "Password123!",
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
 
-        _adminPservice.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
-        _adminPservice.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+        UserService userService = new UserService(_repositoryManager);
+        userService.AddUser(userDTO);
 
-        Assert.IsTrue(project.Members.Count > 0);
-        Assert.AreEqual("John", project.Members[1].FirstName);
+        _adminPservice.AssignMembersToProject(projectDTO.Name, new List<UserDTO> { userDTO });
+
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
+        Assert.IsTrue(project.Members.Any(m => m.Email == "john.doe@example.com"),
+            "User should be added to project after first call");
+
+        _adminPservice.AssignMembersToProject(projectDTO.Name, new List<UserDTO> { userDTO });
+
+        Assert.Fail("Expected UserIsAlreadyAMemberException was not thrown");
     }
 
     [TestMethod]
@@ -165,34 +181,59 @@ public class AdminPServiceTests
             Description = "Project Description",
             StartDate = DateTime.Now,
             AdminProyect = UserDTO,
-            Members = members
+            Members = new List<UserDTO>() 
         };
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
-
-        UserDTO userDTO = new UserDTO
+        UserDTO johnDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
-            Email = "john.doe@example.com",
+            Email = "johndoe@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
-            Password = "password123",
-            Roles = new List<RolDTO> { RolDTO.AdminProject }
+            Password = "Password123!",
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
 
-        _adminPservice.AssignMembersToProject(project.Name, new List<UserDTO> { userDTO });
+        UserDTO memberDTO = new UserDTO
+        {
+            FirstName = "Member",
+            LastName = "User",
+            Email = "memberuser@example.com",
+            Birthday = DateTime.Parse("1985-05-15"),
+            Password = "Password123!",
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
+        };
 
-        Assert.IsTrue(project.Members.Count > 0);
-        Assert.AreEqual("John", project.Members[1].FirstName);
+        UserService userService = new UserService(_repositoryManager);
+        userService.AddUser(johnDTO);
+        userService.AddUser(memberDTO);
 
-        _adminPservice.RemoveMemberFromProject(project.Name, "john.doe@example.com");
-        _adminPservice.RemoveMemberFromProject(project.Name, "member.user@example.com");
+        _adminPservice.AssignMembersToProject(projectDTO.Name, new List<UserDTO> { johnDTO, memberDTO });
 
-        project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
+        Project projectAfterAdd = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
 
-        Assert.IsTrue(project.Members.Count == 0);
+        Assert.IsTrue(projectAfterAdd.Members.Any(m => m.Email == "johndoe@example.com"),
+            "John should be in the project");
+        Assert.IsTrue(projectAfterAdd.Members.Any(m => m.Email == "memberuser@example.com"),
+            "Member should be in the project");
+        Assert.AreEqual(2, projectAfterAdd.Members.Count, "Should have exactly 2 members");
+
+        User johnInProject = projectAfterAdd.Members.First(m => m.Email == "johndoe@example.com");
+        Assert.AreEqual("John", johnInProject.FirstName, "John's first name should be correct");
+
+        _adminPservice.RemoveMemberFromProject(projectDTO.Name, "johndoe@example.com");
+        _adminPservice.RemoveMemberFromProject(projectDTO.Name, "memberuser@example.com");
+
+        Project projectAfterRemove = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
+
+        Assert.IsFalse(projectAfterRemove.Members.Any(m => m.Email == "johndoe@example.com"),
+            "John should be removed from the project");
+        Assert.IsFalse(projectAfterRemove.Members.Any(m => m.Email == "memberuser@example.com"),
+            "Member should be removed from the project");
+        Assert.AreEqual(0, projectAfterRemove.Members.Count,
+            "Project should have no members after removing all");
     }
 
     [TestMethod]

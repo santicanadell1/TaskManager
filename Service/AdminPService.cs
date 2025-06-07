@@ -48,26 +48,105 @@ public class AdminPService : IAdminPService
 
     public void AssignMembersToProject(string projectName, List<UserDTO> membersDTO)
     {
-        CheckAdminProyectRole();
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
-        if (project == null) throw new ProjectNotFoundException();
-
-        foreach (UserDTO memberDTO in membersDTO)
+        try
         {
-            if (project.Members.Any(u => u.Email == memberDTO.Email)) 
+            Console.WriteLine($"=== AssignMembersToProject Started ===");
+            Console.WriteLine($"Project name: '{projectName}'");
+            Console.WriteLine($"Members to add: {membersDTO?.Count ?? 0}");
+
+            if (string.IsNullOrEmpty(projectName))
             {
-                throw new UserIsAlreadyAMemberException();
-            }
-            User existingUser = _repositoryManager.UserRepository.Get(u => u.Email == memberDTO.Email);
-            if (existingUser == null) 
-            {
-                throw new UserNotFoundException();
+                throw new ArgumentException("Project name cannot be null or empty");
             }
 
-            project.AddMember(existingUser);
+            if (membersDTO == null || !membersDTO.Any())
+            {
+                throw new ArgumentException("No members provided");
+            }
+
+            CheckAdminProyectRole();
+            Console.WriteLine("Admin role check passed");
+
+            Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+            if (project == null)
+            {
+                Console.WriteLine($"Project '{projectName}' not found");
+                throw new ProjectNotFoundException();
+            }
+
+            Console.WriteLine($"Project found: {project.Name} (ID: {project.Id})");
+            Console.WriteLine($"Current members: {project.Members?.Count ?? 0}");
+
+            // Inicializar Members si es null
+            if (project.Members == null)
+            {
+                project.Members = new List<User>();
+            }
+
+            foreach (UserDTO memberDTO in membersDTO)
+            {
+                Console.WriteLine($"Processing member: {memberDTO.FirstName} {memberDTO.LastName} ({memberDTO.Email})");
+
+                // CAMBIO: Lanzar excepción si ya es miembro (en lugar de skip)
+                if (project.Members.Any(u => u.Email == memberDTO.Email))
+                {
+                    Console.WriteLine($"User {memberDTO.Email} is already a member - throwing exception");
+                    throw new UserIsAlreadyAMemberException();
+                }
+
+                // Buscar el usuario en la base de datos
+                User existingUser = _repositoryManager.UserRepository.Get(u => u.Email == memberDTO.Email);
+                if (existingUser == null)
+                {
+                    Console.WriteLine($"User {memberDTO.Email} not found in database");
+                    throw new UserNotFoundException();
+                }
+
+                Console.WriteLine(
+                    $"User found in DB: {existingUser.FirstName} {existingUser.LastName} (ID: {existingUser.Id})");
+
+                // Verificar que no esté ya en la lista por ID también
+                if (project.Members.Any(u => u.Id == existingUser.Id))
+                {
+                    Console.WriteLine($"User {memberDTO.Email} already exists by ID - throwing exception");
+                    throw new UserIsAlreadyAMemberException();
+                }
+
+                // Agregar el usuario encontrado en la DB
+                project.Members.Add(existingUser);
+                Console.WriteLine($"User {memberDTO.Email} added successfully");
+            }
+
+            Console.WriteLine("Saving changes...");
+            _repositoryManager.ProjectRepository.Update(project);
+            Console.WriteLine("Changes saved successfully");
+
+            Console.WriteLine("=== AssignMembersToProject Completed Successfully ===");
         }
-
-        _repositoryManager.ProjectRepository.Update(project);
+        catch (ProjectNotFoundException pnfEx)
+        {
+            Console.WriteLine($"ProjectNotFoundException: {pnfEx.Message}");
+            throw;
+        }
+        catch (UserNotFoundException unfEx)
+        {
+            Console.WriteLine($"UserNotFoundException: {unfEx.Message}");
+            throw;
+        }
+        catch (UserIsAlreadyAMemberException uamEx)
+        {
+            Console.WriteLine($"UserIsAlreadyAMemberException: {uamEx.Message}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error in AssignMembersToProject:");
+            Console.WriteLine($"Type: {ex.GetType().Name}");
+            Console.WriteLine($"Message: {ex.Message}");
+            Console.WriteLine($"Inner: {ex.InnerException?.Message}");
+            Console.WriteLine($"Stack: {ex.StackTrace}");
+            throw new Exception($"Failed to assign members to project: {ex.Message}", ex);
+        }
     }
 
     public void RemoveMemberFromProject(string projectName, string memberEmail)
