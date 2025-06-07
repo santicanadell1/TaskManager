@@ -260,10 +260,22 @@ public class MemberPServiceTest
     {
         _adminPService.CreateProject(projectDTO);
         _taskService.AddTask("New Project", task1);
-        _taskService.AddTask("New Project", task3);
+        
+        TaskDTO addedTask1 = _taskService.GetTask("New Project", task1.Title);
+ 
+        TaskDTO task3WithDependency = new TaskDTO
+        {
+            Title = "Task 3",
+            Description = "Description 3",
+            Duration = 1,
+            ExpectedStartDate = DateTime.Parse("2026-01-01"),
+            PreviousTasks = new List<TaskDTO> { addedTask1 }
+        };
+    
+        _taskService.AddTask("New Project", task3WithDependency);
 
         StateDTO newState = StateDTO.DONE;
-        TaskDTO newTask = _taskService.GetTasks("New Project").Find(t => t.Title == task3.Title);
+        TaskDTO newTask = _taskService.GetTasks("New Project").Find(t => t.Title == task3WithDependency.Title);
         _adminPService.AddTaskToMember("New Project", UserDTO.Email, newTask.Title);
         _memberPService.ChangeTaskStatus("New Project", UserDTO.Email, newTask, newState);
     }
