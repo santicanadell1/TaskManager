@@ -28,13 +28,14 @@ public class NotificationServiceTest
         _context.Database.EnsureCreated();
 
         _repositoryManager = new RepositoryManager(_context);
-        
+
         _notificationService = new NotificationService(_repositoryManager);
-    
+
         _adminService = new AdminPService(_repositoryManager);
-    
+
         _loginService = new Login(_repositoryManager);
         _userService = new UserService(_repositoryManager);
+        _adminPService = new AdminPService(_repositoryManager);
 
         CreateAndAddProjectsAndUsers();
     }
