@@ -31,6 +31,12 @@ public class TaskConverter : IConverter<Task, TaskDTO>
 
         taskEntity.Id = taskDTO.Id;
         taskEntity.State = (State)taskDTO.State;
+        taskEntity.IsCritical = taskDTO.IsCritical;
+        taskEntity.StartDate = taskDTO.StartDate;
+        taskEntity.EndDate = taskDTO.EndDate;
+        taskEntity.LatestStart = taskDTO.LatestStart;
+        taskEntity.LatestFinish = taskDTO.LatestFinish;
+        taskEntity.Slack = taskDTO.Slack;
 
         return taskEntity;
     }
