@@ -215,18 +215,31 @@ public class TaskService
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        CpmResult cpmResult = _cpmService.CalculateCriticalPath(GetTasks(projectName));
-
-        return new CpmResultDTO
+        try
         {
-            ProjectDuration = cpmResult.ProjectDuration,
-            CriticalTaskIds = cpmResult.CriticalTasks.Select(t => t.Id).ToList(),
-            CriticalPathIds = cpmResult.CriticalPath.Select(t => t.Id).ToList(),
-            EarliestStartDate = project.Tasks.Min(t => t.StartDate),
-            LatestFinishDate = project.Tasks.Max(t => t.EndDate)
-        };
-    }
+            CpmResult cpmResult = _cpmService.CalculateCriticalPath(GetTasks(projectName));
 
+            return new CpmResultDTO
+            {
+                ProjectDuration = cpmResult.ProjectDuration,
+                CriticalTaskIds = cpmResult.CriticalTasks.Select(t => t.Id).ToList(),
+                CriticalPathIds = cpmResult.CriticalPath.Select(t => t.Id).ToList(),
+                EarliestStartDate = project.Tasks.Any() ? project.Tasks.Min(t => t.StartDate) : DateTime.Now,
+                LatestFinishDate = project.Tasks.Any() ? project.Tasks.Max(t => t.EndDate) : DateTime.Now
+            };
+        }
+        catch (Exception)
+        {
+            return new CpmResultDTO
+            {
+                ProjectDuration = 0,
+                CriticalTaskIds = new List<int?>(),
+                CriticalPathIds = new List<int?>(),
+                EarliestStartDate = DateTime.Now,
+                LatestFinishDate = DateTime.Now
+            };
+        }
+    }
     private void RecalculateCriticalPath(string projectName)
     {
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
