@@ -26,12 +26,8 @@ public class TaskServiceTest
     private TaskService _taskService;
     private UserService _userService;
     private UserDTO userDTO;
-    private ProjectRepository _projectRepository;
-    private NotificationRepository _notificationRepository;
-    private UserRepository _userRepository;
-    private TaskRepository _taskRepository;
-    private ResourceRepository _resourceRepository;
     private ResourceService _resourceService;
+    private IRepositoryManager _repositoryManager;
 
     [TestInitialize]
     public void Setup()
@@ -42,21 +38,16 @@ public class TaskServiceTest
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
 
-        _projectRepository = new ProjectRepository(_context);
-        _notificationRepository = new NotificationRepository(_context);
-        _userRepository = new UserRepository(_context);
-        _taskRepository = new TaskRepository(_context);
-        _resourceRepository = new ResourceRepository(_context);
+        _repositoryManager = new RepositoryManager(_context);
 
         _cpmService = new CpmService();
-        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, _cpmService,
-            _taskRepository, _resourceRepository);
-        _login = new Login(_userRepository);
-        _resourceService = new ResourceService(_resourceRepository, _projectRepository);
+        _taskService = new TaskService(_repositoryManager,_cpmService);
+        _login = new Login(_repositoryManager);
+        _resourceService = new ResourceService(_repositoryManager);
 
         _genericProject = new Project("Generic Project", "Description", DateTime.Now);
-        _projectRepository.Add(_genericProject);
-        _userService = new UserService(_userRepository);
+        _repositoryManager.ProjectRepository.Add(_genericProject);
+        _userService = new UserService(_repositoryManager);
         userDTO = new UserDTO
         {
             FirstName = "Admin",
@@ -85,8 +76,8 @@ public class TaskServiceTest
 
         _resourceService.AddResource(_resourceDTO1);
         _resourceService.AddResource(_resourceDTO2);
-        _resourceDTO1.Id = _resourceRepository.Get(r => r.Name == "Resource 1").Id;
-        _resourceDTO2.Id = _resourceRepository.Get(r => r.Name == "Resource 2").Id;
+        _resourceDTO1.Id = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource 1").Id;
+        _resourceDTO2.Id = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource 2").Id;
 
 
         _taskDTO1 = new TaskDTO
@@ -162,7 +153,7 @@ public class TaskServiceTest
         };
         _taskService.AddTask("Generic Project", taskDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == "Generic Project");
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         List<Task> tasks = project.Tasks;
         Assert.AreEqual(3, tasks.Count);
         Assert.AreEqual("Test Task", tasks[2].Title);
@@ -186,9 +177,9 @@ public class TaskServiceTest
     [TestMethod]
     public void AddTask_ShouldAddTaskWithPreviousTasks_WhenPreviousTasksExist()
     {
-        TaskDTO taskDTO1 = _taskService.GetTask("Generic Project", _taskRepository.Get(t => t.Title == "Task 1").Title);
+        TaskDTO taskDTO1 = _taskService.GetTask("Generic Project", _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1").Title);
         ;
-        TaskDTO taskDTO2 = _taskService.GetTask("Generic Project", _taskRepository.Get(t => t.Title == "Task 2").Title);
+        TaskDTO taskDTO2 = _taskService.GetTask("Generic Project", _repositoryManager.TaskRepository.Get(t => t.Title == "Task 2").Title);
         ;
         TaskDTO taskDTO = new TaskDTO
         {
@@ -206,7 +197,7 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", taskDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == "Generic Project");
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         Task addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Task with Dependencies");
 
         Assert.IsNotNull(addedTask);
@@ -218,9 +209,9 @@ public class TaskServiceTest
     [TestMethod]
     public void AddTask_ShouldAddTaskWithSameTimeTasks_WhenSameTimeTasksExist()
     {
-        TaskDTO taskDTO1 = _taskService.GetTask("Generic Project", _taskRepository.Get(t => t.Title == "Task 1").Title);
+        TaskDTO taskDTO1 = _taskService.GetTask("Generic Project", _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1").Title);
         ;
-        TaskDTO taskDTO2 = _taskService.GetTask("Generic Project", _taskRepository.Get(t => t.Title == "Task 2").Title);
+        TaskDTO taskDTO2 = _taskService.GetTask("Generic Project", _repositoryManager.TaskRepository.Get(t => t.Title == "Task 2").Title);
         ;
         TaskDTO taskDTO = new TaskDTO
         {
@@ -239,7 +230,7 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", taskDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == "Generic Project");
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         Task addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Task with Same Time Tasks");
 
         Assert.IsNotNull(addedTask);
@@ -251,10 +242,10 @@ public class TaskServiceTest
     [TestMethod]
     public void DeleteTask_ShouldDeleteTask_WhenTaskExists()
     {
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         _taskService.DeleteTask("Generic Project", Task1.Title);
 
-        Project project = _projectRepository.Get(p => p.Name == "Generic Project");
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         Assert.AreEqual(1, project.Tasks.Count);
         Assert.AreEqual("Task 2", project.Tasks[0].Title);
     }
@@ -277,7 +268,7 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldUpdateTask_WhenTaskExists()
     {
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         TaskDTO updateDTO = new TaskDTO
         {
             Title = "Updated Task 1",
@@ -333,7 +324,7 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldUpdateTaskWithSameTimeTasks()
     {
-        Task Task2 = _taskRepository.Get(t => t.Title == "Task 2");
+        Task Task2 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 2");
         TaskDTO Task2DTO = _taskService.GetTask("Generic Project", Task2.Title);
         TaskDTO updateDTO = new TaskDTO
         {
@@ -345,7 +336,7 @@ public class TaskServiceTest
             SameTimeTasks = new List<TaskDTO> { Task2DTO },
             Resources = new List<ResourceDTO>()
         };
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         _taskService.UpdateTask("Generic Project", Task1.Title, updateDTO);
 
         TaskDTO updatedTask = _taskService.GetTask("Generic Project", Task1.Title);
@@ -357,10 +348,10 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldUpdateTaskWithResources()
     {
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         _resourceService.AddResource(new()
             { Name = "Updated Resource", Type = "Updated Type", Description = "Updated Desc" });
-        Resource UpdatedResource = _resourceRepository.Get(r => r.Name == "Updated Resource");
+        Resource UpdatedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Updated Resource");
         ResourceDTO UpdatedResourceDTO = _resourceService.Get(UpdatedResource.Id);
         TaskDTO updateDTO = new TaskDTO
         {
@@ -387,7 +378,7 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldIgnoreSelfInPreviousTasks()
     {
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         TaskDTO Task1DTO = _taskService.GetTask("Generic Project", Task1.Title);
         TaskDTO updateDTO = new TaskDTO
         {
@@ -411,7 +402,7 @@ public class TaskServiceTest
     [TestMethod]
     public void UpdateTask_ShouldIgnoreSelfInSameTimeTasks()
     {
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         TaskDTO Task1DTO = _taskService.GetTask("Generic Project", Task1.Title);
         TaskDTO updateDTO = new TaskDTO
         {
@@ -444,7 +435,7 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTask_WhenTaskExists()
     {
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         TaskDTO taskDTO = _taskService.GetTask("Generic Project", Task1.Title);
 
         Assert.AreEqual("Task 1", taskDTO.Title);
@@ -497,7 +488,7 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTaskWithResources()
     {
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         TaskDTO taskDTO = _taskService.GetTask("Generic Project", Task1.Title);
 
         Assert.AreEqual(1, taskDTO.Resources.Count);
@@ -509,10 +500,10 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTaskWithCorrectState()
     {
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         TaskDTO taskDTO = _taskService.GetTask("Generic Project", Task1.Title);
         Assert.AreEqual(StateDTO.TODO, taskDTO.State);
-        Task Task2 = _taskRepository.Get(t => t.Title == "Task 2");
+        Task Task2 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 2");
         TaskDTO taskDTO2 = _taskService.GetTask("Generic Project", Task2.Title);
         Assert.AreEqual(StateDTO.DOING, taskDTO2.State);
     }
@@ -520,7 +511,7 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTaskWithMinimalPreviousTasks()
     {
-        Task Task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task Task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         Task taskWithDependencies = new Task(
             "Task with Dependencies",
             "Description",
@@ -530,9 +521,9 @@ public class TaskServiceTest
             new List<Task>(),
             new List<Resource>()
         );
-        _taskRepository.Add(taskWithDependencies);
-        _projectRepository.AddTask("Generic Project", taskWithDependencies);
-        Task Task2 = _taskRepository.Get(t => t.Title == "Task with Dependencies");
+        _repositoryManager.TaskRepository.Add(taskWithDependencies);
+        _repositoryManager.ProjectRepository.AddTask("Generic Project", taskWithDependencies);
+        Task Task2 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task with Dependencies");
 
         TaskDTO taskDTO = _taskService.GetTask("Generic Project", Task2.Title);
 
@@ -559,9 +550,9 @@ public class TaskServiceTest
 
         task.State = State.DONE;
 
-        _projectRepository.AddTask("Generic Project", task);
+        _repositoryManager.ProjectRepository.AddTask("Generic Project", task);
 
-        var project = _projectRepository.Get(p => p.Name == "Generic Project");
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         var addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Mapping Test Task");
 
         Assert.IsNotNull(addedTask, "La tarea no se agregó correctamente al proyecto");
@@ -600,7 +591,7 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", complexDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == "Generic Project");
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         Task addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Complex Mapping DTO");
 
         Assert.IsNotNull(addedTask);
@@ -628,7 +619,7 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", taskX);
 
-        Project project = _projectRepository.Get(p => p.Name == "Generic Project");
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         TaskDTO taskXEntity = _taskService.GetTask("Generic Project", taskX.Title);
 
         TaskDTO taskY = new TaskDTO
@@ -666,23 +657,23 @@ public class TaskServiceTest
         Task taskC = new Task("Task C", "Description C", DateTime.Now, 3, new List<Task>(), new List<Task>(),
             new List<Resource>());
 
-        _taskRepository.Add(taskA);
-        _taskRepository.Add(taskB);
-        _taskRepository.Add(taskC);
+        _repositoryManager.TaskRepository.Add(taskA);
+        _repositoryManager.TaskRepository.Add(taskB);
+        _repositoryManager.TaskRepository.Add(taskC);
         _context.SaveChanges();
 
-        _projectRepository.AddTask("Generic Project", taskA);
-        _projectRepository.AddTask("Generic Project", taskB);
-        _projectRepository.AddTask("Generic Project", taskC);
+        _repositoryManager.ProjectRepository.AddTask("Generic Project", taskA);
+        _repositoryManager.ProjectRepository.AddTask("Generic Project", taskB);
+        _repositoryManager.ProjectRepository.AddTask("Generic Project", taskC);
 
         TaskDTO addedTaskC = _taskService.GetTask("Generic Project", taskC.Title);
 
         Assert.IsNotNull(addedTaskC, "La tarea C no se agregó correctamente");
 
-        _resourceRepository.Add(new Resource
+        _repositoryManager.ResourceRepository.Add(new Resource
             { Name = "Complex Update Resource", Type = "Update Type", Description = "Update Resource Description" });
         _context.SaveChanges();
-        Resource resource = _resourceRepository.Get(r => r.Name == "Complex Update Resource");
+        Resource resource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Complex Update Resource");
 
         TaskDTO updateDTO = new TaskDTO
         {
@@ -728,9 +719,9 @@ public class TaskServiceTest
         );
         specialTask.State = State.DONE;
 
-        _projectRepository.AddTask("Generic Project", specialTask);
+        _repositoryManager.ProjectRepository.AddTask("Generic Project", specialTask);
 
-        Project project = _projectRepository.Get(p => p.Name == "Generic Project");
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         Task addedSpecialTask = project.Tasks.FirstOrDefault(t => t.Title == "Special Task for List Mapping");
 
         Assert.IsNotNull(addedSpecialTask, "La tarea no se agregó correctamente al proyecto");
@@ -752,7 +743,7 @@ public class TaskServiceTest
     [TestMethod]
     public void GetTask_ShouldReturnTaskWithCpmProperties()
     {
-        Task task1 = _taskRepository.Get(t => t.Title == "Task 1");
+        Task task1 = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
         TaskDTO taskDTO = _taskService.GetTask("Generic Project", task1.Title);
 
         Console.WriteLine($"Slack value: {taskDTO.Slack}");

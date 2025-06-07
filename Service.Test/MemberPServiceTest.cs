@@ -44,7 +44,7 @@ public class MemberPServiceTest
 
         CpmService cpmService = new CpmService();
 
-        _taskService = new TaskService(_repositoryManager);
+        _taskService = new TaskService(_repositoryManager,cpmService);
         _adminPService = new AdminPService(_repositoryManager);
         _login = new Login(_repositoryManager);
         _userservice = new UserService(_repositoryManager);

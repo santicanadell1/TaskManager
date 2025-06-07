@@ -12,10 +12,7 @@ public class UserServiceTest
     private UserService _userService;
     private InMemoryAppContextFactory _contextFactory;
     private IRepositoryManager _repositoryManager;
-
-
-    private UserRepository _userRepository;
-
+    
     [TestInitialize]
     public void TestSetUp()
     {
@@ -142,7 +139,7 @@ public class UserServiceTest
 
         _userService.AddUser(userDTO);
 
-        int? id = _userRepository.Get(user => user.Email == userDTO.Email).Id;
+        int? id = _repositoryManager.UserRepository.Get(user => user.Email == userDTO.Email).Id;
 
 
         UserDTO updatedUserDTO = new UserDTO

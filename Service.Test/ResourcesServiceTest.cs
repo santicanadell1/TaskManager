@@ -38,7 +38,7 @@ public class ResourcesServiceTest
 
         CpmService cpmService = new CpmService();
 
-        _taskService = new TaskService(_repositoryManager);
+        _taskService = new TaskService(_repositoryManager,cpmService);
 
         UserDTO adminSUserDTO = new UserDTO
         {
