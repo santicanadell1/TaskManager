@@ -24,8 +24,8 @@ public class TaskConverter : IConverter<Task, TaskDTO>
             taskDTO.Description,
             taskDTO.ExpectedStartDate,
             taskDTO.Duration,
-            ConvertToEntityList(taskDTO.PreviousTasks),
-            ConvertToEntityList(taskDTO.SameTimeTasks),
+            GetExistingTasksFromIds(taskDTO.PreviousTasks),
+            GetExistingTasksFromIds(taskDTO.SameTimeTasks),
             _resourceConverter.ConvertToResourceEntityList(taskDTO.Resources)
         );
 
@@ -50,8 +50,8 @@ public class TaskConverter : IConverter<Task, TaskDTO>
             Description = task.Description,
             ExpectedStartDate = task.ExpectedStartDate,
             Duration = task.Duration,
-            PreviousTasks = ConvertFromEntityList(task.PreviousTasks),
-            SameTimeTasks = ConvertFromEntityList(task.SameTimeTasks),
+            PreviousTasks = ToMinimalTaskDTOList(task.PreviousTasks),
+            SameTimeTasks = ToMinimalTaskDTOList(task.SameTimeTasks),
             State = (StateDTO)task.State,
             Resources = _resourceConverter.ConvertFromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
             IsCritical = task.IsCritical,
@@ -63,6 +63,24 @@ public class TaskConverter : IConverter<Task, TaskDTO>
         };
     }
 
+    public List<Task> GetExistingTasksFromIds(List<TaskDTO> taskDTOs)
+    {
+        if (taskDTOs == null) return new List<Task>();
+    
+        List<Task> tasks = new List<Task>();
+        foreach (TaskDTO taskDTO in taskDTOs)
+        {
+            if (taskDTO.Id.HasValue)
+            {
+                Task existingTask = _repositoryManager.TaskRepository.Get(t => t.Id == taskDTO.Id);
+                if (existingTask != null)
+                {
+                    tasks.Add(existingTask);
+                }
+            }
+        }
+        return tasks;
+    }
     public List<Task> ConvertToEntityList(List<TaskDTO> taskDTOs)
     {
         if (taskDTOs == null) return new List<Task>();
