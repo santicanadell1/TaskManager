@@ -2,6 +2,8 @@ using DataAccess;
 using Interface.Components;
 using Microsoft.EntityFrameworkCore;
 using Service;
+using Service.Converter;
+using Service.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,12 @@ builder.Services.AddScoped<GanttService>();
 builder.Services.AddScoped<NotificationService>();
 
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
-
+builder.Services.AddScoped<RolConverter>();
+builder.Services.AddScoped<ResourceConverter>();
+builder.Services.AddScoped<TaskConverter>();
+builder.Services.AddScoped<UserConverter>();
+builder.Services.AddScoped<ProjectConverter>();
+builder.Services.AddScoped<NotificationConverter>();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

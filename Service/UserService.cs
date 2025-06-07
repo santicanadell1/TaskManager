@@ -16,10 +16,15 @@ public class UserService : IUserService
     private readonly UserConverter _userConverter;
     private readonly TaskConverter _taskConverter;
     private readonly RolConverter _rolConverter;
+    private readonly ResourceConverter _resourceConverter;
 
     public UserService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
+        _rolConverter = new RolConverter();
+        _resourceConverter = new ResourceConverter(_repositoryManager);
+        _taskConverter = new TaskConverter(repositoryManager, _resourceConverter);
+        _userConverter = new UserConverter(repositoryManager, _rolConverter, _taskConverter);
     }
 
     public void AddUser(UserDTO userDTO)
@@ -48,7 +53,8 @@ public class UserService : IUserService
         user.Roles = _rolConverter.ConvertToDomainRoles(userDTO.Roles);
         user.Birthday = userDTO.Birthday;
         user.Password = userDTO.Password;
-        user.Tasks = _taskConverter.ConvertToEntityList(userDTO.Tasks);;
+        user.Tasks = _taskConverter.ConvertToEntityList(userDTO.Tasks);
+        ;
         _repositoryManager.UserRepository.Update(user);
     }
 
@@ -56,7 +62,7 @@ public class UserService : IUserService
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (User user in _repositoryManager.UserRepository.GetAll()) 
+        foreach (User user in _repositoryManager.UserRepository.GetAll())
             usersDTO.Add(_userConverter.FromEntity(user));
 
         if (usersDTO.Count == 0) throw new NoUsersFoundException();
@@ -89,5 +95,4 @@ public class UserService : IUserService
 
         return user;
     }
-    
 }

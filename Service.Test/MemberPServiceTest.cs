@@ -21,7 +21,7 @@ public class MemberPServiceTest
     private UserDTO UserDTO;
     private InMemoryAppContextFactory _contextFactory;
     private IRepositoryManager _repositoryManager;
-    
+
     private TaskDTO task1;
     private TaskDTO task2;
     private TaskDTO task3;
@@ -36,14 +36,14 @@ public class MemberPServiceTest
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
 
-        _repositoryManager = new RepositoryManager(_context);   
-        
+        _repositoryManager = new RepositoryManager(_context);
+
 
         _memberPService = new MemberPService(_repositoryManager);
 
         CpmService cpmService = new CpmService();
 
-        _taskService = new TaskService(_repositoryManager,cpmService);
+        _taskService = new TaskService(_repositoryManager, cpmService);
         _adminPService = new AdminPService(_repositoryManager);
         _login = new Login(_repositoryManager);
         _userservice = new UserService(_repositoryManager);
