@@ -72,7 +72,7 @@ public class ResourceRepository:IRepository<Resource>
     {
         try
         {
-            var existingResource = _db.Resources.Find(resource.Id);
+            Resource existingResource = _db.Resources.Find(resource.Id);
             _db.Set<Resource>().Remove(existingResource);
             _db.SaveChanges();
         }

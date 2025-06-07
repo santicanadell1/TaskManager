@@ -87,7 +87,7 @@ public class UserRepository : IRepository<User>
     {
         try
         {
-            var existingUser = _db.Users.FirstOrDefault(u => u.Email == user.Email);
+            User existingUser = _db.Users.FirstOrDefault(u => u.Email == user.Email);
             _db.Set<User>().Remove(existingUser);
             _db.SaveChanges();
         }

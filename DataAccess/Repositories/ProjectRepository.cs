@@ -41,7 +41,7 @@ public class ProjectRepository:IRepository<Project>
 
     public void Delete(Project projectE)
     {
-        var project = _db.Set<Project>()
+        Project project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .FirstOrDefault(p => p.Name == projectE.Name);
 
@@ -72,7 +72,7 @@ public class ProjectRepository:IRepository<Project>
 
     public void AddTask(string projectName, Task task)
     {
-        var project = _db.Set<Project>()
+        Project project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .FirstOrDefault(p => p.Name == projectName);
 
@@ -84,7 +84,7 @@ public class ProjectRepository:IRepository<Project>
 
     public void UpdateTask(string projectName, int? taskId, Task updatedTask)
     {
-        var project = _db.Set<Project>()
+        Project project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .ThenInclude(t => t.Resources)
             .Include(p => p.Tasks)
@@ -93,7 +93,7 @@ public class ProjectRepository:IRepository<Project>
 
         if (project == null) throw new ProjectNotFoundException();
 
-        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        Task task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         task.Title = updatedTask.Title;
@@ -110,7 +110,7 @@ public class ProjectRepository:IRepository<Project>
 
     public void RemoveTask(string projectName, int? taskId)
     {
-        var project = _db.Set<Project>()
+        Project project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .FirstOrDefault(p => p.Name == projectName);
 
