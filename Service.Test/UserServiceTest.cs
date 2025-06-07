@@ -11,6 +11,8 @@ public class UserServiceTest
     private AppDbContext _context;
     private UserService _userService;
     private InMemoryAppContextFactory _contextFactory;
+    private IRepositoryManager _repositoryManager;
+
 
     private UserRepository _userRepository;
 
@@ -22,10 +24,10 @@ public class UserServiceTest
 
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
-
-        _userRepository = new UserRepository(_context);
-
-        _userService = new UserService(_userRepository);
+        
+        _repositoryManager = new RepositoryManager(_context);
+        
+        _userService = new UserService(_repositoryManager);
     }
 
     [TestCleanup]
@@ -41,7 +43,7 @@ public class UserServiceTest
         List<RolDTO> rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
 
-        UserService _userService = new UserService(_userRepository);
+        UserService _userService = new UserService(_repositoryManager);
 
         UserDTO userDTO1 = new UserDTO
         {
