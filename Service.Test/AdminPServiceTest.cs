@@ -11,6 +11,7 @@ namespace Service.Test;
 public class AdminPServiceTests
 {
     private AppDbContext _context;
+    private IRepositoryManager _repositoryManager;
     private Login _login;
     private AdminPService _adminPservice;
     private TaskService _taskService;
@@ -18,11 +19,6 @@ public class AdminPServiceTests
     private UserDTO Admin;
     private List<UserDTO> members;
     private UserDTO UserDTO;
-    private UserRepository _userRepository;
-    private ProjectRepository _projectRepository;
-    private NotificationRepository _notificationRepository;
-    private TaskRepository _taskRepository;
-    private ResourceRepository _resourceRepository;
 
     [TestInitialize]
     public void Setup()
@@ -33,21 +29,15 @@ public class AdminPServiceTests
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
 
-        _userRepository = new UserRepository(_context);
-        _projectRepository = new ProjectRepository(_context);
-        _notificationRepository = new NotificationRepository(_context);
-        _taskRepository = new TaskRepository(_context);
-        _resourceRepository = new ResourceRepository(_context);
+        _repositoryManager = new RepositoryManager(_context);
 
-        _userservice = new UserService(_userRepository);
-        _login = new Login(_userRepository);
+        _userservice = new UserService(_repositoryManager);
+        _login = new Login(_repositoryManager);
 
         CpmService cpmService = new CpmService();
-        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository,_resourceRepository);
+        _taskService = new TaskService(_repositoryManager, cpmService);
 
-        _adminPservice = new AdminPService(_userRepository, _projectRepository,
-            _notificationRepository, _taskRepository,_resourceRepository);
+        _adminPservice = new AdminPService(_repositoryManager);
 
         Admin = new UserDTO
         {
@@ -95,7 +85,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
         Assert.AreEqual("New Project", project.Name);
     }
@@ -114,7 +104,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
 
         UserDTO userDTO = new UserDTO
         {
@@ -147,7 +137,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
 
         UserDTO userDTO = new UserDTO
         {
@@ -180,7 +170,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
 
         UserDTO userDTO = new UserDTO
         {
@@ -200,7 +190,7 @@ public class AdminPServiceTests
         _adminPservice.RemoveMemberFromProject(project.Name, "john.doe@example.com");
         _adminPservice.RemoveMemberFromProject(project.Name, "member.user@example.com");
 
-        project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
 
         Assert.IsTrue(project.Members.Count == 0);
     }
@@ -220,7 +210,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
 
         _adminPservice.RemoveMemberFromProject("Proyecto 1", "member.user@example.com");
     }
@@ -240,7 +230,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
 
         _adminPservice.RemoveMemberFromProject(project.Name, "john.user@example.com");
     }
@@ -259,12 +249,12 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
 
         _adminPservice.RemoveProject("New Project");
 
-        project = _projectRepository.Get(p => p.Name == "New Project");
+        project = _repositoryManager.ProjectRepository.Get(p => p.Name == "New Project");
         Assert.IsNull(project);
     }
 
@@ -283,7 +273,7 @@ public class AdminPServiceTests
 
         _adminPservice.CreateProject(projectDTO);
 
-        Project project = _projectRepository.Get(p => p.Name == projectDTO.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
         Assert.IsNotNull(project);
 
         ProjectDTO updatedDTO = new ProjectDTO
@@ -407,7 +397,7 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        
+
         _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
@@ -436,12 +426,11 @@ public class AdminPServiceTests
             ExpectedStartDate = DateTime.Today
         };
         _taskService.AddTask("Test Project", task);
-        
+
         List<TaskDTO> addedTasks = _taskService.GetTasks("Test Project");
         TaskDTO addedTask = addedTasks.FirstOrDefault(t => t.Title == "Task1");
 
         _adminPservice.AddTaskToMember("Test Project", "member1.user@example.com", addedTask.Title);
-        
     }
 
     [TestMethod]
@@ -491,7 +480,7 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        
+
         _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
@@ -523,7 +512,7 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        
+
         _taskService.AddTask("Test Project", task);
 
         _adminPservice.AddTaskToMember("Test Project", "member.user@example.com", task.Title);
@@ -550,7 +539,7 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        
+
 
         _taskService.AddTask("Test Project", task);
 
@@ -584,8 +573,8 @@ public class AdminPServiceTests
             Duration = 1,
             ExpectedStartDate = DateTime.Today
         };
-        
-        
+
+
         _taskService.AddTask("Test Project", task);
         _taskService.AddTask("Test Project", task2);
 
