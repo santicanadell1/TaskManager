@@ -13,12 +13,8 @@ public class NotificationServiceTest
     private UserService _userService;
     private AdminPService _adminPService;
     private AppDbContext _context;
-    private UserRepository _userRepository;
-    private ProjectRepository _projectRepository;
-    private NotificationRepository _notificationRepository;
-    private TaskRepository _taskRepository;
-    private ResourceRepository _resourceRepository;
     private InMemoryAppContextFactory _contextFactory;
+    private IRepositoryManager _repositoryManager;
 
     [TestInitialize]
     public void SetUp()
@@ -29,20 +25,15 @@ public class NotificationServiceTest
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
 
-        _userRepository = new UserRepository(_context);
-        _projectRepository = new ProjectRepository(_context);
-        _notificationRepository = new NotificationRepository(_context);
-        _taskRepository = new TaskRepository(_context);
-        _resourceRepository = new ResourceRepository(_context);
+        _repositoryManager = new RepositoryManager(_context);
+        
 
-        _notificationService = new NotificationService(_userRepository, _projectRepository, _notificationRepository);
+        _notificationService = new NotificationService(_repositoryManager);
         _adminService =
-            new AdminPService(_userRepository, _projectRepository, _notificationRepository, _taskRepository,
-                _resourceRepository);
-        _loginService = new Login(_userRepository);
-        _userService = new UserService(_userRepository);
-        _adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository,
-            _taskRepository, _resourceRepository);
+            new AdminPService(_repositoryManager);
+        _loginService = new Login(_repositoryManager);
+        _userService = new UserService(_repositoryManager);
+        _adminPService = new AdminPService(_repositoryManager);
         CreateAndAddProjectsAndUsers();
     }
 
@@ -122,7 +113,7 @@ public class NotificationServiceTest
     public void AddNotificationToProject_WhenNotificationIsAdded_ThenNotificationShouldBeAddedToAllProjectMembers()
     {
         string projectName = "Project 1";
-        Project project = _projectRepository.Get(p => p.Name == "Project 1");
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project 1");
 
         NotificationDTO notificationDTO = new NotificationDTO
         {
@@ -133,8 +124,8 @@ public class NotificationServiceTest
 
         _notificationService.CreateNotification(notificationDTO);
 
-        User user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
-        User user2 = _userRepository.Get(u => u.Email == "Email2@example.com");
+        User user1 = _repositoryManager.UserRepository.Get(u => u.Email == "Email1@example.com");
+        User user2 = _repositoryManager.UserRepository.Get(u => u.Email == "Email2@example.com");
 
         Assert.AreEqual(2, project.Members.Count);
         Assert.AreEqual(1, user1.Notifications.Count);
@@ -160,13 +151,13 @@ public class NotificationServiceTest
         _notificationService.CreateNotification(notificationDTO);
         _notificationService.CreateNotification(notificationDTO2);
 
-        User user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
+        User user1 = _repositoryManager.UserRepository.Get(u => u.Email == "Email1@example.com");
 
         Assert.AreEqual(2, user1.Notifications.Count);
 
         _notificationService.RemoveNotificationFromUser(user1.Email, user1.Notifications[0].Id);
 
-        user1 = _userRepository.Get(u => u.Email == "Email1@example.com");
+        user1 = _repositoryManager.UserRepository.Get(u => u.Email == "Email1@example.com");
         Assert.AreEqual(1, user1.Notifications.Count);
     }
 

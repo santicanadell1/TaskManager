@@ -9,16 +9,11 @@ namespace Service;
 
 public class NotificationService
 {
-    private readonly ProjectRepository _projectRepository;
-    private readonly UserRepository _userRepository;
-    private readonly NotificationRepository _notificationRepository;
+    private readonly IRepositoryManager _repositoryManager;
 
-    public NotificationService(UserRepository userRepository, ProjectRepository projectRepository,
-        NotificationRepository notificationRepository)
+    public NotificationService(IRepositoryManager repositoryManager)
     {
-        _userRepository = userRepository;
-        _projectRepository = projectRepository;
-        _notificationRepository = notificationRepository;
+        _repositoryManager = repositoryManager;
     }
 
     private NotificationDTO FromEntity(Notification notification)
@@ -109,7 +104,7 @@ public class NotificationService
 
     private Notification ToEntity(NotificationDTO notificationDTO)
     {
-        Project project = _projectRepository.Get(p => p.Name == notificationDTO.Project.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == notificationDTO.Project.Name);
 
         if (project == null)
         {
@@ -127,7 +122,7 @@ public class NotificationService
 
     public List<NotificationDTO> GetNotificationsForUser(string userEmail)
     {
-        User user = _userRepository.Get(u => u.Email == userEmail);
+        User user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
         List<NotificationDTO> notifications = new List<NotificationDTO>();
@@ -145,9 +140,9 @@ public class NotificationService
     public void CreateNotification(NotificationDTO notificationDTO)
     {
         Notification notification = ToEntity(notificationDTO);
-        _notificationRepository.Add(notification);
+        _repositoryManager.NotificationRepository.Add(notification);
 
-        Notification createdNotification = _notificationRepository.Get(n =>
+        Notification createdNotification = _repositoryManager.NotificationRepository.Get(n =>
             n.Description == notification.Description &&
             n.Project.Name == notification.Project.Name);
 
@@ -156,7 +151,7 @@ public class NotificationService
             throw new InvalidOperationException("Failed to create notification");
         }
 
-        Project project = _projectRepository.Get(p => p.Name == notification.Project.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == notification.Project.Name);
 
         if (project?.Members != null)
         {
@@ -169,24 +164,24 @@ public class NotificationService
 
     public void AddNotificationToUser(string userEmail, int? notificationId)
     {
-        User user = _userRepository.Get(u => u.Email == userEmail);
+        User user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
-        Notification notificationToAdd = _notificationRepository.Get(n => n.Id == notificationId);
+        Notification notificationToAdd = _repositoryManager.NotificationRepository.Get(n => n.Id == notificationId);
         if (notificationToAdd != null)
         {
             bool alreadyExists = user.Notifications.Any(n => n.Id == notificationToAdd.Id);
             if (!alreadyExists)
             {
                 user.Notifications.Add(notificationToAdd);
-                _userRepository.Update(user);
+                _repositoryManager.UserRepository.Update(user);
             }
         }
     }
 
     public void RemoveNotificationFromUser(string userEmail, int? notificationId)
     {
-        User user = _userRepository.Get(u => u.Email == userEmail);
+        User user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
         if (user.Notifications != null)
@@ -195,7 +190,7 @@ public class NotificationService
             if (includeNotification != null)
             {
                 user.Notifications.Remove(includeNotification);
-                _userRepository.Update(user);
+                _repositoryManager.UserRepository.Update(user);
             }
             else
             {
