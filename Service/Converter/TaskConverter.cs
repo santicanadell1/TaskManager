@@ -50,8 +50,8 @@ public class TaskConverter : IConverter<Task, TaskDTO>
             Description = task.Description,
             ExpectedStartDate = task.ExpectedStartDate,
             Duration = task.Duration,
-            PreviousTasks = ToMinimalTaskDTOList(task.PreviousTasks),
-            SameTimeTasks = ToMinimalTaskDTOList(task.SameTimeTasks),
+            PreviousTasks = ConvertFromEntityList(task.PreviousTasks),
+            SameTimeTasks = ConvertFromEntityList(task.SameTimeTasks),
             State = (StateDTO)task.State,
             Resources = _resourceConverter.ConvertFromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
             IsCritical = task.IsCritical,
@@ -66,7 +66,11 @@ public class TaskConverter : IConverter<Task, TaskDTO>
     public List<Task> ConvertToEntityList(List<TaskDTO> taskDTOs)
     {
         if (taskDTOs == null) return new List<Task>();
-        return taskDTOs.Select(ToEntity).ToList();
+
+        List<Task> tasks = new List<Task>();
+        foreach (TaskDTO taskDTO in taskDTOs) tasks.Add(ToEntity(taskDTO));
+
+        return tasks;
     }
 
     public List<TaskDTO> ConvertFromEntityList(List<Task> tasks)

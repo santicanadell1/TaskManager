@@ -51,15 +51,17 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
 
     public List<ResourceDTO> ConvertFromResourceEntityList(List<Resource> resources)
     {
-        if (resources == null) return new List<ResourceDTO>();
+        List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
+        foreach (Resource resource in resources)
+            resourceDTOs.Add(new ResourceDTO
+            {
+                Name = resource.Name,
+                Type = resource.Type,
+                Description = resource.Description,
+                Id = resource.Id
+            });
 
-        return resources.Select(resource => new ResourceDTO
-        {
-            Id = resource.Id,
-            Name = resource.Name,
-            Type = resource.Type,
-            Description = resource.Description
-        }).ToList();
+        return resourceDTOs;
     }
 
     public List<Resource> ToResourceEntityList(List<ResourceDTO> resourceDTOs)
