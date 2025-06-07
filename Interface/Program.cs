@@ -16,11 +16,7 @@ builder.Services.AddScoped<CpmService>();
 builder.Services.AddScoped<GanttService>();
 builder.Services.AddScoped<NotificationService>();
 
-builder.Services.AddScoped<NotificationRepository>();
-builder.Services.AddScoped<ProjectRepository>();
-builder.Services.AddScoped<ResourceRepository>();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<TaskRepository>();
+builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 
 
 builder.Services.AddRazorComponents()
