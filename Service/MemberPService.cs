@@ -5,6 +5,7 @@ using Service.Exceptions.MemberServiceExceptions;
 using Service.Interface;
 using Service.Models;
 using Domain;
+using Service.Converters;
 using Task = Domain.Task;
 
 namespace Service;
@@ -16,6 +17,7 @@ public class MemberPService : IMemberPService
     private readonly TaskService _taskService;
     private readonly CpmService _cpmService;
     private readonly IRepositoryManager _repositoryManager;
+    private readonly NotificationConverter _notificationConverter;
 
     public MemberPService(IRepositoryManager repositoryManager)
     {
@@ -23,9 +25,9 @@ public class MemberPService : IMemberPService
 
         _cpmService = new CpmService();
         _adminPService =
-            new AdminPService(_repositoryManager);
+            new AdminPService(_repositoryManager, _notificationConverter);
         _userService = new UserService(_repositoryManager);
-        _taskService = new TaskService(_repositoryManager,_cpmService);
+        _taskService = new TaskService(_repositoryManager,_cpmService,_notificationConverter );
     }
 
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)

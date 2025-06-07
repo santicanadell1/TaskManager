@@ -4,6 +4,7 @@ using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service;
+using Service.Converters;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Interface;
@@ -13,10 +14,11 @@ using Task = Domain.Task;
 public class AdminPService : IAdminPService
 {
     private readonly IRepositoryManager _repositoryManager;
-
-    public AdminPService(IRepositoryManager repositoryManager)
+    private readonly NotificationConverter _notificationConverter;
+    public AdminPService(IRepositoryManager repositoryManager, NotificationConverter notificationConverter)
     {
         _repositoryManager = repositoryManager;
+        _notificationConverter = notificationConverter;
     }
 
     public void CreateProject(ProjectDTO projectDTO)
@@ -166,7 +168,7 @@ public class AdminPService : IAdminPService
     {
         User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
         CpmService cpmService = new CpmService();
-        TaskService taskService = new TaskService(_repositoryManager,cpmService);
+        TaskService taskService = new TaskService(_repositoryManager,cpmService, _notificationConverter);
         List<TaskDTO> returnList = new List<TaskDTO>();
         foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
         {
@@ -184,8 +186,10 @@ public class AdminPService : IAdminPService
     {
         User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
         if (user.Tasks == null) return new List<TaskDTO>();
+
         CpmService cpmService = new CpmService();
-        TaskService taskService = new TaskService(_repositoryManager,cpmService);
+        TaskService taskService = new TaskService(_repositoryManager, cpmService, _notificationConverter);  // Pasar notificationConverter aquí
+
         List<TaskDTO> returnList = new List<TaskDTO>();
         List<TaskDTO> tasks = taskService.GetTasks(projectName);
         foreach (TaskDTO task in tasks)
@@ -198,6 +202,7 @@ public class AdminPService : IAdminPService
 
         return returnList;
     }
+
 
     private void CheckAdminProyectRole()
     {

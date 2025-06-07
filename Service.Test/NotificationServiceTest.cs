@@ -3,6 +3,8 @@ using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service;
 using Service.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Service.Converters;
 
 [TestClass]
 public class NotificationServiceTest
@@ -15,6 +17,7 @@ public class NotificationServiceTest
     private AppDbContext _context;
     private InMemoryAppContextFactory _contextFactory;
     private IRepositoryManager _repositoryManager;
+    private NotificationConverter _notificationConverter;
 
     [TestInitialize]
     public void SetUp()
@@ -26,16 +29,21 @@ public class NotificationServiceTest
         _context.Database.EnsureCreated();
 
         _repositoryManager = new RepositoryManager(_context);
-        
 
-        _notificationService = new NotificationService(_repositoryManager);
-        _adminService =
-            new AdminPService(_repositoryManager);
+        var projectConverter = new ProjectConverter(_repositoryManager);
+
+        _notificationConverter = new NotificationConverter(_repositoryManager, projectConverter);
+
+        _notificationService = new NotificationService(_repositoryManager, _notificationConverter);
+    
+        _adminService = new AdminPService(_repositoryManager, _notificationConverter);
+    
         _loginService = new Login(_repositoryManager);
         _userService = new UserService(_repositoryManager);
-        _adminPService = new AdminPService(_repositoryManager);
+
         CreateAndAddProjectsAndUsers();
     }
+
 
     [TestCleanup]
     public void CleanUp()

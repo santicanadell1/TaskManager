@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Domain.Exceptions.TaskExceptions;
+using Service.Converters;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.MemberServiceExceptions;
 using Service.Models;
@@ -20,6 +21,7 @@ public class MemberPServiceTest
     private UserDTO UserDTO;
     private InMemoryAppContextFactory _contextFactory;
     private IRepositoryManager _repositoryManager;
+    private NotificationConverter _notificationConverter;
 
 
 
@@ -44,8 +46,8 @@ public class MemberPServiceTest
 
         CpmService cpmService = new CpmService();
 
-        _taskService = new TaskService(_repositoryManager,cpmService);
-        _adminPService = new AdminPService(_repositoryManager);
+        _taskService = new TaskService(_repositoryManager,cpmService, _notificationConverter);
+        _adminPService = new AdminPService(_repositoryManager, _notificationConverter);
         _login = new Login(_repositoryManager);
         _userservice = new UserService(_repositoryManager);
 

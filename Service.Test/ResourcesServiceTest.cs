@@ -1,6 +1,7 @@
 using DataAccess;
 using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using Domain;
+using Service.Converters;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Models;
 using Task = Domain.Task;
@@ -18,6 +19,7 @@ public class ResourcesServiceTest
     private UserService _userService;
     private InMemoryAppContextFactory _contextFactory;
     private IRepositoryManager _repositoryManager;
+    private NotificationConverter _notificationConverter;
 
     [TestInitialize]
     public void TestSetUp()
@@ -34,11 +36,11 @@ public class ResourcesServiceTest
         _userService = new UserService(_repositoryManager);
         _resourceService = new ResourceService(_repositoryManager);
         _adminProjectService =
-            new AdminPService(_repositoryManager);
+            new AdminPService(_repositoryManager, _notificationConverter);
 
         CpmService cpmService = new CpmService();
 
-        _taskService = new TaskService(_repositoryManager,cpmService);
+        _taskService = new TaskService(_repositoryManager,cpmService, _notificationConverter);
 
         UserDTO adminSUserDTO = new UserDTO
         {

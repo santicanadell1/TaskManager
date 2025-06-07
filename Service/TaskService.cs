@@ -4,6 +4,7 @@ using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
 using Domain.Exceptions.TaskExceptions;
+using Service.Converters;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -13,12 +14,15 @@ public class TaskService
 {
     private readonly CpmService _cpmService;
     private readonly IRepositoryManager _repositoryManager;
+    private readonly NotificationConverter _notificationConverter;
 
-    public TaskService(IRepositoryManager repositoryManager, CpmService cpmService)
+    public TaskService(IRepositoryManager repositoryManager, CpmService cpmService, NotificationConverter notificationConverter)
     {
         _repositoryManager = repositoryManager;
         _cpmService = cpmService;
+        _notificationConverter = notificationConverter;  
     }
+
 
     private void CreateTask(TaskDTO taskDTO)
     {
@@ -90,8 +94,8 @@ public class TaskService
 
     public void UpdateTask(string projectName, string title, TaskDTO taskDTO)
     {
-        NotificationService _notificationService = new NotificationService(_repositoryManager);
-        AdminPService projectService = new AdminPService(_repositoryManager);
+        NotificationService _notificationService = new NotificationService(_repositoryManager, _notificationConverter);
+        AdminPService projectService = new AdminPService(_repositoryManager, _notificationConverter);
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 

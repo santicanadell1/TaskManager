@@ -1,0 +1,44 @@
+using DataAccess;
+using Domain;
+using Service.Converter;
+using Service.Models;
+
+namespace Service.Converters
+{
+    public class NotificationConverter : IConverter<Notification, NotificationDTO>
+    {
+        private readonly IRepositoryManager _repositoryManager;
+        private readonly ProjectConverter _projectConverter;
+
+        public NotificationConverter(IRepositoryManager repositoryManager, ProjectConverter projectConverter)
+        {
+            _repositoryManager = repositoryManager;
+            _projectConverter = projectConverter;
+        }
+
+        public NotificationDTO FromEntity(Notification notification)
+        {
+            return new NotificationDTO
+            {
+                Id = notification.Id,
+                Read = notification.Read,
+                Description = notification.Description,
+                Project = _projectConverter.FromEntity(notification.Project)
+            };
+        }
+
+        public Notification ToEntity(NotificationDTO dto)
+        {
+            Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == dto.Project.Name);
+
+            if (project == null)
+                throw new InvalidOperationException($"Project '{dto.Project.Name}' not found");
+
+            return new Notification(
+                dto.Read ?? false,
+                dto.Description,
+                project
+            );
+        }
+    }
+}

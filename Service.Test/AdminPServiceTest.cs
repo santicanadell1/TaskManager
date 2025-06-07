@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using Domain;
+using Service.Converters;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Models;
 using Task = System.Threading.Tasks.Task;
@@ -19,6 +20,7 @@ public class AdminPServiceTests
     private UserDTO Admin;
     private List<UserDTO> members;
     private UserDTO UserDTO;
+    private NotificationConverter _notificationConverter;
 
     [TestInitialize]
     public void Setup()
@@ -31,13 +33,15 @@ public class AdminPServiceTests
 
         _repositoryManager = new RepositoryManager(_context);
 
-        _userservice = new UserService(_repositoryManager);
-        _login = new Login(_repositoryManager);
+        var projectConverter = new ProjectConverter(_repositoryManager);  
+        _notificationConverter = new NotificationConverter(_repositoryManager, projectConverter);
 
         CpmService cpmService = new CpmService();
-        _taskService = new TaskService(_repositoryManager, cpmService);
+        _taskService = new TaskService(_repositoryManager, cpmService, _notificationConverter);  
+        _adminPservice = new AdminPService(_repositoryManager, _notificationConverter);  
 
-        _adminPservice = new AdminPService(_repositoryManager);
+        _userservice = new UserService(_repositoryManager);
+        _login = new Login(_repositoryManager);
 
         Admin = new UserDTO
         {

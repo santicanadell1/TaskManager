@@ -3,6 +3,7 @@ using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
 using Domain.Exceptions.TaskExceptions;
+using Service.Converters;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -28,6 +29,7 @@ public class TaskServiceTest
     private UserDTO userDTO;
     private ResourceService _resourceService;
     private IRepositoryManager _repositoryManager;
+    private NotificationConverter _notificationConverter;
 
     [TestInitialize]
     public void Setup()
@@ -41,7 +43,7 @@ public class TaskServiceTest
         _repositoryManager = new RepositoryManager(_context);
 
         _cpmService = new CpmService();
-        _taskService = new TaskService(_repositoryManager,_cpmService);
+        _taskService = new TaskService(_repositoryManager,_cpmService, _notificationConverter);
         _login = new Login(_repositoryManager);
         _resourceService = new ResourceService(_repositoryManager);
 

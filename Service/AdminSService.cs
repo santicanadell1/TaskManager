@@ -2,6 +2,7 @@ using DataAccess;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service;
+using Service.Converters;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Exceptions.UserServiceExceptions;
 using Service.Interface;
@@ -12,6 +13,7 @@ public class AdminSService : IAdminSService
     private readonly IRepositoryManager _repositoryManager;
     private readonly PasswordManager _passwordManager = new();
     private readonly UserService _userService;
+    private readonly NotificationConverter _notificationConverter;
 
 
     public AdminSService(IRepositoryManager repositoryManager)
@@ -29,7 +31,7 @@ public class AdminSService : IAdminSService
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
-        AdminPService adminPService = new AdminPService(_repositoryManager);
+        AdminPService adminPService = new AdminPService(_repositoryManager, _notificationConverter);
         UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
