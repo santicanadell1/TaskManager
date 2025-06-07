@@ -1,4 +1,5 @@
 using DataAccess;
+using Domain;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Exceptions.UserServiceExceptions;
 using Service.Models;
@@ -13,28 +14,22 @@ public class AdminSService_Test
     private AppDbContext _context;
     private Login _loginService;
     private UserService _userService;
-    private UserRepository _userRepository;
-    private ProjectRepository _projectRepository;
-    private TaskRepository _taskRepository;
-    private ResourceRepository _resourceRepository;
-
-
+    private IRepositoryManager _repositoryManager;
+    
     [TestInitialize]
     public void TestSetUp()
     {
         InMemoryAppContextFactory contextFactory = new InMemoryAppContextFactory();
         _context = contextFactory.CreateDbContext();
         
-        _userRepository = new UserRepository(_context);
-        _projectRepository = new ProjectRepository(_context);
-        _taskRepository = new TaskRepository(_context);
-        _resourceRepository = new ResourceRepository(_context);
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
         
-        _adminService = new AdminSService(_userRepository,_projectRepository,_taskRepository,_resourceRepository);
-        _loginService = new Login(_userRepository);
-        _userService = new UserService(_userRepository);
+        _repositoryManager = new RepositoryManager(_context);
+        
+        _adminService = new AdminSService(_repositoryManager);
+        _loginService = new Login(_repositoryManager);
+        _userService = new UserService(_repositoryManager);
 
         UserDTO adminUserDTO = new UserDTO
         {
