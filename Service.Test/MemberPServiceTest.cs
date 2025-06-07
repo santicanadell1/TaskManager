@@ -18,12 +18,9 @@ public class MemberPServiceTest
     private AppDbContext _context;
     private List<UserDTO> members;
     private UserDTO UserDTO;
-    private UserRepository _userRepository;
-    private ProjectRepository _projectRepository;
-    private NotificationRepository _notificationRepository;
-    private TaskRepository _taskRepository;
-    private ResourceRepository _resourceRepository;
     private InMemoryAppContextFactory _contextFactory;
+    private IRepositoryManager _repositoryManager;
+
 
 
     private TaskDTO task1;
@@ -40,23 +37,17 @@ public class MemberPServiceTest
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
 
-        _userRepository = new UserRepository(_context);
-        _projectRepository = new ProjectRepository(_context);
-        _notificationRepository = new NotificationRepository(_context);
-        _taskRepository = new TaskRepository(_context);
-        _resourceRepository = new ResourceRepository(_context);
+        _repositoryManager = new RepositoryManager(_context);   
+        
 
-        _memberPService = new MemberPService(_userRepository, _projectRepository, _notificationRepository,
-            _taskRepository, _resourceRepository);
+        _memberPService = new MemberPService(_repositoryManager);
 
         CpmService cpmService = new CpmService();
 
-        _taskService = new TaskService(_projectRepository, _notificationRepository, _userRepository, cpmService,
-            _taskRepository, _resourceRepository);
-        _adminPService = new AdminPService(_userRepository, _projectRepository, _notificationRepository,
-            _taskRepository, _resourceRepository);
-        _login = new Login(_userRepository);
-        _userservice = new UserService(_userRepository);
+        _taskService = new TaskService(_repositoryManager);
+        _adminPService = new AdminPService(_repositoryManager);
+        _login = new Login(_repositoryManager);
+        _userservice = new UserService(_repositoryManager);
 
         Admin = new UserDTO
         {
