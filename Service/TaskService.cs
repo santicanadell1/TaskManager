@@ -159,44 +159,101 @@ public class TaskService
 
     public List<TaskDTO> GetTasks(string projectName)
     {
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
-        if (project == null) throw new ProjectNotFoundException();
-
-        List<TaskDTO> taskDTOs = project.Tasks.Select(t => new TaskDTO
+        try
         {
-            Title = t.Title,
-            Description = t.Description,
-            ExpectedStartDate = t.ExpectedStartDate,
-            Duration = t.Duration,
-            State = (StateDTO)t.State,
-            Resources = _resourceConverter.FromResourceEntityList(t.Resources),
-            Id = t.Id,
-            IsCritical = t.IsCritical,
-            StartDate = t.StartDate,
-            EndDate = t.EndDate,
-            LatestStart = t.LatestStart,
-            LatestFinish = t.LatestFinish,
-            Slack = t.Slack,
-            PreviousTasks = new List<TaskDTO>(),
-            SameTimeTasks = new List<TaskDTO>()
-        }).ToList();
+            // Validar entrada
+            if (string.IsNullOrEmpty(projectName))
+            {
+                throw new ArgumentException("Project name cannot be null or empty");
+            }
 
-        Dictionary<int?, TaskDTO> taskDict = taskDTOs.ToDictionary(t => t.Id);
+            // Obtener proyecto
+            Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+            if (project == null)
+            {
+                throw new ProjectNotFoundException();
+            }
 
-        foreach (Task task in project.Tasks)
-        {
-            TaskDTO taskDto = taskDict[task.Id];
+            // Verificar si hay tareas
+            if (project.Tasks == null || !project.Tasks.Any())
+            {
+                return new List<TaskDTO>();
+            }
 
-            foreach (Task prevTask in task.PreviousTasks)
-                if (taskDict.ContainsKey(prevTask.Id))
-                    taskDto.PreviousTasks.Add(taskDict[prevTask.Id]);
+            // Crear DTOs básicos - filtrar tareas con ID válido
+            List<TaskDTO> taskDTOs = project.Tasks
+                .Where(t => t.Id.HasValue) // Solo tareas con ID válido
+                .Select(t => new TaskDTO
+                {
+                    Title = t.Title ?? string.Empty,
+                    Description = t.Description ?? string.Empty,
+                    ExpectedStartDate = t.ExpectedStartDate,
+                    Duration = t.Duration,
+                    State = (StateDTO)t.State,
+                    Resources = _resourceConverter.FromResourceEntityList(t.Resources ?? new List<Resource>()),
+                    Id = t.Id,
+                    IsCritical = t.IsCritical,
+                    StartDate = t.StartDate,
+                    EndDate = t.EndDate,
+                    LatestStart = t.LatestStart,
+                    LatestFinish = t.LatestFinish,
+                    Slack = t.Slack,
+                    PreviousTasks = new List<TaskDTO>(),
+                    SameTimeTasks = new List<TaskDTO>()
+                }).ToList();
 
-            foreach (Task sameTask in task.SameTimeTasks)
-                if (taskDict.ContainsKey(sameTask.Id))
-                    taskDto.SameTimeTasks.Add(taskDict[sameTask.Id]);
+            // Si no hay tareas válidas, retornar lista vacía
+            if (!taskDTOs.Any())
+            {
+                return new List<TaskDTO>();
+            }
+
+            // Crear diccionario seguro - solo con IDs válidos
+            Dictionary<int, TaskDTO> taskDict = taskDTOs
+                .Where(t => t.Id.HasValue)
+                .ToDictionary(t => t.Id.Value, t => t);
+
+            // Construir relaciones de manera segura
+            foreach (Task task in project.Tasks.Where(t => t.Id.HasValue))
+            {
+                if (!taskDict.ContainsKey(task.Id.Value)) continue;
+
+                TaskDTO taskDto = taskDict[task.Id.Value];
+
+                // Manejar PreviousTasks de manera segura
+                if (task.PreviousTasks != null)
+                {
+                    foreach (Task prevTask in task.PreviousTasks)
+                    {
+                        if (prevTask?.Id.HasValue == true && taskDict.ContainsKey(prevTask.Id.Value))
+                        {
+                            taskDto.PreviousTasks.Add(taskDict[prevTask.Id.Value]);
+                        }
+                    }
+                }
+
+                // Manejar SameTimeTasks de manera segura
+                if (task.SameTimeTasks != null)
+                {
+                    foreach (Task sameTask in task.SameTimeTasks)
+                    {
+                        if (sameTask?.Id.HasValue == true && taskDict.ContainsKey(sameTask.Id.Value))
+                        {
+                            taskDto.SameTimeTasks.Add(taskDict[sameTask.Id.Value]);
+                        }
+                    }
+                }
+            }
+
+            return taskDTOs;
         }
-
-        return taskDTOs;
+        catch (Exception ex)
+        {
+            // Log del error para debugging
+            Console.WriteLine($"Error in GetTasks for project '{projectName}': {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+            throw; // Re-lanzar para que el UI pueda manejarlo
+        }
     }
 
     public TaskDTO GetTask(string projectName, string title)
@@ -240,6 +297,7 @@ public class TaskService
             };
         }
     }
+
     private void RecalculateCriticalPath(string projectName)
     {
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);

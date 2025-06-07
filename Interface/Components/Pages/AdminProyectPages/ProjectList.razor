@@ -130,7 +130,7 @@
                             <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration"/>
                         </div>
 
-                        
+
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-tools me-1"></i>Select Resources</label>
                             <div class="resource-container">
@@ -157,7 +157,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-arrow-left me-1"></i>Previous Tasks</label>
                             @if (taskList != null && taskList.Any())
@@ -197,7 +197,7 @@
                                     </div>
                                 </div>
 
-                                
+
                                 @if (previousTaskIds.Any())
                                 {
                                     <div class="mt-3">
@@ -319,7 +319,7 @@
                                          @bind-Value="selectedTaskToEdit.Duration"/>
                         </div>
 
-                        
+
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-tools me-1"></i>Select Resources</label>
                             <div class="resource-container">
@@ -346,7 +346,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-arrow-left me-1"></i>Previous Tasks</label>
                             @if (taskList != null && taskList.Any())
@@ -387,7 +387,7 @@
                                     </div>
                                 </div>
 
-                                
+
                                 @if (editPreviousTaskIds.Any())
                                 {
                                     <div class="mt-3">
@@ -549,7 +549,7 @@
                     }
 
                     <div class="row">
-                        
+
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header bg-light">
@@ -585,7 +585,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header bg-light">
@@ -1322,28 +1322,77 @@
 
     private void AddSelectedMembers()
     {
-        List<UserDTO> selectedMembers = membersList
-            .Where(m => selectedEmails.Contains(m.Email))
-            .DistinctBy(m => m.Email)
-            .ToList();
-        if (selectedMembers.Any())
+        try
         {
-            try
+            Console.WriteLine("=== AddSelectedMembers Started ===");
+            Console.WriteLine($"selectedProjectName: '{selectedProjectName}'");
+            Console.WriteLine($"selectedEmails count: {selectedEmails.Count}");
+
+            if (string.IsNullOrEmpty(selectedProjectName))
             {
-                AdminPService.AssignMembersToProject(selectedProjectName ?? "", selectedMembers);
+                memberErrorMessage = "No project selected";
+                Console.WriteLine("No project selected");
+                return;
+            }
+
+            // Obtener los UserDTO seleccionados
+            List<UserDTO> selectedMembers = membersList
+                .Where(m => selectedEmails.Contains(m.Email))
+                .DistinctBy(m => m.Email) // Evitar duplicados
+                .ToList();
+
+            Console.WriteLine($"Selected members: {selectedMembers.Count}");
+            foreach (var member in selectedMembers)
+            {
+                Console.WriteLine($"  - {member.FirstName} {member.LastName} ({member.Email})");
+            }
+
+            if (selectedMembers.Any())
+            {
+                Console.WriteLine("Calling AdminPService.AssignMembersToProject...");
+
+                if (AdminPService == null)
+                {
+                    memberErrorMessage = "AdminPService is null";
+                    Console.WriteLine("AdminPService is null!");
+                    return;
+                }
+
+                // Llamar al método con UserDTO
+                AdminPService.AssignMembersToProject(selectedProjectName, selectedMembers);
+
+                Console.WriteLine("AssignMembersToProject completed successfully");
                 memberSuccessMessage = "Members added successfully!";
                 memberErrorMessage = string.Empty;
+
+                // Limpiar selección
+                selectedEmails.Clear();
+                Console.WriteLine("Selection cleared");
+
+                // Opcional: Refrescar la lista de miembros del proyecto
+                LoadProjectMembers();
             }
-            catch (Exception ex)
+            else
             {
-                memberErrorMessage = $"Error adding members: {ex.Message}";
+                memberErrorMessage = "No members selected.";
                 memberSuccessMessage = string.Empty;
+                Console.WriteLine("No members were selected");
             }
         }
-        else
+        catch (Exception ex)
         {
-            memberErrorMessage = "No members selected.";
+            Console.WriteLine($"Exception in AddSelectedMembers:");
+            Console.WriteLine($"Type: {ex.GetType().Name}");
+            Console.WriteLine($"Message: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+
+            memberErrorMessage = $"Error adding members: {ex.Message}";
             memberSuccessMessage = string.Empty;
+        }
+        finally
+        {
+            Console.WriteLine("=== AddSelectedMembers Finished ===");
+            StateHasChanged(); // Asegurar que la UI se actualice
         }
     }
 
