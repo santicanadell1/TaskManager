@@ -21,10 +21,7 @@ public class MemberPServiceTest
     private UserDTO UserDTO;
     private InMemoryAppContextFactory _contextFactory;
     private IRepositoryManager _repositoryManager;
-    private NotificationConverter _notificationConverter;
-
-
-
+    
     private TaskDTO task1;
     private TaskDTO task2;
     private TaskDTO task3;
@@ -46,8 +43,8 @@ public class MemberPServiceTest
 
         CpmService cpmService = new CpmService();
 
-        _taskService = new TaskService(_repositoryManager,cpmService, _notificationConverter);
-        _adminPService = new AdminPService(_repositoryManager, _notificationConverter);
+        _taskService = new TaskService(_repositoryManager,cpmService);
+        _adminPService = new AdminPService(_repositoryManager);
         _login = new Login(_repositoryManager);
         _userservice = new UserService(_repositoryManager);
 

@@ -24,10 +24,9 @@ public class MemberPService : IMemberPService
         _repositoryManager = repositoryManager;
 
         _cpmService = new CpmService();
-        _adminPService =
-            new AdminPService(_repositoryManager, _notificationConverter);
+        _adminPService = new AdminPService(_repositoryManager);
         _userService = new UserService(_repositoryManager);
-        _taskService = new TaskService(_repositoryManager,_cpmService,_notificationConverter );
+        _taskService = new TaskService(_repositoryManager, _cpmService);
     }
 
     public List<ProjectDTO> GetAllProjectsFromAMember(string email)

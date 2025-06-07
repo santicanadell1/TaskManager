@@ -4,6 +4,7 @@ using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service;
+using Service.Converter;
 using Service.Converters;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.AdminSServiceExceptions;
@@ -15,10 +16,21 @@ public class AdminPService : IAdminPService
 {
     private readonly IRepositoryManager _repositoryManager;
     private readonly NotificationConverter _notificationConverter;
-    public AdminPService(IRepositoryManager repositoryManager, NotificationConverter notificationConverter)
+    private readonly ProjectConverter _projectConverter;
+    private readonly UserConverter _userConverter;
+    private readonly ResourceConverter _resourceConverter;
+    private readonly RolConverter _rolConverter;
+    private readonly TaskConverter _taskConverter;
+
+    public AdminPService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
-        _notificationConverter = notificationConverter;
+        _rolConverter = new RolConverter();
+        _resourceConverter = new ResourceConverter(_repositoryManager);
+        _taskConverter = new TaskConverter(_repositoryManager, _resourceConverter);
+        _userConverter = new UserConverter(_repositoryManager, _rolConverter, _taskConverter);
+        _projectConverter = new ProjectConverter(_repositoryManager, _userConverter);
+        _notificationConverter = new NotificationConverter(_repositoryManager, _projectConverter);
     }
 
     public void CreateProject(ProjectDTO projectDTO)
@@ -27,7 +39,7 @@ public class AdminPService : IAdminPService
         Project existingProject = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
         if (existingProject != null) throw new DuplicatedProjectsNameException();
 
-        Project newProject = ToEntity(projectDTO);
+        Project newProject = _projectConverter.ToEntity(projectDTO);
         SetProjectAdmin(newProject, projectDTO);
 
         _repositoryManager.ProjectRepository.Add(newProject);
@@ -42,7 +54,7 @@ public class AdminPService : IAdminPService
 
         foreach (UserDTO memberDTO in membersDTO)
         {
-            User user = ToEntity(memberDTO);
+            User user = _userConverter.ToEntity(memberDTO);
 
             if (project.Members.Any(u => u.Email == user.Email)) throw new UserIsAlreadyAMemberException();
 
@@ -77,7 +89,7 @@ public class AdminPService : IAdminPService
         Project existingProject = _repositoryManager.ProjectRepository.Get(p => p.Name == projectNameToUpdate);
         if (existingProject == null) throw new ProjectNotFoundException();
 
-        Project updatedProject = ToEntity(updatedProjectDTO);
+        Project updatedProject = _projectConverter.ToEntity(updatedProjectDTO);
 
         updatedProject.Id = existingProject.Id;
         SetProjectAdmin(updatedProject, updatedProjectDTO);
@@ -90,7 +102,7 @@ public class AdminPService : IAdminPService
         CheckAdminProyectRole();
         List<Project> projects = _repositoryManager.ProjectRepository.GetAll();
         List<ProjectDTO> projectDTOs = new List<ProjectDTO>();
-        foreach (Project project in projects) projectDTOs.Add(FromEntity(project));
+        foreach (Project project in projects) projectDTOs.Add(_projectConverter.FromEntity(project));
 
         return projectDTOs;
     }
@@ -100,7 +112,7 @@ public class AdminPService : IAdminPService
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        return FromEntity(project);
+        return _projectConverter.FromEntity(project);
     }
 
     public List<ProjectDTO> GetAllProjectsForUser(string Email)
@@ -108,7 +120,7 @@ public class AdminPService : IAdminPService
         List<ProjectDTO> projects = new List<ProjectDTO>();
         foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
             if (project.AdminProject.Email == Email || project.Members.Any(m => m.Email == Email))
-                projects.Add(FromEntity(project));
+                projects.Add(_projectConverter.FromEntity(project));
 
         return projects;
     }
@@ -168,7 +180,7 @@ public class AdminPService : IAdminPService
     {
         User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
         CpmService cpmService = new CpmService();
-        TaskService taskService = new TaskService(_repositoryManager,cpmService, _notificationConverter);
+        TaskService taskService = new TaskService(_repositoryManager, cpmService);
         List<TaskDTO> returnList = new List<TaskDTO>();
         foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
         {
@@ -188,7 +200,8 @@ public class AdminPService : IAdminPService
         if (user.Tasks == null) return new List<TaskDTO>();
 
         CpmService cpmService = new CpmService();
-        TaskService taskService = new TaskService(_repositoryManager, cpmService, _notificationConverter);  // Pasar notificationConverter aquí
+        TaskService taskService =
+            new TaskService(_repositoryManager, cpmService);
 
         List<TaskDTO> returnList = new List<TaskDTO>();
         List<TaskDTO> tasks = taskService.GetTasks(projectName);
@@ -209,124 +222,6 @@ public class AdminPService : IAdminPService
         UserDTO currentUser = LoggedUser.Current;
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminProject))
             throw new UnauthorizedAdminAccessException();
-    }
-
-    private ProjectDTO FromEntity(Project project)
-    {
-        List<UserDTO> memberDTOs = new List<UserDTO>();
-        if (project.Members != null)
-            foreach (User member in project.Members)
-                memberDTOs.Add(FromEntity(member));
-
-        return new ProjectDTO
-        {
-            Id = project.Id,
-            Name = project.Name,
-            Description = project.Description,
-            StartDate = project.StartDate,
-            Members = memberDTOs,
-            AdminProyect = project.AdminProject != null ? FromEntity(project.AdminProject) : null
-        };
-    }
-
-
-    private Project ToEntity(ProjectDTO projectDTO)
-    {
-        Project project = new Project
-        {
-            Id = projectDTO.Id,
-            Name = projectDTO.Name,
-            Description = projectDTO.Description,
-            StartDate = projectDTO.StartDate,
-            Members = new List<User>()
-        };
-
-        if (projectDTO.Members != null)
-        {
-            foreach (UserDTO memberDTO in projectDTO.Members)
-            {
-                User memberFromDb = _repositoryManager.UserRepository.Get(u => u.Email == memberDTO.Email);
-                if (memberFromDb != null)
-                {
-                    project.Members.Add(memberFromDb);
-                }
-            }
-        }
-
-        return project;
-    }
-
-    private User ToEntity(UserDTO userDTO)
-    {
-        User user = new User
-        {
-            FirstName = userDTO.FirstName,
-            LastName = userDTO.LastName,
-            Email = userDTO.Email,
-            Birthday = userDTO.Birthday,
-            Password = userDTO.Password,
-            Roles = ConvertToDomainRoles(userDTO.Roles),
-            Id = userDTO.Id
-        };
-
-        return user;
-    }
-
-
-    private UserDTO FromEntity(User user)
-    {
-        return new UserDTO
-        {
-            Id = user.Id,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Birthday = user.Birthday,
-            Password = user.Password,
-            Roles = ConvertToDTORoles(user.Roles)
-        };
-    }
-
-    private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
-    {
-        List<Rol> roles = new List<Rol>();
-
-        foreach (RolDTO roleDTO in roleDTOs)
-            switch (roleDTO)
-            {
-                case RolDTO.AdminSystem:
-                    roles.Add(Rol.AdminSystem);
-                    break;
-                case RolDTO.ProjectMember:
-                    roles.Add(Rol.ProjectMember);
-                    break;
-                case RolDTO.AdminProject:
-                    roles.Add(Rol.AdminProject);
-                    break;
-            }
-
-        return roles;
-    }
-
-    private List<RolDTO> ConvertToDTORoles(List<Rol> roles)
-    {
-        List<RolDTO> roleDTOs = new List<RolDTO>();
-
-        foreach (Rol role in roles)
-            switch (role)
-            {
-                case Rol.AdminSystem:
-                    roleDTOs.Add(RolDTO.AdminSystem);
-                    break;
-                case Rol.ProjectMember:
-                    roleDTOs.Add(RolDTO.ProjectMember);
-                    break;
-                case Rol.AdminProject:
-                    roleDTOs.Add(RolDTO.AdminProject);
-                    break;
-            }
-
-        return roleDTOs;
     }
 
     private void SetProjectAdmin(Project project, ProjectDTO projectDTO)

@@ -2,6 +2,7 @@
 using DataAccess.Exceptions.NotificationRepositoryExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
+using Service.Converter;
 using Service.Converters;
 using Service.Models;
 using Task = Domain.Task;
@@ -12,16 +13,25 @@ namespace Service
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly NotificationConverter _notificationConverter;
+        private readonly ResourceConverter _resourceConverter;
+        private readonly RolConverter _rolConverter;
+        private readonly TaskConverter _taskConverter;
+        private readonly UserConverter _userConverter;
+        private readonly ProjectConverter _projectConverter;
 
-        public NotificationService(IRepositoryManager repositoryManager, NotificationConverter notificationConverter)
+        public NotificationService(IRepositoryManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
-            _notificationConverter = notificationConverter; 
+            _rolConverter = new RolConverter();
+            _resourceConverter = new ResourceConverter(_repositoryManager);
+            _taskConverter = new TaskConverter(_repositoryManager, _resourceConverter);
+            _userConverter = new UserConverter(_repositoryManager, _rolConverter, _taskConverter);
+            _projectConverter = new ProjectConverter(_repositoryManager, _userConverter);
+            _notificationConverter = new NotificationConverter(repositoryManager, _projectConverter);
         }
 
         public List<NotificationDTO> GetNotificationsForUser(string userEmail)
         {
-            // Obtener usuario
             User user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
             if (user == null) throw new UserNotFoundException();
 

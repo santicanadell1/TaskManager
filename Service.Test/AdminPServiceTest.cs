@@ -20,7 +20,6 @@ public class AdminPServiceTests
     private UserDTO Admin;
     private List<UserDTO> members;
     private UserDTO UserDTO;
-    private NotificationConverter _notificationConverter;
 
     [TestInitialize]
     public void Setup()
@@ -32,13 +31,10 @@ public class AdminPServiceTests
         _context.Database.EnsureCreated();
 
         _repositoryManager = new RepositoryManager(_context);
-
-        var projectConverter = new ProjectConverter(_repositoryManager);  
-        _notificationConverter = new NotificationConverter(_repositoryManager, projectConverter);
-
+        
         CpmService cpmService = new CpmService();
-        _taskService = new TaskService(_repositoryManager, cpmService, _notificationConverter);  
-        _adminPservice = new AdminPService(_repositoryManager, _notificationConverter);  
+        _taskService = new TaskService(_repositoryManager, cpmService);  
+        _adminPservice = new AdminPService(_repositoryManager);  
 
         _userservice = new UserService(_repositoryManager);
         _login = new Login(_repositoryManager);
