@@ -69,10 +69,13 @@ public class AdminSService : IAdminSService
         UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
+        if (!user.Roles.Contains(role))
+        {
+            user.Roles.Add(role);
 
-        user.Roles.Add(role);
+            _userService.UpdateUser(user);
+        }
 
-        _userService.UpdateUser(user);
     }
 
     private void CheckAdminRole()
