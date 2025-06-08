@@ -11,10 +11,10 @@ public class TaskConverter : IConverter<Task, TaskDTO>
     private readonly IRepositoryManager _repositoryManager;
     private ResourceConverter _resourceConverter;
 
-    public TaskConverter(IRepositoryManager repositoryManager, ResourceConverter resourceConverter)
+    public TaskConverter(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
-        _resourceConverter = resourceConverter;
+        _resourceConverter = new ResourceConverter(repositoryManager);
     }
 
     public Task ToEntity(TaskDTO taskDTO)

@@ -17,7 +17,6 @@ public class MemberPService : IMemberPService
     private readonly TaskService _taskService;
     private readonly CpmService _cpmService;
     private readonly IRepositoryManager _repositoryManager;
-    private readonly NotificationConverter _notificationConverter;
 
     public MemberPService(IRepositoryManager repositoryManager)
     {

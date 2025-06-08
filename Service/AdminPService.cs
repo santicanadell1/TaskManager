@@ -15,22 +15,14 @@ using Task = Domain.Task;
 public class AdminPService : IAdminPService
 {
     private readonly IRepositoryManager _repositoryManager;
-    private readonly NotificationConverter _notificationConverter;
     private readonly ProjectConverter _projectConverter;
     private readonly UserConverter _userConverter;
-    private readonly ResourceConverter _resourceConverter;
-    private readonly RolConverter _rolConverter;
-    private readonly TaskConverter _taskConverter;
-
+    
     public AdminPService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
-        _rolConverter = new RolConverter();
-        _resourceConverter = new ResourceConverter(_repositoryManager);
-        _taskConverter = new TaskConverter(_repositoryManager, _resourceConverter);
-        _userConverter = new UserConverter(_repositoryManager, _rolConverter, _taskConverter);
-        _projectConverter = new ProjectConverter(_repositoryManager, _userConverter);
-        _notificationConverter = new NotificationConverter(_repositoryManager, _projectConverter);
+        _projectConverter = new ProjectConverter(_repositoryManager);
+        _userConverter = new UserConverter(_repositoryManager);
     }
 
     public void CreateProject(ProjectDTO projectDTO)

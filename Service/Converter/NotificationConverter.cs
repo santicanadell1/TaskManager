@@ -10,10 +10,10 @@ namespace Service.Converters
         private readonly IRepositoryManager _repositoryManager;
         private readonly ProjectConverter _projectConverter;
 
-        public NotificationConverter(IRepositoryManager repositoryManager, ProjectConverter projectConverter)
+        public NotificationConverter(IRepositoryManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
-            _projectConverter = projectConverter;
+            _projectConverter = new ProjectConverter(repositoryManager);
         }
 
         public NotificationDTO FromEntity(Notification notification)

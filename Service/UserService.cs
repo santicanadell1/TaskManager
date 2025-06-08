@@ -16,15 +16,13 @@ public class UserService : IUserService
     private readonly UserConverter _userConverter;
     private readonly TaskConverter _taskConverter;
     private readonly RolConverter _rolConverter;
-    private readonly ResourceConverter _resourceConverter;
 
     public UserService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
         _rolConverter = new RolConverter();
-        _resourceConverter = new ResourceConverter(_repositoryManager);
-        _taskConverter = new TaskConverter(repositoryManager, _resourceConverter);
-        _userConverter = new UserConverter(repositoryManager, _rolConverter, _taskConverter);
+        _taskConverter = new TaskConverter(repositoryManager);
+        _userConverter = new UserConverter(repositoryManager);
     }
 
     public void AddUser(UserDTO userDTO)

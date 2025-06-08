@@ -12,7 +12,7 @@ public class UserServiceTest
     private UserService _userService;
     private InMemoryAppContextFactory _contextFactory;
     private IRepositoryManager _repositoryManager;
-    
+
     [TestInitialize]
     public void TestSetUp()
     {
@@ -21,9 +21,9 @@ public class UserServiceTest
 
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
-        
+
         _repositoryManager = new RepositoryManager(_context);
-        
+
         _userService = new UserService(_repositoryManager);
     }
 
