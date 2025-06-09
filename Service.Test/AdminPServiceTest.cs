@@ -337,7 +337,6 @@ public class AdminPServiceTests
             Name = "Project 1",
             Description = "Description 1",
             StartDate = DateTime.Now,
-            AdminProyect = UserDTO,
             Members = members
         };
         ProjectDTO projectDTO2 = new ProjectDTO
@@ -345,7 +344,6 @@ public class AdminPServiceTests
             Name = "Project 2",
             Description = "Description 2",
             StartDate = DateTime.Now.AddDays(1),
-            AdminProyect = UserDTO,
             Members = members
         };
 

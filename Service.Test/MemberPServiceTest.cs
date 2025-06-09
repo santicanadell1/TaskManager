@@ -125,7 +125,6 @@ public class MemberPServiceTest
             Name = "Project 1",
             Description = "Project Description",
             StartDate = DateTime.Today,
-            AdminProyect = UserDTO,
             Members = members
         };
 
@@ -183,7 +182,6 @@ public class MemberPServiceTest
             Name = "Project 1",
             Description = "Project Description",
             StartDate = DateTime.Today,
-            AdminProyect = UserDTO,
             Members = members
         };
 
@@ -194,7 +192,6 @@ public class MemberPServiceTest
             Name = "Project 2",
             Description = "Another project",
             StartDate = DateTime.Today,
-            AdminProyect = UserDTO,
             Members = new List<UserDTO> { UserDTO }
         };
 
