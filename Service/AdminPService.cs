@@ -203,6 +203,8 @@ public class AdminPService : IAdminPService
     public List<ProjectDTO> GetAllProjectsForUser(string Email)
     {
         List<ProjectDTO> projects = new List<ProjectDTO>();
+        Console.WriteLine("entro", ConsoleColor.Yellow);
+
         foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
             if (project.AdminProject.Email == Email || project.Members.Any(m => m.Email == Email))
                 projects.Add(_projectConverter.FromEntity(project));
@@ -282,8 +284,9 @@ public class AdminPService : IAdminPService
     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
     {
         User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
+        if (user == null) throw new UserNotFoundException();
         if (user.Tasks == null) return new List<TaskDTO>();
-
+        Console.WriteLine($"{user.Email}", ConsoleColor.Yellow);
         CpmService cpmService = new CpmService();
         TaskService taskService =
             new TaskService(_repositoryManager, cpmService);

@@ -27,6 +27,7 @@ public class ProjectRepository : IRepository<Project>
     public List<Project> GetAll()
     {
         return _db.Set<Project>()
+            .Include(p => p.Members)
             .Include(p => p.Tasks)
             .ThenInclude(t => t.Resources)
             .Include(p => p.Tasks)

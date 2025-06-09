@@ -4,9 +4,9 @@ namespace Domain;
 
 public class Notification
 {
-    private string description;
-    private Project project;
-    private bool read;
+    public string description;
+    public Project project;
+    public bool read;
     public int? Id { get; set; }
 
     public Notification(bool isRead, string description, Project project)
