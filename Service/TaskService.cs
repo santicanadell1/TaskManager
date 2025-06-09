@@ -15,20 +15,14 @@ public class TaskService
 {
     private readonly CpmService _cpmService;
     private readonly IRepositoryManager _repositoryManager;
-    private readonly ResourceConverter _resourceConverter;
-    private readonly RolConverter _rolConverter;
     private readonly TaskConverter _taskConverter;
-    private readonly UserConverter _userConverter;
-    private readonly ProjectConverter _projectConverter;
+    private readonly ResourceConverter _resourceConverter;
 
     public TaskService(IRepositoryManager repositoryManager, CpmService cpmService)
     {
         _repositoryManager = repositoryManager;
-        _rolConverter = new RolConverter();
+        _taskConverter = new TaskConverter(_repositoryManager);
         _resourceConverter = new ResourceConverter(_repositoryManager);
-        _taskConverter = new TaskConverter(_repositoryManager, _resourceConverter);
-        _userConverter = new UserConverter(_repositoryManager, _rolConverter, _taskConverter);
-        _projectConverter = new ProjectConverter(_repositoryManager, _userConverter);
     }
 
 

@@ -13,21 +13,11 @@ namespace Service
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly NotificationConverter _notificationConverter;
-        private readonly ResourceConverter _resourceConverter;
-        private readonly RolConverter _rolConverter;
-        private readonly TaskConverter _taskConverter;
-        private readonly UserConverter _userConverter;
-        private readonly ProjectConverter _projectConverter;
 
         public NotificationService(IRepositoryManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
-            _rolConverter = new RolConverter();
-            _resourceConverter = new ResourceConverter(_repositoryManager);
-            _taskConverter = new TaskConverter(_repositoryManager, _resourceConverter);
-            _userConverter = new UserConverter(_repositoryManager, _rolConverter, _taskConverter);
-            _projectConverter = new ProjectConverter(_repositoryManager, _userConverter);
-            _notificationConverter = new NotificationConverter(repositoryManager, _projectConverter);
+            _notificationConverter = new NotificationConverter(_repositoryManager);
         }
 
         public List<NotificationDTO> GetNotificationsForUser(string userEmail)

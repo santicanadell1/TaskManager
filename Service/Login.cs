@@ -12,18 +12,14 @@ public class Login : ILogin
 {
     private readonly PasswordManager _passwordManager = new();
     private readonly IRepositoryManager _repositoryManager;
-    private readonly UserConverter _userConverter;
     private readonly RolConverter _rolConverter;
-    private readonly TaskConverter _taskConverter;
-    private readonly ResourceConverter _resourceConverter;
+    private readonly UserConverter _userConverter;
 
     public Login(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
-        _resourceConverter = new ResourceConverter(repositoryManager);
         _rolConverter = new RolConverter();
-        _taskConverter = new TaskConverter(_repositoryManager, _resourceConverter);
-        _userConverter = new UserConverter(_repositoryManager, _rolConverter, _taskConverter);
+        _userConverter = new UserConverter(_repositoryManager);
     }
 
     public UserDTO GetLoggedUser()

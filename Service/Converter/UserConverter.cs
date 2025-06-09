@@ -12,11 +12,11 @@ public class UserConverter : IConverter<User, UserDTO>
     private readonly TaskConverter _taskConverter;
     private readonly PasswordManager _passwordManager = new();
 
-    public UserConverter(IRepositoryManager repositoryManager, RolConverter rolConverter, TaskConverter taskConverter)
+    public UserConverter(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
-        _rolConverter = rolConverter;
-        _taskConverter = taskConverter;
+        _rolConverter = new RolConverter();
+        _taskConverter = new TaskConverter(repositoryManager);
     }
 
     public UserDTO FromEntity(User user)
