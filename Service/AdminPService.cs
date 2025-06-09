@@ -187,7 +187,14 @@ public class AdminPService : IAdminPService
         CheckAdminProyectRole();
         List<Project> projects = _repositoryManager.ProjectRepository.GetAll();
         List<ProjectDTO> projectDTOs = new List<ProjectDTO>();
-        foreach (Project project in projects) projectDTOs.Add(_projectConverter.FromEntity(project));
+        UserDTO loggedUser = LoggedUser.Current;
+        foreach (Project project in projects)
+        {
+            if (project.AdminProject.Email == loggedUser.Email)
+            {
+                projectDTOs.Add(_projectConverter.FromEntity(project));
+            }
+        }
 
         return projectDTOs;
     }

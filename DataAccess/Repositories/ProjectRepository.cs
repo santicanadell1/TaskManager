@@ -38,7 +38,7 @@ public class ProjectRepository : IRepository<Project>
     public Project? Get(Func<Project, bool> filter)
     {
         return _db.Set<Project>()
-            .Include(p => p.Members) 
+            .Include(p => p.Members)
             .FirstOrDefault(filter);
     }
 

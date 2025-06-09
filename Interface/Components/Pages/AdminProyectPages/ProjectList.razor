@@ -1024,7 +1024,6 @@
                 {
                     int taskId = previousTaskIds[i].Value;
 
-                    // Create a minimal TaskDTO with just the ID
                     TaskDTO taskDto = new TaskDTO { Id = taskId };
 
                     if (previousTaskDependencies[i] == "FS")
@@ -1335,10 +1334,9 @@
                 return;
             }
 
-            // Obtener los UserDTO seleccionados
             List<UserDTO> selectedMembers = membersList
                 .Where(m => selectedEmails.Contains(m.Email))
-                .DistinctBy(m => m.Email) // Evitar duplicados
+                .DistinctBy(m => m.Email)
                 .ToList();
 
             Console.WriteLine($"Selected members: {selectedMembers.Count}");
@@ -1358,18 +1356,15 @@
                     return;
                 }
 
-                // Llamar al método con UserDTO
                 AdminPService.AssignMembersToProject(selectedProjectName, selectedMembers);
 
                 Console.WriteLine("AssignMembersToProject completed successfully");
                 memberSuccessMessage = "Members added successfully!";
                 memberErrorMessage = string.Empty;
 
-                // Limpiar selección
                 selectedEmails.Clear();
                 Console.WriteLine("Selection cleared");
 
-                // Opcional: Refrescar la lista de miembros del proyecto
                 LoadProjectMembers();
             }
             else
@@ -1392,7 +1387,7 @@
         finally
         {
             Console.WriteLine("=== AddSelectedMembers Finished ===");
-            StateHasChanged(); // Asegurar que la UI se actualice
+            StateHasChanged();
         }
     }
 
@@ -1437,12 +1432,11 @@
             projectMembers = AdminPService.GetMembers(selectedProjectName);
             Console.WriteLine($"Found {projectMembers?.Count ?? 0} members");
 
-            // Opcional: mostrar los nombres de los miembros
             if (projectMembers != null)
             {
                 foreach (var member in projectMembers)
                 {
-                    Console.WriteLine($"Member: {member.FirstName}"); // o la propiedad que uses
+                    Console.WriteLine($"Member: {member.FirstName}");
                 }
             }
         }

@@ -66,7 +66,7 @@ public class TaskConverter : IConverter<Task, TaskDTO>
     public List<Task> GetExistingTasksFromIds(List<TaskDTO> taskDTOs)
     {
         if (taskDTOs == null) return new List<Task>();
-    
+
         List<Task> tasks = new List<Task>();
         foreach (TaskDTO taskDTO in taskDTOs)
         {
@@ -79,8 +79,10 @@ public class TaskConverter : IConverter<Task, TaskDTO>
                 }
             }
         }
+
         return tasks;
     }
+
     public List<Task> ConvertToEntityList(List<TaskDTO> taskDTOs)
     {
         if (taskDTOs == null) return new List<Task>();
