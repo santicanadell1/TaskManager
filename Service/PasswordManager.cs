@@ -35,4 +35,5 @@ public class PasswordManager : IPasswordManager
         string hashedPassword = HashPassword(plainPassword);
         return hashedPassword == storedHash;
     }
+    
 }

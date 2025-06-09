@@ -5,13 +5,13 @@ namespace Domain;
 
 public class User
 {
-    private DateTime birthday;
-    private string email;
-    private string firstName;
-    private string lastName;
-    private string password;
-    private List<Rol> roles = new();
-    private List<Task> tasks = new();
+    public DateTime birthday;
+    public string email;
+    public string firstName;
+    public string lastName;
+    public string password;
+    public List<Rol> roles = new();
+    public List<Task> tasks = new();
 
 
     public User(string firstName, string lastName, string email, DateTime birthday, string password)

@@ -49,11 +49,11 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Read")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

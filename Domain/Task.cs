@@ -4,13 +4,13 @@ namespace Domain;
 
 public class Task
 {
-    private string _description;
-    private int _duration;
-    private List<Task> _previousTasks;
-    private List<Resource> _resources;
-    private List<Task> _sameTimeTasks;
-    private State _state;
-    private string _title;
+    public string _description;
+    public int _duration;
+    public List<Task> _previousTasks;
+    public List<Resource> _resources;
+    public List<Task> _sameTimeTasks;
+    public State _state;
+    public string _title;
     public DateTime ExpectedStartDate { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }

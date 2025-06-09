@@ -1433,11 +1433,23 @@
     {
         try
         {
+            Console.WriteLine($"Loading members for project: {selectedProjectName}");
             projectMembers = AdminPService.GetMembers(selectedProjectName);
+            Console.WriteLine($"Found {projectMembers?.Count ?? 0} members");
+
+            // Opcional: mostrar los nombres de los miembros
+            if (projectMembers != null)
+            {
+                foreach (var member in projectMembers)
+                {
+                    Console.WriteLine($"Member: {member.FirstName}"); // o la propiedad que uses
+                }
+            }
         }
         catch (Exception ex)
         {
             errorMessage = $"Error loading members: {ex.Message}";
+            Console.WriteLine($"Error: {ex.Message}");
         }
     }
 

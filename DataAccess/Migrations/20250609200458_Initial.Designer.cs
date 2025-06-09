@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250609185542_Initial")]
+    [Migration("20250609200458_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -52,11 +52,11 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Read")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

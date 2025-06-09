@@ -6,7 +6,7 @@ using TaskRepositoryExceptions = DataAccess.Exceptions.TaskRepositoryExceptions;
 
 namespace DataAccess;
 
-public class ProjectRepository:IRepository<Project>
+public class ProjectRepository : IRepository<Project>
 {
     protected readonly AppDbContext _db;
 
@@ -36,7 +36,9 @@ public class ProjectRepository:IRepository<Project>
 
     public Project? Get(Func<Project, bool> filter)
     {
-        return _db.Set<Project>().FirstOrDefault(filter);
+        return _db.Set<Project>()
+            .Include(p => p.Members) 
+            .FirstOrDefault(filter);
     }
 
     public void Delete(Project projectE)
@@ -53,7 +55,7 @@ public class ProjectRepository:IRepository<Project>
 
     public void Update(Project project)
     {
-        if (_db.Set<Project>().Any(p => p.Name == project.Name  && project.Id != p.Id))
+        if (_db.Set<Project>().Any(p => p.Name == project.Name && project.Id != p.Id))
             throw new DuplicatedProjectsNameException();
 
         Project? existingProject = _db.Set<Project>().FirstOrDefault(p => p.Id == project.Id);
@@ -66,7 +68,7 @@ public class ProjectRepository:IRepository<Project>
         existingProject.AdminProject = project.AdminProject;
         existingProject.Members = project.Members;
         existingProject.Id = project.Id;
-        
+
         _db.SaveChanges();
     }
 

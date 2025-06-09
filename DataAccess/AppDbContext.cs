@@ -104,7 +104,7 @@ public class AppDbContext : DbContext
         {
             entity.HasKey(n => n.Id);
             entity.Property(n => n.Description).IsRequired();
-            entity.Property(n => n.Read).IsRequired();
+            entity.Property(n => n.IsRead).IsRequired();
 
             // Relación con Project
             entity.HasOne(n => n.Project)

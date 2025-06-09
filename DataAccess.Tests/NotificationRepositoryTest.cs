@@ -72,7 +72,7 @@ public class NotificationRepositoryTest
 
         Assert.IsNotNull(updatedNotification);
         Assert.AreEqual("Updated notification", updatedNotification.Description);
-        Assert.AreEqual(true, updatedNotification.Read);
+        Assert.AreEqual(true, updatedNotification.IsRead);
     }
 
 

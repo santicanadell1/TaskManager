@@ -21,7 +21,7 @@ namespace Service.Converters
             return new NotificationDTO
             {
                 Id = notification.Id,
-                Read = notification.Read,
+                Read = notification.IsRead,
                 Description = notification.Description,
                 Project = _projectConverter.FromEntity(notification.Project)
             };

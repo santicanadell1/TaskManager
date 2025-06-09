@@ -4,9 +4,9 @@ namespace Domain;
 
 public class Resource
 {
-    private string description;
-    private string name;
-    private string type;
+    public string description;
+    public string name;
+    public string type;
     public int? Id { get; set; }
 
     public Resource(string name, string type, string description)

@@ -43,7 +43,7 @@ public class NotificationRepository:IRepository<Notification>
             }
 
             existingNotification.Description = newNotification.Description;
-            existingNotification.Read = newNotification.Read;
+            existingNotification.IsRead = newNotification.IsRead;
             existingNotification.Project = newNotification.Project;
 
             _db.SaveChanges();

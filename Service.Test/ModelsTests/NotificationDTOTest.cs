@@ -35,7 +35,7 @@ public class NotificationDTOTest
 
 
         Assert.IsFalse(isValid);
-        Assert.IsTrue(validationResults.Any(v => v.ErrorMessage.Contains("Read is required.")));
+        Assert.IsTrue(validationResults.Any(v => v.ErrorMessage.Contains("IsRead is required.")));
     }
 
     [TestMethod]

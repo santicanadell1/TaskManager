@@ -9,9 +9,9 @@ public class Notification
     private bool read;
     public int? Id { get; set; }
 
-    public Notification(bool read, string description, Project project)
+    public Notification(bool isRead, string description, Project project)
     {
-        Read = read;
+        IsRead = isRead;
         Description = description;
         Project = project;
     }
@@ -20,7 +20,7 @@ public class Notification
     {
     }
 
-    public bool Read
+    public bool IsRead
     {
         get => read;
         set => read = value;
