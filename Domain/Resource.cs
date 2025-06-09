@@ -4,9 +4,9 @@ namespace Domain;
 
 public class Resource
 {
-    public string description;
-    public string name;
-    public string type;
+    private string description;
+    private string name;
+    private string type;
     public int? Id { get; set; }
 
     public Resource(string name, string type, string description)
@@ -30,7 +30,10 @@ public class Resource
         set => type = string.IsNullOrEmpty(value) ? throw new ResourceTypeException() : value;
     }
 
-    public string Description { get; set; }
-
+    public string Description 
+    { 
+        get => description;
+        set => description = value;
+    }
    
 }

@@ -57,6 +57,7 @@ public class UserConverter : IConverter<User, UserDTO>
 
     public List<TaskDTO> FromEntityList(List<Task> tasks)
     {
+        if (tasks == null) return new List<TaskDTO>();
         return tasks.Select(t => _taskConverter.FromEntity(t)).ToList();
     }
 }

@@ -51,6 +51,9 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
 
     public List<ResourceDTO> ConvertFromResourceEntityList(List<Resource> resources)
     {
+        if (resources == null)
+            return new List<ResourceDTO>();
+
         List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
         foreach (Resource resource in resources)
             resourceDTOs.Add(new ResourceDTO
@@ -82,6 +85,9 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
 
     public List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
     {
+        if (resources == null)
+            return new List<ResourceDTO>();
+
         List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
         foreach (Resource resource in resources)
             resourceDTOs.Add(new ResourceDTO

@@ -9,9 +9,9 @@ public class User
     private string email;
     private string firstName;
     private string lastName;
-    public string password;
-    public List<Rol> roles = new();
-    public List<Task> tasks = new();
+    private string password;
+    private List<Rol> roles = new();
+    private List<Task> tasks = new();
 
 
     public User(string firstName, string lastName, string email, DateTime birthday, string password)

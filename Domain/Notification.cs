@@ -4,19 +4,21 @@ namespace Domain;
 
 public class Notification
 {
-    public string description;
+    private string description;
     private Project project;
-    public bool read;
+    private bool read;
     public int? Id { get; set; }
-    
+
     public Notification(bool read, string description, Project project)
     {
         Read = read;
         Description = description;
         Project = project;
     }
-    
-    public Notification(){}
+
+    public Notification()
+    {
+    }
 
     public bool Read
     {
@@ -44,6 +46,7 @@ public class Notification
             project = value;
         }
     }
+
     public void MarkRead()
     {
         read = true;
