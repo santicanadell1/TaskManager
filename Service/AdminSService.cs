@@ -72,10 +72,25 @@ public class AdminSService : IAdminSService
         if (!user.Roles.Contains(role))
         {
             user.Roles.Add(role);
-
             _userService.UpdateUser(user);
         }
+    }
+    
+    private void UpdateUserRoles(UserDTO userDTO)
+    {
+        User user;
+        if (userDTO.Id.HasValue)
+        {
+            user = _repositoryManager.UserRepository.Get(u => u.Id == userDTO.Id);
+            if (user == null) throw new UserNotFoundException();
+        }
+        else
+        {
+            user = (userDTO.Email);
+        }
 
+        user.Roles = _rolConverter.ConvertToDomainRoles(userDTO.Roles);
+        _repositoryManager.UserRepository.Update(user);
     }
 
     private void CheckAdminRole()
