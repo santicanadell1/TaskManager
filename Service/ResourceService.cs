@@ -140,4 +140,6 @@ public class ResourceService : IResourceService
         bool projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
         return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
     }
+
+    
 }
