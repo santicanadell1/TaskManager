@@ -243,7 +243,7 @@ public void TestSetUp()
     {
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        
+        _leaderService.DeleteTask("Test Project", "Nonexistent Task");
     }
 
 
