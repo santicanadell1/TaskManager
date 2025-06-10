@@ -1,9 +1,9 @@
 ﻿@page "/users/create"
+@using Controllers
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
-@inject AdminSService AdminService
-@inject UserService UserService
+@inject AdminSystemController _AdminSystemController
 @rendermode InteractiveServer
 
 <link href="styles/styleAddUser.css" rel="stylesheet"/>
@@ -135,7 +135,7 @@
                 return;
             }
 
-            AdminService.CreateUser(_userDto);
+            _AdminSystemController.CreateUser(_userDto);
             successMessage = "User created successfully!";
             successVisible = true;
             alertVisible = false;
