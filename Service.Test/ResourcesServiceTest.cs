@@ -804,4 +804,56 @@ public class ResourcesServiceTest
         DateTime next = _resourceService.NextDateAvailable(resDto, DateTime.Today, 2);
         Assert.AreEqual(DateTime.Today.AddDays(2), next);
     }
+    
+    [TestMethod]
+    public void NextDateAvailable_ReturnsFirstDateAfterLastAssignment_WhenNoGapFits()
+    {
+        // Arrange
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        var resourceDTO = new ResourceDTO
+        {
+            Name = "Resource3",
+            Type = "TypeA",
+            Description = "Description of Resource3"
+        };
+        _resourceService.AddResource(resourceDTO);
+        var added = _repositoryManager.ResourceRepository
+            .Get(r => r.Name == "Resource3");
+        var resDto = _resourceService.Get(added.Id);
+
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var project = new ProjectDTO
+        {
+            Name = "Project3",
+            Description = "Description of Project3",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(project);
+        
+        var t1 = new TaskDTO
+        {
+            Title = "T1",
+            Description = "Desc1",
+            ExpectedStartDate = DateTime.Today,
+            Duration = 2,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resDto }
+        };
+        var t2 = new TaskDTO
+        {
+            Title = "T2",
+            Description = "Desc2",
+            ExpectedStartDate = DateTime.Today.AddDays(3),
+            Duration = 5,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resDto }
+        };
+        _taskService.AddTask("Project3", t1);
+        _taskService.AddTask("Project3", t2);
+        DateTime next = _resourceService.NextDateAvailable(resDto, DateTime.Today, 3);
+        Assert.AreEqual(DateTime.Today.AddDays(8), next);
+    }
 }
