@@ -187,6 +187,8 @@ public void TestSetUp()
             Description = "Original description",
             ExpectedStartDate = DateTime.Now.AddDays(2),
             Duration = 3,
+            State = StateDTO.TODO,
+            Resources = new List<ResourceDTO>()
         };
     }
 
