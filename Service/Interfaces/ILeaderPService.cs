@@ -12,6 +12,7 @@ namespace Service.Interface
         
         void DeleteTask(string projectName, string taskTitle);
         List<TaskDTO> GetTasks(string projectName);
+        CpmResultDTO GetCriticalPath(string projectName);
 
         
         

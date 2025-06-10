@@ -73,7 +73,11 @@ namespace Service
             return _taskService.GetTasks(projectName);
         }
         
-    
+        public CpmResultDTO GetCriticalPath(string projectName)
+        {
+            CheckProjectLeaderRole(projectName);
+            return _taskService.GetCriticalPath(projectName);
+        }
         
       
         
