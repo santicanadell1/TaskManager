@@ -58,7 +58,7 @@ public class UserRepository : IRepository<User>
             throw new UserNotFoundException();
         }
 
-        User? existingUser = _db.Users.FirstOrDefault(u => u.Email == updatedUser.Email);
+        User? existingUser = _db.Users.FirstOrDefault(u => u.Id == updatedUser.Id);
 
         if (existingUser == null)
         {

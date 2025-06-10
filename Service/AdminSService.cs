@@ -2,6 +2,7 @@ using DataAccess;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service;
+using Service.Converter;
 using Service.Converters;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Exceptions.UserServiceExceptions;
@@ -14,12 +15,16 @@ public class AdminSService : IAdminSService
     private readonly PasswordManager _passwordManager = new();
     private readonly UserService _userService;
     private readonly NotificationConverter _notificationConverter;
+    private readonly UserConverter _userConverter;
+    private readonly RolConverter _rolConverter;
 
 
     public AdminSService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
         _userService = new UserService(repositoryManager);
+        _rolConverter = new RolConverter();
+        _userConverter = new UserConverter(repositoryManager);
     }
 
     public void CreateUser(UserDTO userDTO)
@@ -72,10 +77,10 @@ public class AdminSService : IAdminSService
         if (!user.Roles.Contains(role))
         {
             user.Roles.Add(role);
-            _userService.UpdateUser(user);
+            UpdateUserRoles(user);
         }
     }
-    
+
     private void UpdateUserRoles(UserDTO userDTO)
     {
         User user;
@@ -86,7 +91,7 @@ public class AdminSService : IAdminSService
         }
         else
         {
-            user = (userDTO.Email);
+            user = _userConverter.ToEntity(userDTO);
         }
 
         user.Roles = _rolConverter.ConvertToDomainRoles(userDTO.Roles);
