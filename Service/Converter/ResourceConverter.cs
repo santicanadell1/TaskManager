@@ -21,7 +21,8 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
             Id = resource.Id,
             Name = resource.Name,
             Type = resource.Type,
-            Description = resource.Description
+            Description = resource.Description,
+            ConcurrentUsage = resource.ConcurrentUsage,
         };
     }
 
@@ -29,7 +30,8 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
     {
         return new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
         {
-            Id = resourceDTO.Id
+            Id = resourceDTO.Id,
+            ConcurrentUsage = resourceDTO.ConcurrentUsage,
         };
     }
 
@@ -61,6 +63,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
                 Name = resource.Name,
                 Type = resource.Type,
                 Description = resource.Description,
+                ConcurrentUsage = resource.ConcurrentUsage,
                 Id = resource.Id
             });
 
@@ -95,6 +98,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
                 Name = resource.Name,
                 Type = resource.Type,
                 Description = resource.Description,
+                ConcurrentUsage = resource.ConcurrentUsage,
                 Id = resource.Id
             });
 
