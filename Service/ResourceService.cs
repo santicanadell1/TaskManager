@@ -158,4 +158,11 @@ public class ResourceService : IResourceService
         }
         return true;
     }
+
+    public DateTime NextDateAvailable(ResourceDTO res, DateTime startDate, int duration)
+    {
+        if (res.ConcurrentUsage)
+            return startDate.Date;
+        return startDate.Date.AddDays(duration);
+    }
 }
