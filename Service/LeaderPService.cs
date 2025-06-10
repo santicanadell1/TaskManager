@@ -30,10 +30,33 @@ namespace Service
             _taskService.AddTask(projectName, taskDTO);
         }
         
+        public List<ProjectDTO> GetMyProjects()
+        {
+            CheckProjectLeaderRole();  
 
+            UserDTO currentUser = LoggedUser.Current;
+            List<ProjectDTO> myProjects = new List<ProjectDTO>();
+
+            foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
+            {
+                if (project.ProjectLeader != null && project.ProjectLeader.Email == currentUser.Email)
+                {
+                    ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
+                    myProjects.Add(projectConverter.FromEntity(project));
+                }
+            }
+
+            return myProjects;
+        }
         
         
-
+        
+        private void CheckProjectLeaderRole()
+        {
+            UserDTO currentUser = LoggedUser.Current;
+            if (currentUser == null || !currentUser.Roles.Contains(RolDTO.ProjectLeader))
+                throw new UnauthorizedLeaderAccessException();
+        }
 
         private void CheckProjectLeaderRole(string projectName)
         {
