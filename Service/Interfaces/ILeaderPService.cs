@@ -9,6 +9,12 @@ namespace Service.Interface
         void UpdateTask(string projectName, string taskTitle, TaskDTO taskDTO);
   
         TaskDTO GetTask(string projectName, string taskTitle);
+        
+        void DeleteTask(string projectName, string taskTitle);
+        List<TaskDTO> GetTasks(string projectName);
+
+        
+        
      
     }
 }

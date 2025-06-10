@@ -210,6 +210,32 @@ public void TestSetUp()
         Assert.AreEqual(5, retrievedTask.Duration);
         Assert.AreEqual(StateDTO.DOING, retrievedTask.State);
     }
+    
+    [TestMethod]
+    public void LeaderPService_ShouldDeleteTask_WhenUserIsProjectLeader()
+    {
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+        TaskDTO taskDTO = new TaskDTO
+        {
+            Title = "Task To Delete",
+            Description = "This task will be deleted",
+            ExpectedStartDate = DateTime.Now.AddDays(2),
+            Duration = 3,
+            State = StateDTO.TODO,
+            Resources = new List<ResourceDTO>()
+        };
+
+        _leaderService.AddTask("Test Project", taskDTO);
+
+        List<TaskDTO> tasksBeforeDelete = _leaderService.GetTasks("Test Project");
+        Assert.AreEqual(1, tasksBeforeDelete.Count);
+
+        _leaderService.DeleteTask("Test Project", "Task To Delete");
+
+        List<TaskDTO> tasksAfterDelete = _leaderService.GetTasks("Test Project");
+        Assert.AreEqual(0, tasksAfterDelete.Count);
+    }
 
 
 }
