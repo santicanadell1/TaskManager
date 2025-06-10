@@ -303,7 +303,7 @@ public void TestSetUp()
     }
 
     [TestMethod]
-    [ExpectedException(typeof(UnauthorizedAdminAccessException))]
+    [ExpectedException(typeof(UnauthorizedLeaderAccessException))]
     public void LeaderPService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotLeaderOfSpecificProject()
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
