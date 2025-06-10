@@ -8,11 +8,9 @@ namespace Controllers;
 public class UserController
 {
     private readonly IUserService _userService;
-    private readonly IRepositoryManager _repositoryManager;
 
     public UserController(IRepositoryManager repositoryManager)
     {
-        _repositoryManager = repositoryManager;
         _userService = new UserService(repositoryManager);
     }
 

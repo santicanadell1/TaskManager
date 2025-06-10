@@ -1,11 +1,11 @@
 ﻿@page "/project/tasks"
-@using Service
+@using Controllers
 @using Service.Models
-@inject TaskService TaskServiceClient
+@inject TaskController _TaskController
 @inject NavigationManager Navigation
-@inject MemberPService MemberPService
-@inject AdminPService AdminPService
-@inject Login Login
+@inject MemberProjectController _MemberProjectController
+@inject AdminProjectController _AdminProjectController
+@inject LoginController _LoginController
 @rendermode InteractiveServer
 
 <link href="styles/styleTaskProjectMember.css" rel="stylesheet"/>
@@ -103,8 +103,8 @@
     {
         try
         {
-            loginMailUser = Login.GetLoggedUser().Email;
-            projects = AdminPService.GetAllProjectsForUser(loginMailUser);
+            loginMailUser = _LoginController.GetLoggedUser().Email;
+            projects = _AdminProjectController.GetAllProjectsForUser(loginMailUser);
         }
         catch (Exception ex)
         {
@@ -124,7 +124,7 @@
 
             try
             {
-                tasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectId, loginMailUser);
+                tasks = _AdminProjectController.GetAllTaskForAMemberInAProject(selectedProjectId, loginMailUser);
             }
             catch (Exception ex)
             {
@@ -144,7 +144,7 @@
             if (!string.IsNullOrEmpty(selectedTaskId) && !string.IsNullOrEmpty(selectedProjectId))
             {
                 StateHasChanged();
-                TaskDTO task = TaskServiceClient.GetTask(selectedProjectId, selectedTaskId);
+                TaskDTO task = _TaskController.GetTask(selectedProjectId, selectedTaskId);
                 taskStatus = task.State;
 
                 taskStatusString = ConvertEnumToString(taskStatus);
@@ -186,7 +186,7 @@
         {
             StateHasChanged();
 
-            TaskDTO existingTask = TaskServiceClient.GetTask(selectedProjectId, selectedTaskId);
+            TaskDTO existingTask = _TaskController.GetTask(selectedProjectId, selectedTaskId);
 
             TaskDTO taskDTO = new TaskDTO
             {
@@ -202,7 +202,7 @@
             };
 
             StateDTO newStatus = taskStatus;
-            MemberPService.ChangeTaskStatus(selectedProjectId, loginMailUser, taskDTO, newStatus);
+            _MemberProjectController.ChangeTaskStatus(selectedProjectId, loginMailUser, taskDTO, newStatus);
 
             successMessage = $"Task '{existingTask.Title}' has been successfully updated to {taskStatusString}!";
             infoMessage = string.Empty;
@@ -223,7 +223,7 @@
         successMessage = string.Empty;
         infoMessage = string.Empty;
     }
-    
+
     private string ConvertEnumToString(StateDTO state)
     {
         return state switch

@@ -7,11 +7,9 @@ namespace Controllers;
 
 public class AdminSystemController
 {
-    private readonly IRepositoryManager _repositoryManager;
     private readonly IAdminSService _adminSService;
     public AdminSystemController(IRepositoryManager repositoryManager)
     {
-        _repositoryManager = repositoryManager;
         _adminSService = new AdminSService(repositoryManager);
     }
 

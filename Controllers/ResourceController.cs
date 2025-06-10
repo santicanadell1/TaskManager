@@ -8,12 +8,10 @@ namespace Controllers;
 
 public class ResourceController
 {
-    private readonly IRepositoryManager _repositoryManager;
     private readonly IResourceService _resourceService;
 
     public ResourceController(IRepositoryManager repositoryManager)
     {
-        _repositoryManager = repositoryManager;
         _resourceService = new ResourceService(repositoryManager);
     }
 

@@ -7,11 +7,9 @@ namespace Controllers;
 
 public class SignUpController
 {
-    private readonly IRepositoryManager _repositoryManager;
     private readonly IUserService _userService;
     public SignUpController(IRepositoryManager repositoryManager)
     {
-        _repositoryManager = repositoryManager;
         _userService = new UserService(repositoryManager);
     }
 
