@@ -150,4 +150,17 @@ public class ProjectTest
     {
         var project = new Project("Project A", "This is a test project", DateTime.Today);
     }
+    
+    [TestMethod]
+    public void GivenProject_WhenProjectLeaderIsSet_ThenProjectLeaderShouldBeCorrect()
+    {
+        var project = new Project();
+        var leader = new User { Roles = new List<Rol> { Rol.ProjectLeader } };
+
+        project.SetProjectLeader(leader);
+        var actualLeader = project.ProjectLeader;
+
+        Assert.AreEqual(leader, actualLeader);
+    }
+    
 }
