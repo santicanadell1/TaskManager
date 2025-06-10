@@ -141,5 +141,8 @@ public class ResourceService : IResourceService
         return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
     }
 
-    
+    public bool IsAvailable(ResourceDTO res, DateTime startDate, int duration)
+    {
+        return res.ConcurrentUsage;
+    }
 }

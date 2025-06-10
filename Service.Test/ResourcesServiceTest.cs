@@ -574,15 +574,13 @@ public class ResourcesServiceTest
     [TestMethod]
     public void IsAvailable_ReturnsTrue_WhenResourceAllowConcurrentUsage()
     {
-        var resource = new Resource
+        ResourceDTO resource = new ResourceDTO
         {
             Name = "ConcurrentResource",
             Type = "TypeA",
             Description = "Desc",
             ConcurrentUsage = true
         };
-        _repositoryManager.ResourceRepository.Add(resource);
-        _context.SaveChanges();
         bool available = _resourceService.IsAvailable(resource, DateTime.Today, 5);
         Assert.IsTrue(available);
     }
