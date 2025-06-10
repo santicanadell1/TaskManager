@@ -70,7 +70,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<int>("AdminProjectId")
+                    b.Property<int?>("AdminProjectId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -311,8 +311,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.User", "AdminProject")
                         .WithMany()
                         .HasForeignKey("AdminProjectId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("AdminProject");
                 });

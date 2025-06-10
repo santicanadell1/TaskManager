@@ -11,6 +11,8 @@ public class Project
     public List<Task> Tasks { get; set; } = new();
     public User AdminProject { get; set; }
 
+    public int? AdminProjectId { get; set; }
+
     public Project()
     {
     }
