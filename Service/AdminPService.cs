@@ -17,7 +17,7 @@ public class AdminPService : IAdminPService
     private readonly IRepositoryManager _repositoryManager;
     private readonly ProjectConverter _projectConverter;
     private readonly UserConverter _userConverter;
-    
+
     public AdminPService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
@@ -152,6 +152,20 @@ public class AdminPService : IAdminPService
         project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
         _repositoryManager.ProjectRepository.Update(project);
     }
+
+    public void RemoveAdminFromProject(string projectName, string adminEmail)
+    {
+        CheckAdminProyectRole();
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        if (project == null) throw new ProjectNotFoundException();
+
+        if (project.AdminProject == null || project.AdminProject.Email != adminEmail)
+            throw new UserIsNotAMemberException();
+
+        project.AdminProject = null;
+        _repositoryManager.ProjectRepository.Update(project);
+    }
+
 
     public void RemoveProject(string projectName)
     {

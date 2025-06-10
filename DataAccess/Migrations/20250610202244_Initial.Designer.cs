@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250609214237_Initial")]
+    [Migration("20250610202244_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -73,7 +73,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<int>("AdminProjectId")
+                    b.Property<int?>("AdminProjectId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -314,8 +314,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.User", "AdminProject")
                         .WithMany()
                         .HasForeignKey("AdminProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("AdminProject");
                 });

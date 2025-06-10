@@ -57,7 +57,7 @@ public class AppDbContext : DbContext
             entity.HasOne(p => p.AdminProject)
                 .WithMany()
                 .HasForeignKey("AdminProjectId")
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<Task>(entity =>
