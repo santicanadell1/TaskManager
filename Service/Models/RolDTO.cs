@@ -4,5 +4,6 @@ public enum RolDTO
 {
     AdminSystem,
     ProjectMember,
-    AdminProject
+    AdminProject,
+    ProjectLeader,
 }
