@@ -13,6 +13,7 @@ public class RolConverter
                 Rol.AdminSystem => RolDTO.AdminSystem,
                 Rol.ProjectMember => RolDTO.ProjectMember,
                 Rol.AdminProject => RolDTO.AdminProject,
+                Rol.ProjectLeader => RolDTO.ProjectLeader,
                 _ => throw new ArgumentException("Rol desconocido")
             }).ToList();
     }
@@ -25,6 +26,7 @@ public class RolConverter
                 RolDTO.AdminSystem => Rol.AdminSystem,
                 RolDTO.ProjectMember => Rol.ProjectMember,
                 RolDTO.AdminProject => Rol.AdminProject,
+                RolDTO.ProjectLeader => Rol.ProjectLeader,
                 _ => throw new ArgumentException("RolDTO desconocido")
             }).ToList();
     }
@@ -39,6 +41,8 @@ public class RolConverter
                 return RolDTO.ProjectMember;
             case Rol.AdminProject:
                 return RolDTO.AdminProject;
+            case Rol.ProjectLeader:
+                return RolDTO.ProjectLeader;
             default:
                 throw new ArgumentException("Invalid role");
         }

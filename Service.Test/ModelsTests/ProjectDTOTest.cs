@@ -57,7 +57,7 @@ public class ProjectDTOTests
             StartDate = DateTime.Now,
             AdminProyect = Admin,
             Members = members,
-            Leader = Leader
+            ProjectLeader = Leader
         };
 
         var validationResults = new List<ValidationResult>();
@@ -77,7 +77,7 @@ public class ProjectDTOTests
             StartDate = DateTime.Now,
             AdminProyect = Admin,
             Members = members,
-            Leader = Leader
+            ProjectLeader = Leader
         };
 
         var validationResults = new List<ValidationResult>();
@@ -97,7 +97,7 @@ public class ProjectDTOTests
             StartDate = DateTime.Now,
             AdminProyect = Admin,
             Members = members,
-            Leader = null  
+            ProjectLeader = null  
         };
 
         var validationResults = new List<ValidationResult>();
@@ -117,7 +117,7 @@ public class ProjectDTOTests
             StartDate = DateTime.Parse("2020-09-01"),
             AdminProyect = Admin,
             Members = members,
-            Leader = Leader  
+            ProjectLeader = Leader  
         };
 
         var validationResults = new List<ValidationResult>();
@@ -137,7 +137,7 @@ public class ProjectDTOTests
             StartDate = DateTime.Parse("2020-09-01"),
             AdminProyect = Admin,
             Members = members,
-            Leader = Leader  
+            ProjectLeader = Leader  
         };
 
         Assert.IsTrue(projectDTO.StartDate == DateTime.Parse("2020-09-01") &&
@@ -145,6 +145,6 @@ public class ProjectDTOTests
                       projectDTO.Description == "Test Description" &&
                       projectDTO.AdminProyect == Admin &&
                       projectDTO.Members == members &&
-                      projectDTO.Leader == Leader);
+                      projectDTO.ProjectLeader == Leader);
     }
 }
