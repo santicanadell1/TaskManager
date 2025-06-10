@@ -144,24 +144,18 @@ public class ResourceService : IResourceService
     public bool IsAvailable(ResourceDTO res, DateTime startDate, int duration)
     {
         if (res.ConcurrentUsage)
-        {
             return true;
-        }
-
         DateTime endDate = startDate.AddDays(duration);
-        List<Task> tasks = _repositoryManager.TaskRepository.GetAll();
-        bool hasConflict = false;
-        foreach (Task task in tasks)
+        var tasksUsingResource = _repositoryManager.TaskRepository
+            .GetAll()
+            .Where(t => t.Resources.Any(r => r.Id == res.Id));
+        foreach (var task in tasksUsingResource)
         {
-            if (task.Resources.Any(r => r.Id == res.Id))
-            {
-                if (task.StartDate.Date <= endDate.Date && task.EndDate.Date >= startDate.Date)
-                {
-                    hasConflict = true;
-                    break;
-                }
-            }
+            DateTime taskStart = task.ExpectedStartDate.Date;
+            DateTime taskEnd   = taskStart.AddDays(task.Duration).Date;
+            if (taskStart < endDate && startDate < taskEnd)
+                return false;
         }
-        return !hasConflict;
+        return true;
     }
 }
