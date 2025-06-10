@@ -190,6 +190,25 @@ public void TestSetUp()
             State = StateDTO.TODO,
             Resources = new List<ResourceDTO>()
         };
+
+        _leaderService.AddTask("Test Project", originalTask);
+
+        TaskDTO updatedTask = new TaskDTO
+        {
+            Title = "Original Task", 
+            Description = "Updated description",
+            ExpectedStartDate = DateTime.Now.AddDays(3),
+            Duration = 5,
+            State = StateDTO.DOING,
+            Resources = new List<ResourceDTO>()
+        };
+
+        _leaderService.UpdateTask("Test Project", "Original Task", updatedTask);
+
+        TaskDTO retrievedTask = _leaderService.GetTask("Test Project", "Original Task");
+        Assert.AreEqual("Updated description", retrievedTask.Description);
+        Assert.AreEqual(5, retrievedTask.Duration);
+        Assert.AreEqual(StateDTO.DOING, retrievedTask.State);
     }
 
 
