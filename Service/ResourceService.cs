@@ -163,6 +163,12 @@ public class ResourceService : IResourceService
     {
         if (res.ConcurrentUsage)
             return startDate.Date;
-        return startDate.Date.AddDays(duration);
+        DateTime candidate = startDate.Date;
+
+        while (!IsAvailable(res, candidate, duration))
+        {
+            candidate = candidate.AddDays(1);
+        }
+        return candidate;
     }
 }
