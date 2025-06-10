@@ -30,7 +30,11 @@ namespace Service
             _taskService.AddTask(projectName, taskDTO);
         }
         
-     
+        public void UpdateTask(string projectName, string taskTitle, TaskDTO taskDTO)
+        {
+            CheckProjectLeaderRole(projectName);
+            _taskService.UpdateTask(projectName, taskTitle, taskDTO);
+        }
         
         public List<ProjectDTO> GetMyProjects()
         {
@@ -51,7 +55,12 @@ namespace Service
             return myProjects;
         }
         
-
+        public TaskDTO GetTask(string projectName, string taskTitle)
+        {
+            CheckProjectLeaderRole(projectName);
+            return _taskService.GetTask(projectName, taskTitle);
+        }
+        
         
         private void CheckProjectLeaderRole()
         {
