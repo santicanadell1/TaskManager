@@ -9,4 +9,8 @@ public interface IResourceService
     List<ResourceDTO> GetResources();
     void UpdateResource(int? id, ResourceDTO updatedResourceDTO);
     void DeleteResource(int? id);
+
+    bool IsAvailable(ResourceDTO resourceDTO, DateTime startDate, int duration);
+
+    DateTime NextDateAvailable(ResourceDTO resourceDTO, DateTime startDate, int duration);
 }
