@@ -53,8 +53,11 @@ public class ResourceTest
     }
 
     [TestMethod]
-    public void SetConcurrentUsage_ShouldSetConcurrentUsageFalseByDefault()
+    public void SetConcurrentUsage_ShouldSetConcurrentUsageCorrectly()
     {
+        Resource res = new Resource("Name", "Type", "Some description");
+        res.ConcurrentUsage = true;
         
+        Assert.IsTrue(res.ConcurrentUsage);
     }
 }
