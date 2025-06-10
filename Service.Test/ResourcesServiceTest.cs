@@ -700,4 +700,19 @@ public class ResourcesServiceTest
 
         Assert.IsFalse(available);
     }
+    [TestMethod]
+    public void NextDateAvailable_ReturnsStartDate_WhenResourceAllowConcurrentUsage()
+    {
+        var resource = new ResourceDTO
+        {
+            Name = "ConcurrentResource",
+            Type = "TypeA",
+            Description = "Desc",
+            ConcurrentUsage = true
+        };
+        DateTime today = DateTime.Today;
+        DateTime next = _resourceService.NextDateAvailable(resource, today, 5);
+        Assert.AreEqual(today, next);
+    }
+
 }
