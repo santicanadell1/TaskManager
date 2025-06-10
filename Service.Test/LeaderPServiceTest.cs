@@ -236,6 +236,15 @@ public void TestSetUp()
         List<TaskDTO> tasksAfterDelete = _leaderService.GetTasks("Test Project");
         Assert.AreEqual(0, tasksAfterDelete.Count);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(TaskNotFoundException))]
+    public void LeaderPService_ShouldThrowTaskNotFoundException_WhenTaskDoesNotExist()
+    {
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+        
+    }
 
 
 }
