@@ -1,8 +1,9 @@
 ﻿@page "/resources/delete"
+@using Controllers
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
-@inject ResourceService ResourceService
+@inject ResourceController _ResourceController
 @rendermode InteractiveServer
 
 <link href="styles/styleDeleteResource.css" rel="stylesheet"/>
@@ -64,7 +65,7 @@
     {
         try
         {
-            resourcesList = ResourceService.GetResources();
+            resourcesList = _ResourceController.GetAllResources();
             if (resourcesList == null || resourcesList.Count == 0)
             {
                 deleteError = "No resources found.";
@@ -91,7 +92,7 @@
 
         try
         {
-            ResourceService.DeleteResource(selectedResourceId.Value);
+            _ResourceController.DeleteResource(selectedResourceId.Value);
             deleteSuccess = "Resource deleted successfully.";
 
             LoadResources();

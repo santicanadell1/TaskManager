@@ -1,8 +1,9 @@
 ﻿@page "/resources/manage"
+@using Controllers
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
-@inject ResourceService ResourceService
+@inject ResourceController _ResourceController
 @rendermode InteractiveServer
 
 <link href="styles/styleManageResources.css" rel="stylesheet"/>
@@ -104,7 +105,7 @@
     {
         try
         {
-            resourcesList = ResourceService.GetResources();
+            resourcesList = _ResourceController.GetAllResources();
         }
         catch (Exception ex)
         {
@@ -128,7 +129,7 @@
     {
         try
         {
-            ResourceService.UpdateResource(editingResource.Id, editingResource);
+            _ResourceController.UpdateResource(editingResource.Id, editingResource);
             successMessage = "Resource updated successfully.";
             LoadResources();
             CloseEditModal();

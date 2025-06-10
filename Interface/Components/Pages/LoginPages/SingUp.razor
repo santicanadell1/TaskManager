@@ -1,8 +1,8 @@
 ﻿@page "/signup"
-@using Service
+@using Controllers
 @using Service.Models
 @inject NavigationManager Navigation
-@inject UserService UserService
+@inject SignUpController _SignUpController
 @rendermode InteractiveServer
 
 <div class="login-container">
@@ -129,7 +129,7 @@
                 return;
             }
 
-            UserService.AddUser(_userDto);
+            _SignUpController.SignUp(_userDto);
 
             Navigation.NavigateTo("/login");
         }

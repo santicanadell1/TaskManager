@@ -20,6 +20,8 @@ builder.Services.AddScoped<GanttService>();
 builder.Services.AddScoped<NotificationService>();
 
 builder.Services.AddScoped<LoginController>();
+builder.Services.AddScoped<SignUpController>();
+builder.Services.AddScoped<ResourceController>();
 
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<RolConverter>();

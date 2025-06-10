@@ -1,10 +1,9 @@
 ﻿@page "/login"
 @using Controllers
-@using Service
 @using Service.Exceptions.LoginExceptions
 @using Service.Models
 @inject NavigationManager Navigation
-@inject LoginController _Login
+@inject LoginController _LoginController
 @rendermode InteractiveServer
 
 
@@ -72,7 +71,7 @@
     {
         try
         {
-            _Login.LoginUser(_userLoginDto.Email, _userLoginDto.Password);
+            _LoginController.LoginUser(_userLoginDto.Email, _userLoginDto.Password);
 
             Navigation.NavigateTo("/");
         }
