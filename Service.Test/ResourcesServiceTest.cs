@@ -584,4 +584,17 @@ public class ResourcesServiceTest
         bool available = _resourceService.IsAvailable(resource, DateTime.Today, 5);
         Assert.IsTrue(available);
     }
+    [TestMethod]
+    public void IsAvailable_ReturnsTrue_WhenNoAssignmentsExist()
+    {
+        ResourceDTO resource = new ResourceDTO
+        {
+            Name = "ExclusiveResource",
+            Type = "TypeB",
+            Description = "Desc",
+            ConcurrentUsage = false
+        };
+        bool available = _resourceService.IsAvailable(resource, DateTime.Today, 5);
+        Assert.IsTrue(available);
+    }
 }
