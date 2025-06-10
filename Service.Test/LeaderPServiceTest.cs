@@ -302,5 +302,50 @@ public void TestSetUp()
         Assert.IsTrue(criticalPath.ProjectDuration >= 0);
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(UnauthorizedAdminAccessException))]
+    public void LeaderPService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotLeaderOfSpecificProject()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+        
+        UserDTO anotherLeader = new UserDTO
+        {
+            FirstName = "Another",
+            LastName = "Leader",
+            Email = "another.leader@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO> { RolDTO.ProjectLeader }
+        };
+        
+        _userService.AddUser(anotherLeader);
+
+        ProjectDTO anotherProject = new ProjectDTO
+        {
+            Name = "Another Project",
+            Description = "Another project description",
+            StartDate = DateTime.Now.AddDays(1),
+            AdminProyect = _userService.GetUser("admin.user@example.com"),
+            ProjectLeader = anotherLeader,
+            Members = new List<UserDTO>()
+        };
+
+        _adminService.CreateProject(anotherProject);
+
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+        TaskDTO taskDTO = new TaskDTO
+        {
+            Title = "Unauthorized Task",
+            Description = "This should fail",
+            ExpectedStartDate = DateTime.Now.AddDays(2),
+            Duration = 3,
+            State = StateDTO.TODO,
+            Resources = new List<ResourceDTO>()
+        };
+
+        _leaderService.AddTask("Another Project", taskDTO);
+    }
+    
 
 }
