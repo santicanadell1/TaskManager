@@ -175,8 +175,20 @@ public void TestSetUp()
 
         _leaderService.AddTask("Nonexistent Project", taskDTO);
     }
-    
+
+    [TestMethod]
+    public void LeaderPService_ShouldUpdateTask_WhenUserIsProjectLeader()
+    {
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+        TaskDTO originalTask = new TaskDTO
+        {
+            Title = "Original Task",
+            Description = "Original description",
+            ExpectedStartDate = DateTime.Now.AddDays(2),
+            Duration = 3,
+        };
+    }
 
 
-  
 }
