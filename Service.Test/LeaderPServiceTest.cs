@@ -245,6 +245,31 @@ public void TestSetUp()
 
         _leaderService.DeleteTask("Test Project", "Nonexistent Task");
     }
+  
+    [TestMethod]
+    public void LeaderPService_ShouldGetAllTasks_WhenUserIsProjectLeader()
+    {
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
+        TaskDTO task1 = new TaskDTO
+        {
+            Title = "Task 1",
+            Description = "First task",
+            ExpectedStartDate = DateTime.Now.AddDays(2),
+            Duration = 3,
+            State = StateDTO.TODO,
+            Resources = new List<ResourceDTO>()
+        };
+
+     
+
+        _leaderService.AddTask("Test Project", task1);
+        _leaderService.AddTask("Test Project", task2);
+
+        List<TaskDTO> tasks = _leaderService.GetTasks("Test Project");
+        Assert.AreEqual(2, tasks.Count);
+        Assert.IsTrue(tasks.Any(t => t.Title == "Task 1"));
+        Assert.IsTrue(tasks.Any(t => t.Title == "Task 2"));
+    }
 
 }
