@@ -34,4 +34,9 @@ public class AdminSystemController
     {
         _adminSService.ChangeToDefaultPassword(userEmail, oldPassword);
     }
+
+    public void DeleteUser(UserDTO user)
+    {
+        _adminSService.DeleteUser(user);
+    }
 }

@@ -202,7 +202,6 @@ public class AdminPService : IAdminPService
     public List<ProjectDTO> GetAllProjectsForUser(string Email)
     {
         List<ProjectDTO> projects = new List<ProjectDTO>();
-        Console.WriteLine("entro", ConsoleColor.Yellow);
 
         foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
             if (project.AdminProject.Email == Email || project.Members.Any(m => m.Email == Email))

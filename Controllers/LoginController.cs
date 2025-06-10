@@ -30,4 +30,9 @@ public class LoginController
     {
         _login.UpdateUser(userToUpdate);
     }
+
+    public void Logout()
+    {
+        _login.Logout();
+    }
 }

@@ -40,9 +40,16 @@ public class AdminSService : IAdminSService
         UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
+        
         List<ProjectDTO> projects = adminPService.GetAllProjectsForUser(userDTO.Email);
-        foreach (ProjectDTO project in projects) adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
+        
+        foreach (ProjectDTO project in projects)
+        {
+            adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
+        }
+
         User userEntity = _repositoryManager.UserRepository.Get(u => u.Email == userDTO.Email);
+
         _repositoryManager.UserRepository.Delete(userEntity);
     }
 
