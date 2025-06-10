@@ -279,5 +279,28 @@ public void TestSetUp()
         Assert.IsTrue(tasks.Any(t => t.Title == "Task 1"));
         Assert.IsTrue(tasks.Any(t => t.Title == "Task 2"));
     }
+    
+    [TestMethod]
+    public void LeaderPService_ShouldGetCriticalPath_WhenUserIsProjectLeader()
+    {
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+        TaskDTO task = new TaskDTO
+        {
+            Title = "Critical Task",
+            Description = "Task for critical path test",
+            ExpectedStartDate = DateTime.Now.AddDays(2),
+            Duration = 5,
+            State = StateDTO.TODO,
+            Resources = new List<ResourceDTO>()
+        };
+
+        _leaderService.AddTask("Test Project", task);
+
+        CpmResultDTO criticalPath = _leaderService.GetCriticalPath("Test Project");
+        Assert.IsNotNull(criticalPath);
+        Assert.IsTrue(criticalPath.ProjectDuration >= 0);
+    }
+
 
 }
