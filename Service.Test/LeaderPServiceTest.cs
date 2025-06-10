@@ -173,7 +173,7 @@ public void TestSetUp()
             Resources = new List<ResourceDTO>()
         };
 
-        
+        _leaderService.AddTask("Nonexistent Project", taskDTO);
     }
     
 
