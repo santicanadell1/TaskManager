@@ -261,7 +261,15 @@ public void TestSetUp()
             Resources = new List<ResourceDTO>()
         };
 
-     
+        TaskDTO task2 = new TaskDTO
+        {
+            Title = "Task 2",
+            Description = "Second task",
+            ExpectedStartDate = DateTime.Now.AddDays(3),
+            Duration = 4,
+            State = StateDTO.DOING,
+            Resources = new List<ResourceDTO>()
+        };
 
         _leaderService.AddTask("Test Project", task1);
         _leaderService.AddTask("Test Project", task2);
