@@ -157,6 +157,25 @@ public void TestSetUp()
     }
     
     
+    [TestMethod]
+    [ExpectedException(typeof(ProjectNotFoundException))]
+    public void LeaderPService_ShouldThrowProjectNotFoundException_WhenProjectDoesNotExist()
+    {
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+        TaskDTO taskDTO = new TaskDTO
+        {
+            Title = "Test Task",
+            Description = "Test task description",
+            ExpectedStartDate = DateTime.Now.AddDays(2),
+            Duration = 5,
+            State = StateDTO.TODO,
+            Resources = new List<ResourceDTO>()
+        };
+
+        
+    }
+    
 
 
   
