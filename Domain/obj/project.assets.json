@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Nicob\\.nuget\\packages\\": {}
+    "/home/feli/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\OBLS\\305108_282542_281987\\Domain\\Domain.csproj",
+      "projectUniqueName": "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "C:\\OBLS\\305108_282542_281987\\Domain\\Domain.csproj",
-      "packagesPath": "C:\\Users\\Nicob\\.nuget\\packages\\",
-      "outputPath": "C:\\OBLS\\305108_282542_281987\\Domain\\obj\\",
+      "projectPath": "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj",
+      "packagesPath": "/home/feli/.nuget/packages/",
+      "outputPath": "/home/feli/RiderProjects/305108_282542_281987/Domain/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Nicob\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/feli/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -59,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.116/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

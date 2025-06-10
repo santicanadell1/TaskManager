@@ -2783,19 +2783,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Nicob\\.nuget\\packages\\": {}
+    "/home/feli/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\OBLS\\305108_282542_281987\\Service\\Service.csproj",
+      "projectUniqueName": "/home/feli/RiderProjects/305108_282542_281987/Service/Service.csproj",
       "projectName": "Service",
-      "projectPath": "C:\\OBLS\\305108_282542_281987\\Service\\Service.csproj",
-      "packagesPath": "C:\\Users\\Nicob\\.nuget\\packages\\",
-      "outputPath": "C:\\OBLS\\305108_282542_281987\\Service\\obj\\",
+      "projectPath": "/home/feli/RiderProjects/305108_282542_281987/Service/Service.csproj",
+      "packagesPath": "/home/feli/.nuget/packages/",
+      "outputPath": "/home/feli/RiderProjects/305108_282542_281987/Service/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Nicob\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/feli/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -2807,11 +2807,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\OBLS\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "C:\\OBLS\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
+            "/home/feli/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj": {
+              "projectPath": "/home/feli/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj"
             },
-            "C:\\OBLS\\305108_282542_281987\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\OBLS\\305108_282542_281987\\Domain\\Domain.csproj"
+            "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj": {
+              "projectPath": "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj"
             }
           }
         }
@@ -2841,7 +2841,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.116/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

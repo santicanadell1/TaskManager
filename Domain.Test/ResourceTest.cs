@@ -26,12 +26,12 @@ public class ResourceTest
     [TestMethod]
     public void NewResource_WithValidValues_ShouldCreateResourceCorrectly()
     {
-        var name = "Laptop";
-        var type = "Hardware";
-        var description = "Dell Latitude";
+        string name = "Laptop";
+        string type = "Hardware";
+        string description = "Dell Latitude";
 
 
-        var res = new Resource(name, type, description);
+        Resource res = new Resource(name, type, description);
 
 
         Assert.AreEqual(name, res.Name);
@@ -42,7 +42,7 @@ public class ResourceTest
     [TestMethod]
     public void UpdateResourceName_ShouldChangeNameSuccessfully()
     {
-        var res = new Resource("Old Name", "Humano", "Some description");
+        Resource res = new Resource("Old Name", "Humano", "Some description");
 
 
         res.Name = "New Name";
@@ -50,5 +50,11 @@ public class ResourceTest
 
 
         Assert.AreEqual("New Name", res.Name);
+    }
+
+    [TestMethod]
+    public void SetConcurrentUsage_ShouldSetConcurrentUsageFalseByDefault()
+    {
+        
     }
 }
