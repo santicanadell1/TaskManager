@@ -24,4 +24,14 @@ public class AdminSystemController
     {
         _adminSService.AssignRole(user, role);
     }
+
+    public void ChangeUserPassword(string userEmail, string oldPassword, string newPassword)
+    {
+        _adminSService.ChangePassword(userEmail, oldPassword, newPassword);
+    }
+
+    public void ChangeToDefaultPassword(string userEmail, string oldPassword)
+    {
+        _adminSService.ChangeToDefaultPassword(userEmail, oldPassword);
+    }
 }
