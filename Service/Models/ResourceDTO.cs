@@ -13,5 +13,7 @@ public class ResourceDTO
     [Required(ErrorMessage = "Description is required.")]
     public string Description { get; set; }
 
+    public bool ConcurrentUsage { get; set; }
+
     public int? Id { get; set; }
 }
