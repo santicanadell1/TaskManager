@@ -347,5 +347,19 @@ public void TestSetUp()
         _leaderService.AddTask("Another Project", taskDTO);
     }
     
+    [TestMethod]
+    public void GetProject_ShouldReturnProject_WhenUserIsProjectLeader()
+    {
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+    
+        ProjectDTO project = _leaderService.GetProject("Test Project");
+    
+        Assert.IsNotNull(project);
+        Assert.AreEqual("Test Project", project.Name);
+        Assert.AreEqual("Test project description", project.Description);
+        Assert.IsNotNull(project.ProjectLeader);
+        Assert.AreEqual("leader.user@example.com", project.ProjectLeader.Email);
+    }
+    
 
 }

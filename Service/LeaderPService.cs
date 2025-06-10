@@ -78,7 +78,6 @@ namespace Service
             CheckProjectLeaderRole(projectName);
             return _taskService.GetCriticalPath(projectName);
         }
-        
       
         
         private void CheckProjectLeaderRole()
