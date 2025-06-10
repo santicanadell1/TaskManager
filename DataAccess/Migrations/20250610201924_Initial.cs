@@ -63,7 +63,7 @@ namespace DataAccess.Migrations
                         column: x => x.AdminProjectId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

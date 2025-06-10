@@ -311,7 +311,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.User", "AdminProject")
                         .WithMany()
                         .HasForeignKey("AdminProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("AdminProject");

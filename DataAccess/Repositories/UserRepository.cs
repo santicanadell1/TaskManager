@@ -87,13 +87,23 @@ public class UserRepository : IRepository<User>
     {
         try
         {
-            User existingUser = _db.Users.FirstOrDefault(u => u.Email == user.Email);
-            _db.Set<User>().Remove(existingUser);
+            User existingUser = _db.Users
+                .Include(u => u.Notifications)
+                .Include(u => u.Tasks)
+                .FirstOrDefault(u => u.Email == user.Email);
+
+            if (existingUser == null)
+                throw new UserNotFoundException();
+
+            existingUser.Notifications.Clear();
+            existingUser.Tasks.Clear();
+
+            _db.Users.Remove(existingUser);
             _db.SaveChanges();
         }
         catch (Exception e)
         {
-            throw new UserNotFoundException();
+            throw new Exception($"Error deleting user: {e.Message}", e);
         }
     }
 }
