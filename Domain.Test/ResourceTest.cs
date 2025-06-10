@@ -60,4 +60,11 @@ public class ResourceTest
         
         Assert.IsTrue(res.ConcurrentUsage);
     }
+    
+    [TestMethod]
+    public void SetConcurrentUsage_ShouldSetConcurrentUsageFalseByDefault()
+    {
+        Resource res = new Resource("Name", "Type", "Description");
+        Assert.IsFalse(res.ConcurrentUsage);
+    }
 }
