@@ -714,5 +714,42 @@ public class ResourcesServiceTest
         DateTime next = _resourceService.NextDateAvailable(resource, today, 5);
         Assert.AreEqual(today, next);
     }
+    [TestMethod]
+    public void NextDateAvailable_MovesToEndOfBlockingAssignment_WhenAssignmentOverlapsStartDate()
+    {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        var resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1"
+        };
+        _resourceService.AddResource(resourceDTO);
+        var added = _repositoryManager.ResourceRepository
+            .Get(r => r.Name == "Resource1");
+        var resDto = _resourceService.Get(added.Id);
 
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var project = new ProjectDTO
+        {
+            Name = "Project1",
+            Description = "Description of Project1",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(project);
+        var task = new TaskDTO
+        {
+            Title = "T1",
+            Description = "Desc",
+            ExpectedStartDate = DateTime.Today,
+            Duration = 5,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resDto }
+        };
+        _taskService.AddTask("Project1", task);
+        DateTime next = _resourceService.NextDateAvailable(resDto, DateTime.Today, 3);
+        Assert.AreEqual(DateTime.Today.AddDays(5), next);
+    }
 }
