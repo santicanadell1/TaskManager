@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Domain\\Domain.csproj",
+      "projectUniqueName": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Domain\\Domain.csproj",
+      "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj",
       "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "E:\\OBLS\\OBL1-DA1\\305108_282542_281987\\Domain\\obj\\",
+      "outputPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
