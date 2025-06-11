@@ -116,6 +116,18 @@
                             </div>
                         </div>
                     }
+                    @if (showEditForceConfirm)
+                    {
+                        <div class="alert alert-warning d-flex justify-content-between align-items-center" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                The resource is not available for the selected date. Do you want to force editing the task?
+                            </span>
+                            <div>
+                                <button class="btn btn-secondary me-2" @onclick="CancelEditForce">Cancel</button>
+                                <button class="btn btn-primary" @onclick="ForceEditTask">Force Updating</button>
+                            </div>
+                        </div>
+                    }
                     
 
                     <EditForm Model="@newTask" OnValidSubmit="HandleCreateTaskSubmit">
@@ -816,6 +828,7 @@
     private bool showTaskListModal;
     private bool showMemberListModal;
     private bool showForceConfirm = false;
+    private bool showEditForceConfirm = false;
 
     private string errorMessage = string.Empty;
     private string taskErrorMessage = string.Empty;
@@ -827,9 +840,13 @@
     private string assignTaskErrorMessage = string.Empty;
     private string assignTaskSuccessMessage = string.Empty;
     private string pendingProjectName;
+    private string pendingEditProjectName;
+    private string pendingEditOriginalTitle;
 
     private TaskDTO newTask = new();
     private TaskDTO pendingTask;
+    private TaskDTO pendingEditTask;
+
     private readonly HashSet<int?> selectedResourceIds = new();
     private readonly List<int?> previousTaskIds = new();
     private readonly List<string> previousTaskDependencies = new();
@@ -1266,7 +1283,8 @@
             selectedTaskToEdit.Resources = availableResources
                 .Where(r => r.Id.HasValue && editSelectedResourceIds.Contains(r.Id))
                 .ToList();
-
+            pendingEditOriginalTitle = selectedTaskToEdit.Title;
+            pendingEditTask = selectedTaskToEdit;
             TaskService.UpdateTask(selectedProjectName, selectedTaskToEdit.Title, selectedTaskToEdit);
             editTaskSuccessMessage = "Task updated successfully!";
             editTaskErrorMessage = string.Empty;
@@ -1274,10 +1292,43 @@
             await Task.Delay(1500);
             CloseEditTaskModal(true);
         }
+        catch (ResourceNotAvailableException)
+        {
+            pendingEditProjectName = selectedProjectName;
+            showEditForceConfirm = true;
+        }
         catch (Exception ex)
         {
             editTaskErrorMessage = $"Error updating task: {ex.Message}";
             editTaskSuccessMessage = string.Empty;
+        }
+    }
+    private void CancelEditForce()
+    {
+        showEditForceConfirm = false;
+        pendingEditTask = null;
+        pendingEditProjectName = null;
+        pendingEditOriginalTitle = null;
+        editTaskErrorMessage = string.Empty;
+    }
+
+    private async Task ForceEditTask()
+    {
+        try
+        {
+            TaskService.UpdateTask(
+                pendingEditProjectName,
+                pendingEditOriginalTitle,
+                pendingEditTask,
+                solve: true
+            );
+            editTaskSuccessMessage = "Task updated (forced) successfully!";
+            showEditForceConfirm = false;
+            CloseEditTaskModal(true);
+        }
+        catch (Exception ex)
+        {
+            editTaskErrorMessage = $"Error forcing update: {ex.Message}";
         }
     }
 
