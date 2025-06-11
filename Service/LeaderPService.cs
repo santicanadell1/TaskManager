@@ -15,31 +15,17 @@ namespace Service
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly TaskService _taskService;
-        private readonly CpmService _cpmService;
 
-        public LeaderPService(IRepositoryManager repositoryManager)
+        public LeaderPService(IRepositoryManager repositoryManager, TaskService taskService)
         {
             _repositoryManager = repositoryManager;
-            _cpmService = new CpmService();
-            _taskService = new TaskService(_repositoryManager, _cpmService);
-        }
-
-        public void AddTask(string projectName, TaskDTO taskDTO)
-        {
-            CheckProjectLeaderRole(projectName);
-            _taskService.AddTask(projectName, taskDTO);
+            _taskService = taskService;
         }
         
         public void UpdateTask(string projectName, string taskTitle, TaskDTO taskDTO)
         {
             CheckProjectLeaderRole(projectName);
             _taskService.UpdateTask(projectName, taskTitle, taskDTO);
-        }
-        
-        public void DeleteTask(string projectName, string taskTitle)
-        {
-            CheckProjectLeaderRole(projectName);
-            _taskService.DeleteTask(projectName, taskTitle);
         }
         
         public List<ProjectDTO> GetMyProjects()
@@ -61,22 +47,24 @@ namespace Service
             return myProjects;
         }
         
-        public TaskDTO GetTask(string projectName, string taskTitle)
+        public ProjectDTO GetProject(string projectName)
         {
             CheckProjectLeaderRole(projectName);
-            return _taskService.GetTask(projectName, taskTitle);
+    
+            Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+            if (project == null) 
+                throw new ProjectNotFoundException();
+    
+            ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
+            return projectConverter.FromEntity(project);
         }
+        
+     
         
         public List<TaskDTO> GetTasks(string projectName)
         {
             CheckProjectLeaderRole(projectName);
             return _taskService.GetTasks(projectName);
-        }
-        
-        public CpmResultDTO GetCriticalPath(string projectName)
-        {
-            CheckProjectLeaderRole(projectName);
-            return _taskService.GetCriticalPath(projectName);
         }
       
         

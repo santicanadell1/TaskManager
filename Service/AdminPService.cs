@@ -69,7 +69,6 @@ public class AdminPService : IAdminPService
             Console.WriteLine($"Project found: {project.Name} (ID: {project.Id})");
             Console.WriteLine($"Current members: {project.Members?.Count ?? 0}");
 
-            // Inicializar Members si es null
             if (project.Members == null)
             {
                 project.Members = new List<User>();
@@ -79,14 +78,12 @@ public class AdminPService : IAdminPService
             {
                 Console.WriteLine($"Processing member: {memberDTO.FirstName} {memberDTO.LastName} ({memberDTO.Email})");
 
-                // CAMBIO: Lanzar excepción si ya es miembro (en lugar de skip)
                 if (project.Members.Any(u => u.Email == memberDTO.Email))
                 {
                     Console.WriteLine($"User {memberDTO.Email} is already a member - throwing exception");
                     throw new UserIsAlreadyAMemberException();
                 }
 
-                // Buscar el usuario en la base de datos
                 User existingUser = _repositoryManager.UserRepository.Get(u => u.Email == memberDTO.Email);
                 if (existingUser == null)
                 {
@@ -97,14 +94,12 @@ public class AdminPService : IAdminPService
                 Console.WriteLine(
                     $"User found in DB: {existingUser.FirstName} {existingUser.LastName} (ID: {existingUser.Id})");
 
-                // Verificar que no esté ya en la lista por ID también
                 if (project.Members.Any(u => u.Id == existingUser.Id))
                 {
                     Console.WriteLine($"User {memberDTO.Email} already exists by ID - throwing exception");
                     throw new UserIsAlreadyAMemberException();
                 }
 
-                // Agregar el usuario encontrado en la DB
                 project.Members.Add(existingUser);
                 Console.WriteLine($"User {memberDTO.Email} added successfully");
             }

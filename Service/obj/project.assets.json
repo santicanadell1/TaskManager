@@ -2941,19 +2941,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\santi\\.nuget\\packages\\": {}
+    "/Users/santicanadell/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Service\\Service.csproj",
+      "projectUniqueName": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Service/Service.csproj",
       "projectName": "Service",
-      "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Service\\Service.csproj",
-      "packagesPath": "C:\\Users\\santi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Service\\obj\\",
+      "projectPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Service/Service.csproj",
+      "packagesPath": "/Users/santicanadell/.nuget/packages/",
+      "outputPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Service/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\santi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/santicanadell/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -2965,11 +2965,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
+            "/Users/santicanadell/Desktop/GIt/305108_282542_281987/DataAccess/DataAccess.csproj": {
+              "projectPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/DataAccess/DataAccess.csproj"
             },
-            "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Domain\\Domain.csproj"
+            "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Domain/Domain.csproj": {
+              "projectPath": "/Users/santicanadell/Desktop/GIt/305108_282542_281987/Domain/Domain.csproj"
             }
           }
         }
@@ -3010,7 +3010,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.407/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.410/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
