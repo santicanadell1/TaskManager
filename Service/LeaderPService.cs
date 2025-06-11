@@ -51,18 +51,19 @@ namespace Service
             return projectConverter.FromEntity(project);
         }
 
+        //do not show resources from the ui
         public TaskDTO GetTask(string projectName, string taskTitle)
         {
             CheckProjectLeaderRole(projectName);
             return _taskService.GetTask(projectName, taskTitle);
         }
 
+        //do not show resources from the ui
         public List<TaskDTO> GetTasks(string projectName)
         {
             CheckProjectLeaderRole(projectName);
             return _taskService.GetTasks(projectName);
         }
-
 
         private void CheckProjectLeaderRole()
         {
@@ -83,6 +84,5 @@ namespace Service
             if (project.ProjectLeader == null || project.ProjectLeader.Email != currentUser.Email)
                 throw new UnauthorizedLeaderAccessException();
         }
-        
     }
 }
