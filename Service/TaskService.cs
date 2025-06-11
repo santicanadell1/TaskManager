@@ -146,6 +146,14 @@ public class TaskService
         );
         updatedTask.Id = task.Id;
         updatedTask.State = (State)taskDTO.State;
+        DateTime startDate = updatedTask.ExpectedStartDate;
+        foreach (var res in taskDTO.Resources)
+        {
+            DateTime next = _resourceService.NextDateAvailable(res, startDate, taskDTO.Duration);
+            if (next > startDate)
+                startDate = next;
+        }
+        updatedTask.ExpectedStartDate = startDate;
         _repositoryManager.TaskRepository.Update(updatedTask);
         updatedTask = _repositoryManager.TaskRepository.Get(t => t.Title == updatedTask.Title);
         _repositoryManager.ProjectRepository.UpdateTask(projectName, updatedTask.Id, updatedTask);
