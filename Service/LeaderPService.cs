@@ -121,7 +121,17 @@ public class LeaderPService : ILeaderPService
         return memberTasks;
     }
 
-    
+    public void AddTaskToMember(string projectName, string memberEmail, string taskTitle)
+    {
+        UserDTO currentUser = LoggedUser.Current;
+        bool isAdminProject = false;
+
+        AddTempAdminProjectRole(currentUser, isAdminProject);
+
+        _adminPService.AddTaskToMember(projectName, memberEmail, taskTitle);
+
+        RemoveTempAdminProjectRole(currentUser, isAdminProject);
+    }
 
     private void CheckProjectLeaderRole(string projectName)
     {
