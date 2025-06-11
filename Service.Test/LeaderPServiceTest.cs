@@ -389,11 +389,9 @@ public class LeaderPService_Test
 
         _leaderService.AssignMembersToProject(project.Name, membersToAdd);
 
-        _leaderService.GetAllMembersOfAProject(project.Name);
+        List<UserDTO> members = _leaderService.GetAllMembersOfAProject(project.Name);
 
-        project = _repositoryManager.ProjectRepository.Get(p => p.Name == project.Name);
-        Assert.IsNotNull(project);
-        Assert.IsTrue(project.Members.Exists(m => m.Email == normalUserDTO.Email));
+        Assert.IsTrue(members.Exists(m => m.Email == normalUserDTO.Email));
     }
 
     [TestMethod]
