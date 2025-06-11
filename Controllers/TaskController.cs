@@ -24,12 +24,12 @@ public class TaskController
         return _taskService.GetTasks(projectName);
     }
 
-    public void AddTaskToProject(string projectName, TaskDTO newCreatedTask)
+    public void AddTaskToProject(string projectName, TaskDTO newCreatedTask, bool solved = false)
     {
-        _taskService.AddTask(projectName, newCreatedTask);
+        _taskService.AddTask(projectName, newCreatedTask, solved);
     }
 
-    public void UpdateTask(string projectName, string taskToUpdate, TaskDTO newUpdatedTask)
+    public void UpdateTask(string projectName, string taskToUpdate, TaskDTO newUpdatedTask, bool solved = false)
     {
         _taskService.UpdateTask(projectName, taskToUpdate, newUpdatedTask);
     }

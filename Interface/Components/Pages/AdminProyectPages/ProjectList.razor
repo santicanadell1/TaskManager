@@ -1,5 +1,7 @@
 ﻿@page "/project/options"
 @using Controllers
+@using Service
+@using Service.Exceptions.ResourceServiceExceptions
 @using Service.Models
 @inject AdminProjectController _AdminProjectController
 @inject TaskController _TaskController
@@ -1112,7 +1114,7 @@
     {
         try
         {
-            TaskService.AddTask(pendingProjectName, pendingTask, solve: true);
+            _TaskController.AddTaskToProject(pendingProjectName, pendingTask, true);
             taskSuccessMessage = "Task created (forced) successfully!";
             showForceConfirm = false;
             CloseCreateTaskModal(true);
@@ -1315,11 +1317,11 @@
     {
         try
         {
-            TaskService.UpdateTask(
+            _TaskController.UpdateTask(
                 pendingEditProjectName,
                 pendingEditOriginalTitle,
                 pendingEditTask,
-                solve: true
+                true
             );
             editTaskSuccessMessage = "Task updated (forced) successfully!";
             showEditForceConfirm = false;
