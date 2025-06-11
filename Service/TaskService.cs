@@ -149,6 +149,8 @@ public class TaskService
         DateTime startDate = updatedTask.ExpectedStartDate;
         foreach (var res in taskDTO.Resources)
         {
+            if (!_resourceService.IsAvailable(res, startDate, taskDTO.Duration) && !solve)
+                throw new ResourceNotAvailableException();
             DateTime next = _resourceService.NextDateAvailable(res, startDate, taskDTO.Duration);
             if (next > startDate)
                 startDate = next;
