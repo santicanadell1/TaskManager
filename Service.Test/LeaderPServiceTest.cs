@@ -25,6 +25,7 @@ public class LeaderPService_Test
     private UserDTO leaderUserDTO;
     private UserDTO normalUserDTO;
     private Project project;
+    private TaskDTO initialTask;
 
     [TestInitialize]
     public void TestSetUp()
@@ -93,7 +94,7 @@ public class LeaderPService_Test
         _repositoryManager.ProjectRepository.Add(project);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-        TaskDTO initialTask = new TaskDTO
+        initialTask = new TaskDTO
         {
             Title = "Initial Task",
             Description = "Initial task for testing",
@@ -464,5 +465,26 @@ public class LeaderPService_Test
         Assert.AreEqual(2, tasksForMember.Count);
         Assert.IsTrue(tasksForMember.Any(t => t.Title == "Task 1"));
         Assert.IsTrue(tasksForMember.Any(t => t.Title == "Task 2"));
+    }
+
+    [TestMethod]
+    public void AddTaskToMember_ShouldAddTask_WhenUserIsAdmin()
+    {
+        List<UserDTO> membersToAdd = new List<UserDTO>
+        {
+            _userService.GetUser(normalUserDTO.Email)
+        };
+
+        _loginService.LoginUser(leaderUserDTO.Email, leaderUserDTO.Password);
+        _leaderService.AssignMembersToProject(project.Name, membersToAdd);
+
+        _loginService.LoginUser(adminUserDTO.Email, adminUserDTO.Password);
+
+        _leaderService.AddTaskToMember(project.Name, normalUserDTO.Email, initialTask.Title);
+
+        List<TaskDTO> tasksForMember = _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
+        Assert.IsNotNull(tasksForMember);
+        Assert.IsTrue(tasksForMember.Any(t => t.Title == initialTask.Title),
+            "The task should be added to the member's task list.");
     }
 }
