@@ -21,6 +21,9 @@ public class LeaderPService_Test
     private UserService _userService;
     private IRepositoryManager _repositoryManager;
     private CpmService _cpmService;
+    private UserDTO adminUserDTO;
+    private UserDTO leaderUserDTO;
+    private UserDTO normalUserDTO;
 
     [TestInitialize]
     public void TestSetUp()
@@ -40,7 +43,7 @@ public class LeaderPService_Test
         _loginService = new Login(_repositoryManager);
         _userService = new UserService(_repositoryManager);
 
-        UserDTO adminUserDTO = new UserDTO
+        adminUserDTO = new UserDTO
         {
             FirstName = "Admin",
             LastName = "User",
@@ -50,7 +53,7 @@ public class LeaderPService_Test
             Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
 
-        UserDTO leaderUserDTO = new UserDTO
+        leaderUserDTO = new UserDTO
         {
             FirstName = "Leader",
             LastName = "User",
@@ -60,7 +63,7 @@ public class LeaderPService_Test
             Roles = new List<RolDTO> { RolDTO.ProjectLeader }
         };
 
-        UserDTO normalUserDTO = new UserDTO
+        normalUserDTO = new UserDTO
         {
             FirstName = "Normal",
             LastName = "User",
@@ -83,7 +86,7 @@ public class LeaderPService_Test
             Description = "Test project description",
             StartDate = DateTime.Now.AddDays(1),
             AdminProject = adminUser,
-            ProjectLeader = leaderUser  
+            ProjectLeader = leaderUser
         };
 
         _repositoryManager.ProjectRepository.Add(project);
@@ -101,7 +104,6 @@ public class LeaderPService_Test
         _taskService.AddTask("Test Project", initialTask);
 
         Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
-        Console.WriteLine($"TestSetUp verification - Project created with Leader: {createdProject?.ProjectLeader?.Email}");
     }
 
     [TestCleanup]
@@ -109,7 +111,7 @@ public class LeaderPService_Test
     {
         _context?.Database.EnsureDeleted();
     }
-    
+
     [TestMethod]
     public void LeaderPService_ShouldReturnMyProjects_WhenUserIsProjectLeader()
     {
@@ -118,11 +120,16 @@ public class LeaderPService_Test
         {
             _repositoryManager.ProjectRepository.Delete(proj);
         }
-        
+
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        UserDTO leaderUser = _userService.GetUser("leader.user@example.com");//_repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
-        UserDTO adminUser = _userService.GetUser("admin.user@example.com");//_repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
+        UserDTO
+            leaderUser =
+                _userService.GetUser(
+                    "leader.user@example.com"); //_repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
+        UserDTO
+            adminUser = _userService.GetUser(
+                "admin.user@example.com"); //_repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
 
         ProjectDTO project = new ProjectDTO
         {
@@ -145,7 +152,7 @@ public class LeaderPService_Test
         Assert.AreEqual(1, projects.Count);
         Assert.AreEqual("Test Project Direct", projects[0].Name);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void LeaderPService_ShouldThrowProjectNotFoundException_WhenProjectDoesNotExist()
@@ -172,7 +179,7 @@ public class LeaderPService_Test
 
         TaskDTO updatedTask = new TaskDTO
         {
-            Title = "Initial Task", 
+            Title = "Initial Task",
             Description = "Updated description by leader",
             ExpectedStartDate = DateTime.Now.AddDays(3),
             Duration = 5,
@@ -187,7 +194,7 @@ public class LeaderPService_Test
         Assert.AreEqual(5, retrievedTask.Duration);
         Assert.AreEqual(StateDTO.DOING, retrievedTask.State);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(TaskNotFoundException))]
     public void LeaderPService_ShouldThrowTaskNotFoundException_WhenUpdatingNonexistentTask()
@@ -206,7 +213,7 @@ public class LeaderPService_Test
 
         _leaderService.UpdateTask("Test Project", "Nonexistent Task", taskDTO);
     }
-  
+
     [TestMethod]
     public void LeaderPService_ShouldGetAllTasks_WhenUserIsProjectLeader()
     {
@@ -238,7 +245,7 @@ public class LeaderPService_Test
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
         TaskDTO retrievedTask = _leaderService.GetTask("Test Project", "Initial Task");
-        
+
         Assert.IsNotNull(retrievedTask);
         Assert.AreEqual("Initial Task", retrievedTask.Title);
         Assert.AreEqual("Initial task for testing", retrievedTask.Description);
@@ -249,7 +256,7 @@ public class LeaderPService_Test
     public void LeaderPService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotLeaderOfSpecificProject()
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-        
+
         UserDTO anotherLeader = new UserDTO
         {
             FirstName = "Another",
@@ -259,7 +266,7 @@ public class LeaderPService_Test
             Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO> { RolDTO.ProjectLeader }
         };
-        
+
         _userService.AddUser(anotherLeader);
 
         ProjectDTO anotherProject = new ProjectDTO
@@ -306,7 +313,7 @@ public class LeaderPService_Test
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
         ProjectDTO projectDTO = _leaderService.GetProject("Test Project");
-    
+
         Console.WriteLine($"ProjectDTO: {projectDTO != null}");
         Console.WriteLine($"ProjectDTO.Name: {projectDTO?.Name}");
         Console.WriteLine($"ProjectDTO.Description: {projectDTO?.Description}");
@@ -316,13 +323,13 @@ public class LeaderPService_Test
         Assert.IsNotNull(projectDTO, "ProjectDTO should not be null");
         Assert.AreEqual("Test Project", projectDTO.Name);
         Assert.AreEqual("Test project description", projectDTO.Description);
-    
+
         if (projectDTO.ProjectLeader == null)
         {
             Project originalProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
             Console.WriteLine($"Original project leader: {originalProject?.ProjectLeader?.Email}");
         }
-    
+
         Assert.IsNotNull(projectDTO.ProjectLeader, "ProjectLeader should not be null");
         Assert.AreEqual("leader.user@example.com", projectDTO.ProjectLeader.Email);
     }
@@ -345,8 +352,7 @@ public class LeaderPService_Test
 
         _leaderService.UpdateTask("Test Project", "Initial Task", taskDTO);
     }
-    
-    
+
 
     [TestMethod]
     [ExpectedException(typeof(ProjectNotFoundException))]
@@ -355,5 +361,17 @@ public class LeaderPService_Test
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
         _leaderService.GetProject("Nonexistent Project");
+    }
+
+    [TestMethod]
+    public void LeaderPService_ShouldRemoveTempAdminProjectRole_AfterAssigningMembers()
+    {
+        List<UserDTO> membersToAdd = new List<UserDTO>
+        {
+            _userService.GetUser(normalUserDTO.Email)
+        };
+
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+        _leaderService.AssignMembersToProject("Test Project", membersToAdd);
     }
 }

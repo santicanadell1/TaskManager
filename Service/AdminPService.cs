@@ -40,6 +40,7 @@ public class AdminPService : IAdminPService
 
     public void AssignMembersToProject(string projectName, List<UserDTO> membersDTO)
     {
+        CheckAdminProyectRole();
         try
         {
             Console.WriteLine($"=== AssignMembersToProject Started ===");
