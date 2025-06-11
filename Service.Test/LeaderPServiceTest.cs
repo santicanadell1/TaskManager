@@ -417,5 +417,52 @@ public class LeaderPService_Test
         Assert.IsFalse(project.Members.Exists(m => m.Email == normalUserDTO.Email));
     }
 
-   
+    [TestMethod]
+    public void GetAllTaskForAMemberInAProject_ShouldReturnTasks_WhenUserIsAdmin()
+    {
+        List<UserDTO> membersToAdd = new List<UserDTO>
+        {
+            _userService.GetUser(normalUserDTO.Email)
+        };
+
+        _loginService.LoginUser(leaderUserDTO.Email, leaderUserDTO.Password);
+
+        _leaderService.AssignMembersToProject(project.Name, membersToAdd);
+
+        TaskDTO task1 = new TaskDTO
+        {
+            Title = "Task 1",
+            Description = "Task 1 description",
+            ExpectedStartDate = DateTime.Now.AddDays(2),
+            Duration = 5,
+            State = StateDTO.TODO,
+            Resources = new List<ResourceDTO>()
+        };
+
+        TaskDTO task2 = new TaskDTO
+        {
+            Title = "Task 2",
+            Description = "Task 2 description",
+            ExpectedStartDate = DateTime.Now.AddDays(3),
+            Duration = 7,
+            State = StateDTO.DOING,
+            Resources = new List<ResourceDTO>()
+        };
+
+        _loginService.LoginUser(adminUserDTO.Email, adminUserDTO.Password);
+
+        _taskService.AddTask(project.Name, task1);
+        _taskService.AddTask(project.Name, task2);
+        _adminService.AddTaskToMember(project.Name, normalUserDTO.Email, task1.Title);
+        _adminService.AddTaskToMember(project.Name, normalUserDTO.Email, task2.Title);
+
+        _loginService.LoginUser(leaderUserDTO.Email, leaderUserDTO.Password);
+
+        List<TaskDTO> tasksForMember = _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
+
+        Assert.IsNotNull(tasksForMember);
+        Assert.AreEqual(2, tasksForMember.Count);
+        Assert.IsTrue(tasksForMember.Any(t => t.Title == "Task 1"));
+        Assert.IsTrue(tasksForMember.Any(t => t.Title == "Task 2"));
+    }
 }
