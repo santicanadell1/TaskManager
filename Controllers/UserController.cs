@@ -14,7 +14,7 @@ public class UserController
         _userService = new UserService(repositoryManager);
     }
 
-    public List<UserDTO> GetUsers()
+    public List<UserDTO> GetAllUsers()
     {
         return _userService.GetUsers();
     }
