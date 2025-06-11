@@ -27,6 +27,7 @@ builder.Services.AddScoped<UserController>();
 builder.Services.AddScoped<TaskController>();
 builder.Services.AddScoped<MemberProjectController>();
 builder.Services.AddScoped<AdminProjectController>();
+builder.Services.AddScoped<GanttController>();
 
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<RolConverter>();

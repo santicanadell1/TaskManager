@@ -18,4 +18,9 @@ public class TaskController
     {
         return _taskService.GetTask(projectName, titleOfTaskToBeRecibed);
     }
+
+    public List<TaskDTO> GetAllTasksForAProject(string projectName)
+    {
+        return _taskService.GetTasks(projectName);
+    }
 }

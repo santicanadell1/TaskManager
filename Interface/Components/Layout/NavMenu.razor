@@ -1,6 +1,6 @@
-﻿@using Service
+﻿@using Controllers
 @using Service.Models
-@inject Login LoginService
+@inject LoginController _LoginController
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
 
@@ -45,22 +45,22 @@
                 <hr style="border-color: rgba(255,255,255,0.1);"/>
             </div>
 
-            if (LoginService.IsAdminSystem() || LoginService.IsAdminProject())
+            if (_LoginController.IsTheCurrentUserAdminSystem() || _LoginController.IsTheCurrentUserAdminProject())
             {
                 <ResourcesNav/>
             }
 
-            if (LoginService.IsAdminSystem())
+            if (_LoginController.IsTheCurrentUserAdminSystem())
             {
                 <AdminSNav/>
             }
 
-            if (LoginService.IsAdminProject())
+            if (_LoginController.IsTheCurrentUserAdminProject())
             {
                 <AdminPNav/>
             }
 
-            if (LoginService.IsProjectMember())
+            if (_LoginController.IsTheCurrentUserProjectMember())
             {
                 <MyProjectsNav/>
             }
@@ -73,13 +73,13 @@
 
     protected override void OnInitialized()
     {
-        _loggedUser = LoginService.GetLoggedUser();
+        _loggedUser = _LoginController.GetLoggedUser();
         base.OnInitialized();
     }
 
     protected override void OnParametersSet()
     {
-        _loggedUser = LoginService.GetLoggedUser();
+        _loggedUser = _LoginController.GetLoggedUser();
         base.OnParametersSet();
     }
 
@@ -90,7 +90,7 @@
 
     private void Logout()
     {
-        LoginService.Logout();
+        _LoginController.Logout();
         Navigation.NavigateTo("/login", true);
     }
 
