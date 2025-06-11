@@ -74,10 +74,10 @@ public class LeaderPService_Test
         _userService.AddUser(leaderUserDTO);
         _userService.AddUser(normalUserDTO);
 
-        var leaderUser = _repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
-        var adminUser = _repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
+        User leaderUser = _repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
+        User adminUser = _repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
 
-        var project = new Project
+        Project project = new Project
         {
             Name = "Test Project",
             Description = "Test project description",
@@ -100,7 +100,7 @@ public class LeaderPService_Test
         };
         _taskService.AddTask("Test Project", initialTask);
 
-        var createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
         Console.WriteLine($"TestSetUp verification - Project created with Leader: {createdProject?.ProjectLeader?.Email}");
     }
 
@@ -113,8 +113,8 @@ public class LeaderPService_Test
     [TestMethod]
     public void LeaderPService_ShouldReturnMyProjects_WhenUserIsProjectLeader()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects)
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects)
         {
             _repositoryManager.ProjectRepository.Delete(proj);
         }
@@ -135,7 +135,7 @@ public class LeaderPService_Test
         _adminService.CreateProject(project);
         _adminService.SetProjectLeader(project.Name, leaderUser.Email);
 
-        var verifyProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project Direct");
+        Project verifyProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project Direct");
         Assert.IsNotNull(verifyProject?.ProjectLeader, "Project leader should not be null after direct creation");
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
@@ -319,7 +319,7 @@ public class LeaderPService_Test
     
         if (projectDTO.ProjectLeader == null)
         {
-            var originalProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
+            Project originalProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
             Console.WriteLine($"Original project leader: {originalProject?.ProjectLeader?.Email}");
         }
     
