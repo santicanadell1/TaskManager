@@ -1,5 +1,6 @@
 ﻿@page "/project/options"
 @using Service
+@using Service.Exceptions.ResourceServiceExceptions
 @using Service.Models
 @inject NavigationManager Navigation
 @inject AdminPService AdminPService
@@ -103,6 +104,19 @@
                                     aria-label="Close"></button>
                         </div>
                     }
+                    @if (showForceConfirm)
+                    {
+                        <div class="alert alert-warning d-flex justify-content-between align-items-center" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                The resource is not available for the selected date. Do you want to force creating the task?
+                            </span>
+                            <div>
+                                <button class="btn btn-secondary me-2" @onclick="CancelForce">Cancel</button>
+                                <button class="btn btn-primary" @onclick="ForceCreateTask">Force Creating</button>
+                            </div>
+                        </div>
+                    }
+                    
 
                     <EditForm Model="@newTask" OnValidSubmit="HandleCreateTaskSubmit">
                         <DataAnnotationsValidator/>
@@ -801,6 +815,7 @@
     private bool showAssignTaskToMemberModal;
     private bool showTaskListModal;
     private bool showMemberListModal;
+    private bool showForceConfirm = false;
 
     private string errorMessage = string.Empty;
     private string taskErrorMessage = string.Empty;
@@ -811,8 +826,10 @@
     private string memberSuccessMessage = string.Empty;
     private string assignTaskErrorMessage = string.Empty;
     private string assignTaskSuccessMessage = string.Empty;
+    private string pendingProjectName;
 
     private TaskDTO newTask = new();
+    private TaskDTO pendingTask;
     private readonly HashSet<int?> selectedResourceIds = new();
     private readonly List<int?> previousTaskIds = new();
     private readonly List<string> previousTaskDependencies = new();
@@ -1049,7 +1066,6 @@
             newTask.Resources = availableResources?
                 .Where(r => r != null && r.Id.HasValue && selectedResourceIds.Contains(r.Id))
                 .ToList() ?? new List<ResourceDTO>();
-
             TaskService.AddTask(selectedProjectName, newTask);
             taskSuccessMessage = "Task created successfully!";
             taskErrorMessage = string.Empty;
@@ -1057,10 +1073,37 @@
             await Task.Delay(1500);
             CloseCreateTaskModal(true);
         }
+        catch (ResourceNotAvailableException)
+        {
+            pendingTask = newTask;
+            pendingProjectName = selectedProjectName;
+            showForceConfirm = true;
+        }
         catch (Exception ex)
         {
             taskErrorMessage = $"Error creating task: {ex.Message}";
             taskSuccessMessage = string.Empty;
+        }
+    }
+    private void CancelForce()
+    {
+        showForceConfirm = false;
+        pendingTask = null;
+        pendingProjectName = null;
+        taskErrorMessage = string.Empty;
+    }
+    private async Task ForceCreateTask()
+    {
+        try
+        {
+            TaskService.AddTask(pendingProjectName, pendingTask, solve: true);
+            taskSuccessMessage = "Task created (forced) successfully!";
+            showForceConfirm = false;
+            CloseCreateTaskModal(true);
+        }
+        catch (Exception ex)
+        {
+            taskErrorMessage = $"Error forcing task: {ex.Message}";
         }
     }
 
