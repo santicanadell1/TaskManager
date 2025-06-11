@@ -837,4 +837,25 @@ public class TaskServiceTest
 
         Assert.AreEqual(expected.Date, updated.ExpectedStartDate.Date);
     }
+    [TestMethod]
+    [ExpectedException(typeof(ResourceNotAvailableException))]
+    public void UpdateTask_ShouldThrowResourceNotAvailable_WhenResourceInUseAndSolveFalse()
+    {
+        var resourceInUse = _resourceDTO1;
+        DateTime overlapStart = _taskDTO1.ExpectedStartDate.Date;
+
+        var updateDTO = new TaskDTO
+        {
+            Title = "Task 2 Updated",
+            Description = "Now uses Resource 1 and overlaps",
+            ExpectedStartDate = overlapStart,
+            Duration = 3,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resourceInUse },
+            State = StateDTO.DOING
+        };
+        _taskService.UpdateTask("Generic Project", "Task 2", updateDTO);
+    }
+
 }
