@@ -385,9 +385,7 @@ public class LeaderPService_Test
         };
 
         _loginService.LoginUser(leaderUserDTO.Email, leaderUserDTO.Password);
-
-        Project projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == project.Name);
-
+        
         _leaderService.AssignMembersToProject(project.Name, membersToAdd);
 
         _leaderService.GetAllMembersOfAProject(project.Name);
