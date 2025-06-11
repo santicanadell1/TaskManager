@@ -24,6 +24,7 @@ public class LeaderPService_Test
     private UserDTO adminUserDTO;
     private UserDTO leaderUserDTO;
     private UserDTO normalUserDTO;
+    private Project project;
 
     [TestInitialize]
     public void TestSetUp()
@@ -80,7 +81,7 @@ public class LeaderPService_Test
         User leaderUser = _repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
         User adminUser = _repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
 
-        Project project = new Project
+        project = new Project
         {
             Name = "Test Project",
             Description = "Test project description",
@@ -373,5 +374,26 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
         _leaderService.AssignMembersToProject("Test Project", membersToAdd);
+    }
+
+    [TestMethod]
+    public void GetAllMembersOfAProject_ShouldGetMembers_WhenUserIsAdmin()
+    {
+        List<UserDTO> membersToAdd = new List<UserDTO>
+        {
+            _userService.GetUser(normalUserDTO.Email)
+        };
+
+        _loginService.LoginUser(leaderUserDTO.Email, leaderUserDTO.Password);
+
+        Project projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == project.Name);
+
+        _leaderService.AssignMembersToProject(project.Name, membersToAdd);
+
+        _leaderService.GetAllMembersOfAProject(project.Name);
+
+        project = _repositoryManager.ProjectRepository.Get(p => p.Name == project.Name);
+        Assert.IsNotNull(project);
+        Assert.IsTrue(project.Members.Exists(m => m.Email == normalUserDTO.Email));
     }
 }
