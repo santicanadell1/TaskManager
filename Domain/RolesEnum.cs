@@ -4,5 +4,6 @@ public enum Rol
 {
     AdminSystem,
     ProjectMember,
-    AdminProject
+    AdminProject,
+    ProjectLeader
 }
