@@ -84,16 +84,18 @@ public class LeaderPService : ILeaderPService
         RemoveTempAdminProjectRole(currentUser, isAdminProject);
     }
 
-    public void GetAllMembersOfAProject(string projectName)
+    public List<UserDTO> GetAllMembersOfAProject(string projectName)
     {
         UserDTO currentUser = LoggedUser.Current;
         bool isAdminProject = false;
 
         AddTempAdminProjectRole(currentUser, isAdminProject);
 
-        _adminPService.GetMembers(projectName);
+        List<UserDTO> members = _adminPService.GetMembers(projectName);
 
         RemoveTempAdminProjectRole(currentUser, isAdminProject);
+
+        return members;
     }
 
     public void RemoveMemberFromProject(string projectName, string memberToRemoveEmail)
