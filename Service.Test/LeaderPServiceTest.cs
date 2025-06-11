@@ -485,4 +485,29 @@ public class LeaderPService_Test
         Assert.IsTrue(tasksForMember.Any(t => t.Title == initialTask.Title),
             "The task should be added to the member's task list.");
     }
+
+
+    [TestMethod]
+    public void RemoveTaskFromMember_ShouldRemoveTask_WhenUserIsAdmin()
+    {
+        List<UserDTO> membersToAdd = new List<UserDTO>
+        {
+            _userService.GetUser(normalUserDTO.Email)
+        };
+
+        _loginService.LoginUser(leaderUserDTO.Email, leaderUserDTO.Password);
+        _leaderService.AssignMembersToProject(project.Name, membersToAdd);
+        _leaderService.AddTaskToMember(project.Name, normalUserDTO.Email, initialTask.Title);
+
+        List<TaskDTO> tasksBeforeRemoval =
+            _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
+        Assert.IsTrue(tasksBeforeRemoval.Any(t => t.Title == initialTask.Title), "Task should exist before removal");
+
+        _leaderService.RemoveTaskFromMember(project.Name, normalUserDTO.Email, initialTask.Title);
+
+        List<TaskDTO> tasksAfterRemoval =
+            _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
+        Assert.IsFalse(tasksAfterRemoval.Any(t => t.Title == initialTask.Title),
+            "Task should be removed from the member's task list.");
+    }
 }

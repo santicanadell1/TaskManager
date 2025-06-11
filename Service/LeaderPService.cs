@@ -135,6 +135,8 @@ public class LeaderPService : ILeaderPService
         RemoveTempAdminProjectRole(currentUser, isAdminProject);
     }
 
+    
+
     private void CheckProjectLeaderRole(string projectName)
     {
         UserDTO currentUser = LoggedUser.Current;
