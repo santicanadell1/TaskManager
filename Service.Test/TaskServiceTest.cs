@@ -796,4 +796,21 @@ public class TaskServiceTest
 
         Assert.AreEqual(expectedRescheduled.Date, scheduled.ExpectedStartDate.Date);
     }
+    [TestMethod]
+    [ExpectedException(typeof(ResourceNotAvailableException))]
+    public void AddTask_ShouldThrowResourceNotAvailable_WhenResourceInUseAndSolveFalse()
+    {
+        var conflictingTask = new TaskDTO
+        {
+            Title = "ConflictTask",
+            Description = "Conflicts with existing",
+            ExpectedStartDate = _taskDTO1.ExpectedStartDate,
+            Duration = 3,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { _resourceDTO1 },
+            State = StateDTO.TODO
+        };
+        _taskService.AddTask("Generic Project", conflictingTask);
+    }
 }
