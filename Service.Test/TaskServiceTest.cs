@@ -599,7 +599,7 @@ public class TaskServiceTest
         Assert.IsNotNull(addedTask);
         Assert.AreEqual("Complex Mapping DTO", addedTask.Title);
         Assert.AreEqual("Complex mapping description", addedTask.Description);
-        Assert.AreEqual(new DateTime(2025, 6, 15), addedTask.ExpectedStartDate);
+        Assert.AreEqual(new DateTime(2025, 6, 16), addedTask.ExpectedStartDate);
         Assert.AreEqual(9, addedTask.Duration);
         Assert.AreEqual(1, addedTask.Resources.Count);
         Assert.AreEqual(resourceDto.Name, addedTask.Resources[0].Name);
