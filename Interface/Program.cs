@@ -18,6 +18,7 @@ builder.Services.AddScoped<MemberPService>();
 builder.Services.AddScoped<CpmService>();
 builder.Services.AddScoped<GanttService>();
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<LeaderPService>();
 
 builder.Services.AddScoped<LoginController>();
 builder.Services.AddScoped<SignUpController>();

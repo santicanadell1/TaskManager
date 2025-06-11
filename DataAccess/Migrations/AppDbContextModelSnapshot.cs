@@ -81,12 +81,17 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProjectLeaderId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AdminProjectId");
+
+                    b.HasIndex("ProjectLeaderId");
 
                     b.ToTable("Projects");
                 });
@@ -311,9 +316,16 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.User", "AdminProject")
                         .WithMany()
                         .HasForeignKey("AdminProjectId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.User", "ProjectLeader")
+                        .WithMany()
+                        .HasForeignKey("ProjectLeaderId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("AdminProject");
+
+                    b.Navigation("ProjectLeader");
                 });
 
             modelBuilder.Entity("Domain.Task", b =>
