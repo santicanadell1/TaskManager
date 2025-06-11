@@ -10,4 +10,6 @@ public interface ILogin
     bool IsAdminSystem();
     bool IsAdminProject();
     bool IsProjectMember();
+    void UpdateUser(UserDTO userToUpdate);
+    
 }

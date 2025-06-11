@@ -5,10 +5,11 @@ using Service.Interface;
 
 public class PasswordManager : IPasswordManager
 {
+    private readonly Random _random = new Random();
+
     public string getDefaultPassword()
     {
-        string defaultPassword = "Password123?";
-        return defaultPassword;
+        return GenerateRandomPassword();
     }
 
     public bool IsValidPassword(string password)
@@ -35,5 +36,27 @@ public class PasswordManager : IPasswordManager
         string hashedPassword = HashPassword(plainPassword);
         return hashedPassword == storedHash;
     }
-    
+
+    private string GenerateRandomPassword()
+    {
+        const string lowerChars = "abcdefghijklmnopqrstuvwxyz";
+        const string upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string digits = "1234567890";
+        const string specialChars = "!@#$%^&*()_+[]{}|;:,.<>?";
+
+        StringBuilder password = new StringBuilder();
+        password.Append(lowerChars[_random.Next(lowerChars.Length)]);
+        password.Append(upperChars[_random.Next(upperChars.Length)]);
+        password.Append(digits[_random.Next(digits.Length)]);
+        password.Append(specialChars[_random.Next(specialChars.Length)]);
+
+        const string allValidChars =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+[]{}|;:,.<>?";
+        while (password.Length < 8)
+        {
+            password.Append(allValidChars[_random.Next(allValidChars.Length)]);
+        }
+
+        return new string(password.ToString().OrderBy(c => _random.Next()).ToArray());
+    }
 }

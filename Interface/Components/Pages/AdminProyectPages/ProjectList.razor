@@ -1,12 +1,10 @@
 ﻿@page "/project/options"
-@using Service
-@using Service.Exceptions.ResourceServiceExceptions
+@using Controllers
 @using Service.Models
-@inject NavigationManager Navigation
-@inject AdminPService AdminPService
-@inject TaskService TaskService
-@inject ResourceService ResourceService
-@inject UserService UserService
+@inject AdminProjectController _AdminProjectController
+@inject TaskController _TaskController
+@inject ResourceController _ResourceController
+@inject UserController _UserController
 @rendermode InteractiveServer
 
 <link href="styles/styleProjectList.css" rel="stylesheet"/>
@@ -877,7 +875,7 @@
     {
         try
         {
-            projects = AdminPService.GetAllProjects();
+            projects = _AdminProjectController.GetAllProjects();
         }
         catch (Exception ex)
         {
@@ -889,7 +887,7 @@
     {
         try
         {
-            availableResources = ResourceService.GetResources();
+            availableResources = _ResourceController.GetAllResources();
         }
         catch (Exception ex)
         {
@@ -908,7 +906,7 @@
 
         try
         {
-            taskList = TaskService.GetTasks(selectedProjectName);
+            taskList = _TaskController.GetAllTasksForAProject(selectedProjectName);
             if (taskList == null)
             {
                 taskList = new List<TaskDTO>();
@@ -950,7 +948,7 @@
     {
         try
         {
-            AdminPService.RemoveProject(project.Name);
+            _AdminProjectController.RemoveProject(project.Name);
             projects.Remove(project);
 
             if (selectedProjectName == project.Name)
@@ -1083,7 +1081,8 @@
             newTask.Resources = availableResources?
                 .Where(r => r != null && r.Id.HasValue && selectedResourceIds.Contains(r.Id))
                 .ToList() ?? new List<ResourceDTO>();
-            TaskService.AddTask(selectedProjectName, newTask);
+
+            _TaskController.AddTaskToProject(selectedProjectName, newTask);
             taskSuccessMessage = "Task created successfully!";
             taskErrorMessage = string.Empty;
 
@@ -1285,7 +1284,7 @@
                 .ToList();
             pendingEditOriginalTitle = selectedTaskToEdit.Title;
             pendingEditTask = selectedTaskToEdit;
-            TaskService.UpdateTask(selectedProjectName, selectedTaskToEdit.Title, selectedTaskToEdit);
+            _TaskController.UpdateTask(selectedProjectName, selectedTaskToEdit.Title, selectedTaskToEdit);
             editTaskSuccessMessage = "Task updated successfully!";
             editTaskErrorMessage = string.Empty;
 
@@ -1360,7 +1359,7 @@
     {
         try
         {
-            TaskService.DeleteTask(selectedProjectName, task.Title);
+            _TaskController.DeleteTask(selectedProjectName, task.Title);
             LoadTasks();
         }
         catch (Exception ex)
@@ -1374,7 +1373,7 @@
         if (!string.IsNullOrEmpty(selectedProjectName))
         {
             showAddMembersModal = true;
-            List<UserDTO> users = UserService.GetUsers();
+            List<UserDTO> users = _UserController.GetAllUsers();
             List<UserDTO> Members = new List<UserDTO>();
             foreach (UserDTO user in users)
             {
@@ -1443,14 +1442,7 @@
             {
                 Console.WriteLine("Calling AdminPService.AssignMembersToProject...");
 
-                if (AdminPService == null)
-                {
-                    memberErrorMessage = "AdminPService is null";
-                    Console.WriteLine("AdminPService is null!");
-                    return;
-                }
-
-                AdminPService.AssignMembersToProject(selectedProjectName, selectedMembers);
+                _AdminProjectController.AssignMembersToProject(selectedProjectName, selectedMembers);
 
                 Console.WriteLine("AssignMembersToProject completed successfully");
                 memberSuccessMessage = "Members added successfully!";
@@ -1523,7 +1515,7 @@
         try
         {
             Console.WriteLine($"Loading members for project: {selectedProjectName}");
-            projectMembers = AdminPService.GetMembers(selectedProjectName);
+            projectMembers = _AdminProjectController.GetAllMembersOfAProject(selectedProjectName);
             Console.WriteLine($"Found {projectMembers?.Count ?? 0} members");
 
             if (projectMembers != null)
@@ -1545,7 +1537,7 @@
     {
         try
         {
-            AdminPService.RemoveMemberFromProject(selectedProjectName, member.Email);
+            _AdminProjectController.RemoveMemberFromProject(selectedProjectName, member.Email);
             projectMembers.Remove(member);
         }
         catch (Exception ex)
@@ -1565,7 +1557,7 @@
                 throw new Exception("Project name or member ID is null.");
 
             LoadTasks();
-            assignedTasks = AdminPService
+            assignedTasks = _AdminProjectController
                 .GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
             if (assignedTasks == null)
                 assignedTasks = new List<TaskDTO>();
@@ -1595,11 +1587,11 @@
     {
         try
         {
-            AdminPService.AddTaskToMember(selectedProjectName, selectedMemberId, task.Title);
+            _AdminProjectController.AddTaskToMember(selectedProjectName, selectedMemberId, task.Title);
             assignTaskSuccessMessage = $"Task '{task.Title}' assigned successfully";
             assignTaskErrorMessage = string.Empty;
 
-            assignedTasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+            assignedTasks = _AdminProjectController.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
         }
         catch (Exception ex)
         {
@@ -1612,11 +1604,11 @@
     {
         try
         {
-            AdminPService.RemoveTaskFromMember(selectedProjectName, selectedMemberId, task.Title);
+            _AdminProjectController.RemoveTaskFromMember(selectedProjectName, selectedMemberId, task.Title);
             assignTaskSuccessMessage = $"Task '{task.Title}' removed successfully";
             assignTaskErrorMessage = string.Empty;
 
-            assignedTasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+            assignedTasks = _AdminProjectController.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
         }
         catch (Exception ex)
         {

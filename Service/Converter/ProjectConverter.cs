@@ -56,10 +56,8 @@ public class ProjectConverter : IConverter<Project, ProjectDTO>
             Description = project.Description,
             StartDate = project.StartDate,
             Members = memberDTOs,
-            AdminProyect = project.AdminProject != null ? _userConverter.FromEntity(project.AdminProject) : null
+            AdminProyect = project.AdminProject != null ? _userConverter.FromEntity(project.AdminProject) : null,
+            ProjectLeader = project.ProjectLeader != null ? _userConverter.FromEntity(project.ProjectLeader) : null
         };
     }
-
-
-   
 }

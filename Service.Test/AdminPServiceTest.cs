@@ -20,6 +20,7 @@ public class AdminPServiceTests
     private UserDTO Admin;
     private List<UserDTO> members;
     private UserDTO UserDTO;
+    private UserDTO Leader;
 
     [TestInitialize]
     public void Setup()
@@ -59,10 +60,21 @@ public class AdminPServiceTests
             Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
 
+        Leader = new UserDTO()
+        {
+            FirstName = "Normal",
+            LastName = "User",
+            Email = "normal.user@example.com",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Password = "Password123@",
+            Roles = new List<RolDTO> { RolDTO.ProjectLeader }
+        };
+
         members = new List<UserDTO> { UserDTO };
 
         _userservice.AddUser(Admin);
         _userservice.AddUser(UserDTO);
+        _userservice.AddUser(Leader);
         _login.LoginUser(Admin.Email, Admin.Password);
     }
 
@@ -181,7 +193,7 @@ public class AdminPServiceTests
             Description = "Project Description",
             StartDate = DateTime.Now,
             AdminProyect = UserDTO,
-            Members = new List<UserDTO>() 
+            Members = new List<UserDTO>()
         };
 
         _adminPservice.CreateProject(projectDTO);
@@ -661,5 +673,21 @@ public class AdminPServiceTests
         List<TaskDTO> tasks = _adminPservice.GetAllTaskForAMemberInAProject("Test Project", "member.user@example.com");
 
         Assert.AreEqual(2, tasks.Count);
+    }
+
+    [TestMethod]
+    public void SetProjectLeader_WhenTheUserIsNotAlredyProjectLeader_ShouldBeOkey()
+    {
+        ProjectDTO projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Today,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _adminPservice.CreateProject(projectDTO);
+
+        _adminPservice.SetProjectLeader(projectDTO.Name, Leader.Email);
     }
 }

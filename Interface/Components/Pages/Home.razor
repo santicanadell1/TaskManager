@@ -1,8 +1,9 @@
 ﻿@page "/"
+@using Controllers
 @using Service
 @using Service.Models
 @inject NavigationManager Navigation
-@inject Login LoginService
+@inject LoginController _LoginController
 @rendermode InteractiveServer
 
 <link href="styles/styleHome.css" rel="stylesheet"/>
@@ -67,12 +68,12 @@
 
     protected override void OnInitialized()
     {
-        _loggedUser = LoginService.GetLoggedUser();
+        _loggedUser = _LoginController.GetLoggedUser();
     }
 
     protected override void OnParametersSet()
     {
-        _loggedUser = LoginService.GetLoggedUser();
+        _loggedUser = _LoginController.GetLoggedUser();
         base.OnParametersSet();
     }
 

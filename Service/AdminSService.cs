@@ -36,12 +36,46 @@ public class AdminSService : IAdminSService
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
+        UserDTO currentUser = LoggedUser.Current;
+        bool isAdminProject = false;
         AdminPService adminPService = new AdminPService(_repositoryManager);
         UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
+
+        if (!currentUser.Roles.Contains(RolDTO.AdminProject))
+        {
+            currentUser.Roles.Add(RolDTO.AdminProject);
+        }
+        else
+        {
+            isAdminProject = true;
+        }
+
         List<ProjectDTO> projects = adminPService.GetAllProjectsForUser(userDTO.Email);
-        foreach (ProjectDTO project in projects) adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
+        foreach (ProjectDTO project in projects)
+        {
+            try
+            {
+                adminPService.RemoveMemberFromProject(project.Name, userDTO.Email);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            try
+            {
+                adminPService.RemoveAdminFromProject(project.Name, userDTO.Email);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        if (!isAdminProject) currentUser.Roles.Remove(RolDTO.AdminProject);
+
         User userEntity = _repositoryManager.UserRepository.Get(u => u.Email == userDTO.Email);
         _repositoryManager.UserRepository.Delete(userEntity);
     }
@@ -101,6 +135,8 @@ public class AdminSService : IAdminSService
     private void CheckAdminRole()
     {
         UserDTO currentUser = LoggedUser.Current;
+        Console.WriteLine($"Logged user: {currentUser.Email}, Roles: {string.Join(",", currentUser.Roles)}");
+
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminSystem))
             throw new UnauthorizedAdminAccessException();
     }

@@ -1,3 +1,4 @@
+using Controllers;
 using DataAccess;
 using Interface.Components;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,17 @@ builder.Services.AddScoped<MemberPService>();
 builder.Services.AddScoped<CpmService>();
 builder.Services.AddScoped<GanttService>();
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<LeaderPService>();
+
+builder.Services.AddScoped<LoginController>();
+builder.Services.AddScoped<SignUpController>();
+builder.Services.AddScoped<ResourceController>();
+builder.Services.AddScoped<AdminSystemController>();
+builder.Services.AddScoped<UserController>();
+builder.Services.AddScoped<TaskController>();
+builder.Services.AddScoped<MemberProjectController>();
+builder.Services.AddScoped<AdminProjectController>();
+builder.Services.AddScoped<GanttController>();
 
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<RolConverter>();

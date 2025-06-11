@@ -1,8 +1,8 @@
 ﻿@page "/resources/create"
-@using Service
+@using Controllers
 @using Service.Models
 @inject NavigationManager Navigation
-@inject ResourceService ResourceService
+@inject ResourceController _ResourceController
 @rendermode InteractiveServer
 
 <link href="styles/styleCreateResource.css" rel="stylesheet"/>
@@ -74,7 +74,7 @@
     {
         try
         {
-            ResourceService.AddResource(newResource);
+            _ResourceController.CreateResource(newResource);
             successMessage = "Resource created successfully!";
             successVisible = true;
             alertVisible = false;

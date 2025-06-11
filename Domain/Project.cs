@@ -11,6 +11,11 @@ public class Project
     public List<Task> Tasks { get; set; } = new();
     public User AdminProject { get; set; }
 
+    public int? AdminProjectId { get; set; }
+    public int? ProjectLeaderId { get; set; }
+    public User ProjectLeader { get; set; }
+
+
     public Project()
     {
     }
@@ -69,5 +74,10 @@ public class Project
     public void AddTask(Task task)
     {
         Tasks.Add(task);
+    }
+
+    public void SetProjectLeader(User user)
+    {
+        ProjectLeader = user;
     }
 }

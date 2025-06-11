@@ -1,11 +1,11 @@
 ﻿@page "/gantt"
+@using Controllers
 @using Service
 @using Service.Models
 @inject IJSRuntime JS
-@inject AdminPService AdminPService
-@inject TaskService TaskService
-@inject CpmService CpmService
-@inject GanttService GanttService
+@inject AdminProjectController _AdminProjectController
+@inject TaskController _TaskController
+@inject GanttController _GanttController
 @rendermode InteractiveServer
 
 <link href="/GanttLibrary/codebase/dhtmlxgantt.css" rel="stylesheet"/>
@@ -272,7 +272,7 @@
 
     protected override void OnInitialized()
     {
-        projects = AdminPService
+        projects = _AdminProjectController
                        .GetAllProjectsForUser(currentUserEmail)
                    ?? new List<ProjectDTO>();
     }
@@ -290,7 +290,7 @@
     {
         try
         {
-            List<TaskDTO> tasks = TaskService.GetTasks(selectedProjectName);
+            List<TaskDTO> tasks = _TaskController.GetAllTasksForAProject(selectedProjectName);
             Console.WriteLine($"Tasks loaded: {tasks?.Count ?? 0}");
 
             if (tasks == null || !tasks.Any())
@@ -302,8 +302,8 @@
                 return;
             }
 
-            CpmResult cpm = CpmService.CalculateCriticalPath(tasks);
-            ganttData = GanttService.Convert(tasks, cpm.CriticalPath);
+            CpmResult cpm = _GanttController.CalculateCriticalPath(tasks);
+            ganttData = _GanttController.GetGanttData(tasks, cpm.CriticalPath);
 
             Console.WriteLine($"GanttData created - Tasks: {ganttData?.data?.Count ?? 0}, Links: {ganttData?.links?.Count ?? 0}");
 
