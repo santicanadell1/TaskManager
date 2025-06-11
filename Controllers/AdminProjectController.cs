@@ -22,5 +22,44 @@ public class AdminProjectController
     {
         return _adminPService.GetAllTaskForAMemberInAProject(projectName, userEmail);
     }
-    
+
+    public void CreateProject(ProjectDTO project)
+    {
+        _adminPService.CreateProject(project);
+    }
+
+    public List<ProjectDTO> GetAllProjects()
+    {
+        return _adminPService.GetAllProjects();
+    }
+
+    public void AssignMembersToProject(string projectName, List<UserDTO> usersToAssign)
+    {
+        _adminPService.AssignMembersToProject(projectName, usersToAssign);
+    }
+
+    public List<UserDTO> GetAllMembersOfAProject(string projectName)
+    {
+        return _adminPService.GetMembers(projectName);
+    }
+
+    public void RemoveProject(string projectName)
+    {
+        _adminPService.RemoveProject(projectName);
+    }
+
+    public void RemoveMemberFromProject(string projectName, string userToRemoveEmail)
+    {
+        _adminPService.RemoveMemberFromProject(projectName, userToRemoveEmail);
+    }
+
+    public void AddTaskToMember(string projectName, string userToAddTaskEmail, string taskName)
+    {
+        _adminPService.AddTaskToMember(projectName, userToAddTaskEmail, taskName);
+    }
+
+    public void RemoveTaskFromMember(string projectName, string userToDeleteTaskEmail, string taskName)
+    {
+        _adminPService.RemoveTaskFromMember(projectName, userToDeleteTaskEmail, taskName);
+    }
 }

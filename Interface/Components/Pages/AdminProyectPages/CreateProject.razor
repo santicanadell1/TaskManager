@@ -1,7 +1,8 @@
 ﻿@page "/project/create"
+@using Controllers
 @using Service.Models
 @inject NavigationManager Navigation
-@inject AdminPService AdminPService
+@inject AdminProjectController _AdminProjectController
 @rendermode InteractiveServer
 
 <link href="styles/styleCreateProject.css" rel="stylesheet"/>
@@ -74,7 +75,7 @@
     {
         try
         {
-            AdminPService.CreateProject(newProjectDTO);
+            _AdminProjectController.CreateProject(newProjectDTO);
 
             successMessage = "Project created successfully!";
             successVisible = true;
