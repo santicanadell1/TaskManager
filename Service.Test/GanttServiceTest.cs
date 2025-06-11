@@ -57,7 +57,8 @@ public class GanttServiceTestTests
             Slack = TimeSpan.FromDays(2),
             PreviousTasks = new List<TaskDTO> { task }
         };
-        GanttData result = GanttService.Convert(new List<TaskDTO> { task, nonCriticalTask }, new List<TaskDTO> { task });
+        GanttData result =
+            GanttService.Convert(new List<TaskDTO> { task, nonCriticalTask }, new List<TaskDTO> { task });
         GanttTask ganttTask1 = result.data.First(t => t.id == 1);
         GanttTask ganttTask2 = result.data.First(t => t.id == 2);
         Assert.IsTrue(ganttTask1.critical);
