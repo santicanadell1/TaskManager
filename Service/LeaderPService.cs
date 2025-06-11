@@ -64,12 +64,24 @@ public class LeaderPService : ILeaderPService
         CheckProjectLeaderRole(projectName);
         return _taskService.GetTasks(projectName);
     }
-    
+
     private void CheckProjectLeaderRole()
     {
         UserDTO currentUser = LoggedUser.Current;
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.ProjectLeader))
             throw new UnauthorizedLeaderAccessException();
+    }
+
+    public void AssignMembersToProject(string projectName, List<UserDTO> membersDTO)
+    {
+        UserDTO currentUser = LoggedUser.Current;
+        bool isAdminProject = false;
+
+        AddTempAdminProjectRole(currentUser, isAdminProject);
+
+        _adminPService.AssignMembersToProject(projectName, membersDTO);
+
+        RemoveTempAdminProjectRole(currentUser, isAdminProject);
     }
 
     private void CheckProjectLeaderRole(string projectName)
