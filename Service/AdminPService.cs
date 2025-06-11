@@ -213,7 +213,8 @@ public class AdminPService : IAdminPService
         List<ProjectDTO> projects = new List<ProjectDTO>();
 
         foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
-            if (project.AdminProject.Email == Email || project.Members.Any(m => m.Email == Email))
+            if (project.AdminProject.Email == Email || project.ProjectLeader.Email == Email ||
+                project.Members.Any(m => m.Email == Email))
                 projects.Add(_projectConverter.FromEntity(project));
 
         return projects;
@@ -344,11 +345,10 @@ public class AdminPService : IAdminPService
         {
             throw new TheProjectAlredyHasALeader();
         }
-        else
-        {
-            CheckThatHeIsNotAlredyALeader(LeaderEmail);
-            projectEntity.ProjectLeader = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
-        }
+
+
+        CheckThatHeIsNotAlredyALeader(LeaderEmail);
+        projectEntity.ProjectLeader = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
     }
 
     private void CheckThatHeIsNotAlredyALeader(string LeaderEmail)

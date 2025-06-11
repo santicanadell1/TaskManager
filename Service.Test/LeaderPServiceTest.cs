@@ -130,10 +130,10 @@ public class LeaderPService_Test
             Description = "Test project description",
             StartDate = DateTime.Now.AddDays(1),
             AdminProyect = adminUser,
-            ProjectLeader = leaderUser  
         };
 
         _adminService.CreateProject(project);
+        _adminService.SetProjectLeader(project.Name, leaderUser.Email);
 
         var verifyProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project Direct");
         Assert.IsNotNull(verifyProject?.ProjectLeader, "Project leader should not be null after direct creation");
