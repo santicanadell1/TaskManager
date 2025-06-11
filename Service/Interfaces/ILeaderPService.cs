@@ -1,4 +1,5 @@
-﻿using Service.Models;
+﻿using Domain;
+using Service.Models;
 
 namespace Service.Interface
 {
@@ -10,6 +11,10 @@ namespace Service.Interface
         TaskDTO GetTask(string projectName, string taskTitle);
         
         List<TaskDTO> GetTasks(string projectName);
+        
+        List<ProjectDTO> GetMyProjects();
+        
+        ProjectDTO GetProject(string projectName);
         
      
     }

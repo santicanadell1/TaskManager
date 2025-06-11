@@ -59,7 +59,11 @@ namespace Service
             return projectConverter.FromEntity(project);
         }
         
-     
+        public TaskDTO GetTask(string projectName, string taskTitle)
+        {
+            CheckProjectLeaderRole(projectName);
+            return _taskService.GetTask(projectName, taskTitle);
+        }
         
         public List<TaskDTO> GetTasks(string projectName)
         {

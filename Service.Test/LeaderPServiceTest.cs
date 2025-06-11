@@ -323,7 +323,7 @@ public class LeaderPService_Test
         Assert.AreEqual("Test Project", projectDTO.Name);
         Assert.AreEqual("Test project description", projectDTO.Description);
     
-g        if (projectDTO.ProjectLeader == null)
+        if (projectDTO.ProjectLeader == null)
         {
             var originalProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
             Console.WriteLine($"Original project leader: {originalProject?.ProjectLeader?.Email}");
