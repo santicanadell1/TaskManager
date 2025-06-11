@@ -6,6 +6,7 @@ using Domain;
 using Domain.Exceptions.TaskExceptions;
 using Service.Converter;
 using Service.Converters;
+using Service.Exceptions.ResourceServiceExceptions;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -17,12 +18,15 @@ public class TaskService
     private readonly IRepositoryManager _repositoryManager;
     private readonly TaskConverter _taskConverter;
     private readonly ResourceConverter _resourceConverter;
+    private readonly ResourceService _resourceService;
 
     public TaskService(IRepositoryManager repositoryManager, CpmService cpmService)
     {
         _repositoryManager = repositoryManager;
         _taskConverter = new TaskConverter(_repositoryManager);
         _resourceConverter = new ResourceConverter(_repositoryManager);
+        _resourceService = new ResourceService(_repositoryManager);
+        _cpmService = cpmService;
     }
 
 
@@ -60,7 +64,7 @@ public class TaskService
         return tasks;
     }
 
-    public void AddTask(string projectName, TaskDTO taskDTO)
+    public void AddTask(string projectName, TaskDTO taskDTO, bool solve = false)
     {
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
@@ -68,7 +72,7 @@ public class TaskService
         {
             throw new TaskException("The task's start date is before the project's start date.");
         }
-
+        
         CreateTask(taskDTO);
         Task task = _repositoryManager.TaskRepository.Get(t => t.Title == taskDTO.Title);
 

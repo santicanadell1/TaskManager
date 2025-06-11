@@ -4,6 +4,7 @@ using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
 using Domain.Exceptions.TaskExceptions;
 using Service.Converters;
+using Service.Exceptions.ResourceServiceExceptions;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -590,7 +591,7 @@ public class TaskServiceTest
             }
         };
 
-        _taskService.AddTask("Generic Project", complexDTO);
+        _taskService.AddTask("Generic Project", complexDTO, true);
 
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         Task addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Complex Mapping DTO");
@@ -769,5 +770,30 @@ public class TaskServiceTest
         };
 
         _taskService.AddTask("Generic Project", taskDTO);
+    }
+
+    [TestMethod]
+    public void AddTask_ShouldRescheduleTask_WhenResourceInUseAndSolveTrue()
+    {
+        DateTime originalStart = _taskDTO1.ExpectedStartDate.Date;
+        int existingDuration = _taskDTO1.Duration;
+
+        var toSchedule = new TaskDTO
+        {
+            Title = "ResolvedTask",
+            Description = "Will be auto-rescheduled",
+            ExpectedStartDate = originalStart,
+            Duration = 3,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { _resourceDTO1 },
+            State = StateDTO.TODO
+        };
+        _taskService.AddTask("Generic Project", toSchedule, true);
+        
+        var scheduled = _taskService.GetTask("Generic Project", "ResolvedTask");
+        DateTime expectedRescheduled = originalStart.AddDays(existingDuration);
+
+        Assert.AreEqual(expectedRescheduled.Date, scheduled.ExpectedStartDate.Date);
     }
 }
