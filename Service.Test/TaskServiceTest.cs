@@ -813,4 +813,28 @@ public class TaskServiceTest
         };
         _taskService.AddTask("Generic Project", conflictingTask);
     }
+    
+    [TestMethod]
+    public void UpdateTask_ShouldRescheduleTask_WhenResourceInUseAndSolveTrue()
+    {
+        var resourceInUse = _resourceDTO1;
+        DateTime originalStart = _taskDTO1.ExpectedStartDate.Date; 
+        int task1Duration = _taskDTO1.Duration;
+        var updateDTO = new TaskDTO
+        {
+            Title = "Task 2 Rescheduled",
+            Description = "Auto-reschedule on Resource 1",
+            ExpectedStartDate = originalStart,
+            Duration = 3,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resourceInUse },
+            State = StateDTO.DOING
+        };
+        _taskService.UpdateTask("Generic Project", "Task 2", updateDTO, true);
+        var updated = _taskService.GetTask("Generic Project", "Task 2 Rescheduled");
+        DateTime expected = originalStart.AddDays(task1Duration);
+
+        Assert.AreEqual(expected.Date, updated.ExpectedStartDate.Date);
+    }
 }

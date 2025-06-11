@@ -107,7 +107,7 @@ public class TaskService
         RecalculateCriticalPath(projectName);
     }
 
-    public void UpdateTask(string projectName, string title, TaskDTO taskDTO)
+    public void UpdateTask(string projectName, string title, TaskDTO taskDTO, bool solve = false)
     {
         NotificationService _notificationService = new NotificationService(_repositoryManager);
         AdminPService projectService = new AdminPService(_repositoryManager);
