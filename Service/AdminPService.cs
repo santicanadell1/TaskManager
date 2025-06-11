@@ -8,6 +8,7 @@ using Service.Converter;
 using Service.Converters;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.AdminSServiceExceptions;
+using Service.Exceptions.LeaderPServiceException;
 using Service.Interface;
 using Service.Models;
 using Task = Domain.Task;
@@ -330,5 +331,44 @@ public class AdminPService : IAdminPService
             project.AdminProject = _repositoryManager.UserRepository.Get(u => u.Email == LoggedUser.Current.Email);
         }
     }
-    
+
+    public void SetProjectLeader(string projectName, string LeaderEmail)
+    {
+        CheckProjectLeaderRole(LeaderEmail);
+
+        Project projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+
+        if (projectEntity == null) throw new ProjectNotFoundException();
+
+        if (projectEntity.ProjectLeader != null)
+        {
+            throw new TheProjectAlredyHasALeader();
+        }
+        else
+        {
+            CheckThatHeIsNotAlredyALeader(LeaderEmail);
+            projectEntity.ProjectLeader = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
+        }
+    }
+
+    private void CheckThatHeIsNotAlredyALeader(string LeaderEmail)
+    {
+        List<Project> projects = _repositoryManager.ProjectRepository.GetAll();
+
+        foreach (var project in projects)
+        {
+            if (project.ProjectLeader != null && project.ProjectLeader.Email == LeaderEmail)
+            {
+                throw new UserIsAlredyLeaderInOtherProject();
+            }
+        }
+    }
+
+
+    private void CheckProjectLeaderRole(string LeaderEmail)
+    {
+        User leaderUser = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
+        if (leaderUser == null || !leaderUser.Roles.Contains(Rol.ProjectLeader))
+            throw new UnauthorizedLeaderAccessException();
+    }
 }

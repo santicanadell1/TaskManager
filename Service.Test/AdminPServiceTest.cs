@@ -20,7 +20,7 @@ public class AdminPServiceTests
     private UserDTO Admin;
     private List<UserDTO> members;
     private UserDTO UserDTO;
-    private UserDTO NormalUserDTO;
+    private UserDTO Leader;
 
     [TestInitialize]
     public void Setup()
@@ -60,20 +60,21 @@ public class AdminPServiceTests
             Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
 
-        NormalUserDTO = new UserDTO()
+        Leader = new UserDTO()
         {
             FirstName = "Normal",
             LastName = "User",
             Email = "normal.user@example.com",
             Birthday = DateTime.Parse("1990-01-01"),
-            Password = "Password123@"
+            Password = "Password123@",
+            Roles = new List<RolDTO> { RolDTO.ProjectLeader }
         };
 
         members = new List<UserDTO> { UserDTO };
 
         _userservice.AddUser(Admin);
         _userservice.AddUser(UserDTO);
-        _userservice.AddUser(NormalUserDTO);
+        _userservice.AddUser(Leader);
         _login.LoginUser(Admin.Email, Admin.Password);
     }
 
@@ -675,7 +676,6 @@ public class AdminPServiceTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(TaskIsNotFromTheProjectException))]
     public void SetProjectLeader_WhenTheUserIsNotAlredyProjectLeader_ShouldBeOkey()
     {
         ProjectDTO projectDTO = new ProjectDTO
@@ -688,6 +688,6 @@ public class AdminPServiceTests
         };
         _adminPservice.CreateProject(projectDTO);
 
-        _adminPservice.SetProjectLeader(projectDTO.Name, NormalUserDTO.Email);
+        _adminPservice.SetProjectLeader(projectDTO.Name, Leader.Email);
     }
 }
