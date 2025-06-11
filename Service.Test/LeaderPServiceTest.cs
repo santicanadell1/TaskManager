@@ -88,7 +88,6 @@ public class LeaderPService_Test
 
         _repositoryManager.ProjectRepository.Add(project);
 
-        // Create a task using admin service for testing Leader update functionality
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
         TaskDTO initialTask = new TaskDTO
         {
@@ -122,27 +121,26 @@ public class LeaderPService_Test
         
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var leaderUser = _repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
-        var adminUser = _repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
+        UserDTO leaderUser = _userService.GetUser("leader.user@example.com");//_repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
+        UserDTO adminUser = _userService.GetUser("admin.user@example.com");//_repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
 
-        var project = new Project
+        ProjectDTO project = new ProjectDTO
         {
             Name = "Test Project Direct",
             Description = "Test project description",
             StartDate = DateTime.Now.AddDays(1),
-            AdminProject = adminUser,
+            AdminProyect = adminUser,
             ProjectLeader = leaderUser  
         };
 
-        _repositoryManager.ProjectRepository.Add(project);
+        _adminService.CreateProject(project);
 
         var verifyProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project Direct");
-        Console.WriteLine($"Verification - Project Leader: {verifyProject?.ProjectLeader?.Email}");
         Assert.IsNotNull(verifyProject?.ProjectLeader, "Project leader should not be null after direct creation");
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        List<ProjectDTO> projects = _leaderService.GetMyProjects();
+        List<ProjectDTO> projects = _leaderService.GetAllMyProjects();
 
         Assert.AreEqual(1, projects.Count);
         Assert.AreEqual("Test Project Direct", projects[0].Name);
@@ -212,7 +210,6 @@ public class LeaderPService_Test
     [TestMethod]
     public void LeaderPService_ShouldGetAllTasks_WhenUserIsProjectLeader()
     {
-        // Add more tasks using admin service
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
         TaskDTO task2 = new TaskDTO
@@ -227,7 +224,6 @@ public class LeaderPService_Test
 
         _taskService.AddTask("Test Project", task2);
 
-        // Now test leader can get all tasks
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
         List<TaskDTO> tasks = _leaderService.GetTasks("Test Project");
@@ -278,7 +274,6 @@ public class LeaderPService_Test
 
         _adminService.CreateProject(anotherProject);
 
-        // Add a task to the other project using admin
         TaskDTO taskForAnotherProject = new TaskDTO
         {
             Title = "Task in Another Project",
@@ -290,7 +285,6 @@ public class LeaderPService_Test
         };
         _taskService.AddTask("Another Project", taskForAnotherProject);
 
-        // Try to access as the wrong leader
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
         TaskDTO taskDTO = new TaskDTO

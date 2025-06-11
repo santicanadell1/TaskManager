@@ -15,63 +15,55 @@ namespace Service
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly TaskService _taskService;
+        private readonly AdminPService _adminPService;
+        private readonly CpmService _cpmService;
 
         public LeaderPService(IRepositoryManager repositoryManager, TaskService taskService)
         {
             _repositoryManager = repositoryManager;
-            _taskService = taskService;
+            _cpmService = new CpmService();
+            _taskService = new TaskService(repositoryManager, _cpmService);
+            _adminPService = new AdminPService(repositoryManager);
         }
-        
+
         public void UpdateTask(string projectName, string taskTitle, TaskDTO taskDTO)
         {
             CheckProjectLeaderRole(projectName);
             _taskService.UpdateTask(projectName, taskTitle, taskDTO);
         }
-        
-        public List<ProjectDTO> GetMyProjects()
+
+        public List<ProjectDTO> GetAllMyProjects()
         {
-            CheckProjectLeaderRole();  
-
+            CheckProjectLeaderRole();
             UserDTO currentUser = LoggedUser.Current;
-            List<ProjectDTO> myProjects = new List<ProjectDTO>();
-
-            foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
-            {
-                if (project.ProjectLeader != null && project.ProjectLeader.Email == currentUser.Email)
-                {
-                    ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
-                    myProjects.Add(projectConverter.FromEntity(project));
-                }
-            }
-
-            return myProjects;
+            return _adminPService.GetAllProjectsForUser(currentUser.Email);
         }
-        
+
         public ProjectDTO GetProject(string projectName)
         {
             CheckProjectLeaderRole(projectName);
-    
+
             Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
-            if (project == null) 
+            if (project == null)
                 throw new ProjectNotFoundException();
-    
+
             ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
             return projectConverter.FromEntity(project);
         }
-        
+
         public TaskDTO GetTask(string projectName, string taskTitle)
         {
             CheckProjectLeaderRole(projectName);
             return _taskService.GetTask(projectName, taskTitle);
         }
-        
+
         public List<TaskDTO> GetTasks(string projectName)
         {
             CheckProjectLeaderRole(projectName);
             return _taskService.GetTasks(projectName);
         }
-      
-        
+
+
         private void CheckProjectLeaderRole()
         {
             UserDTO currentUser = LoggedUser.Current;

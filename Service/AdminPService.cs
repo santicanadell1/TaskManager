@@ -33,7 +33,6 @@ public class AdminPService : IAdminPService
 
         Project newProject = _projectConverter.ToEntity(projectDTO);
         SetProjectAdmin(newProject, projectDTO);
-
         _repositoryManager.ProjectRepository.Add(newProject);
     }
 
@@ -331,4 +330,5 @@ public class AdminPService : IAdminPService
             project.AdminProject = _repositoryManager.UserRepository.Get(u => u.Email == LoggedUser.Current.Email);
         }
     }
+    
 }

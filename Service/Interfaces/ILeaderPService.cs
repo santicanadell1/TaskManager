@@ -12,7 +12,7 @@ namespace Service.Interface
         
         List<TaskDTO> GetTasks(string projectName);
         
-        List<ProjectDTO> GetMyProjects();
+        List<ProjectDTO> GetAllMyProjects();
         
         ProjectDTO GetProject(string projectName);
         
