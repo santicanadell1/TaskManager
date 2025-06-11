@@ -72,7 +72,14 @@ public class TaskService
         {
             throw new TaskException("The task's start date is before the project's start date.");
         }
-        
+        DateTime startDate = taskDTO.ExpectedStartDate;
+        foreach (var res in taskDTO.Resources)
+        {
+            DateTime next = _resourceService.NextDateAvailable(res, startDate, taskDTO.Duration);
+            if (next > startDate)
+                startDate = next;
+        }
+        taskDTO.ExpectedStartDate = startDate;
         CreateTask(taskDTO);
         Task task = _repositoryManager.TaskRepository.Get(t => t.Title == taskDTO.Title);
 
