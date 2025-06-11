@@ -40,7 +40,7 @@ public class LeaderPService_Test
         _cpmService = new CpmService();
         _taskService = new TaskService(_repositoryManager, _cpmService);
 
-        _leaderService = new LeaderPService(_repositoryManager, _taskService);
+        _leaderService = new LeaderPService(_repositoryManager);
         _adminService = new AdminPService(_repositoryManager);
         _loginService = new Login(_repositoryManager);
         _userService = new UserService(_repositoryManager);

@@ -18,7 +18,7 @@ public class LeaderPService : ILeaderPService
     private readonly AdminPService _adminPService;
     private readonly CpmService _cpmService;
 
-    public LeaderPService(IRepositoryManager repositoryManager, TaskService taskService)
+    public LeaderPService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
         _cpmService = new CpmService();
@@ -65,12 +65,6 @@ public class LeaderPService : ILeaderPService
         return _taskService.GetTasks(projectName);
     }
 
-    private void CheckProjectLeaderRole()
-    {
-        UserDTO currentUser = LoggedUser.Current;
-        if (currentUser == null || !currentUser.Roles.Contains(RolDTO.ProjectLeader))
-            throw new UnauthorizedLeaderAccessException();
-    }
 
     public void AssignMembersToProject(string projectName, List<UserDTO> membersDTO)
     {
@@ -178,5 +172,12 @@ public class LeaderPService : ILeaderPService
         {
             user.Roles.Remove(RolDTO.AdminProject);
         }
+    }
+
+    private void CheckProjectLeaderRole()
+    {
+        UserDTO currentUser = LoggedUser.Current;
+        if (currentUser == null || !currentUser.Roles.Contains(RolDTO.ProjectLeader))
+            throw new UnauthorizedLeaderAccessException();
     }
 }
