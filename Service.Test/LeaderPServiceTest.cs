@@ -385,7 +385,7 @@ public class LeaderPService_Test
         };
 
         _loginService.LoginUser(leaderUserDTO.Email, leaderUserDTO.Password);
-        
+
         _leaderService.AssignMembersToProject(project.Name, membersToAdd);
 
         _leaderService.GetAllMembersOfAProject(project.Name);
@@ -394,4 +394,28 @@ public class LeaderPService_Test
         Assert.IsNotNull(project);
         Assert.IsTrue(project.Members.Exists(m => m.Email == normalUserDTO.Email));
     }
+
+    [TestMethod]
+    public void RemoveMember_ShouldRemoveMember_WhenUserIsAdmin()
+    {
+        List<UserDTO> membersToAdd = new List<UserDTO>
+        {
+            _userService.GetUser(normalUserDTO.Email)
+        };
+
+        _loginService.LoginUser(leaderUserDTO.Email, leaderUserDTO.Password);
+
+        _leaderService.AssignMembersToProject(project.Name, membersToAdd);
+
+        project = _repositoryManager.ProjectRepository.Get(p => p.Name == project.Name);
+        Assert.IsNotNull(project);
+        Assert.IsTrue(project.Members.Exists(m => m.Email == normalUserDTO.Email));
+
+        _leaderService.RemoveMemberFromProject(project.Name, normalUserDTO.Email);
+
+        project = _repositoryManager.ProjectRepository.Get(p => p.Name == project.Name);
+        Assert.IsFalse(project.Members.Exists(m => m.Email == normalUserDTO.Email));
+    }
+
+   
 }

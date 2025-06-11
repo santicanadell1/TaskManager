@@ -295,7 +295,7 @@ public class AdminPService : IAdminPService
         User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
         if (user == null) throw new UserNotFoundException();
         if (user.Tasks == null) return new List<TaskDTO>();
-        Console.WriteLine($"{user.Email}", ConsoleColor.Yellow);
+
         CpmService cpmService = new CpmService();
         TaskService taskService =
             new TaskService(_repositoryManager, cpmService);
