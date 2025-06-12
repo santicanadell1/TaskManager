@@ -66,4 +66,20 @@ public class ProjectExportDTOTest
     }
     
 
+    [TestMethod]
+    public void ProjectExportDTO_ShouldHandleEmptyTasksList()
+    {
+        var projectExportDTO = new ProjectExportDTO
+        {
+            Project = "Empty Project",
+            StartDate = "2024-01-01",
+            Tasks = new List<TaskExportDTO>()
+        };
+
+        Assert.IsNotNull(projectExportDTO.Tasks);
+        Assert.AreEqual(0, projectExportDTO.Tasks.Count);
+    }
+
+    
+
 }
