@@ -3,5 +3,6 @@
     public string Task { get; set; }
     public string StartDate { get; set; }
     public int Duration { get; set; }
+    public string IsCritical { get; set; }
   
 }
