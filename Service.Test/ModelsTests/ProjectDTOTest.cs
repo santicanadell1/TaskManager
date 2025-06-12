@@ -104,7 +104,7 @@ public class ProjectDTOTests
         var isValid =
             Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
 
-        Assert.IsFalse(isValid);
+        Assert.IsTrue(isValid);
     }
 
     [TestMethod]

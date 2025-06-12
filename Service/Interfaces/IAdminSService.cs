@@ -14,5 +14,4 @@ public interface IAdminSService
    
     void AssignRole(UserDTO userDTO, RolDTO role);
     
-    void ChangeToDefaultPassword(string userEmail, string oldPassword);
 }

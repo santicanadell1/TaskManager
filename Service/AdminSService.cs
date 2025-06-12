@@ -140,14 +140,7 @@ public class AdminSService : IAdminSService
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminSystem))
             throw new UnauthorizedAdminAccessException();
     }
-
-    public void ChangeToDefaultPassword(string email, string oldPassword)
-    {
-        CheckAdminRole();
-        string defaultPassword = "Password123#";
-        ChangePassword(email, defaultPassword, oldPassword);
-    }
-
+    
     public void ChangeCurrentUserPassword(string email, string oldPassword, string newPassword)
     {
         CheckIsCurrenUser(email);
