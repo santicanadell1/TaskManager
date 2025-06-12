@@ -512,29 +512,65 @@ public class LeaderPService_Test
             "Task should be removed from the member's task list.");
     }
 
-    [TestMethod]
-    public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
+ [TestMethod]
+public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
+{
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+    
+    var csvExporter = new CSVExporter(_repositoryManager);
+    var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+    
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+    
+    TaskDTO task2 = new TaskDTO
     {
-        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+        Title = "Zeta Task",
+        Description = "Task with Z to test ordering",
+        ExpectedStartDate = DateTime.Now.AddDays(4),
+        Duration = 2,
+        State = StateDTO.DOING,
+        Resources = new List<ResourceDTO>() 
+    };
+    
+    TaskDTO task3 = new TaskDTO
+    {
+        Title = "Alpha Task",
+        Description = "Task with A to test ordering",
+        ExpectedStartDate = DateTime.Now.AddDays(5),
+        Duration = 6,
+        State = StateDTO.TODO,
+        Resources = new List<ResourceDTO>() 
+    };
+    
+    _taskService.AddTask("Test Project", task2);
+    _taskService.AddTask("Test Project", task3);
+    
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+    
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+    
+    Assert.IsNotNull(csvResult);
+    Assert.IsTrue(csvResult.Contains("Proyecto,Fecha de Inicio,Tarea,Fecha de Inicio,Duración,Crítico,Recursos"));
+    Assert.IsTrue(csvResult.Contains("Test Project"));
+    Assert.IsTrue(csvResult.Contains("Zeta Task"));
+    Assert.IsTrue(csvResult.Contains("Alpha Task"));
+    Assert.IsTrue(csvResult.Contains("Initial Task"));
+    
+    string[] lines = csvResult.Split('\n');
+    
+    int zetaIndex = Array.FindIndex(lines, line => line.Contains("Zeta Task"));
+    int initialIndex = Array.FindIndex(lines, line => line.Contains("Initial Task"));
+    int alphaIndex = Array.FindIndex(lines, line => line.Contains("Alpha Task"));
+    
+    Assert.IsTrue(zetaIndex < initialIndex, "Zeta Task should appear before Initial Task");
+    Assert.IsTrue(initialIndex < alphaIndex, "Initial Task should appear before Alpha Task");
+    
+    Console.WriteLine("=== RESULTADO CSV ===");
+    Console.WriteLine(csvResult);
+}
 
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
-        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        TaskDTO task2 = new TaskDTO
-        {
-            Title = "Zeta Task", 
-            Description = "Task with Z to test ordering",
-            ExpectedStartDate = DateTime.Now.AddDays(4),
-            Duration = 2,
-            State = StateDTO.DOING,
-            Resources = new List<ResourceDTO>
-            {
-                new ResourceDTO { Name = "Resource A" },
-                new ResourceDTO { Name = "Resource B" }
-            }
-        };
-    }
+
 
 }
