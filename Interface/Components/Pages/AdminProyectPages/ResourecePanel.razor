@@ -7,28 +7,6 @@
 @inject IJSRuntime                JS
 @rendermode InteractiveServer
 
-<link href="Interface/wwwroot/Calendar/main.min.css" rel="stylesheet" />
-<script src="Interface/wwwroot/Calendar/main.min.js"></script>
-<script>
-  window.initResourceCalendar = function (events) {
-    var calendarEl = document.getElementById('resourceCalendar');
-    if (window._resourceCal) {
-      window._resourceCal.destroy();
-    }
-    window._resourceCal = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: ''
-      },
-      height: 600,
-      events: events
-    });
-    window._resourceCal.render();
-  };
-</script>
-
 <div class="container my-4">
     <h3 class="mb-4"><i class="bi bi-calendar3 me-2"></i>Panel de Recursos</h3>
 
@@ -39,87 +17,90 @@
                 <option value="">-- Selecciona un proyecto --</option>
                 @foreach (var p in _projects)
                 {
-                    <option value="@p.Name">@p.Name</option>
+                <option value="@p.Name">@p.Name</option>
                 }
             </select>
         </div>
         @if (!string.IsNullOrEmpty(_selectedProject))
         {
-            <div class="col-md-4">
-                <label>Recurso:</label>
-                <select class="form-select" @onchange="OnResourceChanged">
-                    <option value="">-- Selecciona un recurso --</option>
-                    @foreach (var r in _resources)
-                    {
-                        <option value="@r.Id">@r.Name</option>
-                    }
-                </select>
-            </div>
+        <div class="col-md-4">
+            <label>Recurso:</label>
+            <select class="form-select" @onchange="OnResourceChanged">
+                <option value="">-- Selecciona un recurso --</option>
+                @foreach (var r in _resources)
+                {
+                <option value="@r.Id">@r.Name</option>
+                }
+            </select>
+        </div>
         }
     </div>
 
     @if (_showCalendar)
     {
-        <div id="resourceCalendar"></div>
+    <div id="resourceCalendar"></div>
     }
 </div>
 
 @code {
-    private List<ProjectDTO>    _projects       = new();
-    private List<ResourceDTO>   _resources      = new();
-    private string              _selectedProject;
-    private ResourceDTO         _selectedResource;
-    private bool                _showCalendar   = false;
+private List<ProjectDTO>  _projects       = new();
+private List<ResourceDTO> _resources      = new();
+private string            _selectedProject;
+private ResourceDTO       _selectedResource;
+private bool              _showCalendar   = false;
 
-    protected override void OnInitialized()
-    {
-        var currentEmail = LoggedUser.Current.Email;
-        _projects = _AdminProjectController
-                        .GetAllProjectsForUser(currentEmail)
-                    ?? new List<ProjectDTO>();
-    }
+protected override void OnInitialized()
+{
+var currentEmail = LoggedUser.Current.Email;
+_projects = _AdminProjectController
+.GetAllProjectsForUser(currentEmail)
+?? new List<ProjectDTO>();
+}
 
-    private void OnProjectChanged(ChangeEventArgs e)
-    {
-        _selectedProject = e.Value?.ToString();
-        _showCalendar   = false;
-        _resources      = string.IsNullOrEmpty(_selectedProject)
-                         ? new List<ResourceDTO>()
-                         : _ResourceAdminController
-                               .getAllResourcesForAProject(_selectedProject);
-    }
+private void OnProjectChanged(ChangeEventArgs e)
+{
+_selectedProject = e.Value?.ToString();
+_showCalendar   = false;
+_resources      = string.IsNullOrEmpty(_selectedProject)
+? new List<ResourceDTO>()
+: _ResourceAdminController
+.getAllResourcesForAProject(_selectedProject);
+}
 
-    private async Task OnResourceChanged(ChangeEventArgs e)
-    {
-        var idStr = e.Value?.ToString();
-        if (!int.TryParse(idStr, out var resId))
-        {
-            _showCalendar = false;
-            return;
-        }
+private async Task OnResourceChanged(ChangeEventArgs e)
+{
+if (!int.TryParse(e.Value?.ToString(), out var resId))
+{
+_showCalendar = false;
+return;
+}
 
-        _selectedResource = _resources.First(r => r.Id == resId);
-        var ocp = _ResourceAdminController.getWhenIsResourceOcupied(_selectedResource);
-        var next = _ResourceAdminController.NextDateAvailable(_selectedResource, DateTime.Today, 1);
-        var events = new List<object>();
-        foreach (var (st, dur) in ocp)
-        {
-            events.Add(new {
-                title      = "Ocupado",
-                start      = st.ToString("yyyy-MM-dd"),
-                end        = st.AddDays(dur).ToString("yyyy-MM-dd"),
-                color      = "red"
-            });
-        }
+_selectedResource = _resources.First(r => r.Id == resId);
 
-        events.Add(new
-        {
-            title = "Libre",
-            start = next.ToString("yyyy-MM-dd"),
-            end = next.AddDays(1).ToString("yyyy-MM-dd"),
-            color = "green"
-        });
-        await JS.InvokeVoidAsync("initResourceCalendar", events);
-        _showCalendar = true;
-    }
+var occupied = _ResourceAdminController
+.getWhenIsResourceOcupied(_selectedResource);
+var nextFree = _ResourceAdminController
+.NextDateAvailable(_selectedResource, DateTime.Today, 1);
+var events = new List<object>();
+foreach (var (start, dur) in occupied)
+{
+events.Add(new {
+title = "Ocupado",
+start = start.ToString("yyyy-MM-dd"),
+end   = start.AddDays(dur).ToString("yyyy-MM-dd"),
+color = "red"
+});
+}
+
+events.Add(new {
+title = "Libre",
+start = nextFree.ToString("yyyy-MM-dd"),
+end   = nextFree.AddDays(1).ToString("yyyy-MM-dd"),
+color = "green"
+});
+
+await JS.InvokeVoidAsync("initResourceCalendar", events);
+
+_showCalendar = true;
+}
 }
