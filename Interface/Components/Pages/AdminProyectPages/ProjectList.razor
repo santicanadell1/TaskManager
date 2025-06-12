@@ -835,7 +835,7 @@
                             <label for="projectLeader" class="form-label">Project Leader</label>
                             <select class="form-select" id="projectLeader" @bind="selectedProjectLeaderEmail">
                                 <option value="">Select Leader</option>
-                                @foreach (var user in usersList)
+                                @foreach (var user in projectLeadersUsers)
                                 {
                                     <option value="@user.Email">@user.FirstName @user.LastName</option>
                                 }
@@ -912,7 +912,7 @@
     private string selectedProjectLeaderEmail;
     private string currentProjectLeaderEmail;
     private string projectErrorMessage = string.Empty;
-    private List<UserDTO> usersList = new List<UserDTO>();
+    private List<UserDTO> projectLeadersUsers = new List<UserDTO>();
 
     protected override void OnInitialized()
     {
@@ -1610,7 +1610,7 @@
     {
         try
         {
-            usersList = _UserController.GetAllUsers();
+            projectLeadersUsers = _AdminProjectController.GetAllProjectLeaderUsers();
         }
         catch (Exception ex)
         {
@@ -1670,16 +1670,7 @@
 
             if (!string.IsNullOrEmpty(selectedProjectLeaderEmail))
             {
-                if (selectedProjectToEdit.ProjectLeader == null)
-                {
-                    selectedProjectToEdit.ProjectLeader = new UserDTO();
-                }
-
-                selectedProjectToEdit.ProjectLeader.Email = selectedProjectLeaderEmail;
-            }
-            else
-            {
-                selectedProjectToEdit.ProjectLeader = null;
+                _AdminProjectController.SetProjectLeaderToProject(selectedProjectToEdit.Name, selectedProjectLeaderEmail);
             }
 
             _AdminProjectController.UpdateProject(selectedProjectToEdit.Name, selectedProjectToEdit);

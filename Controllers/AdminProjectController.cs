@@ -68,14 +68,13 @@ public class AdminProjectController
         _adminPService.UpdateProject(projectNameToUpdate, project);
     }
 
-    public List<UserDTO> GetAllProjectLeaderUsers(string projectName)
+    public List<UserDTO> GetAllProjectLeaderUsers()
     {
-        return new List<UserDTO>();
-        //return _adminPService.GetAllProjectLeaderUsers(projectName);
+        return _adminPService.GetAllProjectLeaderUsers();
     }
 
-    public void SetProjectLeaderToProject(string projectName, UserDTO usersToAssign)
+    public void SetProjectLeaderToProject(string projectName, string usersToAssignLeaderEmail)
     {
-        //_adminPService.
+        _adminPService.SetProjectLeader(projectName, usersToAssignLeaderEmail);
     }
 }
