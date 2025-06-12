@@ -569,7 +569,42 @@ public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader
     Console.WriteLine(csvResult);
 }
 
-
+[TestMethod]
+public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
+{
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+    
+    var jsonExporter = new JSONExporter(_repositoryManager);
+    var leaderServiceWithJson = new LeaderPService(_repositoryManager, jsonExporter);
+    
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+    
+    TaskDTO taskWithoutResources = new TaskDTO
+    {
+        
+    };
+    
+    _taskService.AddTask("Test Project", taskWithoutResources);
+    
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+    
+    string jsonResult = leaderServiceWithJson.ExportProjects();
+    
+    Assert.IsNotNull(jsonResult);
+    Assert.IsTrue(jsonResult.Contains("\"Project\""));
+    Assert.IsTrue(jsonResult.Contains("\"StartDate\""));
+    Assert.IsTrue(jsonResult.Contains("\"Tasks\""));
+    Assert.IsTrue(jsonResult.Contains("\"Task\""));
+    Assert.IsTrue(jsonResult.Contains("\"Duration\""));
+    Assert.IsTrue(jsonResult.Contains("\"IsCritical\""));
+    Assert.IsTrue(jsonResult.Contains("\"Resources\""));
+    Assert.IsTrue(jsonResult.Contains("Test Project"));
+    Assert.IsTrue(jsonResult.Contains("Task With Resources"));
+    
+    
+    Console.WriteLine("=== RESULTADO JSON ===");
+    Console.WriteLine(jsonResult);
+}
 
 
 
