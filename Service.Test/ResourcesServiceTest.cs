@@ -808,7 +808,6 @@ public class ResourcesServiceTest
     [TestMethod]
     public void NextDateAvailable_ReturnsFirstDateAfterLastAssignment_WhenNoGapFits()
     {
-        // Arrange
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
         var resourceDTO = new ResourceDTO
         {
@@ -856,4 +855,47 @@ public class ResourcesServiceTest
         DateTime next = _resourceService.NextDateAvailable(resDto, DateTime.Today, 3);
         Assert.AreEqual(DateTime.Today.AddDays(8), next);
     }
+    [TestMethod]
+    public void GetAllResourcesForAProject_ReturnsAllUniqueResources_WhenTasksHaveDistinctResources()
+    {
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var projectDto = new ProjectDTO
+        {
+            Name = "ProjDistinct",
+            Description = "Two tasks, two resources",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(projectDto);
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        var r1 = new ResourceDTO { Name = "R1", Type = "T1", Description = "D1" };
+        var r2 = new ResourceDTO { Name = "R2", Type = "T2", Description = "D2" };
+        _resourceService.AddResource(r1);
+        _resourceService.AddResource(r2);
+        r1.Id = _repositoryManager.ResourceRepository.Get(r=>r.Name=="R1").Id;
+        r2.Id = _repositoryManager.ResourceRepository.Get(r=>r.Name=="R2").Id;
+        var taskA = new TaskDTO
+        {
+            Title = "TaskA",
+            Description = "uses R1",
+            ExpectedStartDate = DateTime.Today.AddDays(1),
+            Duration = 2,
+            Resources = new List<ResourceDTO> { r1 }
+        };
+        _taskService.AddTask("ProjDistinct", taskA);
+        var taskB = new TaskDTO
+        {
+            Title = "TaskB",
+            Description = "uses R2",
+            ExpectedStartDate = DateTime.Today.AddDays(3),
+            Duration = 2,
+            Resources = new List<ResourceDTO> { r2 }
+        };
+        _taskService.AddTask("ProjDistinct", taskB);
+        var resources = _resourceService.getAllResourcesForAProject("ProjDistinct");
+        Assert.AreEqual(2, resources.Count);
+        Assert.IsTrue(resources.Any(r=>r.Name=="R1"));
+        Assert.IsTrue(resources.Any(r=>r.Name=="R2"));
+    }
+
 }
