@@ -71,6 +71,7 @@ public class ProjectExportDTOTest
     {
         var projectExportDTO = new ProjectExportDTO
         {
+            
             Project = "Empty Project",
             StartDate = "2024-01-01",
             Tasks = new List<TaskExportDTO>()
