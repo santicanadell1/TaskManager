@@ -353,7 +353,6 @@ public class AdminPService : IAdminPService
         return returnList;
     }
 
-
     private void CheckAdminProyectRole()
     {
         UserDTO currentUser = LoggedUser.Current;
@@ -374,6 +373,22 @@ public class AdminPService : IAdminPService
         }
     }
 
+    public List<UserDTO> GetAllProjectLeaderUsers()
+    {
+        List<User> allUsers = _repositoryManager.UserRepository.GetAll();
+        List<UserDTO> projectLeaders = new List<UserDTO>();
+
+        foreach (User user in allUsers)
+        {
+            if (user.Roles.Contains(Rol.ProjectLeader))
+            {
+                projectLeaders.Add(_userConverter.FromEntity(user));
+            }
+        }
+
+        return projectLeaders;
+    }
+
     public void SetProjectLeader(string projectName, string LeaderEmail)
     {
         CheckProjectLeaderRole(LeaderEmail);
@@ -382,29 +397,8 @@ public class AdminPService : IAdminPService
 
         if (projectEntity == null) throw new ProjectNotFoundException();
 
-        if (projectEntity.ProjectLeader != null)
-        {
-            throw new TheProjectAlredyHasALeader();
-        }
-
-
-        CheckThatHeIsNotAlredyALeader(LeaderEmail);
         projectEntity.ProjectLeader = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
     }
-
-    private void CheckThatHeIsNotAlredyALeader(string LeaderEmail)
-    {
-        List<Project> projects = _repositoryManager.ProjectRepository.GetAll();
-
-        foreach (var project in projects)
-        {
-            if (project.ProjectLeader != null && project.ProjectLeader.Email == LeaderEmail)
-            {
-                throw new UserIsAlredyLeaderInOtherProject();
-            }
-        }
-    }
-
 
     private void CheckProjectLeaderRole(string LeaderEmail)
     {
