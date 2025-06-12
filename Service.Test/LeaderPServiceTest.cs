@@ -611,6 +611,25 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
     Console.WriteLine(jsonResult);
 }
 
+[TestMethod]
+public void ExportProjects_ShouldReturnEmptyExport_WhenNoProjectsExist()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+    
+    // Assert
+    Assert.IsNotNull(csvResult);
+    Assert.IsTrue(csvResult.Contains("Proyecto,Fecha de Inicio,Tarea,Fecha de Inicio,Duración,Crítico,Recursos"));
+    
+    string[] lines = csvResult.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+    Assert.AreEqual(1, lines.Length, "Should only contain header when no projects exist");
+    
+    Console.WriteLine("=== RESULTADO SIN PROYECTOS ===");
+    Console.WriteLine(csvResult);
+}
+
+
 
 
 }
