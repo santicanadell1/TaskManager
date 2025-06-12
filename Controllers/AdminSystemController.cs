@@ -8,9 +8,12 @@ namespace Controllers;
 public class AdminSystemController
 {
     private readonly IAdminSService _adminSService;
+    private readonly PasswordManager _passwordManager;
+
     public AdminSystemController(IRepositoryManager repositoryManager)
     {
         _adminSService = new AdminSService(repositoryManager);
+        _passwordManager = new PasswordManager();
     }
 
     public void CreateUser(UserDTO user)
@@ -28,13 +31,13 @@ public class AdminSystemController
         _adminSService.ChangePassword(userEmail, oldPassword, newPassword);
     }
 
-    public void ChangeToDefaultPassword(string userEmail, string oldPassword)
-    {
-        _adminSService.ChangeToDefaultPassword(userEmail, oldPassword);
-    }
-
     public void DeleteUser(UserDTO user)
     {
         _adminSService.DeleteUser(user);
+    }
+
+    public string GetDefaultPassword()
+    {
+        return _passwordManager.getDefaultPassword();
     }
 }

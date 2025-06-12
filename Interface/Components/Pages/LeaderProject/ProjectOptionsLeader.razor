@@ -2,7 +2,7 @@
 @using Controllers
 @using Service
 @using Service.Models
-@inject LeaderPService _LeaderPService
+@inject LeaderProjectController _LeaderProjectController
 @inject TaskController _TaskController
 @inject UserController _UserController
 @rendermode InteractiveServer
@@ -620,7 +620,7 @@
     {
         try
         {
-            projects = _LeaderPService.GetAllMyProjects();
+            projects = _LeaderProjectController.GetAllMyProjects();
         }
         catch (Exception ex)
         {
@@ -956,7 +956,7 @@
             {
                 Console.WriteLine("Calling AdminPService.AssignMembersToProject...");
 
-                _LeaderPService.AssignMembersToProject(selectedProjectName, selectedMembers);
+                _LeaderProjectController.AssignMembersToProject(selectedProjectName, selectedMembers);
 
                 Console.WriteLine("AssignMembersToProject completed successfully");
                 memberSuccessMessage = "Members added successfully!";
@@ -1029,7 +1029,7 @@
         try
         {
             Console.WriteLine($"Loading members for project: {selectedProjectName}");
-            projectMembers = _LeaderPService.GetAllMembersOfAProject(selectedProjectName);
+            projectMembers = _LeaderProjectController.GetAllMembersOfAProject(selectedProjectName);
             Console.WriteLine($"Found {projectMembers?.Count ?? 0} members");
 
             if (projectMembers != null)
@@ -1051,7 +1051,7 @@
     {
         try
         {
-            _LeaderPService.RemoveMemberFromProject(selectedProjectName, member.Email);
+            _LeaderProjectController.RemoveMemberFromProject(selectedProjectName, member.Email);
             projectMembers.Remove(member);
         }
         catch (Exception ex)
@@ -1071,7 +1071,7 @@
                 throw new Exception("Project name or member ID is null.");
 
             LoadTasks();
-            assignedTasks = _LeaderPService
+            assignedTasks = _LeaderProjectController
                 .GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
             if (assignedTasks == null)
                 assignedTasks = new List<TaskDTO>();
@@ -1101,11 +1101,11 @@
     {
         try
         {
-            _LeaderPService.AddTaskToMember(selectedProjectName, selectedMemberId, task.Title);
+            _LeaderProjectController.AddTaskToMember(selectedProjectName, selectedMemberId, task.Title);
             assignTaskSuccessMessage = $"Task '{task.Title}' assigned successfully";
             assignTaskErrorMessage = string.Empty;
 
-            assignedTasks = _LeaderPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+            assignedTasks = _LeaderProjectController.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
         }
         catch (Exception ex)
         {
@@ -1118,11 +1118,11 @@
     {
         try
         {
-            _LeaderPService.RemoveTaskFromMember(selectedProjectName, selectedMemberId, task.Title);
+            _LeaderProjectController.RemoveTaskFromMember(selectedProjectName, selectedMemberId, task.Title);
             assignTaskSuccessMessage = $"Task '{task.Title}' removed successfully";
             assignTaskErrorMessage = string.Empty;
 
-            assignedTasks = _LeaderPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+            assignedTasks = _LeaderProjectController.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
         }
         catch (Exception ex)
         {

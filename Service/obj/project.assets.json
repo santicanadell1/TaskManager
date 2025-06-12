@@ -2941,35 +2941,37 @@
     ]
   },
   "packageFolders": {
-    "/home/feli/.nuget/packages/": {}
+    "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/feli/RiderProjects/305108_282542_281987/Service/Service.csproj",
+      "projectUniqueName": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Service\\Service.csproj",
       "projectName": "Service",
-      "projectPath": "/home/feli/RiderProjects/305108_282542_281987/Service/Service.csproj",
-      "packagesPath": "/home/feli/.nuget/packages/",
-      "outputPath": "/home/feli/RiderProjects/305108_282542_281987/Service/obj/",
+      "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Service\\Service.csproj",
+      "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
+      "outputPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Service\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/feli/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/feli/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj": {
-              "projectPath": "/home/feli/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj"
+            "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
             },
-            "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj": {
-              "projectPath": "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj"
+            "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj": {
+              "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj"
             }
           }
         }
@@ -2978,6 +2980,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3005,7 +3012,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.117/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
