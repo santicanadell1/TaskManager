@@ -27,5 +27,19 @@ public class ProjectExportDTOTest
 
         Assert.AreEqual("2024-01-01", projectExportDTO.StartDate);
     }
+    
+    [TestMethod]
+    public void ProjectExportDTO_ShouldAllowNullTasks()
+    {
+        var projectExportDTO = new ProjectExportDTO
+        {
+            Project = "Test Project",
+            StartDate = "2024-01-01",
+            Tasks = null
+        };
+
+        Assert.IsNull(projectExportDTO.Tasks);
+    }
+    
 
 }
