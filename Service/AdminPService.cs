@@ -357,28 +357,8 @@ public class AdminPService : IAdminPService
 
         if (projectEntity == null) throw new ProjectNotFoundException();
 
-        if (projectEntity.ProjectLeader != null)
-        {
-            throw new TheProjectAlredyHasALeader();
-        }
-
-        CheckThatHeIsNotAlredyALeader(LeaderEmail);
         projectEntity.ProjectLeader = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
     }
-
-    private void CheckThatHeIsNotAlredyALeader(string LeaderEmail)
-    {
-        List<Project> projects = _repositoryManager.ProjectRepository.GetAll();
-
-        foreach (var project in projects)
-        {
-            if (project.ProjectLeader != null && project.ProjectLeader.Email == LeaderEmail)
-            {
-                throw new UserIsAlredyLeaderInOtherProject();
-            }
-        }
-    }
-
 
     private void CheckProjectLeaderRole(string LeaderEmail)
     {
