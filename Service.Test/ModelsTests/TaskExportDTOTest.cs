@@ -41,7 +41,17 @@ public class TaskExportDTOTest
         
         Assert.AreEqual("Yes", taskExportDTO.IsCritical);
     }
-
+    
+    [TestMethod]
+    public void TaskExportDTO_ShouldSetResourcesProperty()
+    {
+        var taskExportDTO = new TaskExportDTO();
+        var resources = new List<string> { "Resource1", "Resource2" };
+        taskExportDTO.Resources = resources;
+        
+        Assert.AreEqual(2, taskExportDTO.Resources.Count);
+        Assert.AreEqual("Resource1", taskExportDTO.Resources[0]);
+    }
 
     
 }
