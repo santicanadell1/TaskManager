@@ -1,3 +1,5 @@
+using DataAccess;
+using Service;
 using Service.Interface;
 using Service.Models;
 
@@ -7,9 +9,9 @@ public class ResourceAdminController
 {
     private readonly IResourceService _resourceService;
 
-    public ResourceAdminController(IResourceService resourceService)
+    public ResourceAdminController(IRepositoryManager repositoryManager)
     {
-        _resourceService = resourceService;
+        _resourceService = new ResourceService(repositoryManager);
     }
 
     public List<ResourceDTO> getAllResourcesForAProject(string pName)
