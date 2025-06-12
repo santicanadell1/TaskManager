@@ -897,5 +897,42 @@ public class ResourcesServiceTest
         Assert.IsTrue(resources.Any(r=>r.Name=="R1"));
         Assert.IsTrue(resources.Any(r=>r.Name=="R2"));
     }
-
+    [TestMethod]
+    public void GetAllResourcesForAProject_ReturnsDistinct_WhenMultipleTasksShareSameResource()
+    {
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var projectDto = new ProjectDTO
+        {
+            Name = "ProjShared",
+            Description = "Two tasks share R1",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(projectDto);
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        var r1 = new ResourceDTO { Name = "SharedR", Type = "T", Description = "D" };
+        _resourceService.AddResource(r1);
+        r1.Id = _repositoryManager.ResourceRepository.Get(r=>r.Name=="SharedR").Id;
+        var task1 = new TaskDTO
+        {
+            Title = "T1",
+            Description = "uses SharedR",
+            ExpectedStartDate = DateTime.Today.AddDays(1),
+            Duration = 2,
+            Resources = new List<ResourceDTO> { r1 }
+        };
+        _taskService.AddTask("ProjShared", task1);
+        var task2 = new TaskDTO
+        {
+            Title = "T2",
+            Description = "also uses SharedR",
+            ExpectedStartDate = DateTime.Today.AddDays(4),
+            Duration = 3,
+            Resources = new List<ResourceDTO> { r1 }
+        };
+        _taskService.AddTask("ProjShared", task2);
+        var resources = _resourceService.getAllResourcesForAProject("ProjShared");
+        Assert.AreEqual(1, resources.Count);
+        Assert.AreEqual("SharedR", resources[0].Name);
+    }
 }
