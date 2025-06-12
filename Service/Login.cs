@@ -57,6 +57,11 @@ public class Login : ILogin
         return LoggedUser.Current?.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.ProjectMember)) ?? false;
     }
 
+    public bool IsProjectLeader()
+    {
+        return LoggedUser.Current?.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.ProjectLeader)) ?? false;
+    }
+
     public void UpdateUser(UserDTO userDTO)
     {
         LoggedUser.Current = userDTO;
