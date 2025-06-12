@@ -16,5 +16,16 @@ public class ProjectExportDTOTest
 
         Assert.AreEqual("Test Project", projectExportDTO.Project);
     }
+    
+    [TestMethod]
+    public void ProjectExportDTO_ShouldSetStartDateProperty()
+    {
+        var projectExportDTO = new ProjectExportDTO
+        {
+            StartDate = "2024-01-01"
+        };
+
+        Assert.AreEqual("2024-01-01", projectExportDTO.StartDate);
+    }
 
 }
