@@ -14,6 +14,16 @@ public class TaskExportDTOTest
         
         Assert.AreEqual("Test Task", taskExportDTO.Task);
     }
+    
+    [TestMethod]
+    public void TaskExportDTO_ShouldSetStartDateProperty()
+    {
+        var taskExportDTO = new TaskExportDTO();
+        taskExportDTO.StartDate = "2024-01-01";
+        
+        Assert.AreEqual("2024-01-01", taskExportDTO.StartDate);
+    }
+
 
     
 }
