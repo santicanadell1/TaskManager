@@ -23,4 +23,6 @@ public interface IAdminPService
     List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email);
 
     void SetProjectLeader(string projectName, string LeaderEmail);
+
+    List<UserDTO> GetAllProjectLeaderUsers();
 }
