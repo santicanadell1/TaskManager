@@ -180,7 +180,10 @@ public class ResourceService : IResourceService
         {
             foreach (Resource res in task._resources)
             {
-                resources.Add(_resourceConverter.FromEntity(res));
+                if (!resources.Any(r => r.Id == res.Id))
+                {
+                    resources.Add(_resourceConverter.FromEntity(res));
+                }
             }
         }
         return resources;
