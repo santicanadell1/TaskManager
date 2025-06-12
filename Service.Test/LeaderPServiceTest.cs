@@ -129,10 +129,10 @@ public class LeaderPService_Test
         UserDTO
             leaderUser =
                 _userService.GetUser(
-                    "leader.user@example.com"); //_repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
+                    "leader.user@example.com"); 
         UserDTO
             adminUser = _userService.GetUser(
-                "admin.user@example.com"); //_repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
+                "admin.user@example.com"); 
 
         ProjectDTO project = new ProjectDTO
         {
@@ -511,4 +511,29 @@ public class LeaderPService_Test
         Assert.IsFalse(tasksAfterRemoval.Any(t => t.Title == initialTask.Title),
             "Task should be removed from the member's task list.");
     }
+
+    [TestMethod]
+    public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
+    {
+        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+        var csvExporter = new CSVExporter(_repositoryManager);
+        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+
+        TaskDTO task2 = new 
+        {
+            Title = "Zeta Task", 
+            Description = "Task with Z to test ordering",
+            ExpectedStartDate = DateTime.Now.AddDays(4),
+            Duration = 2,
+            State = StateDTO.DOING,
+            Resources = new List<ResourceDTO>
+            {
+                new ResourceDTO { Name = "Resource A" },
+                new ResourceDTO { Name = "Resource B" }
+            }
+        };
+    }
+
 }
