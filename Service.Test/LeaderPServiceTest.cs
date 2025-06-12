@@ -627,7 +627,6 @@ public void ExportProjects_ShouldReturnEmptyExport_WhenNoProjectsExist()
     
     string csvResult = leaderServiceWithCsv.ExportProjects();
     
-    // Assert
     Assert.IsNotNull(csvResult);
     Assert.IsTrue(csvResult.Contains("Proyecto,Fecha de Inicio,Tarea,Fecha de Inicio,Duración,Crítico,Recursos"));
     
@@ -637,8 +636,6 @@ public void ExportProjects_ShouldReturnEmptyExport_WhenNoProjectsExist()
     Console.WriteLine("=== RESULTADO SIN PROYECTOS ===");
     Console.WriteLine(csvResult);
 }
-
-
 
 
 }
