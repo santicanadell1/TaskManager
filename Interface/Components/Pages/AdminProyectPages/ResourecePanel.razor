@@ -53,8 +53,8 @@
     <div class="d-flex align-items-center mb-4">
         <i class="bi bi-calendar3 me-3 fs-2 text-primary"></i>
         <div>
-            <h3 class="mb-0">Panel de Recursos</h3>
-            <small class="text-muted">Gestiona la disponibilidad de tus recursos</small>
+            <h3 class="mb-0">Resource Panel</h3>
+            <small class="text-muted">Resource availability</small>
         </div>
     </div>
     
@@ -62,10 +62,10 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label class="form-label">
-                    <i class="bi bi-folder me-2"></i>Proyecto:
+                    <i class="bi bi-folder me-2"></i>Project:
                 </label>
                 <select class="form-select form-select-lg" @onchange="OnProjectChanged" disabled="@_isLoading">
-                    <option value="">-- Selecciona un proyecto --</option>
+                    <option value="">-- Select a project --</option>
                     @foreach (var project in _projects)
                     {
                         <option value="@project.Name" selected="@(_selectedProject == project.Name)">
@@ -81,10 +81,10 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="form-label">
-                        <i class="bi bi-cpu me-2"></i>Recurso:
+                        <i class="bi bi-cpu me-2"></i>Resource:
                     </label>
                     <select class="form-select form-select-lg" @onchange="OnResourceChanged" disabled="@_isLoading">
-                        <option value="">-- Selecciona un recurso --</option>
+                        <option value="">-- Select a resource --</option>
                         @foreach (var resource in _resources)
                         {
                             <option value="@resource.Id" selected="@(_selectedResource?.Id == resource.Id)">
@@ -109,9 +109,9 @@
     {
         <div class="loading-spinner">
             <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-                <span class="visually-hidden">Cargando...</span>
+                <span class="visually-hidden">Loading...</span>
             </div>
-            <p class="mt-3 text-muted">Cargando información del calendario...</p>
+            <p class="mt-3 text-muted">Loading calendar info...</p>
         </div>
     }
     
@@ -125,13 +125,13 @@
                         @_selectedResource.Name
                     </h5>
                     <p class="mb-0">
-                        <small>Proyecto: <strong>@_selectedProject</strong></small>
+                        <small>Project: <strong>@_selectedProject</strong></small>
                     </p>
                 </div>
                 @if (!string.IsNullOrEmpty(_nextAvailableDate))
                 {
                     <div class="col-md-4 text-md-end">
-                        <small>Próxima fecha disponible:</small>
+                        <small>Next available date:</small>
                         <br>
                         <strong class="fs-6">@_nextAvailableDate</strong>
                     </div>
@@ -169,7 +169,7 @@
         }
         catch (Exception ex)
         {
-            _errorMessage = $"Error al cargar proyectos: {ex.Message}";
+            _errorMessage = $"Error while loading projects: {ex.Message}";
         }
     }
 
@@ -184,7 +184,7 @@
             }
             catch (JSException jsEx)
             {
-                _errorMessage = $"Error al inicializar el calendario: {jsEx.Message}";
+                _errorMessage = $"Error while initializing calendar: {jsEx.Message}";
                 _showCalendar = false;
                 StateHasChanged();
             }
@@ -214,7 +214,7 @@
         }
         catch (Exception ex)
         {
-            _errorMessage = $"Error al cargar recursos: {ex.Message}";
+            _errorMessage = $"Error while loading resources: {ex.Message}";
             _resources = new List<ResourceDTO>();
         }
         finally
@@ -245,7 +245,7 @@
             _selectedResource = _resources.FirstOrDefault(r => r.Id == resourceId);
             if (_selectedResource == null)
             {
-                _errorMessage = "Recurso no encontrado";
+                _errorMessage = "Resource not found";
                 return;
             }
             
@@ -259,7 +259,7 @@
             {
                 events.Add(new
                 {
-                    title = "Ocupado",
+                    title = "Ocupied",
                     start = startDate.ToString("yyyy-MM-dd"),
                     end = startDate.AddDays(duration).ToString("yyyy-MM-dd"),
                     color = "#dc3545"
@@ -268,7 +268,7 @@
 
             events.Add(new
             {
-                title = "Disponible",
+                title = "Available ",
                 start = nextAvailable.ToString("yyyy-MM-dd"),
                 end = nextAvailable.AddDays(1).ToString("yyyy-MM-dd"),
                 color = "#28a745"
@@ -280,11 +280,11 @@
         }
         catch (JSException jsEx)
         {
-            _errorMessage = $"Error al inicializar el calendario: {jsEx.Message}";
+            _errorMessage = $"Error while initializing calendar: {jsEx.Message}";
         }
         catch (Exception ex)
         {
-            _errorMessage = $"Error al cargar datos del recurso: {ex.Message}";
+            _errorMessage = $"Error while loading resource's data: {ex.Message}";
         }
         finally
         {
