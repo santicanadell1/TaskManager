@@ -41,5 +41,29 @@ public class ProjectExportDTOTest
         Assert.IsNull(projectExportDTO.Tasks);
     }
     
+    [TestMethod]
+    public void ProjectExportDTO_ShouldCreateValidObject_WhenAllPropertiesAreSet()
+    {
+        var task = new TaskExportDTO
+        {
+            Task = "Test Task",
+            StartDate = "2024-01-01",
+            Duration = 5,
+            IsCritical = "Yes",
+            Resources = new List<string> { "Resource1" }
+        };
+
+        var projectExportDTO = new ProjectExportDTO
+        {
+        ,
+            StartDate = "2024-01-01",
+            Tasks = new List<TaskExportDTO> { task }
+        };
+
+        Assert.AreEqual("Test Project", projectExportDTO.Project);
+        Assert.AreEqual("2024-01-01", projectExportDTO.StartDate);
+        Assert.AreEqual(1, projectExportDTO.Tasks.Count);
+    }
+    
 
 }
