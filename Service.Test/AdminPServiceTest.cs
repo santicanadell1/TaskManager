@@ -728,5 +728,17 @@ public class AdminPServiceTests
         Assert.AreEqual("Task 1", tasks[0].Title);
         Assert.AreEqual("Task 2", tasks[1].Title);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ProjectNotFoundException))]
+    public void GetTasks_ShouldThrowException_WhenProjectDoesNotExist()
+    {
+        ProjectDTO projectDTO = new ProjectDTO
+        {
+            Name = "Nonexistent Project",
+            Description = "Nonexistent Project Description",
+            StartDate = DateTime.Today
+        };
 
+    }
 }
