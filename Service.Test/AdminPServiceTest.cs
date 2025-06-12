@@ -740,5 +740,6 @@ public class AdminPServiceTests
             StartDate = DateTime.Today
         };
 
+        _adminPservice.GetTasks(projectDTO);
     }
 }
