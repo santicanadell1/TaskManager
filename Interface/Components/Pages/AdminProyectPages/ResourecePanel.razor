@@ -7,7 +7,6 @@
 @inject IJSRuntime JS
 @rendermode InteractiveServer
 
-<!-- Estilos adicionales para mejorar la apariencia -->
 <style>
     .calendar-container {
         margin-top: 20px;
@@ -58,8 +57,7 @@
             <small class="text-muted">Gestiona la disponibilidad de tus recursos</small>
         </div>
     </div>
-
-    <!-- Controles de selección -->
+    
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="form-group">
@@ -99,7 +97,6 @@
         }
     </div>
 
-    <!-- Mensajes de estado -->
     @if (!string.IsNullOrEmpty(_errorMessage))
     {
         <div class="error-message">
@@ -117,8 +114,7 @@
             <p class="mt-3 text-muted">Cargando información del calendario...</p>
         </div>
     }
-
-    <!-- Información del recurso seleccionado -->
+    
     @if (_selectedResource != null && !_isLoading)
     {
         <div class="resource-info">
@@ -143,8 +139,7 @@
             </div>
         </div>
     }
-
-    <!-- Calendario -->
+    
     @if (_showCalendar && !_isLoading)
     {
         <div class="calendar-container">
@@ -180,13 +175,12 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Solo inicializar el calendario si necesitamos hacerlo y el DOM está listo
         if (_needsCalendarInit && _showCalendar && _pendingEvents.Any())
         {
             try
             {
                 await JS.InvokeVoidAsync("initResourceCalendar", _pendingEvents);
-                _needsCalendarInit = false; // Marcar como completado
+                _needsCalendarInit = false;
             }
             catch (JSException jsEx)
             {
@@ -254,16 +248,13 @@
                 _errorMessage = "Recurso no encontrado";
                 return;
             }
-
-            // Obtener datos del calendario
+            
             var occupiedPeriods = _ResourceAdminController.getWhenIsResourceOcupied(_selectedResource);
             var nextAvailable = _ResourceAdminController.NextDateAvailable(_selectedResource, DateTime.Today, 1);
             _nextAvailableDate = nextAvailable.ToString("dd/MM/yyyy");
-
-            // Preparar eventos para el calendario
+            
             var events = new List<object>();
-
-            // Agregar períodos ocupados
+            
             foreach (var (startDate, duration) in occupiedPeriods)
             {
                 events.Add(new
@@ -275,7 +266,6 @@
                 });
             }
 
-            // Agregar próxima fecha disponible
             events.Add(new
             {
                 title = "Disponible",
@@ -283,8 +273,7 @@
                 end = nextAvailable.AddDays(1).ToString("yyyy-MM-dd"),
                 color = "#28a745"
             });
-
-            // Guardar los eventos y marcar que necesitamos inicializar el calendario
+            
             _pendingEvents = events;
             _needsCalendarInit = true;
             _showCalendar = true;
