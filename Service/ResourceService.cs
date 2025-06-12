@@ -172,5 +172,17 @@ public class ResourceService : IResourceService
         return candidate;
     }
 
-
+    public List<ResourceDTO> getAllResourcesForAProject(string pName)
+    {
+        List<ResourceDTO> resources = new List<ResourceDTO>();
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == pName);
+        foreach (Task task in project.Tasks)
+        {
+            foreach (Resource res in task._resources)
+            {
+                resources.Add(_resourceConverter.FromEntity(res));
+            }
+        }
+        return resources;
+    }
 }
