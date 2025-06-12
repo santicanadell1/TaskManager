@@ -188,7 +188,7 @@ public class ResourceService : IResourceService
         }
         return resources;
     }
-
+    
     public List<(DateTime, int)> getWhenIsResourceOcupied(ResourceDTO res)
     {
         List<(DateTime, int)> whenIsResourceOcupied = new List<(DateTime, int)>();

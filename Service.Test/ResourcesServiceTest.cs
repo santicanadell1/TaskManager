@@ -703,7 +703,7 @@ public class ResourcesServiceTest
     [TestMethod]
     public void NextDateAvailable_ReturnsStartDate_WhenResourceAllowConcurrentUsage()
     {
-        var resource = new ResourceDTO
+        ResourceDTO resource = new ResourceDTO
         {
             Name = "ConcurrentResource",
             Type = "TypeA",
@@ -718,19 +718,19 @@ public class ResourcesServiceTest
     public void NextDateAvailable_MovesToEndOfBlockingAssignment_WhenAssignmentOverlapsStartDate()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
             Description = "Description of Resource1"
         };
         _resourceService.AddResource(resourceDTO);
-        var added = _repositoryManager.ResourceRepository
+        Resource added = _repositoryManager.ResourceRepository
             .Get(r => r.Name == "Resource1");
-        var resDto = _resourceService.Get(added.Id);
+        ResourceDTO resDto = _resourceService.Get(added.Id);
 
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var project = new ProjectDTO
+        ProjectDTO project = new ProjectDTO
         {
             Name = "Project1",
             Description = "Description of Project1",
@@ -738,7 +738,7 @@ public class ResourcesServiceTest
             AdminProyect = _userService.GetUser("adminProject.user@example.com")
         };
         _adminProjectService.CreateProject(project);
-        var task = new TaskDTO
+        TaskDTO task = new TaskDTO
         {
             Title = "T1",
             Description = "Desc",
@@ -757,19 +757,19 @@ public class ResourcesServiceTest
     public void NextDateAvailable_FindsFirstGapBetweenAssignments_WhenGapFits()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource2",
             Type = "TypeA",
             Description = "Description of Resource2"
         };
         _resourceService.AddResource(resourceDTO);
-        var added = _repositoryManager.ResourceRepository
+        Resource added = _repositoryManager.ResourceRepository
             .Get(r => r.Name == "Resource2");
-        var resDto = _resourceService.Get(added.Id);
+        ResourceDTO resDto = _resourceService.Get(added.Id);
 
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var project = new ProjectDTO
+        ProjectDTO project = new ProjectDTO
         {
             Name = "Project2",
             Description = "Description of Project2",
@@ -778,7 +778,7 @@ public class ResourcesServiceTest
         };
         _adminProjectService.CreateProject(project);
         
-        var t1 = new TaskDTO
+        TaskDTO t1 = new TaskDTO
         {
             Title = "T1",
             Description = "Desc1",
@@ -788,7 +788,7 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { resDto }
         };
-        var t2 = new TaskDTO
+        TaskDTO t2 = new TaskDTO
         {
             Title = "T2",
             Description = "Desc2",
@@ -809,19 +809,19 @@ public class ResourcesServiceTest
     public void NextDateAvailable_ReturnsFirstDateAfterLastAssignment_WhenNoGapFits()
     {
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource3",
             Type = "TypeA",
             Description = "Description of Resource3"
         };
         _resourceService.AddResource(resourceDTO);
-        var added = _repositoryManager.ResourceRepository
+        Resource added = _repositoryManager.ResourceRepository
             .Get(r => r.Name == "Resource3");
-        var resDto = _resourceService.Get(added.Id);
+        ResourceDTO resDto = _resourceService.Get(added.Id);
 
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var project = new ProjectDTO
+        ProjectDTO project = new ProjectDTO
         {
             Name = "Project3",
             Description = "Description of Project3",
@@ -830,7 +830,7 @@ public class ResourcesServiceTest
         };
         _adminProjectService.CreateProject(project);
         
-        var t1 = new TaskDTO
+        TaskDTO t1 = new TaskDTO
         {
             Title = "T1",
             Description = "Desc1",
@@ -840,7 +840,7 @@ public class ResourcesServiceTest
             SameTimeTasks = new List<TaskDTO>(),
             Resources = new List<ResourceDTO> { resDto }
         };
-        var t2 = new TaskDTO
+        TaskDTO t2 = new TaskDTO
         {
             Title = "T2",
             Description = "Desc2",
@@ -859,7 +859,7 @@ public class ResourcesServiceTest
     public void GetAllResourcesForAProject_ReturnsAllUniqueResources_WhenTasksHaveDistinctResources()
     {
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var projectDto = new ProjectDTO
+        ProjectDTO projectDto = new ProjectDTO
         {
             Name = "ProjDistinct",
             Description = "Two tasks, two resources",
@@ -868,13 +868,13 @@ public class ResourcesServiceTest
         };
         _adminProjectService.CreateProject(projectDto);
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var r1 = new ResourceDTO { Name = "R1", Type = "T1", Description = "D1" };
-        var r2 = new ResourceDTO { Name = "R2", Type = "T2", Description = "D2" };
+        ResourceDTO r1 = new ResourceDTO { Name = "R1", Type = "T1", Description = "D1" };
+        ResourceDTO r2 = new ResourceDTO { Name = "R2", Type = "T2", Description = "D2" };
         _resourceService.AddResource(r1);
         _resourceService.AddResource(r2);
         r1.Id = _repositoryManager.ResourceRepository.Get(r=>r.Name=="R1").Id;
         r2.Id = _repositoryManager.ResourceRepository.Get(r=>r.Name=="R2").Id;
-        var taskA = new TaskDTO
+        TaskDTO taskA = new TaskDTO
         {
             Title = "TaskA",
             Description = "uses R1",
@@ -883,7 +883,7 @@ public class ResourcesServiceTest
             Resources = new List<ResourceDTO> { r1 }
         };
         _taskService.AddTask("ProjDistinct", taskA);
-        var taskB = new TaskDTO
+        TaskDTO taskB = new TaskDTO
         {
             Title = "TaskB",
             Description = "uses R2",
@@ -892,7 +892,7 @@ public class ResourcesServiceTest
             Resources = new List<ResourceDTO> { r2 }
         };
         _taskService.AddTask("ProjDistinct", taskB);
-        var resources = _resourceService.getAllResourcesForAProject("ProjDistinct");
+        List<ResourceDTO> resources = _resourceService.getAllResourcesForAProject("ProjDistinct");
         Assert.AreEqual(2, resources.Count);
         Assert.IsTrue(resources.Any(r=>r.Name=="R1"));
         Assert.IsTrue(resources.Any(r=>r.Name=="R2"));
@@ -901,7 +901,7 @@ public class ResourcesServiceTest
     public void GetAllResourcesForAProject_ReturnsDistinct_WhenMultipleTasksShareSameResource()
     {
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var projectDto = new ProjectDTO
+        ProjectDTO projectDto = new ProjectDTO
         {
             Name = "ProjShared",
             Description = "Two tasks share R1",
@@ -910,10 +910,10 @@ public class ResourcesServiceTest
         };
         _adminProjectService.CreateProject(projectDto);
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var r1 = new ResourceDTO { Name = "SharedR", Type = "T", Description = "D" };
+        ResourceDTO r1 = new ResourceDTO { Name = "SharedR", Type = "T", Description = "D" };
         _resourceService.AddResource(r1);
         r1.Id = _repositoryManager.ResourceRepository.Get(r=>r.Name=="SharedR").Id;
-        var task1 = new TaskDTO
+        TaskDTO task1 = new TaskDTO
         {
             Title = "T1",
             Description = "uses SharedR",
@@ -922,7 +922,7 @@ public class ResourcesServiceTest
             Resources = new List<ResourceDTO> { r1 }
         };
         _taskService.AddTask("ProjShared", task1);
-        var task2 = new TaskDTO
+        TaskDTO task2 = new TaskDTO
         {
             Title = "T2",
             Description = "also uses SharedR",
@@ -931,7 +931,7 @@ public class ResourcesServiceTest
             Resources = new List<ResourceDTO> { r1 }
         };
         _taskService.AddTask("ProjShared", task2);
-        var resources = _resourceService.getAllResourcesForAProject("ProjShared");
+        List<ResourceDTO> resources = _resourceService.getAllResourcesForAProject("ProjShared");
         Assert.AreEqual(1, resources.Count);
         Assert.AreEqual("SharedR", resources[0].Name);
     }
@@ -939,7 +939,7 @@ public class ResourcesServiceTest
     public void GetWhenResourceOccupied_ReturnsMultipleEntries_WhenMultipleTasksUseSameResource()
     {
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var project = new ProjectDTO
+        ProjectDTO project = new ProjectDTO
         {
             Name = "ProjMultiOcc",
             Description = "Multiple tasks",
@@ -948,11 +948,11 @@ public class ResourcesServiceTest
         };
         _adminProjectService.CreateProject(project);
         _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
-        var r = new ResourceDTO { Name = "ResB", Type = "TB", Description = "DB" };
+        ResourceDTO r = new ResourceDTO { Name = "ResB", Type = "TB", Description = "DB" };
         _resourceService.AddResource(r);
         r.Id = _repositoryManager.ResourceRepository.Get(x => x.Name == "ResB").Id;
         _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
-        var t1 = new TaskDTO
+        TaskDTO t1 = new TaskDTO
         {
             Title = "T1",
             Description = "first use",
@@ -961,7 +961,7 @@ public class ResourcesServiceTest
             Resources = new List<ResourceDTO> { r }
         };
         _taskService.AddTask("ProjMultiOcc", t1);
-        var t2 = new TaskDTO
+        TaskDTO t2 = new TaskDTO
         {
             Title = "T2",
             Description = "second use",
@@ -970,7 +970,7 @@ public class ResourcesServiceTest
             Resources = new List<ResourceDTO> { r }
         };
         _taskService.AddTask("ProjMultiOcc", t2);
-        var occupied = _resourceService.getWhenIsResourceOcupied(r);
+        List<(DateTime,int)> occupied = _resourceService.getWhenIsResourceOcupied(r);
         Assert.AreEqual(2, occupied.Count);
         Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today    && o.Item2 == 2));
         Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today.AddDays(5) && o.Item2 == 3));
