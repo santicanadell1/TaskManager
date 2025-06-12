@@ -3,123 +3,305 @@
 @using Microsoft.JSInterop
 @using Service.Models
 @inject ResourceAdminController _ResourceAdminController
-@inject AdminProjectController   _AdminProjectController
-@inject IJSRuntime                JS
+@inject AdminProjectController _AdminProjectController
+@inject IJSRuntime JS
 @rendermode InteractiveServer
 
-<link href="Interface/wwwroot/Calendar/main.min.css" rel="stylesheet" />
-<script src="Interface/wwwroot/Calendar/main.min.js"></script>
-<script>
-  window.initResourceCalendar = function (events) {
-    var calendarEl = document.getElementById('resourceCalendar');
-    if (window._resourceCal) {
-      window._resourceCal.destroy();
+<!-- Estilos adicionales para mejorar la apariencia -->
+<style>
+    .calendar-container {
+        margin-top: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
     }
-    window._resourceCal = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: ''
-      },
-      height: 600,
-      events: events
-    });
-    window._resourceCal.render();
-  };
-</script>
+
+    .loading-spinner {
+        text-align: center;
+        padding: 40px;
+    }
+
+    .error-message {
+        color: #dc3545;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 4px;
+        padding: 12px;
+        margin: 15px 0;
+    }
+
+    .resource-info {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+</style>
 
 <div class="container my-4">
-    <h3 class="mb-4"><i class="bi bi-calendar3 me-2"></i>Panel de Recursos</h3>
-
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <label>Proyecto:</label>
-            <select class="form-select" @onchange="OnProjectChanged">
-                <option value="">-- Selecciona un proyecto --</option>
-                @foreach (var p in _projects)
-                {
-                    <option value="@p.Name">@p.Name</option>
-                }
-            </select>
+    <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-calendar3 me-3 fs-2 text-primary"></i>
+        <div>
+            <h3 class="mb-0">Panel de Recursos</h3>
+            <small class="text-muted">Gestiona la disponibilidad de tus recursos</small>
         </div>
-        @if (!string.IsNullOrEmpty(_selectedProject))
-        {
-            <div class="col-md-4">
-                <label>Recurso:</label>
-                <select class="form-select" @onchange="OnResourceChanged">
-                    <option value="">-- Selecciona un recurso --</option>
-                    @foreach (var r in _resources)
+    </div>
+
+    <!-- Controles de selección -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="bi bi-folder me-2"></i>Proyecto:
+                </label>
+                <select class="form-select form-select-lg" @onchange="OnProjectChanged" disabled="@_isLoading">
+                    <option value="">-- Selecciona un proyecto --</option>
+                    @foreach (var project in _projects)
                     {
-                        <option value="@r.Id">@r.Name</option>
+                        <option value="@project.Name" selected="@(_selectedProject == project.Name)">
+                            @project.Name
+                        </option>
                     }
                 </select>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(_selectedProject) && _resources.Any())
+        {
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="bi bi-cpu me-2"></i>Recurso:
+                    </label>
+                    <select class="form-select form-select-lg" @onchange="OnResourceChanged" disabled="@_isLoading">
+                        <option value="">-- Selecciona un recurso --</option>
+                        @foreach (var resource in _resources)
+                        {
+                            <option value="@resource.Id" selected="@(_selectedResource?.Id == resource.Id)">
+                                @resource.Name
+                            </option>
+                        }
+                    </select>
+                </div>
             </div>
         }
     </div>
 
-    @if (_showCalendar)
+    <!-- Mensajes de estado -->
+    @if (!string.IsNullOrEmpty(_errorMessage))
     {
-        <div id="resourceCalendar"></div>
+        <div class="error-message">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Error:</strong> @_errorMessage
+        </div>
+    }
+
+    @if (_isLoading)
+    {
+        <div class="loading-spinner">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3 text-muted">Cargando información del calendario...</p>
+        </div>
+    }
+
+    <!-- Información del recurso seleccionado -->
+    @if (_selectedResource != null && !_isLoading)
+    {
+        <div class="resource-info">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-1">
+                        <i class="bi bi-info-circle me-2"></i>
+                        @_selectedResource.Name
+                    </h5>
+                    <p class="mb-0">
+                        <small>Proyecto: <strong>@_selectedProject</strong></small>
+                    </p>
+                </div>
+                @if (!string.IsNullOrEmpty(_nextAvailableDate))
+                {
+                    <div class="col-md-4 text-md-end">
+                        <small>Próxima fecha disponible:</small>
+                        <br>
+                        <strong class="fs-6">@_nextAvailableDate</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Calendario -->
+    @if (_showCalendar && !_isLoading)
+    {
+        <div class="calendar-container">
+            <div id="resourceCalendar"></div>
+        </div>
     }
 </div>
 
 @code {
-    private List<ProjectDTO>    _projects       = new();
-    private List<ResourceDTO>   _resources      = new();
-    private string              _selectedProject;
-    private ResourceDTO         _selectedResource;
-    private bool                _showCalendar   = false;
+    private List<ProjectDTO> _projects = new();
+    private List<ResourceDTO> _resources = new();
+    private string _selectedProject = string.Empty;
+    private ResourceDTO? _selectedResource;
+    private bool _showCalendar = false;
+    private bool _isLoading = false;
+    private string _errorMessage = string.Empty;
+    private string _nextAvailableDate = string.Empty;
+    private List<object> _pendingEvents = new();
+    private bool _needsCalendarInit = false;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        var currentEmail = LoggedUser.Current.Email;
-        _projects = _AdminProjectController
-                        .GetAllProjectsForUser(currentEmail)
-                    ?? new List<ProjectDTO>();
+        try
+        {
+            var currentEmail = LoggedUser.Current.Email;
+            _projects = _AdminProjectController.GetAllProjectsForUser(currentEmail) ?? new List<ProjectDTO>();
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Error al cargar proyectos: {ex.Message}";
+        }
     }
 
-    private void OnProjectChanged(ChangeEventArgs e)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _selectedProject = e.Value?.ToString();
-        _showCalendar   = false;
-        _resources      = string.IsNullOrEmpty(_selectedProject)
-                         ? new List<ResourceDTO>()
-                         : _ResourceAdminController
-                               .getAllResourcesForAProject(_selectedProject);
+        // Solo inicializar el calendario si necesitamos hacerlo y el DOM está listo
+        if (_needsCalendarInit && _showCalendar && _pendingEvents.Any())
+        {
+            try
+            {
+                await JS.InvokeVoidAsync("initResourceCalendar", _pendingEvents);
+                _needsCalendarInit = false; // Marcar como completado
+            }
+            catch (JSException jsEx)
+            {
+                _errorMessage = $"Error al inicializar el calendario: {jsEx.Message}";
+                _showCalendar = false;
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task OnProjectChanged(ChangeEventArgs e)
+    {
+        _errorMessage = string.Empty;
+        _selectedProject = e.Value?.ToString() ?? string.Empty;
+        _showCalendar = false;
+        _selectedResource = null;
+        _nextAvailableDate = string.Empty;
+
+        if (string.IsNullOrEmpty(_selectedProject))
+        {
+            _resources = new List<ResourceDTO>();
+            return;
+        }
+
+        try
+        {
+            _isLoading = true;
+            StateHasChanged();
+
+            _resources = _ResourceAdminController.getAllResourcesForAProject(_selectedProject) ?? new List<ResourceDTO>();
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Error al cargar recursos: {ex.Message}";
+            _resources = new List<ResourceDTO>();
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
     }
 
     private async Task OnResourceChanged(ChangeEventArgs e)
     {
+        _errorMessage = string.Empty;
         var idStr = e.Value?.ToString();
-        if (!int.TryParse(idStr, out var resId))
+
+        if (!int.TryParse(idStr, out var resourceId))
         {
             _showCalendar = false;
+            _selectedResource = null;
+            _nextAvailableDate = string.Empty;
             return;
         }
 
-        _selectedResource = _resources.First(r => r.Id == resId);
-        var ocp = _ResourceAdminController.getWhenIsResourceOcupied(_selectedResource);
-        var next = _ResourceAdminController.NextDateAvailable(_selectedResource, DateTime.Today, 1);
-        var events = new List<object>();
-        foreach (var (st, dur) in ocp)
+        try
         {
-            events.Add(new {
-                title      = "Ocupado",
-                start      = st.ToString("yyyy-MM-dd"),
-                end        = st.AddDays(dur).ToString("yyyy-MM-dd"),
-                color      = "red"
-            });
-        }
+            _isLoading = true;
+            StateHasChanged();
 
-        events.Add(new
+            _selectedResource = _resources.FirstOrDefault(r => r.Id == resourceId);
+            if (_selectedResource == null)
+            {
+                _errorMessage = "Recurso no encontrado";
+                return;
+            }
+
+            // Obtener datos del calendario
+            var occupiedPeriods = _ResourceAdminController.getWhenIsResourceOcupied(_selectedResource);
+            var nextAvailable = _ResourceAdminController.NextDateAvailable(_selectedResource, DateTime.Today, 1);
+            _nextAvailableDate = nextAvailable.ToString("dd/MM/yyyy");
+
+            // Preparar eventos para el calendario
+            var events = new List<object>();
+
+            // Agregar períodos ocupados
+            foreach (var (startDate, duration) in occupiedPeriods)
+            {
+                events.Add(new
+                {
+                    title = "Ocupado",
+                    start = startDate.ToString("yyyy-MM-dd"),
+                    end = startDate.AddDays(duration).ToString("yyyy-MM-dd"),
+                    color = "#dc3545"
+                });
+            }
+
+            // Agregar próxima fecha disponible
+            events.Add(new
+            {
+                title = "Disponible",
+                start = nextAvailable.ToString("yyyy-MM-dd"),
+                end = nextAvailable.AddDays(1).ToString("yyyy-MM-dd"),
+                color = "#28a745"
+            });
+
+            // Guardar los eventos y marcar que necesitamos inicializar el calendario
+            _pendingEvents = events;
+            _needsCalendarInit = true;
+            _showCalendar = true;
+        }
+        catch (JSException jsEx)
         {
-            title = "Libre",
-            start = next.ToString("yyyy-MM-dd"),
-            end = next.AddDays(1).ToString("yyyy-MM-dd"),
-            color = "green"
-        });
-        await JS.InvokeVoidAsync("initResourceCalendar", events);
-        _showCalendar = true;
+            _errorMessage = $"Error al inicializar el calendario: {jsEx.Message}";
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Error al cargar datos del recurso: {ex.Message}";
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
     }
+
 }

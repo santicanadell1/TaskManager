@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250612183942_Initial")]
+    [Migration("20250612225344_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -106,6 +106,9 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<bool>("ConcurrentUsage")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
