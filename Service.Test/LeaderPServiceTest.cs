@@ -581,7 +581,12 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
     
     TaskDTO taskWithoutResources = new TaskDTO
     {
-        
+        Title = "Task With Resources", 
+        Description = "Task to test resource export",
+        ExpectedStartDate = DateTime.Now.AddDays(3),
+        Duration = 4,
+        State = StateDTO.DOING,
+        Resources = new List<ResourceDTO>() 
     };
     
     _taskService.AddTask("Test Project", taskWithoutResources);
