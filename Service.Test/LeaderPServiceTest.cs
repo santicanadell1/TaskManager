@@ -520,8 +520,9 @@ public class LeaderPService_Test
         var csvExporter = new CSVExporter(_repositoryManager);
         var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        TaskDTO task2 = new 
+        TaskDTO task2 = new TaskDTO
         {
             Title = "Zeta Task", 
             Description = "Task with Z to test ordering",
