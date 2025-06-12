@@ -51,6 +51,7 @@ namespace DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AdminProjectId = table.Column<int>(type: "int", nullable: true),
+                    ProjectLeaderId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -62,8 +63,12 @@ namespace DataAccess.Migrations
                         name: "FK_Projects_Users_AdminProjectId",
                         column: x => x.AdminProjectId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Projects_Users_ProjectLeaderId",
+                        column: x => x.ProjectLeaderId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -277,6 +282,11 @@ namespace DataAccess.Migrations
                 name: "IX_Projects_AdminProjectId",
                 table: "Projects",
                 column: "AdminProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projects_ProjectLeaderId",
+                table: "Projects",
+                column: "ProjectLeaderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskDependencies_PreviousTaskId",

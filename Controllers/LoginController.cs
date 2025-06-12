@@ -7,12 +7,10 @@ namespace Controllers;
 
 public class LoginController
 {
-    private readonly IRepositoryManager _repositoryManager;
     private readonly ILogin _login;
 
     public LoginController(IRepositoryManager repositoryManager)
     {
-        _repositoryManager = repositoryManager;
         _login = new Login(repositoryManager);
     }
 
@@ -34,5 +32,20 @@ public class LoginController
     public void Logout()
     {
         _login.Logout();
+    }
+
+    public bool IsTheCurrentUserAdminSystem()
+    {
+        return _login.IsAdminSystem();
+    }
+
+    public bool IsTheCurrentUserAdminProject()
+    {
+        return _login.IsAdminProject();
+    }
+
+    public bool IsTheCurrentUserProjectMember()
+    {
+        return _login.IsProjectMember();
     }
 }
