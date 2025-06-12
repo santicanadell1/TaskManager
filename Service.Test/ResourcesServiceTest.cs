@@ -571,4 +571,408 @@ public class ResourcesServiceTest
     {
         _resourceService.DeleteResource(999);
     }
+    [TestMethod]
+    public void IsAvailable_ReturnsTrue_WhenResourceAllowConcurrentUsage()
+    {
+        ResourceDTO resource = new ResourceDTO
+        {
+            Name = "ConcurrentResource",
+            Type = "TypeA",
+            Description = "Desc",
+            ConcurrentUsage = true
+        };
+        bool available = _resourceService.IsAvailable(resource, DateTime.Today, 5);
+        Assert.IsTrue(available);
+    }
+    [TestMethod]
+    public void IsAvailable_ReturnsTrue_WhenNoAssignmentsExist()
+    {
+        ResourceDTO resource = new ResourceDTO
+        {
+            Name = "ExclusiveResource",
+            Type = "TypeB",
+            Description = "Desc",
+            ConcurrentUsage = false
+        };
+        bool available = _resourceService.IsAvailable(resource, DateTime.Today, 5);
+        Assert.IsTrue(available);
+    }
+
+    [TestMethod]
+    public void IsAvailable_ReturnsTrue_WhenIntervalDoesNotOverlap()
+    {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        ResourceDTO resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1"
+        };
+        _resourceService.AddResource(resourceDTO);
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
+        ResourceDTO addedResourceDto = new ResourceDTO
+        {
+            Id = addedResource.Id,
+            Name = addedResource.Name,
+            Type = addedResource.Type,
+            Description = addedResource.Description
+        };
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        ProjectDTO project = new ProjectDTO();
+        project.Name = "Project1";
+        project.Description = "Description of Project1";
+        project.StartDate = DateTime.Today;
+        project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
+        TaskDTO task = new TaskDTO
+        {
+            Title = "Title1",
+            Description = "Description1",
+            ExpectedStartDate = DateTime.Today,
+            Duration = 5,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { addedResourceDto }
+        };
+
+        TaskDTO task2 = new TaskDTO
+        {
+            Title = "Title2",
+            Description = "Description2",
+            ExpectedStartDate = DateTime.Today.AddDays(10),
+            Duration = 5,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { addedResourceDto }
+        };
+        _adminProjectService.CreateProject(project);
+
+        _taskService.AddTask("Project1", task);
+        _taskService.AddTask("Project1", task2);
+
+        bool available = _resourceService.IsAvailable(addedResourceDto, DateTime.Today.AddDays(6), 3);
+
+        Assert.IsTrue(available);
+    }
+    [TestMethod]
+
+    public void IsAvailable_ReturnsFalse_WhenIntervalOverlaps()
+    {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        ResourceDTO resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1"
+        };
+        _resourceService.AddResource(resourceDTO);
+        Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
+        ResourceDTO addedResourceDto = new ResourceDTO
+        {
+            Id = addedResource.Id,
+            Name = addedResource.Name,
+            Type = addedResource.Type,
+            Description = addedResource.Description
+        };
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        ProjectDTO project = new ProjectDTO();
+        project.Name = "Project1";
+        project.Description = "Description of Project1";
+        project.StartDate = DateTime.Today;
+        project.AdminProyect = _userService.GetUser("adminProject.user@example.com");
+
+        TaskDTO task = new TaskDTO
+        {
+            Title = "Title1",
+            Description = "Description1",
+            ExpectedStartDate = DateTime.Today,
+            Duration = 5,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { addedResourceDto }
+        };
+        
+        _adminProjectService.CreateProject(project);
+
+        _taskService.AddTask("Project1", task);
+        
+        bool available = _resourceService.IsAvailable(addedResourceDto, DateTime.Today, 3);
+
+        Assert.IsFalse(available);
+    }
+    [TestMethod]
+    public void NextDateAvailable_ReturnsStartDate_WhenResourceAllowConcurrentUsage()
+    {
+        ResourceDTO resource = new ResourceDTO
+        {
+            Name = "ConcurrentResource",
+            Type = "TypeA",
+            Description = "Desc",
+            ConcurrentUsage = true
+        };
+        DateTime today = DateTime.Today;
+        DateTime next = _resourceService.NextDateAvailable(resource, today, 5);
+        Assert.AreEqual(today, next);
+    }
+    [TestMethod]
+    public void NextDateAvailable_MovesToEndOfBlockingAssignment_WhenAssignmentOverlapsStartDate()
+    {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        ResourceDTO resourceDTO = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1"
+        };
+        _resourceService.AddResource(resourceDTO);
+        Resource added = _repositoryManager.ResourceRepository
+            .Get(r => r.Name == "Resource1");
+        ResourceDTO resDto = _resourceService.Get(added.Id);
+
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        ProjectDTO project = new ProjectDTO
+        {
+            Name = "Project1",
+            Description = "Description of Project1",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(project);
+        TaskDTO task = new TaskDTO
+        {
+            Title = "T1",
+            Description = "Desc",
+            ExpectedStartDate = DateTime.Today,
+            Duration = 5,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resDto }
+        };
+        _taskService.AddTask("Project1", task);
+        DateTime next = _resourceService.NextDateAvailable(resDto, DateTime.Today, 3);
+        Assert.AreEqual(DateTime.Today.AddDays(5), next);
+    }
+    
+    [TestMethod]
+    public void NextDateAvailable_FindsFirstGapBetweenAssignments_WhenGapFits()
+    {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        ResourceDTO resourceDTO = new ResourceDTO
+        {
+            Name = "Resource2",
+            Type = "TypeA",
+            Description = "Description of Resource2"
+        };
+        _resourceService.AddResource(resourceDTO);
+        Resource added = _repositoryManager.ResourceRepository
+            .Get(r => r.Name == "Resource2");
+        ResourceDTO resDto = _resourceService.Get(added.Id);
+
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        ProjectDTO project = new ProjectDTO
+        {
+            Name = "Project2",
+            Description = "Description of Project2",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(project);
+        
+        TaskDTO t1 = new TaskDTO
+        {
+            Title = "T1",
+            Description = "Desc1",
+            ExpectedStartDate = DateTime.Today,
+            Duration = 2,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resDto }
+        };
+        TaskDTO t2 = new TaskDTO
+        {
+            Title = "T2",
+            Description = "Desc2",
+            ExpectedStartDate = DateTime.Today.AddDays(4),
+            Duration = 2,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resDto }
+        };
+        _taskService.AddTask("Project2", t1);
+        _taskService.AddTask("Project2", t2);
+        
+        DateTime next = _resourceService.NextDateAvailable(resDto, DateTime.Today, 2);
+        Assert.AreEqual(DateTime.Today.AddDays(2), next);
+    }
+    
+    [TestMethod]
+    public void NextDateAvailable_ReturnsFirstDateAfterLastAssignment_WhenNoGapFits()
+    {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        ResourceDTO resourceDTO = new ResourceDTO
+        {
+            Name = "Resource3",
+            Type = "TypeA",
+            Description = "Description of Resource3"
+        };
+        _resourceService.AddResource(resourceDTO);
+        Resource added = _repositoryManager.ResourceRepository
+            .Get(r => r.Name == "Resource3");
+        ResourceDTO resDto = _resourceService.Get(added.Id);
+
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        ProjectDTO project = new ProjectDTO
+        {
+            Name = "Project3",
+            Description = "Description of Project3",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(project);
+        
+        TaskDTO t1 = new TaskDTO
+        {
+            Title = "T1",
+            Description = "Desc1",
+            ExpectedStartDate = DateTime.Today,
+            Duration = 2,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resDto }
+        };
+        TaskDTO t2 = new TaskDTO
+        {
+            Title = "T2",
+            Description = "Desc2",
+            ExpectedStartDate = DateTime.Today.AddDays(3),
+            Duration = 5,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resDto }
+        };
+        _taskService.AddTask("Project3", t1);
+        _taskService.AddTask("Project3", t2);
+        DateTime next = _resourceService.NextDateAvailable(resDto, DateTime.Today, 3);
+        Assert.AreEqual(DateTime.Today.AddDays(8), next);
+    }
+    [TestMethod]
+    public void GetAllResourcesForAProject_ReturnsAllUniqueResources_WhenTasksHaveDistinctResources()
+    {
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        ProjectDTO projectDto = new ProjectDTO
+        {
+            Name = "ProjDistinct",
+            Description = "Two tasks, two resources",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(projectDto);
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        ResourceDTO r1 = new ResourceDTO { Name = "R1", Type = "T1", Description = "D1" };
+        ResourceDTO r2 = new ResourceDTO { Name = "R2", Type = "T2", Description = "D2" };
+        _resourceService.AddResource(r1);
+        _resourceService.AddResource(r2);
+        r1.Id = _repositoryManager.ResourceRepository.Get(r=>r.Name=="R1").Id;
+        r2.Id = _repositoryManager.ResourceRepository.Get(r=>r.Name=="R2").Id;
+        TaskDTO taskA = new TaskDTO
+        {
+            Title = "TaskA",
+            Description = "uses R1",
+            ExpectedStartDate = DateTime.Today.AddDays(1),
+            Duration = 2,
+            Resources = new List<ResourceDTO> { r1 }
+        };
+        _taskService.AddTask("ProjDistinct", taskA);
+        TaskDTO taskB = new TaskDTO
+        {
+            Title = "TaskB",
+            Description = "uses R2",
+            ExpectedStartDate = DateTime.Today.AddDays(3),
+            Duration = 2,
+            Resources = new List<ResourceDTO> { r2 }
+        };
+        _taskService.AddTask("ProjDistinct", taskB);
+        List<ResourceDTO> resources = _resourceService.getAllResourcesForAProject("ProjDistinct");
+        Assert.AreEqual(2, resources.Count);
+        Assert.IsTrue(resources.Any(r=>r.Name=="R1"));
+        Assert.IsTrue(resources.Any(r=>r.Name=="R2"));
+    }
+    [TestMethod]
+    public void GetAllResourcesForAProject_ReturnsDistinct_WhenMultipleTasksShareSameResource()
+    {
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        ProjectDTO projectDto = new ProjectDTO
+        {
+            Name = "ProjShared",
+            Description = "Two tasks share R1",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(projectDto);
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        ResourceDTO r1 = new ResourceDTO { Name = "SharedR", Type = "T", Description = "D" };
+        _resourceService.AddResource(r1);
+        r1.Id = _repositoryManager.ResourceRepository.Get(r=>r.Name=="SharedR").Id;
+        TaskDTO task1 = new TaskDTO
+        {
+            Title = "T1",
+            Description = "uses SharedR",
+            ExpectedStartDate = DateTime.Today.AddDays(1),
+            Duration = 2,
+            Resources = new List<ResourceDTO> { r1 }
+        };
+        _taskService.AddTask("ProjShared", task1);
+        TaskDTO task2 = new TaskDTO
+        {
+            Title = "T2",
+            Description = "also uses SharedR",
+            ExpectedStartDate = DateTime.Today.AddDays(4),
+            Duration = 3,
+            Resources = new List<ResourceDTO> { r1 }
+        };
+        _taskService.AddTask("ProjShared", task2);
+        List<ResourceDTO> resources = _resourceService.getAllResourcesForAProject("ProjShared");
+        Assert.AreEqual(1, resources.Count);
+        Assert.AreEqual("SharedR", resources[0].Name);
+    }
+    [TestMethod]
+    public void GetWhenResourceOccupied_ReturnsMultipleEntries_WhenMultipleTasksUseSameResource()
+    {
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        ProjectDTO project = new ProjectDTO
+        {
+            Name = "ProjMultiOcc",
+            Description = "Multiple tasks",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(project);
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        ResourceDTO r = new ResourceDTO { Name = "ResB", Type = "TB", Description = "DB" };
+        _resourceService.AddResource(r);
+        r.Id = _repositoryManager.ResourceRepository.Get(x => x.Name == "ResB").Id;
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        TaskDTO t1 = new TaskDTO
+        {
+            Title = "T1",
+            Description = "first use",
+            ExpectedStartDate = DateTime.Today,
+            Duration = 2,
+            Resources = new List<ResourceDTO> { r }
+        };
+        _taskService.AddTask("ProjMultiOcc", t1);
+        TaskDTO t2 = new TaskDTO
+        {
+            Title = "T2",
+            Description = "second use",
+            ExpectedStartDate = DateTime.Today.AddDays(5),
+            Duration = 3,
+            Resources = new List<ResourceDTO> { r }
+        };
+        _taskService.AddTask("ProjMultiOcc", t2);
+        List<(DateTime,int)> occupied = _resourceService.getWhenIsResourceOcupied(r);
+        Assert.AreEqual(2, occupied.Count);
+        Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today    && o.Item2 == 2));
+        Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today.AddDays(5) && o.Item2 == 3));
+    }
 }

@@ -214,7 +214,8 @@ public class AdminPService : IAdminPService
         List<ProjectDTO> projects = new List<ProjectDTO>();
 
         foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
-            if (project.AdminProject.Email == Email || project.ProjectLeader.Email == Email ||
+            if ((project.AdminProject != null && project.AdminProject.Email == Email) ||
+                (project.ProjectLeader != null && project.ProjectLeader.Email == Email) ||
                 project.Members.Any(m => m.Email == Email))
                 projects.Add(_projectConverter.FromEntity(project));
 

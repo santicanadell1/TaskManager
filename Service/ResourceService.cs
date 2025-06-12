@@ -140,4 +140,66 @@ public class ResourceService : IResourceService
         bool projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
         return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
     }
+
+    public bool IsAvailable(ResourceDTO res, DateTime startDate, int duration)
+    {
+        if (res.ConcurrentUsage)
+            return true;
+        DateTime endDate = startDate.AddDays(duration);
+        var tasksUsingResource = _repositoryManager.TaskRepository
+            .GetAll()
+            .Where(t => t.Resources.Any(r => r.Id == res.Id));
+        foreach (var task in tasksUsingResource)
+        {
+            DateTime taskStart = task.ExpectedStartDate.Date;
+            DateTime taskEnd   = taskStart.AddDays(task.Duration).Date;
+            if (taskStart < endDate && startDate < taskEnd)
+                return false;
+        }
+        return true;
+    }
+
+    public DateTime NextDateAvailable(ResourceDTO res, DateTime startDate, int duration)
+    {
+        if (res.ConcurrentUsage)
+            return startDate.Date;
+        DateTime candidate = startDate.Date;
+
+        while (!IsAvailable(res, candidate, duration))
+        {
+            candidate = candidate.AddDays(1);
+        }
+        return candidate;
+    }
+
+    public List<ResourceDTO> getAllResourcesForAProject(string pName)
+    {
+        List<ResourceDTO> resources = new List<ResourceDTO>();
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == pName);
+        foreach (Task task in project.Tasks)
+        {
+            foreach (Resource res in task._resources)
+            {
+                if (!resources.Any(r => r.Id == res.Id))
+                {
+                    resources.Add(_resourceConverter.FromEntity(res));
+                }
+            }
+        }
+        return resources;
+    }
+    
+    public List<(DateTime, int)> getWhenIsResourceOcupied(ResourceDTO res)
+    {
+        List<(DateTime, int)> whenIsResourceOcupied = new List<(DateTime, int)>();
+        List<Task> tasks = _repositoryManager.TaskRepository.GetAll();
+        foreach (Task task in tasks)
+        {
+            if (task.Resources.Any(r => r.Id == res.Id))
+            {
+                whenIsResourceOcupied.Add((task.ExpectedStartDate, task.Duration));
+            }
+        }
+        return whenIsResourceOcupied;
+    }
 }

@@ -30,6 +30,7 @@ builder.Services.AddScoped<MemberProjectController>();
 builder.Services.AddScoped<AdminProjectController>();
 builder.Services.AddScoped<GanttController>();
 builder.Services.AddScoped<LeaderProjectController>();
+builder.Services.AddScoped<ResourceAdminController>();
 
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<RolConverter>();

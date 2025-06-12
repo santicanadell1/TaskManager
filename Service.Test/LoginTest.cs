@@ -227,4 +227,29 @@ public class LoginTests
         Assert.IsFalse(_login.IsProjectMember());
         Assert.IsTrue(_login.IsAdminProject());
     }
+    
+    [TestMethod]
+    public void IsProjectLeaderMember_ShouldReturnTrue_WhenUserIsProjectLeaderMember()
+    {
+        string email = "john.doe@example.com";
+        string password = "Password123@";
+        List<RolDTO> roles = new List<RolDTO> { RolDTO.ProjectLeader };
+
+        UserDTO userDTO = new UserDTO
+        {
+            Email = email,
+            FirstName = "John",
+            LastName = "Doe",
+            Password = password,
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = roles
+        };
+
+        UserService userService = new UserService(_repositoryManager);
+        userService.AddUser(userDTO);
+
+        _login.LoginUser(email, password);
+
+        Assert.IsTrue(_login.IsProjectLeader());
+    }
 }

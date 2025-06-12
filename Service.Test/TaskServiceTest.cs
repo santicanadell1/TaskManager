@@ -4,6 +4,7 @@ using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
 using Domain.Exceptions.TaskExceptions;
 using Service.Converters;
+using Service.Exceptions.ResourceServiceExceptions;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -590,7 +591,7 @@ public class TaskServiceTest
             }
         };
 
-        _taskService.AddTask("Generic Project", complexDTO);
+        _taskService.AddTask("Generic Project", complexDTO, true);
 
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Generic Project");
         Task addedTask = project.Tasks.FirstOrDefault(t => t.Title == "Complex Mapping DTO");
@@ -598,7 +599,7 @@ public class TaskServiceTest
         Assert.IsNotNull(addedTask);
         Assert.AreEqual("Complex Mapping DTO", addedTask.Title);
         Assert.AreEqual("Complex mapping description", addedTask.Description);
-        Assert.AreEqual(new DateTime(2025, 6, 15), addedTask.ExpectedStartDate);
+        Assert.AreEqual(new DateTime(2025, 6, 16), addedTask.ExpectedStartDate);
         Assert.AreEqual(9, addedTask.Duration);
         Assert.AreEqual(1, addedTask.Resources.Count);
         Assert.AreEqual(resourceDto.Name, addedTask.Resources[0].Name);
@@ -770,4 +771,91 @@ public class TaskServiceTest
 
         _taskService.AddTask("Generic Project", taskDTO);
     }
+
+    [TestMethod]
+    public void AddTask_ShouldRescheduleTask_WhenResourceInUseAndSolveTrue()
+    {
+        DateTime originalStart = _taskDTO1.ExpectedStartDate.Date;
+        int existingDuration = _taskDTO1.Duration;
+
+        var toSchedule = new TaskDTO
+        {
+            Title = "ResolvedTask",
+            Description = "Will be auto-rescheduled",
+            ExpectedStartDate = originalStart,
+            Duration = 3,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { _resourceDTO1 },
+            State = StateDTO.TODO
+        };
+        _taskService.AddTask("Generic Project", toSchedule, true);
+        
+        var scheduled = _taskService.GetTask("Generic Project", "ResolvedTask");
+        DateTime expectedRescheduled = originalStart.AddDays(existingDuration);
+
+        Assert.AreEqual(expectedRescheduled.Date, scheduled.ExpectedStartDate.Date);
+    }
+    [TestMethod]
+    [ExpectedException(typeof(ResourceNotAvailableException))]
+    public void AddTask_ShouldThrowResourceNotAvailable_WhenResourceInUseAndSolveFalse()
+    {
+        var conflictingTask = new TaskDTO
+        {
+            Title = "ConflictTask",
+            Description = "Conflicts with existing",
+            ExpectedStartDate = _taskDTO1.ExpectedStartDate,
+            Duration = 3,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { _resourceDTO1 },
+            State = StateDTO.TODO
+        };
+        _taskService.AddTask("Generic Project", conflictingTask);
+    }
+    
+    [TestMethod]
+    public void UpdateTask_ShouldRescheduleTask_WhenResourceInUseAndSolveTrue()
+    {
+        var resourceInUse = _resourceDTO1;
+        DateTime originalStart = _taskDTO1.ExpectedStartDate.Date; 
+        int task1Duration = _taskDTO1.Duration;
+        var updateDTO = new TaskDTO
+        {
+            Title = "Task 2 Rescheduled",
+            Description = "Auto-reschedule on Resource 1",
+            ExpectedStartDate = originalStart,
+            Duration = 3,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resourceInUse },
+            State = StateDTO.DOING
+        };
+        _taskService.UpdateTask("Generic Project", "Task 2", updateDTO, true);
+        var updated = _taskService.GetTask("Generic Project", "Task 2 Rescheduled");
+        DateTime expected = originalStart.AddDays(task1Duration);
+
+        Assert.AreEqual(expected.Date, updated.ExpectedStartDate.Date);
+    }
+    [TestMethod]
+    [ExpectedException(typeof(ResourceNotAvailableException))]
+    public void UpdateTask_ShouldThrowResourceNotAvailable_WhenResourceInUseAndSolveFalse()
+    {
+        var resourceInUse = _resourceDTO1;
+        DateTime overlapStart = _taskDTO1.ExpectedStartDate.Date;
+
+        var updateDTO = new TaskDTO
+        {
+            Title = "Task 2 Updated",
+            Description = "Now uses Resource 1 and overlaps",
+            ExpectedStartDate = overlapStart,
+            Duration = 3,
+            PreviousTasks = new List<TaskDTO>(),
+            SameTimeTasks = new List<TaskDTO>(),
+            Resources = new List<ResourceDTO> { resourceInUse },
+            State = StateDTO.DOING
+        };
+        _taskService.UpdateTask("Generic Project", "Task 2", updateDTO);
+    }
+
 }

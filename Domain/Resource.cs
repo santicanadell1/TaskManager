@@ -7,13 +7,15 @@ public class Resource
     public string description;
     public string name;
     public string type;
+    public bool ConcurrentUsage{ get; set; }
     public int? Id { get; set; }
 
-    public Resource(string name, string type, string description)
+    public Resource(string name, string type, string description, bool concurrentUsage = false)
     {
         Name = name;
         Type = type;
         Description = description;
+        ConcurrentUsage = concurrentUsage;
     }
     
     public Resource(){}

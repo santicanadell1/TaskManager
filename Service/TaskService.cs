@@ -6,6 +6,7 @@ using Domain;
 using Domain.Exceptions.TaskExceptions;
 using Service.Converter;
 using Service.Converters;
+using Service.Exceptions.ResourceServiceExceptions;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -17,12 +18,15 @@ public class TaskService
     private readonly IRepositoryManager _repositoryManager;
     private readonly TaskConverter _taskConverter;
     private readonly ResourceConverter _resourceConverter;
+    private readonly ResourceService _resourceService;
 
     public TaskService(IRepositoryManager repositoryManager, CpmService cpmService)
     {
         _repositoryManager = repositoryManager;
         _taskConverter = new TaskConverter(_repositoryManager);
         _resourceConverter = new ResourceConverter(_repositoryManager);
+        _resourceService = new ResourceService(_repositoryManager);
+        _cpmService = cpmService;
     }
 
 
@@ -60,7 +64,21 @@ public class TaskService
         return tasks;
     }
 
-    public void AddTask(string projectName, TaskDTO taskDTO)
+    private DateTime GetNextDateAvailable(bool solve, DateTime startDate, int duration, List<ResourceDTO> resources)
+    {
+        DateTime startDateNext = startDate;
+        foreach (var res in resources)
+        {
+            if (!_resourceService.IsAvailable(res, startDate, duration) && !solve)
+                throw new ResourceNotAvailableException();
+            DateTime next = _resourceService.NextDateAvailable(res, startDate, duration);
+            if (next > startDate)
+                startDateNext = next;
+        }
+        return startDateNext;
+    }
+
+    public void AddTask(string projectName, TaskDTO taskDTO, bool solve = false)
     {
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
@@ -68,7 +86,8 @@ public class TaskService
         {
             throw new TaskException("The task's start date is before the project's start date.");
         }
-
+        DateTime startDate = GetNextDateAvailable(solve, taskDTO.ExpectedStartDate, taskDTO.Duration, taskDTO.Resources);
+        taskDTO.ExpectedStartDate = startDate;
         CreateTask(taskDTO);
         Task task = _repositoryManager.TaskRepository.Get(t => t.Title == taskDTO.Title);
 
@@ -94,7 +113,7 @@ public class TaskService
         RecalculateCriticalPath(projectName);
     }
 
-    public void UpdateTask(string projectName, string title, TaskDTO taskDTO)
+    public void UpdateTask(string projectName, string title, TaskDTO taskDTO, bool solve = false)
     {
         NotificationService _notificationService = new NotificationService(_repositoryManager);
         AdminPService projectService = new AdminPService(_repositoryManager);
@@ -133,6 +152,8 @@ public class TaskService
         );
         updatedTask.Id = task.Id;
         updatedTask.State = (State)taskDTO.State;
+        DateTime startDate =GetNextDateAvailable(solve, taskDTO.ExpectedStartDate, taskDTO.Duration, taskDTO.Resources);
+        updatedTask.ExpectedStartDate = startDate;
         _repositoryManager.TaskRepository.Update(updatedTask);
         updatedTask = _repositoryManager.TaskRepository.Get(t => t.Title == updatedTask.Title);
         _repositoryManager.ProjectRepository.UpdateTask(projectName, updatedTask.Id, updatedTask);
