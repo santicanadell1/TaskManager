@@ -1815,7 +1815,8 @@
         "dependencies": {
           "DataAccess": "1.0.0",
           "Domain": "1.0.0",
-          "MSTest.TestFramework": "3.1.1"
+          "MSTest.TestFramework": "3.1.1",
+          "Newtonsoft.Json": "13.0.2"
         },
         "compile": {
           "bin/placeholder/Service.dll": {}
