@@ -32,6 +32,15 @@ public class TaskExportDTOTest
         
         Assert.AreEqual(5, taskExportDTO.Duration);
     }
+    
+    [TestMethod]
+    public void TaskExportDTO_ShouldSetIsCriticalProperty()
+    {
+        var taskExportDTO = new TaskExportDTO();
+        taskExportDTO.IsCritical = "Yes";
+        
+        Assert.AreEqual("Yes", taskExportDTO.IsCritical);
+    }
 
 
     
