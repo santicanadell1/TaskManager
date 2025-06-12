@@ -48,4 +48,9 @@ public class LoginController
     {
         return _login.IsProjectMember();
     }
+
+    public bool IsTheCurrentUserLeaderProject()
+    {
+        return _login.
+    }
 }
