@@ -85,13 +85,16 @@ public class ProjectExportDTOTest
     {
         var task1 = new TaskExportDTO
         {
-
+            Task = "Task 1",
+            StartDate = "2024-01-01",
+            Duration = 3,
             IsCritical = "No",
             Resources = new List<string> { "Resource1" }
         };
         var task2 = new TaskExportDTO
         {
-
+            Task = "Task 2",
+            StartDate = "2024-01-04",
             Duration = 7,
             IsCritical = "Yes",
             Resources = new List<string> { "Resource2", "Resource3" }
@@ -99,7 +102,8 @@ public class ProjectExportDTOTest
 
         var projectExportDTO = new ProjectExportDTO
         {
-
+            Project = "Multi-Task Project",
+            StartDate = "2024-01-01",
             Tasks = new List<TaskExportDTO> { task1, task2 }
         };
 
