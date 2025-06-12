@@ -332,7 +332,23 @@ public class AdminPService : IAdminPService
             project.AdminProject = _repositoryManager.UserRepository.Get(u => u.Email == LoggedUser.Current.Email);
         }
     }
-    
+
+    public List<UserDTO> GetAllProjectLeaderUsers()
+    {
+        List<User> allUsers = _repositoryManager.UserRepository.GetAll();
+        List<UserDTO> projectLeaders = new List<UserDTO>();
+
+        foreach (User user in allUsers)
+        {
+            if (user.Roles.Contains(Rol.ProjectLeader))
+            {
+                projectLeaders.Add(_userConverter.FromEntity(user));
+            }
+        }
+
+        return projectLeaders;
+    }
+
     public void SetProjectLeader(string projectName, string LeaderEmail)
     {
         CheckProjectLeaderRole(LeaderEmail);
