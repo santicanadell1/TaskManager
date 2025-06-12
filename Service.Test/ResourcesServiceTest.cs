@@ -935,4 +935,44 @@ public class ResourcesServiceTest
         Assert.AreEqual(1, resources.Count);
         Assert.AreEqual("SharedR", resources[0].Name);
     }
+    [TestMethod]
+    public void GetWhenResourceOccupied_ReturnsMultipleEntries_WhenMultipleTasksUseSameResource()
+    {
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var project = new ProjectDTO
+        {
+            Name = "ProjMultiOcc",
+            Description = "Multiple tasks",
+            StartDate = DateTime.Today,
+            AdminProyect = _userService.GetUser("adminProject.user@example.com")
+        };
+        _adminProjectService.CreateProject(project);
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+        var r = new ResourceDTO { Name = "ResB", Type = "TB", Description = "DB" };
+        _resourceService.AddResource(r);
+        r.Id = _repositoryManager.ResourceRepository.Get(x => x.Name == "ResB").Id;
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        var t1 = new TaskDTO
+        {
+            Title = "T1",
+            Description = "first use",
+            ExpectedStartDate = DateTime.Today,
+            Duration = 2,
+            Resources = new List<ResourceDTO> { r }
+        };
+        _taskService.AddTask("ProjMultiOcc", t1);
+        var t2 = new TaskDTO
+        {
+            Title = "T2",
+            Description = "second use",
+            ExpectedStartDate = DateTime.Today.AddDays(5),
+            Duration = 3,
+            Resources = new List<ResourceDTO> { r }
+        };
+        _taskService.AddTask("ProjMultiOcc", t2);
+        var occupied = _resourceService.getWhenIsResourceOcupied(r);
+        Assert.AreEqual(2, occupied.Count);
+        Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today    && o.Item2 == 2));
+        Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today.AddDays(5) && o.Item2 == 3));
+    }
 }
