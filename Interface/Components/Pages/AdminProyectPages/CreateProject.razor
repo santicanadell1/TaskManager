@@ -30,6 +30,17 @@
             <InputDate id="startDate" class="form-control" @bind-Value="newProjectDTO.StartDate" required/>
         </div>
 
+        <div class="mb-3">
+            <label for="projectLeader" class="form-label">Assign Project Leader</label>
+            <select class="form-select" id="projectLeader" @bind="projectLeaderEmail" required>
+                <option value="">Select Leader</option>
+                @foreach (var user in usersList)
+                {
+                    <option value="@user.Email">@user.FirstName @user.LastName</option>
+                }
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-primary">Create Project</button>
     </EditForm>
 
@@ -56,8 +67,10 @@
 
 @code {
     private ProjectDTO newProjectDTO = new();
+    private List<UserDTO> usersList = new();
     private bool alertVisible;
     private bool successVisible;
+    private string projectLeaderEmail = string.Empty;
     private string alertMessage = string.Empty;
     private string successMessage = string.Empty;
 
@@ -69,12 +82,28 @@
             Description = "",
             Name = ""
         };
+
+        LoadUsers();
+    }
+
+    private void LoadUsers()
+    {
+        try
+        {
+            //usersList = _AdminProjectController.GetAllProjectLeaderUsers();
+        }
+        catch (Exception ex)
+        {
+            alertMessage = $"Error loading users: {ex.Message}";
+            alertVisible = true;
+        }
     }
 
     private void HandleValidSubmit()
     {
         try
         {
+           // _AdminProjectController.SetProjectLeaderToProject(newProjectDTO.Name, projectLeaderEmail);
             _AdminProjectController.CreateProject(newProjectDTO);
 
             successMessage = "Project created successfully!";

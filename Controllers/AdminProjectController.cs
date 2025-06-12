@@ -62,4 +62,20 @@ public class AdminProjectController
     {
         _adminPService.RemoveTaskFromMember(projectName, userToDeleteTaskEmail, taskName);
     }
+
+    public void UpdateProject(string projectNameToUpdate, ProjectDTO project)
+    {
+        _adminPService.UpdateProject(projectNameToUpdate, project);
+    }
+
+    public List<UserDTO> GetAllProjectLeaderUsers(string projectName)
+    {
+        return new List<UserDTO>();
+        //return _adminPService.GetAllProjectLeaderUsers(projectName);
+    }
+
+    public void SetProjectLeaderToProject(string projectName, UserDTO usersToAssign)
+    {
+        //_adminPService.
+    }
 }

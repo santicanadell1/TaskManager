@@ -29,6 +29,12 @@
                                 @onclick="() => ShowProjectOptions(project)">
                             <i class="bi bi-gear-fill me-2"></i>View Options
                         </button>
+
+                        <button class="btn-warning btn-sm @GetButtonClass(project)"
+                                @onclick="() => ShowEditProjectModal(project)">
+                            <i class="bi bi-pencil-fill me-2"></i>Edit Project
+                        </button>
+
                         <button class="btn-danger btn-sm" @onclick="() => RemoveProject(project)">
                             <i class="bi bi-trash-fill me-2"></i>Remove Project
                         </button>
@@ -785,6 +791,75 @@
     </div>
 }
 
+<!-- Modal para editar el proyecto -->
+@if (showEditProjectModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="editProjectModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Edit Project</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseEditProjectModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(projectErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>@projectErrorMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => projectErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+                    <EditForm Model="@selectedProjectToEdit" OnValidSubmit="HandleEditProjectSubmit">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+
+                        <!-- Nombre del Proyecto -->
+                        <div class="mb-3">
+                            <label for="projectName" class="form-label">Project Name</label>
+                            <InputText id="projectName" class="form-control" @bind-Value="selectedProjectToEdit.Name"
+                                       required/>
+                        </div>
+
+                        <!-- Descripción del Proyecto -->
+                        <div class="mb-3">
+                            <label for="projectDescription" class="form-label">Project Description</label>
+                            <InputTextArea id="projectDescription" class="form-control"
+                                           @bind-Value="selectedProjectToEdit.Description"/>
+                        </div>
+
+                        <!-- Líder de Proyecto -->
+                        <div class="mb-3">
+                            <label for="projectLeader" class="form-label">Project Leader</label>
+                            <select class="form-select" id="projectLeader" @bind="selectedProjectLeaderEmail">
+                                <option value="">Select Leader</option>
+                                @foreach (var user in usersList)
+                                {
+                                    <option value="@user.Email">@user.FirstName @user.LastName</option>
+                                }
+                            </select>
+                            @if (!string.IsNullOrEmpty(currentProjectLeaderEmail) && currentProjectLeaderEmail != selectedProjectLeaderEmail)
+                            {
+                                <button class="btn-danger btn-sm mt-2" @onclick="RemoveCurrentLeader">Remove Current
+                                    Leader
+                                </button>
+                            }
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i>Save Changes
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
 
     private List<ProjectDTO> projects = new();
@@ -832,10 +907,18 @@
     private List<TaskDTO> assignedTasks = new();
     private List<UserDTO> projectMembers = new();
 
+    private bool showEditProjectModal = false;
+    private ProjectDTO selectedProjectToEdit;
+    private string selectedProjectLeaderEmail;
+    private string currentProjectLeaderEmail;
+    private string projectErrorMessage = string.Empty;
+    private List<UserDTO> usersList = new List<UserDTO>();
+
     protected override void OnInitialized()
     {
         LoadProjects();
         LoadResources();
+        LoadUsers();
     }
 
     private void LoadProjects()
@@ -1520,6 +1603,95 @@
         {
             assignTaskErrorMessage = $"Error removing task: {ex.Message}";
             assignTaskSuccessMessage = string.Empty;
+        }
+    }
+
+    private void LoadUsers()
+    {
+        try
+        {
+            usersList = _UserController.GetAllUsers();
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error loading users: {ex.Message}";
+        }
+    }
+
+    private void ShowEditProjectModal(ProjectDTO project)
+    {
+        try
+        {
+            selectedProjectToEdit = new ProjectDTO
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Description = project.Description,
+                ProjectLeader = project.ProjectLeader != null ? _UserController.GetUser(project.ProjectLeader.Email) : null
+            };
+
+            currentProjectLeaderEmail = project.ProjectLeader?.Email ?? string.Empty;
+            selectedProjectLeaderEmail = currentProjectLeaderEmail;
+
+            projectErrorMessage = string.Empty;
+            showEditProjectModal = true;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error loading project for editing: {ex.Message}";
+            showEditProjectModal = false;
+        }
+    }
+
+    private void CloseEditProjectModal(bool refreshData)
+    {
+        showEditProjectModal = false;
+        if (refreshData)
+        {
+            LoadProjects();
+        }
+    }
+
+    private void RemoveCurrentLeader()
+    {
+        selectedProjectLeaderEmail = string.Empty;
+    }
+
+    private async Task HandleEditProjectSubmit()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(selectedProjectToEdit.Name))
+            {
+                projectErrorMessage = "Project name is required.";
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(selectedProjectLeaderEmail))
+            {
+                if (selectedProjectToEdit.ProjectLeader == null)
+                {
+                    selectedProjectToEdit.ProjectLeader = new UserDTO();
+                }
+
+                selectedProjectToEdit.ProjectLeader.Email = selectedProjectLeaderEmail;
+            }
+            else
+            {
+                selectedProjectToEdit.ProjectLeader = null;
+            }
+
+            _AdminProjectController.UpdateProject(selectedProjectToEdit.Name, selectedProjectToEdit);
+
+            projectErrorMessage = string.Empty;
+            showEditProjectModal = false;
+            LoadProjects();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error updating project: {ex.Message}";
         }
     }
 
