@@ -88,26 +88,6 @@ public class ProjectDTOTests
     }
 
     [TestMethod]
-    public void Validate_ShouldThrowValidationException_WhenLeaderIsNull()
-    {
-        var projectDTO = new ProjectDTO
-        {
-            Name = "Test Project",
-            Description = "Test Description",
-            StartDate = DateTime.Now,
-            AdminProyect = Admin,
-            Members = members,
-            ProjectLeader = null  
-        };
-
-        var validationResults = new List<ValidationResult>();
-        var isValid =
-            Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
-
-        Assert.IsFalse(isValid);
-    }
-
-    [TestMethod]
     public void Validate_ShouldNotThrowValidationException_WhenAllFieldsAreValid()
     {
         var projectDTO = new ProjectDTO

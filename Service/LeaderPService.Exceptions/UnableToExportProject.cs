@@ -1,6 +1,10 @@
 ﻿namespace Service.Exceptions.LeaderPServiceException;
 
-public class can_tExportProject
+public class UnableToExportProject : LeaderPServiceException
 {
+    public UnableToExportProject() :
+        base("Error al exportar proyectos")
+    {
+    }
     
 }

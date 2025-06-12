@@ -26,6 +26,7 @@ public class LeaderPService_Test
     private UserDTO normalUserDTO;
     private Project project;
     private TaskDTO initialTask;
+    private readonly IExporter _exporter;
 
     [TestInitialize]
     public void TestSetUp()
@@ -40,7 +41,7 @@ public class LeaderPService_Test
         _cpmService = new CpmService();
         _taskService = new TaskService(_repositoryManager, _cpmService);
 
-        _leaderService = new LeaderPService(_repositoryManager);
+        _leaderService = new LeaderPService(_repositoryManager,_exporter );
         _adminService = new AdminPService(_repositoryManager);
         _loginService = new Login(_repositoryManager);
         _userService = new UserService(_repositoryManager);

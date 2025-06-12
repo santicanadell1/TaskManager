@@ -17,7 +17,7 @@ public class ProjectDTO
 
     public List<UserDTO> Members { get; set; }
     
-    [Required(ErrorMessage = "Leader is required.")]
+
     public UserDTO ProjectLeader { get; set; }  
     
     public int? Id { get; set; }
