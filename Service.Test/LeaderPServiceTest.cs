@@ -615,7 +615,16 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
 public void ExportProjects_ShouldReturnEmptyExport_WhenNoProjectsExist()
 {
     List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+    
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+    
+    var csvExporter = new CSVExporter(_repositoryManager);
+    var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+    
     string csvResult = leaderServiceWithCsv.ExportProjects();
     
     // Assert
