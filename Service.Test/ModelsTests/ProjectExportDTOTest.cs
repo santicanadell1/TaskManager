@@ -80,6 +80,34 @@ public class ProjectExportDTOTest
         Assert.IsNotNull(projectExportDTO.Tasks);
         Assert.AreEqual(0, projectExportDTO.Tasks.Count);
     }
+    [TestMethod]
+    public void ProjectExportDTO_ShouldHandleMultipleTasks()
+    {
+        var task1 = new TaskExportDTO
+        {
+
+            IsCritical = "No",
+            Resources = new List<string> { "Resource1" }
+        };
+        var task2 = new TaskExportDTO
+        {
+
+            Duration = 7,
+            IsCritical = "Yes",
+            Resources = new List<string> { "Resource2", "Resource3" }
+        };
+
+        var projectExportDTO = new ProjectExportDTO
+        {
+
+            Tasks = new List<TaskExportDTO> { task1, task2 }
+        };
+
+        Assert.AreEqual(2, projectExportDTO.Tasks.Count);
+        Assert.AreEqual("Task 1", projectExportDTO.Tasks[0].Task);
+        Assert.AreEqual("Task 2", projectExportDTO.Tasks[1].Task);
+        Assert.AreEqual("Yes", projectExportDTO.Tasks[1].IsCritical);
+    }
 
     
 
