@@ -64,8 +64,11 @@
             {
                 <MyProjectsNav/>
             }
-            
-            <ProjectLeaderNav/>
+
+            if (_LoginController.IsTheCurrentUserProjectMember())
+            {
+                <ProjectLeaderNav/>
+            }
         }
     </nav>
 </div>

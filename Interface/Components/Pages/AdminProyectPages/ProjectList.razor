@@ -134,7 +134,7 @@
                             </div>
                         </div>
                     }
-                    
+
 
                     <EditForm Model="@newTask" OnValidSubmit="HandleCreateTaskSubmit">
                         <DataAnnotationsValidator/>
@@ -1186,6 +1186,7 @@
             taskSuccessMessage = string.Empty;
         }
     }
+
     private void CancelForce()
     {
         showForceConfirm = false;
@@ -1193,6 +1194,7 @@
         pendingProjectName = null;
         taskErrorMessage = string.Empty;
     }
+
     private async Task ForceCreateTask()
     {
         try
@@ -1387,6 +1389,7 @@
             editTaskSuccessMessage = string.Empty;
         }
     }
+
     private void CancelEditForce()
     {
         showEditForceConfirm = false;
