@@ -332,7 +332,7 @@ public class AdminPService : IAdminPService
             project.AdminProject = _repositoryManager.UserRepository.Get(u => u.Email == LoggedUser.Current.Email);
         }
     }
-
+    
     public void SetProjectLeader(string projectName, string LeaderEmail)
     {
         CheckProjectLeaderRole(LeaderEmail);

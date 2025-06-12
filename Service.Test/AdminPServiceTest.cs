@@ -710,4 +710,16 @@ public class AdminPServiceTests
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "New Project");
         Assert.AreEqual(Leader.Email, project.ProjectLeader.Email);
     }
+
+
+    [TestMethod]
+    public void GetAllProjectLeaderUsers_ShouldReturnOnlyProjectLeaders()
+    {
+        List<UserDTO> projectLeaders = _adminPservice.GetAllProjectLeaderUsers();
+
+        Assert.AreEqual(1, projectLeaders.Count, "There should be exactly one project leader");
+        Assert.AreEqual(Leader.FirstName, projectLeaders[0].FirstName,
+            "The first leader should be the one with the correct name");
+        Assert.AreEqual(Leader.Email, projectLeaders[0].Email, "The leader should have the correct email");
+    }
 }
