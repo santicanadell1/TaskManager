@@ -189,5 +189,17 @@ public class ResourceService : IResourceService
         return resources;
     }
 
-    
+    public List<(DateTime, int)> getWhenIsResourceOcupied(ResourceDTO res)
+    {
+        List<(DateTime, int)> whenIsResourceOcupied = new List<(DateTime, int)>();
+        List<Task> tasks = _repositoryManager.TaskRepository.GetAll();
+        foreach (Task task in tasks)
+        {
+            if (task.Resources.Any(r => r.Id == res.Id))
+            {
+                whenIsResourceOcupied.Add((task.ExpectedStartDate, task.Duration));
+            }
+        }
+        return whenIsResourceOcupied;
+    }
 }
