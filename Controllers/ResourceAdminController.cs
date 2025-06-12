@@ -1,4 +1,5 @@
 using Service.Interface;
+using Service.Models;
 
 namespace Controllers;
 
@@ -9,5 +10,20 @@ public class ResourceAdminController
     public ResourceAdminController(IResourceService resourceService)
     {
         _resourceService = resourceService;
+    }
+
+    public List<ResourceDTO> getAllResourcesForAProject(string pName)
+    {
+        return _resourceService.getAllResourcesForAProject(pName);
+    }
+
+    public List<(DateTime, int)> getWhenIsResourceOcupied(ResourceDTO res)
+    {
+        return _resourceService.getWhenIsResourceOcupied(res);   
+    }
+
+    public DateTime NextDateAvailable(ResourceDTO res, DateTime startDate, int duration)
+    {
+        return _resourceService.NextDateAvailable(res, startDate, duration);
     }
 }
