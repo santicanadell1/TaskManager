@@ -690,4 +690,24 @@ public class AdminPServiceTests
 
         _adminPservice.SetProjectLeader(projectDTO.Name, Leader.Email);
     }
+
+    [TestMethod]
+    public void SetProjectLeader_ShouldAssignLeader_WhenValid()
+    {
+        ProjectDTO projectDTO = new ProjectDTO
+        {
+            Name = "New Project",
+            Description = "Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+
+        _adminPservice.CreateProject(projectDTO);
+
+        _adminPservice.SetProjectLeader("New Project", Leader.Email);
+
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "New Project");
+        Assert.AreEqual(Leader.Email, project.ProjectLeader.Email);
+    }
 }
