@@ -41,6 +41,11 @@
                        @bind="rolesSelected[RolDTO.ProjectMember]"/>
                 <label class="form-check-label" for="projectMember">Project Member</label>
             </div>
+            <div class="form-check">
+                <input type="checkbox" id="projectMember" class="form-check-input"
+                       @bind="rolesSelected[RolDTO.ProjectLeader]"/>
+                <label class="form-check-label" for="projectMember">Project Member</label>
+            </div>
         </div>
     </div>
 
@@ -82,7 +87,8 @@
     {
         { RolDTO.AdminSystem, false },
         { RolDTO.AdminProject, false },
-        { RolDTO.ProjectMember, false }
+        { RolDTO.ProjectMember, false },
+        { RolDTO.ProjectLeader, false }
     };
 
     protected override void OnInitialized()
