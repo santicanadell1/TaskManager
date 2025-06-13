@@ -225,6 +225,7 @@
             if (!string.IsNullOrEmpty(selectedProjectLeaderEmail))
             {
                 _AdminProjectController.SetProjectLeaderToProject(newProjectDTO.Name, selectedProjectLeaderEmail);
+                _AdminProjectController.UpdateProject(newProjectDTO.Name, newProjectDTO);
                 successMessage = $"Project '{newProjectDTO.Name}' created successfully with {GetLeaderDisplayName(selectedProjectLeaderEmail)} as leader!";
             }
             else
