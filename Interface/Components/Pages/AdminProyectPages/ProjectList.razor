@@ -1800,14 +1800,11 @@
     {
         try
         {
-            // Remover el leader del proyecto
             _AdminProjectController.RemoveProjectLeaderFromProject(selectedProjectToEdit.Name);
 
-            // Actualizar el estado local
             currentProjectLeaderEmail = string.Empty;
             selectedProjectLeaderEmail = string.Empty;
 
-            // Recargar para mostrar la lista de leaders disponibles
             StateHasChanged();
 
             projectErrorMessage = string.Empty;
@@ -1828,14 +1825,11 @@
                 return;
             }
 
-            // Asignar el nuevo leader
             _AdminProjectController.SetProjectLeaderToProject(selectedProjectToEdit.Name, selectedProjectLeaderEmail);
 
-            // Actualizar el estado local
             currentProjectLeaderEmail = selectedProjectLeaderEmail;
             selectedProjectLeaderEmail = string.Empty;
 
-            // Recargar para mostrar el nuevo leader actual
             StateHasChanged();
 
             projectErrorMessage = string.Empty;
@@ -1865,7 +1859,6 @@
                 return;
             }
 
-            // Actualizar solo los datos básicos del proyecto
             _AdminProjectController.UpdateProject(selectedProjectToEdit.Name, selectedProjectToEdit);
 
             projectErrorMessage = string.Empty;

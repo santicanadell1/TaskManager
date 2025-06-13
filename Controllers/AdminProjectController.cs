@@ -80,6 +80,6 @@ public class AdminProjectController
 
     public void RemoveProjectLeaderFromProject(string projectName)
     {
-        
+        _adminPService.RemoveProjectLeader(projectName);
     }
 }
