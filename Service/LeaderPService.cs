@@ -2,6 +2,7 @@
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
+using Microsoft.Extensions.Logging;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Exceptions.LeaderPServiceException;
@@ -18,6 +19,8 @@ public class LeaderPService : ILeaderPService
     private readonly AdminPService _adminPService;
     private readonly CpmService _cpmService;
     private readonly IExporter _exporter;
+    private readonly ProjectConverter _projectConverter;
+
     public LeaderPService(IRepositoryManager repositoryManager, IExporter exporter)
     {
         _repositoryManager = repositoryManager;
@@ -25,17 +28,18 @@ public class LeaderPService : ILeaderPService
         _taskService = new TaskService(repositoryManager, _cpmService);
         _adminPService = new AdminPService(repositoryManager);
         _exporter = exporter;
+        _projectConverter = new ProjectConverter(repositoryManager);
     }
-    
+
     public string ExportProjects()
     {
         try
         {
             var projects = _adminPService.GetAllProjectsForUser(LoggedUser.Current.Email);
-        
+
             if (projects == null || !projects.Any())
                 return _exporter.Export(new List<ProjectDTO>());
-            
+
             return _exporter.Export(projects);
         }
         catch (Exception ex)
@@ -54,7 +58,14 @@ public class LeaderPService : ILeaderPService
     {
         CheckProjectLeaderRole();
         UserDTO currentUser = LoggedUser.Current;
-        return _adminPService.GetAllProjectsForUser(currentUser.Email);
+
+        List<ProjectDTO> projects = new List<ProjectDTO>();
+
+        foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
+            if (project.ProjectLeader != null && project.ProjectLeader.Email == currentUser.Email)
+                projects.Add(_projectConverter.FromEntity(project));
+
+        return projects;
     }
 
     public ProjectDTO GetProject(string projectName)
