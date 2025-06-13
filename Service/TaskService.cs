@@ -152,9 +152,11 @@ public class TaskService
         );
         updatedTask.Id = task.Id;
         updatedTask.State = (State)taskDTO.State;
-        DateTime startDate =GetNextDateAvailable(solve, taskDTO.ExpectedStartDate, taskDTO.Duration, taskDTO.Resources);
+        DateTime startDate = GetNextDateAvailable(solve, taskDTO.ExpectedStartDate, taskDTO.Duration, taskDTO.Resources);
         updatedTask.ExpectedStartDate = startDate;
+        Console.WriteLine("antes del update del repository");
         _repositoryManager.TaskRepository.Update(updatedTask);
+        Console.WriteLine("paso el update de repository");
         updatedTask = _repositoryManager.TaskRepository.Get(t => t.Title == updatedTask.Title);
         _repositoryManager.ProjectRepository.UpdateTask(projectName, updatedTask.Id, updatedTask);
 

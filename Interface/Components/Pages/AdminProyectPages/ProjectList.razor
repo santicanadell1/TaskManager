@@ -32,7 +32,7 @@
                             <i class="bi bi-gear-fill me-2"></i>View Options
                         </button>
 
-                        <button class="btn-warning btn-sm @GetButtonClass(project)"
+                        <button class="btn-warning  @GetButtonClass(project)"
                                 @onclick="() => ShowEditProjectModal(project)">
                             <i class="bi bi-pencil-fill me-2"></i>Edit Project
                         </button>
@@ -1726,6 +1726,7 @@
                 Id = project.Id,
                 Name = project.Name,
                 Description = project.Description,
+                StartDate = project.StartDate,
                 ProjectLeader = project.ProjectLeader != null ? _UserController.GetUser(project.ProjectLeader.Email) : null
             };
 

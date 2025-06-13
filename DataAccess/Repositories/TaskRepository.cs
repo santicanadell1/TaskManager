@@ -54,7 +54,7 @@ public class TaskRepository : IRepository<Task>
         Task? existingTask = _db.Tasks.FirstOrDefault(t => t.Id == updatedTask.Id);
         if (existingTask == null)
             throw new TaskNotFoundException();
-
+        
         existingTask.Title = updatedTask.Title;
         existingTask.Description = updatedTask.Description;
         existingTask.Duration = updatedTask.Duration;
