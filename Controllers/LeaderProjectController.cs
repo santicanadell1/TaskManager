@@ -7,11 +7,17 @@ namespace Controllers;
 
 public class LeaderProjectController
 {
+    private readonly ILeaderPService _LeaderPServiceJSON;
+    private readonly ILeaderPService _LeaderPServiceCSV;
     private readonly ILeaderPService _LeaderPService;
 
     public LeaderProjectController(IRepositoryManager repositoryManager)
     {
-        _LeaderPService = new LeaderPService(repositoryManager);
+        CSVExporter csvExporter = new CSVExporter(repositoryManager);
+        JSONExporter jsonExporter = new JSONExporter(repositoryManager);
+        _LeaderPService = new LeaderPService(repositoryManager, csvExporter);
+        _LeaderPServiceCSV = new LeaderPService(repositoryManager, csvExporter);
+        _LeaderPServiceJSON = new LeaderPService(repositoryManager, jsonExporter);
     }
 
     public void AssignMembersToProject(string projectName, List<UserDTO> members)

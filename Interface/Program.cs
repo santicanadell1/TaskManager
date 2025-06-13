@@ -40,6 +40,10 @@ builder.Services.AddScoped<UserConverter>();
 builder.Services.AddScoped<ProjectConverter>();
 builder.Services.AddScoped<NotificationConverter>();
 
+builder.Services.AddScoped<IExporter, CSVExporter>();
+builder.Services.AddScoped<IExporter, JSONExporter>();
+
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
