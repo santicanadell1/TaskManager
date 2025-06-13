@@ -774,4 +774,25 @@ public class AdminPServiceTests
 
         _adminPservice.GetTasks(projectDTO);
     }
+    
+    [TestMethod]
+    public void RemoveProjectLeader_ShouldRemoveAssignedLeader_WhenTheProjectrHasAProjectLeader()
+    {
+        ProjectDTO projectDTO = new ProjectDTO
+        {
+            Name = "New Project",
+            Description = "Description",
+            StartDate = DateTime.Now,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+
+        _adminPservice.CreateProject(projectDTO);
+
+        _adminPservice.SetProjectLeader("New Project", Leader.Email);
+        _adminPservice.RemoveProjectLeader("New Project");
+        
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "New Project");
+        Assert.AreNotEqual(Leader.Email, project.ProjectLeader.Email);
+    }
 }

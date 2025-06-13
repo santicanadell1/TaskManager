@@ -52,7 +52,7 @@ public class PasswordManager : IPasswordManager
 
         const string allValidChars =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+[]{}|;:,.<>?";
-        while (password.Length < 8)
+        while (password.Length < 16)
         {
             password.Append(allValidChars[_random.Next(allValidChars.Length)]);
         }
