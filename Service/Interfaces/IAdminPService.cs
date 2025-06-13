@@ -25,4 +25,6 @@ public interface IAdminPService
     void SetProjectLeader(string projectName, string LeaderEmail);
 
     List<UserDTO> GetAllProjectLeaderUsers();
+    
+    void RemoveProjectLeader(string projectName);
 }
