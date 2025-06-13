@@ -722,4 +722,56 @@ public class AdminPServiceTests
             "The first leader should be the one with the correct name");
         Assert.AreEqual(Leader.Email, projectLeaders[0].Email, "The leader should have the correct email");
     }
+    
+    [TestMethod]
+    public void GetTasks_ShouldReturnAllTasks_WhenProjectHasTasks()
+    {
+        ProjectDTO projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Today,
+            AdminProyect = UserDTO,
+            Members = members
+        };
+        _adminPservice.CreateProject(projectDTO);
+
+        TaskDTO task1 = new TaskDTO
+        {
+            Title = "Task 1",
+            Description = "Task 1 Description",
+            Duration = 2,
+            ExpectedStartDate = DateTime.Today
+        };
+        TaskDTO task2 = new TaskDTO
+        {
+            Title = "Task 2",
+            Description = "Task 2 Description",
+            Duration = 3,
+            ExpectedStartDate = DateTime.Today.AddDays(1)
+        };
+
+        _taskService.AddTask("Test Project", task1);
+        _taskService.AddTask("Test Project", task2);
+
+        List<TaskDTO> tasks = _adminPservice.GetTasks(projectDTO);
+
+        Assert.AreEqual(2, tasks.Count);
+        Assert.AreEqual("Task 1", tasks[0].Title);
+        Assert.AreEqual("Task 2", tasks[1].Title);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ProjectNotFoundException))]
+    public void GetTasks_ShouldThrowException_WhenProjectDoesNotExist()
+    {
+        ProjectDTO projectDTO = new ProjectDTO
+        {
+            Name = "Nonexistent Project",
+            Description = "Nonexistent Project Description",
+            StartDate = DateTime.Today
+        };
+
+        _adminPservice.GetTasks(projectDTO);
+    }
 }
