@@ -26,5 +26,7 @@ namespace Service.Interface
         void AddTaskToMember(string projectName, string memberEmail, string taskTitle);
 
         void RemoveTaskFromMember(string projectName, string memberEmail, string taskTitle);
+
+        string ExportProjects();
     }
 }

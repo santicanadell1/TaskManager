@@ -54,4 +54,14 @@ public class LeaderProjectController
     {
         _LeaderPService.RemoveTaskFromMember(projectName, memberEmail, taskTitle);
     }
+
+    public string ExportProjectsAsJSON()
+    {
+        return _LeaderPServiceJSON.ExportProjects();
+    }
+
+    public string ExportProjectsAsCSV()
+    {
+        return _LeaderPServiceCSV.ExportProjects();
+    }
 }

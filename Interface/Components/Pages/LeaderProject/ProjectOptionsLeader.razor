@@ -5,6 +5,7 @@
 @inject LeaderProjectController _LeaderProjectController
 @inject TaskController _TaskController
 @inject UserController _UserController
+@inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
 <link href="styles/styleProjectList.css" rel="stylesheet"/>
@@ -19,6 +20,13 @@
 <div class="project-list-container">
     @if (projects != null && projects.Any())
     {
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0"><i class="bi bi-folder2-open me-2"></i>My Projects</h5>
+            <button class="btn btn-success" @onclick="ShowExportModal">
+                <i class="bi bi-download me-2"></i>Export Projects
+            </button>
+        </div>
+
         <ul class="list-group">
             @foreach (ProjectDTO project in projects)
             {
@@ -568,6 +576,58 @@
     </div>
 }
 
+@if (showExportModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="exportModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-download me-2"></i>Export Projects</h5>
+                    <button type="button" class="btn-close" @onclick="CloseExportModal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(exportErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>@exportErrorMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => exportErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(exportSuccessMessage))
+                    {
+                        <div class="alert alert-success d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-check-circle-fill me-2"></i>@exportSuccessMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => exportSuccessMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <p>Choose the format to export your projects:</p>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" @onclick="ExportAsJSON">
+                            <i class="bi bi-filetype-json me-2"></i>Export as JSON
+                        </button>
+                        <button class="btn btn-secondary" @onclick="ExportAsCSV">
+                            <i class="bi bi-filetype-csv me-2"></i>Export as CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="CloseExportModal">
+                        <i class="bi bi-x-circle me-1"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
 
     private List<ProjectDTO> projects = new();
@@ -610,6 +670,10 @@
     private string selectedMemberName;
     private List<TaskDTO> assignedTasks = new();
     private List<UserDTO> projectMembers = new();
+
+    private bool showExportModal;
+    private string exportErrorMessage = string.Empty;
+    private string exportSuccessMessage = string.Empty;
 
     protected override void OnInitialized()
     {
@@ -1129,6 +1193,69 @@
             assignTaskErrorMessage = $"Error removing task: {ex.Message}";
             assignTaskSuccessMessage = string.Empty;
         }
+    }
+
+    private void ShowExportModal()
+    {
+        showExportModal = true;
+        exportErrorMessage = string.Empty;
+        exportSuccessMessage = string.Empty;
+    }
+
+    private void CloseExportModal()
+    {
+        showExportModal = false;
+        exportErrorMessage = string.Empty;
+        exportSuccessMessage = string.Empty;
+    }
+
+    private async Task ExportAsJSON()
+    {
+        try
+        {
+            string jsonData = _LeaderProjectController.ExportProjectsAsJSON();
+            await DownloadFile(jsonData, "projects.json", "application/json");
+            exportSuccessMessage = "Projects exported as JSON successfully!";
+            exportErrorMessage = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            exportErrorMessage = $"Error exporting projects as JSON: {ex.Message}";
+            exportSuccessMessage = string.Empty;
+        }
+    }
+
+    private async Task ExportAsCSV()
+    {
+        try
+        {
+            string csvData = _LeaderProjectController.ExportProjectsAsCSV();
+            await DownloadFile(csvData, "projects.csv", "text/csv");
+            exportSuccessMessage = "Projects exported as CSV successfully!";
+            exportErrorMessage = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            exportErrorMessage = $"Error exporting projects as CSV: {ex.Message}";
+            exportSuccessMessage = string.Empty;
+        }
+    }
+
+    private async Task DownloadFile(string content, string fileName, string contentType)
+    {
+        var bytes = System.Text.Encoding.UTF8.GetBytes(content);
+        var base64 = Convert.ToBase64String(bytes);
+        var dataUrl = $"data:{contentType};base64,{base64}";
+
+        // Crear elemento de descarga usando JavaScript
+        var script = $@"
+        var link = document.createElement('a');
+        link.href = '{dataUrl}';
+        link.download = '{fileName}';
+        link.click();
+        ";
+
+        await JSRuntime.InvokeVoidAsync("eval", script);
     }
 
 }

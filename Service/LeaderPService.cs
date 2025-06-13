@@ -35,7 +35,7 @@ public class LeaderPService : ILeaderPService
     {
         try
         {
-            var projects = _adminPService.GetAllProjectsForUser(LoggedUser.Current.Email);
+            var projects = GetAllMyProjects();
 
             if (projects == null || !projects.Any())
                 return _exporter.Export(new List<ProjectDTO>());
