@@ -172,7 +172,6 @@
             selectedProjectLeaderEmail = projectLeaderEmail;
             projectLeaderEmail = string.Empty;
 
-            // Limpiar mensajes anteriores
             alertVisible = false;
             successVisible = false;
 
@@ -207,7 +206,6 @@
     {
         try
         {
-            // Validar datos básicos
             if (string.IsNullOrWhiteSpace(newProjectDTO.Name))
             {
                 alertMessage = "Project name is required.";
@@ -222,10 +220,8 @@
                 return;
             }
 
-            // Crear el proyecto
             _AdminProjectController.CreateProject(newProjectDTO);
 
-            // Asignar leader si se seleccionó uno
             if (!string.IsNullOrEmpty(selectedProjectLeaderEmail))
             {
                 _AdminProjectController.SetProjectLeaderToProject(newProjectDTO.Name, selectedProjectLeaderEmail);
@@ -239,7 +235,6 @@
             successVisible = true;
             alertVisible = false;
 
-            // Limpiar formulario
             newProjectDTO = new ProjectDTO
             {
                 StartDate = DateTime.Now,
@@ -249,7 +244,6 @@
             selectedProjectLeaderEmail = string.Empty;
             projectLeaderEmail = string.Empty;
 
-            // Opcional: navegar después de un delay
             Task.Delay(2000).ContinueWith(t => { InvokeAsync(() => Navigation.NavigateTo("/project/options")); });
         }
         catch (Exception ex)

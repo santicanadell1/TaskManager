@@ -1770,9 +1770,8 @@
             };
 
             currentProjectLeaderEmail = project.ProjectLeader?.Email ?? string.Empty;
-            selectedProjectLeaderEmail = string.Empty; // Reset selection
+            selectedProjectLeaderEmail = string.Empty; 
 
-            // Cargar usuarios disponibles
             LoadUsers();
 
             projectErrorMessage = string.Empty;
