@@ -11,7 +11,7 @@ public interface IAdminSService
     
     void ChangePassword(string email, string newPassword, string oldPassword);
 
-   
+    void ChangeCurrentUserPassword(string userEmail, string oldPassword, string newPassword);
     void AssignRole(UserDTO userDTO, RolDTO role);
     
 }

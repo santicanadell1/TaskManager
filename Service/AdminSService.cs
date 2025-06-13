@@ -140,7 +140,7 @@ public class AdminSService : IAdminSService
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminSystem))
             throw new UnauthorizedAdminAccessException();
     }
-    
+
     public void ChangeCurrentUserPassword(string email, string oldPassword, string newPassword)
     {
         CheckIsCurrenUser(email);

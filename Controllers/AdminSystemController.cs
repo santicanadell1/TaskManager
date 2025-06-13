@@ -31,6 +31,11 @@ public class AdminSystemController
         _adminSService.ChangePassword(userEmail, oldPassword, newPassword);
     }
 
+    public void ChangeCurrentUserPassword(string userEmail, string oldPassword, string newPassword)
+    {
+        _adminSService.ChangeCurrentUserPassword(userEmail, oldPassword, newPassword);
+    }
+
     public void DeleteUser(UserDTO user)
     {
         _adminSService.DeleteUser(user);
