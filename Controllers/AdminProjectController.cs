@@ -77,4 +77,9 @@ public class AdminProjectController
     {
         _adminPService.SetProjectLeader(projectName, usersToAssignLeaderEmail);
     }
+
+    public void RemoveProjectLeaderFromProject(string projectName)
+    {
+        
+    }
 }

@@ -817,7 +817,6 @@
         </div>
     </div>
 }
-
 <!-- Modal para editar el proyecto -->
 @if (showEditProjectModal)
 {
@@ -857,21 +856,73 @@
                                            @bind-Value="selectedProjectToEdit.Description"/>
                         </div>
 
-                        <!-- Líder de Proyecto -->
+                        <!-- Sección de Project Leader -->
                         <div class="mb-3">
-                            <label for="projectLeader" class="form-label">Project Leader</label>
-                            <select class="form-select" id="projectLeader" @bind="selectedProjectLeaderEmail">
-                                <option value="">Select Leader</option>
-                                @foreach (var user in projectLeadersUsers)
-                                {
-                                    <option value="@user.Email">@user.FirstName @user.LastName</option>
-                                }
-                            </select>
-                            @if (!string.IsNullOrEmpty(currentProjectLeaderEmail) && currentProjectLeaderEmail != selectedProjectLeaderEmail)
+                            <label class="form-label">Project Leader</label>
+
+                            @if (!string.IsNullOrEmpty(currentProjectLeaderEmail))
                             {
-                                <button class="btn-danger btn-sm mt-2" @onclick="RemoveCurrentLeader">Remove Current
-                                    Leader
-                                </button>
+                                <!-- Mostrar leader actual con botón para remover -->
+                                <div class="card border-primary">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="card-title mb-1">
+                                                    <i class="bi bi-person-badge-fill text-primary me-2"></i>Current
+                                                    Leader
+                                                </h6>
+                                                <p class="card-text mb-0">
+                                                    @GetLeaderDisplayName(currentProjectLeaderEmail)
+                                                </p>
+                                                <small class="text-muted">@currentProjectLeaderEmail</small>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-danger btn-sm"
+                                                    @onclick="RemoveCurrentLeader">
+                                                <i class="bi bi-trash3 me-1"></i>Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <!-- Mostrar lista de leaders disponibles cuando no hay uno asignado -->
+                                <div class="card border-success">
+                                    <div class="card-body p-3">
+                                        <div class="mb-3">
+                                            <h6 class="card-title mb-2">
+                                                <i class="bi bi-person-plus-fill text-success me-2"></i>Assign Project
+                                                Leader
+                                            </h6>
+                                            <select class="form-select" @bind="selectedProjectLeaderEmail">
+                                                <option value="">Select a Leader</option>
+                                                @foreach (var user in projectLeadersUsers)
+                                                {
+                                                    <option value="@user.Email">@user.FirstName @user.LastName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(selectedProjectLeaderEmail))
+                                        {
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <div>
+                                                    <strong>Selected:</strong> @GetLeaderDisplayName(selectedProjectLeaderEmail)
+                                                </div>
+                                                <button type="button" class="btn btn-success btn-sm"
+                                                        @onclick="AssignSelectedLeader">
+                                                    <i class="bi bi-check-circle me-1"></i>Assign Leader
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                @if (projectLeadersUsers == null || !projectLeadersUsers.Any())
+                                {
+                                    <div class="alert alert-warning mt-2">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>No project leaders available.
+                                    </div>
+                                }
                             }
                         </div>
 
@@ -1705,18 +1756,6 @@
         }
     }
 
-    private void LoadUsers()
-    {
-        try
-        {
-            projectLeadersUsers = _AdminProjectController.GetAllProjectLeaderUsers();
-        }
-        catch (Exception ex)
-        {
-            projectErrorMessage = $"Error loading users: {ex.Message}";
-        }
-    }
-
     private void ShowEditProjectModal(ProjectDTO project)
     {
         try
@@ -1731,7 +1770,10 @@
             };
 
             currentProjectLeaderEmail = project.ProjectLeader?.Email ?? string.Empty;
-            selectedProjectLeaderEmail = currentProjectLeaderEmail;
+            selectedProjectLeaderEmail = string.Empty; // Reset selection
+
+            // Cargar usuarios disponibles
+            LoadUsers();
 
             projectErrorMessage = string.Empty;
             showEditProjectModal = true;
@@ -1747,6 +1789,7 @@
     private void CloseEditProjectModal(bool refreshData)
     {
         showEditProjectModal = false;
+        selectedProjectLeaderEmail = string.Empty;
         if (refreshData)
         {
             LoadProjects();
@@ -1755,7 +1798,61 @@
 
     private void RemoveCurrentLeader()
     {
-        selectedProjectLeaderEmail = string.Empty;
+        try
+        {
+            // Remover el leader del proyecto
+            _AdminProjectController.RemoveProjectLeaderFromProject(selectedProjectToEdit.Name);
+
+            // Actualizar el estado local
+            currentProjectLeaderEmail = string.Empty;
+            selectedProjectLeaderEmail = string.Empty;
+
+            // Recargar para mostrar la lista de leaders disponibles
+            StateHasChanged();
+
+            projectErrorMessage = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error removing project leader: {ex.Message}";
+        }
+    }
+
+    private void AssignSelectedLeader()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(selectedProjectLeaderEmail))
+            {
+                projectErrorMessage = "Please select a project leader.";
+                return;
+            }
+
+            // Asignar el nuevo leader
+            _AdminProjectController.SetProjectLeaderToProject(selectedProjectToEdit.Name, selectedProjectLeaderEmail);
+
+            // Actualizar el estado local
+            currentProjectLeaderEmail = selectedProjectLeaderEmail;
+            selectedProjectLeaderEmail = string.Empty;
+
+            // Recargar para mostrar el nuevo leader actual
+            StateHasChanged();
+
+            projectErrorMessage = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error assigning project leader: {ex.Message}";
+        }
+    }
+
+    private string GetLeaderDisplayName(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+            return "No leader assigned";
+
+        var user = projectLeadersUsers?.FirstOrDefault(u => u.Email == email);
+        return user != null ? $"{user.FirstName} {user.LastName}" : email;
     }
 
     private async Task HandleEditProjectSubmit()
@@ -1768,11 +1865,7 @@
                 return;
             }
 
-            if (!string.IsNullOrEmpty(selectedProjectLeaderEmail))
-            {
-                _AdminProjectController.SetProjectLeaderToProject(selectedProjectToEdit.Name, selectedProjectLeaderEmail);
-            }
-
+            // Actualizar solo los datos básicos del proyecto
             _AdminProjectController.UpdateProject(selectedProjectToEdit.Name, selectedProjectToEdit);
 
             projectErrorMessage = string.Empty;
@@ -1783,6 +1876,18 @@
         catch (Exception ex)
         {
             projectErrorMessage = $"Error updating project: {ex.Message}";
+        }
+    }
+
+    private void LoadUsers()
+    {
+        try
+        {
+            projectLeadersUsers = _AdminProjectController.GetAllProjectLeaderUsers();
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error loading users: {ex.Message}";
         }
     }
 
