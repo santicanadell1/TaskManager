@@ -70,6 +70,13 @@
                 <ProjectLeaderNav/>
             }
 
+            if (_LoginController.IsTheCurrentUserAdminProject() || _LoginController.IsTheCurrentUserLeaderProject() || _LoginController.IsTheCurrentUserProjectMember())
+            {
+                <NavLink class="nav-link" href="/gantt">
+                    <i class="bi bi-calendar"></i> Gantt Diagram
+                </NavLink>
+            }
+
             <NavLink class="nav-link" href="/users/changeCurrentPassword">
                 <i class="bi bi-key"></i> Change My Password
             </NavLink>
