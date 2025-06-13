@@ -36,6 +36,7 @@ public class AdminPService : IAdminPService
         SetProjectAdmin(newProject, projectDTO);
         _repositoryManager.ProjectRepository.Add(newProject);
     }
+
     public List<TaskDTO> GetTasks(ProjectDTO projectDTO)
     {
         CheckAdminProyectRole();
@@ -43,7 +44,7 @@ public class AdminPService : IAdminPService
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
         if (project == null)
         {
-            throw new ProjectNotFoundException(); 
+            throw new ProjectNotFoundException();
         }
 
         if (project.Tasks == null || !project.Tasks.Any())
@@ -68,14 +69,13 @@ public class AdminPService : IAdminPService
                 LatestStart = task.LatestStart,
                 LatestFinish = task.LatestFinish,
                 Slack = task.Slack,
-                PreviousTasks = new List<TaskDTO>(), 
-                SameTimeTasks = new List<TaskDTO>() 
+                PreviousTasks = new List<TaskDTO>(),
+                SameTimeTasks = new List<TaskDTO>()
             });
         }
 
         return taskDTOs;
     }
-
 
 
     public void AssignMembersToProject(string projectName, List<UserDTO> membersDTO)
@@ -399,6 +399,26 @@ public class AdminPService : IAdminPService
         if (projectEntity == null) throw new ProjectNotFoundException();
 
         projectEntity.ProjectLeader = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
+    }
+
+    public void RemoveProjectLeader(string projectName)
+    {
+        CheckAdminProyectRole();
+
+        Project projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+
+        if (projectEntity == null) throw new ProjectNotFoundException();
+
+        if (projectEntity.ProjectLeader != null)
+        {
+            projectEntity.ProjectLeader = null;
+        }
+        else
+        {
+            throw new TheProjectDoesNotHaveAProjectLeader();
+        }
+
+        _repositoryManager.ProjectRepository.Update(projectEntity);
     }
 
     private void CheckProjectLeaderRole(string LeaderEmail)

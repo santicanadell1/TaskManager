@@ -722,7 +722,7 @@ public class AdminPServiceTests
             "The first leader should be the one with the correct name");
         Assert.AreEqual(Leader.Email, projectLeaders[0].Email, "The leader should have the correct email");
     }
-    
+
     [TestMethod]
     public void GetTasks_ShouldReturnAllTasks_WhenProjectHasTasks()
     {
@@ -760,7 +760,7 @@ public class AdminPServiceTests
         Assert.AreEqual("Task 1", tasks[0].Title);
         Assert.AreEqual("Task 2", tasks[1].Title);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ProjectNotFoundException))]
     public void GetTasks_ShouldThrowException_WhenProjectDoesNotExist()
@@ -774,7 +774,7 @@ public class AdminPServiceTests
 
         _adminPservice.GetTasks(projectDTO);
     }
-    
+
     [TestMethod]
     public void RemoveProjectLeader_ShouldRemoveAssignedLeader_WhenTheProjectrHasAProjectLeader()
     {
@@ -786,12 +786,13 @@ public class AdminPServiceTests
             AdminProyect = UserDTO,
             Members = members
         };
+
         _adminPservice.CreateProject(projectDTO);
 
         _adminPservice.SetProjectLeader("New Project", Leader.Email);
         _adminPservice.RemoveProjectLeader("New Project");
-        
+
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "New Project");
-        Assert.AreNotEqual(Leader.Email, project.ProjectLeader.Email);
+        Assert.IsNull(project.ProjectLeader);
     }
 }
