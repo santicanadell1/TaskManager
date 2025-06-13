@@ -16,8 +16,9 @@ public class ProjectDTO
     public UserDTO? AdminProyect { get; set; }
 
     public List<UserDTO> Members { get; set; }
+    
 
-    public UserDTO ProjectLeader { get; set; }
-
+    public UserDTO ProjectLeader { get; set; }  
+    
     public int? Id { get; set; }
 }

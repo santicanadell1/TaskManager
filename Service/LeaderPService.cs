@@ -17,13 +17,31 @@ public class LeaderPService : ILeaderPService
     private readonly TaskService _taskService;
     private readonly AdminPService _adminPService;
     private readonly CpmService _cpmService;
-
-    public LeaderPService(IRepositoryManager repositoryManager)
+    private readonly IExporter _exporter;
+    public LeaderPService(IRepositoryManager repositoryManager, IExporter exporter)
     {
         _repositoryManager = repositoryManager;
         _cpmService = new CpmService();
         _taskService = new TaskService(repositoryManager, _cpmService);
         _adminPService = new AdminPService(repositoryManager);
+        _exporter = exporter;
+    }
+    
+    public string ExportProjects()
+    {
+        try
+        {
+            var projects = _adminPService.GetAllProjectsForUser(LoggedUser.Current.Email);
+        
+            if (projects == null || !projects.Any())
+                return _exporter.Export(new List<ProjectDTO>());
+            
+            return _exporter.Export(projects);
+        }
+        catch (Exception ex)
+        {
+            throw new UnableToExportProject();
+        }
     }
 
     public void UpdateTask(string projectName, string taskTitle, TaskDTO taskDTO)

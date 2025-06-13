@@ -36,6 +36,46 @@ public class AdminPService : IAdminPService
         SetProjectAdmin(newProject, projectDTO);
         _repositoryManager.ProjectRepository.Add(newProject);
     }
+    public List<TaskDTO> GetTasks(ProjectDTO projectDTO)
+    {
+        CheckAdminProyectRole();
+
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
+        if (project == null)
+        {
+            throw new ProjectNotFoundException(); 
+        }
+
+        if (project.Tasks == null || !project.Tasks.Any())
+        {
+            return new List<TaskDTO>();
+        }
+
+        List<TaskDTO> taskDTOs = new List<TaskDTO>();
+        foreach (Task task in project.Tasks)
+        {
+            taskDTOs.Add(new TaskDTO
+            {
+                Title = task.Title,
+                Description = task.Description,
+                ExpectedStartDate = task.ExpectedStartDate,
+                Duration = task.Duration,
+                State = (StateDTO)task.State,
+                Id = task.Id,
+                IsCritical = task.IsCritical,
+                StartDate = task.StartDate,
+                EndDate = task.EndDate,
+                LatestStart = task.LatestStart,
+                LatestFinish = task.LatestFinish,
+                Slack = task.Slack,
+                PreviousTasks = new List<TaskDTO>(), 
+                SameTimeTasks = new List<TaskDTO>() 
+            });
+        }
+
+        return taskDTOs;
+    }
+
 
 
     public void AssignMembersToProject(string projectName, List<UserDTO> membersDTO)

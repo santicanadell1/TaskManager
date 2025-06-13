@@ -637,6 +637,19 @@
           "build/net6.0/MSTest.TestFramework.targets": {}
         }
       },
+      "Newtonsoft.Json/13.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.ClientModel/1.0.0": {
         "type": "package",
         "dependencies": {
@@ -2076,6 +2089,36 @@
         "mstest.testframework.nuspec"
       ]
     },
+    "Newtonsoft.Json/13.0.2": {
+      "sha512": "R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.2.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    },
     "System.ClientModel/1.0.0": {
       "sha512": "I3CVkvxeqFYjIVEP59DnjbeoGNfo/+SZrCLpRz2v/g0gpCHaEMPtWSY0s9k/7jR1rAsLNg2z2u1JRB76tPjnIw==",
       "type": "package",
@@ -2937,41 +2980,40 @@
     "net8.0": [
       "DataAccess >= 1.0.0",
       "Domain >= 1.0.0",
-      "MSTest.TestFramework >= 3.1.1"
+      "MSTest.TestFramework >= 3.1.1",
+      "Newtonsoft.Json >= 13.0.2"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\": {}
+    "C:\\Users\\santi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Service\\Service.csproj",
+      "projectUniqueName": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Service\\Service.csproj",
       "projectName": "Service",
-      "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Service\\Service.csproj",
-      "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Service\\obj\\",
+      "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Service\\Service.csproj",
+      "packagesPath": "C:\\Users\\santi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Service\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\santi\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
+            "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
             },
-            "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj": {
-              "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj"
+            "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\diss\\305108_282542_281987\\Domain\\Domain.csproj"
             }
           }
         }
@@ -2994,6 +3036,10 @@
           "MSTest.TestFramework": {
             "target": "Package",
             "version": "[3.1.1, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.2, )"
           }
         },
         "imports": [
@@ -3012,7 +3058,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.407/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
