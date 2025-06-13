@@ -398,6 +398,11 @@ public class AdminPService : IAdminPService
 
         if (projectEntity == null) throw new ProjectNotFoundException();
 
+        if (projectEntity.ProjectLeader != null)
+        {
+            throw new TheProjectAlredyHasALeader();
+        }
+
         projectEntity.ProjectLeader = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
     }
 
