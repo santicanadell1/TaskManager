@@ -1227,6 +1227,7 @@
 
             await Task.Delay(1500);
             CloseCreateTaskModal(true);
+            Navigation.NavigateTo(Navigation.Uri, true);
         }
         catch (ResourceNotAvailableException)
         {
@@ -1260,6 +1261,7 @@
 
             await Task.Delay(1500);
             CloseCreateTaskModal(true);
+            Navigation.NavigateTo(Navigation.Uri, true);
         }
         catch (Exception ex)
         {
@@ -1473,6 +1475,7 @@
 
             await Task.Delay(1500);
             CloseEditTaskModal(true);
+            Navigation.NavigateTo(Navigation.Uri, true);
         }
         catch (Exception ex)
         {
