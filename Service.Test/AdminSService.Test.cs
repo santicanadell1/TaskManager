@@ -204,7 +204,7 @@ public class AdminSService_Test
 
     [TestMethod]
     [ExpectedException(typeof(InvalidOldPasswordException))]
-    public void AdminService_ShouldThrowInvalidOldPasswordException_WhenOldPasswordIsIncorrect()
+    public void g()
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
@@ -220,7 +220,7 @@ public class AdminSService_Test
 
         string newPassword = "NewPassword456@";
 
-        _adminService.ChangePassword(userToUpdate.Email, "IncorrectOldPassword");  
+        _adminService.ChangePassword(userToUpdate.Email, newPassword, "IncorrectOldPassword");  
     }
 
     
