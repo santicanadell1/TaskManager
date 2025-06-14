@@ -32,18 +32,10 @@ public class TaskRepository : IRepository<Task>
         }
     }
 
-    private void ValidateDuplicateTitle(string title)
-    {
-        if (_db.Set<Task>().Any(t => t.Title == title))
-        {
-            throw new TaskAlreadyExistsException(title);
-        }
-    }
-
     public List<Task> GetAll()
     {
         return _db.Set<Task>()
-            .Include(t=> t.Resources)
+            .Include(t => t.Resources)
             .ToList();
     }
 
@@ -54,7 +46,7 @@ public class TaskRepository : IRepository<Task>
 
     public void Update(Task updatedTask)
     {
-        Task? existingTask = _db.Tasks
+        var existingTask = _db.Tasks
             .Include(t => t.Resources)
             .Include(t => t.PreviousTasks)
             .Include(t => t.SameTimeTasks)
@@ -62,7 +54,7 @@ public class TaskRepository : IRepository<Task>
 
         if (existingTask == null)
             throw new TaskNotFoundException();
-        
+
         existingTask.Title = updatedTask.Title;
         existingTask.Description = updatedTask.Description;
         existingTask.Duration = updatedTask.Duration;
@@ -92,7 +84,7 @@ public class TaskRepository : IRepository<Task>
     {
         try
         {
-            Task? existingTask = _db.Tasks.Find(task.Id);
+            var existingTask = _db.Tasks.Find(task.Id);
             if (existingTask == null)
                 throw new TaskNotFoundException();
 
@@ -103,5 +95,10 @@ public class TaskRepository : IRepository<Task>
         {
             throw new TaskRepositoryExceptions("The task can't be deleted");
         }
+    }
+
+    private void ValidateDuplicateTitle(string title)
+    {
+        if (_db.Set<Task>().Any(t => t.Title == title)) throw new TaskAlreadyExistsException(title);
     }
 }

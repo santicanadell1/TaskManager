@@ -1,24 +1,22 @@
 ﻿using Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Task = Domain.Task;
 
 namespace DataAccess;
 
 public class AppDbContext : DbContext
 {
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+        if (!Database.IsInMemory()) Database.Migrate();
+    }
+
     public DbSet<User> Users { get; set; }
     public DbSet<Task> Tasks { get; set; }
     public DbSet<Resource> Resources { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Notification> Notifications { get; set; }
-
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-        if (!Database.IsInMemory())
-        {
-            Database.Migrate();
-        }
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -39,7 +37,7 @@ public class AppDbContext : DbContext
                     v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
                         .Select(s => Enum.Parse<Rol>(s))
                         .ToList(),
-                    new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<List<Rol>>(
+                    new ValueComparer<List<Rol>>(
                         (c1, c2) => c1.SequenceEqual(c2),
                         c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                         c => c.ToList()
@@ -58,11 +56,11 @@ public class AppDbContext : DbContext
                 .WithMany()
                 .HasForeignKey("AdminProjectId")
                 .OnDelete(DeleteBehavior.NoAction);
-            
+
             entity.HasOne(p => p.ProjectLeader)
                 .WithMany()
                 .HasForeignKey("ProjectLeaderId")
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Task>(entity =>
@@ -151,15 +149,29 @@ public class AppDbContext : DbContext
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
                 "TaskDependencies",
-                j => j.HasOne<Task>().WithMany().HasForeignKey("PreviousTaskId").OnDelete(DeleteBehavior.Restrict),
-                j => j.HasOne<Task>().WithMany().HasForeignKey("DependentTaskId").OnDelete(DeleteBehavior.Restrict));
+                j => j.HasOne<Task>()
+                    .WithMany()
+                    .HasForeignKey("PreviousTaskId")
+                    .OnDelete(DeleteBehavior.ClientCascade),
+                j => j.HasOne<Task>()
+                    .WithMany()
+                    .HasForeignKey("DependentTaskId")
+                    .OnDelete(DeleteBehavior.ClientCascade)
+            );
 
         modelBuilder.Entity<Task>()
             .HasMany(t => t.SameTimeTasks)
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
                 "ConcurrentTasks",
-                j => j.HasOne<Task>().WithMany().HasForeignKey("TaskId").OnDelete(DeleteBehavior.Restrict),
-                j => j.HasOne<Task>().WithMany().HasForeignKey("ConcurrentTaskId").OnDelete(DeleteBehavior.Restrict));
+                j => j.HasOne<Task>()
+                    .WithMany()
+                    .HasForeignKey("TaskId")
+                    .OnDelete(DeleteBehavior.ClientCascade),
+                j => j.HasOne<Task>()
+                    .WithMany()
+                    .HasForeignKey("ConcurrentTaskId")
+                    .OnDelete(DeleteBehavior.ClientCascade)
+            );
     }
 }
