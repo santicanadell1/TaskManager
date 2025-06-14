@@ -141,6 +141,11 @@ public class ResourceService : IResourceService
         return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
     }
 
+    public TaskDTO updateResourceDependencies(TaskDTO taskDTO, string ProjectName)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool IsAvailable(ResourceDTO res, DateTime startDate, int duration, string taskTitle = "")
     {
         if (res.ConcurrentUsage)

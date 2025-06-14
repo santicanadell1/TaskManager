@@ -975,4 +975,64 @@ public class ResourcesServiceTest
         Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today    && o.Item2 == 2));
         Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today.AddDays(5) && o.Item2 == 3));
     }
+    [TestMethod]
+public void UpdateResourceDependencies_ShouldAddPreviousTasks_BasedOnResourceAndStartDate()
+{
+    _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+    var projectDto = new ProjectDTO
+    {
+        Name = "ProjDeps",
+        Description = "Proyecto para dependencias",
+        StartDate = DateTime.Today,
+        AdminProyect = _userService.GetUser("adminProject.user@example.com")
+    };
+    _adminProjectService.CreateProject(projectDto);
+
+    _loginService.Logout();
+    _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+    var resDto = new ResourceDTO { Name = "R", Type = "T", Description = "D" };
+    _resourceService.AddResource(resDto);
+    var resEntity = _repositoryManager.ResourceRepository.Get(r => r.Name == "R");
+    resDto.Id = resEntity.Id;
+
+    _loginService.Logout();
+    _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+
+    var tA = new TaskDTO
+    {
+        Title = "A",
+        Description = "usa R",
+        ExpectedStartDate = DateTime.Today,
+        Duration = 1,
+        Resources = new List<ResourceDTO> { resDto }
+    };
+    _taskService.AddTask("ProjDeps", tA);
+
+    var tB = new TaskDTO
+    {
+        Title = "B",
+        Description = "usa R",
+        ExpectedStartDate = DateTime.Today.AddDays(1),
+        Duration = 1,
+        Resources = new List<ResourceDTO> { resDto }
+    };
+    _taskService.AddTask("ProjDeps", tB);
+
+    var tC = new TaskDTO
+    {
+        Title = "C",
+        Description = "usa R",
+        ExpectedStartDate = DateTime.Today.AddDays(2),
+        Duration = 1,
+        Resources = new List<ResourceDTO> { resDto }
+    };
+    _taskService.AddTask("ProjDeps", tC);
+
+    var createdC = _taskService.GetTask("ProjDeps", "C");
+
+    var result = _resourceService.updateResourceDependencies(createdC, "ProjDeps" );
+    Assert.AreEqual(2, result.PreviousTasks.Count);
+    var titles = result.PreviousTasks.Select(p => p.Title).ToList();
+    CollectionAssert.AreEquivalent(new[] { "A", "B" }, titles);
+}
 }
