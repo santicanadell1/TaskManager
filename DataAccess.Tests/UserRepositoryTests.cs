@@ -123,4 +123,12 @@ public class UserRepositoryTests
         _userRepository.Add(null);
     }
     
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void Update_ShouldThrowUserNotFoundException_WhenUserIsNull()
+    {
+        _userRepository(null);
+    }
+
+    
 }
