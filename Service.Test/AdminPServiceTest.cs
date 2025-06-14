@@ -922,6 +922,23 @@ public class AdminPServiceTests
         Assert.AreEqual(0, createdProject.Members.Count);
     }
 
-
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithNullAdminProyect_WhenAdminProyectIsNull()
+    {
+        ProjectDTO projectWithNullAdmin = new ProjectDTO
+        {
+            Name = "Project With Null Admin",
+            Description = "Project with null AdminProyect",
+            StartDate = DateTime.Today,
+            AdminProyect = null,
+            Members = new List<UserDTO>()
+        };
+    
+        _adminPservice.CreateProject(projectWithNullAdmin);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Null Admin");
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(AdminProject);
+    }
     
 }
