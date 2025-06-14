@@ -141,14 +141,14 @@ public class ResourceService : IResourceService
         return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
     }
 
-    public bool IsAvailable(ResourceDTO res, DateTime startDate, int duration)
+    public bool IsAvailable(ResourceDTO res, DateTime startDate, int duration, string taskTitle = "")
     {
         if (res.ConcurrentUsage)
             return true;
         DateTime endDate = startDate.AddDays(duration);
         var tasksUsingResource = _repositoryManager.TaskRepository
             .GetAll()
-            .Where(t => t.Resources.Any(r => r.Id == res.Id));
+            .Where(t => t.Resources.Any(r => r.Id == res.Id) && t.Title != taskTitle);
         foreach (var task in tasksUsingResource)
         {
             DateTime taskStart = task.ExpectedStartDate.Date;
@@ -159,13 +159,13 @@ public class ResourceService : IResourceService
         return true;
     }
 
-    public DateTime NextDateAvailable(ResourceDTO res, DateTime startDate, int duration)
+    public DateTime NextDateAvailable(ResourceDTO res, DateTime startDate, int duration, string taskTitle = "")
     {
         if (res.ConcurrentUsage)
             return startDate.Date;
         DateTime candidate = startDate.Date;
 
-        while (!IsAvailable(res, candidate, duration))
+        while (!IsAvailable(res, candidate, duration, taskTitle))
         {
             candidate = candidate.AddDays(1);
         }

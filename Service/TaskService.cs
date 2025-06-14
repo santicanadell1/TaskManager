@@ -64,14 +64,14 @@ public class TaskService
         return tasks;
     }
 
-    private DateTime GetNextDateAvailable(bool solve, DateTime startDate, int duration, List<ResourceDTO> resources)
+    private DateTime GetNextDateAvailable(bool solve, DateTime startDate, int duration, List<ResourceDTO> resources, string taskTitle = "")
     {
         DateTime startDateNext = startDate;
         foreach (var res in resources)
         {
-            if (!_resourceService.IsAvailable(res, startDate, duration) && !solve)
+            if (!_resourceService.IsAvailable(res, startDate, duration, taskTitle) && !solve)
                 throw new ResourceNotAvailableException();
-            DateTime next = _resourceService.NextDateAvailable(res, startDate, duration);
+            DateTime next = _resourceService.NextDateAvailable(res, startDate, duration, taskTitle);
             if (next > startDate)
                 startDateNext = next;
         }
@@ -89,7 +89,7 @@ public class TaskService
         }
 
         DateTime startDate =
-            GetNextDateAvailable(solve, taskDTO.ExpectedStartDate, taskDTO.Duration, taskDTO.Resources);
+            GetNextDateAvailable(solve, taskDTO.ExpectedStartDate, taskDTO.Duration, taskDTO.Resources, taskDTO.Title);
         taskDTO.ExpectedStartDate = startDate;
         CreateTask(taskDTO);
         Task task = _repositoryManager.TaskRepository.Get(t => t.Title == taskDTO.Title);
@@ -156,7 +156,7 @@ public class TaskService
         updatedTask.Id = task.Id;
         updatedTask.State = (State)taskDTO.State;
         DateTime startDate =
-            GetNextDateAvailable(solve, taskDTO.ExpectedStartDate, taskDTO.Duration, taskDTO.Resources);
+            GetNextDateAvailable(solve, taskDTO.ExpectedStartDate, taskDTO.Duration, taskDTO.Resources, taskDTO.Title);
         updatedTask.ExpectedStartDate = startDate;
         _repositoryManager.TaskRepository.Update(updatedTask);
         updatedTask = _repositoryManager.TaskRepository.Get(t => t.Title == updatedTask.Title);

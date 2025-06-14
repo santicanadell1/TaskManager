@@ -9,8 +9,8 @@ public interface IResourceService
     List<ResourceDTO> GetResources();
     void UpdateResource(int? id, ResourceDTO updatedResourceDTO);
     void DeleteResource(int? id);
-    bool IsAvailable(ResourceDTO resourceDTO, DateTime startDate, int duration);
-    DateTime NextDateAvailable(ResourceDTO resourceDTO, DateTime startDate, int duration);
+    bool IsAvailable(ResourceDTO resourceDTO, DateTime startDate, int duration, string taskTitle = "");
+    DateTime NextDateAvailable(ResourceDTO resourceDTO, DateTime startDate, int duration, string taskTitle = "");
     public List<ResourceDTO> getAllResourcesForAProject(string pName);
     public List<(DateTime, int)> getWhenIsResourceOcupied(ResourceDTO res);
 }
