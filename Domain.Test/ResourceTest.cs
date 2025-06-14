@@ -67,4 +67,21 @@ public class ResourceTest
         Resource res = new Resource("Name", "Type", "Description");
         Assert.IsFalse(res.ConcurrentUsage);
     }
+    
+    [TestMethod]
+    public void SetConcurrentUsage_WhenConcurrentUsageIsSetToTrue_ShouldSetConcurrentUsageToTrue()
+    {
+        Resource res = new Resource("Name", "Type", "Description");
+        res.ConcurrentUsage = true;
+        
+        Assert.IsTrue(res.ConcurrentUsage);
+    }
+    
+    [TestMethod]
+    public void CreateResource_WithProject_ThenResourceShouldBeCreated()
+    {
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1", new Project("Project1", "Description of Project1", DateTime.Today));
+        
+        Assert.IsNotNull(resource.Project);
+    }
 }
