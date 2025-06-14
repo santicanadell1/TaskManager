@@ -15,18 +15,17 @@ public class AdminSService_Test
     private Login _loginService;
     private UserService _userService;
     private IRepositoryManager _repositoryManager;
-    
+
     [TestInitialize]
     public void TestSetUp()
     {
         InMemoryAppContextFactory contextFactory = new InMemoryAppContextFactory();
         _context = contextFactory.CreateDbContext();
-        
+
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
-        
+
         _repositoryManager = new RepositoryManager(_context);
-        
         _adminService = new AdminSService(_repositoryManager);
         _loginService = new Login(_repositoryManager);
         _userService = new UserService(_repositoryManager);
@@ -50,9 +49,14 @@ public class AdminSService_Test
             Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO>()
         };
+
         _userService.AddUser(adminUserDTO);
         _userService.AddUser(normalUserDTO);
+
+        var savedUser = _userService.GetUser(normalUserDTO.Email);
+        Assert.IsNotNull(savedUser);
     }
+
 
     [TestCleanup]
     public void CleanUp()
@@ -151,7 +155,7 @@ public class AdminSService_Test
 
         _adminService.ChangePassword(userToUpdate.Email, newPassword, "Password123@");
     }
-    
+
 
     [TestMethod]
     public void AdminService_ShouldChangePassword_WhenChangingUserPassword()
@@ -173,7 +177,7 @@ public class AdminSService_Test
         UserDTO user = _userService.GetUser(userToUpdate.Email);
         Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void AdminService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotAdmin_CreateUser()
@@ -181,8 +185,9 @@ public class AdminSService_Test
         _loginService.LoginUser("john.doe@example.com", "Password123@");
         UserDTO currentUser = LoggedUser.Current;
 
-        _adminService.CreateUser(currentUser);  
+        _adminService.CreateUser(currentUser);
     }
+
     [TestMethod]
     [ExpectedException(typeof(UserNotFoundException))]
     public void AdminService_ShouldThrowUserNotFoundException_WhenDeletingNonExistentUser()
@@ -199,7 +204,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        _adminService.DeleteUser(userToDeleteDTO); 
+        _adminService.DeleteUser(userToDeleteDTO);
     }
 
     [TestMethod]
@@ -220,7 +225,7 @@ public class AdminSService_Test
 
         string newPassword = "NewPassword456@";
 
-        _adminService.ChangePassword(userToUpdate.Email, newPassword, "IncorrectOldPassword");  
+        _adminService.ChangePassword(userToUpdate.Email, newPassword, "IncorrectOldPassword");
     }
 
     [TestMethod]
@@ -243,7 +248,7 @@ public class AdminSService_Test
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(InvalidUserPasswordException))]
     public void AdminService_ShouldThrowInvalidUserPasswordException_WhenNewPasswordIsInvalid()
@@ -260,12 +265,35 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        string newPassword = "123";  
-        _adminService.ChangePassword(userToUpdate.Email, newPassword, "Password123@");  
+        string newPassword = "123";
+        _adminService.ChangePassword(userToUpdate.Email, newPassword, "Password123@");
     }
 
+    [TestMethod]
+    public void AdminService_ShouldCreateUser_WhenUserIsAdmin()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
+        UserDTO newUserDTO = new UserDTO
+        {
+            FirstName = "New",
+            LastName = "User",
+            Email = "new.user@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1992-01-01"),
+            Roles = new List<RolDTO>()
+        };
 
+        _adminService.CreateUser(newUserDTO);
 
-
+        UserDTO createdUser = _userService.GetUser(newUserDTO.Email);
+        Assert.IsNotNull(createdUser);
+        Assert.AreEqual();
+    }
+    
 }
+
+
+
+
+
