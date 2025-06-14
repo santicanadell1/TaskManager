@@ -5,6 +5,7 @@ using Domain;
 using Newtonsoft.Json;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.AdminSServiceExceptions;
+using Service.Exceptions.ExporterExeptions;
 using Service.Exceptions.LeaderPServiceException;
 using Service.Models;
 using Task = Domain.Task;
@@ -1166,6 +1167,40 @@ public void ExportProjects_CSV_ShouldHandleTasksWithoutResources()
     Assert.IsTrue(csvResult.Contains("Proyecto Sin Recursos"));
     Assert.IsTrue(csvResult.Contains("Tarea Sin Recursos"));
 }
+
+[TestMethod]
+[ExpectedException(typeof(NullProjectsCanNotBeImported))]
+public void ExportProjects_ShouldThrowNullProjectsCanNotBeImported_WhenProjectsListIsNull()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    TestExporterForNull testExporter = new TestExporterForNull();
+    LeaderPService leaderServiceWithTestExporter = new LeaderPService(_repositoryManager, testExporter);
+
+    testExporter();
+}
+
+
+public class TestExporterForNull : ExporterBase
+{
+    protected override string ExportData(List<ProjectDTO> projects)
+    {
+        return "Test export data";
+    }
+
+    public void SimulateNullProjects()
+    {
+        Export(null);
+    }
+}
+
+
 
     
 }
