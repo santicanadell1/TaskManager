@@ -99,5 +99,13 @@ public class ResourceRepositoryTests
         _resourceRepository.Update(null);
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(ResourceNotFoundException))]
+    public void Update_ShouldThrowResourceNotFoundException_WhenResourceDoesNotExist()
+    {
+        Resource nonExistentResource = new Resource("NonExistent", "Type", "Description");
+        nonExistentResource.Id = 999;
     
+        _resourceRepository(nonExistentResource);
+    }
 }
