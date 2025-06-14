@@ -453,10 +453,11 @@ public void AdminService_ShouldUpdateUserRoles_WhenUserHasNoId()
         LastName = "User", 
         Email = "john.doe@example.com",
         Password = "Password123@",
-      
+        Birthday = DateTime.Parse("1990-01-01"),
+        Roles = new List<RolDTO>()
     };
     
-    _adminService.AssignRole(RolDTO.ProjectMember);
+    _adminService.AssignRole(userWithoutId, RolDTO.ProjectMember);
     
     UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
     Assert.IsTrue(updatedUser.Roles.Contains(RolDTO.ProjectMember));
