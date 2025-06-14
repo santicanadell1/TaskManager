@@ -421,8 +421,28 @@ public void AdminService_ShouldThrowInvalidOldPasswordException_WhenCurrentUserO
     _adminService.ChangeCurrentUserPassword("john.doe@example.com", "WrongOldPassword123@", "NewPassword123@");
 }
 
-
+[TestMethod]
+[ExpectedException(typeof(UserNotFoundException))]
+public void AdminService_ShouldThrowUserNotFoundException_WhenUpdatingRolesForNonExistentUser()
+{
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
     
+    UserDTO userWithInvalidId = new UserDTO
+    {
+        Id = 999,
+        FirstName = "Test",
+        LastName = "User",
+        Email = "test@example.com",
+        Password = "Password123@",
+        Birthday = DateTime.Parse("1990-01-01"),
+        Roles = new List<RolDTO> { RolDTO.ProjectMember }
+    };
+    
+    _adminService.AssignRole(userWithInvalidId);
+}
+
+
+
 }
 
 
