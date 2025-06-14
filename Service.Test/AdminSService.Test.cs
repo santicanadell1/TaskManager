@@ -441,7 +441,26 @@ public void AdminService_ShouldThrowUserNotFoundException_WhenUpdatingRolesForNo
     _adminService.AssignRole(userWithInvalidId, RolDTO.ProjectMember);
 }
 
-
+[TestMethod]
+public void AdminService_ShouldUpdateUserRoles_WhenUserHasNoId()
+{
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+    
+    UserDTO userWithoutId = new UserDTO
+    {
+        Id = null,
+        FirstName = "Test",
+        LastName = "User", 
+        Email = "john.doe@example.com",
+        Password = "Password123@",
+      
+    };
+    
+    _adminService.AssignRole(RolDTO.ProjectMember);
+    
+    UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
+    Assert.IsTrue(updatedUser.Roles.Contains(RolDTO.ProjectMember));
+}
 
 }
 
