@@ -1249,7 +1249,7 @@ public class TestExporterWithNullElements : ExporterBase
 
 [TestMethod]
 [ExpectedException(typeof(TheProjectDoesNotHaveAProjectLeader))]
-public void AdminPService_ShouldThrowTheProjectDoesNotHaveAProjectLeader_WhenRemovingLeaderFromProjectWithoutLeader()
+public void LeaderPService_ShouldThrowTheProjectDoesNotHaveAProjectLeader_WhenProjectHasNoLeader()
 {
     _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
     
@@ -1264,12 +1264,13 @@ public void AdminPService_ShouldThrowTheProjectDoesNotHaveAProjectLeader_WhenRem
     
     _adminService.CreateProject(projectWithoutLeader);
     
-    _adminService.RemoveProjectLeader("Project Without Leader");
+    TestAdminPServiceForException testAdminService = new TestAdminPServiceForException(_repositoryManager);
+    testAdminService.TriggerProjectDoesNotHaveLeaderException("Project Without Leader");
 }
 
 [TestMethod]
 [ExpectedException(typeof(TheProjectAlredyHasALeader))]
-public void AdminPService_ShouldThrowTheProjectAlredyHasALeader_WhenProjectAlreadyHasLeader()
+public void LeaderPService_ShouldThrowTheProjectAlredyHasALeader_WhenProjectAlreadyHasLeader()
 {
     _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
     
@@ -1299,5 +1300,36 @@ public void AdminPService_ShouldThrowTheProjectAlredyHasALeader_WhenProjectAlrea
     _adminService.SetProjectLeader("Project With Leader", "another.leader2@example.com");
 }
 
+[TestMethod]
+[ExpectedException(typeof(UnableToExportProject))]
+public void LeaderPService_ShouldThrowUnableToExportProject_WhenExportFails()
+{
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
     
+    FailingExporter failingExporter = new FailingExporter();
+    LeaderPService leaderServiceWithFailingExporter = new LeaderPService(_repositoryManager, failingExporter);
+    
+    leaderServiceWithFailingExporter.ExportProjects();
+}
+
+public class TestAdminPServiceForException : AdminPService
+{
+    public TestAdminPServiceForException(IRepositoryManager repositoryManager) : base(repositoryManager)
+    {
+    }
+    
+    public void TriggerProjectDoesNotHaveLeaderException(string projectName)
+    {
+        RemoveProjectLeader(projectName);
+    }
+}
+
+public class FailingExporter : ExporterBase
+{
+    protected override string ExportData(List<ProjectDTO> projects)
+    {
+        throw new Exception("Simulated export failure");
+    }
+}
+
 }
