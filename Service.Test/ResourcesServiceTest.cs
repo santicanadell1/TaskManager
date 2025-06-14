@@ -1096,6 +1096,7 @@ public void UpdateResourceDependencies_ShouldAddPreviousTasks_BasedOnResourceAnd
         };
         _adminProjectService.CreateProject(projectDTO1);
 
+        
         _resourceService.AddResource(resourceDTO1);
         _resourceService.AddResource(resourceDTO2);
 
