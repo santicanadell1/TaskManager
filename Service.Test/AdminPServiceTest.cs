@@ -871,6 +871,26 @@ public class AdminPServiceTests
         Assert.AreEqual(0, createdProject.Tasks.Count);
     }
 
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithExistingMembers_WhenMembersExistInDatabase()
+    {
+        ProjectDTO projectWithMembers = new ProjectDTO
+        {
+            Name = "Project With Existing Members",
+            Description = "Project with existing members",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            Members = new List<UserDTO> { UserDTO }
+        };
     
+        _adminPservice.CreateProject(projectWithMembers);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Existing Members");
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(createdProject.Members);
+        Assert.AreEqual(1, createdProject.Members.Count);
+        Assert.AreEqual(Members[0].Email);
+    }
+
     
 }
