@@ -173,4 +173,16 @@ public class AdminSService_Test
         UserDTO user = _userService.GetUser(userToUpdate.Email);
         Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
     }
+    
+    
+    [TestMethod]
+    [ExpectedException(typeof(UnauthorizedAdminAccessException))]
+    public void AdminService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotAdmin_CreateUser()
+    {
+        _loginService.LoginUser("john.doe@example.com", "Password123@");
+        UserDTO currentUser = LoggedUser.Current;
+
+        _adminService.CreateUser();  
+    }
+
 }
