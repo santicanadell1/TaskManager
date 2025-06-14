@@ -74,14 +74,16 @@ public class ResourceRepositoryTests
     [ExpectedException(typeof(ResourceIsNullException))]
     public void Delete_ShouldThrowException_WhenAddingNullResourceAfterDeletion()
     {
-        Resource resource = new Resource("Resource1", "TypeA", "Description of Resource1");
+        Resource resource = new Resource(, "TypeA", "Description of Resource1");
         _resourceRepository.Add(resource);
         resource.Id = _resourceRepository.Get(r => r.Name == resource.Name).Id;
 
         _resourceRepository.Delete(resource);
 
-        Resource deletedResource = _resourceRepository.Get(r => r.Name == resource.Name);
-
-        _resourceRepository.Add(deletedResource);
+       
     }
+
+    
+    
+    
 }
