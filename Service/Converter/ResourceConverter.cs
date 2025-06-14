@@ -16,6 +16,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
 
     public ResourceDTO FromEntity(Resource resource)
     {
+        ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
         return new ResourceDTO
         {
             Id = resource.Id,
@@ -23,6 +24,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
             Type = resource.Type,
             Description = resource.Description,
             ConcurrentUsage = resource.ConcurrentUsage,
+            Project = projectConverter.FromEntity(resource.Project),
         };
     }
 
@@ -32,6 +34,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
         {
             Id = resourceDTO.Id,
             ConcurrentUsage = resourceDTO.ConcurrentUsage,
+            Project = _repositoryManager.ProjectRepository.Get(p => p.Id == resourceDTO.Project.Id)
         };
     }
 
@@ -55,7 +58,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
     {
         if (resources == null)
             return new List<ResourceDTO>();
-
+        ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
         List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
         foreach (Resource resource in resources)
             resourceDTOs.Add(new ResourceDTO
@@ -64,7 +67,8 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
                 Type = resource.Type,
                 Description = resource.Description,
                 ConcurrentUsage = resource.ConcurrentUsage,
-                Id = resource.Id
+                Id = resource.Id,
+                Project = projectConverter.FromEntity(resource.Project)
             });
 
         return resourceDTOs;
@@ -90,7 +94,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
     {
         if (resources == null)
             return new List<ResourceDTO>();
-
+        ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
         List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
         foreach (Resource resource in resources)
             resourceDTOs.Add(new ResourceDTO
@@ -99,7 +103,8 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
                 Type = resource.Type,
                 Description = resource.Description,
                 ConcurrentUsage = resource.ConcurrentUsage,
-                Id = resource.Id
+                Id = resource.Id,
+                Project = projectConverter.FromEntity(resource.Project)
             });
 
         return resourceDTOs;
