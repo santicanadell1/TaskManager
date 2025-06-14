@@ -1221,8 +1221,6 @@ public void ExportProjects_ShouldFilterNullProjects_WhenProjectsListContainsNull
     Assert.IsTrue(result.Contains("1 valid project"));
 }
 
-
-
 public class TestExporterForNull : ExporterBase
 {
     protected override string ExportData(List<ProjectDTO> projects)
@@ -1249,6 +1247,57 @@ public class TestExporterWithNullElements : ExporterBase
     }
 }
 
+[TestMethod]
+[ExpectedException(typeof(TheProjectDoesNotHaveAProjectLeader))]
+public void AdminPService_ShouldThrowTheProjectDoesNotHaveAProjectLeader_WhenRemovingLeaderFromProjectWithoutLeader()
+{
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+    
+    ProjectDTO projectWithoutLeader = new ProjectDTO
+    {
+        Name = "Project Without Leader",
+        Description = "Project that has no leader assigned",
+        StartDate = DateTime.Now.AddDays(1),
+        AdminProyect = _userService.GetUser("admin.user@example.com"),
+        ProjectLeader = null
+    };
+    
+    _adminService.CreateProject(projectWithoutLeader);
+    
+    _adminService.RemoveProjectLeader("Project Without Leader");
+}
+
+[TestMethod]
+[ExpectedException(typeof(TheProjectAlredyHasALeader))]
+public void AdminPService_ShouldThrowTheProjectAlredyHasALeader_WhenProjectAlreadyHasLeader()
+{
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+    
+    ProjectDTO projectWithLeader = new ProjectDTO
+    {
+        Name = "Project With Leader",
+        Description = "Project that already has a leader",
+        StartDate = DateTime.Now.AddDays(1),
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+    
+    _adminService.CreateProject(projectWithLeader);
+    _adminService.SetProjectLeader("Project With Leader", "leader.user@example.com");
+    
+    UserDTO anotherLeader = new UserDTO
+    {
+        FirstName = "Another",
+        LastName = "Leader",
+        Email = "another.leader2@example.com",
+        Password = "Password123@",
+        Birthday = DateTime.Parse("1990-01-01"),
+        Roles = new List<RolDTO> { RolDTO.ProjectLeader }
+    };
+    
+    _userService.AddUser(anotherLeader);
+    
+    _adminService.SetProjectLeader("Project With Leader", "another.leader2@example.com");
+}
 
     
 }
