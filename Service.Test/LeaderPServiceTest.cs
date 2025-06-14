@@ -1186,6 +1186,42 @@ public void ExportProjects_ShouldThrowNullProjectsCanNotBeImported_WhenProjectsL
     testExporter.SimulateNullProjects();
 }
 
+[TestMethod]
+public void ExportProjects_ShouldFilterNullProjects_WhenProjectsListContainsNullElements()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO validProject = new ProjectDTO
+    {
+        Name = "Valid Project",
+        Description = "Valid project for null test",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(validProject);
+    _adminService.SetProjectLeader("Valid Project", "leader.user@example.com");
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    TestExporterWithNullElements testExporter = new TestExporterWithNullElements();
+    LeaderPService leaderServiceWithTestExporter = new LeaderPService(_repositoryManager, testExporter);
+
+    string result = leaderServiceWithTestExporter.ExportProjects();
+
+    Assert.IsNotNull(result);
+    Assert.IsTrue(result.Contains("1 valid project"));
+}
+
+
 
 public class TestExporterForNull : ExporterBase
 {
@@ -1199,6 +1235,7 @@ public class TestExporterForNull : ExporterBase
         Export(null);
     }
 }
+
 
 
 
