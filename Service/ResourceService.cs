@@ -147,19 +147,25 @@ public class ResourceService : IResourceService
     public TaskDTO updateResourceDependencies(TaskDTO taskDTO, string ProjectName)
     {
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == ProjectName);
+        taskDTO.PreviousTasks ??= new List<TaskDTO>();
+        taskDTO.Resources     ??= new List<ResourceDTO>();
         HashSet<int> resourceIds = taskDTO.Resources
             .Where(r => r.Id.HasValue)
             .Select(r => r.Id.Value)
             .ToHashSet();
         List<Task> prevTasks = project.Tasks
             .Where(t =>
-                t.Id.HasValue &&
-                t.Id != taskDTO.Id.Value &&
+                t._title != taskDTO.Title &&
                 t.ExpectedStartDate < taskDTO.ExpectedStartDate &&
                 t.Resources.Any(r => resourceIds.Contains((int)r.Id)))
             .ToList();
         List<TaskDTO> prevDtos = _taskConverter.ToMinimalTaskDTOList(prevTasks);
-        taskDTO.PreviousTasks = prevDtos;
+        foreach (TaskDTO prevTaskDTO in prevDtos)
+        {
+            if(taskDTO.PreviousTasks.Any(t => t.Id == prevTaskDTO.Id) == false)
+                taskDTO.PreviousTasks.Add(prevTaskDTO);
+        }
+
         return taskDTO;
     }
 

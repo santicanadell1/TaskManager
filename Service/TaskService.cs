@@ -91,6 +91,7 @@ public class TaskService
         DateTime startDate =
             GetNextDateAvailable(solve, taskDTO.ExpectedStartDate, taskDTO.Duration, taskDTO.Resources, taskDTO.Title);
         taskDTO.ExpectedStartDate = startDate;
+        taskDTO = _resourceService.updateResourceDependencies(taskDTO, projectName);
         CreateTask(taskDTO);
         Task task = _repositoryManager.TaskRepository.Get(t => t.Title == taskDTO.Title);
 
