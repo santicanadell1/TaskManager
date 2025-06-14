@@ -241,8 +241,29 @@ public class AdminSService_Test
 
         RolDTO roleToAssign = RolDTO.ProjectMember;
 
-        _adminService.AssignRole(userToUpdate, roleToAssign );
+        _adminService.AssignRole(userToUpdate, roleToAssign);
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(InvalidUserPasswordException))]
+    public void AdminService_ShouldThrowInvalidUserPasswordException_WhenNewPasswordIsInvalid()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        UserDTO userToUpdate = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO>()
+        };
+
+        string newPassword = "123";  
+        _adminService.ChangePassword(userToUpdate.Email, newPassword, );  
+    }
+
 
 
 
