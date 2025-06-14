@@ -839,5 +839,6 @@ public class AdminPServiceTests
         Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Tasks");
         Assert.IsNotNull(createdProject);
         Assert.IsNotNull(createdProject.Tasks);
+        
     }
 }
