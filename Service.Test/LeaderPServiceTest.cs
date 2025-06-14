@@ -1010,6 +1010,45 @@ public void ExportProjects_CSV_ShouldEscapeFieldsWithNewlines()
     Assert.IsTrue(csvResult.Contains("\"Proyecto\ncon saltos\""));
 }
 
-    
-    
+[TestMethod]
+public void ExportProjects_CSV_ShouldHandleEmptyFields()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO projectWithValid = new ProjectDTO
+    {
+        Name = "Proyecto Valido",
+        Description = "Proyecto válido para test de campos vacíos",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(projectWithValid);
+    _adminService.SetProjectLeader("Proyecto Valido", "leader.user@example.com");
+
+    TaskDTO taskWithEmpty = new TaskDTO
+    {
+        Title = "Tarea Valida",
+        Description = "Tarea válida sin recursos",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto Valido", taskWithEmpty);
+
+}
+
+
 }
