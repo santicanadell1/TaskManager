@@ -24,7 +24,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
             Type = resource.Type,
             Description = resource.Description,
             ConcurrentUsage = resource.ConcurrentUsage,
-            Project = projectConverter.FromEntity(resource.Project),
+            Project = resource.Project!=null? projectConverter.FromEntity(resource.Project): null
         };
     }
 
@@ -34,7 +34,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
         {
             Id = resourceDTO.Id,
             ConcurrentUsage = resourceDTO.ConcurrentUsage,
-            Project = _repositoryManager.ProjectRepository.Get(p => p.Id == resourceDTO.Project.Id)
+            Project = resourceDTO.Project!=null ? _repositoryManager.ProjectRepository.Get(p => p.Id == resourceDTO.Project.Id): null
         };
     }
 
@@ -68,7 +68,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
                 Description = resource.Description,
                 ConcurrentUsage = resource.ConcurrentUsage,
                 Id = resource.Id,
-                Project = projectConverter.FromEntity(resource.Project)
+                Project = resource.Project!=null? projectConverter.FromEntity(resource.Project): null
             });
 
         return resourceDTOs;
@@ -104,7 +104,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
                 Description = resource.Description,
                 ConcurrentUsage = resource.ConcurrentUsage,
                 Id = resource.Id,
-                Project = projectConverter.FromEntity(resource.Project)
+                Project = resource.Project!=null? projectConverter.FromEntity(resource.Project): null
             });
 
         return resourceDTOs;
