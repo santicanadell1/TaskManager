@@ -16,12 +16,15 @@ public class ResourceService : IResourceService
     private readonly IRepositoryManager _repositoryManager;
     private readonly ResourceConverter _resourceConverter;
     private readonly RolConverter _rolConverter;
+    private readonly TaskConverter _taskConverter;
+    
 
     public ResourceService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
         _rolConverter = new RolConverter();
         _resourceConverter = new ResourceConverter(_repositoryManager);
+        _taskConverter = new TaskConverter(_repositoryManager);
     }
 
     public void AddResource(ResourceDTO resourceDTO)
@@ -143,7 +146,21 @@ public class ResourceService : IResourceService
 
     public TaskDTO updateResourceDependencies(TaskDTO taskDTO, string ProjectName)
     {
-        throw new NotImplementedException();
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == ProjectName);
+        HashSet<int> resourceIds = taskDTO.Resources
+            .Where(r => r.Id.HasValue)
+            .Select(r => r.Id.Value)
+            .ToHashSet();
+        List<Task> prevTasks = project.Tasks
+            .Where(t =>
+                t.Id.HasValue &&
+                t.Id != taskDTO.Id.Value &&
+                t.ExpectedStartDate < taskDTO.ExpectedStartDate &&
+                t.Resources.Any(r => resourceIds.Contains((int)r.Id)))
+            .ToList();
+        List<TaskDTO> prevDtos = _taskConverter.ToMinimalTaskDTOList(prevTasks);
+        taskDTO.PreviousTasks = prevDtos;
+        return taskDTO;
     }
 
     public bool IsAvailable(ResourceDTO res, DateTime startDate, int duration, string taskTitle = "")
