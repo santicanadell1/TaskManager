@@ -329,7 +329,7 @@
                             <label for="editTaskTitle" class="form-label"><i class="bi bi-type me-1"></i>Task
                                 Title</label>
                             <InputText id="editTaskTitle" class="form-control" @bind-Value="selectedTaskToEdit.Title"
-                                       required/>
+                                       readonly required/>
                         </div>
 
                         <div class="mb-3">
@@ -847,7 +847,7 @@
                         <div class="mb-3">
                             <label for="projectName" class="form-label">Project Name</label>
                             <InputText id="projectName" class="form-control" @bind-Value="selectedProjectToEdit.Name"
-                                       required/>
+                                       readonly required/>
                         </div>
 
                         <!-- Descripción del Proyecto -->
@@ -1254,6 +1254,9 @@
             _TaskController.AddTaskToProject(pendingProjectName, pendingTask, true);
             taskSuccessMessage = "Task created (forced) successfully!";
             showForceConfirm = false;
+            taskErrorMessage = string.Empty;
+
+            await Task.Delay(1500);
             CloseCreateTaskModal(true);
         }
         catch (Exception ex)
@@ -1463,6 +1466,9 @@
             );
             editTaskSuccessMessage = "Task updated (forced) successfully!";
             showEditForceConfirm = false;
+            taskErrorMessage = string.Empty;
+
+            await Task.Delay(1500);
             CloseEditTaskModal(true);
         }
         catch (Exception ex)
@@ -1771,7 +1777,7 @@
             };
 
             currentProjectLeaderEmail = project.ProjectLeader?.Email ?? string.Empty;
-            selectedProjectLeaderEmail = string.Empty; 
+            selectedProjectLeaderEmail = string.Empty;
 
             LoadUsers();
 
