@@ -17,7 +17,7 @@ public class ProjectDTO
 
     public List<UserDTO> Members { get; set; }
     
-
+    public List<TaskDTO> Tasks { get; set; }
     public UserDTO ProjectLeader { get; set; }  
     
     public int? Id { get; set; }

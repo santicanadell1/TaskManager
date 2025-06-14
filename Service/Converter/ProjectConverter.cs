@@ -2,16 +2,19 @@ using DataAccess;
 using Domain;
 using Service.Converter;
 using Service.Models;
+using Task = Domain.Task;
 
 public class ProjectConverter : IConverter<Project, ProjectDTO>
 {
     private readonly IRepositoryManager _repositoryManager;
     private readonly UserConverter _userConverter;
+    private readonly TaskConverter _taskConverter;
 
     public ProjectConverter(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
         _userConverter = new UserConverter(repositoryManager);
+        _taskConverter = new TaskConverter(repositoryManager);
     }
 
     public Project ToEntity(ProjectDTO projectDTO)
@@ -22,8 +25,23 @@ public class ProjectConverter : IConverter<Project, ProjectDTO>
             Name = projectDTO.Name,
             Description = projectDTO.Description,
             StartDate = projectDTO.StartDate,
-            Members = new List<User>()
+            Members = new List<User>(),
+            AdminProject = projectDTO.AdminProyect != null ? _repositoryManager.UserRepository.Get(u => u.Email == projectDTO.AdminProyect.Email) : null,
+            ProjectLeader = projectDTO.ProjectLeader != null ? _repositoryManager.UserRepository.Get(u => u.Email == projectDTO.ProjectLeader.Email) : null,
+            Tasks = new List<Task>()
         };
+
+        if (projectDTO.Tasks != null)
+        {
+            foreach (TaskDTO taskDTO in projectDTO.Tasks)
+            {
+                Task taskFromDb = _repositoryManager.TaskRepository.Get(t => t.Id == taskDTO.Id);
+                if (taskFromDb != null)
+                {
+                    project.Tasks.Add(taskFromDb);
+                }
+            }
+        }
 
         if (projectDTO.Members != null)
         {
@@ -48,6 +66,15 @@ public class ProjectConverter : IConverter<Project, ProjectDTO>
             foreach (User member in project.Members)
                 memberDTOs.Add(_userConverter.FromEntity(member)); 
         }
+        
+        List<TaskDTO> taskDTOs = new List<TaskDTO>();
+        if (project.Tasks != null)
+        {
+            foreach (Task task in project.Tasks)
+            {
+                taskDTOs.Add(_taskConverter.FromEntity(task));
+            }
+        }
 
         return new ProjectDTO
         {
@@ -57,7 +84,8 @@ public class ProjectConverter : IConverter<Project, ProjectDTO>
             StartDate = project.StartDate,
             Members = memberDTOs,
             AdminProyect = project.AdminProject != null ? _userConverter.FromEntity(project.AdminProject) : null,
-            ProjectLeader = project.ProjectLeader != null ? _userConverter.FromEntity(project.ProjectLeader) : null
+            ProjectLeader = project.ProjectLeader != null ? _userConverter.FromEntity(project.ProjectLeader) : null,
+            Tasks = taskDTOs
         };
     }
 }

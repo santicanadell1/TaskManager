@@ -39,6 +39,7 @@ public class ProjectRepository : IRepository<Project>
     {
         return _db.Set<Project>()
             .Include(p => p.Members)
+            .Include(p => p.Tasks)
             .FirstOrDefault(filter);
     }
 
@@ -64,7 +65,6 @@ public class ProjectRepository : IRepository<Project>
 
         existingProject.Description = project.Description;
         existingProject.Name = project.Name;
-        existingProject.Tasks = project.Tasks;
         existingProject.StartDate = project.StartDate;
         existingProject.AdminProject = project.AdminProject;
         existingProject.Members = project.Members;
