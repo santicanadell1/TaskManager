@@ -649,19 +649,18 @@ public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader
    [TestMethod]
 public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
 {
-    // Limpio proyectos existentes
+
     List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
     foreach (Project proj in existingProjects)
     {
         _repositoryManager.ProjectRepository.Delete(proj);
     }
 
-    // Logueo como admin para crear proyectos
     _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
     DateTime baseDate = DateTime.Now.AddDays(10);
 
-    // Creo dos proyectos
+
     ProjectDTO project1 = new ProjectDTO
     {
         Name = "Proyecto A",
@@ -679,11 +678,11 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
     _adminService.CreateProject(project1);
     _adminService.CreateProject(project2);
 
-    // Asigno líder a ambos proyectos
+
     _adminService.SetProjectLeader("Proyecto A", "leader.user@example.com");
     _adminService.SetProjectLeader("Proyecto B", "leader.user@example.com");
 
-    // Preparo tareas para Proyecto A
+
     TaskDTO tarea1_A = new TaskDTO
     {
         Title = "Tarea Z",
@@ -729,7 +728,7 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
         Resources = new List<ResourceDTO>()
     };
 
-    // Tarea para Proyecto B
+
     TaskDTO tarea1_B = new TaskDTO
     {
         Title = "T1",
@@ -742,24 +741,24 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
         Resources = new List<ResourceDTO>()
     };
 
-    // Agrego tareas
+
     _taskService.AddTask("Proyecto A", tarea1_A);
     _taskService.AddTask("Proyecto A", tarea2_A);
     _taskService.AddTask("Proyecto A", tarea3_A);
     _taskService.AddTask("Proyecto A", tarea4_A);
     _taskService.AddTask("Proyecto B", tarea1_B);
 
-    // Logueo como líder para exportar
+
     _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
     var jsonExporter = new JSONExporter(_repositoryManager);
     var leaderServiceWithJson = new LeaderPService(_repositoryManager, jsonExporter);
 
-    // Act
+
     string jsonResult = leaderServiceWithJson.ExportProjects();
     Assert.IsNotNull(jsonResult);
 
-    // Propiedades base en el JSON
+
     Assert.IsTrue(jsonResult.Contains("\"Project\""));
     Assert.IsTrue(jsonResult.Contains("\"StartDate\""));
     Assert.IsTrue(jsonResult.Contains("\"Tasks\""));
@@ -768,7 +767,7 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
     Assert.IsTrue(jsonResult.Contains("\"IsCritical\""));
     Assert.IsTrue(jsonResult.Contains("\"Resources\""));
 
-    // Contenido de proyectos y tareas
+
     Assert.IsTrue(jsonResult.Contains("\"Proyecto A\""));
     Assert.IsTrue(jsonResult.Contains("\"Proyecto B\""));
     Assert.IsTrue(jsonResult.Contains("\"Zebra\""));
@@ -777,7 +776,7 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
     Assert.IsTrue(jsonResult.Contains("\"Alpha\""));
     Assert.IsTrue(jsonResult.Contains("\"T1\""));
 
-    // Formato de fechas dd/MM/yyyy
+
     string dA  = baseDate.ToString("dd/MM/yyyy");
     string dB  = baseDate.AddDays(10).ToString("dd/MM/yyyy");
     string dt1 = baseDate.AddDays(1).ToString("dd/MM/yyyy");
@@ -794,18 +793,16 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
     Assert.IsTrue(jsonResult.Contains($"\"{dt4}\""), $"Debe contener la fecha de Medio {dt4}");
     Assert.IsTrue(jsonResult.Contains($"\"{dt5}\""), $"Debe contener la fecha de T1 {dt5}");
 
-    // Sólo tareas críticas tras cálculo CPM
     Assert.IsTrue(jsonResult.Contains("\"IsCritical\": \"S\""),
         "Todas las tareas deben salir marcadas como críticas (\"S\") tras el cálculo CPM");
 
-    // Duraciones y recursos
     Assert.IsTrue(jsonResult.Contains("\"Duration\": 5"));
     Assert.IsTrue(jsonResult.Contains("\"Duration\": 3"));
     Assert.IsTrue(jsonResult.Contains("\"Duration\": 4"));
     Assert.IsTrue(jsonResult.Contains("\"Duration\": 2"));
     Assert.IsTrue(jsonResult.Contains("\"Resources\": []"));
 
-    // Deserialización y conteo de elementos
+
     var projects = JsonConvert.DeserializeObject<List<dynamic>>(jsonResult);
     Assert.AreEqual(2, projects.Count, "Debe haber exactamente 2 proyectos");
 
