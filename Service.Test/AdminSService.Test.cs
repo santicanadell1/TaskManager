@@ -331,7 +331,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        _adminService.ChangePassword( "OldPassword123@");
+        _adminService.ChangePassword("nonexistent@example.com", "NewPassword123@", "OldPassword123@");
     }
 
     
