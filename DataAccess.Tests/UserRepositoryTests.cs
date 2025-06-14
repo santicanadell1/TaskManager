@@ -172,5 +172,18 @@ public class UserRepositoryTests
         Assert.IsNull(deletedUser);
     }
     
+    [TestMethod]
+    public void ValidateDuplicateEmail_ShouldWork_WhenEmailDoesNotExist()
+    {
+        User user1 = new User("First", "User", "first@email.com", DateTime.Today.AddYears(-18), "Password");
+        User user2 = new User("Second", "User", "second@email.com", DateTime.Today.AddYears(-18), "Password");
+    
+        _userRepository.Add(user1);
+        _userRepository.Add(user2);
+    
+        List<User> users = _userRepository.GetAll();
+        Assert.AreEqual(2, users.Count);
+        Assert.IsTrue(users.Any()
+    }
     
 }
