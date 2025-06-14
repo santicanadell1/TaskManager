@@ -130,5 +130,19 @@ public class UserRepositoryTests
         _userRepository.Update(null);
     }
 
+    [TestMethod]
+    public void Update_ShouldUpdateAllUserProperties_WhenUserExists()
+    {
+        User originalUser = new User("Original", "User", "original@email.com", DateTime.Today.AddYears(-20), "OriginalPassword");
+        _userRepository.Add(originalUser);
     
+        User addedUser = _userRepository.Get(u => u.Email == "original@email.com");
+        User updatedUser = new User("Updated", "Name", "original@email.com", DateTime.Today.AddYears(-25), "UpdatedPassword");
+        updatedUser.Id = addedUser.Id;
+    
+        _userRepository.Update(updatedUser);
+    
+        User retrievedUser = _userRepository.Get(u => u.Id == updatedUser.Id);
+        Assert.AreEqual
+
 }
