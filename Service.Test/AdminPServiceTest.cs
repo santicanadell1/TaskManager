@@ -938,7 +938,7 @@ public class AdminPServiceTests
     
         Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Null Admin");
         Assert.IsNotNull(createdProject);
-        Assert.IsNotNull(AdminProject);
+        Assert.IsNotNull(createdProject.AdminProject);
     }
     
 }
