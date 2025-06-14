@@ -438,7 +438,7 @@ public void AdminService_ShouldThrowUserNotFoundException_WhenUpdatingRolesForNo
         Roles = new List<RolDTO> { RolDTO.ProjectMember }
     };
     
-    _adminService.AssignRole(userWithInvalidId);
+    _adminService.AssignRole(userWithInvalidId, RolDTO.ProjectMember);
 }
 
 
