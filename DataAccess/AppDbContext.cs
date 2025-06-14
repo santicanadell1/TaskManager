@@ -110,7 +110,7 @@ public class AppDbContext : DbContext
             entity.HasOne(n => n.Project)
                 .WithMany()
                 .HasForeignKey("ProjectId")
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
 

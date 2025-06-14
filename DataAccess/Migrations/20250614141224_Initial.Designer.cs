@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250614030816_Initial")]
+    [Migration("20250614141224_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -311,7 +311,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Project");
