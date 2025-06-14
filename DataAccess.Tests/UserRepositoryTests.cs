@@ -183,7 +183,8 @@ public class UserRepositoryTests
     
         List<User> users = _userRepository.GetAll();
         Assert.AreEqual(2, users.Count);
-        Assert.IsTrue(users.Any()
+        Assert.IsTrue(users.Any(u => u.Email == "first@email.com"));
+        Assert.IsTrue(users.Any(u => u.Email == "second@email.com"));
     }
     
 }
