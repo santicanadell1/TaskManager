@@ -1157,7 +1157,8 @@ public void ExportProjects_CSV_ShouldHandleTasksWithoutResources()
 
     _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-\
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
     string csvResult = leaderServiceWithCsv.ExportProjects();
 
