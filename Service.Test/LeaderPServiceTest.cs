@@ -514,200 +514,137 @@ public class LeaderPService_Test
     }
 
     [TestMethod]
-    public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
+public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
     {
-        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (Project proj in existingProjects)
-        {
-            _repositoryManager.ProjectRepository.Delete(proj);
-        }
-
-        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-
-        DateTime baseDate = DateTime.Now.AddDays(10);
-
-        ProjectDTO project1 = new ProjectDTO
-        {
-            Name = "Proyecto A",
-            Description = "Primer proyecto",
-            StartDate = baseDate,
-            AdminProyect = _userService.GetUser("admin.user@example.com")
-        };
-
-        ProjectDTO project2 = new ProjectDTO
-        {
-            Name = "Proyecto B",
-            Description = "Segundo proyecto",
-            StartDate = baseDate.AddDays(10),
-            AdminProyect = _userService.GetUser("admin.user@example.com")
-        };
-
-        _adminService.CreateProject(project1);
-        _adminService.CreateProject(project2);
-
-        _adminService.SetProjectLeader("Proyecto A", "leader.user@example.com");
-        _adminService.SetProjectLeader("Proyecto B", "leader.user@example.com");
-
-
-        TaskDTO tarea1_A = new TaskDTO
-        {
-            Title = "Tarea Z",
-            Description = "Tercera tarea del proyecto A",
-            ExpectedStartDate = baseDate.AddDays(1),
-            StartDate = baseDate.AddDays(1),
-            Duration = 5,
-            State = StateDTO.TODO,
-            IsCritical = false,
-            Resources = new List<ResourceDTO>()
-        };
-
-        TaskDTO tarea2_A = new TaskDTO
-        {
-            Title = "Alpha",
-            Description = "Cuarta tarea del proyecto A",
-            ExpectedStartDate = baseDate.AddDays(3),
-            StartDate = baseDate.AddDays(3),
-            Duration = 3,
-            State = StateDTO.DOING,
-            IsCritical = true, // S
-            Resources = new List<ResourceDTO>()
-        };
-
-        TaskDTO tarea3_A = new TaskDTO
-        {
-            Title = "Zebra",
-            Description = "Primera tarea del proyecto A",
-            ExpectedStartDate = baseDate.AddDays(2),
-            StartDate = baseDate.AddDays(2),
-            Duration = 4,
-            State = StateDTO.TODO,
-            IsCritical = true, // S
-            Resources = new List<ResourceDTO>()
-        };
-
-        TaskDTO tarea4_A = new TaskDTO
-        {
-            Title = "Medio",
-            Description = "Segunda tarea del proyecto A",
-            ExpectedStartDate = baseDate.AddDays(4),
-            StartDate = baseDate.AddDays(4),
-            Duration = 2,
-            State = StateDTO.DOING,
-            IsCritical = false, // N
-            Resources = new List<ResourceDTO>()
-        };
-
-        // Tarea para Proyecto B
-        TaskDTO tarea1_B = new TaskDTO
-        {
-            Title = "T1",
-            Description = "Tarea del proyecto B",
-            ExpectedStartDate = baseDate.AddDays(11),
-            StartDate = baseDate.AddDays(11),
-            Duration = 2,
-            State = StateDTO.TODO,
-            IsCritical = true,
-            Resources = new List<ResourceDTO>()
-        };
-
-
-        _taskService.AddTask("Proyecto A", tarea1_A);
-        _taskService.AddTask("Proyecto A", tarea2_A);
-        _taskService.AddTask("Proyecto A", tarea3_A);
-        _taskService.AddTask("Proyecto A", tarea4_A);
-        _taskService.AddTask("Proyecto B", tarea1_B);
-
-
-        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
-
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
-
-        string csvResult = leaderServiceWithCsv.ExportProjects();
-
-
-        Console.WriteLine("=== RESULTADO CSV ===");
-        Console.WriteLine(csvResult);
-
-
-        Assert.IsNotNull(csvResult);
-        Assert.IsTrue(csvResult.Contains("Proyecto,Fecha de Inicio,Tarea,Fecha de Inicio,Duración,Crítico,Recursos"));
-
-
-        Assert.IsTrue(csvResult.Contains("Proyecto A"));
-        Assert.IsTrue(csvResult.Contains("Proyecto B"));
-
-
-        Assert.IsTrue(csvResult.Contains("Zebra"));
-        Assert.IsTrue(csvResult.Contains("Tarea Z"));
-        Assert.IsTrue(csvResult.Contains("Medio"));
-        Assert.IsTrue(csvResult.Contains("Alpha"));
-        Assert.IsTrue(csvResult.Contains("T1"));
-
-
-        string expectedDate1 = baseDate.ToString("dd/MM/yyyy");
-        string expectedDate2 = baseDate.AddDays(10).ToString("dd/MM/yyyy");
-        string expectedTaskDate1 = baseDate.AddDays(1).ToString("dd/MM/yyyy");
-        string expectedTaskDate2 = baseDate.AddDays(3).ToString("dd/MM/yyyy");
-        string expectedTaskDate3 = baseDate.AddDays(2).ToString("dd/MM/yyyy");
-        string expectedTaskDate4 = baseDate.AddDays(4).ToString("dd/MM/yyyy");
-        string expectedTaskDate5 = baseDate.AddDays(11).ToString("dd/MM/yyyy");
-
-        Console.WriteLine($"Fecha esperada proyecto A: {expectedDate1}");
-        Console.WriteLine($"Fecha esperada proyecto B: {expectedDate2}");
-        Console.WriteLine($"Fecha esperada Tarea Z: {expectedTaskDate1}");
-        Console.WriteLine($"Fecha esperada Alpha: {expectedTaskDate2}");
-        Console.WriteLine($"Fecha esperada Zebra: {expectedTaskDate3}");
-        Console.WriteLine($"Fecha esperada Medio: {expectedTaskDate4}");
-        Console.WriteLine($"Fecha esperada T1: {expectedTaskDate5}");
-
-        if (!csvResult.Contains(expectedDate1))
-            Console.WriteLine($"ERROR: No se encontró la fecha {expectedDate1} en el CSV");
-        if (!csvResult.Contains(expectedDate2))
-            Console.WriteLine($"ERROR: No se encontró la fecha {expectedDate2} en el CSV");
-        if (!csvResult.Contains(expectedTaskDate1))
-            Console.WriteLine($"ERROR: No se encontró la fecha de Tarea Z {expectedTaskDate1} en el CSV");
-        if (!csvResult.Contains(expectedTaskDate2))
-            Console.WriteLine($"ERROR: No se encontró la fecha de Alpha {expectedTaskDate2} en el CSV");
-        if (!csvResult.Contains(expectedTaskDate3))
-            Console.WriteLine($"ERROR: No se encontró la fecha de Zebra {expectedTaskDate3} en el CSV");
-        if (!csvResult.Contains(expectedTaskDate4))
-            Console.WriteLine($"ERROR: No se encontró la fecha de Medio {expectedTaskDate4} en el CSV");
-        if (!csvResult.Contains(expectedTaskDate5))
-            Console.WriteLine($"ERROR: No se encontró la fecha de T1 {expectedTaskDate5} en el CSV");
-
-        Assert.IsTrue(csvResult.Contains(expectedDate1), $"Debe contener la fecha {expectedDate1}");
-        Assert.IsTrue(csvResult.Contains(expectedDate2), $"Debe contener la fecha {expectedDate2}");
-        Assert.IsTrue(csvResult.Contains(expectedTaskDate1), $"Debe contener la fecha de Tarea Z {expectedTaskDate1}");
-        Assert.IsTrue(csvResult.Contains(expectedTaskDate2), $"Debe contener la fecha de Alpha {expectedTaskDate2}");
-        Assert.IsTrue(csvResult.Contains(expectedTaskDate3), $"Debe contener la fecha de Zebra {expectedTaskDate3}");
-        Assert.IsTrue(csvResult.Contains(expectedTaskDate4), $"Debe contener la fecha de Medio {expectedTaskDate4}");
-        Assert.IsTrue(csvResult.Contains(expectedTaskDate5), $"Debe contener la fecha de T1 {expectedTaskDate5}");
-
-        Assert.IsTrue(csvResult.Contains(",N,") || csvResult.Contains(",N\r") || csvResult.Contains(",N\n"));
-        Assert.IsTrue(csvResult.Contains(",S,") || csvResult.Contains(",S\r") || csvResult.Contains(",S\n"));
-
-        Assert.IsTrue(csvResult.Contains(",,") || csvResult.Contains(",\"\",") || csvResult.Contains(",\r") ||
-                      csvResult.Contains(",\n"));
-
-        string[] lines = csvResult.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        int proyectoAIndex = Array.FindIndex(lines, line => line.Contains("Proyecto A"));
-        int proyectoBIndex = Array.FindIndex(lines, line => line.Contains("Proyecto B"));
-
-        Assert.IsTrue(proyectoAIndex < proyectoBIndex, "Proyecto A debe aparecer antes que Proyecto B");
-
-        int zebraIndex = Array.FindIndex(lines, line => line.Contains("Zebra"));
-        int tareaZIndex = Array.FindIndex(lines, line => line.Contains("Tarea Z"));
-        int medioIndex = Array.FindIndex(lines, line => line.Contains("Medio"));
-        int alphaIndex = Array.FindIndex(lines, line => line.Contains("Alpha"));
-
-        Console.WriteLine(
-            $"Índices encontrados - Zebra: {zebraIndex}, Tarea Z: {tareaZIndex}, Medio: {medioIndex}, Alpha: {alphaIndex}");
-
-        Assert.IsTrue(zebraIndex < tareaZIndex, "Zebra debe aparecer antes que Tarea Z");
-        Assert.IsTrue(tareaZIndex < medioIndex, "Tarea Z debe aparecer antes que Medio");
-        Assert.IsTrue(medioIndex < alphaIndex, "Medio debe aparecer antes que Alpha");
+        _repositoryManager.ProjectRepository.Delete(proj);
     }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO project1 = new ProjectDTO
+    {
+        Name = "Proyecto A",
+        Description = "Primer proyecto",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    ProjectDTO project2 = new ProjectDTO
+    {
+        Name = "Proyecto B",
+        Description = "Segundo proyecto",
+        StartDate = baseDate.AddDays(10),
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(project1);
+    _adminService.CreateProject(project2);
+
+    _adminService.SetProjectLeader("Proyecto A", "leader.user@example.com");
+    _adminService.SetProjectLeader("Proyecto B", "leader.user@example.com");
+
+
+    TaskDTO tarea1_A = new TaskDTO
+    {
+        Title = "Tarea Z",
+        Description = "Tercera tarea del proyecto A",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 5,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    TaskDTO tarea2_A = new TaskDTO
+    {
+        Title = "Alpha",
+        Description = "Cuarta tarea del proyecto A",
+        ExpectedStartDate = baseDate.AddDays(3),
+        StartDate = baseDate.AddDays(3),
+        Duration = 3,
+        State = StateDTO.DOING,
+        IsCritical = true,
+        Resources = new List<ResourceDTO>()
+    };
+
+    TaskDTO tarea3_A = new TaskDTO
+    {
+        Title = "Zebra",
+        Description = "Primera tarea del proyecto A",
+        ExpectedStartDate = baseDate.AddDays(2),
+        StartDate = baseDate.AddDays(2),
+        Duration = 4,
+        State = StateDTO.TODO,
+        IsCritical = true,
+        Resources = new List<ResourceDTO>()
+    };
+
+    TaskDTO tarea4_A = new TaskDTO
+    {
+        Title = "Medio",
+        Description = "Segunda tarea del proyecto A",
+        ExpectedStartDate = baseDate.AddDays(4),
+        StartDate = baseDate.AddDays(4),
+        Duration = 2,
+        State = StateDTO.DOING,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    TaskDTO tarea1_B = new TaskDTO
+    {
+        Title = "T1",
+        Description = "Tarea del proyecto B",
+        ExpectedStartDate = baseDate.AddDays(11),
+        StartDate = baseDate.AddDays(11),
+        Duration = 2,
+        State = StateDTO.TODO,
+        IsCritical = true,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto A", tarea1_A);
+    _taskService.AddTask("Proyecto A", tarea2_A);
+    _taskService.AddTask("Proyecto A", tarea3_A);
+    _taskService.AddTask("Proyecto A", tarea4_A);
+    _taskService.AddTask("Proyecto B", tarea1_B);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    var csvExporter = new CSVExporter(_repositoryManager);
+    var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+    Assert.IsNotNull(csvResult);
+
+    string expectedDateA    = baseDate.ToString("dd/MM/yyyy");
+    string expectedDateB    = baseDate.AddDays(10).ToString("dd/MM/yyyy");
+    string expectedDateT1   = baseDate.AddDays(1).ToString("dd/MM/yyyy");
+    string expectedDateT2   = baseDate.AddDays(3).ToString("dd/MM/yyyy");
+    string expectedDateT3   = baseDate.AddDays(2).ToString("dd/MM/yyyy");
+    string expectedDateT4   = baseDate.AddDays(4).ToString("dd/MM/yyyy");
+    string expectedDateT5   = baseDate.AddDays(11).ToString("dd/MM/yyyy");
+
+    var lines = csvResult
+        .Split(new[] {'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
+    
+    Assert.AreEqual($"Proyecto A,{expectedDateA}", lines[0], "La primera línea debe ser 'Proyecto A,fecha'");
+    Assert.AreEqual($"Zebra,{expectedDateT3},S",    lines[1], "Primera tarea debe ser Zebra con crítico S");
+    Assert.AreEqual($"Tarea Z,{expectedDateT1},S", lines[2], "Segunda tarea debe ser Tarea Z con crítico S");
+    Assert.AreEqual($"Medio,{expectedDateT4},S",   lines[3], "Tercera tarea debe ser Medio con crítico S");
+    Assert.AreEqual($"Alpha,{expectedDateT2},S",   lines[4], "Cuarta tarea debe ser Alpha con crítico S");
+    int idxB = Array.FindIndex(lines, l => l.StartsWith("Proyecto B,"));
+    Assert.IsTrue(idxB > 0, "Debe existir una línea que empiece con 'Proyecto B,'");
+    Assert.AreEqual($"Proyecto B,{expectedDateB}", lines[idxB], "Línea de Proyecto B incorrecta");
+    Assert.AreEqual($"T1,{expectedDateT5},S", lines[idxB + 1], "Tarea T1 de Proyecto B incorrecta");
+}
+
 
     [TestMethod]
     public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
