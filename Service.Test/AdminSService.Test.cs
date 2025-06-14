@@ -174,7 +174,6 @@ public class AdminSService_Test
         Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
     }
     
-    
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedAdminAccessException))]
     public void AdminService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotAdmin_CreateUser()
@@ -184,5 +183,27 @@ public class AdminSService_Test
 
         _adminService.CreateUser(currentUser);  
     }
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void AdminService_ShouldThrowUserNotFoundException_WhenDeletingNonExistentUser()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        UserDTO userToDeleteDTO = new UserDTO
+        {
+            FirstName = "Nonexistent",
+            LastName = "User",
+            Email = "nonexistent.user@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO>()
+        };
+
+        _adminService.DeleteUser(); 
+    }
+
+    
+    
+    
 
 }
