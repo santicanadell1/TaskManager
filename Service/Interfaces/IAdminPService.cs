@@ -27,4 +27,5 @@ public interface IAdminPService
     List<UserDTO> GetAllProjectLeaderUsers();
     
     void RemoveProjectLeader(string projectName);
+    public List<ProjectDTO> GetAllProjectsForAdmin();
 }
