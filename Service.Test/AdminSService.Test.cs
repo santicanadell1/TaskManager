@@ -204,7 +204,7 @@ public class AdminSService_Test
 
     [TestMethod]
     [ExpectedException(typeof(InvalidOldPasswordException))]
-    public void g()
+    public void AdminService_ShouldThrowInvalidOldPasswordException_WhenOldPasswordIsIncorrect()
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
@@ -223,8 +223,28 @@ public class AdminSService_Test
         _adminService.ChangePassword(userToUpdate.Email, newPassword, "IncorrectOldPassword");  
     }
 
-    
-    
-    
+    [TestMethod]
+    [ExpectedException(typeof(UnauthorizedAdminAccessException))]
+    public void AdminService_ShouldThrowUnauthorizedAccessException_WhenAssigningRoleAndUserIsNotAdmin()
+    {
+        _loginService.LoginUser("john.doe@example.com", "Password123@");
+
+        UserDTO userToUpdate = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO>()
+        };
+
+        RolDTO roleToAssign = RolDTO.ProjectMember;
+
+        _adminService.AssignRole();
+    }
+
+
+
 
 }
