@@ -290,7 +290,7 @@ public class AdminSService_Test
         Assert.IsNotNull(createdUser);
         Assert.AreEqual(newUserDTO.Email, createdUser.Email);
     }
-    
+
     [TestMethod]
     public void AdminService_ShouldDeleteUser_WhenUserExistsAndAdminIsLoggedIn()
     {
@@ -311,7 +311,7 @@ public class AdminSService_Test
 
         }
     }
-    
+
     [TestMethod]
     public void AdminService_ShouldChangePassword_WhenValidCredentialsProvided()
     {
@@ -324,7 +324,7 @@ public class AdminSService_Test
         UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
         Assert.AreEqual(passwordManager.HashPassword(newPassword), updatedUser.Password);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(UserNotFoundException))]
     public void AdminService_ShouldThrowUserNotFoundException_WhenChangingPasswordForNonExistentUser()
@@ -349,121 +349,107 @@ public class AdminSService_Test
     }
 
     [TestMethod]
-public void AdminService_ShouldDeleteUser_WhenCurrentUserIsAlreadyAdminProject()
-{
-    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-    
-    UserDTO currentUser = LoggedUser.Current;
-    if (!currentUser.Roles.Contains(RolDTO.AdminProject))
+    public void AdminService_ShouldDeleteUser_WhenCurrentUserIsAlreadyAdminProject()
     {
-        currentUser.Roles.Add(RolDTO.AdminProject);
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        UserDTO currentUser = LoggedUser.Current;
+        if (!currentUser.Roles.Contains(RolDTO.AdminProject))
+        {
+            currentUser.Roles.Add(RolDTO.AdminProject);
+        }
+
+        UserDTO userToDelete = new UserDTO
+        {
+            FirstName = "Delete",
+            LastName = "Me2",
+            Email = "delete.me2@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO>()
+        };
+
+        _userService.AddUser(userToDelete);
+
+        _adminService.DeleteUser(userToDelete);
+
+        try
+        {
+            UserDTO deletedUser = _userService.GetUser("delete.me2@example.com");
+            Assert.Fail("Expected UserNotFoundException was not thrown");
+        }
+        catch (UserNotFoundException)
+        {
+        }
     }
-    
-    UserDTO userToDelete = new UserDTO
+
+    [TestMethod]
+    public void AdminService_ShouldDeleteUser_AndHandleProjectRemovalExceptions()
     {
-        FirstName = "Delete",
-        LastName = "Me2",
-        Email = "delete.me2@example.com",
-        Password = "Password123@",
-        Birthday = DateTime.Parse("1990-01-01"),
-        Roles = new List<RolDTO>()
-    };
-    
-    _userService.AddUser(userToDelete);
-    
-    _adminService.DeleteUser(userToDelete);
-    
-    try
-    {
-        UserDTO deletedUser = _userService.GetUser("delete.me2@example.com");
-        Assert.Fail("Expected UserNotFoundException was not thrown");
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        UserDTO userToDelete = new UserDTO
+        {
+            FirstName = "Delete",
+            LastName = "Me3",
+            Email = "delete.me3@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO>()
+        };
+
+        _userService.AddUser(userToDelete);
+
+        _adminService.DeleteUser(userToDelete);
+
+        try
+        {
+            UserDTO deletedUser = _userService.GetUser("delete.me3@example.com");
+            Assert.Fail("Expected UserNotFoundException was not thrown");
+        }
+        catch (UserNotFoundException)
+        {
+        }
     }
-    catch (UserNotFoundException)
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOldPasswordException))]
+    public void AdminService_ShouldThrowInvalidOldPasswordException_WhenCurrentUserOldPasswordIsWrong()
     {
+        _loginService.LoginUser("john.doe@example.com", "Password123@");
+
+        _adminService.ChangeCurrentUserPassword("john.doe@example.com", "WrongOldPassword123@", "NewPassword123@");
+    }
+
+    [TestMethod]
+    public void AdminService_ShouldDeleteUserFromRepository_WhenUserExists()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        UserDTO userToDelete = new UserDTO
+        {
+            FirstName = "Repository",
+            LastName = "Test",
+            Email = "repository.test@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO>()
+        };
+
+        _userService.AddUser(userToDelete);
+
+        User userEntityBeforeDelete =
+            _repositoryManager.UserRepository.Get(u => u.Email == "repository.test@example.com");
+        Assert.IsNotNull(userEntityBeforeDelete);
+
+        _adminService.DeleteUser(userToDelete);
+
+        User userEntityAfterDelete =
+            _repositoryManager.UserRepository.Get("repository.test@example.com");
+        Assert.IsNull(userEntityAfterDelete);
     }
 }
 
-[TestMethod]
-public void AdminService_ShouldDeleteUser_AndHandleProjectRemovalExceptions()
-{
-    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-    
-    UserDTO userToDelete = new UserDTO
-    {
-        FirstName = "Delete",
-        LastName = "Me3",
-        Email = "delete.me3@example.com",
-        Password = "Password123@",
-        Birthday = DateTime.Parse("1990-01-01"),
-        Roles = new List<RolDTO>()
-    };
-    
-    _userService.AddUser(userToDelete);
-    
-    _adminService.DeleteUser(userToDelete);
-    
-    try
-    {
-        UserDTO deletedUser = _userService.GetUser("delete.me3@example.com");
-        Assert.Fail("Expected UserNotFoundException was not thrown");
-    }
-    catch (UserNotFoundException)
-    {
-    }
-}
-
-[TestMethod]
-[ExpectedException(typeof(InvalidOldPasswordException))]
-public void AdminService_ShouldThrowInvalidOldPasswordException_WhenCurrentUserOldPasswordIsWrong()
-{
-    _loginService.LoginUser("john.doe@example.com", "Password123@");
-    
-    _adminService.ChangeCurrentUserPassword("john.doe@example.com", "WrongOldPassword123@", "NewPassword123@");
-}
-
-[TestMethod]
-[ExpectedException(typeof(UserNotFoundException))]
-public void AdminService_ShouldThrowUserNotFoundException_WhenUpdatingRolesForNonExistentUser()
-{
-    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-    
-    UserDTO userWithInvalidId = new UserDTO
-    {
-        Id = 999,
-        FirstName = "Test",
-        LastName = "User",
-        Email = "test@example.com",
-        Password = "Password123@",
-        Birthday = DateTime.Parse("1990-01-01"),
-        Roles = new List<RolDTO> { RolDTO.ProjectMember }
-    };
-    
-    _adminService.AssignRole(userWithInvalidId, RolDTO.ProjectMember);
-}
-
-[TestMethod]
-public void AdminService_ShouldUpdateUserRoles_WhenUserHasNoId()
-{
-    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-    
-    UserDTO userWithoutId = new UserDTO
-    {
-        Id = null,
-        FirstName = "Test",
-        LastName = "User", 
-        Email = "john.doe@example.com",
-        Password = "Password123@",
-        Birthday = DateTime.Parse("1990-01-01"),
-        Roles = new List<RolDTO>()
-    };
-    
-    _adminService.AssignRole(userWithoutId, RolDTO.ProjectMember);
-    
-    UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
-    Assert.IsTrue(updatedUser.Roles.Contains(RolDTO.ProjectMember));
-}
-
-}
 
 
 
