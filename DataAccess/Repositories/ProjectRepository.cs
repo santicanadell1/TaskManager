@@ -45,7 +45,7 @@ public class ProjectRepository : IRepository<Project>
 
     public void Delete(Project projectE)
     {
-        Project project = _db.Set<Project>()
+        var project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .FirstOrDefault(p => p.Name == projectE.Name);
 
@@ -60,7 +60,7 @@ public class ProjectRepository : IRepository<Project>
         if (_db.Set<Project>().Any(p => p.Name == project.Name && project.Id != p.Id))
             throw new DuplicatedProjectsNameException();
 
-        Project? existingProject = _db.Set<Project>().FirstOrDefault(p => p.Id == project.Id);
+        var existingProject = _db.Set<Project>().FirstOrDefault(p => p.Id == project.Id);
         if (existingProject == null) throw new ProjectNotFoundException();
 
         existingProject.Description = project.Description;
@@ -75,7 +75,7 @@ public class ProjectRepository : IRepository<Project>
 
     public void AddTask(string projectName, Task task)
     {
-        Project project = _db.Set<Project>()
+        var project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .FirstOrDefault(p => p.Name == projectName);
 
@@ -87,7 +87,7 @@ public class ProjectRepository : IRepository<Project>
 
     public void UpdateTask(string projectName, int? taskId, Task updatedTask)
     {
-        Project project = _db.Set<Project>()
+        var project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .ThenInclude(t => t.Resources)
             .Include(p => p.Tasks)
@@ -96,7 +96,7 @@ public class ProjectRepository : IRepository<Project>
 
         if (project == null) throw new ProjectNotFoundException();
 
-        Task task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         task.Title = updatedTask.Title;
@@ -113,13 +113,13 @@ public class ProjectRepository : IRepository<Project>
 
     public void RemoveTask(string projectName, int? taskId)
     {
-        Project project = _db.Set<Project>()
+        var project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .FirstOrDefault(p => p.Name == projectName);
 
         if (project == null) throw new ProjectNotFoundException();
 
-        Task? task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         project.Tasks.Remove(task);
@@ -128,14 +128,14 @@ public class ProjectRepository : IRepository<Project>
 
     public void AddPreviousTask(string projectName, int? taskId, Task previousTask)
     {
-        Project? project = _db.Set<Project>()
+        var project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .ThenInclude(t => t.PreviousTasks)
             .FirstOrDefault(p => p.Name == projectName);
 
         if (project == null) throw new ProjectNotFoundException();
 
-        Task? task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         if (!project.Tasks.Contains(previousTask))
@@ -147,14 +147,14 @@ public class ProjectRepository : IRepository<Project>
 
     public void AddResourceToTask(string projectName, int? taskId, Resource resource)
     {
-        Project? project = _db.Set<Project>()
+        var project = _db.Set<Project>()
             .Include(p => p.Tasks)
             .ThenInclude(t => t.Resources)
             .FirstOrDefault(p => p.Name == projectName);
 
         if (project == null) throw new ProjectNotFoundException();
 
-        Task? task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) throw new TaskRepositoryExceptions.TaskNotFoundException();
 
         if (task.Resources == null) task.Resources = new List<Resource>();

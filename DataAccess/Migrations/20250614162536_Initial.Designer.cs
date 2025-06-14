@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250614160432_Initial")]
+    [Migration("20250614162536_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -296,13 +296,13 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.Task", null)
                         .WithMany()
                         .HasForeignKey("ConcurrentTaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Task", null)
                         .WithMany()
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
@@ -362,13 +362,13 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.Task", null)
                         .WithMany()
                         .HasForeignKey("DependentTaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Task", null)
                         .WithMany()
                         .HasForeignKey("PreviousTaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 

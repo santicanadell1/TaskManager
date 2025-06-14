@@ -3,12 +3,12 @@
 public class RepositoryManager : IRepositoryManager
 {
     private readonly AppDbContext _context;
-    
-    private UserRepository _userRepository;
-    private ProjectRepository _projectRepository;
     private NotificationRepository _notificationRepository;
-    private TaskRepository _taskRepository;
+    private ProjectRepository _projectRepository;
     private ResourceRepository _resourceRepository;
+    private TaskRepository _taskRepository;
+
+    private UserRepository _userRepository;
 
     public RepositoryManager(AppDbContext context)
     {
