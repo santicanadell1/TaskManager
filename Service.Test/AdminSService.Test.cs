@@ -202,6 +202,27 @@ public class AdminSService_Test
         _adminService.DeleteUser(userToDeleteDTO); 
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOldPasswordException))]
+    public void AdminService_ShouldThrowInvalidOldPasswordException_WhenOldPasswordIsIncorrect()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        UserDTO userToUpdate = new UserDTO
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            Password = "OldPassword123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO>()
+        };
+
+        string newPassword = "NewPassword456@";
+
+        _adminService.ChangePassword(userToUpdate.Email, "IncorrectOldPassword");  
+    }
+
     
     
     
