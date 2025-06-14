@@ -127,7 +127,7 @@ public class UserRepositoryTests
     [ExpectedException(typeof(UserNotFoundException))]
     public void Update_ShouldThrowUserNotFoundException_WhenUserIsNull()
     {
-        _userRepository(null);
+        _userRepository.Update(null);
     }
 
     
