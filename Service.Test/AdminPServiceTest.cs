@@ -795,4 +795,49 @@ public class AdminPServiceTests
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "New Project");
         Assert.IsNull(project.ProjectLeader);
     }
+    
+   
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithTasks_WhenTasksExistInDatabase()
+    {
+        ProjectDTO initialProject = new ProjectDTO
+        {
+            Name = "Initial Project",
+            Description = "Initial project for task",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin
+        };
+    
+        _adminPservice.CreateProject(initialProject);
+    
+        TaskDTO existingTask = new TaskDTO
+        {
+            Title = "Existing Task",
+            Description = "Task Description",
+            Duration = 3,
+            ExpectedStartDate = DateTime.Today,
+            State = StateDTO.TODO
+        };
+    
+        _taskService.AddTask("Initial Project", existingTask);
+    
+        List<TaskDTO> savedTasks = _taskService.GetTasks("Initial Project");
+        TaskDTO savedTask = savedTasks.FirstOrDefault(t => t.Title == "Existing Task");
+        Assert.IsNotNull(savedTask);
+    
+        ProjectDTO projectWithTasks = new ProjectDTO
+        {
+            Name = "Project With Tasks",
+            Description = "Project with existing tasks",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            Tasks = new List<TaskDTO> { savedTask }
+        };
+    
+        _adminPservice.CreateProject(projectWithTasks);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Tasks");
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(createdProject.Tasks);
+    }
 }
