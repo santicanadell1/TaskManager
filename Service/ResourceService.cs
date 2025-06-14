@@ -157,7 +157,7 @@ public class ResourceService : IResourceService
             .Where(t =>
                 t._title != taskDTO.Title &&
                 t.ExpectedStartDate < taskDTO.ExpectedStartDate &&
-                t.Resources.Any(r => resourceIds.Contains((int)r.Id)))
+                t.Resources.Any(r => resourceIds.Contains((int)r.Id) && !r.ConcurrentUsage))
             .ToList();
         List<TaskDTO> prevDtos = _taskConverter.ToMinimalTaskDTOList(prevTasks);
         foreach (TaskDTO prevTaskDTO in prevDtos)
