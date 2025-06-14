@@ -166,10 +166,10 @@ public class UserRepositoryTests
         User addedUser = _userRepository.Get(u => u.Email == "test@email.com");
         Assert.IsNotNull(addedUser);
     
-        _userRepository
+        _userRepository.Delete(addedUser);
     
         User deletedUser = _userRepository.Get(u => u.Email == "test@email.com");
-        Assert.IsNull;
+        Assert.IsNull(deletedUser);
     }
     
     
