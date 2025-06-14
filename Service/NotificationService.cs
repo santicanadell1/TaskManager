@@ -61,6 +61,16 @@ namespace Service
                     AddNotificationToUser(user.Email, createdNotification.Id);
                 }
             }
+
+            if (project?.AdminProject != null)
+            {
+                AddNotificationToUser(project.AdminProject.Email, createdNotification.Id);
+            }
+
+            if (project?.ProjectLeader != null)
+            {
+                AddNotificationToUser(project.ProjectLeader.Email, createdNotification.Id);
+            }
         }
 
         public void AddNotificationToUser(string userEmail, int? notificationId)
