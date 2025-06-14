@@ -9,6 +9,24 @@
 <div class="manage-resources-container">
     <h3 class="manage-resources-title">Manage Resources</h3>
 
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <strong>Success!</strong> @successMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    @onclick="ClearMessages"></button>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <strong>Oops!</strong> @errorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    @onclick="ClearMessages"></button>
+        </div>
+    }
     <p>Click on a resource to edit:</p>
 
 
@@ -25,7 +43,6 @@
     </div>
 </div>
 
-
 @if (showEditModal)
 {
     <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="editResourceModal"
@@ -37,24 +54,6 @@
                     <button type="button" class="btn-close" @onclick="CloseEditModal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @if (!string.IsNullOrEmpty(successMessage))
-                    {
-                        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                            <i class="fas fa-check-circle me-2"></i>
-                            <strong>Success!</strong> @successMessage
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
-                                    @onclick="ClearMessages"></button>
-                        </div>
-                    }
-                    @if (!string.IsNullOrEmpty(errorMessage))
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                            <i class="fas fa-exclamation-circle me-2"></i>
-                            <strong>Oops!</strong> @errorMessage
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
-                                    @onclick="ClearMessages"></button>
-                        </div>
-                    }
                     <EditForm Model="@editingResource" OnValidSubmit="HandleEditSubmit">
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
