@@ -866,7 +866,9 @@ public class AdminPServiceTests
         _adminPservice.CreateProject(projectWithNonExistentTasks);
     
         Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Invalid Tasks");
-        Assert.IsNotNull()
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(createdProject.Tasks);
+        Assert.AreEqual(0, createdProject.Tasks.Count);
     }
 
     
