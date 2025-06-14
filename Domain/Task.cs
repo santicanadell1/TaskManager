@@ -7,7 +7,7 @@ public class Task
     public string _description;
     public int _duration;
     public List<Task> _previousTasks;
-    public List<Resource> _resources;
+    public List<Resource> _resources = new List<Resource>();
     public List<Task> _sameTimeTasks;
     public State _state;
     public string _title;

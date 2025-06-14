@@ -1,5 +1,6 @@
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 using Task = Domain.Task;
 
 namespace DataAccess;
@@ -41,7 +42,9 @@ public class TaskRepository : IRepository<Task>
 
     public List<Task> GetAll()
     {
-        return _db.Set<Task>().ToList();
+        return _db.Set<Task>()
+            .Include(t=> t.Resources)
+            .ToList();
     }
 
     public Task? Get(Func<Task, bool> filter)
