@@ -3,6 +3,7 @@ using DataAccess.Exceptions.ResourceRepositoryExceptions;
 using Domain;
 using Service.Converters;
 using Service.Exceptions.AdminSServiceExceptions;
+using Service.Exceptions.ResourceServiceExceptions;
 using Service.Models;
 using Task = Domain.Task;
 
@@ -975,4 +976,38 @@ public class ResourcesServiceTest
         Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today    && o.Item2 == 2));
         Assert.IsTrue(occupied.Any(o => o.Item1 == DateTime.Today.AddDays(5) && o.Item2 == 3));
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ResourceNotFoundException))]
+    public void UpdateResource_ShouldThrowResourceNotFoundException_WhenResourceDoesNotExist()
+    {
+        _loginService.LoginUser("adminSystem.user@example.com", "AdminPassword123@");
+    
+        ResourceDTO nonExistentResource = new ResourceDTO
+        {
+            Name = "Non Existent Resource",
+            Type = "TypeX",
+            Description = "This resource does not exist"
+        };
+    
+        _resourceService.UpdateResource(999, nonExistentResource);
+    }
+
+    [TestMethod]
+    public void GetWhenResourceOccupied_ShouldReturnEmptyList_WhenResourceDoesNotExist()
+    {
+        ResourceDTO nonExistentResource = new ResourceDTO
+        {
+            Id = 999,
+            Name = "Non Existent",
+            Type = "Type",
+            Description = "Description"
+        };
+    
+        List<(DateTime,int)> result = _resourceService.getWhenIsResourceOcupied(nonExistentResource);
+    
+        Assert.IsNotNull(result);
+        Assert.AreEqual(0, result.Count);
+    }
+
 }
