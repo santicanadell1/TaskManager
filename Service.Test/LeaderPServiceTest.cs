@@ -1085,7 +1085,36 @@ public void ExportProjects_CSV_ShouldIncludeResourcesInSeparateLines()
         AdminProyect = _userService.GetUser("admin.user@example.com")
     };
 
-   
+    _adminService.CreateProject(project);
+    _adminService.SetProjectLeader("Proyecto con Recursos", "leader.user@example.com");
+
+    TaskDTO taskWithEmptyResources = new TaskDTO
+    {
+        Title = "Tarea con Lista Recursos",
+        Description = "Tarea para probar lógica de recursos",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto con Recursos", taskWithEmptyResources);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsNotNull(csvResult);
+    Assert.IsTrue(csvResult.Contains("Proyecto con Recursos"));
+    Assert.IsTrue(csvResult.Contains("Tarea con Lista Recursos"));
+    
+    String[] lines = csvResult.Split(new[] {'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
+    Assert.IsTrue(lines.Length >= 2); 
 }
 
     
