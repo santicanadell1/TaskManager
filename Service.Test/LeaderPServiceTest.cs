@@ -989,8 +989,18 @@ public void ExportProjects_CSV_ShouldEscapeFieldsWithNewlines()
 
     DateTime baseDate = DateTime.Now.AddDays(10);
 
+    ProjectDTO projectWithNewlines = new ProjectDTO
+    {
+        Name = "Proyecto\ncon saltos",
+        Description = "Proyecto con saltos de línea",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
 
-    
+    _adminService.CreateProject(projectWithNewlines);
+    _adminService.SetProjectLeader("Proyecto\ncon saltos", "leader.user@example.com");
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
     CSVExporter csvExporter = new CSVExporter(_repositoryManager);
     LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
