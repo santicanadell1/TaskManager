@@ -348,7 +348,61 @@ public class AdminSService_Test
         Assert.IsTrue(updatedUser.Roles.Contains(roleToAssign));
     }
 
+    [TestMethod]
+public void AdminService_ShouldDeleteUser_WhenCurrentUserIsAlreadyAdminProject()
+{
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
     
+    UserDTO currentUser = LoggedUser.Current;
+    if (!currentUser.Roles.Contains(RolDTO.AdminProject))
+    {
+        currentUser.Roles.Add(RolDTO.AdminProject);
+    }
+    
+    UserDTO userToDelete = new UserDTO
+    {
+        FirstName = "Delete",
+        LastName = "Me2",
+        Email = "delete.me2@example.com",
+        Password = "Password123@",
+        Birthday = DateTime.Parse("1990-01-01"),
+        Roles = new List<RolDTO>()
+    };
+    
+    _userService.AddUser(userToDelete);
+    
+    _adminService.DeleteUser(userToDelete);
+    
+    try
+    {
+        UserDTO deletedUser = _userService.GetUser("delete.me2@example.com");
+        Assert.Fail("Expected UserNotFoundException was not thrown");
+    }
+    catch (UserNotFoundException)
+    {
+    }
+}
+
+[TestMethod]
+public void AdminService_ShouldDeleteUser_AndHandleProjectRemovalExceptions()
+{
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+    
+    UserDTO userToDelete = new UserDTO
+    {
+    ]3@example.com",
+        Password = "Password123@",
+        Birthday = DateTime.Parse("1990-01-01"),
+        Roles = new List<RolDTO>()
+    };
+    
+    _userService.AddUser(userToDelete);
+    
+    _adminService.DeleteUser(userToDelete);
+   
+}
+
+
     
 }
 
