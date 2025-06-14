@@ -978,7 +978,7 @@ public class AdminPServiceTests
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Leader");
         Assert.IsNotNull(project);
         Assert.IsNotNull(project.ProjectLeader);
-        Assert.AreEqual(project.ProjectLeader.Email);
+        Assert.AreEqual("normal.user@example.com", project.ProjectLeader.Email);
     }
 
     
