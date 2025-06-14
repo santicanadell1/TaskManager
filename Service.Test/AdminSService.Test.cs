@@ -325,7 +325,15 @@ public class AdminSService_Test
         Assert.AreEqual(passwordManager.HashPassword(newPassword), updatedUser.Password);
     }
     
-    
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void AdminService_ShouldThrowUserNotFoundException_WhenChangingPasswordForNonExistentUser()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        _adminService.ChangePassword( "OldPassword123@");
+    }
+
     
     
     
