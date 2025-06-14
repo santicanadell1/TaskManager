@@ -89,7 +89,7 @@ public class ResourceRepositoryTests
     [ExpectedException(typeof(ResourceIsNullException))]
     public void Add_ShouldThrowResourceIsNullException_WhenResourceIsNull()
     {
-        _resourceRepository(null);
+        _resourceRepository.Add(null);
     }
 
     
