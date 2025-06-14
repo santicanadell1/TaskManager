@@ -877,4 +877,129 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
         Console.WriteLine($"Número de líneas no vacías: {lines.Length}");
         Console.WriteLine($"Contenido (raw): '{csvResult}'");
     }
+    
+    [TestMethod]
+public void ExportProjects_CSV_ShouldEscapeFieldsWithCommas()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO projectWithCommas = new ProjectDTO
+    {
+        Name = "Proyecto, con comas",
+        Description = "Proyecto con comas en el nombre",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(projectWithCommas);
+    _adminService.SetProjectLeader("Proyecto, con comas", "leader.user@example.com");
+
+    TaskDTO taskWithCommas = new TaskDTO
+    {
+        Title = "Tarea, con comas",
+        Description = "Tarea con comas",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto, con comas", taskWithCommas);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsTrue(csvResult.Contains("\"Proyecto, con comas\""));
+    Assert.IsTrue(csvResult.Contains("\"Tarea, con comas\""));
+}
+
+[TestMethod]
+public void ExportProjects_CSV_ShouldEscapeFieldsWithQuotes()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO projectWithQuotes = new ProjectDTO
+    {
+        Name = "Proyecto \"con comillas\"",
+        Description = "Proyecto con comillas",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(projectWithQuotes);
+    _adminService.SetProjectLeader("Proyecto \"con comillas\"", "leader.user@example.com");
+
+    TaskDTO taskWithQuotes = new TaskDTO
+    {
+        Title = "Tarea \"con comillas\"",
+        Description = "Tarea con comillas",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto \"con comillas\"", taskWithQuotes);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsTrue(csvResult.Contains("\"Proyecto \"\"con comillas\"\"\""));
+    Assert.IsTrue(csvResult.Contains("\"Tarea \"\"con comillas\"\"\""));
+}
+
+[TestMethod]
+public void ExportProjects_CSV_ShouldEscapeFieldsWithNewlines()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+
+    
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsTrue(csvResult.Contains("\"Proyecto\ncon saltos\""));
+}
+
+    
+    
 }
