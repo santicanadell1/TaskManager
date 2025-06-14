@@ -31,7 +31,7 @@ public class TaskController
 
     public void UpdateTask(string projectName, string taskToUpdate, TaskDTO newUpdatedTask, bool solved = false)
     {
-        _taskService.UpdateTask(projectName, taskToUpdate, newUpdatedTask);
+        _taskService.UpdateTask(projectName, taskToUpdate, newUpdatedTask, solved);
     }
 
     public void DeleteTask(string projectName, string taskToDelete)
