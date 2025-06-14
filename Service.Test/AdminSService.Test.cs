@@ -261,7 +261,7 @@ public class AdminSService_Test
         };
 
         string newPassword = "123";  
-        _adminService.ChangePassword(userToUpdate.Email, newPassword, );  
+        _adminService.ChangePassword(userToUpdate.Email, newPassword, "Password123@");  
     }
 
 
