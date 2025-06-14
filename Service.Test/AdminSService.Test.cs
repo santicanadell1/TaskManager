@@ -291,6 +291,23 @@ public class AdminSService_Test
         Assert.AreEqual(newUserDTO.Email, createdUser.Email);
     }
     
+    [TestMethod]
+    public void AdminService_ShouldDeleteUser_WhenUserExistsAndAdminIsLoggedIn()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        UserDTO userToDelete = _userService.GetUser("john.doe@example.com");
+        Assert.IsNotNull(userToDelete);
+
+        _adminService.DeleteUser(userToDelete);
+
+       
+        catch (UserNotFoundException)
+        {
+
+        }
+    }
+    
 }
 
 
