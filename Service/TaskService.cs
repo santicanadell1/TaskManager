@@ -180,28 +180,21 @@ public class TaskService
     {
         try
         {
-            // Validar entrada
             if (string.IsNullOrEmpty(projectName))
             {
                 throw new ArgumentException("Project name cannot be null or empty");
             }
-
-            // Obtener proyecto
             Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
             if (project == null)
             {
                 throw new ProjectNotFoundException();
             }
-
-            // Verificar si hay tareas
             if (project.Tasks == null || !project.Tasks.Any())
             {
                 return new List<TaskDTO>();
             }
-
-            // Crear DTOs básicos - filtrar tareas con ID válido
             List<TaskDTO> taskDTOs = project.Tasks
-                .Where(t => t.Id.HasValue) // Solo tareas con ID válido
+                .Where(t => t.Id.HasValue)
                 .Select(t => new TaskDTO
                 {
                     Title = t.Title ?? string.Empty,
@@ -220,26 +213,18 @@ public class TaskService
                     PreviousTasks = new List<TaskDTO>(),
                     SameTimeTasks = new List<TaskDTO>()
                 }).ToList();
-
-            // Si no hay tareas válidas, retornar lista vacía
             if (!taskDTOs.Any())
             {
                 return new List<TaskDTO>();
             }
-
-            // Crear diccionario seguro - solo con IDs válidos
             Dictionary<int, TaskDTO> taskDict = taskDTOs
                 .Where(t => t.Id.HasValue)
                 .ToDictionary(t => t.Id.Value, t => t);
-
-            // Construir relaciones de manera segura
             foreach (Task task in project.Tasks.Where(t => t.Id.HasValue))
             {
                 if (!taskDict.ContainsKey(task.Id.Value)) continue;
 
                 TaskDTO taskDto = taskDict[task.Id.Value];
-
-                // Manejar PreviousTasks de manera segura
                 if (task.PreviousTasks != null)
                 {
                     foreach (Task prevTask in task.PreviousTasks)
@@ -250,8 +235,6 @@ public class TaskService
                         }
                     }
                 }
-
-                // Manejar SameTimeTasks de manera segura
                 if (task.SameTimeTasks != null)
                 {
                     foreach (Task sameTask in task.SameTimeTasks)
@@ -268,10 +251,9 @@ public class TaskService
         }
         catch (Exception ex)
         {
-            // Log del error para debugging
             Console.WriteLine($"Error in GetTasks for project '{projectName}': {ex.Message}");
             Console.WriteLine($"Stack trace: {ex.StackTrace}");
-            throw; // Re-lanzar para que el UI pueda manejarlo
+            throw;
         }
     }
 
