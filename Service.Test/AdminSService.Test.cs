@@ -301,7 +301,11 @@ public class AdminSService_Test
 
         _adminService.DeleteUser(userToDelete);
 
-       
+        try
+        {
+            UserDTO deletedUser = _userService.GetUser("john.doe@example.com");
+            Assert.Fail("Expected UserNotFoundException was not thrown");
+        }
         catch (UserNotFoundException)
         {
 
