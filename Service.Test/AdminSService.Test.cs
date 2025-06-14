@@ -445,7 +445,7 @@ public class AdminSService_Test
         _adminService.DeleteUser(userToDelete);
 
         User userEntityAfterDelete =
-            _repositoryManager.UserRepository.Get("repository.test@example.com");
+            _repositoryManager.UserRepository.Get(u => u.Email == "repository.test@example.com");
         Assert.IsNull(userEntityAfterDelete);
     }
 }
