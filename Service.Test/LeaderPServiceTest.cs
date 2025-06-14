@@ -1048,7 +1048,20 @@ public void ExportProjects_CSV_ShouldHandleEmptyFields()
 
     _taskService.AddTask("Proyecto Valido", taskWithEmpty);
 
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsNotNull(csvResult);
+    Assert.IsTrue(csvResult.Contains("Proyecto Valido"));
+    Assert.IsTrue(csvResult.Contains("Tarea Valida"));
+    
+    String[] lines = csvResult.Split(new[] {'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
+    Assert.IsTrue(lines.Length > 0);
 }
 
-
+    
 }
