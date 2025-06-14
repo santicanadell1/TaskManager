@@ -61,7 +61,22 @@ public class ResourceService : IResourceService
         return resourcesDTO;
     }
 
+    public List<ResourceDTO> GetResourcesForProject(string projectName)
+    {
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
 
+        foreach (Resource resource in _repositoryManager.ResourceRepository.GetAll())
+        {
+            if (resource.Project == null || resource.Project.Name == projectName)
+            {
+                resourcesDTO.Add(_resourceConverter.FromEntity(resource));
+            }
+        }
+        if (resourcesDTO.Count == 0) throw new NoResourcesFoundException();
+
+        return resourcesDTO;
+    }
 
     public void UpdateResource(int? id, ResourceDTO updatedResourceDTO)
     {
