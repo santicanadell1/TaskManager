@@ -115,4 +115,76 @@ public class UserRepositoryTests
 
         Assert.IsNull(_userRepository.Get(u => u.Email == "Email1@email.com"));
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void Add_ShouldThrowUserNotFoundException_WhenUserIsNull()
+    {
+        _userRepository.Add(null);
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void Update_ShouldThrowUserNotFoundException_WhenUserIsNull()
+    {
+        _userRepository.Update(null);
+    }
+
+    [TestMethod]
+    public void Update_ShouldUpdateAllUserProperties_WhenUserExists()
+    {
+        User originalUser = new User("Original", "User", "original@email.com", DateTime.Today.AddYears(-20), "OriginalPassword");
+        _userRepository.Add(originalUser);
+    
+        User addedUser = _userRepository.Get(u => u.Email == "original@email.com");
+        User updatedUser = new User("Updated", "Name", "original@email.com", DateTime.Today.AddYears(-25), "UpdatedPassword");
+        updatedUser.Id = addedUser.Id;
+    
+        _userRepository.Update(updatedUser);
+    
+        User retrievedUser = _userRepository.Get(u => u.Id == updatedUser.Id);
+        Assert.AreEqual("Updated", retrievedUser.FirstName);
+        Assert.AreEqual("Name", retrievedUser.LastName);
+        Assert.AreEqual("UpdatedPassword", retrievedUser.Password);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(Exception))]
+    public void Delete_ShouldThrowException_WhenUserDoesNotExist()
+    {
+        User nonExistentUser = new User("Non", "Existent", "nonexistent@email.com", DateTime.Today.AddYears(-18), "Password");
+    
+        _userRepository.Delete(nonExistentUser);
+    }
+
+    [TestMethod]
+    public void Delete_ShouldClearNotificationsAndTasks_WhenUserHasRelatedData()
+    {
+        User user = new User("Test", "User", "test@email.com", DateTime.Today.AddYears(-18), "Password");
+        _userRepository.Add(user);
+    
+        User addedUser = _userRepository.Get(u => u.Email == "test@email.com");
+        Assert.IsNotNull(addedUser);
+    
+        _userRepository.Delete(addedUser);
+    
+        User deletedUser = _userRepository.Get(u => u.Email == "test@email.com");
+        Assert.IsNull(deletedUser);
+    }
+    
+    [TestMethod]
+    public void ValidateDuplicateEmail_ShouldWork_WhenEmailDoesNotExist()
+    {
+        User user1 = new User("First", "User", "first@email.com", DateTime.Today.AddYears(-18), "Password");
+        User user2 = new User("Second", "User", "second@email.com", DateTime.Today.AddYears(-18), "Password");
+    
+        _userRepository.Add(user1);
+        _userRepository.Add(user2);
+    
+        List<User> users = _userRepository.GetAll();
+        Assert.AreEqual(2, users.Count);
+        Assert.IsTrue(users.Any(u => u.Email == "first@email.com"));
+        Assert.IsTrue(users.Any(u => u.Email == "second@email.com"));
+    }
+    
 }

@@ -3,6 +3,7 @@ using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
 using Domain.Exceptions.TaskExceptions;
+using Service.Converter;
 using Service.Converters;
 using Service.Exceptions.ResourceServiceExceptions;
 using Service.Models;
@@ -856,5 +857,138 @@ public class TaskServiceTest
         };
         _taskService.UpdateTask("Generic Project", "Task 2", updateDTO);
     }
+    
+    [TestMethod]
+public void ToMinimalTaskDTOList_ShouldReturnEmptyList_WhenTasksIsNull()
+{
+    TaskConverter taskConverter = new TaskConverter(_repositoryManager);
+    List<TaskDTO> result = taskConverter.ToMinimalTaskDTOList(null);
+    
+    Assert.IsNotNull(result);
+    Assert.AreEqual(0, result.Count);
+}
+
+[TestMethod]
+public void ConvertToEntityList_ShouldReturnEmptyList_WhenTaskDTOsIsNull()
+{
+    TaskConverter taskConverter = new TaskConverter(_repositoryManager);
+    List<Task> result = taskConverter.ConvertToEntityList(null);
+    
+    Assert.IsNotNull(result);
+    Assert.AreEqual(0, result.Count);
+}
+
+[TestMethod]
+public void ConvertToEntityList_ShouldConvertAllTasks_WhenTaskDTOsProvided()
+{
+    TaskConverter taskConverter = new TaskConverter(_repositoryManager);
+    
+    List<TaskDTO> taskDTOs = new List<TaskDTO>
+    {
+        new TaskDTO
+        {
+            Title = "Convert Task 1",
+            Description = "First task to convert",
+            ExpectedStartDate = DateTime.Now,
+            Duration = 2,
+            State = StateDTO.TODO,
+            Resources = new List<ResourceDTO>()
+        },
+        new TaskDTO
+        {
+            Title = "Convert Task 2", 
+            Description = "Second task to convert",
+            ExpectedStartDate = DateTime.Now.AddDays(1),
+            Duration = 3,
+            State = StateDTO.DOING,
+            Resources = new List<ResourceDTO>()
+        }
+    };
+    
+    List<Task> result = taskConverter.ConvertToEntityList(taskDTOs);
+    
+    Assert.IsNotNull(result);
+    Assert.AreEqual(2, result.Count);
+    Assert.AreEqual("Convert Task 1", result[0].Title);
+    Assert.AreEqual("Convert Task 2", result[1].Title);
+    Assert.AreEqual(State.TODO, result[0].State);
+    Assert.AreEqual(State.DOING, result[1].State);
+}
+
+[TestMethod]
+public void ConvertFromEntityList_ShouldReturnEmptyList_WhenTasksIsNull()
+{
+    TaskConverter taskConverter = new TaskConverter(_repositoryManager);
+    List<TaskDTO> result = taskConverter.ConvertFromEntityList(null);
+    
+    Assert.IsNotNull(result);
+    Assert.AreEqual(0, result.Count);
+}
+
+[TestMethod]
+public void ConvertFromEntityList_ShouldConvertAllTasks_WhenTasksProvided()
+{
+    TaskConverter taskConverter = new TaskConverter(_repositoryManager);
+    
+    List<Task> tasks = new List<Task>
+    {
+        new Task("Entity Task 1", "First entity task", DateTime.Now, 2, new List<Task>(), new List<Task>(), new List<Resource>()),
+        new Task("Entity Task 2", "Second entity task", DateTime.Now.AddDays(1), 3, new List<Task>(), new List<Task>(), new List<Resource>())
+    };
+    
+    tasks[0].State = State.TODO;
+    tasks[1].State = State.DOING;
+    
+    List<TaskDTO> result = taskConverter.ConvertFromEntityList(tasks);
+    
+    Assert.IsNotNull(result);
+    Assert.AreEqual(2, result.Count);
+    Assert.AreEqual("Entity Task 1", result[0].Title);
+    Assert.AreEqual("Entity Task 2", result[1].Title);
+    Assert.AreEqual(StateDTO.TODO, result[0].State);
+    Assert.AreEqual(StateDTO.DOING, result[1].State);
+}
+
+[TestMethod]
+public void GetExistingTasksFromIds_ShouldHandleTasksWithoutIds()
+{
+    TaskConverter taskConverter = new TaskConverter(_repositoryManager);
+    
+    List<TaskDTO> taskDTOsWithoutIds = new List<TaskDTO>
+    {
+        new TaskDTO
+        {
+            Id = null,
+            Title = "Task Without ID",
+            Description = "This task has no ID"
+        }
+    };
+    
+    List<Task> result = taskConverter.GetExistingTasksFromIds(taskDTOsWithoutIds);
+    
+    Assert.IsNotNull(result);
+    Assert.AreEqual(0, result.Count);
+}
+
+[TestMethod]
+public void GetExistingTasksFromIds_ShouldHandleNonExistentIds()
+{
+    TaskConverter taskConverter = new TaskConverter(_repositoryManager);
+    
+    List<TaskDTO> taskDTOsWithInvalidIds = new List<TaskDTO>
+    {
+        new TaskDTO
+        {
+            Id = 999999,
+            Title = "Task With Invalid ID",
+            Description = "This task has an ID that doesn't exist"
+        }
+    };
+    
+    List<Task> result = taskConverter.GetExistingTasksFromIds(taskDTOsWithInvalidIds);
+    
+    Assert.IsNotNull(result);
+    Assert.AreEqual(0, result.Count);
+}
 
 }

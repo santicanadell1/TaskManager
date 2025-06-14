@@ -5,6 +5,7 @@ using Domain;
 using Newtonsoft.Json;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.AdminSServiceExceptions;
+using Service.Exceptions.ExporterExeptions;
 using Service.Exceptions.LeaderPServiceException;
 using Service.Models;
 using Task = Domain.Task;
@@ -877,4 +878,458 @@ public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeade
         Console.WriteLine($"Número de líneas no vacías: {lines.Length}");
         Console.WriteLine($"Contenido (raw): '{csvResult}'");
     }
+    
+    [TestMethod]
+public void ExportProjects_CSV_ShouldEscapeFieldsWithCommas()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO projectWithCommas = new ProjectDTO
+    {
+        Name = "Proyecto, con comas",
+        Description = "Proyecto con comas en el nombre",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(projectWithCommas);
+    _adminService.SetProjectLeader("Proyecto, con comas", "leader.user@example.com");
+
+    TaskDTO taskWithCommas = new TaskDTO
+    {
+        Title = "Tarea, con comas",
+        Description = "Tarea con comas",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto, con comas", taskWithCommas);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsTrue(csvResult.Contains("\"Proyecto, con comas\""));
+    Assert.IsTrue(csvResult.Contains("\"Tarea, con comas\""));
+}
+
+[TestMethod]
+public void ExportProjects_CSV_ShouldEscapeFieldsWithQuotes()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO projectWithQuotes = new ProjectDTO
+    {
+        Name = "Proyecto \"con comillas\"",
+        Description = "Proyecto con comillas",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(projectWithQuotes);
+    _adminService.SetProjectLeader("Proyecto \"con comillas\"", "leader.user@example.com");
+
+    TaskDTO taskWithQuotes = new TaskDTO
+    {
+        Title = "Tarea \"con comillas\"",
+        Description = "Tarea con comillas",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto \"con comillas\"", taskWithQuotes);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsTrue(csvResult.Contains("\"Proyecto \"\"con comillas\"\"\""));
+    Assert.IsTrue(csvResult.Contains("\"Tarea \"\"con comillas\"\"\""));
+}
+
+[TestMethod]
+public void ExportProjects_CSV_ShouldEscapeFieldsWithNewlines()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO projectWithNewlines = new ProjectDTO
+    {
+        Name = "Proyecto\ncon saltos",
+        Description = "Proyecto con saltos de línea",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(projectWithNewlines);
+    _adminService.SetProjectLeader("Proyecto\ncon saltos", "leader.user@example.com");
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsTrue(csvResult.Contains("\"Proyecto\ncon saltos\""));
+}
+
+[TestMethod]
+public void ExportProjects_CSV_ShouldHandleEmptyFields()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO projectWithValid = new ProjectDTO
+    {
+        Name = "Proyecto Valido",
+        Description = "Proyecto válido para test de campos vacíos",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(projectWithValid);
+    _adminService.SetProjectLeader("Proyecto Valido", "leader.user@example.com");
+
+    TaskDTO taskWithEmpty = new TaskDTO
+    {
+        Title = "Tarea Valida",
+        Description = "Tarea válida sin recursos",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto Valido", taskWithEmpty);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsNotNull(csvResult);
+    Assert.IsTrue(csvResult.Contains("Proyecto Valido"));
+    Assert.IsTrue(csvResult.Contains("Tarea Valida"));
+    
+    String[] lines = csvResult.Split(new[] {'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
+    Assert.IsTrue(lines.Length > 0);
+}
+
+[TestMethod]
+public void ExportProjects_CSV_ShouldIncludeResourcesInSeparateLines()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+
+    ProjectDTO project = new ProjectDTO
+    {
+        Name = "Proyecto con Recursos",
+        Description = "Proyecto con recursos",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(project);
+    _adminService.SetProjectLeader("Proyecto con Recursos", "leader.user@example.com");
+
+    TaskDTO taskWithEmptyResources = new TaskDTO
+    {
+        Title = "Tarea con Lista Recursos",
+        Description = "Tarea para probar lógica de recursos",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto con Recursos", taskWithEmptyResources);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsNotNull(csvResult);
+    Assert.IsTrue(csvResult.Contains("Proyecto con Recursos"));
+    Assert.IsTrue(csvResult.Contains("Tarea con Lista Recursos"));
+    
+    String[] lines = csvResult.Split(new[] {'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
+    Assert.IsTrue(lines.Length >= 2); 
+}
+
+[TestMethod]
+public void ExportProjects_CSV_ShouldHandleTasksWithoutResources()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO project = new ProjectDTO
+    {
+        Name = "Proyecto Sin Recursos",
+        Description = "Proyecto sin recursos",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(project);
+    _adminService.SetProjectLeader("Proyecto Sin Recursos", "leader.user@example.com");
+
+    TaskDTO taskWithoutResources = new TaskDTO
+    {
+        Title = "Tarea Sin Recursos",
+        Description = "Tarea sin recursos",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto Sin Recursos", taskWithoutResources);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+    LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsNotNull(csvResult);
+    Assert.IsTrue(csvResult.Contains("Proyecto Sin Recursos"));
+    Assert.IsTrue(csvResult.Contains("Tarea Sin Recursos"));
+}
+
+[TestMethod]
+[ExpectedException(typeof(NullProjectsCanNotBeImported))]
+public void ExportProjects_ShouldThrowNullProjectsCanNotBeImported_WhenProjectsListIsNull()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    TestExporterForNull testExporter = new TestExporterForNull();
+    LeaderPService leaderServiceWithTestExporter = new LeaderPService(_repositoryManager, testExporter);
+
+    testExporter.SimulateNullProjects();
+}
+
+[TestMethod]
+public void ExportProjects_ShouldFilterNullProjects_WhenProjectsListContainsNullElements()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO validProject = new ProjectDTO
+    {
+        Name = "Valid Project",
+        Description = "Valid project for null test",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(validProject);
+    _adminService.SetProjectLeader("Valid Project", "leader.user@example.com");
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    TestExporterWithNullElements testExporter = new TestExporterWithNullElements();
+    LeaderPService leaderServiceWithTestExporter = new LeaderPService(_repositoryManager, testExporter);
+
+    string result = leaderServiceWithTestExporter.ExportProjects();
+
+    Assert.IsNotNull(result);
+    Assert.IsTrue(result.Contains("1 valid project"));
+}
+
+public class TestExporterForNull : ExporterBase
+{
+    protected override string ExportData(List<ProjectDTO> projects)
+    {
+        return "Test export data";
+    }
+
+    public void SimulateNullProjects()
+    {
+        Export(null);
+    }
+}
+
+public class TestExporterWithNullElements : ExporterBase
+{
+    protected override string ExportData(List<ProjectDTO> projects)
+    {
+        return $"{projects.Count} valid project";
+    }
+
+    public string TestExportWithNullElements(List<ProjectDTO> projectsWithNull)
+    {
+        return Export(projectsWithNull);
+    }
+}
+
+[TestMethod]
+[ExpectedException(typeof(TheProjectDoesNotHaveAProjectLeader))]
+public void LeaderPService_ShouldThrowTheProjectDoesNotHaveAProjectLeader_WhenProjectHasNoLeader()
+{
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+    
+    ProjectDTO projectWithoutLeader = new ProjectDTO
+    {
+        Name = "Project Without Leader",
+        Description = "Project that has no leader assigned",
+        StartDate = DateTime.Now.AddDays(1),
+        AdminProyect = _userService.GetUser("admin.user@example.com"),
+        ProjectLeader = null
+    };
+    
+    _adminService.CreateProject(projectWithoutLeader);
+    
+    TestAdminPServiceForException testAdminService = new TestAdminPServiceForException(_repositoryManager);
+    testAdminService.TriggerProjectDoesNotHaveLeaderException("Project Without Leader");
+}
+
+[TestMethod]
+[ExpectedException(typeof(TheProjectAlredyHasALeader))]
+public void LeaderPService_ShouldThrowTheProjectAlredyHasALeader_WhenProjectAlreadyHasLeader()
+{
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+    
+    ProjectDTO projectWithLeader = new ProjectDTO
+    {
+        Name = "Project With Leader",
+        Description = "Project that already has a leader",
+        StartDate = DateTime.Now.AddDays(1),
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+    
+    _adminService.CreateProject(projectWithLeader);
+    _adminService.SetProjectLeader("Project With Leader", "leader.user@example.com");
+    
+    UserDTO anotherLeader = new UserDTO
+    {
+        FirstName = "Another",
+        LastName = "Leader",
+        Email = "another.leader2@example.com",
+        Password = "Password123@",
+        Birthday = DateTime.Parse("1990-01-01"),
+        Roles = new List<RolDTO> { RolDTO.ProjectLeader }
+    };
+    
+    _userService.AddUser(anotherLeader);
+    
+    _adminService.SetProjectLeader("Project With Leader", "another.leader2@example.com");
+}
+
+[TestMethod]
+[ExpectedException(typeof(UnableToExportProject))]
+public void LeaderPService_ShouldThrowUnableToExportProject_WhenExportFails()
+{
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+    
+    FailingExporter failingExporter = new FailingExporter();
+    LeaderPService leaderServiceWithFailingExporter = new LeaderPService(_repositoryManager, failingExporter);
+    
+    leaderServiceWithFailingExporter.ExportProjects();
+}
+
+public class TestAdminPServiceForException : AdminPService
+{
+    public TestAdminPServiceForException(IRepositoryManager repositoryManager) : base(repositoryManager)
+    {
+    }
+    
+    public void TriggerProjectDoesNotHaveLeaderException(string projectName)
+    {
+        RemoveProjectLeader(projectName);
+    }
+}
+
+public class FailingExporter : ExporterBase
+{
+    protected override string ExportData(List<ProjectDTO> projects)
+    {
+        throw new Exception("Simulated export failure");
+    }
+}
+
 }

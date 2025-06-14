@@ -795,4 +795,365 @@ public class AdminPServiceTests
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "New Project");
         Assert.IsNull(project.ProjectLeader);
     }
+    
+   
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithTasks_WhenTasksExistInDatabase()
+    {
+        ProjectDTO initialProject = new ProjectDTO
+        {
+            Name = "Initial Project",
+            Description = "Initial project for task",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin
+        };
+    
+        _adminPservice.CreateProject(initialProject);
+    
+        TaskDTO existingTask = new TaskDTO
+        {
+            Title = "Existing Task",
+            Description = "Task Description",
+            Duration = 3,
+            ExpectedStartDate = DateTime.Today,
+            State = StateDTO.TODO
+        };
+    
+        _taskService.AddTask("Initial Project", existingTask);
+    
+        List<TaskDTO> savedTasks = _taskService.GetTasks("Initial Project");
+        TaskDTO savedTask = savedTasks.FirstOrDefault(t => t.Title == "Existing Task");
+        Assert.IsNotNull(savedTask);
+    
+        ProjectDTO projectWithTasks = new ProjectDTO
+        {
+            Name = "Project With Tasks",
+            Description = "Project with existing tasks",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            Tasks = new List<TaskDTO> { savedTask }
+        };
+    
+        _adminPservice.CreateProject(projectWithTasks);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Tasks");
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(createdProject.Tasks);
+        
+    }
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithNonExistentTasks_WhenTasksNotInDatabase()
+    {
+        TaskDTO nonExistentTask = new TaskDTO
+        {
+            Id = 999,
+            Title = "Non Existent Task",
+            Description = "Task that doesn't exist",
+            Duration = 3,
+            ExpectedStartDate = DateTime.Today,
+            State = StateDTO.TODO
+        };
+    
+        ProjectDTO projectWithNonExistentTasks = new ProjectDTO
+        {
+            Name = "Project With Invalid Tasks",
+            Description = "Project with non-existent tasks",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            Tasks = new List<TaskDTO> { nonExistentTask }
+        };
+    
+        _adminPservice.CreateProject(projectWithNonExistentTasks);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Invalid Tasks");
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(createdProject.Tasks);
+        Assert.AreEqual(0, createdProject.Tasks.Count);
+    }
+
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithExistingMembers_WhenMembersExistInDatabase()
+    {
+        ProjectDTO projectWithMembers = new ProjectDTO
+        {
+            Name = "Project With Existing Members",
+            Description = "Project with existing members",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            Members = new List<UserDTO> { UserDTO }
+        };
+    
+        _adminPservice.CreateProject(projectWithMembers);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Existing Members");
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(createdProject.Members);
+        Assert.AreEqual(1, createdProject.Members.Count);
+        Assert.AreEqual("member.user@example.com", createdProject.Members[0].Email);
+    }
+    
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithNonExistentMembers_WhenMembersNotInDatabase()
+    {
+        UserDTO nonExistentMember = new UserDTO
+        {
+            FirstName = "Non",
+            LastName = "Existent",
+            Email = "nonexistent@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
+        };
+    
+        ProjectDTO projectWithNonExistentMembers = new ProjectDTO
+        {
+            Name = "Project With Invalid Members",
+            Description = "Project with non-existent members",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            Members = new List<UserDTO> { nonExistentMember }
+        };
+    
+        _adminPservice.CreateProject(projectWithNonExistentMembers);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Invalid Members");
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(createdProject.Members);
+        Assert.AreEqual(0, createdProject.Members.Count);
+    }
+
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithNullAdminProyect_WhenAdminProyectIsNull()
+    {
+        ProjectDTO projectWithNullAdmin = new ProjectDTO
+        {
+            Name = "Project With Null Admin",
+            Description = "Project with null AdminProyect",
+            StartDate = DateTime.Today,
+            AdminProyect = null,
+            Members = new List<UserDTO>()
+        };
+    
+        _adminPservice.CreateProject(projectWithNullAdmin);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Null Admin");
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(createdProject.AdminProject);
+    }
+    
+    
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithNullProjectLeader_WhenProjectLeaderIsNull()
+    {
+        ProjectDTO projectWithNullLeader = new ProjectDTO
+        {
+            Name = "Project With Null Leader",
+            Description = "Project with null ProjectLeader",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            ProjectLeader = null
+        };
+    
+        _adminPservice.CreateProject(projectWithNullLeader);
+    
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Null Leader");
+        Assert.IsNotNull(project);
+        Assert.IsNull(project.ProjectLeader);
+    }
+
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithExistingProjectLeader_WhenProjectLeaderExists()
+    {
+        ProjectDTO projectWithLeader = new ProjectDTO
+        {
+            Name = "Project With Leader",
+            Description = "Project with leader",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            ProjectLeader = Leader
+        };
+    
+        _adminPservice.CreateProject(projectWithLeader);
+    
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Leader");
+        Assert.IsNotNull(project);
+        Assert.IsNotNull(project.ProjectLeader);
+        Assert.AreEqual("normal.user@example.com", project.ProjectLeader.Email);
+    }
+
+    [TestMethod]
+[ExpectedException(typeof(Exception))]
+public void AssignMembersToProject_ShouldThrowException_WhenProjectNameIsNull()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    List<UserDTO> membersToAdd = new List<UserDTO>
+    {
+        _userservice.GetUser("member.user@example.com")
+    };
+    
+    _adminPservice.AssignMembersToProject(null, membersToAdd);
+}
+
+[TestMethod]
+[ExpectedException(typeof(Exception))]
+public void AssignMembersToProject_ShouldThrowException_WhenProjectNameIsEmpty()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    List<UserDTO> membersToAdd = new List<UserDTO>
+    {
+        _userservice.GetUser("member.user@example.com")
+    };
+    
+    _adminPservice.AssignMembersToProject("", membersToAdd);
+}
+
+[TestMethod]
+[ExpectedException(typeof(Exception))]
+public void AssignMembersToProject_ShouldThrowException_WhenMembersListIsNull()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Test Project for Null Members",
+        Description = "Test project",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    _adminPservice.AssignMembersToProject("Test Project for Null Members", null);
+}
+
+[TestMethod]
+[ExpectedException(typeof(Exception))]
+public void AssignMembersToProject_ShouldThrowException_WhenMembersListIsEmpty()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Test Project for Empty Members",
+        Description = "Test project",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    _adminPservice.AssignMembersToProject("Test Project for Empty Members", new List<UserDTO>());
+}
+
+[TestMethod]
+[ExpectedException(typeof(UserIsAlreadyAMemberException))]
+public void AssignMembersToProject_ShouldThrowUserIsAlreadyAMemberException_WhenUserAlreadyMemberById()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Test Project Member By ID",
+        Description = "Test project",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    UserDTO memberToAdd = _userservice.GetUser("member.user@example.com");
+    _adminPservice.AssignMembersToProject("Test Project Member By ID", new List<UserDTO> { memberToAdd });
+    
+    UserDTO sameMemberDifferentInstance = new UserDTO
+    {
+        FirstName = "User",
+        LastName = "Member", 
+        Email = "member.user@example.com",
+        Password = "Password123@",
+        Birthday = DateTime.Parse("1990-01-01"),
+        Roles = new List<RolDTO> { RolDTO.ProjectMember }
+    };
+    
+    _adminPservice.AssignMembersToProject("Test Project Member By ID", new List<UserDTO> { sameMemberDifferentInstance });
+}
+
+[TestMethod]
+public void RemoveAdminFromProject_ShouldRemoveAdmin_WhenProjectHasAdmin()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Project With Admin To Remove",
+        Description = "Project that has an admin",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    _adminPservice.RemoveAdminFromProject("Project With Admin To Remove", "admin.user@example.com");
+    
+    Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Admin To Remove");
+    Assert.IsNull(project.AdminProject);
+}
+
+[TestMethod]
+[ExpectedException(typeof(ProjectNotFoundException))]
+public void RemoveAdminFromProject_ShouldThrowProjectNotFoundException_WhenProjectDoesNotExist()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    _adminPservice.RemoveAdminFromProject("NonExistent Project", "admin.user@example.com");
+}
+
+[TestMethod]
+[ExpectedException(typeof(UserIsNotAMemberException))]
+public void RemoveAdminFromProject_ShouldThrowUserIsNotAMemberException_WhenProjectHasNoAdmin()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Project For Admin Removal",
+        Description = "Project to test admin removal",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project For Admin Removal");
+    project.AdminProject = null;
+    _repositoryManager.ProjectRepository.Update(project);
+    
+    _adminPservice.RemoveAdminFromProject("Project For Admin Removal", "admin.user@example.com");
+}
+
+[TestMethod]
+[ExpectedException(typeof(UserIsNotAMemberException))]
+public void RemoveAdminFromProject_ShouldThrowUserIsNotAMemberException_WhenEmailDoesNotMatchAdmin()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Project With Different Admin",
+        Description = "Project with specific admin",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    _adminPservice.RemoveAdminFromProject("Project With Different Admin", "different.admin@example.com");
+}
 }
