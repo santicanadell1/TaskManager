@@ -891,6 +891,37 @@ public class AdminPServiceTests
         Assert.AreEqual(1, createdProject.Members.Count);
         Assert.AreEqual("member.user@example.com", createdProject.Members[0].Email);
     }
+    
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithNonExistentMembers_WhenMembersNotInDatabase()
+    {
+        UserDTO nonExistentMember = new UserDTO
+        {
+            FirstName = "Non",
+            LastName = "Existent",
+            Email = "nonexistent@example.com",
+            Password = "Password123@",
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
+        };
+    
+        ProjectDTO projectWithNonExistentMembers = new ProjectDTO
+        {
+            Name = "Project With Invalid Members",
+            Description = "Project with non-existent members",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            Members = new List<UserDTO> { nonExistentMember }
+        };
+    
+        _adminPservice.CreateProject(projectWithNonExistentMembers);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Invalid Members");
+        Assert.IsNotNull(createdProject);
+        Assert.IsNotNull(createdProject.Members);
+        Assert.AreEqual(0);
+    }
+
 
     
 }
