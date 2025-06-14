@@ -1063,5 +1063,30 @@ public void ExportProjects_CSV_ShouldHandleEmptyFields()
     Assert.IsTrue(lines.Length > 0);
 }
 
+[TestMethod]
+public void ExportProjects_CSV_ShouldIncludeResourcesInSeparateLines()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+
+    ProjectDTO project = new ProjectDTO
+    {
+        Name = "Proyecto con Recursos",
+        Description = "Proyecto con recursos",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+   
+}
+
     
 }
