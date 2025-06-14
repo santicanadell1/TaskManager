@@ -864,34 +864,29 @@ public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader
     }
 
     [TestMethod]
-    public void ExportProjects_CSV_ShouldReturnOnlyHeader_WhenNoProjectsExist()
+    public void ExportProjects_CSV_ShouldReturnEmpty_WhenNoProjectsExist()
     {
         List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
         foreach (Project proj in existingProjects)
         {
             _repositoryManager.ProjectRepository.Delete(proj);
         }
-
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
         var csvExporter = new CSVExporter(_repositoryManager);
         var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
-
         string csvResult = leaderServiceWithCsv.ExportProjects();
-
         Assert.IsNotNull(csvResult, "El resultado no debe ser null");
-
-        Assert.IsTrue(csvResult.Contains("Proyecto,Fecha de Inicio,Tarea,Fecha de Inicio,Duración,Crítico,Recursos"),
-            "Debe contener el header CSV correcto");
-
-        string[] lines = csvResult.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        Assert.AreEqual(1, lines.Length, "Debe contener solo el header cuando no hay proyectos");
-
-        Assert.AreEqual("Proyecto,Fecha de Inicio,Tarea,Fecha de Inicio,Duración,Crítico,Recursos",
-            lines[0].Trim(), "El header debe ser exactamente el esperado");
+        string trimmed = csvResult.Trim();
+        Assert.IsTrue(string.IsNullOrEmpty(trimmed),
+            "Debe devolver cadena vacía cuando no hay proyectos");
+        string[] lines = csvResult
+            .Split(new[] {'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
+        Assert.AreEqual(0, lines.Length,
+            "No debe haber líneas cuando no hay proyectos");
 
         Console.WriteLine("=== RESULTADO SIN PROYECTOS ===");
-        Console.WriteLine($"Número de líneas: {lines.Length}");
-        Console.WriteLine($"Contenido: '{csvResult}'");
+        Console.WriteLine($"Número de líneas no vacías: {lines.Length}");
+        Console.WriteLine($"Contenido (raw): '{csvResult}'");
     }
 }
