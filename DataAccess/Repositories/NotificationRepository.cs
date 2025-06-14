@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
 
-public class NotificationRepository:IRepository<Notification>
+public class NotificationRepository : IRepository<Notification>
 {
     protected readonly AppDbContext _db;
 
@@ -27,8 +27,8 @@ public class NotificationRepository:IRepository<Notification>
     public Notification? Get(Func<Notification, bool> filter)
     {
         return _db.Set<Notification>()
-            .Include(n => n.Project)         
-            .ThenInclude(p => p.Members)       
+            .Include(n => n.Project)
+            .ThenInclude(p => p.Members)
             .FirstOrDefault(filter);
     }
 
@@ -36,11 +36,8 @@ public class NotificationRepository:IRepository<Notification>
     {
         try
         {
-            Notification existingNotification = _db.Notifications.Find(newNotification.Id);
-            if (existingNotification == null)
-            {
-                throw new NotificationNotFoundException();
-            }
+            var existingNotification = _db.Notifications.Find(newNotification.Id);
+            if (existingNotification == null) throw new NotificationNotFoundException();
 
             existingNotification.Description = newNotification.Description;
             existingNotification.IsRead = newNotification.IsRead;

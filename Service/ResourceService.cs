@@ -16,12 +16,15 @@ public class ResourceService : IResourceService
     private readonly IRepositoryManager _repositoryManager;
     private readonly ResourceConverter _resourceConverter;
     private readonly RolConverter _rolConverter;
+    private readonly TaskConverter _taskConverter;
+    
 
     public ResourceService(IRepositoryManager repositoryManager)
     {
         _repositoryManager = repositoryManager;
         _rolConverter = new RolConverter();
         _resourceConverter = new ResourceConverter(_repositoryManager);
+        _taskConverter = new TaskConverter(_repositoryManager);
     }
 
     public void AddResource(ResourceDTO resourceDTO)
@@ -141,6 +144,31 @@ public class ResourceService : IResourceService
         return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
     }
 
+    public TaskDTO updateResourceDependencies(TaskDTO taskDTO, string ProjectName)
+    {
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == ProjectName);
+        taskDTO.PreviousTasks ??= new List<TaskDTO>();
+        taskDTO.Resources     ??= new List<ResourceDTO>();
+        HashSet<int> resourceIds = taskDTO.Resources
+            .Where(r => r.Id.HasValue)
+            .Select(r => r.Id.Value)
+            .ToHashSet();
+        List<Task> prevTasks = project.Tasks
+            .Where(t =>
+                t._title != taskDTO.Title &&
+                t.ExpectedStartDate < taskDTO.ExpectedStartDate &&
+                t.Resources.Any(r => resourceIds.Contains((int)r.Id) && !r.ConcurrentUsage))
+            .ToList();
+        List<TaskDTO> prevDtos = _taskConverter.ToMinimalTaskDTOList(prevTasks);
+        foreach (TaskDTO prevTaskDTO in prevDtos)
+        {
+            if(taskDTO.PreviousTasks.Any(t => t.Id == prevTaskDTO.Id) == false)
+                taskDTO.PreviousTasks.Add(prevTaskDTO);
+        }
+
+        return taskDTO;
+    }
+
     public bool IsAvailable(ResourceDTO res, DateTime startDate, int duration, string taskTitle = "")
     {
         if (res.ConcurrentUsage)
@@ -148,7 +176,7 @@ public class ResourceService : IResourceService
         DateTime endDate = startDate.AddDays(duration);
         var tasksUsingResource = _repositoryManager.TaskRepository
             .GetAll()
-            .Where(t => t.Resources.Any(r => r.Id == res.Id) && t.Title != taskTitle);
+            .Where(t => t.Resources.Any(r => r.Id == res.Id) && t.Title != taskTitle && t.State != State.DONE);
         foreach (var task in tasksUsingResource)
         {
             DateTime taskStart = task.ExpectedStartDate.Date;

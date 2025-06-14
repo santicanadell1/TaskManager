@@ -183,14 +183,12 @@ namespace DataAccess.Migrations
                         name: "FK_ConcurrentTasks_Tasks_ConcurrentTaskId",
                         column: x => x.ConcurrentTaskId,
                         principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ConcurrentTasks_Tasks_TaskId",
                         column: x => x.TaskId,
                         principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -207,14 +205,12 @@ namespace DataAccess.Migrations
                         name: "FK_TaskDependencies_Tasks_DependentTaskId",
                         column: x => x.DependentTaskId,
                         principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_TaskDependencies_Tasks_PreviousTaskId",
                         column: x => x.PreviousTaskId,
                         principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

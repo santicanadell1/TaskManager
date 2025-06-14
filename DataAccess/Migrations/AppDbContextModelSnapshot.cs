@@ -293,13 +293,13 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.Task", null)
                         .WithMany()
                         .HasForeignKey("ConcurrentTaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Task", null)
                         .WithMany()
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
@@ -359,13 +359,13 @@ namespace DataAccess.Migrations
                     b.HasOne("Domain.Task", null)
                         .WithMany()
                         .HasForeignKey("DependentTaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Task", null)
                         .WithMany()
                         .HasForeignKey("PreviousTaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 

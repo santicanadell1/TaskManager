@@ -34,14 +34,6 @@ public class UserRepository : IRepository<User>
         }
     }
 
-    private void validateDuplicateEmail(string email)
-    {
-        if (_db.Set<User>().ToList().Any(u => u.Email == email))
-        {
-            throw new UserEmailIsDuplicatedException();
-        }
-    }
-
     public User? Get(Func<User, bool> filter)
     {
         return _db.Set<User>()
@@ -53,17 +45,11 @@ public class UserRepository : IRepository<User>
 
     public void Update(User updatedUser)
     {
-        if (updatedUser == null)
-        {
-            throw new UserNotFoundException();
-        }
+        if (updatedUser == null) throw new UserNotFoundException();
 
-        User? existingUser = _db.Users.FirstOrDefault(u => u.Id == updatedUser.Id);
+        var existingUser = _db.Users.FirstOrDefault(u => u.Id == updatedUser.Id);
 
-        if (existingUser == null)
-        {
-            throw new UserNotFoundException();
-        }
+        if (existingUser == null) throw new UserNotFoundException();
 
         existingUser.FirstName = updatedUser.FirstName;
         existingUser.LastName = updatedUser.LastName;
@@ -87,7 +73,7 @@ public class UserRepository : IRepository<User>
     {
         try
         {
-            User existingUser = _db.Users
+            var existingUser = _db.Users
                 .Include(u => u.Notifications)
                 .Include(u => u.Tasks)
                 .FirstOrDefault(u => u.Email == user.Email);
@@ -105,5 +91,10 @@ public class UserRepository : IRepository<User>
         {
             throw new Exception($"Error deleting user: {e.Message}", e);
         }
+    }
+
+    private void validateDuplicateEmail(string email)
+    {
+        if (_db.Set<User>().ToList().Any(u => u.Email == email)) throw new UserEmailIsDuplicatedException();
     }
 }
