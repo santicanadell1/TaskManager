@@ -981,5 +981,179 @@ public class AdminPServiceTests
         Assert.AreEqual("normal.user@example.com", project.ProjectLeader.Email);
     }
 
+    [TestMethod]
+[ExpectedException(typeof(Exception))]
+public void AssignMembersToProject_ShouldThrowException_WhenProjectNameIsNull()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
     
+    List<UserDTO> membersToAdd = new List<UserDTO>
+    {
+        _userservice.GetUser("member.user@example.com")
+    };
+    
+    _adminPservice.AssignMembersToProject(null, membersToAdd);
+}
+
+[TestMethod]
+[ExpectedException(typeof(Exception))]
+public void AssignMembersToProject_ShouldThrowException_WhenProjectNameIsEmpty()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    List<UserDTO> membersToAdd = new List<UserDTO>
+    {
+        _userservice.GetUser("member.user@example.com")
+    };
+    
+    _adminPservice.AssignMembersToProject("", membersToAdd);
+}
+
+[TestMethod]
+[ExpectedException(typeof(Exception))]
+public void AssignMembersToProject_ShouldThrowException_WhenMembersListIsNull()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Test Project for Null Members",
+        Description = "Test project",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    _adminPservice.AssignMembersToProject("Test Project for Null Members", null);
+}
+
+[TestMethod]
+[ExpectedException(typeof(Exception))]
+public void AssignMembersToProject_ShouldThrowException_WhenMembersListIsEmpty()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Test Project for Empty Members",
+        Description = "Test project",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    _adminPservice.AssignMembersToProject("Test Project for Empty Members", new List<UserDTO>());
+}
+
+[TestMethod]
+[ExpectedException(typeof(UserIsAlreadyAMemberException))]
+public void AssignMembersToProject_ShouldThrowUserIsAlreadyAMemberException_WhenUserAlreadyMemberById()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Test Project Member By ID",
+        Description = "Test project",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    UserDTO memberToAdd = _userservice.GetUser("member.user@example.com");
+    _adminPservice.AssignMembersToProject("Test Project Member By ID", new List<UserDTO> { memberToAdd });
+    
+    UserDTO sameMemberDifferentInstance = new UserDTO
+    {
+        FirstName = "User",
+        LastName = "Member", 
+        Email = "member.user@example.com",
+        Password = "Password123@",
+        Birthday = DateTime.Parse("1990-01-01"),
+        Roles = new List<RolDTO> { RolDTO.ProjectMember }
+    };
+    
+    _adminPservice.AssignMembersToProject("Test Project Member By ID", new List<UserDTO> { sameMemberDifferentInstance });
+}
+
+[TestMethod]
+public void RemoveAdminFromProject_ShouldRemoveAdmin_WhenProjectHasAdmin()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Project With Admin To Remove",
+        Description = "Project that has an admin",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    _adminPservice.RemoveAdminFromProject("Project With Admin To Remove", "admin.user@example.com");
+    
+    Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Admin To Remove");
+    Assert.IsNull(project.AdminProject);
+}
+
+[TestMethod]
+[ExpectedException(typeof(ProjectNotFoundException))]
+public void RemoveAdminFromProject_ShouldThrowProjectNotFoundException_WhenProjectDoesNotExist()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    _adminPservice.RemoveAdminFromProject("NonExistent Project", "admin.user@example.com");
+}
+
+[TestMethod]
+[ExpectedException(typeof(UserIsNotAMemberException))]
+public void RemoveAdminFromProject_ShouldThrowUserIsNotAMemberException_WhenProjectHasNoAdmin()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Project For Admin Removal",
+        Description = "Project to test admin removal",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project For Admin Removal");
+    project.AdminProject = null;
+    _repositoryManager.ProjectRepository.Update(project);
+    
+    _adminPservice.RemoveAdminFromProject("Project For Admin Removal", "admin.user@example.com");
+}
+
+[TestMethod]
+[ExpectedException(typeof(UserIsNotAMemberException))]
+public void RemoveAdminFromProject_ShouldThrowUserIsNotAMemberException_WhenEmailDoesNotMatchAdmin()
+{
+    _login.LoginUser("admin.user@example.com", "Password123@");
+    
+    ProjectDTO projectDTO = new ProjectDTO
+    {
+        Name = "Project With Different Admin",
+        Description = "Project with specific admin",
+        StartDate = DateTime.Now,
+        AdminProyect = Admin,
+        Members = new List<UserDTO>()
+    };
+    
+    _adminPservice.CreateProject(projectDTO);
+    
+    _adminPservice.RemoveAdminFromProject("Project With Different Admin", "different.admin@example.com");
+}
 }
