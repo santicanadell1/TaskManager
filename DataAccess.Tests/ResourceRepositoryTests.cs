@@ -108,4 +108,19 @@ public class ResourceRepositoryTests
     
         _resourceRepository.Update(nonExistentResource);
     }
+    
+    [TestMethod]
+    public void Add_ShouldSuccessfullyAddResource_WhenValidResourceProvided()
+    {
+        Resource resource = new Resource("ValidResource", "ValidType", "Valid Description");
+    
+        _resourceRepository.Add(resource);
+    
+        Resource retrievedResource = _resourceRepository.Get(r => r.Name == "ValidResource");
+        Assert.IsNotNull(retrievedResource);
+        Assert.AreEqual("ValidResource", retrievedResource.Name);
+        Assert.AreEqual("ValidType", retrievedResource.Type);
+        Assert.AreEqual("Valid Description", retrievedResource.Description);
+    }
+
 }
