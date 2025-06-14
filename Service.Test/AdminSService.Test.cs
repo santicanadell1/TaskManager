@@ -322,7 +322,7 @@ public class AdminSService_Test
         _adminService.ChangePassword("john.doe@example.com", newPassword, "Password123@");
 
         UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
-        Assert.AreEqual;
+        Assert.AreEqual(passwordManager.HashPassword(newPassword), updatedUser.Password);
     }
     
     
