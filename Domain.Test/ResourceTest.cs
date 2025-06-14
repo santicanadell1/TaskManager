@@ -80,8 +80,9 @@ public class ResourceTest
     [TestMethod]
     public void CreateResource_WithProject_ThenResourceShouldBeCreated()
     {
-        var resource = new Resource("Resource1", "TypeA", "Description of Resource1", new Project("Project1", "Description of Project1", DateTime.Today));
-        
+        Project project = new Project();
+        project.Name = "Project1";
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1", false ,project);
         Assert.IsNotNull(resource.Project);
     }
 }
