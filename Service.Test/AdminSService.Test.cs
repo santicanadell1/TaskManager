@@ -412,6 +412,15 @@ public void AdminService_ShouldDeleteUser_AndHandleProjectRemovalExceptions()
     }
 }
 
+[TestMethod]
+[ExpectedException(typeof(InvalidOldPasswordException))]
+public void AdminService_ShouldThrowInvalidOldPasswordException_WhenCurrentUserOldPasswordIsWrong()
+{
+    _loginService.LoginUser("john.doe@example.com", "Password123@");
+    
+    _adminService.ChangeCurrentUserPassword( "WrongOldPassword123@", "NewPassword123@");
+}
+
 
     
 }
