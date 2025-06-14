@@ -241,7 +241,7 @@ public class AdminSService_Test
 
         RolDTO roleToAssign = RolDTO.ProjectMember;
 
-        _adminService.AssignRole();
+        _adminService.AssignRole(userToUpdate, roleToAssign);
     }
 
 
