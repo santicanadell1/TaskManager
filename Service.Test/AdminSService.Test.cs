@@ -288,7 +288,7 @@ public class AdminSService_Test
 
         UserDTO createdUser = _userService.GetUser(newUserDTO.Email);
         Assert.IsNotNull(createdUser);
-        Assert.AreEqual();
+        Assert.AreEqual(newUserDTO.Email, createdUser.Email);
     }
     
 }
