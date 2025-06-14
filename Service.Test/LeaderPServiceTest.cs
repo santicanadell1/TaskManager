@@ -1117,5 +1117,54 @@ public void ExportProjects_CSV_ShouldIncludeResourcesInSeparateLines()
     Assert.IsTrue(lines.Length >= 2); 
 }
 
+[TestMethod]
+public void ExportProjects_CSV_ShouldHandleTasksWithoutResources()
+{
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
+    {
+        _repositoryManager.ProjectRepository.Delete(proj);
+    }
+
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    ProjectDTO project = new ProjectDTO
+    {
+        Name = "Proyecto Sin Recursos",
+        Description = "Proyecto sin recursos",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+
+    _adminService.CreateProject(project);
+    _adminService.SetProjectLeader("Proyecto Sin Recursos", "leader.user@example.com");
+
+    TaskDTO taskWithoutResources = new TaskDTO
+    {
+        Title = "Tarea Sin Recursos",
+        Description = "Tarea sin recursos",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 3,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    _taskService.AddTask("Proyecto Sin Recursos", taskWithoutResources);
+
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+\
+
+    string csvResult = leaderServiceWithCsv.ExportProjects();
+
+    Assert.IsNotNull(csvResult);
+    Assert.IsTrue(csvResult.Contains("Proyecto Sin Recursos"));
+    Assert.IsTrue(csvResult.Contains("Tarea Sin Recursos"));
+}
+
     
 }
