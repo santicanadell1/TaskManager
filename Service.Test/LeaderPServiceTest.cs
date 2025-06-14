@@ -646,193 +646,184 @@ public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader
 }
 
 
-    [TestMethod]
-    public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
+   [TestMethod]
+public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
+{
+    // Limpio proyectos existentes
+    List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+    foreach (Project proj in existingProjects)
     {
-        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (Project proj in existingProjects)
-        {
-            _repositoryManager.ProjectRepository.Delete(proj);
-        }
-
-        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-
-        DateTime baseDate = DateTime.Now.AddDays(10);
-
-        ProjectDTO project1 = new ProjectDTO
-        {
-            Name = "Proyecto A",
-            Description = "Primer proyecto",
-            StartDate = baseDate,
-            AdminProyect = _userService.GetUser("admin.user@example.com")
-        };
-
-        ProjectDTO project2 = new ProjectDTO
-        {
-            Name = "Proyecto B",
-            Description = "Segundo proyecto",
-            StartDate = baseDate.AddDays(10),
-            AdminProyect = _userService.GetUser("admin.user@example.com")
-        };
-
-        _adminService.CreateProject(project1);
-        _adminService.CreateProject(project2);
-
-        _adminService.SetProjectLeader("Proyecto A", "leader.user@example.com");
-        _adminService.SetProjectLeader("Proyecto B", "leader.user@example.com");
-
-        TaskDTO tarea1_A = new TaskDTO
-        {
-            Title = "Tarea Z",
-            Description = "Tercera tarea del proyecto A",
-            ExpectedStartDate = baseDate.AddDays(1),
-            StartDate = baseDate.AddDays(1),
-            Duration = 5,
-            State = StateDTO.TODO,
-            IsCritical = false,
-            Resources = new List<ResourceDTO>()
-        };
-
-        TaskDTO tarea2_A = new TaskDTO
-        {
-            Title = "Alpha",
-            Description = "Cuarta tarea del proyecto A",
-            ExpectedStartDate = baseDate.AddDays(3),
-            StartDate = baseDate.AddDays(3),
-            Duration = 3,
-            State = StateDTO.DOING,
-            IsCritical = true,
-            Resources = new List<ResourceDTO>()
-        };
-
-        TaskDTO tarea3_A = new TaskDTO
-        {
-            Title = "Zebra",
-            Description = "Primera tarea del proyecto A",
-            ExpectedStartDate = baseDate.AddDays(2),
-            StartDate = baseDate.AddDays(2),
-            Duration = 4,
-            State = StateDTO.TODO,
-            IsCritical = true,
-            Resources = new List<ResourceDTO>()
-        };
-
-        TaskDTO tarea4_A = new TaskDTO
-        {
-            Title = "Medio",
-            Description = "Segunda tarea del proyecto A",
-            ExpectedStartDate = baseDate.AddDays(4),
-            StartDate = baseDate.AddDays(4),
-            Duration = 2,
-            State = StateDTO.DOING,
-            IsCritical = false,
-            Resources = new List<ResourceDTO>()
-        };
-
-
-        TaskDTO tarea1_B = new TaskDTO
-        {
-            Title = "T1",
-            Description = "Tarea del proyecto B",
-            ExpectedStartDate = baseDate.AddDays(11),
-            StartDate = baseDate.AddDays(11),
-            Duration = 2,
-            State = StateDTO.TODO,
-            IsCritical = true,
-            Resources = new List<ResourceDTO>()
-        };
-
-        _taskService.AddTask("Proyecto A", tarea1_A);
-        _taskService.AddTask("Proyecto A", tarea2_A);
-        _taskService.AddTask("Proyecto A", tarea3_A);
-        _taskService.AddTask("Proyecto A", tarea4_A);
-        _taskService.AddTask("Proyecto B", tarea1_B);
-
-        _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
-
-        var jsonExporter = new JSONExporter(_repositoryManager);
-        var leaderServiceWithJson = new LeaderPService(_repositoryManager, jsonExporter);
-
-        string jsonResult = leaderServiceWithJson.ExportProjects();
-
-        Console.WriteLine("=== RESULTADO JSON ===");
-        Console.WriteLine(jsonResult);
-
-
-        Assert.IsNotNull(jsonResult);
-        Assert.IsTrue(jsonResult.Contains("\"Project\""));
-        Assert.IsTrue(jsonResult.Contains("\"StartDate\""));
-        Assert.IsTrue(jsonResult.Contains("\"Tasks\""));
-        Assert.IsTrue(jsonResult.Contains("\"Task\""));
-        Assert.IsTrue(jsonResult.Contains("\"Duration\""));
-        Assert.IsTrue(jsonResult.Contains("\"IsCritical\""));
-        Assert.IsTrue(jsonResult.Contains("\"Resources\""));
-
-        Assert.IsTrue(jsonResult.Contains("\"Proyecto A\""));
-        Assert.IsTrue(jsonResult.Contains("\"Proyecto B\""));
-
-        Assert.IsTrue(jsonResult.Contains("\"Zebra\""));
-        Assert.IsTrue(jsonResult.Contains("\"Tarea Z\""));
-        Assert.IsTrue(jsonResult.Contains("\"Medio\""));
-        Assert.IsTrue(jsonResult.Contains("\"Alpha\""));
-        Assert.IsTrue(jsonResult.Contains("\"T1\""));
-
-        string expectedDate1 = baseDate.ToString("dd/MM/yyyy");
-        string expectedDate2 = baseDate.AddDays(10).ToString("dd/MM/yyyy");
-        string expectedTaskDate1 = baseDate.AddDays(1).ToString("dd/MM/yyyy");
-        string expectedTaskDate2 = baseDate.AddDays(3).ToString("dd/MM/yyyy");
-        string expectedTaskDate3 = baseDate.AddDays(2).ToString("dd/MM/yyyy");
-        string expectedTaskDate4 = baseDate.AddDays(4).ToString("dd/MM/yyyy");
-        string expectedTaskDate5 = baseDate.AddDays(11).ToString("dd/MM/yyyy");
-        Console.WriteLine($"Fecha esperada proyecto A: {expectedDate1}");
-        Console.WriteLine($"Fecha esperada proyecto B: {expectedDate2}");
-        Console.WriteLine($"Fecha esperada Tarea Z: {expectedTaskDate1}");
-        Console.WriteLine($"Fecha esperada Alpha: {expectedTaskDate2}");
-        Console.WriteLine($"Fecha esperada Zebra: {expectedTaskDate3}");
-        Console.WriteLine($"Fecha esperada Medio: {expectedTaskDate4}");
-        Console.WriteLine($"Fecha esperada T1: {expectedTaskDate5}");
-
-        Assert.IsTrue(jsonResult.Contains($"\"{expectedDate1}\""), $"Debe contener la fecha {expectedDate1}");
-        Assert.IsTrue(jsonResult.Contains($"\"{expectedDate2}\""), $"Debe contener la fecha {expectedDate2}");
-        Assert.IsTrue(jsonResult.Contains($"\"{expectedTaskDate1}\""),
-            $"Debe contener la fecha de Tarea Z {expectedTaskDate1}");
-        Assert.IsTrue(jsonResult.Contains($"\"{expectedTaskDate2}\""),
-            $"Debe contener la fecha de Alpha {expectedTaskDate2}");
-        Assert.IsTrue(jsonResult.Contains($"\"{expectedTaskDate3}\""),
-            $"Debe contener la fecha de Zebra {expectedTaskDate3}");
-        Assert.IsTrue(jsonResult.Contains($"\"{expectedTaskDate4}\""),
-            $"Debe contener la fecha de Medio {expectedTaskDate4}");
-        Assert.IsTrue(jsonResult.Contains($"\"{expectedTaskDate5}\""),
-            $"Debe contener la fecha de T1 {expectedTaskDate5}");
-
-        Assert.IsTrue(jsonResult.Contains("\"IsCritical\": \"N\""));
-        Assert.IsTrue(jsonResult.Contains("\"IsCritical\": \"S\""));
-
-        Assert.IsTrue(jsonResult.Contains("\"Duration\": 5"));
-        Assert.IsTrue(jsonResult.Contains("\"Duration\": 3"));
-        Assert.IsTrue(jsonResult.Contains("\"Duration\": 4"));
-        Assert.IsTrue(jsonResult.Contains("\"Duration\": 2"));
-
-        Assert.IsTrue(jsonResult.Contains("\"Resources\": []"));
-
-        var projects = JsonConvert.DeserializeObject<List<dynamic>>(jsonResult);
-        Assert.AreEqual(2, projects.Count, "Debe haber exactamente 2 proyectos");
-
-        Assert.AreEqual("Proyecto A", (string)projects[0].Project);
-        Assert.AreEqual("Proyecto B", (string)projects[1].Project);
-
-        var tasksByProjectA = projects[0].Tasks;
-        Assert.AreEqual(4, tasksByProjectA.Count, "Proyecto A debe tener 4 tareas");
-
-        Assert.AreEqual("Zebra", (string)tasksByProjectA[0].Task);
-        Assert.AreEqual("Tarea Z", (string)tasksByProjectA[1].Task);
-        Assert.AreEqual("Medio", (string)tasksByProjectA[2].Task);
-        Assert.AreEqual("Alpha", (string)tasksByProjectA[3].Task);
-
-        var tasksByProjectB = projects[1].Tasks;
-        Assert.AreEqual(1, tasksByProjectB.Count, "Proyecto B debe tener 1 tarea");
-        Assert.AreEqual("T1", (string)tasksByProjectB[0].Task);
+        _repositoryManager.ProjectRepository.Delete(proj);
     }
+
+    // Logueo como admin para crear proyectos
+    _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+    DateTime baseDate = DateTime.Now.AddDays(10);
+
+    // Creo dos proyectos
+    ProjectDTO project1 = new ProjectDTO
+    {
+        Name = "Proyecto A",
+        Description = "Primer proyecto",
+        StartDate = baseDate,
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+    ProjectDTO project2 = new ProjectDTO
+    {
+        Name = "Proyecto B",
+        Description = "Segundo proyecto",
+        StartDate = baseDate.AddDays(10),
+        AdminProyect = _userService.GetUser("admin.user@example.com")
+    };
+    _adminService.CreateProject(project1);
+    _adminService.CreateProject(project2);
+
+    // Asigno líder a ambos proyectos
+    _adminService.SetProjectLeader("Proyecto A", "leader.user@example.com");
+    _adminService.SetProjectLeader("Proyecto B", "leader.user@example.com");
+
+    // Preparo tareas para Proyecto A
+    TaskDTO tarea1_A = new TaskDTO
+    {
+        Title = "Tarea Z",
+        Description = "Tercera tarea del proyecto A",
+        ExpectedStartDate = baseDate.AddDays(1),
+        StartDate = baseDate.AddDays(1),
+        Duration = 5,
+        State = StateDTO.TODO,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+    TaskDTO tarea2_A = new TaskDTO
+    {
+        Title = "Alpha",
+        Description = "Cuarta tarea del proyecto A",
+        ExpectedStartDate = baseDate.AddDays(3),
+        StartDate = baseDate.AddDays(3),
+        Duration = 3,
+        State = StateDTO.DOING,
+        IsCritical = true,
+        Resources = new List<ResourceDTO>()
+    };
+    TaskDTO tarea3_A = new TaskDTO
+    {
+        Title = "Zebra",
+        Description = "Primera tarea del proyecto A",
+        ExpectedStartDate = baseDate.AddDays(2),
+        StartDate = baseDate.AddDays(2),
+        Duration = 4,
+        State = StateDTO.TODO,
+        IsCritical = true,
+        Resources = new List<ResourceDTO>()
+    };
+    TaskDTO tarea4_A = new TaskDTO
+    {
+        Title = "Medio",
+        Description = "Segunda tarea del proyecto A",
+        ExpectedStartDate = baseDate.AddDays(4),
+        StartDate = baseDate.AddDays(4),
+        Duration = 2,
+        State = StateDTO.DOING,
+        IsCritical = false,
+        Resources = new List<ResourceDTO>()
+    };
+
+    // Tarea para Proyecto B
+    TaskDTO tarea1_B = new TaskDTO
+    {
+        Title = "T1",
+        Description = "Tarea del proyecto B",
+        ExpectedStartDate = baseDate.AddDays(11),
+        StartDate = baseDate.AddDays(11),
+        Duration = 2,
+        State = StateDTO.TODO,
+        IsCritical = true,
+        Resources = new List<ResourceDTO>()
+    };
+
+    // Agrego tareas
+    _taskService.AddTask("Proyecto A", tarea1_A);
+    _taskService.AddTask("Proyecto A", tarea2_A);
+    _taskService.AddTask("Proyecto A", tarea3_A);
+    _taskService.AddTask("Proyecto A", tarea4_A);
+    _taskService.AddTask("Proyecto B", tarea1_B);
+
+    // Logueo como líder para exportar
+    _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
+
+    var jsonExporter = new JSONExporter(_repositoryManager);
+    var leaderServiceWithJson = new LeaderPService(_repositoryManager, jsonExporter);
+
+    // Act
+    string jsonResult = leaderServiceWithJson.ExportProjects();
+    Assert.IsNotNull(jsonResult);
+
+    // Propiedades base en el JSON
+    Assert.IsTrue(jsonResult.Contains("\"Project\""));
+    Assert.IsTrue(jsonResult.Contains("\"StartDate\""));
+    Assert.IsTrue(jsonResult.Contains("\"Tasks\""));
+    Assert.IsTrue(jsonResult.Contains("\"Task\""));
+    Assert.IsTrue(jsonResult.Contains("\"Duration\""));
+    Assert.IsTrue(jsonResult.Contains("\"IsCritical\""));
+    Assert.IsTrue(jsonResult.Contains("\"Resources\""));
+
+    // Contenido de proyectos y tareas
+    Assert.IsTrue(jsonResult.Contains("\"Proyecto A\""));
+    Assert.IsTrue(jsonResult.Contains("\"Proyecto B\""));
+    Assert.IsTrue(jsonResult.Contains("\"Zebra\""));
+    Assert.IsTrue(jsonResult.Contains("\"Tarea Z\""));
+    Assert.IsTrue(jsonResult.Contains("\"Medio\""));
+    Assert.IsTrue(jsonResult.Contains("\"Alpha\""));
+    Assert.IsTrue(jsonResult.Contains("\"T1\""));
+
+    // Formato de fechas dd/MM/yyyy
+    string dA  = baseDate.ToString("dd/MM/yyyy");
+    string dB  = baseDate.AddDays(10).ToString("dd/MM/yyyy");
+    string dt1 = baseDate.AddDays(1).ToString("dd/MM/yyyy");
+    string dt2 = baseDate.AddDays(3).ToString("dd/MM/yyyy");
+    string dt3 = baseDate.AddDays(2).ToString("dd/MM/yyyy");
+    string dt4 = baseDate.AddDays(4).ToString("dd/MM/yyyy");
+    string dt5 = baseDate.AddDays(11).ToString("dd/MM/yyyy");
+
+    Assert.IsTrue(jsonResult.Contains($"\"{dA}\""),  $"Debe contener la fecha {dA}");
+    Assert.IsTrue(jsonResult.Contains($"\"{dB}\""),  $"Debe contener la fecha {dB}");
+    Assert.IsTrue(jsonResult.Contains($"\"{dt1}\""), $"Debe contener la fecha de Tarea Z {dt1}");
+    Assert.IsTrue(jsonResult.Contains($"\"{dt2}\""), $"Debe contener la fecha de Alpha {dt2}");
+    Assert.IsTrue(jsonResult.Contains($"\"{dt3}\""), $"Debe contener la fecha de Zebra {dt3}");
+    Assert.IsTrue(jsonResult.Contains($"\"{dt4}\""), $"Debe contener la fecha de Medio {dt4}");
+    Assert.IsTrue(jsonResult.Contains($"\"{dt5}\""), $"Debe contener la fecha de T1 {dt5}");
+
+    // Sólo tareas críticas tras cálculo CPM
+    Assert.IsTrue(jsonResult.Contains("\"IsCritical\": \"S\""),
+        "Todas las tareas deben salir marcadas como críticas (\"S\") tras el cálculo CPM");
+
+    // Duraciones y recursos
+    Assert.IsTrue(jsonResult.Contains("\"Duration\": 5"));
+    Assert.IsTrue(jsonResult.Contains("\"Duration\": 3"));
+    Assert.IsTrue(jsonResult.Contains("\"Duration\": 4"));
+    Assert.IsTrue(jsonResult.Contains("\"Duration\": 2"));
+    Assert.IsTrue(jsonResult.Contains("\"Resources\": []"));
+
+    // Deserialización y conteo de elementos
+    var projects = JsonConvert.DeserializeObject<List<dynamic>>(jsonResult);
+    Assert.AreEqual(2, projects.Count, "Debe haber exactamente 2 proyectos");
+
+    Assert.AreEqual("Proyecto A", (string)projects[0].Project);
+    Assert.AreEqual("Proyecto B", (string)projects[1].Project);
+
+    var tasksA = projects[0].Tasks;
+    Assert.AreEqual(4, tasksA.Count, "Proyecto A debe tener 4 tareas");
+    Assert.AreEqual("Zebra",   (string)tasksA[0].Task);
+    Assert.AreEqual("Tarea Z", (string)tasksA[1].Task);
+    Assert.AreEqual("Medio",   (string)tasksA[2].Task);
+    Assert.AreEqual("Alpha",   (string)tasksA[3].Task);
+
+    var tasksB = projects[1].Tasks;
+    Assert.AreEqual(1, tasksB.Count, "Proyecto B debe tener 1 tarea");
+    Assert.AreEqual("T1", (string)tasksB[0].Task);
+}
+
 
     [TestMethod]
     public void ExportProjects_JSON_ShouldReturnEmptyArray_WhenNoProjectsExist()
