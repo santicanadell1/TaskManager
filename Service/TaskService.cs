@@ -81,6 +81,8 @@ public class TaskService
 
     public void AddTask(string projectName, TaskDTO taskDTO, bool solve = false)
     {
+        NotificationService notificationService = new NotificationService(_repositoryManager);
+        AdminPService _projectService      = new AdminPService(_repositoryManager);
         Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
         if (taskDTO.ExpectedStartDate.AddDays(1) <= project.StartDate)
@@ -100,6 +102,17 @@ public class TaskService
         _repositoryManager.ProjectRepository.Update(project);
 
         RecalculateCriticalPath(projectName);
+        var cpmResult = GetCriticalPath(projectName);
+        if (cpmResult.CriticalTaskIds.Contains(task.Id))
+        {
+            var notificationDTO = new NotificationDTO
+            {
+                Read        = false,
+                Description = $"The task {task.Title} has been created. The critical path has changed.",
+                Project     = _projectService.GetProjectByName(projectName)
+            };
+            notificationService.CreateNotification(notificationDTO);
+        }
     }
 
     public void DeleteTask(string projectName, string title)
