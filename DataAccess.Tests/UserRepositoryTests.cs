@@ -115,4 +115,12 @@ public class UserRepositoryTests
 
         Assert.IsNull(_userRepository.Get(u => u.Email == "Email1@email.com"));
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(UserNotFoundException))]
+    public void Add_ShouldThrowUserNotFoundException_WhenUserIsNull()
+    {
+        _userRepository(null);
+    }
+    
 }
