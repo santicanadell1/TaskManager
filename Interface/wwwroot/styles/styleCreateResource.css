@@ -135,6 +135,26 @@
     transform: translateY(-50%) scale(1.1);
 }
 
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 20px;
+}
+
+.custom-checkbox {
+    width: 24px; 
+    height: 24px; 
+    margin-right: 10px; 
+}
+
+.form-check-label {
+    font-size: 16px; 
+    font-weight: bold; 
+    margin-left: 10px; 
+}
+
+
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
     .resource-container {

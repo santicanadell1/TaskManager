@@ -29,14 +29,16 @@
             <InputTextArea id="resourceDescription" class="form-control mt-1" @bind-Value="newResource.Description"/>
         </div>
         <div class="form-group form-check mt-3">
-            <InputCheckbox id="concurrencyEnabled"
-                           class="form-check-input"
-                           @bind-Value="newResource.ConcurrentUsage" />
-            <label class="form-check-label" for="concurrencyEnabled">
-                Enable concurrent usage
-            </label>
+            <div class="checkbox-container">
+                <label class="form-check-label custom-checkbox">
+                    <InputCheckbox id="concurrencyEnabled"
+                                   class="form-check-input"
+                                   @bind-Value="newResource.ConcurrentUsage"/>
+                    Enable concurrent usage
+                </label>
+            </div>
         </div>
-
+        
         <button type="submit" class="btn btn-primary mt-3">Create Resource</button>
     </EditForm>
 
