@@ -182,7 +182,7 @@ public class AdminSService_Test
         _loginService.LoginUser("john.doe@example.com", "Password123@");
         UserDTO currentUser = LoggedUser.Current;
 
-        _adminService.CreateUser();  
+        _adminService.CreateUser(currentUser);  
     }
 
 }
