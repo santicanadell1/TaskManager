@@ -92,6 +92,12 @@ public class ResourceRepositoryTests
         _resourceRepository.Add(null);
     }
 
-    
+    [TestMethod]
+    [ExpectedException(typeof(ResourceNotFoundException))]
+    public void Update_ShouldThrowResourceNotFoundException_WhenResourceIsNull()
+    {
+        _resourceRepository(null);
+    }
+
     
 }
