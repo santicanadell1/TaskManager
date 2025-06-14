@@ -114,7 +114,7 @@
                             <label for="editTaskTitle" class="form-label"><i class="bi bi-type me-1"></i>Task
                                 Title</label>
                             <InputText id="editTaskTitle" class="form-control" @bind-Value="selectedTaskToEdit.Title"
-                                       required/>
+                                       readonly required/>
                         </div>
 
                         <div class="mb-3">
@@ -471,9 +471,6 @@
                                                         <i class="bi bi-pencil-fill me-1"></i>Edit
                                                     </button>
                                                 }
-                                                <button class="btn btn-sm btn-danger" @onclick="() => RemoveTask(task)">
-                                                    <i class="bi bi-trash-fill me-1"></i>Remove
-                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -933,18 +930,6 @@
         }
     }
 
-    private void RemoveTask(TaskDTO task)
-    {
-        try
-        {
-            _TaskController.DeleteTask(selectedProjectName, task.Title);
-            LoadTasks();
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error removing task: {ex.Message}";
-        }
-    }
 
     private void ShowAddMembersModal()
     {
