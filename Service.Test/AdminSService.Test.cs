@@ -390,7 +390,9 @@ public void AdminService_ShouldDeleteUser_AndHandleProjectRemovalExceptions()
     
     UserDTO userToDelete = new UserDTO
     {
-    ]3@example.com",
+        FirstName = "Delete",
+        LastName = "Me3",
+        Email = "delete.me3@example.com",
         Password = "Password123@",
         Birthday = DateTime.Parse("1990-01-01"),
         Roles = new List<RolDTO>()
@@ -399,7 +401,15 @@ public void AdminService_ShouldDeleteUser_AndHandleProjectRemovalExceptions()
     _userService.AddUser(userToDelete);
     
     _adminService.DeleteUser(userToDelete);
-   
+    
+    try
+    {
+        UserDTO deletedUser = _userService.GetUser("delete.me3@example.com");
+        Assert.Fail("Expected UserNotFoundException was not thrown");
+    }
+    catch (UserNotFoundException)
+    {
+    }
 }
 
 
