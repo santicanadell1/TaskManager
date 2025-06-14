@@ -418,7 +418,7 @@ public void AdminService_ShouldThrowInvalidOldPasswordException_WhenCurrentUserO
 {
     _loginService.LoginUser("john.doe@example.com", "Password123@");
     
-    _adminService.ChangeCurrentUserPassword( "WrongOldPassword123@", "NewPassword123@");
+    _adminService.ChangeCurrentUserPassword("john.doe@example.com", "WrongOldPassword123@", "NewPassword123@");
 }
 
 
