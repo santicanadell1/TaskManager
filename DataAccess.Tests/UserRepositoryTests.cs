@@ -143,6 +143,9 @@ public class UserRepositoryTests
         _userRepository.Update(updatedUser);
     
         User retrievedUser = _userRepository.Get(u => u.Id == updatedUser.Id);
-        Assert.AreEqual
+        Assert.AreEqual("Updated", retrievedUser.FirstName);
+        Assert.AreEqual("Name", retrievedUser.LastName);
+        Assert.AreEqual("UpdatedPassword", retrievedUser.Password);
+    }
 
 }
