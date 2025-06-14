@@ -345,6 +345,7 @@ public class AdminSService_Test
         _adminService.AssignRole(userToUpdate, roleToAssign);
 
         UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
+        Assert.IsTrue(updatedUser.Roles.Contains(roleToAssign));
     }
 
     
