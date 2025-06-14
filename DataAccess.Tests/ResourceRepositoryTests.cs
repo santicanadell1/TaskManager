@@ -85,7 +85,13 @@ public class ResourceRepositoryTests
         _resourceRepository.Add(deletedResource);
     }
     
-    
+    [TestMethod]
+    [ExpectedException(typeof(ResourceIsNullException))]
+    public void Add_ShouldThrowResourceIsNullException_WhenResourceIsNull()
+    {
+        _resourceRepository(null);
+    }
+
     
     
 }
