@@ -841,4 +841,34 @@ public class AdminPServiceTests
         Assert.IsNotNull(createdProject.Tasks);
         
     }
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithNonExistentTasks_WhenTasksNotInDatabase()
+    {
+        TaskDTO nonExistentTask = new TaskDTO
+        {
+            Id = 999,
+            Title = "Non Existent Task",
+            Description = "Task that doesn't exist",
+            Duration = 3,
+            ExpectedStartDate = DateTime.Today,
+            State = StateDTO.TODO
+        };
+    
+        ProjectDTO projectWithNonExistentTasks = new ProjectDTO
+        {
+            Name = "Project With Invalid Tasks",
+            Description = "Project with non-existent tasks",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            Tasks = new List<TaskDTO> { nonExistentTask }
+        };
+    
+        _adminPservice.CreateProject(projectWithNonExistentTasks);
+    
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Invalid Tasks");
+        Assert.IsNotNull()
+    }
+
+    
+    
 }
