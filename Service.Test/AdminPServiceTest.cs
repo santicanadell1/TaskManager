@@ -889,7 +889,7 @@ public class AdminPServiceTests
         Assert.IsNotNull(createdProject);
         Assert.IsNotNull(createdProject.Members);
         Assert.AreEqual(1, createdProject.Members.Count);
-        Assert.AreEqual(Members[0].Email);
+        Assert.AreEqual("member.user@example.com", createdProject.Members[0].Email);
     }
 
     
