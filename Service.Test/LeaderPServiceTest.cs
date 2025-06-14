@@ -1236,7 +1236,18 @@ public class TestExporterForNull : ExporterBase
     }
 }
 
+public class TestExporterWithNullElements : ExporterBase
+{
+    protected override string ExportData(List<ProjectDTO> projects)
+    {
+        return $"{projects.Count} valid project";
+    }
 
+    public string TestExportWithNullElements(List<ProjectDTO> projectsWithNull)
+    {
+        return Export(projectsWithNull);
+    }
+}
 
 
     
