@@ -148,7 +148,7 @@ public class ResourceService : IResourceService
         DateTime endDate = startDate.AddDays(duration);
         var tasksUsingResource = _repositoryManager.TaskRepository
             .GetAll()
-            .Where(t => t.Resources.Any(r => r.Id == res.Id) && t.Title != taskTitle);
+            .Where(t => t.Resources.Any(r => r.Id == res.Id) && t.Title != taskTitle && t.State != State.DONE);
         foreach (var task in tasksUsingResource)
         {
             DateTime taskStart = task.ExpectedStartDate.Date;

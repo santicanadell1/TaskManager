@@ -125,6 +125,7 @@
             try
             {
                 tasks = _AdminProjectController.GetAllTaskForAMemberInAProject(selectedProjectId, loginMailUser);
+                tasks = tasks.FindAll(t => t.State != StateDTO.DONE);
             }
             catch (Exception ex)
             {
