@@ -1,5 +1,6 @@
 ﻿@page "/project/options"
 @using Controllers
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using Service
 @using Service.Exceptions.ResourceServiceExceptions
 @using Service.Models
@@ -7,6 +8,7 @@
 @inject TaskController _TaskController
 @inject ResourceController _ResourceController
 @inject UserController _UserController
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
 
 <link href="styles/styleProjectList.css" rel="stylesheet"/>
@@ -1432,6 +1434,7 @@
 
             await Task.Delay(1500);
             CloseEditTaskModal(true);
+            Navigation.NavigateTo(Navigation.Uri, true);
         }
         catch (ResourceNotAvailableException)
         {
