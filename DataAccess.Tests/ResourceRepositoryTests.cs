@@ -106,6 +106,6 @@ public class ResourceRepositoryTests
         Resource nonExistentResource = new Resource("NonExistent", "Type", "Description");
         nonExistentResource.Id = 999;
     
-        _resourceRepository(nonExistentResource);
+        _resourceRepository.Update(nonExistentResource);
     }
 }
