@@ -148,4 +148,29 @@ public class UserRepositoryTests
         Assert.AreEqual("UpdatedPassword", retrievedUser.Password);
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(Exception))]
+    public void Delete_ShouldThrowException_WhenUserDoesNotExist()
+    {
+        User nonExistentUser = new User("Non", "Existent", "nonexistent@email.com", DateTime.Today.AddYears(-18), "Password");
+    
+        _userRepository.Delete(nonExistentUser);
+    }
+
+    [TestMethod]
+    public void Delete_ShouldClearNotificationsAndTasks_WhenUserHasRelatedData()
+    {
+        User user = new User("Test", "User", "test@email.com", DateTime.Today.AddYears(-18), "Password");
+        _userRepository.Add(user);
+    
+        User addedUser = _userRepository.Get(u => u.Email == "test@email.com");
+        Assert.IsNotNull(addedUser);
+    
+        _userRepository
+    
+        User deletedUser = _userRepository.Get(u => u.Email == "test@email.com");
+        Assert.IsNull;
+    }
+    
+    
 }
