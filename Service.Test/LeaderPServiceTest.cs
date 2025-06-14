@@ -1183,7 +1183,7 @@ public void ExportProjects_ShouldThrowNullProjectsCanNotBeImported_WhenProjectsL
     TestExporterForNull testExporter = new TestExporterForNull();
     LeaderPService leaderServiceWithTestExporter = new LeaderPService(_repositoryManager, testExporter);
 
-    testExporter();
+    testExporter.SimulateNullProjects();
 }
 
 
