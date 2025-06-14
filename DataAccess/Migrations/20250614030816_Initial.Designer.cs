@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250612235259_Initial")]
+    [Migration("20250614030816_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -160,8 +160,8 @@ namespace DataAccess.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("Slack")
-                        .HasColumnType("time");
+                    b.Property<long>("Slack")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");

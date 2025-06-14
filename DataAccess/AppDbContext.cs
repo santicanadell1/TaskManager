@@ -76,7 +76,12 @@ public class AppDbContext : DbContext
             entity.Property(t => t.EndDate).IsRequired();
             entity.Property(t => t.LatestStart).IsRequired();
             entity.Property(t => t.LatestFinish).IsRequired();
-            entity.Property(t => t.Slack).IsRequired();
+            entity.Property(t => t.Slack)
+                .IsRequired()
+                .HasConversion(
+                    v => v.Ticks,
+                    v => TimeSpan.FromTicks(v))
+                .HasColumnType("bigint");
             entity.Property(t => t.IsCritical).IsRequired();
 
             entity.Property(t => t.State)

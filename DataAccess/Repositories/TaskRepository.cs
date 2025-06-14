@@ -54,7 +54,12 @@ public class TaskRepository : IRepository<Task>
 
     public void Update(Task updatedTask)
     {
-        Task? existingTask = _db.Tasks.FirstOrDefault(t => t.Id == updatedTask.Id);
+        Task? existingTask = _db.Tasks
+            .Include(t => t.Resources)
+            .Include(t => t.PreviousTasks)
+            .Include(t => t.SameTimeTasks)
+            .FirstOrDefault(t => t.Id == updatedTask.Id);
+
         if (existingTask == null)
             throw new TaskNotFoundException();
         

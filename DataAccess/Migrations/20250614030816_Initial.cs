@@ -127,7 +127,7 @@ namespace DataAccess.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LatestStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LatestFinish = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Slack = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Slack = table.Column<long>(type: "bigint", nullable: false),
                     IsCritical = table.Column<bool>(type: "bit", nullable: false),
                     State = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),

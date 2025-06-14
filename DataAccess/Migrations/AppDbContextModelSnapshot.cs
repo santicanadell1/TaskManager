@@ -157,8 +157,8 @@ namespace DataAccess.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("Slack")
-                        .HasColumnType("time");
+                    b.Property<long>("Slack")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
