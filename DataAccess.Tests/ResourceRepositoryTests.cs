@@ -123,4 +123,21 @@ public class ResourceRepositoryTests
         Assert.AreEqual("Valid Description", retrievedResource.Description);
     }
 
+    
+    
+    [TestMethod]
+    public void Update_ShouldSuccessfullyUpdateAllFields_WhenResourceExists()
+    {
+        Resource originalResource = new Resource("Original", "OriginalType", "Original Description");
+        _resourceRepository.Add(originalResource);
+    
+        Resource addedResource = _resourceRepository.Get(r => r.Name == "Original");
+        Resource updatedResource = new Resource("Updated", "UpdatedType", "Updated Description");
+        updatedResource.Id = addedResource.Id;
+    
+        _resourceRepository.Update(updatedResource);
+    
+        Resource retrievedResource = _resourceRepository.Get(r => r.Id == updatedResource.Id);
+        Assert.IsNotNull(retrievedR)
+    }
 }
