@@ -312,6 +312,23 @@ public class AdminSService_Test
         }
     }
     
+    [TestMethod]
+    public void AdminService_ShouldChangePassword_WhenValidCredentialsProvided()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+        PasswordManager passwordManager = new PasswordManager();
+
+        string newPassword = "NewPassword123@";
+        _adminService.ChangePassword("john.doe@example.com", newPassword, "Password123@");
+
+        UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
+        Assert.AreEqual;
+    }
+    
+    
+    
+    
+    
 }
 
 
