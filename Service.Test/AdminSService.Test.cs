@@ -199,7 +199,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        _adminService.DeleteUser(); 
+        _adminService.DeleteUser(userToDeleteDTO); 
     }
 
     
