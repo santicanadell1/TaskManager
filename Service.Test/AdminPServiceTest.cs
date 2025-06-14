@@ -919,7 +919,7 @@ public class AdminPServiceTests
         Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Invalid Members");
         Assert.IsNotNull(createdProject);
         Assert.IsNotNull(createdProject.Members);
-        Assert.AreEqual(0);
+        Assert.AreEqual(0, createdProject.Members.Count);
     }
 
 
