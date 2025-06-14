@@ -138,6 +138,9 @@ public class ResourceRepositoryTests
         _resourceRepository.Update(updatedResource);
     
         Resource retrievedResource = _resourceRepository.Get(r => r.Id == updatedResource.Id);
-        Assert.IsNotNull(retrievedR)
+        Assert.IsNotNull(retrievedResource);
+        Assert.AreEqual("Updated", retrievedResource.Name);
+        Assert.AreEqual("UpdatedType", retrievedResource.Type);
+        Assert.AreEqual("Updated Description", retrievedResource.Description);
     }
 }
