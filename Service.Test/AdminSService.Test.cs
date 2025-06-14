@@ -334,7 +334,19 @@ public class AdminSService_Test
         _adminService.ChangePassword("nonexistent@example.com", "NewPassword123@", "OldPassword123@");
     }
 
-    
+    [TestMethod]
+    public void AdminService_ShouldAssignRole_WhenUserExistsAndRoleNotAssigned()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        UserDTO userToUpdate = _userService.GetUser("john.doe@example.com");
+        RolDTO roleToAssign = RolDTO.ProjectMember;
+
+        _adminService.AssignRole(userToUpdate, roleToAssign);
+
+        UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
+    }
+
     
     
 }
