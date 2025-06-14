@@ -100,7 +100,7 @@ public class LeaderPService : ILeaderPService
         UserDTO currentUser = LoggedUser.Current;
         bool isAdminProject = false;
 
-        AddTempAdminProjectRole(currentUser, isAdminProject);
+        AddTempAdminProjectRole(currentUser, ref isAdminProject);
 
         _adminPService.AssignMembersToProject(projectName, membersDTO);
 
@@ -112,7 +112,7 @@ public class LeaderPService : ILeaderPService
         UserDTO currentUser = LoggedUser.Current;
         bool isAdminProject = false;
 
-        AddTempAdminProjectRole(currentUser, isAdminProject);
+        AddTempAdminProjectRole(currentUser, ref isAdminProject);
 
         List<UserDTO> members = _adminPService.GetMembers(projectName);
 
@@ -126,7 +126,7 @@ public class LeaderPService : ILeaderPService
         UserDTO currentUser = LoggedUser.Current;
         bool isAdminProject = false;
 
-        AddTempAdminProjectRole(currentUser, isAdminProject);
+        AddTempAdminProjectRole(currentUser, ref isAdminProject);
         _adminPService.RemoveMemberFromProject(projectName, memberToRemoveEmail);
 
         RemoveTempAdminProjectRole(currentUser, isAdminProject);
@@ -137,7 +137,7 @@ public class LeaderPService : ILeaderPService
         UserDTO currentUser = LoggedUser.Current;
         bool isAdminProject = false;
 
-        AddTempAdminProjectRole(currentUser, isAdminProject);
+        AddTempAdminProjectRole(currentUser, ref isAdminProject);
         List<TaskDTO> memberTasks = new List<TaskDTO>();
         memberTasks = _adminPService.GetAllTaskForAMemberInAProject(projectName, memberEmail);
 
@@ -151,7 +151,7 @@ public class LeaderPService : ILeaderPService
         UserDTO currentUser = LoggedUser.Current;
         bool isAdminProject = false;
 
-        AddTempAdminProjectRole(currentUser, isAdminProject);
+        AddTempAdminProjectRole(currentUser, ref isAdminProject);
 
         _adminPService.AddTaskToMember(projectName, memberEmail, taskTitle);
 
@@ -163,7 +163,7 @@ public class LeaderPService : ILeaderPService
         UserDTO currentUser = LoggedUser.Current;
         bool isAdminProject = false;
 
-        AddTempAdminProjectRole(currentUser, isAdminProject);
+        AddTempAdminProjectRole(currentUser, ref isAdminProject);
 
         _adminPService.RemoveTaskFromMember(projectName, memberEmail, taskTitle);
 
@@ -183,7 +183,7 @@ public class LeaderPService : ILeaderPService
             throw new UnauthorizedLeaderAccessException();
     }
 
-    private void AddTempAdminProjectRole(UserDTO user, bool isAdminProject = false)
+    private void AddTempAdminProjectRole(UserDTO user, ref bool isAdminProject)
     {
         if (user.Roles.Contains(RolDTO.AdminProject))
         {
