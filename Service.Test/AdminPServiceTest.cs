@@ -941,4 +941,45 @@ public class AdminPServiceTests
         Assert.IsNotNull(createdProject.AdminProject);
     }
     
+    
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithNullProjectLeader_WhenProjectLeaderIsNull()
+    {
+        ProjectDTO projectWithNullLeader = new ProjectDTO
+        {
+            Name = "Project With Null Leader",
+            Description = "Project with null ProjectLeader",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            ProjectLeader = null
+        };
+    
+        _adminPservice.CreateProject(projectWithNullLeader);
+    
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Null Leader");
+        Assert.IsNotNull(project);
+        Assert.IsNull(project.ProjectLeader);
+    }
+
+    [TestMethod]
+    public void CreateProject_ShouldHandleProjectWithExistingProjectLeader_WhenProjectLeaderExists()
+    {
+        ProjectDTO projectWithLeader = new ProjectDTO
+        {
+            Name = "Project With Leader",
+            Description = "Project with leader",
+            StartDate = DateTime.Today,
+            AdminProyect = Admin,
+            ProjectLeader = Leader
+        };
+    
+        _adminPservice.CreateProject(projectWithLeader);
+    
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == "Project With Leader");
+        Assert.IsNotNull(project);
+        Assert.IsNotNull(project.ProjectLeader);
+        Assert.AreEqual(project.ProjectLeader.Email);
+    }
+
+    
 }
