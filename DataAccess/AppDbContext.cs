@@ -97,6 +97,12 @@ public class AppDbContext : DbContext
             entity.Property(r => r.Name).IsRequired();
             entity.Property(r => r.Type).IsRequired();
             entity.Property(r => r.Description).IsRequired();
+            entity
+                .HasOne(r => r.Project) 
+                .WithMany()             
+                .HasForeignKey("ProjectId")
+                .IsRequired(false)        
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<Notification>(entity =>

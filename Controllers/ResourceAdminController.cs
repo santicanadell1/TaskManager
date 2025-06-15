@@ -16,7 +16,7 @@ public class ResourceAdminController
 
     public List<ResourceDTO> getAllResourcesForAProject(string pName)
     {
-        return _resourceService.getAllResourcesForAProject(pName);
+        return _resourceService.GetResourcesForProject(pName);
     }
 
     public List<(DateTime, int)> getWhenIsResourceOcupied(ResourceDTO res)

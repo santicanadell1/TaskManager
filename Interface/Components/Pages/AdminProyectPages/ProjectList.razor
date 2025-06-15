@@ -1024,9 +1024,14 @@
 
     private void LoadResources()
     {
+        if (string.IsNullOrWhiteSpace(selectedProjectName))
+        {
+            availableResources = new List<ResourceDTO>();
+            return;
+        }
         try
         {
-            availableResources = _ResourceController.GetAllResources();
+            availableResources = _ResourceController.GetAllResourcesForAProject(selectedProjectName);
         }
         catch (Exception ex)
         {
@@ -1065,6 +1070,7 @@
         selectedProjectName = project.Name;
         errorMessage = string.Empty;
         LoadTasks();
+        LoadResources();
     }
 
     public string GetButtonClass(ProjectDTO project)

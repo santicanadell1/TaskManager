@@ -16,16 +16,23 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
 
     public ResourceDTO FromEntity(Resource resource)
     {
-        ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
-        return new ResourceDTO
-        {
-            Id = resource.Id,
-            Name = resource.Name,
-            Type = resource.Type,
-            Description = resource.Description,
-            ConcurrentUsage = resource.ConcurrentUsage,
-            Project = resource.Project!=null? projectConverter.FromEntity(resource.Project): null
+        var dto = new ResourceDTO {
+            Id              = resource.Id,
+            Name            = resource.Name,
+            Type            = resource.Type,
+            Description     = resource.Description,
+            ConcurrentUsage = resource.ConcurrentUsage
         };
+
+        if (resource.Project != null)
+        {
+            dto.Project = new ProjectDTO {
+                Id   = resource.Project.Id,
+                Name = resource.Project.Name
+            };
+        }
+
+        return dto;
     }
 
     public Resource ToEntity(ResourceDTO resourceDTO)
@@ -37,7 +44,23 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
             Project = resourceDTO.Project!=null ? _repositoryManager.ProjectRepository.Get(p => p.Id == resourceDTO.Project.Id): null
         };
     }
+    public List<ResourceDTO> ConvertFromResourceEntityList(List<Resource> resources)
+    {
+        if (resources == null)
+            return new List<ResourceDTO>();
+        return resources
+            .Select(r => FromEntity(r))
+            .ToList();
+    }
 
+    public List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
+    {
+        if (resources == null)
+            return new List<ResourceDTO>();
+        return resources
+            .Select(r => FromEntity(r))
+            .ToList();
+    }
     public List<Resource> ConvertToResourceEntityList(List<ResourceDTO> resourceDTOs)
     {
         if (resourceDTOs == null) return new List<Resource>();
@@ -53,27 +76,6 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
 
         return resources;
     }
-
-    public List<ResourceDTO> ConvertFromResourceEntityList(List<Resource> resources)
-    {
-        if (resources == null)
-            return new List<ResourceDTO>();
-        ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
-        List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
-        foreach (Resource resource in resources)
-            resourceDTOs.Add(new ResourceDTO
-            {
-                Name = resource.Name,
-                Type = resource.Type,
-                Description = resource.Description,
-                ConcurrentUsage = resource.ConcurrentUsage,
-                Id = resource.Id,
-                Project = resource.Project!=null? projectConverter.FromEntity(resource.Project): null
-            });
-
-        return resourceDTOs;
-    }
-
     public List<Resource> ToResourceEntityList(List<ResourceDTO> resourceDTOs)
     {
         if (resourceDTOs == null) return new List<Resource>();
@@ -89,24 +91,5 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
 
         return resources;
     }
-
-    public List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
-    {
-        if (resources == null)
-            return new List<ResourceDTO>();
-        ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
-        List<ResourceDTO> resourceDTOs = new List<ResourceDTO>();
-        foreach (Resource resource in resources)
-            resourceDTOs.Add(new ResourceDTO
-            {
-                Name = resource.Name,
-                Type = resource.Type,
-                Description = resource.Description,
-                ConcurrentUsage = resource.ConcurrentUsage,
-                Id = resource.Id,
-                Project = resource.Project!=null? projectConverter.FromEntity(resource.Project): null
-            });
-
-        return resourceDTOs;
-    }
+    
 }
