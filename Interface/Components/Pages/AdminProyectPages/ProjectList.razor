@@ -9,6 +9,8 @@
 @inject ResourceController _ResourceController
 @inject UserController _UserController
 @inject NavigationManager Navigation
+@inject IJSRuntime JS
+
 @rendermode InteractiveServer
 
 <link href="styles/styleProjectList.css" rel="stylesheet"/>
@@ -941,6 +943,8 @@
     </div>
 }
 
+
+
 @code {
 
     private List<ProjectDTO> projects = new();
@@ -1003,11 +1007,20 @@
     private string projectErrorMessage = string.Empty;
     private List<UserDTO> projectLeadersUsers = new List<UserDTO>();
 
-    protected override void OnInitialized()
+
+    protected override async void OnInitialized()
     {
         LoadProjects();
         LoadResources();
         LoadUsers();
+
+        var savedProjectName = await JS.InvokeAsync<string>("localStorage.getItem", "selectedProject");
+        
+        if (!string.IsNullOrEmpty(savedProjectName))
+        {
+            selectedProjectName = savedProjectName;
+            LoadTasks();
+        }
     }
 
     private void LoadProjects()
@@ -1060,10 +1073,11 @@
         }
     }
 
-    private void ShowProjectOptions(ProjectDTO project)
+    private async void ShowProjectOptions(ProjectDTO project)
     {
         selectedProjectName = project.Name;
         errorMessage = string.Empty;
+        await JS.InvokeVoidAsync("localStorage.setItem", "selectedProject", project.Name);
         LoadTasks();
     }
 
@@ -1095,6 +1109,8 @@
                 selectedProjectName = null;
                 taskList.Clear();
             }
+            Navigation.NavigateTo(Navigation.Uri,true);
+            StateHasChanged();
         }
         catch (Exception ex)
         {

@@ -82,4 +82,9 @@ public class AdminProjectController
     {
         _adminPService.RemoveProjectLeader(projectName);
     }
+
+    public ProjectDTO GetProject(string projectName)
+    {
+        return _adminPService.GetProjectByName(projectName);
+    }
 }
