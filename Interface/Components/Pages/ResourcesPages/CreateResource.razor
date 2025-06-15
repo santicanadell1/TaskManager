@@ -4,6 +4,7 @@
 @inject NavigationManager Navigation
 @inject ResourceController _ResourceController
 @inject AdminProjectController _AdminProjectController
+@inject LoginController _LoginController
 @rendermode InteractiveServer
 
 <link href="styles/styleCreateResource.css" rel="stylesheet"/>
@@ -48,6 +49,7 @@
                         <option value="@proj.Id">@proj.Name</option>
                     }
                 </select>
+                
             </div>
         </div>
 
@@ -97,10 +99,18 @@
         projects = _AdminProjectController.GetAllProjectsForAdmin();
     }
 
-    private void HandleValidSubmit()
+    private async void HandleValidSubmit()
     {
         try
         {
+            if (!selectedProjectId.HasValue && !_LoginController.IsTheCurrentUserAdminSystem())
+            {
+                alertMessage = "Please select a project. As an Admin Project, you can only create a resource exclusive to your projects.";                
+                alertVisible = true;
+                successVisible = false;
+                return;
+            }
+
             if (selectedProjectId.HasValue)
             {
                 newResource.Project = projects
@@ -111,6 +121,8 @@
             successMessage = "Resource created successfully!";
             successVisible = true;
             alertVisible = false;
+            await Task.Delay(1500);
+            ClearAllInputs();
         }
         catch (Exception ex)
         {
@@ -125,5 +137,23 @@
         alertVisible = false;
         successVisible = false;
     }
+
+    private void ClearAllInputs()
+    {
+        newResource = new ResourceDTO
+        {
+            Description = "",
+            Name = "",
+            Type = "",
+            ConcurrentUsage = false
+        };
+
+        selectedProjectId = null;
+        alertVisible = false;
+        successVisible = false;
+
+        StateHasChanged();
+    }
+
 
 }
