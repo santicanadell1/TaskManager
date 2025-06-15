@@ -2990,11 +2990,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Service\\Service.csproj",
+      "projectUniqueName": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Service\\Service.csproj",
       "projectName": "Service",
-      "projectPath": "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Service\\Service.csproj",
+      "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Service\\Service.csproj",
       "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Service\\obj\\",
+      "outputPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Service\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3011,11 +3011,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
+            "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\DataAccess\\DataAccess.csproj"
             },
-            "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Domain\\Domain.csproj": {
-              "projectPath": "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Domain\\Domain.csproj"
+            "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj": {
+              "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj"
             }
           }
         }

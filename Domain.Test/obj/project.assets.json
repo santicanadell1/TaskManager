@@ -1018,11 +1018,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Domain.Test\\Domain.Test.csproj",
+      "projectUniqueName": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain.Test\\Domain.Test.csproj",
       "projectName": "Domain.Test",
-      "projectPath": "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Domain.Test\\Domain.Test.csproj",
+      "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain.Test\\Domain.Test.csproj",
       "packagesPath": "C:\\Users\\SALCHIPAPA\\.nuget\\packages\\",
-      "outputPath": "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Domain.Test\\obj\\",
+      "outputPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain.Test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SALCHIPAPA\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1039,8 +1039,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Domain\\Domain.csproj": {
-              "projectPath": "E:\\OBLS\\Nueva carpeta\\305108_282542_281987\\Domain\\Domain.csproj"
+            "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj": {
+              "projectPath": "E:\\OBLS\\Obl2-DA1\\305108_282542_281987\\Domain\\Domain.csproj"
             }
           }
         }
