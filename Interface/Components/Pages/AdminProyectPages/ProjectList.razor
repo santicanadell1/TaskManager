@@ -1018,7 +1018,7 @@
         {
             var savedProjectName = await JS.InvokeAsync<string>("localStorage.getItem", "selectedProject");
 
-            if (!string.IsNullOrEmpty(savedProjectName))
+            if (!string.IsNullOrEmpty(savedProjectName) && projects.Any(p => p.Name == savedProjectName))
             {
                 selectedProjectName = savedProjectName;
                 LoadTasks();
