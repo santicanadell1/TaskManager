@@ -1014,12 +1014,15 @@
         LoadResources();
         LoadUsers();
 
-        var savedProjectName = await JS.InvokeAsync<string>("localStorage.getItem", "selectedProject");
-        
-        if (!string.IsNullOrEmpty(savedProjectName))
+        if (projects != null && projects.Any())
         {
-            selectedProjectName = savedProjectName;
-            LoadTasks();
+            var savedProjectName = await JS.InvokeAsync<string>("localStorage.getItem", "selectedProject");
+
+            if (!string.IsNullOrEmpty(savedProjectName))
+            {
+                selectedProjectName = savedProjectName;
+                LoadTasks();
+            }
         }
     }
 
@@ -1106,10 +1109,13 @@
 
             if (selectedProjectName == project.Name)
             {
-                selectedProjectName = null;
+                selectedProjectName = string.Empty;
                 taskList.Clear();
             }
-            Navigation.NavigateTo(Navigation.Uri,true);
+
+            Navigation.NavigateTo(Navigation.Uri, true);
+            JS.InvokeVoidAsync("localStorage.setItem", "selectedProject", null);
+
             StateHasChanged();
         }
         catch (Exception ex)
