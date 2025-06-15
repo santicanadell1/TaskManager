@@ -61,6 +61,23 @@ public class ResourceService : IResourceService
         return resourcesDTO;
     }
 
+    public List<ResourceDTO> GetResourcesForProject(string projectName)
+    {
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
+
+        foreach (Resource resource in _repositoryManager.ResourceRepository.GetAll())
+        {
+            if (resource.Project == null || resource.Project.Name == projectName)
+            {
+                resourcesDTO.Add(_resourceConverter.FromEntity(resource));
+            }
+        }
+        if (resourcesDTO.Count == 0) throw new NoResourcesFoundException();
+
+        return resourcesDTO;
+    }
+
     public void UpdateResource(int? id, ResourceDTO updatedResourceDTO)
     {
         isAbleToModifyResource(GetResourceObject(id));
@@ -111,7 +128,7 @@ public class ResourceService : IResourceService
     private bool isAdminSystem()
     {
         UserDTO currentUser = LoggedUser.Current;
-        return currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminSystem));
+        return currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminSystem)) || currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminProject));
     }
 
     private List<Project> GetProjectsThatAreUsingResource(Resource resource)
@@ -134,15 +151,18 @@ public class ResourceService : IResourceService
     }
 
     private bool isExclusive(Resource resource)
-    {
-        UserDTO currentUser = LoggedUser.Current;
-        List<Project> projects = GetProjectsThatAreUsingResource(resource);
-        if (projects.Count == 0) return false;
-        bool currentUserIsAdmin = currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminProject));
-        bool isUsedByOneProject = projects.Count == 1;
-        bool projectAdminIsCurrentUser = projects[0].AdminProject.Email.Equals(currentUser.Email);
-        return currentUserIsAdmin && isUsedByOneProject && projectAdminIsCurrentUser;
-    }
+        {
+                UserDTO currentUser = LoggedUser.Current;
+
+                    var projectsUsing = GetProjectsThatAreUsingResource(resource);
+
+                    if (projectsUsing.Count != 1)
+                        return false;
+
+                    var project = projectsUsing[0];
+                return project.AdminProject != null
+                        && project.AdminProject.Email.Equals(currentUser.Email);
+            }
 
     public TaskDTO updateResourceDependencies(TaskDTO taskDTO, string ProjectName)
     {

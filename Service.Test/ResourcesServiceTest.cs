@@ -305,7 +305,7 @@ public class ResourcesServiceTest
         {
             Title = "Title 2",
             Description = "Description2",
-            ExpectedStartDate = DateTime.Today,
+            ExpectedStartDate = DateTime.Today.AddDays(10),
             Duration = 5,
             PreviousTasks = new List<TaskDTO>(),
             SameTimeTasks = new List<TaskDTO>(),
@@ -469,7 +469,7 @@ public class ResourcesServiceTest
 
         _resourceService.AddResource(resourceDTO);
         _loginService.Logout();
-        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");
+        _loginService.LoginUser("john.doe@example.com", "Password123@");
         Resource addedResource = _repositoryManager.ResourceRepository.Get(r => r.Name == "Resource1");
 
         ResourceDTO addedResourceDto = _resourceService.Get(addedResource.Id);
@@ -1068,6 +1068,43 @@ public void UpdateResourceDependencies_ShouldAddPreviousTasks_BasedOnResourceAnd
     
         Assert.IsNotNull(result);
         Assert.AreEqual(0, result.Count);
+    }
+    
+    [TestMethod]
+    public void GetResourcesForAProject_ShouldReturnAllResourcesForTheProject_WhenResourcesExist()
+    {
+        _loginService.LoginUser("adminProject.user@example.com", "AdminPassword123@");;
+        ProjectDTO projectDTO1 = new ProjectDTO
+        {
+            Name = "Project 1",
+            Description = "Description 1",
+            StartDate = DateTime.Now,
+        };
+        ResourceDTO resourceDTO1 = new ResourceDTO
+        {
+            Name = "Resource1",
+            Type = "TypeA",
+            Description = "Description of Resource1",
+            Project = projectDTO1
+        };
+
+        ResourceDTO resourceDTO2 = new ResourceDTO
+        {
+            Name = "Resource2",
+            Type = "TypeB",
+            Description = "Description of Resource2"
+        };
+        _adminProjectService.CreateProject(projectDTO1);
+
+        
+        _resourceService.AddResource(resourceDTO1);
+        _resourceService.AddResource(resourceDTO2);
+
+        List<ResourceDTO> resources = _resourceService.GetResourcesForProject("Project 1");
+
+        Assert.AreEqual(2, resources.Count);
+        Assert.IsTrue(resources.Exists(r => r.Name == "Resource1"));
+        Assert.IsTrue(resources.Exists(r => r.Name == "Resource2"));
     }
 
 }

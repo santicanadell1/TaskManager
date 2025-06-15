@@ -97,9 +97,7 @@ public class TaskService
         CreateTask(taskDTO);
         Task task = _repositoryManager.TaskRepository.Get(t => t.Title == taskDTO.Title);
 
-        project.Tasks.Add(task);
-
-        _repositoryManager.ProjectRepository.Update(project);
+        _repositoryManager.ProjectRepository.AddTask(projectName, task);
 
         RecalculateCriticalPath(projectName);
         var cpmResult = GetCriticalPath(projectName);

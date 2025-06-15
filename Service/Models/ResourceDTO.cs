@@ -14,6 +14,8 @@ public class ResourceDTO
     public string Description { get; set; }
 
     public bool ConcurrentUsage { get; set; }
+    
+    public ProjectDTO? Project { get; set; }
 
     public int? Id { get; set; }
 }

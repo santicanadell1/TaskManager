@@ -12,7 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
+<<<<<<<< HEAD:DataAccess/Migrations/20250615033637_Initial.Designer.cs
     [Migration("20250615033637_Initial")]
+========
+    [Migration("20250615193119_Initial")]
+>>>>>>>> Feat/ProjectResource:DataAccess/Migrations/20250615193119_Initial.Designer.cs
     partial class Initial
     {
         /// <inheritdoc />
@@ -118,11 +122,16 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Resources");
                 });
@@ -332,6 +341,16 @@ namespace DataAccess.Migrations
                     b.Navigation("AdminProject");
 
                     b.Navigation("ProjectLeader");
+                });
+
+            modelBuilder.Entity("Domain.Resource", b =>
+                {
+                    b.HasOne("Domain.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Domain.Task", b =>

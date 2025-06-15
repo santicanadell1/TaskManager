@@ -87,4 +87,9 @@ public class AdminProjectController
     {
         return _adminPService.GetProjectByName(projectName);
     }
+
+    public List<ProjectDTO> GetAllProjectsForAdmin()
+    {
+        return _adminPService.GetAllProjectsForAdmin();
+    }
 }

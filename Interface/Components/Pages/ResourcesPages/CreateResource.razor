@@ -3,6 +3,7 @@
 @using Service.Models
 @inject NavigationManager Navigation
 @inject ResourceController _ResourceController
+@inject AdminProjectController _AdminProjectController
 @rendermode InteractiveServer
 
 <link href="styles/styleCreateResource.css" rel="stylesheet"/>
@@ -28,17 +29,29 @@
             <label for="resourceDescription">Description</label>
             <InputTextArea id="resourceDescription" class="form-control mt-1" @bind-Value="newResource.Description"/>
         </div>
-        <div class="form-group form-check mt-3">
-            <div class="checkbox-container">
-                <label class="form-check-label custom-checkbox">
-                    <InputCheckbox id="concurrencyEnabled"
-                                   class="form-check-input"
-                                   @bind-Value="newResource.ConcurrentUsage"/>
+
+        <div class="mb-2 mt-3">
+            <div class="d-flex justify-content-center align-items-center mb-4">
+                <input class="form-check-input" type="checkbox" id="concurrencyEnabled"
+                       @bind="newResource.ConcurrentUsage"/>
+                <label class="form-check-label ml-2" for="concurrencyEnabled">
                     Enable concurrent usage
                 </label>
             </div>
+
+            <label class="form-label mt-1">Assign to project (optional)</label>
+            <div class="d-flex justify-content-center mt-2">
+                <select class="form-select w-50" @bind="selectedProjectId">
+                    <option value="">— Global resource —</option>
+                    @foreach (var proj in projects)
+                    {
+                        <option value="@proj.Id">@proj.Name</option>
+                    }
+                </select>
+            </div>
         </div>
-        
+
+
         <button type="submit" class="btn btn-primary mt-3">Create Resource</button>
     </EditForm>
 
@@ -65,6 +78,8 @@
 
 @code {
     private ResourceDTO newResource = new();
+    private List<ProjectDTO> projects;
+    private int? selectedProjectId;
     private bool alertVisible;
     private string alertMessage = string.Empty;
     private bool successVisible;
@@ -79,12 +94,19 @@
             Type = "",
             ConcurrentUsage = false
         };
+        projects = _AdminProjectController.GetAllProjectsForAdmin();
     }
 
     private void HandleValidSubmit()
     {
         try
         {
+            if (selectedProjectId.HasValue)
+            {
+                newResource.Project = projects
+                    .First(p => p.Id == selectedProjectId.Value);
+            }
+
             _ResourceController.CreateResource(newResource);
             successMessage = "Resource created successfully!";
             successVisible = true;

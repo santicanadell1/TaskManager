@@ -34,4 +34,9 @@ public class ResourceController
     {
         return _resourceService.GetResources();
     }
+
+    public List<ResourceDTO> GetAllResourcesForAProject(string projectName)
+    {
+        return _resourceService.GetResourcesForProject(projectName);
+    }
 }

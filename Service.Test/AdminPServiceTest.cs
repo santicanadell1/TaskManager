@@ -1156,4 +1156,31 @@ public void RemoveAdminFromProject_ShouldThrowUserIsNotAMemberException_WhenEmai
     
     _adminPservice.RemoveAdminFromProject("Project With Different Admin", "different.admin@example.com");
 }
+[TestMethod]
+public void GetAllProjectsForAdmin_ShouldReturnAllProjectsLoggedUserIsAdmin()
+{
+    ProjectDTO projectDTO1 = new ProjectDTO
+    {
+        Name = "Project 1",
+        Description = "Description 1",
+        StartDate = DateTime.Now,
+        Members = members
+    };
+    ProjectDTO projectDTO2 = new ProjectDTO
+    {
+        Name = "Project 2",
+        Description = "Description 2",
+        StartDate = DateTime.Now.AddDays(1),
+        Members = members
+    };
+
+    _adminPservice.CreateProject(projectDTO1);
+    _adminPservice.CreateProject(projectDTO2);
+
+    List<ProjectDTO> projects = _adminPservice.GetAllProjectsForAdmin();
+
+    Assert.AreEqual(2, projects.Count);
+    Assert.AreEqual("Project 1", projects[0].Name);
+    Assert.AreEqual("Project 2", projects[1].Name);
+}
 }

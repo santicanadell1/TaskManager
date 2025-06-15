@@ -123,7 +123,7 @@
         };
     }
 
-    private void HandleValidSubmit()
+    private async void HandleValidSubmit()
     {
         try
         {
@@ -138,7 +138,8 @@
             successMessage = "User created successfully!";
             successVisible = true;
             alertVisible = false;
-            Navigation.NavigateTo("/");
+            await Task.Delay(1500);
+            ClearAllInputs();
         }
         catch (Exception ex)
         {
@@ -153,5 +154,31 @@
         alertVisible = false;
         successVisible = false;
     }
+
+    private void ClearAllInputs()
+    {
+        _userDto = new UserDTO
+        {
+            FirstName = "",
+            LastName = "",
+            Email = "",
+            Password = "",
+            Birthday = DateTime.Now,
+            Roles = new List<RolDTO>()
+        };
+
+        confirmPassword = ""; 
+
+        passwordInputType = "password";
+        passwordEyeIcon = "fas fa-eye-slash";
+        confirmPasswordInputType = "password";
+        confirmPasswordEyeIcon = "fas fa-eye-slash";
+
+        alertVisible = false;
+        successVisible = false;
+
+        StateHasChanged();
+    }
+
 
 }

@@ -244,8 +244,6 @@
             };
             selectedProjectLeaderEmail = string.Empty;
             projectLeaderEmail = string.Empty;
-
-            Task.Delay(2000).ContinueWith(t => { InvokeAsync(() => Navigation.NavigateTo("/project/options")); });
         }
         catch (Exception ex)
         {

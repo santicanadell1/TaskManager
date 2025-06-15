@@ -9,13 +9,16 @@ public class Resource
     public string type;
     public bool ConcurrentUsage{ get; set; }
     public int? Id { get; set; }
+    
+    public Project? Project { get; set; }
 
-    public Resource(string name, string type, string description, bool concurrentUsage = false)
+    public Resource(string name, string type, string description, bool concurrentUsage = false, Project? project = null)
     {
         Name = name;
         Type = type;
         Description = description;
         ConcurrentUsage = concurrentUsage;
+        Project = project;
     }
     
     public Resource(){}

@@ -262,6 +262,15 @@ public class AdminPService : IAdminPService
         return projects;
     }
 
+    public List<ProjectDTO> GetAllProjectsForAdmin()
+    {
+        List<ProjectDTO> projects = new List<ProjectDTO>();
+        foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
+            if ((project.AdminProject != null && project.AdminProject.Email == LoggedUser.Current.Email) || (LoggedUser.Current.Roles.Equals(RolDTO.AdminSystem)))
+                projects.Add(_projectConverter.FromEntity(project));
+        return projects;   
+    }
+
     public List<UserDTO> GetMembers(string projectName)
     {
         CheckAdminProyectRole();
