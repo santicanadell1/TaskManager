@@ -182,6 +182,20 @@
                 template: function (task) {
                     return task.slack ? task.slack.toFixed(1) : "0";
                 }
+            },
+            {
+                name: "State",
+                label: "State",
+                align: "center",
+                width: 100,
+                resize: false,
+                template: function (task) {
+                    switch (task.progress){
+                        case 0: return "To Do"
+                        case 0.5: return "In Progress"
+                        case 1: return "Done"
+                    }
+                }
             }
         ];
         gantt.templates.task_class = function (start, end, task) {
