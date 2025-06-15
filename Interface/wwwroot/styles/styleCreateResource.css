@@ -8,8 +8,12 @@
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos dentro del contenedor */
 }
 
+/* Hover effect for container */
 .resource-container:hover {
     box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
     transform: translateY(-5px);
@@ -25,6 +29,7 @@
     position: relative;
 }
 
+/* Title line under resource title */
 .resource-container .resource-title::after {
     content: '';
     position: absolute;
@@ -49,6 +54,7 @@
     color: #333;
 }
 
+/* Form control focus effect */
 .resource-container .form-control:focus {
     border-color: #3498db;
     box-shadow: 0 0 8px rgba(52, 152, 219, 0.35);
@@ -56,7 +62,47 @@
     background-color: #fff;
 }
 
-/* Buttons */
+/* Checkbox container */
+.resource-container .form-check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;  /* Aumenta el espacio entre el checkbox y los elementos siguientes */
+}
+
+/* Checkbox label */
+.resource-container .form-check-label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* Selector de proyectos */
+.resource-container .form-select {
+    border-radius: 12px;
+    border: 2px solid #e6e6e6;
+    padding: 12px 18px;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    color: #333;
+    max-width: 500px;
+    width: 100%;  /* Hace que el select ocupe todo el espacio disponible */
+    margin-top: 30px;  /* Añade más espacio entre el campo de descripción y el select */
+    appearance: none;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"%3E%3Cpath fill="none" stroke="%23333" stroke-width="1.5" d="M1 1l4 4 4-4" /%3E%3C/svg%3E');
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+}
+
+/* Enfoque del select */
+.resource-container .form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.35);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Botón centrado */
 .resource-container button.btn {
     width: 100%;
     padding: 12px;
@@ -70,95 +116,20 @@
     cursor: pointer;
 }
 
+/* Button hover effect */
 .resource-container button.btn:hover {
     background-color: #2980b9;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
 }
 
-.resource-container button.btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(41, 128, 185, 0.4);
-}
-
-/* Success and Error Messages */
-.resource-container .alert-success {
-    margin-top: 20px;
-    font-size: 14px;
-    background-color: #2ecc71;
-    color: white;
-    padding: 12px 15px;
-    border-radius: 10px;
-    border-left: 4px solid #27ae60;
-}
-
-.resource-container .alert-danger {
-    margin-top: 20px;
-    font-size: 14px;
-    background-color: #ff6b6b;
-    color: white;
-    padding: 12px 15px;
-    border-radius: 10px;
-    border-left: 4px solid #e74c3c;
-}
-
-/* Button to close alert (with the "X" or a similar icon) */
-.resource-container .alert .close {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 1.5em;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    transition: all 0.3s ease;
-    border-radius: 50%;
-    padding: 8px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.resource-container .alert .close:hover {
-    background-color: #e74c3c;
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.resource-container .alert .close:focus {
-    outline: none;
-    background-color: #e74c3c;
-    transform: translateY(-50%) scale(1.1);
-}
-
-.checkbox-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-left: 20px;
-}
-
-.custom-checkbox {
-    width: 24px; 
-    height: 24px; 
-    margin-right: 10px; 
-}
-
-.form-check-label {
-    font-size: 16px; 
-    font-weight: bold; 
-    margin-left: 10px; 
-}
-
-
-/* Mobile View Adjustments */
+/* Ajustes para móviles */
 @media (max-width: 768px) {
-    .resource-container {
-        padding: 25px;
-        margin: 40px auto;
+    .resource-container .form-select {
+        width: 80%;  /* En móviles, el select ocupará el 80% del contenedor */
+    }
+
+    .resource-container .form-control {
+        width: 80%; /* Los inputs también ocuparán el 80% en móviles */
     }
 }
