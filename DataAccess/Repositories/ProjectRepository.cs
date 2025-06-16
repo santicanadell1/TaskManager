@@ -32,6 +32,10 @@ public class ProjectRepository : IRepository<Project>
             .ThenInclude(t => t.Resources)
             .Include(p => p.Tasks)
             .ThenInclude(t => t.PreviousTasks)
+            .Include(p=> p.Tasks)
+            .ThenInclude(t => t.SameTimeTasks)
+            .Include(p=> p.AdminProject)
+            .Include(p=> p.ProjectLeader)
             .ToList();
     }
 
@@ -43,6 +47,8 @@ public class ProjectRepository : IRepository<Project>
             .ThenInclude(t => t.Resources)
             .Include(p => p.Tasks)
             .ThenInclude(t => t.PreviousTasks)
+            .Include(p=> p.Tasks)
+            .ThenInclude(t => t.SameTimeTasks)
             .Include(p => p.Tasks)
             .Include(p=> p.AdminProject)
             .Include(p=> p.ProjectLeader)
