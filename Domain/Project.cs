@@ -55,10 +55,6 @@ public class Project
         set
         {
             if (value == default) throw new ProjectStartDateException();
-
-            if (value < DateTime.Today)
-                throw new ProjectException("The Start Date must be greater than the current date");
-
             startDate = value;
         }
     }

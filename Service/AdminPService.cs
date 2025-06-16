@@ -13,6 +13,8 @@ using Service.Interface;
 using Service.Models;
 using Task = Domain.Task;
 
+
+
 public class AdminPService : IAdminPService
 {
     private readonly IRepositoryManager _repositoryManager;
@@ -31,7 +33,8 @@ public class AdminPService : IAdminPService
         CheckAdminProyectRole();
         Project existingProject = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
         if (existingProject != null) throw new DuplicatedProjectsNameException();
-
+        if (projectDTO.StartDate < DateTime.Today)
+            throw new ProjectStartDateException();
         Project newProject = _projectConverter.ToEntity(projectDTO);
         SetProjectAdmin(newProject, projectDTO);
         _repositoryManager.ProjectRepository.Add(newProject);
