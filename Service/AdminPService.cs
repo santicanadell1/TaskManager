@@ -184,7 +184,17 @@ public class AdminPService : IAdminPService
         if (project == null) throw new ProjectNotFoundException();
 
         if (project.Members.Find(m => m.Email == memberEmail) == null) throw new UserIsNotAMemberException();
-
+        HashSet<int?> projectTasks = project.Tasks.Select(t => t.Id).ToHashSet();
+        User user = _repositoryManager.UserRepository
+            .Get(u => u.Email == memberEmail);
+        List<Task> TasksToDelete = user.Tasks
+            .Where(t => t.Id.HasValue && projectTasks.Contains(t.Id.Value))
+            .ToList();
+        foreach (var Task in TasksToDelete)
+        {
+            user.Tasks.Remove(Task);
+        }
+        _repositoryManager.UserRepository.Update(user);
         project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
         _repositoryManager.ProjectRepository.Update(project);
     }
