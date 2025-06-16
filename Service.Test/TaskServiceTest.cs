@@ -48,7 +48,7 @@ public class TaskServiceTest
         _login = new Login(_repositoryManager);
         _resourceService = new ResourceService(_repositoryManager);
 
-        _genericProject = new Project("Generic Project", "Description", DateTime.Now);
+        _genericProject = new Project("Generic Project", "Description", DateTime.Parse("2025-06-16"));
         _repositoryManager.ProjectRepository.Add(_genericProject);
         _userService = new UserService(_repositoryManager);
         userDTO = new UserDTO
@@ -581,7 +581,7 @@ public class TaskServiceTest
         {
             Title = "Complex Mapping DTO",
             Description = "Complex mapping description",
-            ExpectedStartDate = new DateTime(2025, 6, 15),
+            ExpectedStartDate = new DateTime(2026, 6, 15),
             Duration = 9,
             State = StateDTO.DOING,
             PreviousTasks = new List<TaskDTO>(),

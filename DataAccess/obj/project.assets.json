@@ -4056,19 +4056,19 @@
     ]
   },
   "packageFolders": {
-    "/home/feli/.nuget/packages/": {}
+    "C:\\Users\\santi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/feli/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj",
+      "projectUniqueName": "C:\\Users\\santi\\OneDrive\\Escritorio\\DDDD\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
       "projectName": "DataAccess",
-      "projectPath": "/home/feli/RiderProjects/305108_282542_281987/DataAccess/DataAccess.csproj",
-      "packagesPath": "/home/feli/.nuget/packages/",
-      "outputPath": "/home/feli/RiderProjects/305108_282542_281987/DataAccess/obj/",
+      "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\DDDD\\305108_282542_281987\\DataAccess\\DataAccess.csproj",
+      "packagesPath": "C:\\Users\\santi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\DDDD\\305108_282542_281987\\DataAccess\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/feli/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\santi\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -4080,8 +4080,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj": {
-              "projectPath": "/home/feli/RiderProjects/305108_282542_281987/Domain/Domain.csproj"
+            "C:\\Users\\santi\\OneDrive\\Escritorio\\DDDD\\305108_282542_281987\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\santi\\OneDrive\\Escritorio\\DDDD\\305108_282542_281987\\Domain\\Domain.csproj"
             }
           }
         }
@@ -4090,6 +4090,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -4141,7 +4146,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.117/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.407/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
