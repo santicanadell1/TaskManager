@@ -1808,7 +1808,10 @@
                 Name = project.Name,
                 Description = project.Description,
                 StartDate = project.StartDate,
-                ProjectLeader = project.ProjectLeader != null ? _UserController.GetUser(project.ProjectLeader.Email) : null
+                ProjectLeader = project.ProjectLeader != null ? _UserController.GetUser(project.ProjectLeader.Email) : null,
+                Members = project.Members,
+                AdminProyect = project.AdminProyect,
+                Tasks = project.Tasks
             };
 
             currentProjectLeaderEmail = project.ProjectLeader?.Email ?? string.Empty;

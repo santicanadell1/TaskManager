@@ -423,6 +423,7 @@ public class AdminPService : IAdminPService
         }
 
         projectEntity.ProjectLeader = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
+        _repositoryManager.ProjectRepository.Update(projectEntity);
     }
 
     public void RemoveProjectLeader(string projectName)
