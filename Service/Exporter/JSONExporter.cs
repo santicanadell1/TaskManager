@@ -14,7 +14,7 @@ public class JSONExporter : ExporterBase
 
     protected override string ExportData(List<ProjectDTO> projects)
     {
-        List<ProjectDTO> projectsJson = projects
+        List<ProjectExportDTO> projectsJson = projects
             .Select(p => new ProjectExportDTO
             {
                 Project = p.Name,
