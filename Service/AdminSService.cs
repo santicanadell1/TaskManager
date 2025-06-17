@@ -115,7 +115,17 @@ public class AdminSService : IAdminSService
         }
     }
 
-
+    public void RemoveRole(UserDTO userDTO, RolDTO role)
+    {
+        CheckAdminRole();
+        UserDTO user = _userService.GetUser(userDTO.Email);
+        if (user == null) throw new UserNotFoundException();
+        if (user.Roles.Contains(role))
+        {
+            user.Roles.Remove(role);
+            UpdateUserRoles(user);
+        }
+    }
 
     private void UpdateUserRoles(UserDTO userDTO)
     {
