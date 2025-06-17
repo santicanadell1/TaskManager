@@ -18,21 +18,20 @@ public class LoginController
     {
         _login.LoginUser(email, password);
     }
+    public void Logout()
+    {
+        _login.Logout();
+    }
 
     public UserDTO GetLoggedUser()
     {
         return _login.GetLoggedUser();
     }
-
     public void UpdateLoggedUser(UserDTO userToUpdate)
     {
         _login.UpdateUser(userToUpdate);
     }
-
-    public void Logout()
-    {
-        _login.Logout();
-    }
+    
 
     public bool IsTheCurrentUserAdminSystem()
     {
