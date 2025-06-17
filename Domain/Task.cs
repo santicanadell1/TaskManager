@@ -4,6 +4,7 @@ namespace Domain;
 
 public class Task
 {
+    public int? Id { get; set; }
     public string _description;
     public int _duration;
     public List<Task> _previousTasks;
@@ -19,7 +20,8 @@ public class Task
     public TimeSpan Slack { get; set; }
     public bool IsCritical { get; set; }
     public State State { get; set; }
-    public int? Id { get; set; }
+    
+    public Task(){}
 
     public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks,
         List<Task> sameTimeTasks, List<Resource> resources)
@@ -124,5 +126,5 @@ public class Task
         SameTimeTasks.Remove(task);
     }
     
-    public Task(){}
+    
 }
