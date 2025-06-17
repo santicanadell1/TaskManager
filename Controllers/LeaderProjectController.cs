@@ -13,8 +13,8 @@ public class LeaderProjectController
 
     public LeaderProjectController(IRepositoryManager repositoryManager)
     {
-        var csvExporter = new CSVExporter(repositoryManager);
-        var jsonExporter = new JSONExporter(repositoryManager);
+        CSVExporter csvExporter = new CSVExporter(repositoryManager);
+        JSONExporter jsonExporter = new JSONExporter(repositoryManager);
         _LeaderPService = new LeaderPService(repositoryManager, csvExporter);
         _LeaderPServiceCSV = new LeaderPService(repositoryManager, csvExporter);
         _LeaderPServiceJSON = new LeaderPService(repositoryManager, jsonExporter);
