@@ -6,12 +6,10 @@ namespace Controllers;
 
 public class GanttController
 {
-    private readonly GanttService _ganttService;
     private readonly CpmService _cpmService;
 
     public GanttController()
     {
-        _ganttService = new GanttService();
         _cpmService = new CpmService();
     }
 
