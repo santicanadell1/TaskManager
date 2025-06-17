@@ -764,7 +764,7 @@ public class TaskServiceTest
         {
             Title = "Task with invalid start date",
             Description = "Description",
-            ExpectedStartDate = DateTime.Now.AddDays(-2),
+            ExpectedStartDate =DateTime.Parse("2025-06-16").AddDays(-2),
             Duration = 3,
             Resources = new List<ResourceDTO>()
         };
