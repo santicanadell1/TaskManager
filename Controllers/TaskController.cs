@@ -11,7 +11,7 @@ public class TaskController
 
     public TaskController(IRepositoryManager repositoryManager)
     {
-        var cpmService = new CpmService();
+        CpmService cpmService = new CpmService();
         _taskService = new TaskService(repositoryManager, cpmService);
     }
 
