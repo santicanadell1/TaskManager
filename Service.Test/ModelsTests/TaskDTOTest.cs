@@ -195,10 +195,8 @@ public class TaskDTOTest
     [TestMethod]
     public void TaskDTO_DefaultValues_ShouldBeCorrect()
     {
-        // Arrange & Act
         var taskDTO = new TaskDTO();
-
-        // Assert
+        
         Assert.IsFalse(taskDTO.IsCritical, "Default value for IsCritical should be false");
         Assert.AreEqual(default, taskDTO.StartDate, "Default value for StartDate should be default(DateTime)");
         Assert.AreEqual(default, taskDTO.EndDate, "Default value for EndDate should be default(DateTime)");
