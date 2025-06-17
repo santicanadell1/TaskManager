@@ -8,7 +8,7 @@ public class GanttDataTests
     [TestMethod]
     public void GanttData_WhenInitializingWithEmptyLists_ShouldInitializeCorrectly()
     {
-        var ganttData = new GanttData
+        GanttData ganttData = new GanttData
         {
             data = new List<GanttTask>(),
             links = new List<GanttLink>(),
@@ -25,10 +25,10 @@ public class GanttDataTests
     [TestMethod]
     public void GanttData_WhenInitializeWithCorrectData_ShouldHoldProvidedData()
     {
-        var task = new GanttTask { id = 1, text = "Tarea 1", start_date = "2025-05-10", duration = 5, progress = 0.5 };
-        var link = new GanttLink { id = 1, source = 1, target = 2, type = "0", critical = true };
-        var criticalIds = new List<int> { 1, 2, 3 };
-        var ganttData = new GanttData
+        GanttTask task = new GanttTask { id = 1, text = "Tarea 1", start_date = "2025-05-10", duration = 5, progress = 0.5 };
+        GanttLink link = new GanttLink { id = 1, source = 1, target = 2, type = "0", critical = true };
+        List<int> criticalIds = new List<int> { 1, 2, 3 };
+        GanttData ganttData = new GanttData
         {
             data = new List<GanttTask> { task },
             links = new List<GanttLink> { link },
