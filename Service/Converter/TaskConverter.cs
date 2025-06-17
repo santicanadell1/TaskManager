@@ -18,7 +18,7 @@ public class TaskConverter : IConverter<Task, TaskDTO>
 
     public Task ToEntity(TaskDTO taskDTO)
     {
-        var taskEntity = new Task(
+        Task taskEntity = new Task(
             taskDTO.Title,
             taskDTO.Description,
             taskDTO.ExpectedStartDate,
@@ -66,11 +66,11 @@ public class TaskConverter : IConverter<Task, TaskDTO>
     {
         if (taskDTOs == null) return new List<Task>();
 
-        var tasks = new List<Task>();
-        foreach (var taskDTO in taskDTOs)
+        List<Task> tasks = new List<Task>();
+        foreach (TaskDTO taskDTO in taskDTOs)
             if (taskDTO.Id.HasValue)
             {
-                var existingTask = _repositoryManager.TaskRepository.Get(t => t.Id == taskDTO.Id);
+                Task existingTask = _repositoryManager.TaskRepository.Get(t => t.Id == taskDTO.Id);
                 if (existingTask != null) tasks.Add(existingTask);
             }
 
@@ -81,8 +81,8 @@ public class TaskConverter : IConverter<Task, TaskDTO>
     {
         if (taskDTOs == null) return new List<Task>();
 
-        var tasks = new List<Task>();
-        foreach (var taskDTO in taskDTOs) tasks.Add(ToEntity(taskDTO));
+        List<Task> tasks = new List<Task>();
+        foreach (TaskDTO taskDTO in taskDTOs) tasks.Add(ToEntity(taskDTO));
 
         return tasks;
     }
