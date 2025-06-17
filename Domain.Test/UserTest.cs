@@ -23,7 +23,7 @@ public class UserTest
     public void NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated()
     {
         User user;
-        var birthday = DateTime.Parse("10/03/2005");
+        DateTime birthday = DateTime.Parse("10/03/2005");
 
         user = new User("First Name", "Last Name", "Email@email.com", birthday, "Password");
 
@@ -35,7 +35,7 @@ public class UserTest
     public void NewUser_WhenFirstNameIsNull_ThenThrowUserFirstNameException()
     {
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
 
         user = new User("  ", "Last Name", "Email@email.com", birthday, "Password");
     }
@@ -45,7 +45,7 @@ public class UserTest
     public void NewUser_WhenLastNameIsNull_ThenThrowUserLastNameException()
     {
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
 
         user = new User("First Name", "", "Email@email.com", birthday, "Password");
     }
@@ -55,7 +55,7 @@ public class UserTest
     public void NewUser_WhenEmailIsNull_ThenThrowUserEmailException()
     {
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
 
         user = new User("First Name", "Last Name", "", birthday, "Password");
     }
@@ -65,7 +65,7 @@ public class UserTest
     public void NewUser_WhenEmailHasAnInvalidFormat_ThenThrowUserEmailException()
     {
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
         user = new User("First Name", "Last Name", "email", birthday, "Password");
     }
 
@@ -73,7 +73,7 @@ public class UserTest
     public void NewUser_WhenEmailIsValid_ThenUserIsCreated()
     {
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
 
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
 
@@ -85,8 +85,7 @@ public class UserTest
     public void NewUser_WhenDateIsAfterToday_ThenThrowUserBirthdayException()
     {
         User user;
-        var birthday = DateTime.Today.AddDays(1);
-        ;
+        DateTime birthday = DateTime.Today.AddDays(1);
 
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
     }
@@ -96,7 +95,7 @@ public class UserTest
     public void NewUser_WhenPasswordIsNull_ThenThrowUserPasswordException()
     {
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
 
         user = new User("First Name", "Last Name", "Email@email.com", birthday, "");
     }
@@ -104,9 +103,9 @@ public class UserTest
     [TestMethod]
     public void AddRol_WhenRoleIsAdded_ThenRoleIsInList()
     {
-        var roles = new List<Rol> { Rol.AdminSystem };
+        List<Rol> roles = new List<Rol> { Rol.AdminSystem };
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
 
         user.Roles = roles;
@@ -120,9 +119,9 @@ public class UserTest
     [ExpectedException(typeof(UserRoleAlreadyExistsException))]
     public void AddRol_WhenRoleAlreadyExists_ThenThrowUserRoleAlreadyExistsException()
     {
-        var roles = new List<Rol> { Rol.AdminSystem };
+        List<Rol> roles = new List<Rol> { Rol.AdminSystem };
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
 
         user.Roles = roles;
@@ -133,9 +132,9 @@ public class UserTest
     [ExpectedException(typeof(UserRoleNotFoundException))]
     public void RemoveRol_WhenRoleDoesNotExist_ThenThrowUserRoleNotFoundException()
     {
-        var roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
+        List<Rol> roles = new List<Rol> { Rol.AdminSystem, Rol.AdminProject };
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
 
         user.Roles = roles;
@@ -146,8 +145,7 @@ public class UserTest
     [TestMethod]
     public void User_WhenInitializedWithEmptyConstructor_ThenPropertiesAreInitializedWithDefaultValues()
     {
-        var user = new User();
-
+        User user = new User();
 
         Assert.IsNull(user.FirstName);
         Assert.IsNull(user.LastName);
@@ -156,12 +154,11 @@ public class UserTest
         Assert.AreEqual(0, user.Roles.Count);
     }
 
-
     [TestMethod]
     public void FirstName_WhenValid_ThenUserIsCreated()
     {
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
 
         user = new User("John", "Doe", "email@email.com", birthday, "Password");
 
@@ -173,7 +170,7 @@ public class UserTest
     public void LastName_WhenInvalid_ThenThrowUserLastNameException()
     {
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
 
         user = new User("John", "", "email@email.com", birthday, "Password");
     }
@@ -182,7 +179,7 @@ public class UserTest
     public void Email_WhenValid_ThenUserIsCreated()
     {
         User user;
-        var birthday = DateTime.Parse("10/05/2005");
+        DateTime birthday = DateTime.Parse("10/05/2005");
 
         user = new User("John", "Doe", "john.doe@example.com", birthday, "Password");
 
@@ -192,7 +189,7 @@ public class UserTest
     [TestMethod]
     public void Roles_WhenAssignedEmptyList_ThenRolesShouldBeEmpty()
     {
-        var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+        User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
 
         user.Roles = new List<Rol>();
 
@@ -203,18 +200,15 @@ public class UserTest
     [ExpectedException(typeof(UserEmailException))]
     public void Email_WhenSetToInvalidFormat_ThenThrowUserEmailException()
     {
-        var user = new User("John", "Doe", "valid.email@example.com", DateTime.Parse("10/05/2005"), "Password");
-
+        User user = new User("John", "Doe", "valid.email@example.com", DateTime.Parse("10/05/2005"), "Password");
 
         user.Email = "invalidemail";
     }
 
-
     [TestMethod]
     public void AddRol_WhenRolesListIsEmpty_ThenRoleIsAdded()
     {
-        var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-
+        User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
 
         user.Roles = new List<Rol>();
 
@@ -224,26 +218,22 @@ public class UserTest
         Assert.IsTrue(user.Roles.Contains(Rol.AdminSystem));
     }
 
-
     [TestMethod]
     public void RemoveRol_WhenSingleRole_ThenRoleIsRemoved()
     {
-        var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-
+        User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
 
         user.Roles = new List<Rol> { Rol.AdminSystem };
-
 
         user.RemoveRol(Rol.AdminSystem);
 
         Assert.AreEqual(0, user.Roles.Count);
     }
 
-
     [TestMethod]
     public void NewUser_WhenAddingTaskID_ThenTaskIdIsAdded()
     {
-        var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+        User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
         user.AddTask(task1);
 
         Assert.AreEqual(1, user.Tasks.Count);
@@ -253,7 +243,7 @@ public class UserTest
     [ExpectedException(typeof(UserTaskException))]
     public void AddTask_WhenAddingTaskWithTheSameId_ThenTaskThrowsException()
     {
-        var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+        User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
         user.AddTask(task1);
         user.AddTask(task1);
     }
@@ -261,7 +251,7 @@ public class UserTest
     [TestMethod]
     public void RemoveTask_WhenRemovingTask_ThenTaskIsRemoved()
     {
-        var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+        User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
         user.AddTask(task1);
         user.RemoveTask(task1);
 
@@ -272,15 +262,15 @@ public class UserTest
     [ExpectedException(typeof(UserTaskException))]
     public void RemoveTask_WhenRemovingTaskThatIsNotInTheList_ThenThrowsException()
     {
-        var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+        User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
         user.RemoveTask(task2);
     }
 
     [TestMethod]
     public void NewUser_WhenAddingNotification_ShouldBeAddedCorrectly()
     {
-        var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        var notification = new Notification(false, "Some description", new Project());
+        User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+        Notification notification = new Notification(false, "Some description", new Project());
         user.AddNotification(notification);
 
         Assert.AreEqual(1, user.Notifications.Count);
@@ -289,8 +279,8 @@ public class UserTest
     [TestMethod]
     public void RemoveNotification_WhenNotificationExists_ShouldBeDeletedCorrectly()
     {
-        var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        var notification = new Notification(false, "Some description", new Project());
+        User user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
+        Notification notification = new Notification(false, "Some description", new Project());
         user.AddNotification(notification);
         user.RemoveNotification(notification);
 
