@@ -9,13 +9,13 @@ public class ResourceDTOTest
     [TestMethod]
     public void ResourceDTO_ShouldFailValidation_WhenNameIsNull()
     {
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = null
         };
 
         var validationResults = new List<ValidationResult>();
-        var isValid =
+        bool isValid =
             Validator.TryValidateObject(resourceDTO, new ValidationContext(resourceDTO), validationResults, true);
 
         Assert.IsFalse(isValid);
@@ -24,14 +24,14 @@ public class ResourceDTOTest
     [TestMethod]
     public void ResourceDTO_ShouldFailValidation_WhenTypeIsNull()
     {
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = null
         };
 
         var validationResults = new List<ValidationResult>();
-        var isValid =
+        bool isValid =
             Validator.TryValidateObject(resourceDTO, new ValidationContext(resourceDTO), validationResults, true);
 
         Assert.IsFalse(isValid);
@@ -40,7 +40,7 @@ public class ResourceDTOTest
     [TestMethod]
     public void ResourceDTO_ShouldFailValidation_WhenDescriptionIsNull()
     {
-        var resourceDTO = new ResourceDTO
+        ResourceDTO resourceDTO = new ResourceDTO
         {
             Name = "Resource1",
             Type = "TypeA",
@@ -48,7 +48,7 @@ public class ResourceDTOTest
         };
 
         var validationResults = new List<ValidationResult>();
-        var isValid =
+        bool isValid =
             Validator.TryValidateObject(resourceDTO, new ValidationContext(resourceDTO), validationResults, true);
 
         Assert.IsFalse(isValid);
