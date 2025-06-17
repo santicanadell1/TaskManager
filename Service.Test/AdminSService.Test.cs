@@ -448,6 +448,23 @@ public class AdminSService_Test
             _repositoryManager.UserRepository.Get(u => u.Email == "repository.test@example.com");
         Assert.IsNull(userEntityAfterDelete);
     }
+    [TestMethod]
+    public void AdminService_ShouldRemoveRole_WhenUserExistsAndRoleIsAssigned()
+    {
+        _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
+
+        UserDTO userToUpdate = _userService.GetUser("john.doe@example.com");
+        RolDTO roleToAssign = RolDTO.ProjectMember;
+
+        _adminService.AssignRole(userToUpdate, roleToAssign);
+
+        UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
+        Assert.IsTrue(updatedUser.Roles.Contains(roleToAssign));
+        
+        _adminService.RemoveRole(userToUpdate, roleToAssign);
+        updatedUser = _userService.GetUser("john.doe@example.com");
+        Assert.IsFalse(updatedUser.Roles.Contains(roleToAssign));
+    }
 }
 
 
