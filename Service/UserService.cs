@@ -51,7 +51,6 @@ public class UserService : IUserService
         user.Roles = _rolConverter.ConvertToDomainRoles(userDTO.Roles);
         user.Birthday = userDTO.Birthday;
         user.Password = userDTO.Password;
-        //user.Tasks = _taskConverter.ConvertToEntityList(userDTO.Tasks);
         
         _repositoryManager.UserRepository.Update(user);
     }
