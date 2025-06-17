@@ -41,4 +41,9 @@ public class AdminSystemController
     {
         return _passwordManager.getDefaultPassword();
     }
+
+    public void RemoveRole(UserDTO user, RolDTO role)
+    {
+        
+    }
 }
