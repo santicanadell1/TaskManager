@@ -51,7 +51,7 @@ public class TaskRepositoryTest
     public void Get_ReturnsMatchingTask_WhenFilterMatches()
     {
         _taskRepository.Add(_task);
-        var found = _taskRepository.Get(t => t.Title == "Task1");
+        Task found = _taskRepository.Get(t => t.Title == "Task1");
         Assert.IsNotNull(found);
         Assert.AreEqual("Task1", found!.Title);
         Assert.AreEqual("Description1", found.Description);
@@ -62,7 +62,7 @@ public class TaskRepositoryTest
     {
         _taskRepository.Add(_task);
 
-        var taskId = (int)_taskRepository.Get(t => t.Title == "Task1").Id;
+        int taskId = (int)_taskRepository.Get(t => t.Title == "Task1").Id;
 
         Assert.IsTrue(taskId > 0, "Task ID was not assigned correctly.");
 
@@ -70,7 +70,7 @@ public class TaskRepositoryTest
 
         _taskRepository.Update(_task2);
 
-        var found = _taskRepository.Get(t => t.Id == taskId);
+        Task found = _taskRepository.Get(t => t.Id == taskId);
 
         Assert.IsNotNull(found);
 
@@ -85,17 +85,17 @@ public class TaskRepositoryTest
         _taskRepository.Add(_task);
         _taskRepository.Add(_task2);
 
-        var taskId = (int)_taskRepository.Get(t => t.Title == "Task2").Id;
+        int taskId = (int)_taskRepository.Get(t => t.Title == "Task2").Id;
 
         Assert.IsTrue(taskId > 0, "Task ID was not assigned correctly.");
 
-        var _task3 = new Task("Task3", "Description3", DateTime.Today, 2, new List<Task>(), new List<Task>(),
+        Task _task3 = new Task("Task3", "Description3", DateTime.Today, 2, new List<Task>(), new List<Task>(),
             new List<Resource>());
         _task3.Id = taskId;
 
         _taskRepository.Update(_task3);
 
-        var found = _taskRepository.Get(t => t.Id == taskId);
+        Task found = _taskRepository.Get(t => t.Id == taskId);
 
         Assert.IsNotNull(found);
 
