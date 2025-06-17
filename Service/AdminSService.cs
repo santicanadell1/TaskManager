@@ -119,9 +119,14 @@ public class AdminSService : IAdminSService
     {
         CheckAdminRole();
         UserDTO user = _userService.GetUser(userDTO.Email);
+        int usersWithAdminSystemRole = _userService.GetUsers().Count(u => u.Roles.Contains(RolDTO.AdminSystem));
         if (user == null) throw new UserNotFoundException();
         if (user.Roles.Contains(role))
         {
+            if (role == RolDTO.AdminSystem && usersWithAdminSystemRole == 1)
+            {
+                throw new AdminSServiceException("There must be at least one admin system user");
+            }
             user.Roles.Remove(role);
             UpdateUserRoles(user);
         }
