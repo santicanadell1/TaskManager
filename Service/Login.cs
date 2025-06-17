@@ -28,7 +28,7 @@ public class Login : ILogin
 
     public void LoginUser(string email, string password)
     {
-        var user = _repositoryManager.UserRepository.Get(user => user.Email == email);
+        User user = _repositoryManager.UserRepository.Get(user => user.Email == email);
         if (user == null || !_passwordManager.VerifyPassword(password, user.Password))
             throw new InvalidLoginCredentialsException();
 
