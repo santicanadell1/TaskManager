@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.Exceptions.NotificationRepositoryExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
+using Domain;
 using Service.Converters;
 using Service.Models;
 
@@ -19,12 +20,12 @@ public class NotificationService
 
     public List<NotificationDTO> GetNotificationsForUser(string userEmail)
     {
-        var user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
+        User user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
-        var notifications = new List<NotificationDTO>();
+        List<NotificationDTO> notifications = new List<NotificationDTO>();
         if (user.Notifications != null)
-            foreach (var notification in user.Notifications)
+            foreach (Notification notification in user.Notifications)
                 if (notification != null)
                     notifications.Add(_notificationConverter.FromEntity(notification));
 
@@ -33,19 +34,19 @@ public class NotificationService
 
     public void CreateNotification(NotificationDTO notificationDTO)
     {
-        var notification = _notificationConverter.ToEntity(notificationDTO);
+        Notification notification = _notificationConverter.ToEntity(notificationDTO);
         _repositoryManager.NotificationRepository.Add(notification);
 
-        var createdNotification = _repositoryManager.NotificationRepository.Get(n =>
+        Notification createdNotification = _repositoryManager.NotificationRepository.Get(n =>
             n.Description == notification.Description &&
             n.Project.Name == notification.Project.Name);
 
         if (createdNotification == null) throw new InvalidOperationException("Failed to create notification");
 
-        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == notification.Project.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == notification.Project.Name);
 
         if (project?.Members != null)
-            foreach (var user in project.Members)
+            foreach (User user in project.Members)
                 AddNotificationToUser(user.Email, createdNotification.Id);
 
         if (project?.AdminProject != null) AddNotificationToUser(project.AdminProject.Email, createdNotification.Id);
@@ -55,13 +56,13 @@ public class NotificationService
 
     public void AddNotificationToUser(string userEmail, int? notificationId)
     {
-        var user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
+        User user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
-        var notificationToAdd = _repositoryManager.NotificationRepository.Get(n => n.Id == notificationId);
+        Notification notificationToAdd = _repositoryManager.NotificationRepository.Get(n => n.Id == notificationId);
         if (notificationToAdd != null)
         {
-            var alreadyExists = user.Notifications.Any(n => n.Id == notificationToAdd.Id);
+            bool alreadyExists = user.Notifications.Any(n => n.Id == notificationToAdd.Id);
             if (!alreadyExists)
             {
                 user.Notifications.Add(notificationToAdd);
@@ -72,12 +73,12 @@ public class NotificationService
 
     public void RemoveNotificationFromUser(string userEmail, int? notificationId)
     {
-        var user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
+        User user = _repositoryManager.UserRepository.Get(u => u.Email == userEmail);
         if (user == null) throw new UserNotFoundException();
 
         if (user.Notifications != null)
         {
-            var includeNotification = user.Notifications.Find(n => n.Id == notificationId);
+            Notification includeNotification = user.Notifications.Find(n => n.Id == notificationId);
             if (includeNotification != null)
             {
                 user.Notifications.Remove(includeNotification);
