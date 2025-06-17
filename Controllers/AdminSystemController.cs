@@ -44,6 +44,6 @@ public class AdminSystemController
 
     public void RemoveRole(UserDTO user, RolDTO role)
     {
-        
+        _adminSService.RemoveRole(user, role);
     }
 }
