@@ -12,5 +12,4 @@ public interface ILogin
     bool IsProjectMember();
     bool IsProjectLeader();
     void UpdateUser(UserDTO userToUpdate);
-    
 }

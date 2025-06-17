@@ -4,7 +4,6 @@ using Service.Converter;
 using Service.Exceptions.LoginExceptions;
 using Service.Interface;
 using Service.Models;
-using Service.Models.Exceptions;
 
 namespace Service;
 
@@ -29,7 +28,7 @@ public class Login : ILogin
 
     public void LoginUser(string email, string password)
     {
-        User user = _repositoryManager.UserRepository.Get(user => user.Email == email);
+        var user = _repositoryManager.UserRepository.Get(user => user.Email == email);
         if (user == null || !_passwordManager.VerifyPassword(password, user.Password))
             throw new InvalidLoginCredentialsException();
 

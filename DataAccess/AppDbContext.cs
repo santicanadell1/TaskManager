@@ -98,10 +98,10 @@ public class AppDbContext : DbContext
             entity.Property(r => r.Type).IsRequired();
             entity.Property(r => r.Description).IsRequired();
             entity
-                .HasOne(r => r.Project) 
-                .WithMany()             
+                .HasOne(r => r.Project)
+                .WithMany()
                 .HasForeignKey("ProjectId")
-                .IsRequired(false)        
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
         });
 

@@ -20,7 +20,7 @@ public class CSVExporter : ExporterBase
         {
             strings.AppendLine($"{EscapeCsvField(project.Name)},{project.StartDate:dd/MM/yyyy}");
 
-            List<TaskDTO> tasks = _taskService.GetTasks(project.Name);
+            var tasks = _taskService.GetTasks(project.Name);
 
             foreach (var task in tasks.OrderByDescending(t => t.Title))
             {
@@ -28,12 +28,8 @@ public class CSVExporter : ExporterBase
                     $"{EscapeCsvField(task.Title)},{task.StartDate:dd/MM/yyyy},{(task.IsCritical ? "S" : "N")}");
 
                 if (task.Resources?.Any() == true)
-                {
                     foreach (var resource in task.Resources)
-                    {
                         strings.AppendLine($"{EscapeCsvField(resource.Name ?? "")}");
-                    }
-                }
             }
         }
 
@@ -46,9 +42,7 @@ public class CSVExporter : ExporterBase
             return "";
 
         if (field.Contains(',') || field.Contains('\n') || field.Contains('\r') || field.Contains('"'))
-        {
             return $"\"{field.Replace("\"", "\"\"")}\"";
-        }
 
         return field;
     }

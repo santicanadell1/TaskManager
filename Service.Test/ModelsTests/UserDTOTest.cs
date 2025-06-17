@@ -60,7 +60,7 @@ public class UserDTOTest
     [TestMethod]
     public void NewUser_WhenTasksAreAssigned_ThenTasksAreSet()
     {
-        var tasks = new List<TaskDTO> {new TaskDTO(){Title = "Task1"}};
+        var tasks = new List<TaskDTO> { new() { Title = "Task1" } };
         var user = new UserDTO { Tasks = tasks };
         Assert.IsNotNull(user.Tasks);
     }

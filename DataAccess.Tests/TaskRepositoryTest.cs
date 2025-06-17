@@ -1,17 +1,17 @@
 using DataAccess.Exceptions.TaskRepositoryExceptions;
+using Domain;
+using Task = Domain.Task;
 
 namespace DataAccess.Test;
-
-using Domain;
 
 [TestClass]
 public class TaskRepositoryTest
 {
-    private TaskRepository _taskRepository;
     private AppDbContext _context;
     private InMemoryAppContextFactory _contextFactory;
     private Task _task;
     private Task _task2;
+    private TaskRepository _taskRepository;
 
     [TestInitialize]
     public void Initialize()
@@ -51,7 +51,7 @@ public class TaskRepositoryTest
     public void Get_ReturnsMatchingTask_WhenFilterMatches()
     {
         _taskRepository.Add(_task);
-        Task found = _taskRepository.Get(t => t.Title == "Task1");
+        var found = _taskRepository.Get(t => t.Title == "Task1");
         Assert.IsNotNull(found);
         Assert.AreEqual("Task1", found!.Title);
         Assert.AreEqual("Description1", found.Description);
@@ -62,7 +62,7 @@ public class TaskRepositoryTest
     {
         _taskRepository.Add(_task);
 
-        int taskId = (int)_taskRepository.Get(t => t.Title == "Task1").Id;
+        var taskId = (int)_taskRepository.Get(t => t.Title == "Task1").Id;
 
         Assert.IsTrue(taskId > 0, "Task ID was not assigned correctly.");
 
@@ -70,7 +70,7 @@ public class TaskRepositoryTest
 
         _taskRepository.Update(_task2);
 
-        Task found = _taskRepository.Get(t => t.Id == taskId);
+        var found = _taskRepository.Get(t => t.Id == taskId);
 
         Assert.IsNotNull(found);
 
@@ -85,17 +85,17 @@ public class TaskRepositoryTest
         _taskRepository.Add(_task);
         _taskRepository.Add(_task2);
 
-        int taskId = (int)_taskRepository.Get(t => t.Title == "Task2").Id;
+        var taskId = (int)_taskRepository.Get(t => t.Title == "Task2").Id;
 
         Assert.IsTrue(taskId > 0, "Task ID was not assigned correctly.");
 
-        Task _task3 = new Task("Task3", "Description3", DateTime.Today, 2, new List<Task>(), new List<Task>(),
+        var _task3 = new Task("Task3", "Description3", DateTime.Today, 2, new List<Task>(), new List<Task>(),
             new List<Resource>());
         _task3.Id = taskId;
 
         _taskRepository.Update(_task3);
 
-        Task found = _taskRepository.Get(t => t.Id == taskId);
+        var found = _taskRepository.Get(t => t.Id == taskId);
 
         Assert.IsNotNull(found);
 

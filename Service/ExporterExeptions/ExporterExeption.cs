@@ -1,6 +1,6 @@
 ﻿namespace Service.Exceptions.ExporterExeptions;
 
-public class ExporterExeption: Exception
+public class ExporterExeption : Exception
 {
     public ExporterExeption(string message) : base(message)
     {

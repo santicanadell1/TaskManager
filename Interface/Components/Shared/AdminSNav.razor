@@ -37,7 +37,7 @@
                     <NavLink class="nav-link" href="/users/change-password">
                         <i class="bi bi-key"></i> Change Password
                     </NavLink>
-                    
+
                 </div>
             }
         </div>
@@ -45,9 +45,9 @@
 </div>
 
 @code {
-    private bool showAdmin = false;
-    private bool showUsers = false;
-    private bool showSystem = false;
+    private bool showAdmin;
+    private bool showUsers;
+    private bool showSystem;
 
     private void ToggleAdmin()
     {

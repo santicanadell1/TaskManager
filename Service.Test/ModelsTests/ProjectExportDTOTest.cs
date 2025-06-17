@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Service.Models;
-
-namespace Service.Test.ModelsTests;
+﻿namespace Service.Test.ModelsTests;
 
 [TestClass]
 public class ProjectExportDTOTest
@@ -16,7 +13,7 @@ public class ProjectExportDTOTest
 
         Assert.AreEqual("Test Project", projectExportDTO.Project);
     }
-    
+
     [TestMethod]
     public void ProjectExportDTO_ShouldSetStartDateProperty()
     {
@@ -27,7 +24,7 @@ public class ProjectExportDTOTest
 
         Assert.AreEqual("2024-01-01", projectExportDTO.StartDate);
     }
-    
+
     [TestMethod]
     public void ProjectExportDTO_ShouldAllowNullTasks()
     {
@@ -40,7 +37,7 @@ public class ProjectExportDTOTest
 
         Assert.IsNull(projectExportDTO.Tasks);
     }
-    
+
     [TestMethod]
     public void ProjectExportDTO_ShouldCreateValidObject_WhenAllPropertiesAreSet()
     {
@@ -64,14 +61,13 @@ public class ProjectExportDTOTest
         Assert.AreEqual("2024-01-01", projectExportDTO.StartDate);
         Assert.AreEqual(1, projectExportDTO.Tasks.Count);
     }
-    
+
 
     [TestMethod]
     public void ProjectExportDTO_ShouldHandleEmptyTasksList()
     {
         var projectExportDTO = new ProjectExportDTO
         {
-            
             Project = "Empty Project",
             StartDate = "2024-01-01",
             Tasks = new List<TaskExportDTO>()
@@ -80,6 +76,7 @@ public class ProjectExportDTOTest
         Assert.IsNotNull(projectExportDTO.Tasks);
         Assert.AreEqual(0, projectExportDTO.Tasks.Count);
     }
+
     [TestMethod]
     public void ProjectExportDTO_ShouldHandleMultipleTasks()
     {
@@ -112,7 +109,4 @@ public class ProjectExportDTOTest
         Assert.AreEqual("Task 2", projectExportDTO.Tasks[1].Task);
         Assert.AreEqual("Yes", projectExportDTO.Tasks[1].IsCritical);
     }
-
-    
-
 }

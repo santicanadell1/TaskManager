@@ -13,6 +13,6 @@ public interface IResourceService
     DateTime NextDateAvailable(ResourceDTO resourceDTO, DateTime startDate, int duration, string taskTitle = "");
     public List<ResourceDTO> GetResourcesForProject(string pName);
     public List<(DateTime, int)> getWhenIsResourceOcupied(ResourceDTO res);
-    
+
     public TaskDTO updateResourceDependencies(TaskDTO taskDTO, string ProjectName);
 }

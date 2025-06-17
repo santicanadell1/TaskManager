@@ -11,11 +11,14 @@ public class UserTest
     [TestInitialize]
     public void Initialize()
     {
-        task1 = new Task("Title1", "Description1", DateTime.Now, 3,new List<Task>(), new List<Task>(), new List<Resource>());
+        task1 = new Task("Title1", "Description1", DateTime.Now, 3, new List<Task>(), new List<Task>(),
+            new List<Resource>());
         task1.Id = 1;
-        task2 = new Task("Title2", "Description2", DateTime.Now, 3,new List<Task>(), new List<Task>(), new List<Resource>());
+        task2 = new Task("Title2", "Description2", DateTime.Now, 3, new List<Task>(), new List<Task>(),
+            new List<Resource>());
         task2.Id = 2;
     }
+
     [TestMethod]
     public void NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated()
     {
@@ -82,7 +85,8 @@ public class UserTest
     public void NewUser_WhenDateIsAfterToday_ThenThrowUserBirthdayException()
     {
         User user;
-        var birthday = DateTime.Today.AddDays(1);;
+        var birthday = DateTime.Today.AddDays(1);
+        ;
 
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
     }

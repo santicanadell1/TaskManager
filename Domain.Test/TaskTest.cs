@@ -11,7 +11,7 @@ public class TaskTests
         Task task;
         var startDate = DateTime.Now;
         var endDate = DateTime.Parse("2026-09-01");
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         task = new Task("Title", "Description", startDate, 1, previousTasks, sameTimeTasks, new List<Resource>());
         Assert.IsNotNull(task);
@@ -23,7 +23,7 @@ public class TaskTests
     {
         Task task;
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         task = new Task("", "Description", startDate, 1, previousTasks, sameTimeTasks, new List<Resource>());
     }
@@ -34,7 +34,7 @@ public class TaskTests
     {
         Task task;
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         task = new Task("Title", "", startDate, 1, previousTasks, sameTimeTasks, new List<Resource>());
     }
@@ -45,7 +45,7 @@ public class TaskTests
     {
         Task task;
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         task = new Task("Title", "Description", startDate, -11, previousTasks, sameTimeTasks, new List<Resource>());
     }
@@ -54,7 +54,7 @@ public class TaskTests
     public void NewTask_WhenAddingNewPreviousTask_ThenTaskIsAdded()
     {
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task1 = new Task("Title", "Description", startDate, 1, previousTasks, sameTimeTasks, new List<Resource>());
         var task2 = new Task("Title1", "Description1", startDate, 1, previousTasks, sameTimeTasks,
@@ -67,7 +67,7 @@ public class TaskTests
     public void NewTask_WhenDeletingAPreviousTask_ThenTaskIsDeleted()
     {
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task2 = new Task("Title1", "Description1", startDate, 1, new List<Task>(), sameTimeTasks,
             new List<Resource>());
@@ -81,7 +81,7 @@ public class TaskTests
     public void NewTask_WhenAddingNewSameTimeTask_ThenTaskIsAdded()
     {
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task1 = new Task("Title", "Description", startDate, 1, previousTasks, sameTimeTasks, new List<Resource>());
         var task2 = new Task("Title1", "Description1", startDate, 1, previousTasks, sameTimeTasks,
@@ -94,7 +94,7 @@ public class TaskTests
     public void NewTask_WhenDeletingASameTimeTask_ThenTaskIsDeleted()
     {
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task2 = new Task("Title1", "Description1", startDate, 1, new List<Task>(), new List<Task>(),
             new List<Resource>());
@@ -108,7 +108,7 @@ public class TaskTests
     public void ExpectedStartDate_WhenSet_ThenDateIsAssigned()
     {
         var expectedDate = DateTime.Parse("2026-09-01");
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks,
             new List<Resource>());
@@ -122,7 +122,7 @@ public class TaskTests
     public void EndDate_WhenSet_ThenDateIsAssigned()
     {
         var endDate = DateTime.Parse("2026-09-01");
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks,
             new List<Resource>());
@@ -136,7 +136,7 @@ public class TaskTests
     public void State_WhenSet_ThenStateIsAssigned()
     {
         var state = State.DONE;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks,
             new List<Resource>());
@@ -150,7 +150,7 @@ public class TaskTests
     public void Id_WhenSet_ThenIdIsAssigned()
     {
         var expectedId = 123;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks,
             new List<Resource>());
@@ -163,7 +163,7 @@ public class TaskTests
     [TestMethod]
     public void Id_WhenNotSet_ThenIdIsNull()
     {
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", DateTime.Now, 1, previousTasks, sameTimeTasks,
             new List<Resource>());
@@ -304,7 +304,7 @@ public class TaskTests
     public void LatestStart_WhenNewTaskIsCreated_ShouldBeEqualToStartDate()
     {
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
 
@@ -315,7 +315,7 @@ public class TaskTests
     public void LatestFinish_WhenNewTaskIsCreated_ShouldBeEqualToEndDate()
     {
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
 
@@ -327,7 +327,7 @@ public class TaskTests
     public void Slack_WhenNewTaskIsCreated_ShouldBeZero()
     {
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
 
@@ -338,7 +338,7 @@ public class TaskTests
     public void IsCritical_WhenNewTaskIsCreated_ShouldBeFalse()
     {
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
 
@@ -350,7 +350,7 @@ public class TaskTests
     {
         var startDate = DateTime.Now;
         var newLatestStart = startDate.AddDays(3);
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
 
@@ -364,7 +364,7 @@ public class TaskTests
     {
         var startDate = DateTime.Now;
         var newLatestFinish = startDate.AddDays(7);
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
 
@@ -378,7 +378,7 @@ public class TaskTests
     {
         var startDate = DateTime.Now;
         var newSlack = TimeSpan.FromDays(2);
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
 
@@ -391,7 +391,7 @@ public class TaskTests
     public void SetIsCritical_WhenAssigned_ShouldUpdateValue()
     {
         var startDate = DateTime.Now;
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var sameTimeTasks = new List<Task>();
         var task = new Task("Title", "Description", startDate, 5, previousTasks, sameTimeTasks, new List<Resource>());
 

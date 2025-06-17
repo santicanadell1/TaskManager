@@ -1,7 +1,5 @@
 ﻿@page "/project/options"
 @using Controllers
-@using Microsoft.EntityFrameworkCore.Metadata.Internal
-@using Service
 @using Service.Exceptions.ResourceServiceExceptions
 @using Service.Models
 @inject AdminProjectController _AdminProjectController
@@ -26,7 +24,7 @@
     @if (projects != null && projects.Any())
     {
         <ul class="list-group">
-            @foreach (ProjectDTO project in projects)
+            @foreach (var project in projects)
             {
                 <li class="list-group-item">
                     <span><i class="bi bi-folder-fill me-2"></i>@project.Name</span>
@@ -161,7 +159,7 @@
                             <div class="resource-container">
                                 @if (availableResources != null && availableResources.Any())
                                 {
-                                    foreach (ResourceDTO resource in availableResources)
+                                    foreach (var resource in availableResources)
                                     {
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input"
@@ -197,7 +195,7 @@
                                                 <label for="newPrevTask" class="form-label">Task</label>
                                                 <select id="newPrevTask" class="form-control" @bind="newPreviousTaskId">
                                                     <option value="">-- Select Task --</option>
-                                                    @foreach (TaskDTO task in taskList)
+                                                    @foreach (var task in taskList)
                                                     {
                                                         <option value="@task.Id">@task.Title (ID: @task.Id)</option>
                                                     }
@@ -230,10 +228,10 @@
                                         <div class="list-group dependency-list">
                                             @for (var i = 0; i < previousTaskIds.Count; i++)
                                             {
-                                                int index = i;
+                                                var index = i;
                                                 var taskId = previousTaskIds[i];
-                                                String depType = previousTaskDependencies[i];
-                                                String taskTitle = taskList.FirstOrDefault(t => t.Id == taskId)?.Title ?? "Unknown Task";
+                                                var depType = previousTaskDependencies[i];
+                                                var taskTitle = taskList.FirstOrDefault(t => t.Id == taskId)?.Title ?? "Unknown Task";
 
                                                 <div
                                                     class="list-group-item d-flex justify-content-between align-items-center">
@@ -362,7 +360,7 @@
                             <div class="resource-container">
                                 @if (availableResources != null && availableResources.Any())
                                 {
-                                    foreach (ResourceDTO resource in availableResources)
+                                    foreach (var resource in availableResources)
                                     {
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input"
@@ -399,7 +397,7 @@
                                                 <select id="editNewPrevTask" class="form-control"
                                                         @bind="editNewPreviousTaskId">
                                                     <option value="">-- Select Task --</option>
-                                                    @foreach (TaskDTO task in taskList.Where(t => t.Id != selectedTaskToEdit.Id))
+                                                    @foreach (var task in taskList.Where(t => t.Id != selectedTaskToEdit.Id))
                                                     {
                                                         <option value="@task.Id">@task.Title (ID: @task.Id)</option>
                                                     }
@@ -432,10 +430,10 @@
                                         <div class="list-group dependency-list">
                                             @for (var i = 0; i < editPreviousTaskIds.Count; i++)
                                             {
-                                                int index = i;
+                                                var index = i;
                                                 var taskId = editPreviousTaskIds[i];
-                                                String depType = editPreviousTaskDependencies[i];
-                                                String taskTitle = taskList.FirstOrDefault(t => t.Id == taskId)?.Title ?? "Unknown Task";
+                                                var depType = editPreviousTaskDependencies[i];
+                                                var taskTitle = taskList.FirstOrDefault(t => t.Id == taskId)?.Title ?? "Unknown Task";
 
                                                 <div
                                                     class="list-group-item d-flex justify-content-between align-items-center">
@@ -519,7 +517,7 @@
                     <div class="member-selection mb-3">
                         @if (membersList != null && membersList.Any())
                         {
-                            foreach (UserDTO member in membersList)
+                            foreach (var member in membersList)
                             {
                                 <div class="form-check member-item">
                                     <input type="checkbox" class="form-check-input" id="@member.Email"
@@ -596,7 +594,7 @@
                                     @if (taskList != null && taskList.Any(t => !assignedTasks.Any(at => at.Id == t.Id)))
                                     {
                                         <div class="list-group task-list">
-                                            @foreach (TaskDTO task in taskList.Where(t => !assignedTasks.Any(at => at.Id == t.Id)))
+                                            @foreach (var task in taskList.Where(t => !assignedTasks.Any(at => at.Id == t.Id)))
                                             {
                                                 <div
                                                     class="list-group-item d-flex justify-content-between align-items-center">
@@ -632,7 +630,7 @@
                                     @if (assignedTasks != null && assignedTasks.Any())
                                     {
                                         <div class="list-group task-list">
-                                            @foreach (TaskDTO task in assignedTasks)
+                                            @foreach (var task in assignedTasks)
                                             {
                                                 <div
                                                     class="list-group-item d-flex justify-content-between align-items-center">
@@ -699,7 +697,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (TaskDTO task in taskList)
+                                @foreach (var task in taskList)
                                 {
                                     <tr>
                                         <td>@task.Title</td>
@@ -773,7 +771,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (UserDTO member in projectMembers)
+                                @foreach (var member in projectMembers)
                                 {
                                     <tr class="@(selectedMemberId == member.Email ? "table-primary" : "")">
                                         <td>
@@ -960,8 +958,8 @@
     private bool showAssignTaskToMemberModal;
     private bool showTaskListModal;
     private bool showMemberListModal;
-    private bool showForceConfirm = false;
-    private bool showEditForceConfirm = false;
+    private bool showForceConfirm;
+    private bool showEditForceConfirm;
 
     private string errorMessage = string.Empty;
     private string taskErrorMessage = string.Empty;
@@ -1000,12 +998,12 @@
     private List<TaskDTO> assignedTasks = new();
     private List<UserDTO> projectMembers = new();
 
-    private bool showEditProjectModal = false;
+    private bool showEditProjectModal;
     private ProjectDTO selectedProjectToEdit;
     private string selectedProjectLeaderEmail;
     private string currentProjectLeaderEmail;
     private string projectErrorMessage = string.Empty;
-    private List<UserDTO> projectLeadersUsers = new List<UserDTO>();
+    private List<UserDTO> projectLeadersUsers = new();
 
 
     protected override async void OnInitialized()
@@ -1044,6 +1042,7 @@
             availableResources = new List<ResourceDTO>();
             return;
         }
+
         try
         {
             availableResources = _ResourceController.GetAllResourcesForAProject(selectedProjectName);
@@ -1214,16 +1213,16 @@
                 return;
             }
 
-            List<TaskDTO> previousTasksFS = new List<TaskDTO>();
-            List<TaskDTO> sameTimeTasksSS = new List<TaskDTO>();
+            var previousTasksFS = new List<TaskDTO>();
+            var sameTimeTasksSS = new List<TaskDTO>();
 
             for (var i = 0; i < previousTaskIds.Count; i++)
             {
                 if (previousTaskIds[i].HasValue)
                 {
-                    int taskId = previousTaskIds[i].Value;
+                    var taskId = previousTaskIds[i].Value;
 
-                    TaskDTO taskDto = new TaskDTO { Id = taskId };
+                    var taskDto = new TaskDTO { Id = taskId };
 
                     if (previousTaskDependencies[i] == "FS")
                     {
@@ -1346,7 +1345,7 @@
 
         if (selectedTaskToEdit.Resources != null)
         {
-            foreach (ResourceDTO resource in selectedTaskToEdit.Resources)
+            foreach (var resource in selectedTaskToEdit.Resources)
             {
                 editSelectedResourceIds.Add(resource.Id);
             }
@@ -1354,7 +1353,7 @@
 
         if (selectedTaskToEdit.PreviousTasks != null)
         {
-            foreach (TaskDTO prevTask in selectedTaskToEdit.PreviousTasks)
+            foreach (var prevTask in selectedTaskToEdit.PreviousTasks)
             {
                 if (prevTask.Id.HasValue)
                 {
@@ -1366,7 +1365,7 @@
 
         if (selectedTaskToEdit.SameTimeTasks != null)
         {
-            foreach (TaskDTO sameTask in selectedTaskToEdit.SameTimeTasks)
+            foreach (var sameTask in selectedTaskToEdit.SameTimeTasks)
             {
                 if (sameTask.Id.HasValue)
                 {
@@ -1430,16 +1429,16 @@
                 return;
             }
 
-            List<TaskDTO> previousTasksFS = new List<TaskDTO>();
-            List<TaskDTO> sameTimeTasksSS = new List<TaskDTO>();
+            var previousTasksFS = new List<TaskDTO>();
+            var sameTimeTasksSS = new List<TaskDTO>();
 
             for (var i = 0; i < editPreviousTaskIds.Count; i++)
             {
                 if (editPreviousTaskIds[i].HasValue)
                 {
-                    int taskId = editPreviousTaskIds[i].Value;
+                    var taskId = editPreviousTaskIds[i].Value;
 
-                    TaskDTO taskDto = new TaskDTO { Id = taskId };
+                    var taskDto = new TaskDTO { Id = taskId };
 
                     if (editPreviousTaskDependencies[i] == "FS")
                     {
@@ -1554,9 +1553,9 @@
         if (!string.IsNullOrEmpty(selectedProjectName))
         {
             showAddMembersModal = true;
-            List<UserDTO> users = _UserController.GetAllUsers();
-            List<UserDTO> Members = new List<UserDTO>();
-            foreach (UserDTO user in users)
+            var users = _UserController.GetAllUsers();
+            var Members = new List<UserDTO>();
+            foreach (var user in users)
             {
                 if (user.Roles.Contains(RolDTO.ProjectMember))
                 {
@@ -1608,7 +1607,7 @@
                 return;
             }
 
-            List<UserDTO> selectedMembers = membersList
+            var selectedMembers = membersList
                 .Where(m => selectedEmails.Contains(m.Email))
                 .DistinctBy(m => m.Email)
                 .ToList();
@@ -1643,7 +1642,7 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception in AddSelectedMembers:");
+            Console.WriteLine("Exception in AddSelectedMembers:");
             Console.WriteLine($"Type: {ex.GetType().Name}");
             Console.WriteLine($"Message: {ex.Message}");
             Console.WriteLine($"Stack trace: {ex.StackTrace}");

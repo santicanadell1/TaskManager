@@ -6,5 +6,4 @@ public class UnableToExportProject : LeaderPServiceException
         base("Error al exportar proyectos")
     {
     }
-    
 }

@@ -9,9 +9,9 @@ namespace Service.Test;
 public class UserServiceTest
 {
     private AppDbContext _context;
-    private UserService _userService;
     private InMemoryAppContextFactory _contextFactory;
     private IRepositoryManager _repositoryManager;
+    private UserService _userService;
 
     [TestInitialize]
     public void TestSetUp()
@@ -37,12 +37,12 @@ public class UserServiceTest
     [ExpectedException(typeof(InvalidUserEmailException))]
     public void AddUser_ShouldThrowException_WhenEmailIsNotUnique()
     {
-        List<RolDTO> rols = new List<RolDTO>();
+        var rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
 
-        UserService _userService = new UserService(_repositoryManager);
+        var _userService = new UserService(_repositoryManager);
 
-        UserDTO userDTO1 = new UserDTO
+        var userDTO1 = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -54,7 +54,7 @@ public class UserServiceTest
 
         _userService.AddUser(userDTO1);
 
-        UserDTO userDTO2 = new UserDTO
+        var userDTO2 = new UserDTO
         {
             FirstName = "Jane",
             LastName = "Doe",
@@ -71,10 +71,10 @@ public class UserServiceTest
     [ExpectedException(typeof(UserNotFoundException))]
     public void UpdateUser_ShouldThrowException_WhenUserDoesNotExist()
     {
-        List<RolDTO> rols = new List<RolDTO>();
+        var rols = new List<RolDTO>();
         rols.Add(RolDTO.ProjectMember);
 
-        UserDTO userToUpdate = new UserDTO
+        var userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -104,8 +104,8 @@ public class UserServiceTest
     [TestMethod]
     public void AddUser_ShouldAddUser_WhenEmailIsUnique()
     {
-        List<RolDTO> rols = new List<RolDTO> { RolDTO.ProjectMember };
-        UserDTO userDTO = new UserDTO
+        var rols = new List<RolDTO> { RolDTO.ProjectMember };
+        var userDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -118,7 +118,7 @@ public class UserServiceTest
         _userService.AddUser(userDTO);
 
 
-        List<UserDTO> users = _userService.GetUsers();
+        var users = _userService.GetUsers();
         Assert.AreEqual(1, users.Count);
         Assert.AreEqual("john.doe@example.com", users[0].Email);
     }
@@ -126,8 +126,8 @@ public class UserServiceTest
     [TestMethod]
     public void UpdateUser_ShouldUpdateUser_WhenUserExists()
     {
-        List<RolDTO> rols = new List<RolDTO> { RolDTO.ProjectMember };
-        UserDTO userDTO = new UserDTO
+        var rols = new List<RolDTO> { RolDTO.ProjectMember };
+        var userDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -139,10 +139,10 @@ public class UserServiceTest
 
         _userService.AddUser(userDTO);
 
-        int? id = _repositoryManager.UserRepository.Get(user => user.Email == userDTO.Email).Id;
+        var id = _repositoryManager.UserRepository.Get(user => user.Email == userDTO.Email).Id;
 
 
-        UserDTO updatedUserDTO = new UserDTO
+        var updatedUserDTO = new UserDTO
         {
             FirstName = "Johnny",
             LastName = "Dough",
@@ -157,7 +157,7 @@ public class UserServiceTest
         _userService.UpdateUser(updatedUserDTO);
 
 
-        UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
+        var updatedUser = _userService.GetUser("john.doe@example.com");
         Assert.AreEqual("Johnny", updatedUser.FirstName);
         Assert.AreEqual("Dough", updatedUser.LastName);
     }

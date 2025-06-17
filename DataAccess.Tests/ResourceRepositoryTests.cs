@@ -6,9 +6,9 @@ namespace DataAccess.Test;
 [TestClass]
 public class ResourceRepositoryTests
 {
-    private ResourceRepository _resourceRepository;
     private AppDbContext _context;
     private InMemoryAppContextFactory _contextFactory;
+    private ResourceRepository _resourceRepository;
 
     [TestInitialize]
     public void Setup()
@@ -27,18 +27,18 @@ public class ResourceRepositoryTests
     [TestMethod]
     public void GetAll_ShouldReturnEmptyList_WhenNoResourcesAdded()
     {
-        List<Resource> resources = _resourceRepository.GetAll();
+        var resources = _resourceRepository.GetAll();
         Assert.AreEqual(0, resources.Count);
     }
 
     [TestMethod]
     public void AddResource_ShouldAddResource_WhenValidResourceIsProvided()
     {
-        Resource resource = new Resource("Resource1", "TypeA", "Description of Resource1");
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
 
         _resourceRepository.Add(resource);
 
-        Resource addedResource = _resourceRepository.Get(r => r.Name == resource.Name);
+        var addedResource = _resourceRepository.Get(r => r.Name == resource.Name);
         Assert.IsNotNull(addedResource);
         Assert.AreEqual(resource.Name, addedResource?.Name);
     }
@@ -46,14 +46,14 @@ public class ResourceRepositoryTests
     [TestMethod]
     public void Update_ShouldUpdateResource_WhenResourceExists()
     {
-        Resource resource = new Resource("Resource1", "TypeA", "Description of Resource1");
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.Add(resource);
 
-        Resource updatedResource = new Resource("Resource1.v1", "TypeB", "Updated Description");
+        var updatedResource = new Resource("Resource1.v1", "TypeB", "Updated Description");
         updatedResource.Id = _resourceRepository.Get(r => r.Name == resource.Name).Id;
         _resourceRepository.Update(updatedResource);
 
-        Resource result = _resourceRepository.Get(r =>
+        var result = _resourceRepository.Get(r =>
             r.Name == updatedResource.Name && r.Description == updatedResource.Description &&
             r.Type == updatedResource.Type);
 
@@ -74,17 +74,17 @@ public class ResourceRepositoryTests
     [ExpectedException(typeof(ResourceIsNullException))]
     public void Delete_ShouldThrowException_WhenAddingNullResourceAfterDeletion()
     {
-        Resource resource = new Resource("Resource1", "TypeA", "Description of Resource1");
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1");
         _resourceRepository.Add(resource);
         resource.Id = _resourceRepository.Get(r => r.Name == resource.Name).Id;
 
         _resourceRepository.Delete(resource);
 
-        Resource deletedResource = _resourceRepository.Get(r => r.Name == resource.Name);
+        var deletedResource = _resourceRepository.Get(r => r.Name == resource.Name);
 
         _resourceRepository.Add(deletedResource);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ResourceIsNullException))]
     public void Add_ShouldThrowResourceIsNullException_WhenResourceIsNull()
@@ -103,41 +103,40 @@ public class ResourceRepositoryTests
     [ExpectedException(typeof(ResourceNotFoundException))]
     public void Update_ShouldThrowResourceNotFoundException_WhenResourceDoesNotExist()
     {
-        Resource nonExistentResource = new Resource("NonExistent", "Type", "Description");
+        var nonExistentResource = new Resource("NonExistent", "Type", "Description");
         nonExistentResource.Id = 999;
-    
+
         _resourceRepository.Update(nonExistentResource);
     }
-    
+
     [TestMethod]
     public void Add_ShouldSuccessfullyAddResource_WhenValidResourceProvided()
     {
-        Resource resource = new Resource("ValidResource", "ValidType", "Valid Description");
-    
+        var resource = new Resource("ValidResource", "ValidType", "Valid Description");
+
         _resourceRepository.Add(resource);
-    
-        Resource retrievedResource = _resourceRepository.Get(r => r.Name == "ValidResource");
+
+        var retrievedResource = _resourceRepository.Get(r => r.Name == "ValidResource");
         Assert.IsNotNull(retrievedResource);
         Assert.AreEqual("ValidResource", retrievedResource.Name);
         Assert.AreEqual("ValidType", retrievedResource.Type);
         Assert.AreEqual("Valid Description", retrievedResource.Description);
     }
 
-    
-    
+
     [TestMethod]
     public void Update_ShouldSuccessfullyUpdateAllFields_WhenResourceExists()
     {
-        Resource originalResource = new Resource("Original", "OriginalType", "Original Description");
+        var originalResource = new Resource("Original", "OriginalType", "Original Description");
         _resourceRepository.Add(originalResource);
-    
-        Resource addedResource = _resourceRepository.Get(r => r.Name == "Original");
-        Resource updatedResource = new Resource("Updated", "UpdatedType", "Updated Description");
+
+        var addedResource = _resourceRepository.Get(r => r.Name == "Original");
+        var updatedResource = new Resource("Updated", "UpdatedType", "Updated Description");
         updatedResource.Id = addedResource.Id;
-    
+
         _resourceRepository.Update(updatedResource);
-    
-        Resource retrievedResource = _resourceRepository.Get(r => r.Id == updatedResource.Id);
+
+        var retrievedResource = _resourceRepository.Get(r => r.Id == updatedResource.Id);
         Assert.IsNotNull(retrievedResource);
         Assert.AreEqual("Updated", retrievedResource.Name);
         Assert.AreEqual("UpdatedType", retrievedResource.Type);

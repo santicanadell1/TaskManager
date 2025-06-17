@@ -6,7 +6,7 @@ namespace Domain.Test;
 public class NotificationTest
 {
     private Project project;
-    
+
 
     [TestInitialize]
     public void Initialize()

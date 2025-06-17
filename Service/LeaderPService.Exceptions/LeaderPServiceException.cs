@@ -1,6 +1,6 @@
 ﻿namespace Service.Exceptions.LeaderPServiceException;
 
-public class LeaderPServiceException: Exception
+public class LeaderPServiceException : Exception
 {
     public LeaderPServiceException(string message) : base(message)
     {

@@ -36,4 +36,3 @@ public class JSONExporter : ExporterBase
         return JsonConvert.SerializeObject(projectsJson, Formatting.Indented);
     }
 }
-

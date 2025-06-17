@@ -24,6 +24,6 @@ public class UserDTO
     public List<TaskDTO> Tasks { get; set; }
 
     public List<NotificationDTO> Notifications { get; set; }
-    
+
     public int? Id { get; set; }
 }

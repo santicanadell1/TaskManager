@@ -7,10 +7,10 @@ namespace Service.Converter;
 
 public class UserConverter : IConverter<User, UserDTO>
 {
+    private readonly PasswordManager _passwordManager = new();
     private readonly IRepositoryManager _repositoryManager;
     private readonly RolConverter _rolConverter;
     private readonly TaskConverter _taskConverter;
-    private readonly PasswordManager _passwordManager = new();
 
     public UserConverter(IRepositoryManager repositoryManager)
     {

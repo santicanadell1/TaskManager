@@ -25,7 +25,7 @@ public class TaskDTO
 
     public int? Id { get; set; }
 
-    public List<ResourceDTO> Resources { get; set; } = new List<ResourceDTO>();
+    public List<ResourceDTO> Resources { get; set; } = new();
 
     public bool IsCritical { get; set; }
     public DateTime StartDate { get; set; }

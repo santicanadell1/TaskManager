@@ -14,5 +14,4 @@ public interface ITaskService
     void DeleteTask(TaskDTO taskDTO);
     void DeleteTask(string projectName, string title);
     CpmResultDTO GetCriticalPath(string projectName);
-
 }

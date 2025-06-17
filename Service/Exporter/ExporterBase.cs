@@ -18,7 +18,7 @@ public abstract class ExporterBase : IExporter
     protected virtual List<ProjectDTO> OrderProjects(List<ProjectDTO> projects)
     {
         return projects
-            .Where(p => p != null) 
+            .Where(p => p != null)
             .OrderBy(p => p.StartDate)
             .ToList();
     }

@@ -139,7 +139,7 @@ public class ProjectTest
         var project = new Project();
         var startDate = DateTime.Now;
         var endDate = DateTime.Parse("2026-09-01");
-        List<Task> previousTasks = new List<Task>();
+        var previousTasks = new List<Task>();
         var task1 = new Task("Title", "Description", startDate, 1, previousTasks, null, null);
         project.AddTask(task1);
         Assert.IsTrue(project.Tasks.Contains(task1));
@@ -150,7 +150,7 @@ public class ProjectTest
     {
         var project = new Project("Project A", "This is a test project", DateTime.Today);
     }
-    
+
     [TestMethod]
     public void GivenProject_WhenProjectLeaderIsSet_ThenProjectLeaderShouldBeCorrect()
     {
@@ -162,5 +162,4 @@ public class ProjectTest
 
         Assert.AreEqual(leader, actualLeader);
     }
-    
 }

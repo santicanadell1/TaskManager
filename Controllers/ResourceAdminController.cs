@@ -21,7 +21,7 @@ public class ResourceAdminController
 
     public List<(DateTime, int)> getWhenIsResourceOcupied(ResourceDTO res)
     {
-        return _resourceService.getWhenIsResourceOcupied(res);   
+        return _resourceService.getWhenIsResourceOcupied(res);
     }
 
     public DateTime NextDateAvailable(ResourceDTO res, DateTime startDate, int duration)

@@ -1,6 +1,6 @@
 ﻿@page "/projectLeader/options"
+@using System.Text
 @using Controllers
-@using Service
 @using Service.Models
 @inject LeaderProjectController _LeaderProjectController
 @inject TaskController _TaskController
@@ -28,7 +28,7 @@
         </div>
 
         <ul class="list-group">
-            @foreach (ProjectDTO project in projects)
+            @foreach (var project in projects)
             {
                 <li class="list-group-item">
                     <span><i class="bi bi-folder-fill me-2"></i>@project.Name</span>
@@ -152,7 +152,7 @@
                                                 <select id="editNewPrevTask" class="form-control"
                                                         @bind="editNewPreviousTaskId">
                                                     <option value="">-- Select Task --</option>
-                                                    @foreach (TaskDTO task in taskList.Where(t => t.Id != selectedTaskToEdit.Id))
+                                                    @foreach (var task in taskList.Where(t => t.Id != selectedTaskToEdit.Id))
                                                     {
                                                         <option value="@task.Id">@task.Title (ID: @task.Id)</option>
                                                     }
@@ -185,10 +185,10 @@
                                         <div class="list-group dependency-list">
                                             @for (var i = 0; i < editPreviousTaskIds.Count; i++)
                                             {
-                                                int index = i;
+                                                var index = i;
                                                 var taskId = editPreviousTaskIds[i];
-                                                String depType = editPreviousTaskDependencies[i];
-                                                String taskTitle = taskList.FirstOrDefault(t => t.Id == taskId)?.Title ?? "Unknown Task";
+                                                var depType = editPreviousTaskDependencies[i];
+                                                var taskTitle = taskList.FirstOrDefault(t => t.Id == taskId)?.Title ?? "Unknown Task";
 
                                                 <div
                                                     class="list-group-item d-flex justify-content-between align-items-center">
@@ -272,7 +272,7 @@
                     <div class="member-selection mb-3">
                         @if (membersList != null && membersList.Any())
                         {
-                            foreach (UserDTO member in membersList)
+                            foreach (var member in membersList)
                             {
                                 <div class="form-check member-item">
                                     <input type="checkbox" class="form-check-input" id="@member.Email"
@@ -349,7 +349,7 @@
                                     @if (taskList != null && taskList.Any(t => !assignedTasks.Any(at => at.Id == t.Id)))
                                     {
                                         <div class="list-group task-list">
-                                            @foreach (TaskDTO task in taskList.Where(t => !assignedTasks.Any(at => at.Id == t.Id)))
+                                            @foreach (var task in taskList.Where(t => !assignedTasks.Any(at => at.Id == t.Id)))
                                             {
                                                 <div
                                                     class="list-group-item d-flex justify-content-between align-items-center">
@@ -385,7 +385,7 @@
                                     @if (assignedTasks != null && assignedTasks.Any())
                                     {
                                         <div class="list-group task-list">
-                                            @foreach (TaskDTO task in assignedTasks)
+                                            @foreach (var task in assignedTasks)
                                             {
                                                 <div
                                                     class="list-group-item d-flex justify-content-between align-items-center">
@@ -452,7 +452,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (TaskDTO task in taskList)
+                                @foreach (var task in taskList)
                                 {
                                     <tr>
                                         <td>@task.Title</td>
@@ -523,7 +523,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (UserDTO member in projectMembers)
+                                @foreach (var member in projectMembers)
                                 {
                                     <tr class="@(selectedMemberId == member.Email ? "table-primary" : "")">
                                         <td>
@@ -807,7 +807,7 @@
 
         if (selectedTaskToEdit.PreviousTasks != null)
         {
-            foreach (TaskDTO prevTask in selectedTaskToEdit.PreviousTasks)
+            foreach (var prevTask in selectedTaskToEdit.PreviousTasks)
             {
                 if (prevTask.Id.HasValue)
                 {
@@ -819,7 +819,7 @@
 
         if (selectedTaskToEdit.SameTimeTasks != null)
         {
-            foreach (TaskDTO sameTask in selectedTaskToEdit.SameTimeTasks)
+            foreach (var sameTask in selectedTaskToEdit.SameTimeTasks)
             {
                 if (sameTask.Id.HasValue)
                 {
@@ -882,16 +882,16 @@
                 return;
             }
 
-            List<TaskDTO> previousTasksFS = new List<TaskDTO>();
-            List<TaskDTO> sameTimeTasksSS = new List<TaskDTO>();
+            var previousTasksFS = new List<TaskDTO>();
+            var sameTimeTasksSS = new List<TaskDTO>();
 
             for (var i = 0; i < editPreviousTaskIds.Count; i++)
             {
                 if (editPreviousTaskIds[i].HasValue)
                 {
-                    int taskId = editPreviousTaskIds[i].Value;
+                    var taskId = editPreviousTaskIds[i].Value;
 
-                    TaskDTO taskDto = new TaskDTO { Id = taskId };
+                    var taskDto = new TaskDTO { Id = taskId };
 
                     if (editPreviousTaskDependencies[i] == "FS")
                     {
@@ -936,9 +936,9 @@
         if (!string.IsNullOrEmpty(selectedProjectName))
         {
             showAddMembersModal = true;
-            List<UserDTO> users = _UserController.GetAllUsers();
-            List<UserDTO> Members = new List<UserDTO>();
-            foreach (UserDTO user in users)
+            var users = _UserController.GetAllUsers();
+            var Members = new List<UserDTO>();
+            foreach (var user in users)
             {
                 if (user.Roles.Contains(RolDTO.ProjectMember))
                 {
@@ -990,7 +990,7 @@
                 return;
             }
 
-            List<UserDTO> selectedMembers = membersList
+            var selectedMembers = membersList
                 .Where(m => selectedEmails.Contains(m.Email))
                 .DistinctBy(m => m.Email)
                 .ToList();
@@ -1025,7 +1025,7 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception in AddSelectedMembers:");
+            Console.WriteLine("Exception in AddSelectedMembers:");
             Console.WriteLine($"Type: {ex.GetType().Name}");
             Console.WriteLine($"Message: {ex.Message}");
             Console.WriteLine($"Stack trace: {ex.StackTrace}");
@@ -1198,7 +1198,7 @@
     {
         try
         {
-            string jsonData = _LeaderProjectController.ExportProjectsAsJSON();
+            var jsonData = _LeaderProjectController.ExportProjectsAsJSON();
             await DownloadFile(jsonData, "projects.json", "application/json");
             exportSuccessMessage = "Projects exported as JSON successfully!";
             exportErrorMessage = string.Empty;
@@ -1214,7 +1214,7 @@
     {
         try
         {
-            string csvData = _LeaderProjectController.ExportProjectsAsCSV();
+            var csvData = _LeaderProjectController.ExportProjectsAsCSV();
             await DownloadFile(csvData, "projects.csv", "text/csv");
             exportSuccessMessage = "Projects exported as CSV successfully!";
             exportErrorMessage = string.Empty;
@@ -1228,7 +1228,7 @@
 
     private async Task DownloadFile(string content, string fileName, string contentType)
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes(content);
+        var bytes = Encoding.UTF8.GetBytes(content);
         var base64 = Convert.ToBase64String(bytes);
         var dataUrl = $"data:{contentType};base64,{base64}";
 

@@ -1,24 +1,19 @@
-﻿using System.Runtime.CompilerServices;
-using DataAccess;
+﻿using DataAccess;
 using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service;
 using Service.Converter;
-using Service.Converters;
 using Service.Exceptions.AdminPServiceExceptions;
 using Service.Exceptions.AdminSServiceExceptions;
 using Service.Exceptions.LeaderPServiceException;
 using Service.Interface;
 using Service.Models;
-using Task = Domain.Task;
-
-
 
 public class AdminPService : IAdminPService
 {
-    private readonly IRepositoryManager _repositoryManager;
     private readonly ProjectConverter _projectConverter;
+    private readonly IRepositoryManager _repositoryManager;
     private readonly UserConverter _userConverter;
 
     public AdminPService(IRepositoryManager repositoryManager)
@@ -31,53 +26,13 @@ public class AdminPService : IAdminPService
     public void CreateProject(ProjectDTO projectDTO)
     {
         CheckAdminProyectRole();
-        Project existingProject = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
+        var existingProject = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
         if (existingProject != null) throw new DuplicatedProjectsNameException();
         if (projectDTO.StartDate < DateTime.Today)
             throw new ProjectStartDateException();
-        Project newProject = _projectConverter.ToEntity(projectDTO);
+        var newProject = _projectConverter.ToEntity(projectDTO);
         SetProjectAdmin(newProject, projectDTO);
         _repositoryManager.ProjectRepository.Add(newProject);
-    }
-
-    public List<TaskDTO> GetTasks(ProjectDTO projectDTO)
-    {
-        CheckAdminProyectRole();
-
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
-        if (project == null)
-        {
-            throw new ProjectNotFoundException();
-        }
-
-        if (project.Tasks == null || !project.Tasks.Any())
-        {
-            return new List<TaskDTO>();
-        }
-
-        List<TaskDTO> taskDTOs = new List<TaskDTO>();
-        foreach (Task task in project.Tasks)
-        {
-            taskDTOs.Add(new TaskDTO
-            {
-                Title = task.Title,
-                Description = task.Description,
-                ExpectedStartDate = task.ExpectedStartDate,
-                Duration = task.Duration,
-                State = (StateDTO)task.State,
-                Id = task.Id,
-                IsCritical = task.IsCritical,
-                StartDate = task.StartDate,
-                EndDate = task.EndDate,
-                LatestStart = task.LatestStart,
-                LatestFinish = task.LatestFinish,
-                Slack = task.Slack,
-                PreviousTasks = new List<TaskDTO>(),
-                SameTimeTasks = new List<TaskDTO>()
-            });
-        }
-
-        return taskDTOs;
     }
 
 
@@ -86,24 +41,18 @@ public class AdminPService : IAdminPService
         CheckAdminProyectRole();
         try
         {
-            Console.WriteLine($"=== AssignMembersToProject Started ===");
+            Console.WriteLine("=== AssignMembersToProject Started ===");
             Console.WriteLine($"Project name: '{projectName}'");
             Console.WriteLine($"Members to add: {membersDTO?.Count ?? 0}");
 
-            if (string.IsNullOrEmpty(projectName))
-            {
-                throw new ArgumentException("Project name cannot be null or empty");
-            }
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentException("Project name cannot be null or empty");
 
-            if (membersDTO == null || !membersDTO.Any())
-            {
-                throw new ArgumentException("No members provided");
-            }
+            if (membersDTO == null || !membersDTO.Any()) throw new ArgumentException("No members provided");
 
             CheckAdminProyectRole();
             Console.WriteLine("Admin role check passed");
 
-            Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+            var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
             if (project == null)
             {
                 Console.WriteLine($"Project '{projectName}' not found");
@@ -113,12 +62,9 @@ public class AdminPService : IAdminPService
             Console.WriteLine($"Project found: {project.Name} (ID: {project.Id})");
             Console.WriteLine($"Current members: {project.Members?.Count ?? 0}");
 
-            if (project.Members == null)
-            {
-                project.Members = new List<User>();
-            }
+            if (project.Members == null) project.Members = new List<User>();
 
-            foreach (UserDTO memberDTO in membersDTO)
+            foreach (var memberDTO in membersDTO)
             {
                 Console.WriteLine($"Processing member: {memberDTO.FirstName} {memberDTO.LastName} ({memberDTO.Email})");
 
@@ -128,7 +74,7 @@ public class AdminPService : IAdminPService
                     throw new UserIsAlreadyAMemberException();
                 }
 
-                User existingUser = _repositoryManager.UserRepository.Get(u => u.Email == memberDTO.Email);
+                var existingUser = _repositoryManager.UserRepository.Get(u => u.Email == memberDTO.Email);
                 if (existingUser == null)
                 {
                     Console.WriteLine($"User {memberDTO.Email} not found in database");
@@ -171,7 +117,7 @@ public class AdminPService : IAdminPService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Unexpected error in AssignMembersToProject:");
+            Console.WriteLine("Unexpected error in AssignMembersToProject:");
             Console.WriteLine($"Type: {ex.GetType().Name}");
             Console.WriteLine($"Message: {ex.Message}");
             Console.WriteLine($"Inner: {ex.InnerException?.Message}");
@@ -183,35 +129,19 @@ public class AdminPService : IAdminPService
     public void RemoveMemberFromProject(string projectName, string memberEmail)
     {
         CheckAdminProyectRole();
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         if (project.Members.Find(m => m.Email == memberEmail) == null) throw new UserIsNotAMemberException();
-        HashSet<int?> projectTasks = project.Tasks.Select(t => t.Id).ToHashSet();
-        User user = _repositoryManager.UserRepository
+        var projectTasks = project.Tasks.Select(t => t.Id).ToHashSet();
+        var user = _repositoryManager.UserRepository
             .Get(u => u.Email == memberEmail);
-        List<Task> TasksToDelete = user.Tasks
+        var TasksToDelete = user.Tasks
             .Where(t => t.Id.HasValue && projectTasks.Contains(t.Id.Value))
             .ToList();
-        foreach (var Task in TasksToDelete)
-        {
-            user.Tasks.Remove(Task);
-        }
+        foreach (var Task in TasksToDelete) user.Tasks.Remove(Task);
         _repositoryManager.UserRepository.Update(user);
         project.Members.Remove(project.Members.Find(m => m.Email == memberEmail));
-        _repositoryManager.ProjectRepository.Update(project);
-    }
-
-    public void RemoveAdminFromProject(string projectName, string adminEmail)
-    {
-        CheckAdminProyectRole();
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
-        if (project == null) throw new ProjectNotFoundException();
-
-        if (project.AdminProject == null || project.AdminProject.Email != adminEmail)
-            throw new UserIsNotAMemberException();
-
-        project.AdminProject = null;
         _repositoryManager.ProjectRepository.Update(project);
     }
 
@@ -219,17 +149,17 @@ public class AdminPService : IAdminPService
     public void RemoveProject(string projectName)
     {
         CheckAdminProyectRole();
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         _repositoryManager.ProjectRepository.Delete(project);
     }
 
     public void UpdateProject(string projectNameToUpdate, ProjectDTO updatedProjectDTO)
     {
         CheckAdminProyectRole();
-        Project existingProject = _repositoryManager.ProjectRepository.Get(p => p.Name == projectNameToUpdate);
+        var existingProject = _repositoryManager.ProjectRepository.Get(p => p.Name == projectNameToUpdate);
         if (existingProject == null) throw new ProjectNotFoundException();
 
-        Project updatedProject = _projectConverter.ToEntity(updatedProjectDTO);
+        var updatedProject = _projectConverter.ToEntity(updatedProjectDTO);
 
         updatedProject.Id = existingProject.Id;
         SetProjectAdmin(updatedProject, updatedProjectDTO);
@@ -240,23 +170,19 @@ public class AdminPService : IAdminPService
     public List<ProjectDTO> GetAllProjects()
     {
         CheckAdminProyectRole();
-        List<Project> projects = _repositoryManager.ProjectRepository.GetAll();
-        List<ProjectDTO> projectDTOs = new List<ProjectDTO>();
-        UserDTO loggedUser = LoggedUser.Current;
-        foreach (Project project in projects)
-        {
+        var projects = _repositoryManager.ProjectRepository.GetAll();
+        var projectDTOs = new List<ProjectDTO>();
+        var loggedUser = LoggedUser.Current;
+        foreach (var project in projects)
             if (project.AdminProject.Email == loggedUser.Email)
-            {
                 projectDTOs.Add(_projectConverter.FromEntity(project));
-            }
-        }
 
         return projectDTOs;
     }
 
     public ProjectDTO GetProjectByName(string projectName)
     {
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         return _projectConverter.FromEntity(project);
@@ -264,9 +190,9 @@ public class AdminPService : IAdminPService
 
     public List<ProjectDTO> GetAllProjectsForUser(string Email)
     {
-        List<ProjectDTO> projects = new List<ProjectDTO>();
+        var projects = new List<ProjectDTO>();
 
-        foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
+        foreach (var project in _repositoryManager.ProjectRepository.GetAll())
             if ((project.AdminProject != null && project.AdminProject.Email == Email) ||
                 (project.ProjectLeader != null && project.ProjectLeader.Email == Email) ||
                 project.Members.Any(m => m.Email == Email))
@@ -277,20 +203,21 @@ public class AdminPService : IAdminPService
 
     public List<ProjectDTO> GetAllProjectsForAdmin()
     {
-        List<ProjectDTO> projects = new List<ProjectDTO>();
-        foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
-            if ((project.AdminProject != null && project.AdminProject.Email == LoggedUser.Current.Email) || (LoggedUser.Current.Roles.Equals(RolDTO.AdminSystem)))
+        var projects = new List<ProjectDTO>();
+        foreach (var project in _repositoryManager.ProjectRepository.GetAll())
+            if ((project.AdminProject != null && project.AdminProject.Email == LoggedUser.Current.Email) ||
+                LoggedUser.Current.Roles.Equals(RolDTO.AdminSystem))
                 projects.Add(_projectConverter.FromEntity(project));
-        return projects;   
+        return projects;
     }
 
     public List<UserDTO> GetMembers(string projectName)
     {
         CheckAdminProyectRole();
-        ProjectDTO project = GetProjectByName(projectName);
+        var project = GetProjectByName(projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        List<UserDTO> memberDTOs = project.Members;
+        var memberDTOs = project.Members;
 
         return memberDTOs;
     }
@@ -298,7 +225,7 @@ public class AdminPService : IAdminPService
     public void AddTaskToMember(string projectName, string memberEmail, string title)
     {
         CheckAdminProyectRole();
-        Project projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (projectEntity == null) throw new ProjectNotFoundException();
 
         if (projectEntity.Members == null || !projectEntity.Members.Any(m => m.Email == memberEmail))
@@ -307,10 +234,10 @@ public class AdminPService : IAdminPService
         if (projectEntity.Tasks == null || !projectEntity.Tasks.Any(t => t.Title == title))
             throw new TaskIsNotFromTheProjectException();
 
-        User userEntity = _repositoryManager.UserRepository.Get(u => u.Email == memberEmail);
+        var userEntity = _repositoryManager.UserRepository.Get(u => u.Email == memberEmail);
         if (userEntity == null) throw new UserNotFoundException();
 
-        Task task = _repositoryManager.TaskRepository.Get(t => t.Title == title);
+        var task = _repositoryManager.TaskRepository.Get(t => t.Title == title);
         userEntity.Tasks.Add(task);
         _repositoryManager.UserRepository.Update(userEntity);
     }
@@ -318,7 +245,7 @@ public class AdminPService : IAdminPService
     public void RemoveTaskFromMember(string projectName, string memberEmail, string title)
     {
         CheckAdminProyectRole();
-        Project projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (projectEntity == null) throw new ProjectNotFoundException();
 
         if (projectEntity.Members == null || !projectEntity.Members.Any(m => m.Email == memberEmail))
@@ -327,24 +254,24 @@ public class AdminPService : IAdminPService
         if (projectEntity.Tasks == null || !projectEntity.Tasks.Any(t => t.Title == title))
             throw new TaskIsNotFromTheProjectException();
 
-        User userEntity = _repositoryManager.UserRepository.Get(u => u.Email == memberEmail);
+        var userEntity = _repositoryManager.UserRepository.Get(u => u.Email == memberEmail);
         if (userEntity == null) throw new UserNotFoundException();
 
-        Task task = projectEntity.Tasks.Find(t => t.Title == title);
+        var task = projectEntity.Tasks.Find(t => t.Title == title);
         userEntity.RemoveTask(task);
         _repositoryManager.UserRepository.Update(userEntity);
     }
 
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
-        User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
-        CpmService cpmService = new CpmService();
-        TaskService taskService = new TaskService(_repositoryManager, cpmService);
-        List<TaskDTO> returnList = new List<TaskDTO>();
-        foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
+        var user = _repositoryManager.UserRepository.Get(u => u.Email == email);
+        var cpmService = new CpmService();
+        var taskService = new TaskService(_repositoryManager, cpmService);
+        var returnList = new List<TaskDTO>();
+        foreach (var project in _repositoryManager.ProjectRepository.GetAll())
         {
-            List<TaskDTO> tasks = taskService.GetTasks(project.Name);
-            foreach (TaskDTO task in tasks)
+            var tasks = taskService.GetTasks(project.Name);
+            foreach (var task in tasks)
                 if (task.Id.HasValue && user.Tasks.Any(t => t.Id == task.Id))
                     returnList.Add(task);
         }
@@ -355,59 +282,31 @@ public class AdminPService : IAdminPService
 
     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string email)
     {
-        User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
+        var user = _repositoryManager.UserRepository.Get(u => u.Email == email);
         if (user == null) throw new UserNotFoundException();
         if (user.Tasks == null) return new List<TaskDTO>();
 
-        CpmService cpmService = new CpmService();
-        TaskService taskService =
+        var cpmService = new CpmService();
+        var taskService =
             new TaskService(_repositoryManager, cpmService);
 
-        List<TaskDTO> returnList = new List<TaskDTO>();
-        List<TaskDTO> tasks = taskService.GetTasks(projectName);
-        foreach (TaskDTO task in tasks)
-        {
-            if (task.Id.HasValue && user.Tasks.Any((t => t.Id == task.Id)))
-            {
+        var returnList = new List<TaskDTO>();
+        var tasks = taskService.GetTasks(projectName);
+        foreach (var task in tasks)
+            if (task.Id.HasValue && user.Tasks.Any(t => t.Id == task.Id))
                 returnList.Add(task);
-            }
-        }
 
         return returnList;
     }
 
-    private void CheckAdminProyectRole()
-    {
-        UserDTO currentUser = LoggedUser.Current;
-        if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminProject))
-            throw new UnauthorizedAdminAccessException();
-    }
-
-    private void SetProjectAdmin(Project project, ProjectDTO projectDTO)
-    {
-        if (projectDTO.AdminProyect != null)
-        {
-            User adminFromDb = _repositoryManager.UserRepository.Get(u => u.Email == projectDTO.AdminProyect.Email);
-            project.AdminProject = adminFromDb;
-        }
-        else
-        {
-            project.AdminProject = _repositoryManager.UserRepository.Get(u => u.Email == LoggedUser.Current.Email);
-        }
-    }
-
     public List<UserDTO> GetAllProjectLeaderUsers()
     {
-        List<User> allUsers = _repositoryManager.UserRepository.GetAll();
-        List<UserDTO> projectLeaders = new List<UserDTO>();
+        var allUsers = _repositoryManager.UserRepository.GetAll();
+        var projectLeaders = new List<UserDTO>();
 
-        foreach (User user in allUsers)
-        {
+        foreach (var user in allUsers)
             if (user.Roles.Contains(Rol.ProjectLeader))
-            {
                 projectLeaders.Add(_userConverter.FromEntity(user));
-            }
-        }
 
         return projectLeaders;
     }
@@ -416,14 +315,11 @@ public class AdminPService : IAdminPService
     {
         CheckProjectLeaderRole(LeaderEmail);
 
-        Project projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
 
         if (projectEntity == null) throw new ProjectNotFoundException();
 
-        if (projectEntity.ProjectLeader != null)
-        {
-            throw new TheProjectAlredyHasALeader();
-        }
+        if (projectEntity.ProjectLeader != null) throw new TheProjectAlredyHasALeader();
 
         projectEntity.ProjectLeader = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
         _repositoryManager.ProjectRepository.Update(projectEntity);
@@ -433,25 +329,86 @@ public class AdminPService : IAdminPService
     {
         CheckAdminProyectRole();
 
-        Project projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var projectEntity = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
 
         if (projectEntity == null) throw new ProjectNotFoundException();
 
         if (projectEntity.ProjectLeader != null)
-        {
             projectEntity.ProjectLeader = null;
-        }
         else
-        {
             throw new TheProjectDoesNotHaveAProjectLeader();
-        }
 
         _repositoryManager.ProjectRepository.Update(projectEntity);
     }
 
+    public List<TaskDTO> GetTasks(ProjectDTO projectDTO)
+    {
+        CheckAdminProyectRole();
+
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectDTO.Name);
+        if (project == null) throw new ProjectNotFoundException();
+
+        if (project.Tasks == null || !project.Tasks.Any()) return new List<TaskDTO>();
+
+        var taskDTOs = new List<TaskDTO>();
+        foreach (var task in project.Tasks)
+            taskDTOs.Add(new TaskDTO
+            {
+                Title = task.Title,
+                Description = task.Description,
+                ExpectedStartDate = task.ExpectedStartDate,
+                Duration = task.Duration,
+                State = (StateDTO)task.State,
+                Id = task.Id,
+                IsCritical = task.IsCritical,
+                StartDate = task.StartDate,
+                EndDate = task.EndDate,
+                LatestStart = task.LatestStart,
+                LatestFinish = task.LatestFinish,
+                Slack = task.Slack,
+                PreviousTasks = new List<TaskDTO>(),
+                SameTimeTasks = new List<TaskDTO>()
+            });
+
+        return taskDTOs;
+    }
+
+    public void RemoveAdminFromProject(string projectName, string adminEmail)
+    {
+        CheckAdminProyectRole();
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        if (project == null) throw new ProjectNotFoundException();
+
+        if (project.AdminProject == null || project.AdminProject.Email != adminEmail)
+            throw new UserIsNotAMemberException();
+
+        project.AdminProject = null;
+        _repositoryManager.ProjectRepository.Update(project);
+    }
+
+    private void CheckAdminProyectRole()
+    {
+        var currentUser = LoggedUser.Current;
+        if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminProject))
+            throw new UnauthorizedAdminAccessException();
+    }
+
+    private void SetProjectAdmin(Project project, ProjectDTO projectDTO)
+    {
+        if (projectDTO.AdminProyect != null)
+        {
+            var adminFromDb = _repositoryManager.UserRepository.Get(u => u.Email == projectDTO.AdminProyect.Email);
+            project.AdminProject = adminFromDb;
+        }
+        else
+        {
+            project.AdminProject = _repositoryManager.UserRepository.Get(u => u.Email == LoggedUser.Current.Email);
+        }
+    }
+
     private void CheckProjectLeaderRole(string LeaderEmail)
     {
-        User leaderUser = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
+        var leaderUser = _repositoryManager.UserRepository.Get(u => u.Email == LeaderEmail);
         if (leaderUser == null || !leaderUser.Roles.Contains(Rol.ProjectLeader))
             throw new UnauthorizedLeaderAccessException();
     }

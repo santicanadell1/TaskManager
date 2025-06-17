@@ -59,7 +59,7 @@ builder.Services.AddDbContextFactory<AppDbContext>(
         providerOptions => providerOptions.EnableRetryOnFailure())
 );*/
 
-WebApplication app = builder.Build();
+var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {

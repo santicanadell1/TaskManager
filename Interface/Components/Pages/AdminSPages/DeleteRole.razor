@@ -16,7 +16,7 @@
         <label for="userSelect">Select a User</label>
         <select id="userSelect" class="form-control mt-1" @bind="selectedUserEmail">
             <option value="">-- Select a User --</option>
-            @foreach (UserDTO user in usersList)
+            @foreach (var user in usersList)
             {
                 <option value="@user.Email">@user.FirstName @user.LastName</option>
             }
@@ -114,7 +114,7 @@
             return;
         }
 
-        UserDTO? userToRemoveRole = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
+        var userToRemoveRole = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
 
         if (userToRemoveRole == null)
         {
@@ -124,7 +124,7 @@
 
         try
         {
-            Boolean anyRoleRemoved = false;
+            var anyRoleRemoved = false;
 
             foreach (var rolePair in rolesSelected)
             {
@@ -149,7 +149,7 @@
 
             if (userToRemoveRole.Email == _LoginController.GetLoggedUser().Email)
             {
-                UserDTO userDto = _UserController.GetUser(userToRemoveRole.Email);
+                var userDto = _UserController.GetUser(userToRemoveRole.Email);
                 _LoginController.UpdateLoggedUser(userDto);
                 Navigation.NavigateTo(Navigation.Uri, true);
             }

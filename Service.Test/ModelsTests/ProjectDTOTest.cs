@@ -8,11 +8,11 @@ public class ProjectDTOTests
 {
     private UserDTO Admin;
 
+    private UserDTO Leader;
+
     private List<UserDTO> members;
 
     private UserDTO User;
-
-    private UserDTO Leader;
 
     [TestInitialize]
     public void Initialize()
@@ -97,7 +97,7 @@ public class ProjectDTOTests
             StartDate = DateTime.Now,
             AdminProyect = Admin,
             Members = members,
-            ProjectLeader = null  
+            ProjectLeader = null
         };
 
         var validationResults = new List<ValidationResult>();
@@ -117,7 +117,7 @@ public class ProjectDTOTests
             StartDate = DateTime.Parse("2020-09-01"),
             AdminProyect = Admin,
             Members = members,
-            ProjectLeader = Leader  
+            ProjectLeader = Leader
         };
 
         var validationResults = new List<ValidationResult>();
@@ -137,7 +137,7 @@ public class ProjectDTOTests
             StartDate = DateTime.Parse("2020-09-01"),
             AdminProyect = Admin,
             Members = members,
-            ProjectLeader = Leader  
+            ProjectLeader = Leader
         };
 
         Assert.IsTrue(projectDTO.StartDate == DateTime.Parse("2020-09-01") &&

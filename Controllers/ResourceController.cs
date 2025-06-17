@@ -1,5 +1,4 @@
 ﻿using DataAccess;
-using Domain;
 using Service;
 using Service.Interface;
 using Service.Models;
@@ -25,7 +24,7 @@ public class ResourceController
         _resourceService.DeleteResource(idResource);
     }
 
-    public void UpdateResource(int? idResourceToUpdate,ResourceDTO updatedResource)
+    public void UpdateResource(int? idResourceToUpdate, ResourceDTO updatedResource)
     {
         _resourceService.UpdateResource(idResourceToUpdate, updatedResource);
     }

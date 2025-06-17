@@ -8,6 +8,7 @@ namespace Controllers;
 public class SignUpController
 {
     private readonly IUserService _userService;
+
     public SignUpController(IRepositoryManager repositoryManager)
     {
         _userService = new UserService(repositoryManager);
@@ -17,5 +18,4 @@ public class SignUpController
     {
         _userService.AddUser(user);
     }
-    
 }
