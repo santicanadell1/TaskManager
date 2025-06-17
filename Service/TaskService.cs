@@ -7,12 +7,13 @@ using Domain.Exceptions.TaskExceptions;
 using Service.Converter;
 using Service.Converters;
 using Service.Exceptions.ResourceServiceExceptions;
+using Service.Interface;
 using Service.Models;
 using Task = Domain.Task;
 
 namespace Service;
 
-public class TaskService
+public class TaskService:ITaskService
 {
     private readonly CpmService _cpmService;
     private readonly IRepositoryManager _repositoryManager;

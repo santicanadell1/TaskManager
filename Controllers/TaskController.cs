@@ -1,12 +1,13 @@
 ﻿using DataAccess;
 using Service;
+using Service.Interface;
 using Service.Models;
 
 namespace Controllers;
 
 public class TaskController
 {
-    private readonly TaskService _taskService;
+    private readonly ITaskService _taskService;
 
     public TaskController(IRepositoryManager repositoryManager)
     {
