@@ -15,10 +15,13 @@ public class AdminSystemController
         _adminSService = new AdminSService(repositoryManager);
         _passwordManager = new PasswordManager();
     }
-
     public void CreateUser(UserDTO user)
     {
         _adminSService.CreateUser(user);
+    }
+    public void DeleteUser(UserDTO user)
+    {
+        _adminSService.DeleteUser(user);
     }
 
     public void AssignRole(UserDTO user, RolDTO role)
@@ -30,17 +33,10 @@ public class AdminSystemController
     {
         _adminSService.ChangePassword(userEmail, oldPassword, newPassword);
     }
-
     public void ChangeCurrentUserPassword(string userEmail, string oldPassword, string newPassword)
     {
         _adminSService.ChangeCurrentUserPassword(userEmail, oldPassword, newPassword);
     }
-
-    public void DeleteUser(UserDTO user)
-    {
-        _adminSService.DeleteUser(user);
-    }
-
     public string GetDefaultPassword()
     {
         return _passwordManager.getDefaultPassword();
