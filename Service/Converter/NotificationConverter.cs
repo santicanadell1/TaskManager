@@ -29,7 +29,7 @@ public class NotificationConverter : IConverter<Notification, NotificationDTO>
 
     public Notification ToEntity(NotificationDTO dto)
     {
-        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == dto.Project.Name);
+        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == dto.Project.Name);
 
         if (project == null)
             throw new InvalidOperationException($"Project '{dto.Project.Name}' not found");
