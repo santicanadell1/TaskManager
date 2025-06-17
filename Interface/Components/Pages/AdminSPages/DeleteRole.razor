@@ -114,9 +114,9 @@
             return;
         }
 
-        UserDTO? userToAssignRoles = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
+        UserDTO? userToRemoveRole = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
 
-        if (userToAssignRoles == null)
+        if (userToRemoveRole == null)
         {
             assignError = "User not found.";
             return;
@@ -124,32 +124,32 @@
 
         try
         {
-            Boolean anyRoleAssigned = false;
+            Boolean anyRoleRemoved = false;
 
             foreach (var rolePair in rolesSelected)
             {
                 if (rolePair.Value)
                 {
-                    _AdminSystemController.AssignRole(userToAssignRoles, rolePair.Key);
+                    _AdminSystemController.RemoveRole(userToRemoveRole, rolePair.Key);
 
-                    anyRoleAssigned = true;
+                    anyRoleRemoved = true;
                 }
             }
 
-            if (!anyRoleAssigned)
+            if (!anyRoleRemoved)
             {
-                assignError = "Please select at least one role to assign.";
+                assignError = "Please select at least one role to Remove.";
                 return;
             }
 
-            assignSuccess = $"Roles have been assigned to {userToAssignRoles.FirstName} {userToAssignRoles.LastName} successfully.";
+            assignSuccess = $"Roles have been assigned to {userToRemoveRole.FirstName} {userToRemoveRole.LastName} successfully.";
 
             selectedUserEmail = "";
             ResetRoleSelections();
 
-            if (userToAssignRoles.Email == _LoginController.GetLoggedUser().Email)
+            if (userToRemoveRole.Email == _LoginController.GetLoggedUser().Email)
             {
-                UserDTO userDto = _UserController.GetUser(userToAssignRoles.Email);
+                UserDTO userDto = _UserController.GetUser(userToRemoveRole.Email);
                 _LoginController.UpdateLoggedUser(userDto);
                 Navigation.NavigateTo(Navigation.Uri, true);
             }
