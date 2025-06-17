@@ -5,6 +5,7 @@ namespace Domain;
 
 public class User
 {
+    public int? Id { get; set; }
     public DateTime birthday;
     public string email;
     public string firstName;
@@ -95,16 +96,11 @@ public class User
             tasks = value;
         }
     }
-
-    public int? Id { get; set; }
-
     private bool IsValidEmail(string email)
     {
         var emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
         return Regex.IsMatch(email, emailPattern);
     }
-
-
     public void AddRol(Rol rol)
     {
         if (roles.Contains(rol)) throw new UserRoleAlreadyExistsException(rol.ToString());
