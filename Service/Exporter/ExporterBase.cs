@@ -8,8 +8,8 @@ public abstract class ExporterBase : IExporter
         if (projects == null)
             throw new NullProjectsCanNotBeImported();
 
-        var orderedProjects = OrderProjects(projects);
-        var result = ExportData(orderedProjects);
+        List<ProjectDTO> orderedProjects = OrderProjects(projects);
+        String result = ExportData(orderedProjects);
         return result;
     }
 
