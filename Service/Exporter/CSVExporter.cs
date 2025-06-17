@@ -14,21 +14,21 @@ public class CSVExporter : ExporterBase
 
     protected override string ExportData(List<ProjectDTO> projects)
     {
-        var strings = new StringBuilder();
+        StringBuilder strings = new StringBuilder();
 
-        foreach (var project in projects)
+        foreach (ProjectDTO project in projects)
         {
             strings.AppendLine($"{EscapeCsvField(project.Name)},{project.StartDate:dd/MM/yyyy}");
 
-            var tasks = _taskService.GetTasks(project.Name);
+            List<TaskDTO> tasks = _taskService.GetTasks(project.Name);
 
-            foreach (var task in tasks.OrderByDescending(t => t.Title))
+            foreach (TaskDTO task in tasks.OrderByDescending(t => t.Title))
             {
                 strings.AppendLine(
                     $"{EscapeCsvField(task.Title)},{task.StartDate:dd/MM/yyyy},{(task.IsCritical ? "S" : "N")}");
 
                 if (task.Resources?.Any() == true)
-                    foreach (var resource in task.Resources)
+                    foreach (ResourceDTO resource in task.Resources)
                         strings.AppendLine($"{EscapeCsvField(resource.Name ?? "")}");
             }
         }
