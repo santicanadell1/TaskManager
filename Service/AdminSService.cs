@@ -36,10 +36,10 @@ public class AdminSService : IAdminSService
     public void DeleteUser(UserDTO userDTO)
     {
         CheckAdminRole();
-        var currentUser = LoggedUser.Current;
-        var isAdminProject = false;
-        var adminPService = new AdminPService(_repositoryManager);
-        var user = _userService.GetUser(userDTO.Email);
+        UserDTO currentUser = LoggedUser.Current;
+        bool isAdminProject = false;
+        AdminPService adminPService = new AdminPService(_repositoryManager);
+        UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
 
@@ -48,8 +48,8 @@ public class AdminSService : IAdminSService
         else
             isAdminProject = true;
 
-        var projects = adminPService.GetAllProjectsForUser(userDTO.Email);
-        foreach (var project in projects)
+        List<ProjectDTO> projects = adminPService.GetAllProjectsForUser(userDTO.Email);
+        foreach (ProjectDTO project in projects)
         {
             try
             {
@@ -72,7 +72,7 @@ public class AdminSService : IAdminSService
 
         if (!isAdminProject) currentUser.Roles.Remove(RolDTO.AdminProject);
 
-        var userEntity = _repositoryManager.UserRepository.Get(u => u.Email == userDTO.Email);
+        User userEntity = _repositoryManager.UserRepository.Get(u => u.Email == userDTO.Email);
         _repositoryManager.UserRepository.Delete(userEntity);
     }
 
@@ -80,7 +80,7 @@ public class AdminSService : IAdminSService
     {
         CheckAdminRole();
 
-        var user = _userService.GetUser(email);
+        UserDTO user = _userService.GetUser(email);
 
         if (user == null) throw new UserNotFoundException();
 
@@ -101,7 +101,7 @@ public class AdminSService : IAdminSService
     {
         CheckAdminRole();
 
-        var user = _userService.GetUser(userDTO.Email);
+        UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
         if (!user.Roles.Contains(role))
@@ -114,8 +114,8 @@ public class AdminSService : IAdminSService
     public void RemoveRole(UserDTO userDTO, RolDTO role)
     {
         CheckAdminRole();
-        var user = _userService.GetUser(userDTO.Email);
-        var usersWithAdminSystemRole = _userService.GetUsers().Count(u => u.Roles.Contains(RolDTO.AdminSystem));
+        UserDTO user = _userService.GetUser(userDTO.Email);
+        int usersWithAdminSystemRole = _userService.GetUsers().Count(u => u.Roles.Contains(RolDTO.AdminSystem));
         if (user == null) throw new UserNotFoundException();
         if (user.Roles.Contains(role))
         {
@@ -129,7 +129,7 @@ public class AdminSService : IAdminSService
     public void ChangeCurrentUserPassword(string email, string oldPassword, string newPassword)
     {
         CheckIsCurrenUser(email);
-        var user = _userService.GetUser(email);
+        UserDTO user = _userService.GetUser(email);
 
 
         if (user == null) throw new UserNotFoundException();
@@ -166,7 +166,7 @@ public class AdminSService : IAdminSService
 
     private void CheckAdminRole()
     {
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
         Console.WriteLine($"Logged user: {currentUser.Email}, Roles: {string.Join(",", currentUser.Roles)}");
 
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminSystem))
@@ -175,7 +175,7 @@ public class AdminSService : IAdminSService
 
     private void CheckIsCurrenUser(string email)
     {
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
         if (currentUser == null || currentUser.Email != email) throw new UnauthorizedAdminAccessException();
     }
 }
