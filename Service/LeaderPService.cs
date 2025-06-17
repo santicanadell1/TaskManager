@@ -79,15 +79,11 @@ public class LeaderPService : ILeaderPService
         ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
         return projectConverter.FromEntity(project);
     }
-
-    //do not show resources from the ui because the leader can't edit the resources
     public TaskDTO GetTask(string projectName, string taskTitle)
     {
         CheckProjectLeaderRole(projectName);
         return _taskService.GetTask(projectName, taskTitle);
     }
-
-    //do not show resources from the ui because the leader can't edit the resources
     public List<TaskDTO> GetTasks(string projectName)
     {
         CheckProjectLeaderRole(projectName);
