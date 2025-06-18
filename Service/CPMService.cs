@@ -1,9 +1,10 @@
 using Service.Exceptions.CPMServiceExceptions;
+using Service.Interface;
 using Service.Models;
 
 namespace Service;
 
-public class CpmService
+public class CpmService:ICpmService
 {
     private const double SLACK_TOLERANCE = 0.0001;
 

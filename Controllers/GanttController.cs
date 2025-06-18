@@ -1,11 +1,12 @@
 ﻿using Service;
+using Service.Interface;
 using Service.Models;
 
 namespace Controllers;
 
 public class GanttController
 {
-    private readonly CpmService _cpmService;
+    private readonly ICpmService _cpmService;
 
     public GanttController()
     {

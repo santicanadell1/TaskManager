@@ -261,7 +261,7 @@ public class AdminPService : IAdminPService
     public List<TaskDTO> GetAllTaskForAMember(string email)
     {
         User user = _repositoryManager.UserRepository.Get(u => u.Email == email);
-        CpmService cpmService = new CpmService();
+        ICpmService cpmService = new CpmService();
         TaskService taskService = new TaskService(_repositoryManager, cpmService);
         List<TaskDTO> returnList = new List<TaskDTO>();
         foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
@@ -281,7 +281,7 @@ public class AdminPService : IAdminPService
         if (user == null) throw new UserNotFoundException();
         if (user.Tasks == null) return new List<TaskDTO>();
 
-        CpmService cpmService = new CpmService();
+        ICpmService cpmService = new CpmService();
         TaskService taskService = new TaskService(_repositoryManager, cpmService);
 
         List<TaskDTO> returnList = new List<TaskDTO>();
