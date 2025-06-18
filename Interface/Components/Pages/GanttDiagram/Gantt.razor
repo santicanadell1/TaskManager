@@ -307,11 +307,8 @@
         try
         {
             List<TaskDTO> tasks = _TaskController.GetAllTasksForAProject(selectedProjectName);
-            Console.WriteLine($"Tasks loaded: {tasks?.Count ?? 0}");
-
             if (tasks == null || !tasks.Any())
             {
-                Console.WriteLine("No tasks found for project: " + selectedProjectName);
                 ganttData = new GanttData { data = new List<GanttTask>(), links = new List<GanttLink>() };
                 showGantt = true;
                 StateHasChanged();
@@ -320,8 +317,6 @@
 
             var cpm = _GanttController.CalculateCriticalPath(tasks);
             ganttData = _GanttController.GetGanttData(tasks, cpm.CriticalPath);
-
-            Console.WriteLine($"GanttData created - Tasks: {ganttData?.data?.Count ?? 0}, Links: {ganttData?.links?.Count ?? 0}");
 
             if (tasks.Any())
             {
@@ -339,8 +334,6 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading gantt data: {ex.Message}");
-            Console.WriteLine($"Stack trace: {ex.StackTrace}");
         }
     }
 
@@ -394,8 +387,6 @@
         {
             DateTime startDate = new DateTime(selectedYear, selectedMonth, 1);
             DateTime endDate = startDate.AddMonths(1).AddDays(-1);
-
-            Console.WriteLine($"OnAfterRenderAsync - firstRender: {firstRender}, showGantt: {showGantt}, tasks: {ganttData.data.Count}");
 
             await JS.InvokeVoidAsync("initGantt",
                 ganttData,
