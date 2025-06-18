@@ -59,7 +59,7 @@ namespace Service
         public void AddTask(string projectName, TaskDTO taskDTO, bool solve = false)
         {
             INotificationService notificationService = new NotificationService(_repositoryManager);
-            AdminPService projectService = new AdminPService(_repositoryManager);
+            IAdminPService projectService = new AdminPService(_repositoryManager);
             Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
             if (project == null) throw new ProjectNotFoundException();
             if (taskDTO.ExpectedStartDate.AddDays(1) <= project.StartDate)
@@ -111,7 +111,7 @@ namespace Service
         public void UpdateTask(string projectName, string title, TaskDTO taskDTO, bool solve = false)
         {
             INotificationService notificationService = new NotificationService(_repositoryManager);
-            AdminPService projectService = new AdminPService(_repositoryManager);
+            IAdminPService projectService = new AdminPService(_repositoryManager);
             Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
             if (project == null) throw new ProjectNotFoundException();
 

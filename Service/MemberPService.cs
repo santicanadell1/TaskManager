@@ -11,7 +11,7 @@ namespace Service;
 
 public class MemberPService : IMemberPService
 {
-    private readonly AdminPService _adminPService;
+    private readonly IAdminPService _adminPService;
     private readonly ICpmService _cpmService;
     private readonly IRepositoryManager _repositoryManager;
     private readonly TaskService _taskService;

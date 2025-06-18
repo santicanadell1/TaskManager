@@ -38,7 +38,7 @@ public class AdminSService : IAdminSService
         CheckAdminRole();
         UserDTO currentUser = LoggedUser.Current;
         bool isAdminProject = false;
-        AdminPService adminPService = new AdminPService(_repositoryManager);
+        IAdminPService adminPService = new AdminPService(_repositoryManager);
         UserDTO user = _userService.GetUser(userDTO.Email);
 
         if (user == null) throw new UserNotFoundException();
