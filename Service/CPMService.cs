@@ -4,7 +4,7 @@ using Service.Models;
 
 namespace Service;
 
-public class CpmService: ICpmService
+public class CpmService : ICpmService
 {
     private const double SLACK_TOLERANCE = 0.0001;
 

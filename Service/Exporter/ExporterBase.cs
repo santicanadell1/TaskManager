@@ -9,7 +9,7 @@ public abstract class ExporterBase : IExporter
             throw new NullProjectsCanNotBeImported();
 
         List<ProjectDTO> orderedProjects = OrderProjects(projects);
-        String result = ExportData(orderedProjects);
+        var result = ExportData(orderedProjects);
         return result;
     }
 

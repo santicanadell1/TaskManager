@@ -28,7 +28,7 @@
                     <select @onchange="OnProjectSelected"
                             class="form-select gantt-select">
                         <option disabled selected value="">-- Select a project --</option>
-                        @foreach (ProjectDTO p in projects)
+                        @foreach (var p in projects)
                         {
                             <option value="@p.Name">@p.Name</option>
                         }
@@ -62,7 +62,7 @@
                         <select @onchange="OnYearChanged"
                                 value="@selectedYear"
                                 class="form-select gantt-select">
-                            @for (int year = DateTime.Now.Year - 5; year <= DateTime.Now.Year + 5; year++)
+                            @for (var year = DateTime.Now.Year - 5; year <= DateTime.Now.Year + 5; year++)
                             {
                                 <option value="@year">@year</option>
                             }
@@ -104,7 +104,7 @@
             @if (CriticalTasks.Any())
             {
                 <ul>
-                    @foreach (GanttTask task in CriticalTasks)
+                    @foreach (var task in CriticalTasks)
                     {
                         <li>@task.text</li>
                     }
@@ -120,7 +120,7 @@
             <strong>Select not critical Task:</strong>
             <select class="form-select" @onchange="OnNonCriticalTaskSelected">
                 <option value="">-- Select --</option>
-                @foreach (GanttTask task in NonCriticalTasks)
+                @foreach (var task in NonCriticalTasks)
                 {
                     <option value="@task.id">@task.text</option>
                 }
@@ -306,7 +306,7 @@
     {
         try
         {
-            List<TaskDTO> tasks = _TaskController.GetAllTasksForAProject(selectedProjectName);
+            var tasks = _TaskController.GetAllTasksForAProject(selectedProjectName);
             if (tasks == null || !tasks.Any())
             {
                 ganttData = new GanttData { data = new List<GanttTask>(), links = new List<GanttLink>() };
@@ -320,7 +320,7 @@
 
             if (tasks.Any())
             {
-                DateTime minDate = tasks.Min(t => t.StartDate);
+                var minDate = tasks.Min(t => t.StartDate);
                 selectedMonth = minDate.Month;
                 selectedYear = minDate.Year;
             }
@@ -339,7 +339,7 @@
 
     private async Task OnMonthChanged(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out int month))
+        if (int.TryParse(e.Value?.ToString(), out var month))
         {
             selectedMonth = month;
             await UpdateGanttView();
@@ -348,7 +348,7 @@
 
     private async Task OnYearChanged(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out int year))
+        if (int.TryParse(e.Value?.ToString(), out var year))
         {
             selectedYear = year;
             await UpdateGanttView();
@@ -359,8 +359,8 @@
     {
         if (showGantt)
         {
-            DateTime startDate = new DateTime(selectedYear, selectedMonth, 1);
-            DateTime endDate = startDate.AddMonths(1).AddDays(-1);
+            var startDate = new DateTime(selectedYear, selectedMonth, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
 
             await JS.InvokeVoidAsync("updateGanttView",
                 startDate.ToString("yyyy-MM-dd"),
@@ -385,8 +385,8 @@
     {
         if (showGantt && ganttData != null && ganttData.data != null && ganttData.data.Any())
         {
-            DateTime startDate = new DateTime(selectedYear, selectedMonth, 1);
-            DateTime endDate = startDate.AddMonths(1).AddDays(-1);
+            var startDate = new DateTime(selectedYear, selectedMonth, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
 
             await JS.InvokeVoidAsync("initGantt",
                 ganttData,
@@ -398,9 +398,9 @@
 
     private void OnNonCriticalTaskSelected(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out int taskId))
+        if (int.TryParse(e.Value?.ToString(), out var taskId))
         {
-            GanttTask selected = NonCriticalTasks.FirstOrDefault(t => t.id == taskId);
+            var selected = NonCriticalTasks.FirstOrDefault(t => t.id == taskId);
             SelectedTaskSlack = selected?.slack;
         }
         else

@@ -8,31 +8,31 @@ public class GanttLinkTest
     [TestMethod]
     public void GanttLink_WhenInitializing_ShouldInitializeWithDefaultType()
     {
-        GanttLink link = new GanttLink();
-        string type = link.type;
+        var link = new GanttLink();
+        var type = link.type;
         Assert.AreEqual("0", type);
     }
 
     [TestMethod]
     public void GanttLink_WhenInitializingCritical_ShouldBeFalseByDefault()
     {
-        GanttLink link = new GanttLink();
-        bool critical = link.critical;
+        var link = new GanttLink();
+        var critical = link.critical;
         Assert.IsFalse(critical);
     }
 
     [TestMethod]
     public void GanttLink_WhenInitializingAType_ShouldAllowCustomValue()
     {
-        GanttLink link = new GanttLink { type = "2" };
-        string type = link.type;
+        var link = new GanttLink { type = "2" };
+        var type = link.type;
         Assert.AreEqual("2", type);
     }
 
     [TestMethod]
     public void GanttLink_ShouldSetAllPropertiesCorrectly()
     {
-        GanttLink link = new GanttLink
+        var link = new GanttLink
         {
             id = 1,
             source = 101,

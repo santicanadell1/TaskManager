@@ -28,7 +28,7 @@ public class ResourceService : IResourceService
     {
         if (isAdminSystem())
         {
-            Resource resource = _resourceConverter.ToEntity(resourceDTO);
+            var resource = _resourceConverter.ToEntity(resourceDTO);
             _repositoryManager.ResourceRepository.Add(resource);
         }
         else
@@ -39,7 +39,7 @@ public class ResourceService : IResourceService
 
     public ResourceDTO Get(int? id)
     {
-        Resource resource = _repositoryManager.ResourceRepository.Get(r => r.Id == id);
+        var resource = _repositoryManager.ResourceRepository.Get(r => r.Id == id);
 
         if (resource == null) throw new ResourceNotFoundException();
 
@@ -50,7 +50,7 @@ public class ResourceService : IResourceService
     {
         List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
 
-        foreach (Resource resource in _repositoryManager.ResourceRepository.GetAll())
+        foreach (var resource in _repositoryManager.ResourceRepository.GetAll())
             resourcesDTO.Add(_resourceConverter.FromEntity(resource));
 
         if (resourcesDTO.Count == 0) throw new NoResourcesFoundException();
@@ -60,10 +60,10 @@ public class ResourceService : IResourceService
 
     public List<ResourceDTO> GetResourcesForProject(string projectName)
     {
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         List<ResourceDTO> resourcesDTO = new List<ResourceDTO>();
 
-        foreach (Resource resource in _repositoryManager.ResourceRepository.GetAll())
+        foreach (var resource in _repositoryManager.ResourceRepository.GetAll())
             if (resource.Project == null || resource.Project.Name == projectName)
                 resourcesDTO.Add(_resourceConverter.FromEntity(resource));
 
@@ -74,10 +74,10 @@ public class ResourceService : IResourceService
 
     public void UpdateResource(int? id, ResourceDTO updatedResourceDTO)
     {
-        Resource existingResource = GetResourceObject(id);
+        var existingResource = GetResourceObject(id);
         isAbleToModifyResource(existingResource);
 
-        Resource updatedResource = _resourceConverter.ToEntity(updatedResourceDTO);
+        var updatedResource = _resourceConverter.ToEntity(updatedResourceDTO);
         updatedResource.Id = id.Value;
 
         _repositoryManager.ResourceRepository.Update(updatedResource);
@@ -85,7 +85,7 @@ public class ResourceService : IResourceService
 
     public void DeleteResource(int? id)
     {
-        Resource resource = GetResourceObject(id);
+        var resource = GetResourceObject(id);
         isAbleToModifyResource(resource);
         try
         {
@@ -99,10 +99,10 @@ public class ResourceService : IResourceService
 
     public TaskDTO updateResourceDependencies(TaskDTO taskDTO, string ProjectName)
     {
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == ProjectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == ProjectName);
         taskDTO.PreviousTasks ??= new List<TaskDTO>();
         taskDTO.Resources ??= new List<ResourceDTO>();
-        HashSet<int> resourceIds = taskDTO.Resources
+        var resourceIds = taskDTO.Resources
             .Where(r => r.Id.HasValue)
             .Select(r => r.Id.Value)
             .ToHashSet();
@@ -113,7 +113,7 @@ public class ResourceService : IResourceService
                 t.Resources.Any(r => resourceIds.Contains((int)r.Id) && !r.ConcurrentUsage))
             .ToList();
         List<TaskDTO> prevDtos = _taskConverter.ToMinimalTaskDTOList(prevTasks);
-        foreach (TaskDTO prevTaskDTO in prevDtos)
+        foreach (var prevTaskDTO in prevDtos)
             if (!taskDTO.PreviousTasks.Any(t => t.Id == prevTaskDTO.Id))
                 taskDTO.PreviousTasks.Add(prevTaskDTO);
 
@@ -124,14 +124,14 @@ public class ResourceService : IResourceService
     {
         if (res.ConcurrentUsage)
             return true;
-        DateTime endDate = startDate.AddDays(duration);
+        var endDate = startDate.AddDays(duration);
         IEnumerable<Domain.Task> tasksUsingResource = _repositoryManager.TaskRepository
             .GetAll()
             .Where(t => t.Resources.Any(r => r.Id == res.Id) && t.Title != taskTitle && t.State != State.DONE);
-        foreach (Domain.Task task in tasksUsingResource)
+        foreach (var task in tasksUsingResource)
         {
-            DateTime taskStart = task.ExpectedStartDate.Date;
-            DateTime taskEnd = taskStart.AddDays(task.Duration).Date;
+            var taskStart = task.ExpectedStartDate.Date;
+            var taskEnd = taskStart.AddDays(task.Duration).Date;
             if (taskStart < endDate && startDate < taskEnd)
                 return false;
         }
@@ -143,7 +143,7 @@ public class ResourceService : IResourceService
     {
         if (res.ConcurrentUsage)
             return startDate.Date;
-        DateTime candidate = startDate.Date;
+        var candidate = startDate.Date;
 
         while (!IsAvailable(res, candidate, duration, taskTitle))
             candidate = candidate.AddDays(1);
@@ -152,9 +152,9 @@ public class ResourceService : IResourceService
 
     public List<(DateTime, int)> getWhenIsResourceOcupied(ResourceDTO res)
     {
-        List<(DateTime, int)> whenIsResourceOcupied = new List<(DateTime, int)>();
+        var whenIsResourceOcupied = new List<(DateTime, int)>();
         IEnumerable<Domain.Task> tasks = _repositoryManager.TaskRepository.GetAll();
-        foreach (Domain.Task task in tasks)
+        foreach (var task in tasks)
             if (task.Resources.Any(r => r.Id == res.Id))
                 whenIsResourceOcupied.Add((task.ExpectedStartDate, task.Duration));
 
@@ -163,7 +163,7 @@ public class ResourceService : IResourceService
 
     private Resource GetResourceObject(int? id)
     {
-        Resource resource = _repositoryManager.ResourceRepository.Get(r => r.Id == id);
+        var resource = _repositoryManager.ResourceRepository.Get(r => r.Id == id);
 
         if (resource == null) throw new ResourceNotFoundException();
 
@@ -172,7 +172,7 @@ public class ResourceService : IResourceService
 
     private void isAbleToModifyResource(Resource resource)
     {
-        UserDTO currentUser = LoggedUser.Current;
+        var currentUser = LoggedUser.Current;
 
         if (currentUser == null) throw new UnauthorizedAdminAccessException();
 
@@ -188,26 +188,22 @@ public class ResourceService : IResourceService
 
     private bool isAdminSystem()
     {
-        UserDTO currentUser = LoggedUser.Current;
+        var currentUser = LoggedUser.Current;
         return currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminSystem)) ||
                currentUser.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminProject));
     }
 
     private List<Project> GetProjectsThatAreUsingResource(Resource resource)
     {
-        List<Project> projects = _repositoryManager.ProjectRepository.GetAll();
+        var projects = _repositoryManager.ProjectRepository.GetAll();
         List<Project> projectsThatAreUsingResource = new List<Project>();
-        foreach (Project project in projects)
-        {
-            foreach (Domain.Task task in project.Tasks)
+        foreach (var project in projects)
+        foreach (var task in project.Tasks)
+            if (task.Resources.Any(r => r.Id == resource.Id))
             {
-                if (task.Resources.Any(r => r.Id == resource.Id))
-                {
-                    projectsThatAreUsingResource.Add(project);
-                    break;
-                }
+                projectsThatAreUsingResource.Add(project);
+                break;
             }
-        }
 
         return projectsThatAreUsingResource;
     }
@@ -219,7 +215,7 @@ public class ResourceService : IResourceService
         if (projectsUsing.Count != 1)
             return false;
 
-        Project project = projectsUsing[0];
+        var project = projectsUsing[0];
         return project.AdminProject != null
                && project.AdminProject.Email.Equals(LoggedUser.Current.Email);
     }
@@ -227,15 +223,11 @@ public class ResourceService : IResourceService
     public List<ResourceDTO> getAllResourcesForAProject(string pName)
     {
         List<ResourceDTO> resources = new List<ResourceDTO>();
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == pName);
-        foreach (Domain.Task task in project.Tasks)
-        {
-            foreach (Resource res in task._resources)
-            {
-                if (!resources.Any(r => r.Id == res.Id))
-                    resources.Add(_resourceConverter.FromEntity(res));
-            }
-        }
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == pName);
+        foreach (var task in project.Tasks)
+        foreach (var res in task._resources)
+            if (!resources.Any(r => r.Id == res.Id))
+                resources.Add(_resourceConverter.FromEntity(res));
 
         return resources;
     }

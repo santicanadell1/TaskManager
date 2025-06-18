@@ -736,7 +736,7 @@
             _ => "bg-secondary"
         };
     }
-    
+
 
     private void ShowEditTaskModal(TaskDTO task)
     {
@@ -936,7 +936,6 @@
     {
         try
         {
-
             if (string.IsNullOrEmpty(selectedProjectName))
             {
                 memberErrorMessage = "No project selected";
@@ -947,10 +946,9 @@
                 .Where(m => selectedEmails.Contains(m.Email))
                 .DistinctBy(m => m.Email)
                 .ToList();
-            
+
             if (selectedMembers.Any())
             {
-
                 _LeaderProjectController.AssignMembersToProject(selectedProjectName, selectedMembers);
 
                 memberSuccessMessage = "Members added successfully!";

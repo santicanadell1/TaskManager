@@ -60,7 +60,7 @@
                             </h6>
                             <select class="form-select" @bind="projectLeaderEmail">
                                 <option value="">No leader assigned</option>
-                                @foreach (UserDTO user in usersList)
+                                @foreach (var user in usersList)
                                 {
                                     <option value="@user.Email">@user.FirstName @user.LastName</option>
                                 }
@@ -196,7 +196,7 @@
         if (string.IsNullOrEmpty(email))
             return "No leader assigned";
 
-        UserDTO user = usersList?.FirstOrDefault(u => u.Email == email);
+        var user = usersList?.FirstOrDefault(u => u.Email == email);
         return user != null ? $"{user.FirstName} {user.LastName}" : email;
     }
 

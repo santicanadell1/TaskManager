@@ -19,7 +19,7 @@ public class ProjectConverter : IConverter<Project, ProjectDTO>
 
     public Project ToEntity(ProjectDTO projectDTO)
     {
-        Project project = new Project
+        var project = new Project
         {
             Id = projectDTO.Id,
             Name = projectDTO.Name,
@@ -36,16 +36,16 @@ public class ProjectConverter : IConverter<Project, ProjectDTO>
         };
 
         if (projectDTO.Tasks != null)
-            foreach (TaskDTO taskDTO in projectDTO.Tasks)
+            foreach (var taskDTO in projectDTO.Tasks)
             {
-                Task taskFromDb = _repositoryManager.TaskRepository.Get(t => t.Id == taskDTO.Id);
+                var taskFromDb = _repositoryManager.TaskRepository.Get(t => t.Id == taskDTO.Id);
                 if (taskFromDb != null) project.Tasks.Add(taskFromDb);
             }
 
         if (projectDTO.Members != null)
-            foreach (UserDTO memberDTO in projectDTO.Members)
+            foreach (var memberDTO in projectDTO.Members)
             {
-                User memberFromDb = _repositoryManager.UserRepository.Get(u => u.Email == memberDTO.Email);
+                var memberFromDb = _repositoryManager.UserRepository.Get(u => u.Email == memberDTO.Email);
                 if (memberFromDb != null) project.Members.Add(memberFromDb);
             }
 
@@ -54,14 +54,14 @@ public class ProjectConverter : IConverter<Project, ProjectDTO>
 
     public ProjectDTO FromEntity(Project project)
     {
-        List<UserDTO> memberDTOs = new List<UserDTO>();
+        var memberDTOs = new List<UserDTO>();
         if (project.Members != null)
-            foreach (User member in project.Members)
+            foreach (var member in project.Members)
                 memberDTOs.Add(_userConverter.FromEntity(member));
 
         List<TaskDTO> taskDTOs = new List<TaskDTO>();
         if (project.Tasks != null)
-            foreach (Task task in project.Tasks)
+            foreach (var task in project.Tasks)
                 taskDTOs.Add(_taskConverter.FromEntity(task));
 
         return new ProjectDTO

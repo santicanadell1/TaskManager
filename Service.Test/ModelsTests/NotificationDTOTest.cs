@@ -5,58 +5,57 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Service.Models;
 
-namespace Service.Models
+namespace Service.Models;
+
+[TestClass]
+public class NotificationDTOTest
 {
-    [TestClass]
-    public class NotificationDTOTest
+    [TestMethod]
+    public void NewNotification_WhenReadIsTrue_ThenNotificationIsCreatedWithTrue()
     {
-        [TestMethod]
-        public void NewNotification_WhenReadIsTrue_ThenNotificationIsCreatedWithTrue()
-        {
-            NotificationDTO notification = new NotificationDTO { Read = true };
-            Assert.IsTrue(notification.Read);
-        }
+        var notification = new NotificationDTO { Read = true };
+        Assert.IsTrue(notification.Read);
+    }
 
-        [TestMethod]
-        public void NewNotification_WhenReadIsFalse_ThenNotificationIsCreatedWithFalse()
-        {
-            NotificationDTO notification = new NotificationDTO { Read = false };
-            Assert.IsFalse(notification.Read);
-        }
+    [TestMethod]
+    public void NewNotification_WhenReadIsFalse_ThenNotificationIsCreatedWithFalse()
+    {
+        var notification = new NotificationDTO { Read = false };
+        Assert.IsFalse(notification.Read);
+    }
 
-        [TestMethod]
-        public void NewNotification_WhenReadIsNotSet_ThenNotificationIsNotCreated()
-        {
-            NotificationDTO notification = new NotificationDTO();
+    [TestMethod]
+    public void NewNotification_WhenReadIsNotSet_ThenNotificationIsNotCreated()
+    {
+        var notification = new NotificationDTO();
 
-            List<ValidationResult> validationResults = new List<ValidationResult>();
-            ValidationContext validationContext = new ValidationContext(notification);
-            bool isValid = Validator.TryValidateObject(notification, validationContext, validationResults, true);
+        var validationResults = new List<ValidationResult>();
+        var validationContext = new ValidationContext(notification);
+        var isValid = Validator.TryValidateObject(notification, validationContext, validationResults, true);
 
-            Assert.IsFalse(isValid);
-            Assert.IsTrue(validationResults.Any(v => v.ErrorMessage.Contains("IsRead is required.")));
-        }
+        Assert.IsFalse(isValid);
+        Assert.IsTrue(validationResults.Any(v => v.ErrorMessage.Contains("IsRead is required.")));
+    }
 
-        [TestMethod]
-        public void NewNotification_WhenDescriptionIsNotSet_ThenNotificationIsNotCreated()
-        {
-            NotificationDTO notification = new NotificationDTO();
+    [TestMethod]
+    public void NewNotification_WhenDescriptionIsNotSet_ThenNotificationIsNotCreated()
+    {
+        var notification = new NotificationDTO();
 
-            List<ValidationResult> validationResults = new List<ValidationResult>();
-            ValidationContext validationContext = new ValidationContext(notification);
-            bool isValid = Validator.TryValidateObject(notification, validationContext, validationResults, true);
+        var validationResults = new List<ValidationResult>();
+        var validationContext = new ValidationContext(notification);
+        var isValid = Validator.TryValidateObject(notification, validationContext, validationResults, true);
 
-            Assert.IsFalse(isValid);
-            Assert.IsTrue(validationResults.Any(v => v.ErrorMessage.Contains("Description is required.")));
-        }
+        Assert.IsFalse(isValid);
+        Assert.IsTrue(validationResults.Any(v => v.ErrorMessage.Contains("Description is required.")));
+    }
 
-        [TestMethod]
-        public void NewNotification_WhenDescriptionIsValid_ThenDescriptionIsSetCorrectly()
-        {
-            string validDescription = "Valid description";
-            NotificationDTO notification = new NotificationDTO { Description = validDescription };
+    [TestMethod]
+    public void NewNotification_WhenDescriptionIsValid_ThenDescriptionIsSetCorrectly()
+    {
+        var validDescription = "Valid description";
+        var notification = new NotificationDTO { Description = validDescription };
 
-            Assert.AreEqual(validDescription, notification.Description);
-        }
+        Assert.AreEqual(validDescription, notification.Description);
     }
 }

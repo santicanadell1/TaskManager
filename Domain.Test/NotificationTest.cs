@@ -40,13 +40,13 @@ public class NotificationTest
     [ExpectedException(typeof(NotificationDescriptionException))]
     public void NewNotification_WhenDescriptionIsWhiteSpace_ShouldThrowNotificationDescriptionException()
     {
-        Notification not = new Notification(false, "    ", project);
+        var not = new Notification(false, "    ", project);
     }
 
     [TestMethod]
     public void NewNotification_WhenCreated_ShouldHaveReadAsFalse()
     {
-        Notification not = new Notification(false, "Some description", project);
+        var not = new Notification(false, "Some description", project);
 
 
         Assert.IsFalse(not.IsRead);
@@ -55,7 +55,7 @@ public class NotificationTest
     [TestMethod]
     public void Description_WhenSetToValidValue_ThenNoExceptionThrown()
     {
-        Notification not = new Notification(false, "Valid description", project);
+        var not = new Notification(false, "Valid description", project);
 
 
         Assert.AreEqual("Valid description", not.Description);
@@ -64,7 +64,7 @@ public class NotificationTest
     [TestMethod]
     public void Description_WhenChanged_ThenUpdatedSuccessfully()
     {
-        Notification not = new Notification(false, "Initial description", project);
+        var not = new Notification(false, "Initial description", project);
 
 
         not.Description = "Updated description";
@@ -77,6 +77,6 @@ public class NotificationTest
     [ExpectedException(typeof(NotificationException))]
     public void Project_WhenProjectIsNull_ThrowException()
     {
-        Notification not = new Notification(false, "Initial description", null);
+        var not = new Notification(false, "Initial description", null);
     }
 }

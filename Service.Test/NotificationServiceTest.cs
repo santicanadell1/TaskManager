@@ -46,7 +46,7 @@ public class NotificationServiceTest
 
     private void CreateAndAddProjectsAndUsers()
     {
-        UserDTO user1 = new UserDTO
+        var user1 = new UserDTO
         {
             FirstName = "Name 1",
             LastName = "LastName 1",
@@ -56,7 +56,7 @@ public class NotificationServiceTest
             Roles = new List<RolDTO> { RolDTO.ProjectMember, RolDTO.AdminProject }
         };
 
-        UserDTO user2 = new UserDTO
+        var user2 = new UserDTO
         {
             FirstName = "Name 2",
             LastName = "LastName 2",
@@ -71,14 +71,14 @@ public class NotificationServiceTest
 
         _loginService.LoginUser(user1.Email, user1.Password);
 
-        ProjectDTO project1 = new ProjectDTO
+        var project1 = new ProjectDTO
         {
             Name = "Project 1",
             Description = "Description 1",
             StartDate = DateTime.Today
         };
 
-        ProjectDTO project2 = new ProjectDTO
+        var project2 = new ProjectDTO
         {
             Name = "Project 2",
             Description = "Description 2",
@@ -95,8 +95,8 @@ public class NotificationServiceTest
     [TestMethod]
     public void GetNotificationsForUser_WhenUserHasNotifications_ThenReturnNotifications()
     {
-        string userEmail = "Email1@example.com";
-        NotificationDTO notificationDTO = new NotificationDTO
+        var userEmail = "Email1@example.com";
+        var notificationDTO = new NotificationDTO
         {
             Read = false,
             Description = "Test notification",
@@ -104,7 +104,7 @@ public class NotificationServiceTest
         };
         _notificationService.CreateNotification(notificationDTO);
 
-        List<NotificationDTO> result = _notificationService.GetNotificationsForUser(userEmail);
+        var result = _notificationService.GetNotificationsForUser(userEmail);
 
         Assert.AreEqual(1, result.Count);
         Assert.AreEqual("Test notification", result[0].Description);
@@ -113,10 +113,10 @@ public class NotificationServiceTest
     [TestMethod]
     public void AddNotificationToProject_WhenNotificationIsAdded_ThenNotificationShouldBeAddedToAllProjectMembers()
     {
-        string projectName = "Project 1";
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var projectName = "Project 1";
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
 
-        NotificationDTO notificationDTO = new NotificationDTO
+        var notificationDTO = new NotificationDTO
         {
             Read = false,
             Description = "New Project Notification",
@@ -125,8 +125,8 @@ public class NotificationServiceTest
 
         _notificationService.CreateNotification(notificationDTO);
 
-        User user1 = _repositoryManager.UserRepository.Get(u => u.Email == "Email1@example.com");
-        User user2 = _repositoryManager.UserRepository.Get(u => u.Email == "Email2@example.com");
+        var user1 = _repositoryManager.UserRepository.Get(u => u.Email == "Email1@example.com");
+        var user2 = _repositoryManager.UserRepository.Get(u => u.Email == "Email2@example.com");
 
         Assert.AreEqual(2, project.Members.Count);
         Assert.AreEqual(1, user1.Notifications.Count);
@@ -136,14 +136,14 @@ public class NotificationServiceTest
     [TestMethod]
     public void RemoveNotificationFromUser_WhenNotificationIsRemoved_ThenNotificationShouldBeRemovedFromUser()
     {
-        string projectName = "Project 1";
-        NotificationDTO notificationDTO = new NotificationDTO
+        var projectName = "Project 1";
+        var notificationDTO = new NotificationDTO
         {
             Read = false,
             Description = "New Project Notification",
             Project = _adminService.GetProjectByName(projectName)
         };
-        NotificationDTO notificationDTO2 = new NotificationDTO
+        var notificationDTO2 = new NotificationDTO
         {
             Read = false,
             Description = "New Project Notification 2",
@@ -152,7 +152,7 @@ public class NotificationServiceTest
         _notificationService.CreateNotification(notificationDTO);
         _notificationService.CreateNotification(notificationDTO2);
 
-        User user1 = _repositoryManager.UserRepository.Get(u => u.Email == "Email1@example.com");
+        var user1 = _repositoryManager.UserRepository.Get(u => u.Email == "Email1@example.com");
 
         Assert.AreEqual(2, user1.Notifications.Count);
 
@@ -166,14 +166,14 @@ public class NotificationServiceTest
     [ExpectedException(typeof(UserNotFoundException))]
     public void RemoveNotificationFromUser_WhenUserIsIncorrect_ThenThrowsException()
     {
-        string projectName = "Project 1";
-        NotificationDTO notificationDTO = new NotificationDTO
+        var projectName = "Project 1";
+        var notificationDTO = new NotificationDTO
         {
             Read = false,
             Description = "New Project Notification",
             Project = _adminService.GetProjectByName(projectName)
         };
-        NotificationDTO notificationDTO2 = new NotificationDTO
+        var notificationDTO2 = new NotificationDTO
         {
             Read = false,
             Description = "New Project Notification 2",

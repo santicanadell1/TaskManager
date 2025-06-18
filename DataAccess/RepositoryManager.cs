@@ -17,16 +17,16 @@ public class RepositoryManager : IRepositoryManager
         _context = context;
     }
 
-    public  IRepository<User>  UserRepository =>
+    public IRepository<User> UserRepository =>
         _userRepository ??= new UserRepository(_context);
 
     public IProjectRepository ProjectRepository =>
         _projectRepository ??= new ProjectRepository(_context);
 
-    public  IRepository<Notification>  NotificationRepository =>
+    public IRepository<Notification> NotificationRepository =>
         _notificationRepository ??= new NotificationRepository(_context);
 
-    public  IRepository<Task>  TaskRepository =>
+    public IRepository<Task> TaskRepository =>
         _taskRepository ??= new TaskRepository(_context);
 
     public IRepository<Resource> ResourceRepository =>

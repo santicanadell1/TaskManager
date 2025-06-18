@@ -8,12 +8,12 @@ public class ProjectTest
     [TestMethod]
     public void GivenProject_WhenNameIsSet_ThenNameShouldBeCorrect()
     {
-        Project project = new Project();
-        String expectedName = "Project A";
+        var project = new Project();
+        var expectedName = "Project A";
 
 
         project.Name = expectedName;
-        String actualName = project.Name;
+        var actualName = project.Name;
 
 
         Assert.AreEqual(expectedName, actualName);
@@ -22,12 +22,12 @@ public class ProjectTest
     [TestMethod]
     public void GivenProject_WhenDescriptionIsSet_ThenDescriptionShouldBeCorrect()
     {
-        Project project = new Project();
-        String expectedDescription = "This is a test project";
+        var project = new Project();
+        var expectedDescription = "This is a test project";
 
 
         project.Description = expectedDescription;
-        String actualDescription = project.Description;
+        var actualDescription = project.Description;
 
 
         Assert.AreEqual(expectedDescription, actualDescription);
@@ -36,12 +36,12 @@ public class ProjectTest
     [TestMethod]
     public void GivenProject_WhenStartDateIsSet_ThenStartDateShouldBeCorrect()
     {
-        Project project = new Project();
-        DateTime expectedStartDate = DateTime.Today;
+        var project = new Project();
+        var expectedStartDate = DateTime.Today;
 
 
         project.StartDate = expectedStartDate;
-        DateTime actualStartDate = project.StartDate;
+        var actualStartDate = project.StartDate;
 
 
         Assert.AreEqual(expectedStartDate, actualStartDate);
@@ -50,12 +50,12 @@ public class ProjectTest
     [TestMethod]
     public void GivenProject_WhenMembersAreSet_ThenMembersShouldBeCorrect()
     {
-        Project project = new Project();
-        List<User> expectedMembers = new List<User>();
+        var project = new Project();
+        var expectedMembers = new List<User>();
 
 
         project.Members = expectedMembers;
-        List<User> actualMembers = project.Members;
+        var actualMembers = project.Members;
 
 
         CollectionAssert.AreEqual(expectedMembers, actualMembers);
@@ -64,12 +64,12 @@ public class ProjectTest
     [TestMethod]
     public void GivenTaskList_WhenTasksAreAdded_ThenTaskListShouldContainCorrectTasks()
     {
-        Project project = new Project();
-        List<Task> expectedTasks = new List<Task>();
+        var project = new Project();
+        var expectedTasks = new List<Task>();
 
 
         project.Tasks = expectedTasks;
-        List<Task> actualTasks = project.Tasks;
+        var actualTasks = project.Tasks;
 
 
         CollectionAssert.AreEqual(expectedTasks, actualTasks);
@@ -78,14 +78,14 @@ public class ProjectTest
     [TestMethod]
     public void GivenProject_WhenAdminProjectIsSet_ThenAdminProjectShouldBeCorrect()
     {
-        Project project = new Project();
-        User adminUser = new User();
+        var project = new Project();
+        var adminUser = new User();
         adminUser.Roles = new List<Rol>();
         adminUser.AddRol(Rol.AdminProject);
 
 
         project.AdminProject = adminUser;
-        User actualAdminProject = project.AdminProject;
+        var actualAdminProject = project.AdminProject;
 
 
         Assert.IsTrue(actualAdminProject.Roles.Contains(Rol.AdminProject));
@@ -95,7 +95,7 @@ public class ProjectTest
     [ExpectedException(typeof(ProjectNameException))]
     public void GivenProject_WhenNameIsNull_ThenProjectNameExceptionShouldBeThrown()
     {
-        Project project = new Project();
+        var project = new Project();
 
 
         project.Name = null;
@@ -105,7 +105,7 @@ public class ProjectTest
     [ExpectedException(typeof(ProjectDescriptionException))]
     public void GivenProject_WhenDescriptionIsEmpty_ThenProjectDescriptionExceptionShouldBeThrown()
     {
-        Project project = new Project();
+        var project = new Project();
 
 
         project.Description = "";
@@ -115,7 +115,7 @@ public class ProjectTest
     [ExpectedException(typeof(ProjectStartDateException))]
     public void GivenProject_WhenStartDateIsDefault_ThenProjectStartDateExceptionShouldBeThrown()
     {
-        Project project = new Project();
+        var project = new Project();
 
 
         project.StartDate = default;
@@ -124,9 +124,9 @@ public class ProjectTest
     [TestMethod]
     public void GivenProject_WhenAddingANewUser_ThenUserShouldBeAddedToProjectMembers()
     {
-        Project project = new Project();
-        User user1 = new User();
-        User user2 = new User();
+        var project = new Project();
+        var user1 = new User();
+        var user2 = new User();
         project.AddMember(user1);
         project.AddMember(user2);
         Assert.IsTrue(project.Members.Contains(user1));
@@ -136,11 +136,11 @@ public class ProjectTest
     [TestMethod]
     public void GivenProject_WhenAddingANewTask_ThenTaskShouldBeAddedToProjectTasks()
     {
-        Project project = new Project();
-        DateTime startDate = DateTime.Now;
-        DateTime endDate = DateTime.Parse("2026-09-01");
+        var project = new Project();
+        var startDate = DateTime.Now;
+        var endDate = DateTime.Parse("2026-09-01");
         List<Task> previousTasks = new List<Task>();
-        Task task1 = new Task("Title", "Description", startDate, 1, previousTasks, null, null);
+        var task1 = new Task("Title", "Description", startDate, 1, previousTasks, null, null);
         project.AddTask(task1);
         Assert.IsTrue(project.Tasks.Contains(task1));
     }
@@ -148,17 +148,17 @@ public class ProjectTest
     [TestMethod]
     public void CreateProject_With3parameters_ThenProjectShouldBeCreated()
     {
-        Project project = new Project("Project A", "This is a test project", DateTime.Today);
+        var project = new Project("Project A", "This is a test project", DateTime.Today);
     }
 
     [TestMethod]
     public void GivenProject_WhenProjectLeaderIsSet_ThenProjectLeaderShouldBeCorrect()
     {
-        Project project = new Project();
-        User leader = new User { Roles = new List<Rol> { Rol.ProjectLeader } };
+        var project = new Project();
+        var leader = new User { Roles = new List<Rol> { Rol.ProjectLeader } };
 
         project.SetProjectLeader(leader);
-        User actualLeader = project.ProjectLeader;
+        var actualLeader = project.ProjectLeader;
 
         Assert.AreEqual(leader, actualLeader);
     }

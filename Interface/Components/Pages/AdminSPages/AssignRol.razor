@@ -16,7 +16,7 @@
         <label for="userSelect">Select a User</label>
         <select id="userSelect" class="form-control mt-1" @bind="selectedUserEmail">
             <option value="">-- Select a User --</option>
-            @foreach (UserDTO user in usersList)
+            @foreach (var user in usersList)
             {
                 <option value="@user.Email">@user.FirstName @user.LastName</option>
             }
@@ -114,7 +114,7 @@
             return;
         }
 
-        UserDTO userToAssignRoles = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
+        var userToAssignRoles = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
 
         if (userToAssignRoles == null)
         {
@@ -124,7 +124,7 @@
 
         try
         {
-            bool anyRoleAssigned = false;
+            var anyRoleAssigned = false;
 
             foreach (var rolePair in rolesSelected)
             {
@@ -149,7 +149,7 @@
 
             if (userToAssignRoles.Email == _LoginController.GetLoggedUser().Email)
             {
-                UserDTO userDto = _UserController.GetUser(userToAssignRoles.Email);
+                var userDto = _UserController.GetUser(userToAssignRoles.Email);
                 _LoginController.UpdateLoggedUser(userDto);
                 Navigation.NavigateTo(Navigation.Uri, true);
             }
@@ -162,7 +162,7 @@
 
     private void ResetRoleSelections()
     {
-        foreach (RolDTO key in rolesSelected.Keys.ToList())
+        foreach (var key in rolesSelected.Keys.ToList())
         {
             rolesSelected[key] = false;
         }

@@ -13,7 +13,7 @@
         <label for="resourceSelect">Select a Resource to Delete</label>
         <select id="resourceSelect" class="form-control mt-1" @bind="selectedResourceId">
             <option value="">-- Select a Resource --</option>
-            @foreach (ResourceDTO resource in resourcesList)
+            @foreach (var resource in resourcesList)
             {
                 <option value="@resource.Id">@resource.Name</option>
             }

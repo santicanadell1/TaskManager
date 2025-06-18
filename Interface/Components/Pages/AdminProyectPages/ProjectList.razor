@@ -1609,7 +1609,6 @@
 
             if (selectedMembers.Any())
             {
-
                 _AdminProjectController.AssignMembersToProject(selectedProjectName, selectedMembers);
                 memberSuccessMessage = "Members added successfully!";
                 memberErrorMessage = string.Empty;
@@ -1626,7 +1625,6 @@
         }
         catch (Exception ex)
         {
-
             memberErrorMessage = $"Error adding members: {ex.Message}";
             memberSuccessMessage = string.Empty;
         }

@@ -26,12 +26,12 @@ public class ResourceTest
     [TestMethod]
     public void NewResource_WithValidValues_ShouldCreateResourceCorrectly()
     {
-        String name = "Laptop";
-        String type = "Hardware";
-        String description = "Dell Latitude";
+        var name = "Laptop";
+        var type = "Hardware";
+        var description = "Dell Latitude";
 
 
-        Resource res = new Resource(name, type, description);
+        var res = new Resource(name, type, description);
 
 
         Assert.AreEqual(name, res.Name);
@@ -42,7 +42,7 @@ public class ResourceTest
     [TestMethod]
     public void UpdateResourceName_ShouldChangeNameSuccessfully()
     {
-        Resource res = new Resource("Old Name", "Humano", "Some description");
+        var res = new Resource("Old Name", "Humano", "Some description");
 
 
         res.Name = "New Name";
@@ -55,7 +55,7 @@ public class ResourceTest
     [TestMethod]
     public void SetConcurrentUsage_ShouldSetConcurrentUsageCorrectly()
     {
-        Resource res = new Resource("Name", "Type", "Some description");
+        var res = new Resource("Name", "Type", "Some description");
         res.ConcurrentUsage = true;
 
         Assert.IsTrue(res.ConcurrentUsage);
@@ -64,14 +64,14 @@ public class ResourceTest
     [TestMethod]
     public void SetConcurrentUsage_ShouldSetConcurrentUsageFalseByDefault()
     {
-        Resource res = new Resource("Name", "Type", "Description");
+        var res = new Resource("Name", "Type", "Description");
         Assert.IsFalse(res.ConcurrentUsage);
     }
 
     [TestMethod]
     public void SetConcurrentUsage_WhenConcurrentUsageIsSetToTrue_ShouldSetConcurrentUsageToTrue()
     {
-        Resource res = new Resource("Name", "Type", "Description");
+        var res = new Resource("Name", "Type", "Description");
         res.ConcurrentUsage = true;
 
         Assert.IsTrue(res.ConcurrentUsage);
@@ -80,9 +80,9 @@ public class ResourceTest
     [TestMethod]
     public void CreateResource_WithProject_ThenResourceShouldBeCreated()
     {
-        Project project = new Project();
+        var project = new Project();
         project.Name = "Project1";
-        Resource resource = new Resource("Resource1", "TypeA", "Description of Resource1", false, project);
+        var resource = new Resource("Resource1", "TypeA", "Description of Resource1", false, project);
         Assert.IsNotNull(resource.Project);
     }
 }

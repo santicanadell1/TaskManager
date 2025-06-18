@@ -16,7 +16,7 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
 
     public ResourceDTO FromEntity(Resource resource)
     {
-        ResourceDTO dto = new ResourceDTO
+        var dto = new ResourceDTO
         {
             Id = resource.Id,
             Name = resource.Name,
@@ -69,10 +69,10 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
     {
         if (resourceDTOs == null) return new List<Resource>();
 
-        List<Resource> resources = new List<Resource>();
-        foreach (ResourceDTO resourceDTO in resourceDTOs)
+        var resources = new List<Resource>();
+        foreach (var resourceDTO in resourceDTOs)
         {
-            Resource existing = _repositoryManager.ResourceRepository.Get(r => r.Id == resourceDTO.Id);
+            var existing = _repositoryManager.ResourceRepository.Get(r => r.Id == resourceDTO.Id);
             if (existing == null)
                 throw new ResourceNotFoundException();
             resources.Add(existing);
@@ -85,10 +85,10 @@ public class ResourceConverter : IConverter<Resource, ResourceDTO>
     {
         if (resourceDTOs == null) return new List<Resource>();
 
-        List<Resource> resources = new List<Resource>();
-        foreach (ResourceDTO resourceDTO in resourceDTOs)
+        var resources = new List<Resource>();
+        foreach (var resourceDTO in resourceDTOs)
         {
-            Resource existing = _repositoryManager.ResourceRepository.Get(r => r.Id == resourceDTO.Id);
+            var existing = _repositoryManager.ResourceRepository.Get(r => r.Id == resourceDTO.Id);
             if (existing == null)
                 throw new ResourceNotFoundException();
             resources.Add(existing);

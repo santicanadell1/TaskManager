@@ -52,15 +52,13 @@ public class LeaderPService : ILeaderPService
     public List<ProjectDTO> GetAllMyProjects()
     {
         CheckProjectLeaderRole();
-        UserDTO currentUser = LoggedUser.Current;
+        var currentUser = LoggedUser.Current;
 
         List<ProjectDTO> projects = new List<ProjectDTO>();
 
-        foreach (Project project in _repositoryManager.ProjectRepository.GetAll())
-        {
+        foreach (var project in _repositoryManager.ProjectRepository.GetAll())
             if (project.ProjectLeader != null && project.ProjectLeader.Email == currentUser.Email)
                 projects.Add(_projectConverter.FromEntity(project));
-        }
 
         return projects;
     }
@@ -69,11 +67,11 @@ public class LeaderPService : ILeaderPService
     {
         CheckProjectLeaderRole(projectName);
 
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null)
             throw new ProjectNotFoundException();
 
-        ProjectConverter projectConverter = new ProjectConverter(_repositoryManager);
+        var projectConverter = new ProjectConverter(_repositoryManager);
         return projectConverter.FromEntity(project);
     }
 
@@ -91,8 +89,8 @@ public class LeaderPService : ILeaderPService
 
     public void AssignMembersToProject(string projectName, List<UserDTO> membersDTO)
     {
-        UserDTO currentUser = LoggedUser.Current;
-        bool isAdminProject = false;
+        var currentUser = LoggedUser.Current;
+        var isAdminProject = false;
 
         AddTempAdminProjectRole(currentUser, ref isAdminProject);
 
@@ -103,8 +101,8 @@ public class LeaderPService : ILeaderPService
 
     public List<UserDTO> GetAllMembersOfAProject(string projectName)
     {
-        UserDTO currentUser = LoggedUser.Current;
-        bool isAdminProject = false;
+        var currentUser = LoggedUser.Current;
+        var isAdminProject = false;
 
         AddTempAdminProjectRole(currentUser, ref isAdminProject);
 
@@ -117,8 +115,8 @@ public class LeaderPService : ILeaderPService
 
     public void RemoveMemberFromProject(string projectName, string memberToRemoveEmail)
     {
-        UserDTO currentUser = LoggedUser.Current;
-        bool isAdminProject = false;
+        var currentUser = LoggedUser.Current;
+        var isAdminProject = false;
 
         AddTempAdminProjectRole(currentUser, ref isAdminProject);
         _adminPService.RemoveMemberFromProject(projectName, memberToRemoveEmail);
@@ -128,8 +126,8 @@ public class LeaderPService : ILeaderPService
 
     public List<TaskDTO> GetAllTaskForAMemberInAProject(string projectName, string memberEmail)
     {
-        UserDTO currentUser = LoggedUser.Current;
-        bool isAdminProject = false;
+        var currentUser = LoggedUser.Current;
+        var isAdminProject = false;
 
         AddTempAdminProjectRole(currentUser, ref isAdminProject);
         List<TaskDTO> memberTasks = _adminPService.GetAllTaskForAMemberInAProject(projectName, memberEmail);
@@ -141,8 +139,8 @@ public class LeaderPService : ILeaderPService
 
     public void AddTaskToMember(string projectName, string memberEmail, string taskTitle)
     {
-        UserDTO currentUser = LoggedUser.Current;
-        bool isAdminProject = false;
+        var currentUser = LoggedUser.Current;
+        var isAdminProject = false;
 
         AddTempAdminProjectRole(currentUser, ref isAdminProject);
 
@@ -153,8 +151,8 @@ public class LeaderPService : ILeaderPService
 
     public void RemoveTaskFromMember(string projectName, string memberEmail, string taskTitle)
     {
-        UserDTO currentUser = LoggedUser.Current;
-        bool isAdminProject = false;
+        var currentUser = LoggedUser.Current;
+        var isAdminProject = false;
 
         AddTempAdminProjectRole(currentUser, ref isAdminProject);
 
@@ -165,11 +163,11 @@ public class LeaderPService : ILeaderPService
 
     private void CheckProjectLeaderRole(string projectName)
     {
-        UserDTO currentUser = LoggedUser.Current;
+        var currentUser = LoggedUser.Current;
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.ProjectLeader))
             throw new UnauthorizedLeaderAccessException();
 
-        Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
         if (project.ProjectLeader == null || project.ProjectLeader.Email != currentUser.Email)
@@ -191,7 +189,7 @@ public class LeaderPService : ILeaderPService
 
     private void CheckProjectLeaderRole()
     {
-        UserDTO currentUser = LoggedUser.Current;
+        var currentUser = LoggedUser.Current;
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.ProjectLeader))
             throw new UnauthorizedLeaderAccessException();
     }

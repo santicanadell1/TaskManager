@@ -58,7 +58,7 @@ public class UserService : IUserService
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (User user in _repositoryManager.UserRepository.GetAll())
+        foreach (var user in _repositoryManager.UserRepository.GetAll())
             usersDTO.Add(_userConverter.FromEntity(user));
 
         if (usersDTO.Count == 0) throw new NoUsersFoundException();
@@ -68,7 +68,7 @@ public class UserService : IUserService
 
     public UserDTO GetUser(string email)
     {
-        User user = _repositoryManager.UserRepository.Get(user => user.Email == email);
+        var user = _repositoryManager.UserRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
         return _userConverter.FromEntity(user);
@@ -77,7 +77,7 @@ public class UserService : IUserService
 
     private void ValidateUserEmailAndPassword(UserDTO userDTO)
     {
-        foreach (User user in _repositoryManager.UserRepository.GetAll())
+        foreach (var user in _repositoryManager.UserRepository.GetAll())
             if (user.Email == userDTO.Email)
                 throw new InvalidUserEmailException();
 
@@ -86,7 +86,7 @@ public class UserService : IUserService
 
     private User GetUserObject(string email)
     {
-        User user = _repositoryManager.UserRepository.Get(user => user.Email == email);
+        var user = _repositoryManager.UserRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
         return user;

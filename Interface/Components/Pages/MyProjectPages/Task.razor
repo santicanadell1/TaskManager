@@ -44,7 +44,7 @@
         <label for="projectSelect">Select Project</label>
         <select id="projectSelect" class="form-control" @onchange="OnProjectChange">
             <option value="">-- Select a Project --</option>
-            @foreach (ProjectDTO project in projects)
+            @foreach (var project in projects)
             {
                 <option value="@project.Name">@project.Name</option>
             }
@@ -57,7 +57,7 @@
             <label for="taskSelect">Select Task</label>
             <select id="taskSelect" class="form-control" @onchange="OnTaskChange">
                 <option value="">-- Select a Task --</option>
-                @foreach (TaskDTO task in tasks)
+                @foreach (var task in tasks)
                 {
                     <option value="@task.Title">@task.Title</option>
                 }
@@ -145,7 +145,7 @@
             if (!string.IsNullOrEmpty(selectedTaskId) && !string.IsNullOrEmpty(selectedProjectId))
             {
                 StateHasChanged();
-                TaskDTO task = _TaskController.GetTask(selectedProjectId, selectedTaskId);
+                var task = _TaskController.GetTask(selectedProjectId, selectedTaskId);
                 taskStatus = task.State;
 
                 taskStatusString = ConvertEnumToString(taskStatus);
@@ -187,9 +187,9 @@
         {
             StateHasChanged();
 
-            TaskDTO existingTask = _TaskController.GetTask(selectedProjectId, selectedTaskId);
+            var existingTask = _TaskController.GetTask(selectedProjectId, selectedTaskId);
 
-            TaskDTO taskDTO = new TaskDTO
+            var taskDTO = new TaskDTO
             {
                 Id = existingTask.Id,
                 Title = existingTask.Title,
@@ -202,7 +202,7 @@
                 State = taskStatus
             };
 
-            StateDTO newStatus = taskStatus;
+            var newStatus = taskStatus;
             _MemberProjectController.ChangeTaskStatus(selectedProjectId, loginMailUser, taskDTO, newStatus);
 
             successMessage = $"Task '{existingTask.Title}' has been successfully updated to {taskStatusString}!";
