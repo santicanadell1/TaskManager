@@ -16,7 +16,7 @@ public class AdminSService : IAdminSService
     private readonly IRepositoryManager _repositoryManager;
     private readonly RolConverter _rolConverter;
     private readonly UserConverter _userConverter;
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
 
 
     public AdminSService(IRepositoryManager repositoryManager)

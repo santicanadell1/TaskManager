@@ -15,7 +15,7 @@ public class MemberPService : IMemberPService
     private readonly ICpmService _cpmService;
     private readonly IRepositoryManager _repositoryManager;
     private readonly ITaskService _taskService;
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
 
     public MemberPService(IRepositoryManager repositoryManager)
     {
