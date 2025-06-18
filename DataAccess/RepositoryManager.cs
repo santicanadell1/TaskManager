@@ -1,4 +1,6 @@
 ﻿using DataAccess;
+using Domain;
+using Task = Domain.Task;
 
 public class RepositoryManager : IRepositoryManager
 {
@@ -15,18 +17,18 @@ public class RepositoryManager : IRepositoryManager
         _context = context;
     }
 
-    public UserRepository UserRepository =>
+    public  IRepository<User>  UserRepository =>
         _userRepository ??= new UserRepository(_context);
 
-    public ProjectRepository ProjectRepository =>
+    public IProjectRepository ProjectRepository =>
         _projectRepository ??= new ProjectRepository(_context);
 
-    public NotificationRepository NotificationRepository =>
+    public  IRepository<Notification>  NotificationRepository =>
         _notificationRepository ??= new NotificationRepository(_context);
 
-    public TaskRepository TaskRepository =>
+    public  IRepository<Task>  TaskRepository =>
         _taskRepository ??= new TaskRepository(_context);
 
-    public ResourceRepository ResourceRepository =>
+    public IRepository<Resource> ResourceRepository =>
         _resourceRepository ??= new ResourceRepository(_context);
 }

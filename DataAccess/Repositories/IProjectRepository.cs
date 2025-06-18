@@ -1,11 +1,9 @@
 ﻿using Domain;
-using Task = System.Threading.Tasks.Task;
+using Task = Domain.Task;
 
 namespace DataAccess;
 
-public class IProjectRepository
-{
-    public interface IRepository<T>
+public interface IProjectRepository
     {
         public List<Project> GetAll();
         public Project? Get(Func<Project, bool> filter);
@@ -18,4 +16,3 @@ public class IProjectRepository
         public void AddPreviousTask(string projectName, int? taskId, Task previousTask);
         public void AddResourceToTask(string projectName, int? taskId, Resource resource);
     }
-}
