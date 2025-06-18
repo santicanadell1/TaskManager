@@ -167,7 +167,6 @@ public class AdminSService : IAdminSService
     private void CheckAdminRole()
     {
         UserDTO currentUser = LoggedUser.Current;
-        Console.WriteLine($"Logged user: {currentUser.Email}, Roles: {string.Join(",", currentUser.Roles)}");
 
         if (currentUser == null || !currentUser.Roles.Contains(RolDTO.AdminSystem))
             throw new UnauthorizedAdminAccessException();
