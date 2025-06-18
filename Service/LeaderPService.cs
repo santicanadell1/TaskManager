@@ -10,7 +10,7 @@ namespace Service;
 public class LeaderPService : ILeaderPService
 {
     private readonly IAdminPService _adminPService;
-    private readonly ICpmService _cpmService;
+    private readonly CpmService _cpmService;
     private readonly IExporter _exporter;
     private readonly ProjectConverter _projectConverter;
     private readonly IRepositoryManager _repositoryManager;
