@@ -13,13 +13,13 @@ namespace Service
 {
     public class TaskService : ITaskService
     {
-        private readonly ICpmService _cpmService;
+        private readonly CpmService _cpmService;
         private readonly IRepositoryManager _repositoryManager;
         private readonly ResourceConverter _resourceConverter;
         private readonly IResourceService _resourceService;
         private readonly TaskConverter _taskConverter;
 
-        public TaskService(IRepositoryManager repositoryManager, ICpmService cpmService)
+        public TaskService(IRepositoryManager repositoryManager, CpmService cpmService)
         {
             _repositoryManager = repositoryManager;
             _taskConverter = new TaskConverter(_repositoryManager);
