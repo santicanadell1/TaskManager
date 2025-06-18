@@ -18,7 +18,7 @@ public class AdminSService_Test
     [TestInitialize]
     public void TestSetUp()
     {
-        var contextFactory = new InMemoryAppContextFactory();
+        InMemoryAppContextFactory contextFactory = new InMemoryAppContextFactory();
         _context = contextFactory.CreateDbContext();
 
         _context.Database.EnsureDeleted();
@@ -29,7 +29,7 @@ public class AdminSService_Test
         _loginService = new Login(_repositoryManager);
         _userService = new UserService(_repositoryManager);
 
-        var adminUserDTO = new UserDTO
+        UserDTO adminUserDTO = new UserDTO
         {
             FirstName = "Admin",
             LastName = "User",
@@ -39,7 +39,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO> { RolDTO.AdminSystem }
         };
 
-        var normalUserDTO = new UserDTO
+        UserDTO normalUserDTO = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -52,7 +52,7 @@ public class AdminSService_Test
         _userService.AddUser(adminUserDTO);
         _userService.AddUser(normalUserDTO);
 
-        var savedUser = _userService.GetUser(normalUserDTO.Email);
+        UserDTO savedUser = _userService.GetUser(normalUserDTO.Email);
         Assert.IsNotNull(savedUser);
     }
 
@@ -68,7 +68,7 @@ public class AdminSService_Test
     public void AdminService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotAdmin()
     {
         _loginService.LoginUser("john.doe@example.com", "Password123@");
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
 
         _adminService.CreateUser(currentUser);
     }
@@ -79,7 +79,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToDeleteDTO = new UserDTO
+        UserDTO userToDeleteDTO = new UserDTO
         {
             FirstName = "Nonexistent",
             LastName = "User",
@@ -98,7 +98,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("john.doe@example.com", "Password123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -108,7 +108,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var newPassword = "NewPassword456@";
+        string newPassword = "NewPassword456@";
 
         _adminService.ChangePassword(userToUpdate.Email, newPassword, userToUpdate.Password);
     }
@@ -119,7 +119,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("john.doe@example.com", "Password123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -129,7 +129,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var roleToAssign = RolDTO.ProjectMember;
+        RolDTO roleToAssign = RolDTO.ProjectMember;
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
     }
@@ -140,7 +140,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -150,7 +150,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var newPassword = "abcD1";
+        string newPassword = "abcD1";
 
         _adminService.ChangePassword(userToUpdate.Email, newPassword, "Password123@");
     }
@@ -159,10 +159,10 @@ public class AdminSService_Test
     [TestMethod]
     public void AdminService_ShouldChangePassword_WhenChangingUserPassword()
     {
-        var _passwordManager = new PasswordManager();
+        PasswordManager _passwordManager = new PasswordManager();
 
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -173,7 +173,7 @@ public class AdminSService_Test
         };
         _loginService.LoginUser("john.doe@example.com", "Password123@");
         _adminService.ChangeCurrentUserPassword(userToUpdate.Email, "Password123@", "Password123#");
-        var user = _userService.GetUser(userToUpdate.Email);
+        UserDTO user = _userService.GetUser(userToUpdate.Email);
         Assert.AreEqual(_passwordManager.HashPassword("Password123#"), user.Password);
     }
 
@@ -182,7 +182,7 @@ public class AdminSService_Test
     public void AdminService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotAdmin_CreateUser()
     {
         _loginService.LoginUser("john.doe@example.com", "Password123@");
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
 
         _adminService.CreateUser(currentUser);
     }
@@ -193,7 +193,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToDeleteDTO = new UserDTO
+        UserDTO userToDeleteDTO = new UserDTO
         {
             FirstName = "Nonexistent",
             LastName = "User",
@@ -212,7 +212,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -222,7 +222,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var newPassword = "NewPassword456@";
+        string newPassword = "NewPassword456@";
 
         _adminService.ChangePassword(userToUpdate.Email, newPassword, "IncorrectOldPassword");
     }
@@ -233,7 +233,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("john.doe@example.com", "Password123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -243,7 +243,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var roleToAssign = RolDTO.ProjectMember;
+        RolDTO roleToAssign = RolDTO.ProjectMember;
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
     }
@@ -254,7 +254,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToUpdate = new UserDTO
+        UserDTO userToUpdate = new UserDTO
         {
             FirstName = "John",
             LastName = "Doe",
@@ -264,7 +264,7 @@ public class AdminSService_Test
             Roles = new List<RolDTO>()
         };
 
-        var newPassword = "123";
+        string newPassword = "123";
         _adminService.ChangePassword(userToUpdate.Email, newPassword, "Password123@");
     }
 
@@ -273,7 +273,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var newUserDTO = new UserDTO
+        UserDTO newUserDTO = new UserDTO
         {
             FirstName = "New",
             LastName = "User",
@@ -285,7 +285,7 @@ public class AdminSService_Test
 
         _adminService.CreateUser(newUserDTO);
 
-        var createdUser = _userService.GetUser(newUserDTO.Email);
+        UserDTO createdUser = _userService.GetUser(newUserDTO.Email);
         Assert.IsNotNull(createdUser);
         Assert.AreEqual(newUserDTO.Email, createdUser.Email);
     }
@@ -295,14 +295,14 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToDelete = _userService.GetUser("john.doe@example.com");
+        UserDTO userToDelete = _userService.GetUser("john.doe@example.com");
         Assert.IsNotNull(userToDelete);
 
         _adminService.DeleteUser(userToDelete);
 
         try
         {
-            var deletedUser = _userService.GetUser("john.doe@example.com");
+            UserDTO deletedUser = _userService.GetUser("john.doe@example.com");
             Assert.Fail("Expected UserNotFoundException was not thrown");
         }
         catch (UserNotFoundException)
@@ -314,12 +314,12 @@ public class AdminSService_Test
     public void AdminService_ShouldChangePassword_WhenValidCredentialsProvided()
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
-        var passwordManager = new PasswordManager();
+        PasswordManager passwordManager = new PasswordManager();
 
-        var newPassword = "NewPassword123@";
+        string newPassword = "NewPassword123@";
         _adminService.ChangePassword("john.doe@example.com", newPassword, "Password123@");
 
-        var updatedUser = _userService.GetUser("john.doe@example.com");
+        UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
         Assert.AreEqual(passwordManager.HashPassword(newPassword), updatedUser.Password);
     }
 
@@ -337,12 +337,12 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToUpdate = _userService.GetUser("john.doe@example.com");
-        var roleToAssign = RolDTO.ProjectMember;
+        UserDTO userToUpdate = _userService.GetUser("john.doe@example.com");
+        RolDTO roleToAssign = RolDTO.ProjectMember;
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
 
-        var updatedUser = _userService.GetUser("john.doe@example.com");
+        UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
         Assert.IsTrue(updatedUser.Roles.Contains(roleToAssign));
     }
 
@@ -351,10 +351,10 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var currentUser = LoggedUser.Current;
+        UserDTO currentUser = LoggedUser.Current;
         if (!currentUser.Roles.Contains(RolDTO.AdminProject)) currentUser.Roles.Add(RolDTO.AdminProject);
 
-        var userToDelete = new UserDTO
+        UserDTO userToDelete = new UserDTO
         {
             FirstName = "Delete",
             LastName = "Me2",
@@ -370,7 +370,7 @@ public class AdminSService_Test
 
         try
         {
-            var deletedUser = _userService.GetUser("delete.me2@example.com");
+            UserDTO deletedUser = _userService.GetUser("delete.me2@example.com");
             Assert.Fail("Expected UserNotFoundException was not thrown");
         }
         catch (UserNotFoundException)
@@ -383,7 +383,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToDelete = new UserDTO
+        UserDTO userToDelete = new UserDTO
         {
             FirstName = "Delete",
             LastName = "Me3",
@@ -399,7 +399,7 @@ public class AdminSService_Test
 
         try
         {
-            var deletedUser = _userService.GetUser("delete.me3@example.com");
+            UserDTO deletedUser = _userService.GetUser("delete.me3@example.com");
             Assert.Fail("Expected UserNotFoundException was not thrown");
         }
         catch (UserNotFoundException)
@@ -421,7 +421,7 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToDelete = new UserDTO
+        UserDTO userToDelete = new UserDTO
         {
             FirstName = "Repository",
             LastName = "Test",
@@ -433,14 +433,12 @@ public class AdminSService_Test
 
         _userService.AddUser(userToDelete);
 
-        var userEntityBeforeDelete =
-            _repositoryManager.UserRepository.Get(u => u.Email == "repository.test@example.com");
+        Domain.User userEntityBeforeDelete = _repositoryManager.UserRepository.Get(u => u.Email == "repository.test@example.com");
         Assert.IsNotNull(userEntityBeforeDelete);
 
         _adminService.DeleteUser(userToDelete);
 
-        var userEntityAfterDelete =
-            _repositoryManager.UserRepository.Get(u => u.Email == "repository.test@example.com");
+        Domain.User userEntityAfterDelete = _repositoryManager.UserRepository.Get(u => u.Email == "repository.test@example.com");
         Assert.IsNull(userEntityAfterDelete);
     }
 
@@ -449,12 +447,12 @@ public class AdminSService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var userToUpdate = _userService.GetUser("john.doe@example.com");
-        var roleToAssign = RolDTO.ProjectMember;
+        UserDTO userToUpdate = _userService.GetUser("john.doe@example.com");
+        RolDTO roleToAssign = RolDTO.ProjectMember;
 
         _adminService.AssignRole(userToUpdate, roleToAssign);
 
-        var updatedUser = _userService.GetUser("john.doe@example.com");
+        UserDTO updatedUser = _userService.GetUser("john.doe@example.com");
         Assert.IsTrue(updatedUser.Roles.Contains(roleToAssign));
 
         _adminService.RemoveRole(userToUpdate, roleToAssign);
