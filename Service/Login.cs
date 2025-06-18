@@ -9,7 +9,7 @@ namespace Service;
 
 public class Login : ILogin
 {
-    private readonly PasswordManager _passwordManager = new();
+    private readonly IPasswordManager _passwordManager = new PasswordManager();
     private readonly IRepositoryManager _repositoryManager;
     private readonly RolConverter _rolConverter;
     private readonly UserConverter _userConverter;

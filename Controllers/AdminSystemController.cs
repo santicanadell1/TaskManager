@@ -7,7 +7,7 @@ namespace Controllers;
 public class AdminSystemController
 {
     private readonly IAdminSService _adminSService;
-    private readonly PasswordManager _passwordManager;
+    private readonly IPasswordManager _passwordManager;
 
     public AdminSystemController(IRepositoryManager repositoryManager)
     {
