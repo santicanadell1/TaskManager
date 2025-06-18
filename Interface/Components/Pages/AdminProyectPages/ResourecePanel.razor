@@ -65,7 +65,7 @@
                 </label>
                 <select class="form-select form-select-lg" @onchange="OnProjectChanged" disabled="@_isLoading">
                     <option value="">-- Select a project --</option>
-                    @foreach (var project in _projects)
+                    @foreach (ProjectDTO project in _projects)
                     {
                         <option value="@project.Name" selected="@(_selectedProject == project.Name)">
                             @project.Name
@@ -84,7 +84,7 @@
                     </label>
                     <select class="form-select form-select-lg" @onchange="OnResourceChanged" disabled="@_isLoading">
                         <option value="">-- Select a resource --</option>
-                        @foreach (var resource in _resources)
+                        @foreach (ResourceDTO resource in _resources)
                         {
                             <option value="@resource.Id" selected="@(_selectedResource?.Id == resource.Id)">
                                 @resource.Name
@@ -163,7 +163,7 @@
     {
         try
         {
-            var currentEmail = LoggedUser.Current.Email;
+            string currentEmail = LoggedUser.Current.Email;
             _projects = _AdminProjectController.GetAllProjectsForUser(currentEmail) ?? new List<ProjectDTO>();
         }
         catch (Exception ex)
@@ -226,9 +226,9 @@
     private async Task OnResourceChanged(ChangeEventArgs e)
     {
         _errorMessage = string.Empty;
-        var idStr = e.Value?.ToString();
+        string idStr = e.Value?.ToString();
 
-        if (!int.TryParse(idStr, out var resourceId))
+        if (!int.TryParse(idStr, out int resourceId))
         {
             _showCalendar = false;
             _selectedResource = null;
@@ -248,11 +248,11 @@
                 return;
             }
 
-            var occupiedPeriods = _ResourceAdminController.getWhenIsResourceOcupied(_selectedResource);
-            var nextAvailable = _ResourceAdminController.NextDateAvailable(_selectedResource, DateTime.Today, 1);
+            List<(DateTime,int)> occupiedPeriods = _ResourceAdminController.getWhenIsResourceOcupied(_selectedResource);
+            DateTime nextAvailable = _ResourceAdminController.NextDateAvailable(_selectedResource, DateTime.Today, 1);
             _nextAvailableDate = nextAvailable.ToString("dd/MM/yyyy");
 
-            var events = new List<object>();
+            List<Object> events = new List<object>();
 
             foreach (var (startDate, duration) in occupiedPeriods)
             {
