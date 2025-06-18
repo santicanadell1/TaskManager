@@ -16,7 +16,7 @@ namespace Service
         private readonly ICpmService _cpmService;
         private readonly IRepositoryManager _repositoryManager;
         private readonly ResourceConverter _resourceConverter;
-        private readonly ResourceService _resourceService;
+        private readonly IResourceService _resourceService;
         private readonly TaskConverter _taskConverter;
 
         public TaskService(IRepositoryManager repositoryManager, ICpmService cpmService)
