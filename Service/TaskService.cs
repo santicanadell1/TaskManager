@@ -265,8 +265,6 @@ namespace Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetTasks for project '{projectName}': {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
