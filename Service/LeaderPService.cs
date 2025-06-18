@@ -14,7 +14,7 @@ public class LeaderPService : ILeaderPService
     private readonly IExporter _exporter;
     private readonly ProjectConverter _projectConverter;
     private readonly IRepositoryManager _repositoryManager;
-    private readonly TaskService _taskService;
+    private readonly ITaskService _taskService;
 
     public LeaderPService(IRepositoryManager repositoryManager, IExporter exporter)
     {
