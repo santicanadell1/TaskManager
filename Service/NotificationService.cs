@@ -3,11 +3,12 @@ using DataAccess.Exceptions.NotificationRepositoryExceptions;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
 using Service.Converters;
+using Service.Interface;
 using Service.Models;
 
 namespace Service;
 
-public class NotificationService
+public class NotificationService:INotificationService
 {
     private readonly NotificationConverter _notificationConverter;
     private readonly IRepositoryManager _repositoryManager;

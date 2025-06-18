@@ -58,7 +58,7 @@ namespace Service
 
         public void AddTask(string projectName, TaskDTO taskDTO, bool solve = false)
         {
-            NotificationService notificationService = new NotificationService(_repositoryManager);
+            INotificationService notificationService = new NotificationService(_repositoryManager);
             AdminPService projectService = new AdminPService(_repositoryManager);
             Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
             if (project == null) throw new ProjectNotFoundException();
@@ -110,7 +110,7 @@ namespace Service
 
         public void UpdateTask(string projectName, string title, TaskDTO taskDTO, bool solve = false)
         {
-            NotificationService notificationService = new NotificationService(_repositoryManager);
+            INotificationService notificationService = new NotificationService(_repositoryManager);
             AdminPService projectService = new AdminPService(_repositoryManager);
             Project project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
             if (project == null) throw new ProjectNotFoundException();
