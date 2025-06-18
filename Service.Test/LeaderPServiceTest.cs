@@ -312,12 +312,6 @@ public class LeaderPService_Test
 
         ProjectDTO projectDTO = _leaderService.GetProject("Test Project");
 
-        Console.WriteLine($"ProjectDTO: {projectDTO != null}");
-        Console.WriteLine($"ProjectDTO.Name: {projectDTO?.Name}");
-        Console.WriteLine($"ProjectDTO.Description: {projectDTO?.Description}");
-        Console.WriteLine($"ProjectDTO.ProjectLeader: {projectDTO?.ProjectLeader != null}");
-        Console.WriteLine($"ProjectDTO.ProjectLeader.Email: {projectDTO?.ProjectLeader?.Email}");
-
         Assert.IsNotNull(projectDTO, "ProjectDTO should not be null");
         Assert.AreEqual("Test Project", projectDTO.Name);
         Assert.AreEqual("Test project description", projectDTO.Description);
@@ -325,7 +319,6 @@ public class LeaderPService_Test
         if (projectDTO.ProjectLeader == null)
         {
             Project originalProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
-            Console.WriteLine($"Original project leader: {originalProject?.ProjectLeader?.Email}");
         }
 
         Assert.IsNotNull(projectDTO.ProjectLeader, "ProjectLeader should not be null");
@@ -813,8 +806,6 @@ public class LeaderPService_Test
         string normalizedJson = jsonResult.Replace(" ", "").Replace("\n", "").Replace("\r", "");
         Assert.AreEqual("[]", normalizedJson, "El JSON debe ser un array vacío");
 
-        Console.WriteLine("=== RESULTADO JSON SIN PROYECTOS ===");
-        Console.WriteLine($"Contenido: '{jsonResult}'");
     }
 
     [TestMethod]
@@ -836,9 +827,6 @@ public class LeaderPService_Test
         Assert.AreEqual(0, lines.Length,
             "No debe haber líneas cuando no hay proyectos");
 
-        Console.WriteLine("=== RESULTADO SIN PROYECTOS ===");
-        Console.WriteLine($"Número de líneas no vacías: {lines.Length}");
-        Console.WriteLine($"Contenido (raw): '{csvResult}'");
     }
 
     [TestMethod]
