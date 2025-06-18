@@ -44,7 +44,7 @@
 </div>
 
 @code {
-    private bool isNotificationsVisible = false;
+    private bool isNotificationsVisible;
     private List<NotificationDTO> notifications = new();
     private int unreadCount => notifications.Count(n => !n.Read.GetValueOrDefault());
 
@@ -83,7 +83,7 @@
         isNotificationsVisible = !isNotificationsVisible;
     }
 
-    private void MarkAsRead(int notificationId)
+    private void MarkAsRead(int? notificationId)
     {
         try
         {

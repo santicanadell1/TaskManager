@@ -1,10 +1,10 @@
 ﻿@page "/users/roles"
-@using Service
+@using Controllers
 @using Service.Models
 @inject NavigationManager Navigation
-@inject AdminSService AdminService
-@inject UserService UserService
-@inject Login _login
+@inject AdminSystemController _AdminSystemController
+@inject UserController _UserController
+@inject LoginController _LoginController
 @rendermode InteractiveServer
 
 <link href="styles/styleAssignRol.css" rel="stylesheet"/>
@@ -40,6 +40,11 @@
                 <input type="checkbox" id="projectMember" class="form-check-input"
                        @bind="rolesSelected[RolDTO.ProjectMember]"/>
                 <label class="form-check-label" for="projectMember">Project Member</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="projectMember" class="form-check-input"
+                       @bind="rolesSelected[RolDTO.ProjectLeader]"/>
+                <label class="form-check-label" for="projectMember">Project Leader</label>
             </div>
         </div>
     </div>
@@ -82,14 +87,15 @@
     {
         { RolDTO.AdminSystem, false },
         { RolDTO.AdminProject, false },
-        { RolDTO.ProjectMember, false }
+        { RolDTO.ProjectMember, false },
+        { RolDTO.ProjectLeader, false }
     };
 
     protected override void OnInitialized()
     {
         try
         {
-            usersList = UserService.GetUsers();
+            usersList = _UserController.GetAllUsers();
         }
         catch (Exception ex)
         {
@@ -124,7 +130,7 @@
             {
                 if (rolePair.Value)
                 {
-                    AdminService.AssignRole(userToAssignRoles, rolePair.Key);
+                    _AdminSystemController.AssignRole(userToAssignRoles, rolePair.Key);
 
                     anyRoleAssigned = true;
                 }
@@ -141,10 +147,10 @@
             selectedUserEmail = "";
             ResetRoleSelections();
 
-            if (userToAssignRoles.Email == _login.GetLoggedUser().Email)
+            if (userToAssignRoles.Email == _LoginController.GetLoggedUser().Email)
             {
-                var userDto = UserService.GetUser(userToAssignRoles.Email);
-                _login.UpdateUser(userDto);
+                var userDto = _UserController.GetUser(userToAssignRoles.Email);
+                _LoginController.UpdateLoggedUser(userDto);
                 Navigation.NavigateTo(Navigation.Uri, true);
             }
         }

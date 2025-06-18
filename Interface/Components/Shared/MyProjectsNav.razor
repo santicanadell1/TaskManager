@@ -26,26 +26,19 @@
             @if (showProjectOptions)
             {
                 <div class="ms-3">
-                    <!-- Tasks Option -->
                     <NavLink class="nav-link" href="/project/tasks">
                         <i class="bi bi-list-check"></i> Tasks
                     </NavLink>
-                    <!-- Gantt Diagram Option -->
-                    <NavLink class="nav-link" href="/gantt">
-                        <i class="bi bi-calendar"></i> Gantt Diagram
-                    </NavLink>
+
                 </div>
             }
-            <NavLink class="nav-link" href="/users/changeCurrentPassword">
-                <i class="bi bi-key"></i> Change Password
-            </NavLink>
         </div>
     }
 </div>
 
 @code {
-    private bool showMyProjects = false;
-    private bool showProjectOptions = false;
+    private bool showMyProjects;
+    private bool showProjectOptions;
 
     private void ToggleMyProjects()
     {

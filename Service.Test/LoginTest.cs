@@ -2,20 +2,36 @@ using DataAccess;
 using Service;
 using Service.Exceptions.LoginExceptions;
 using Service.Models;
+using System;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 [TestClass]
 public class LoginTests
 {
-    private InMemoryDatabase _inMemoryDatabase;
+    private AppDbContext _context;
+    private InMemoryAppContextFactory _contextFactory;
     private Login _login;
-    private PasswordManager _passwordManager;
+    private IRepositoryManager _repositoryManager;
 
     [TestInitialize]
     public void Setup()
     {
-        _inMemoryDatabase = new InMemoryDatabase();
-        _login = new Login(_inMemoryDatabase);
-        _passwordManager = new PasswordManager();
+        _contextFactory = new InMemoryAppContextFactory();
+        _context = _contextFactory.CreateDbContext();
+
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+
+        _repositoryManager = new RepositoryManager(_context);
+
+        _login = new Login(_repositoryManager);
+    }
+
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _context?.Database.EnsureDeleted();
     }
 
     [TestMethod]
@@ -35,7 +51,7 @@ public class LoginTests
             Birthday = DateTime.Parse("1990-01-01")
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -64,7 +80,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -96,7 +112,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -119,7 +135,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -144,7 +160,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -169,7 +185,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -194,7 +210,7 @@ public class LoginTests
             Roles = roles
         };
 
-        var userService = new UserService(_inMemoryDatabase);
+        var userService = new UserService(_repositoryManager);
         userService.AddUser(userDTO);
 
         _login.LoginUser(email, password);
@@ -208,8 +224,34 @@ public class LoginTests
             Birthday = DateTime.Parse("1990-01-01"),
             Roles = new List<RolDTO> { RolDTO.AdminProject }
         };
+
         _login.UpdateUser(userUpdate);
         Assert.IsFalse(_login.IsProjectMember());
         Assert.IsTrue(_login.IsAdminProject());
+    }
+
+    [TestMethod]
+    public void IsProjectLeaderMember_ShouldReturnTrue_WhenUserIsProjectLeaderMember()
+    {
+        var email = "john.doe@example.com";
+        var password = "Password123@";
+        var roles = new List<RolDTO> { RolDTO.ProjectLeader };
+
+        var userDTO = new UserDTO
+        {
+            Email = email,
+            FirstName = "John",
+            LastName = "Doe",
+            Password = password,
+            Birthday = DateTime.Parse("1990-01-01"),
+            Roles = roles
+        };
+
+        var userService = new UserService(_repositoryManager);
+        userService.AddUser(userDTO);
+
+        _login.LoginUser(email, password);
+
+        Assert.IsTrue(_login.IsProjectLeader());
     }
 }

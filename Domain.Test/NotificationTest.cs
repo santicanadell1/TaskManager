@@ -7,6 +7,7 @@ public class NotificationTest
 {
     private Project project;
 
+
     [TestInitialize]
     public void Initialize()
     {
@@ -32,7 +33,7 @@ public class NotificationTest
         not.MarkRead();
 
 
-        Assert.IsTrue(not.Read);
+        Assert.IsTrue(not.IsRead);
     }
 
     [TestMethod]
@@ -48,7 +49,7 @@ public class NotificationTest
         var not = new Notification(false, "Some description", project);
 
 
-        Assert.IsFalse(not.Read);
+        Assert.IsFalse(not.IsRead);
     }
 
     [TestMethod]

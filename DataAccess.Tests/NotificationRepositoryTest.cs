@@ -6,78 +6,99 @@ namespace DataAccess.Test;
 [TestClass]
 public class NotificationRepositoryTest
 {
+    private AppDbContext _context;
+    private InMemoryAppContextFactory _contextFactory;
+    private NotificationRepository _notificationRepository;
+
+    [TestInitialize]
+    public void Setup()
+    {
+        _contextFactory = new InMemoryAppContextFactory();
+        _context = _contextFactory.CreateDbContext();
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+        _notificationRepository = new NotificationRepository(_context);
+    }
+
+    [TestCleanup]
+    public void CleanUp()
+    {
+        _context?.Database.EnsureDeleted();
+    }
+
     [TestMethod]
     public void NewNotificationRepository_WhenRepositoryIsCreated_ShouldNotBeNull()
     {
-        NotificationRepository notificationRepository;
-
-        notificationRepository = new NotificationRepository();
-
-        Assert.IsNotNull(notificationRepository);
+        Assert.IsNotNull(_notificationRepository);
     }
 
     [TestMethod]
     public void AddNewNotification_WhenAddNewNotification_ListShouldContainNotification()
     {
-        var notificationRepository = new NotificationRepository();
-        var notification = new Notification(false, "New notification", new Project());
+        var project = new Project { Name = "Project 1", Description = "Project 1 description" };
+        var notification = new Notification(false, "New notification", project);
+        _notificationRepository.Add(notification);
 
-        notificationRepository.AddNotification(notification);
-
-        Assert.IsTrue(notificationRepository.GetAll().Contains(notification));
+        Assert.IsTrue(_notificationRepository.GetAll().Count == 1);
+        Assert.IsTrue(_notificationRepository.GetAll().Contains(notification));
     }
 
     [TestMethod]
     public void AddNewNotification_WhenGettingANotification_ShouldReturnNotification()
     {
-        var notificationRepository = new NotificationRepository();
-        var notification1 = new Notification(false, "New notification", new Project());
-        var notification2 = new Notification(true, "Another notification", new Project());
-        notificationRepository.AddNotification(notification1);
-        notificationRepository.AddNotification(notification2);
+        var project = new Project { Name = "Project 1", Description = "Project 1 description" };
+        var notification1 = new Notification(false, "New notification", project);
+        var notification2 = new Notification(true, "Another notification", project);
+        _notificationRepository.Add(notification1);
+        _notificationRepository.Add(notification2);
 
-        var notification3 = notificationRepository.Get(n => n.Description == "New notification");
+        var notification = _notificationRepository.Get(n => n.Description == "New notification");
 
-        Assert.AreEqual(notification1, notification3);
+        Assert.AreEqual(notification1, notification);
     }
 
     [TestMethod]
     public void UpdateNotification_WhenGettingTheNotification_ShouldBeDifferentFromOriginalNotification()
     {
-        var notificationRepository = new NotificationRepository();
-        var notification1 = new Notification(false, "Old notification", new Project());
-        var notification2 = new Notification(true, "Updated notification", new Project());
-        notificationRepository.AddNotification(notification1);
+        var project = new Project { Name = "Project 1", Description = "Project 1 description" };
+        var notification1 = new Notification(false, "Old notification", project);
+        var notification2 = new Notification(true, "Updated notification", project);
+        _notificationRepository.Add(notification1);
+        notification2.Id = _notificationRepository.Get(n => n.Description == "Old notification").Id;
 
-        notificationRepository.Update(notification1, notification2);
+        _notificationRepository.Update(notification2);
 
-        Assert.AreNotEqual(notification1, notificationRepository.Get(n => n.Description == "Updated notification"));
+        var updatedNotification = _notificationRepository.Get(n => n.Description == "Updated notification");
+
+        Assert.IsNotNull(updatedNotification);
+        Assert.AreEqual("Updated notification", updatedNotification.Description);
+        Assert.AreEqual(true, updatedNotification.IsRead);
     }
+
 
     [TestMethod]
     [ExpectedException(typeof(NotificationNotFoundException))]
     public void UpdateNotification_WhenNotificationIsNotFound_ShouldThrowNotificationNotFoundException()
     {
-        var notificationRepository = new NotificationRepository();
-        var notification1 = new Notification(false, "Old notification", new Project());
-        var notification2 = new Notification(true, "Updated notification", new Project());
-        notificationRepository.AddNotification(notification1);
+        var project = new Project { Name = "Project 1", Description = "Project 1 description" };
+        var notification1 = new Notification(false, "Old notification", project);
+        var notification2 = new Notification(true, "Updated notification", project);
+        _notificationRepository.Add(notification1);
 
-        var notification3 = new Notification(false, "Nonexistent notification", new Project());
-        notificationRepository.Update(notification3, notification2);
+        _notificationRepository.Update(notification2);
     }
 
     [TestMethod]
     public void DeleteNotification_WhenGettingTheNotification_ShouldBeNull()
     {
-        var notificationRepository = new NotificationRepository();
-        var notification1 = new Notification(false, "Notification to be deleted", new Project());
-        var notification2 = new Notification(true, "Another notification", new Project());
-        notificationRepository.AddNotification(notification1);
-        notificationRepository.AddNotification(notification2);
+        var project = new Project { Name = "Project 1", Description = "Project 1 description" };
+        var notification1 = new Notification(false, "Notification to be deleted", project);
+        var notification2 = new Notification(true, "Another notification", project);
+        _notificationRepository.Add(notification1);
+        _notificationRepository.Add(notification2);
 
-        notificationRepository.Delete(notification1);
+        _notificationRepository.Delete(notification1);
 
-        Assert.IsNull(notificationRepository.Get(n => n.Description == "Notification to be deleted"));
+        Assert.IsNull(_notificationRepository.Get(n => n.Description == "Notification to be deleted"));
     }
 }

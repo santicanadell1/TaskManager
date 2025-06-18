@@ -5,6 +5,20 @@ namespace Domain.Test;
 [TestClass]
 public class UserTest
 {
+    private Task task1;
+    private Task task2;
+
+    [TestInitialize]
+    public void Initialize()
+    {
+        task1 = new Task("Title1", "Description1", DateTime.Now, 3, new List<Task>(), new List<Task>(),
+            new List<Resource>());
+        task1.Id = 1;
+        task2 = new Task("Title2", "Description2", DateTime.Now, 3, new List<Task>(), new List<Task>(),
+            new List<Resource>());
+        task2.Id = 2;
+    }
+
     [TestMethod]
     public void NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated()
     {
@@ -71,7 +85,7 @@ public class UserTest
     public void NewUser_WhenDateIsAfterToday_ThenThrowUserBirthdayException()
     {
         User user;
-        var birthday = DateTime.Parse("20/07/2026");
+        var birthday = DateTime.Today.AddDays(1);
 
         user = new User("First Name", "Last Name", "email@email.com", birthday, "Password");
     }
@@ -133,14 +147,12 @@ public class UserTest
     {
         var user = new User();
 
-
         Assert.IsNull(user.FirstName);
         Assert.IsNull(user.LastName);
         Assert.IsNull(user.Email);
         Assert.IsNull(user.Password);
         Assert.AreEqual(0, user.Roles.Count);
     }
-
 
     [TestMethod]
     public void FirstName_WhenValid_ThenUserIsCreated()
@@ -190,16 +202,13 @@ public class UserTest
     {
         var user = new User("John", "Doe", "valid.email@example.com", DateTime.Parse("10/05/2005"), "Password");
 
-
         user.Email = "invalidemail";
     }
-
 
     [TestMethod]
     public void AddRol_WhenRolesListIsEmpty_ThenRoleIsAdded()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-
 
         user.Roles = new List<Rol>();
 
@@ -209,27 +218,23 @@ public class UserTest
         Assert.IsTrue(user.Roles.Contains(Rol.AdminSystem));
     }
 
-
     [TestMethod]
     public void RemoveRol_WhenSingleRole_ThenRoleIsRemoved()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
 
-
         user.Roles = new List<Rol> { Rol.AdminSystem };
-
 
         user.RemoveRol(Rol.AdminSystem);
 
         Assert.AreEqual(0, user.Roles.Count);
     }
 
-
     [TestMethod]
     public void NewUser_WhenAddingTaskID_ThenTaskIdIsAdded()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddTask(1);
+        user.AddTask(task1);
 
         Assert.AreEqual(1, user.Tasks.Count);
     }
@@ -239,16 +244,16 @@ public class UserTest
     public void AddTask_WhenAddingTaskWithTheSameId_ThenTaskThrowsException()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddTask(1);
-        user.AddTask(1);
+        user.AddTask(task1);
+        user.AddTask(task1);
     }
 
     [TestMethod]
     public void RemoveTask_WhenRemovingTask_ThenTaskIsRemoved()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddTask(1);
-        user.RemoveTask(1);
+        user.AddTask(task1);
+        user.RemoveTask(task1);
 
         Assert.AreEqual(0, user.Tasks.Count);
     }
@@ -258,14 +263,15 @@ public class UserTest
     public void RemoveTask_WhenRemovingTaskThatIsNotInTheList_ThenThrowsException()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.RemoveTask(2);
+        user.RemoveTask(task2);
     }
 
     [TestMethod]
     public void NewUser_WhenAddingNotification_ShouldBeAddedCorrectly()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddNotification(1);
+        var notification = new Notification(false, "Some description", new Project());
+        user.AddNotification(notification);
 
         Assert.AreEqual(1, user.Notifications.Count);
     }
@@ -274,8 +280,9 @@ public class UserTest
     public void RemoveNotification_WhenNotificationExists_ShouldBeDeletedCorrectly()
     {
         var user = new User("John", "Doe", "email@email.com", DateTime.Parse("10/05/2005"), "Password");
-        user.AddNotification(1);
-        user.RemoveNotification(1);
+        var notification = new Notification(false, "Some description", new Project());
+        user.AddNotification(notification);
+        user.RemoveNotification(notification);
 
         Assert.AreEqual(0, user.Notifications.Count);
     }

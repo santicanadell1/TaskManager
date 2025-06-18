@@ -5,13 +5,13 @@ namespace Domain;
 
 public class User
 {
-    private DateTime birthday;
-    private string email;
-    private string firstName;
-    private string lastName;
+    public DateTime birthday;
+    public string email;
+    public string firstName;
+    public string lastName;
     public string password;
     public List<Rol> roles = new();
-    public List<int> tasks = new();
+    public List<Task> tasks = new();
 
 
     public User(string firstName, string lastName, string email, DateTime birthday, string password)
@@ -22,12 +22,14 @@ public class User
         Birthday = birthday;
         Password = password;
         Roles = new List<Rol>();
-        Tasks = new List<int>();
+        Tasks = new List<Task>();
     }
 
     public User()
     {
     }
+
+    public int? Id { get; set; }
 
 
     public string FirstName
@@ -73,7 +75,7 @@ public class User
             password = string.IsNullOrWhiteSpace(value) ? throw new UserPasswordException() : value;
     }
 
-    public List<int> Notifications { get; set; } = new();
+    public List<Notification> Notifications { get; set; } = new();
 
     public List<Rol> Roles
     {
@@ -86,12 +88,12 @@ public class User
         }
     }
 
-    public List<int> Tasks
+    public List<Task> Tasks
     {
         get => tasks;
         set
         {
-            if (value == null) tasks = new List<int>();
+            if (value == null) tasks = new List<Task>();
             tasks = value;
         }
     }
@@ -101,7 +103,6 @@ public class User
         var emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
         return Regex.IsMatch(email, emailPattern);
     }
-
 
     public void AddRol(Rol rol)
     {
@@ -117,26 +118,26 @@ public class User
         roles.Remove(rol);
     }
 
-    public void AddTask(int taskId)
+    public void AddTask(Task task)
     {
-        if (tasks == null) Tasks = new List<int>();
-        if (tasks.Contains(taskId)) throw new UserTaskException("The task is already assigned to the user.");
-        tasks.Add(taskId);
+        if (tasks == null) Tasks = new List<Task>();
+        if (tasks.Any(t => t.Id == task.Id)) throw new UserTaskException("The task is already assigned to the user.");
+        tasks.Add(task);
     }
 
-    public void RemoveTask(int taskId)
+    public void RemoveTask(Task task)
     {
-        if (!tasks.Contains(taskId)) throw new UserTaskException("the task is not assigned to the user.");
-        tasks.Remove(taskId);
+        if (!tasks.Any(t => t.Id == task.Id)) throw new UserTaskException("the task is not assigned to the user.");
+        tasks.Remove(task);
     }
 
-    public void AddNotification(int notificationId)
+    public void AddNotification(Notification notification)
     {
-        Notifications.Add(notificationId);
+        Notifications.Add(notification);
     }
 
-    public void RemoveNotification(int notificationId)
+    public void RemoveNotification(Notification notification)
     {
-        Notifications.Remove(notificationId);
+        Notifications.Remove(notification);
     }
 }

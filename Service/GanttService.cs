@@ -6,8 +6,8 @@ public class GanttService
 {
     public static GanttData Convert(List<TaskDTO> allTasks, List<TaskDTO> criticalPath)
     {
-        var data = new List<GanttTask>();
-        var links = new List<GanttLink>();
+        List<GanttTask> data = new List<GanttTask>();
+        List<GanttLink> links = new List<GanttLink>();
         var linkId = 1;
 
         foreach (var task in allTasks)

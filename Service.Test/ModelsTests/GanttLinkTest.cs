@@ -17,14 +17,16 @@ public class GanttLinkTest
     public void GanttLink_WhenInitializingCritical_ShouldBeFalseByDefault()
     {
         var link = new GanttLink();
-        Assert.IsFalse(link.critical);
+        var critical = link.critical;
+        Assert.IsFalse(critical);
     }
 
     [TestMethod]
     public void GanttLink_WhenInitializingAType_ShouldAllowCustomValue()
     {
         var link = new GanttLink { type = "2" };
-        Assert.AreEqual("2", link.type);
+        var type = link.type;
+        Assert.AreEqual("2", type);
     }
 
     [TestMethod]

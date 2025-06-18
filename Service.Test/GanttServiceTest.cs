@@ -8,7 +8,7 @@ public class GanttServiceTestTests
     [TestMethod]
     public void Convert_WhenCreatingGanttTask_ShouldAssignProgressCorrectlyBasedOnState()
     {
-        var tasks = new List<TaskDTO>
+        List<TaskDTO> tasks = new List<TaskDTO>
         {
             new()
             {
@@ -57,7 +57,8 @@ public class GanttServiceTestTests
             Slack = TimeSpan.FromDays(2),
             PreviousTasks = new List<TaskDTO> { task }
         };
-        var result = GanttService.Convert(new List<TaskDTO> { task, nonCriticalTask }, new List<TaskDTO> { task });
+        var result =
+            GanttService.Convert(new List<TaskDTO> { task, nonCriticalTask }, new List<TaskDTO> { task });
         var ganttTask1 = result.data.First(t => t.id == 1);
         var ganttTask2 = result.data.First(t => t.id == 2);
         Assert.IsTrue(ganttTask1.critical);

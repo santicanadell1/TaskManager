@@ -1,8 +1,10 @@
 ﻿@page "/resources/create"
-@using Service
+@using Controllers
 @using Service.Models
 @inject NavigationManager Navigation
-@inject ResourceService ResourceService
+@inject ResourceController _ResourceController
+@inject AdminProjectController _AdminProjectController
+@inject LoginController _LoginController
 @rendermode InteractiveServer
 
 <link href="styles/styleCreateResource.css" rel="stylesheet"/>
@@ -27,6 +29,27 @@
         <div class="form-group mt-3">
             <label for="resourceDescription">Description</label>
             <InputTextArea id="resourceDescription" class="form-control mt-1" @bind-Value="newResource.Description"/>
+        </div>
+
+        <div class="mb-3 mt-2">
+            <div class="d-flex justify-content-center align-items-center mb-4">
+                <input class="form-check-input" type="checkbox" id="concurrencyEnabled"
+                       @bind="newResource.ConcurrentUsage"/>
+                <label class="form-check-label ml-2" for="concurrencyEnabled">
+                    Enable concurrent usage
+                </label>
+            </div>
+
+            <label class="form-label mt-1">Assign to project (optional)</label>
+            <div class="d-flex justify-content-center mt-1">
+                <select class="form-select" @bind="selectedProjectId">
+                    <option value="">— Global resource —</option>
+                    @foreach (var proj in projects)
+                    {
+                        <option value="@proj.Id">@proj.Name</option>
+                    }
+                </select>
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary mt-3">Create Resource</button>
@@ -55,6 +78,8 @@
 
 @code {
     private ResourceDTO newResource = new();
+    private List<ProjectDTO> projects;
+    private int? selectedProjectId;
     private bool alertVisible;
     private string alertMessage = string.Empty;
     private bool successVisible;
@@ -66,18 +91,36 @@
         {
             Description = "",
             Name = "",
-            Type = ""
+            Type = "",
+            ConcurrentUsage = false
         };
+        projects = _AdminProjectController.GetAllProjectsForAdmin();
     }
 
-    private void HandleValidSubmit()
+    private async void HandleValidSubmit()
     {
         try
         {
-            ResourceService.AddResource(newResource);
+            if (!selectedProjectId.HasValue && !_LoginController.IsTheCurrentUserAdminSystem())
+            {
+                alertMessage = "Please select a project. As an Admin Project, you can only create a resource exclusive to your projects.";
+                alertVisible = true;
+                successVisible = false;
+                return;
+            }
+
+            if (selectedProjectId.HasValue)
+            {
+                newResource.Project = projects
+                    .First(p => p.Id == selectedProjectId.Value);
+            }
+
+            _ResourceController.CreateResource(newResource);
             successMessage = "Resource created successfully!";
             successVisible = true;
             alertVisible = false;
+            await Task.Delay(1500);
+            ClearAllInputs();
         }
         catch (Exception ex)
         {
@@ -91,6 +134,23 @@
     {
         alertVisible = false;
         successVisible = false;
+    }
+
+    private void ClearAllInputs()
+    {
+        newResource = new ResourceDTO
+        {
+            Description = "",
+            Name = "",
+            Type = "",
+            ConcurrentUsage = false
+        };
+
+        selectedProjectId = null;
+        alertVisible = false;
+        successVisible = false;
+
+        StateHasChanged();
     }
 
 }

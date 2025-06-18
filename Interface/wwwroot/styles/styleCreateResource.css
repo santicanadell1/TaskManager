@@ -1,4 +1,11 @@
-﻿/* Container for Create Resource Page */
+﻿/* Aplicar box-sizing globalmente */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Container for Create Resource Page */
 .resource-container {
     max-width: 600px;
     margin: 60px auto;
@@ -8,8 +15,10 @@
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     text-align: center;
+    width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
 }
 
+/* Hover effect for container */
 .resource-container:hover {
     box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
     transform: translateY(-5px);
@@ -25,6 +34,7 @@
     position: relative;
 }
 
+/* Title line under resource title */
 .resource-container .resource-title::after {
     content: '';
     position: absolute;
@@ -47,9 +57,56 @@
     width: 100%;
     background-color: #f8f9fa;
     color: #333;
+    margin-bottom: 16px; /* Espacio entre campos */
 }
 
+/* Form control focus effect */
 .resource-container .form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.35);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Custom Checkbox Styles */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 20px;
+}
+
+.custom-checkbox {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.resource-container .form-check-label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* Selector de proyectos */
+.resource-container .form-select {
+    width: 100%; /* Asegura que el select ocupe el 100% */
+    padding: 12px 18px;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    color: #333;
+    border-radius: 12px;
+    border: 2px solid #e6e6e6;
+    transition: all 0.25s ease-in-out;
+    margin-top: 5px; /* Ajuste para reducir el espacio entre el campo y el texto */
+    appearance: none;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"%3E%3Cpath fill="none" stroke="%23333" stroke-width="1.5" d="M1 1l4 4 4-4" /%3E%3C/svg%3E');
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+}
+
+/* Ajustes para cuando se está enfocado el campo de selección */
+.resource-container .form-select:focus {
     border-color: #3498db;
     box-shadow: 0 0 8px rgba(52, 152, 219, 0.35);
     outline: none;
@@ -70,6 +127,7 @@
     cursor: pointer;
 }
 
+/* Button hover effect */
 .resource-container button.btn:hover {
     background-color: #2980b9;
     transform: translateY(-2px);
@@ -100,39 +158,6 @@
     padding: 12px 15px;
     border-radius: 10px;
     border-left: 4px solid #e74c3c;
-}
-
-/* Button to close alert (with the "X" or a similar icon) */
-.resource-container .alert .close {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 1.5em;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    transition: all 0.3s ease;
-    border-radius: 50%;
-    padding: 8px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.resource-container .alert .close:hover {
-    background-color: #e74c3c;
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.resource-container .alert .close:focus {
-    outline: none;
-    background-color: #e74c3c;
-    transform: translateY(-50%) scale(1.1);
 }
 
 /* Mobile View Adjustments */

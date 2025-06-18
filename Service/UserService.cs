@@ -1,6 +1,7 @@
 using DataAccess;
 using DataAccess.Exceptions.UserRepositoryExceptions;
 using Domain;
+using Service.Converter;
 using Service.Exceptions.UserServiceExceptions;
 using Service.Interface;
 using Service.Models;
@@ -9,39 +10,56 @@ namespace Service;
 
 public class UserService : IUserService
 {
-    private readonly InMemoryDatabase _database;
-    private readonly PasswordManager _passwordManager = new();
+    private readonly IPasswordManager _passwordManager = new PasswordManager();
+    private readonly IRepositoryManager _repositoryManager;
+    private readonly RolConverter _rolConverter;
+    private readonly TaskConverter _taskConverter;
+    private readonly UserConverter _userConverter;
 
-    public UserService(InMemoryDatabase database)
+    public UserService(IRepositoryManager repositoryManager)
     {
-        _database = database;
+        _repositoryManager = repositoryManager;
+        _rolConverter = new RolConverter();
+        _taskConverter = new TaskConverter(repositoryManager);
+        _userConverter = new UserConverter(repositoryManager);
     }
 
     public void AddUser(UserDTO userDTO)
     {
-        if (_database.users.GetAll().Count == 0) userDTO.Roles.Add(RolDTO.AdminSystem);
+        if (_repositoryManager.UserRepository.GetAll().Count == 0) userDTO.Roles.Add(RolDTO.AdminSystem);
         ValidateUserEmailAndPassword(userDTO);
-        _database.users.AddUser(ToEntity(userDTO));
+        _repositoryManager.UserRepository.Add(_userConverter.ToEntity(userDTO));
     }
 
     public void UpdateUser(UserDTO userDTO)
     {
-        var user = GetUserObject(userDTO.Email);
+        User user;
+        if (userDTO.Id.HasValue)
+        {
+            user = _repositoryManager.UserRepository.Get(u => u.Id == userDTO.Id);
+            if (user == null) throw new UserNotFoundException();
+        }
+        else
+        {
+            user = GetUserObject(userDTO.Email);
+        }
+
         user.FirstName = userDTO.FirstName;
         user.LastName = userDTO.LastName;
         user.Email = userDTO.Email;
-        user.Roles = ConvertToDomainRoles(userDTO.Roles);
+        user.Roles = _rolConverter.ConvertToDomainRoles(userDTO.Roles);
         user.Birthday = userDTO.Birthday;
         user.Password = userDTO.Password;
-        user.Tasks = userDTO.Tasks;
-        _database.users.Update(user.Email, user);
+
+        _repositoryManager.UserRepository.Update(user);
     }
 
     public List<UserDTO> GetUsers()
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (var user in _database.users.GetAll()) usersDTO.Add(FromEntity(user));
+        foreach (var user in _repositoryManager.UserRepository.GetAll())
+            usersDTO.Add(_userConverter.FromEntity(user));
 
         if (usersDTO.Count == 0) throw new NoUsersFoundException();
 
@@ -50,97 +68,27 @@ public class UserService : IUserService
 
     public UserDTO GetUser(string email)
     {
-        var user = _database.users.Get(user => user.Email == email);
+        var user = _repositoryManager.UserRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
-        return FromEntity(user);
+        return _userConverter.FromEntity(user);
     }
 
 
     private void ValidateUserEmailAndPassword(UserDTO userDTO)
     {
-        foreach (var user in _database.users.GetAll())
+        foreach (var user in _repositoryManager.UserRepository.GetAll())
             if (user.Email == userDTO.Email)
                 throw new InvalidUserEmailException();
 
         if (!_passwordManager.IsValidPassword(userDTO.Password)) throw new InvalidUserPasswordException();
     }
 
-    private User ToEntity(UserDTO userDTO)
-    {
-        return new User
-        {
-            Email = userDTO.Email,
-            FirstName = userDTO.FirstName,
-            LastName = userDTO.LastName,
-            Password = _passwordManager.HashPassword(userDTO.Password),
-            Birthday = userDTO.Birthday,
-            Roles = ConvertToDomainRoles(userDTO.Roles),
-            Tasks = userDTO.Tasks
-        };
-    }
-
     private User GetUserObject(string email)
     {
-        var user = _database.users.Get(user => user.Email == email);
+        var user = _repositoryManager.UserRepository.Get(user => user.Email == email);
         if (user == null) throw new UserNotFoundException();
 
         return user;
-    }
-
-    private UserDTO FromEntity(User user)
-    {
-        return new UserDTO
-        {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Roles = ConvertToDTORoles(user.Roles),
-            Password = user.Password,
-            Birthday = user.Birthday,
-            Tasks = user.Tasks
-        };
-    }
-
-    private List<Rol> ConvertToDomainRoles(List<RolDTO> roleDTOs)
-    {
-        var roles = new List<Rol>();
-
-        foreach (var roleDTO in roleDTOs)
-            switch (roleDTO)
-            {
-                case RolDTO.AdminSystem:
-                    roles.Add(Rol.AdminSystem);
-                    break;
-                case RolDTO.ProjectMember:
-                    roles.Add(Rol.ProjectMember);
-                    break;
-                case RolDTO.AdminProject:
-                    roles.Add(Rol.AdminProject);
-                    break;
-            }
-
-        return roles;
-    }
-
-    private List<RolDTO> ConvertToDTORoles(List<Rol> roles)
-    {
-        var roleDTOs = new List<RolDTO>();
-
-        foreach (var role in roles)
-            switch (role)
-            {
-                case Rol.AdminSystem:
-                    roleDTOs.Add(RolDTO.AdminSystem);
-                    break;
-                case Rol.ProjectMember:
-                    roleDTOs.Add(RolDTO.ProjectMember);
-                    break;
-                case Rol.AdminProject:
-                    roleDTOs.Add(RolDTO.AdminProject);
-                    break;
-            }
-
-        return roleDTOs;
     }
 }

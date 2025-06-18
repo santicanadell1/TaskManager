@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Service.Models;
 
 namespace Service.Test.ModelsTests;
@@ -7,9 +10,8 @@ namespace Service.Test.ModelsTests;
 public class ProjectDTOTests
 {
     private UserDTO Admin;
-
+    private UserDTO Leader;
     private List<UserDTO> members;
-
     private UserDTO User;
 
     [TestInitialize]
@@ -33,6 +35,15 @@ public class ProjectDTOTests
             Password = "Password123@",
             Roles = new List<RolDTO> { RolDTO.ProjectMember }
         };
+        Leader = new UserDTO
+        {
+            FirstName = "Leader",
+            LastName = "Member",
+            Email = "leader.user@example.com",
+            Birthday = DateTime.Parse("1985-05-01"),
+            Password = "Password123@",
+            Roles = new List<RolDTO> { RolDTO.ProjectMember }
+        };
         members = new List<UserDTO> { User };
     }
 
@@ -45,16 +56,20 @@ public class ProjectDTOTests
             Description = "Test Description",
             StartDate = DateTime.Now,
             AdminProyect = Admin,
-            Members = members
+            Members = members,
+            ProjectLeader = Leader
         };
 
         var validationResults = new List<ValidationResult>();
-        var isValid =
-            Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
+        var isValid = Validator.TryValidateObject(
+            projectDTO,
+            new ValidationContext(projectDTO),
+            validationResults,
+            true
+        );
 
         Assert.IsFalse(isValid);
     }
-
 
     [TestMethod]
     public void Validate_ShouldThrowValidationException_WhenDescriptionIsNullOrWhiteSpace()
@@ -65,16 +80,44 @@ public class ProjectDTOTests
             Description = "",
             StartDate = DateTime.Now,
             AdminProyect = Admin,
-            Members = members
+            Members = members,
+            ProjectLeader = Leader
         };
 
         var validationResults = new List<ValidationResult>();
-        var isValid =
-            Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
+        var isValid = Validator.TryValidateObject(
+            projectDTO,
+            new ValidationContext(projectDTO),
+            validationResults,
+            true
+        );
 
         Assert.IsFalse(isValid);
     }
 
+    [TestMethod]
+    public void Validate_ShouldThrowValidationException_WhenLeaderIsNull()
+    {
+        var projectDTO = new ProjectDTO
+        {
+            Name = "Test Project",
+            Description = "Test Description",
+            StartDate = DateTime.Now,
+            AdminProyect = Admin,
+            Members = members,
+            ProjectLeader = null
+        };
+
+        var validationResults = new List<ValidationResult>();
+        var isValid = Validator.TryValidateObject(
+            projectDTO,
+            new ValidationContext(projectDTO),
+            validationResults,
+            true
+        );
+
+        Assert.IsTrue(isValid);
+    }
 
     [TestMethod]
     public void Validate_ShouldNotThrowValidationException_WhenAllFieldsAreValid()
@@ -85,12 +128,17 @@ public class ProjectDTOTests
             Description = "Test Description",
             StartDate = DateTime.Parse("2020-09-01"),
             AdminProyect = Admin,
-            Members = members
+            Members = members,
+            ProjectLeader = Leader
         };
 
         var validationResults = new List<ValidationResult>();
-        var isValid =
-            Validator.TryValidateObject(projectDTO, new ValidationContext(projectDTO), validationResults, true);
+        var isValid = Validator.TryValidateObject(
+            projectDTO,
+            new ValidationContext(projectDTO),
+            validationResults,
+            true
+        );
 
         Assert.IsTrue(isValid);
     }
@@ -104,10 +152,17 @@ public class ProjectDTOTests
             Description = "Test Description",
             StartDate = DateTime.Parse("2020-09-01"),
             AdminProyect = Admin,
-            Members = members
+            Members = members,
+            ProjectLeader = Leader
         };
-        Assert.IsTrue(projectDTO.StartDate == DateTime.Parse("2020-09-01") && projectDTO.Name == "Test Project" &&
-                      projectDTO.Description == "Test Description" && projectDTO.AdminProyect == Admin &&
-                      projectDTO.Members == members);
+
+        Assert.IsTrue(
+            projectDTO.StartDate == DateTime.Parse("2020-09-01") &&
+            projectDTO.Name == "Test Project" &&
+            projectDTO.Description == "Test Description" &&
+            projectDTO.AdminProyect == Admin &&
+            projectDTO.Members == members &&
+            projectDTO.ProjectLeader == Leader
+        );
     }
 }

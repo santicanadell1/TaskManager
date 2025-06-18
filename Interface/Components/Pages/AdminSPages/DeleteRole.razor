@@ -1,0 +1,177 @@
+﻿@page "/users/removeRoles"
+@using Controllers
+@using Service.Models
+@inject NavigationManager Navigation
+@inject AdminSystemController _AdminSystemController
+@inject UserController _UserController
+@inject LoginController _LoginController
+@rendermode InteractiveServer
+
+<link href="styles/styleAssignRol.css" rel="stylesheet"/>
+
+<div class="assign-role-container">
+    <h3>Remove Roles From User</h3>
+
+    <div class="form-group">
+        <label for="userSelect">Select a User</label>
+        <select id="userSelect" class="form-control mt-1" @bind="selectedUserEmail">
+            <option value="">-- Select a User --</option>
+            @foreach (var user in usersList)
+            {
+                <option value="@user.Email">@user.FirstName @user.LastName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Select Roles</label>
+        <div class="role-checkboxes mt-2">
+            <div class="form-check">
+                <input type="checkbox" id="adminSystem" class="form-check-input"
+                       @bind="rolesSelected[RolDTO.AdminSystem]"/>
+                <label class="form-check-label" for="adminSystem">Admin System</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="adminProject" class="form-check-input"
+                       @bind="rolesSelected[RolDTO.AdminProject]"/>
+                <label class="form-check-label" for="adminProject">Admin Project</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="projectMember" class="form-check-input"
+                       @bind="rolesSelected[RolDTO.ProjectMember]"/>
+                <label class="form-check-label" for="projectMember">Project Member</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="projectMember" class="form-check-input"
+                       @bind="rolesSelected[RolDTO.ProjectLeader]"/>
+                <label class="form-check-label" for="projectMember">Project Leader</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="button" class="btn btn-primary" @onclick="RemoveRoles"
+                disabled="@(string.IsNullOrEmpty(selectedUserEmail))">
+            Remove Roles
+        </button>
+    </div>
+
+    @if (!string.IsNullOrEmpty(assignError))
+    {
+        <div class="alert alert-danger mt-3">
+            <strong>Error: </strong>@assignError
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(assignSuccess))
+    {
+        <div class="alert alert-success mt-3">
+            <strong>Success: </strong>@assignSuccess
+            <button type="button" class="close" @onclick="ToggleAlertVisibility">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+
+</div>
+
+@code {
+    private List<UserDTO> usersList = new();
+    private string selectedUserEmail = "";
+    private string assignError = "";
+    private string assignSuccess = "";
+
+    private readonly Dictionary<RolDTO, bool> rolesSelected = new()
+    {
+        { RolDTO.AdminSystem, false },
+        { RolDTO.AdminProject, false },
+        { RolDTO.ProjectMember, false },
+        { RolDTO.ProjectLeader, false }
+    };
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            usersList = _UserController.GetAllUsers();
+        }
+        catch (Exception ex)
+        {
+            assignError = $"Error loading users: {ex.Message}";
+        }
+    }
+
+    private void RemoveRoles()
+    {
+        assignError = "";
+        assignSuccess = "";
+
+        if (string.IsNullOrEmpty(selectedUserEmail))
+        {
+            assignError = "Please select a user.";
+            return;
+        }
+
+        var userToRemoveRole = usersList.FirstOrDefault(u => u.Email == selectedUserEmail);
+
+        if (userToRemoveRole == null)
+        {
+            assignError = "User not found.";
+            return;
+        }
+
+        try
+        {
+            var anyRoleRemoved = false;
+
+            foreach (var rolePair in rolesSelected)
+            {
+                if (rolePair.Value)
+                {
+                    _AdminSystemController.RemoveRole(userToRemoveRole, rolePair.Key);
+
+                    anyRoleRemoved = true;
+                }
+            }
+
+            if (!anyRoleRemoved)
+            {
+                assignError = "Please select at least one role to Remove.";
+                return;
+            }
+
+            assignSuccess = $"Roles have been assigned to {userToRemoveRole.FirstName} {userToRemoveRole.LastName} successfully.";
+
+            selectedUserEmail = "";
+            ResetRoleSelections();
+
+            if (userToRemoveRole.Email == _LoginController.GetLoggedUser().Email)
+            {
+                var userDto = _UserController.GetUser(userToRemoveRole.Email);
+                _LoginController.UpdateLoggedUser(userDto);
+                Navigation.NavigateTo(Navigation.Uri, true);
+            }
+        }
+        catch (Exception ex)
+        {
+            assignError = $"An error occurred: {ex.Message}";
+        }
+    }
+
+    private void ResetRoleSelections()
+    {
+        foreach (var key in rolesSelected.Keys.ToList())
+        {
+            rolesSelected[key] = false;
+        }
+    }
+
+    private void ToggleAlertVisibility()
+    {
+        assignError = "";
+        assignSuccess = "";
+    }
+
+}

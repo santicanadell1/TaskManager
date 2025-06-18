@@ -1,6 +1,6 @@
-﻿@using Service
+﻿@using Controllers
 @using Service.Models
-@inject Login LoginService
+@inject LoginController _LoginController
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
 
@@ -17,7 +17,6 @@
     <nav class="flex-column">
         @if (_loggedUser == null)
         {
-            <!-- If the user is not logged in, show Login and Sign Up -->
             <div class="nav-item px-3 mt-3">
                 <NavLink class="nav-link" href="/login">
                     <i class="bi bi-box-arrow-in-right me-2"></i> Login
@@ -45,25 +44,41 @@
                 <hr style="border-color: rgba(255,255,255,0.1);"/>
             </div>
 
-            if (LoginService.IsAdminSystem() || LoginService.IsAdminProject())
+            if (_LoginController.IsTheCurrentUserAdminSystem() || _LoginController.IsTheCurrentUserAdminProject())
             {
                 <ResourcesNav/>
             }
 
-            if (LoginService.IsAdminSystem())
+            if (_LoginController.IsTheCurrentUserAdminSystem())
             {
                 <AdminSNav/>
             }
 
-            if (LoginService.IsAdminProject())
+            if (_LoginController.IsTheCurrentUserAdminProject())
             {
                 <AdminPNav/>
             }
 
-            if (LoginService.IsProjectMember())
+            if (_LoginController.IsTheCurrentUserProjectMember())
             {
                 <MyProjectsNav/>
             }
+
+            if (_LoginController.IsTheCurrentUserLeaderProject())
+            {
+                <ProjectLeaderNav/>
+            }
+
+            if (_LoginController.IsTheCurrentUserAdminProject() || _LoginController.IsTheCurrentUserLeaderProject() || _LoginController.IsTheCurrentUserProjectMember())
+            {
+                <NavLink class="nav-link" href="/gantt">
+                    <i class="bi bi-calendar"></i> Gantt Diagram
+                </NavLink>
+            }
+
+            <NavLink class="nav-link" href="/users/changeCurrentPassword">
+                <i class="bi bi-key"></i> Change My Password
+            </NavLink>
         }
     </nav>
 </div>
@@ -73,13 +88,13 @@
 
     protected override void OnInitialized()
     {
-        _loggedUser = LoginService.GetLoggedUser();
+        _loggedUser = _LoginController.GetLoggedUser();
         base.OnInitialized();
     }
 
     protected override void OnParametersSet()
     {
-        _loggedUser = LoginService.GetLoggedUser();
+        _loggedUser = _LoginController.GetLoggedUser();
         base.OnParametersSet();
     }
 
@@ -90,7 +105,7 @@
 
     private void Logout()
     {
-        LoginService.Logout();
+        _LoginController.Logout();
         Navigation.NavigateTo("/login", true);
     }
 

@@ -1,10 +1,10 @@
 ﻿@page "/users/delete"
-@using Service
+@using Controllers
 @using Service.Models
 @inject NavigationManager Navigation
-@inject AdminSService AdminService
-@inject UserService UserService
-@inject Login LoginService
+@inject AdminSystemController _AdminSystemController
+@inject UserController _UserController
+@inject LoginController _LoginController
 @rendermode InteractiveServer
 
 <link href="styles/styleDeleteUser.css" rel="stylesheet"/>
@@ -78,7 +78,7 @@
     {
         try
         {
-            usersList = UserService.GetUsers();
+            usersList = _UserController.GetAllUsers();
 
             if (usersList == null || !usersList.Any())
             {
@@ -134,16 +134,16 @@
         {
             showConfirmation = false;
 
-            AdminService.DeleteUser(userToDelete);
+            _AdminSystemController.DeleteUser(userToDelete);
             deleteSuccess = $"User {userToDelete.FirstName} {userToDelete.LastName} has been deleted successfully.";
-            if (userToDelete.Email == LoginService.GetLoggedUser().Email)
+            if (userToDelete.Email == _LoginController.GetLoggedUser().Email)
             {
-                LoginService.Logout();
+                _LoginController.Logout();
                 Navigation.NavigateTo("/login", true);
                 return;
             }
 
-            usersList = UserService.GetUsers();
+            usersList = _UserController.GetAllUsers();
             selectedUserEmail = "";
         }
         catch (Exception ex)

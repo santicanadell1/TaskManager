@@ -1,0 +1,1169 @@
+﻿@page "/projectLeader/options"
+@using System.Text
+@using Controllers
+@using Service.Models
+@inject LeaderProjectController _LeaderProjectController
+@inject TaskController _TaskController
+@inject UserController _UserController
+@inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
+
+<link href="styles/styleProjectList.css" rel="stylesheet"/>
+<link href="styles/styleProjectModals.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<div class="page-header mb-4">
+    <h3 class="project-title"><i class="bi bi-diagram-project me-2"></i>Project Management</h3>
+    <p class="text-muted">Manage your projects, tasks and team members</p>
+</div>
+
+<div class="project-list-container">
+    @if (projects != null && projects.Any())
+    {
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0"><i class="bi bi-folder2-open me-2"></i>My Projects</h5>
+            <button class="btn btn-success" @onclick="ShowExportModal">
+                <i class="bi bi-download me-2"></i>Export Projects
+            </button>
+        </div>
+
+        <ul class="list-group">
+            @foreach (var project in projects)
+            {
+                <li class="list-group-item">
+                    <span><i class="bi bi-folder-fill me-2"></i>@project.Name</span>
+                    <div class="button-container">
+                        <button class="view-options-btn @GetButtonClass(project)"
+                                @onclick="() => ShowProjectOptions(project)">
+                            <i class="bi bi-gear-fill me-2"></i>View Options
+                        </button>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>No projects available.
+        </div>
+    }
+</div>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-3">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>@errorMessage
+        <button type="button" class="btn-close float-end" @onclick="() => errorMessage = string.Empty"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(selectedProjectName))
+{
+    <div class="project-options mt-3">
+        <h5><i class="bi bi-folder-fill me-2"></i>@selectedProjectName Options</h5>
+        <button class="btn-secondary" @onclick="ShowAddMembersModal">
+            <i class="bi bi-person-plus-fill me-2"></i>Add Members
+        </button>
+        <button class="btn-warning" @onclick="ShowTaskListModal">
+            <i class="bi bi-list-check me-2"></i>Task List
+        </button>
+        <button class="btn btn-info" @onclick="ShowMemberListModal">
+            <i class="bi bi-people-fill me-2"></i>Member List
+        </button>
+    </div>
+}
+
+@if (showEditTaskModal && selectedTaskToEdit != null)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="editTaskModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Edit Task</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseEditTaskModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(editTaskErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>@editTaskErrorMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => editTaskErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(editTaskSuccessMessage))
+                    {
+                        <div class="alert alert-success d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-check-circle-fill me-2"></i>@editTaskSuccessMessage</span>
+                            <button type="button" class="btn-close"
+                                    @onclick="() => editTaskSuccessMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <EditForm Model="@selectedTaskToEdit" OnValidSubmit="HandleEditTaskSubmit">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+
+                        <div class="mb-3">
+                            <label for="editTaskTitle" class="form-label"><i class="bi bi-type me-1"></i>Task
+                                Title</label>
+                            <InputText id="editTaskTitle" class="form-control" @bind-Value="selectedTaskToEdit.Title"
+                                       readonly required/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editTaskDescription" class="form-label"><i class="bi bi-card-text me-1"></i>Description</label>
+                            <InputTextArea id="editTaskDescription" class="form-control"
+                                           @bind-Value="selectedTaskToEdit.Description"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editStartDate" class="form-label"><i class="bi bi-calendar-date me-1"></i>Estimated
+                                Start Date</label>
+                            <InputDate id="editStartDate" class="form-control"
+                                       @bind-Value="selectedTaskToEdit.ExpectedStartDate"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editDuration" class="form-label"><i class="bi bi-clock me-1"></i>Duration
+                                (Days)</label>
+                            <InputNumber id="editDuration" class="form-control" min="0"
+                                         @bind-Value="selectedTaskToEdit.Duration"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><i class="bi bi-arrow-left me-1"></i>Previous Tasks</label>
+                            @if (taskList != null && taskList.Any())
+                            {
+                                <div class="card mb-2 task-selector-card">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0"><i class="bi bi-link-45deg me-1"></i>Add Dependency</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row align-items-end">
+                                            <div class="col-md-5">
+                                                <label for="editNewPrevTask" class="form-label">Task</label>
+                                                <select id="editNewPrevTask" class="form-control"
+                                                        @bind="editNewPreviousTaskId">
+                                                    <option value="">-- Select Task --</option>
+                                                    @foreach (var task in taskList.Where(t => t.Id != selectedTaskToEdit.Id))
+                                                    {
+                                                        <option value="@task.Id">@task.Title (ID: @task.Id)</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="editNewDependencyType" class="form-label">Dependency
+                                                    Type</label>
+                                                <select id="editNewDependencyType" class="form-control"
+                                                        @bind="editNewDependencyType">
+                                                    <option value="FS">Finish-to-Start (FS)</option>
+                                                    <option value="SS">Start-to-Start (SS)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn btn-info w-100"
+                                                        @onclick="AddTaskToEditPreviousTasks">
+                                                    <i class="bi bi-plus-lg me-1"></i>Add
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                @if (editPreviousTaskIds.Any())
+                                {
+                                    <div class="mt-3">
+                                        <h6><i class="bi bi-diagram-3 me-1"></i>Added Dependencies:</h6>
+                                        <div class="list-group dependency-list">
+                                            @for (var i = 0; i < editPreviousTaskIds.Count; i++)
+                                            {
+                                                var index = i;
+                                                var taskId = editPreviousTaskIds[i];
+                                                var depType = editPreviousTaskDependencies[i];
+                                                var taskTitle = taskList.FirstOrDefault(t => t.Id == taskId)?.Title ?? "Unknown Task";
+
+                                                <div
+                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <strong><i class="bi bi-check2-square me-1"></i>@taskTitle
+                                                        </strong>
+                                                        <span class="badge bg-secondary ms-2">
+                                                            @if (depType == "FS")
+                                                            {
+                                                                <i class="bi bi-arrow-right me-1"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="bi bi-arrow-up-right me-1"></i>
+                                                            }
+                                                            @depType
+                                                        </span>
+                                                    </div>
+                                                    <button type="button" class="btn btn-sm btn-danger"
+                                                            @onclick="() => RemoveEditPreviousTask(index)">
+                                                        <i class="bi bi-trash-fill me-1"></i>Remove
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted"><i class="bi bi-info-circle me-1"></i>No tasks available for
+                                    dependencies</p>
+                            }
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i>Save Changes
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (showAddMembersModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="addMembersModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2"></i>Add Members to Project</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseAddMembersModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(memberErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>@memberErrorMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => memberErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(memberSuccessMessage))
+                    {
+                        <div class="alert alert-success d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-check-circle-fill me-2"></i>@memberSuccessMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => memberSuccessMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <h6><i class="bi bi-people-fill me-2"></i>Select Members to Add</h6>
+                    <div class="member-selection mb-3">
+                        @if (membersList != null && membersList.Any())
+                        {
+                            foreach (var member in membersList)
+                            {
+                                <div class="form-check member-item">
+                                    <input type="checkbox" class="form-check-input" id="@member.Email"
+                                           @onchange="e => ToggleMemberSelection(e, member.Email)"/>
+                                    <label class="form-check-label" for="@member.Email">
+                                        <i class="bi bi-person me-1"></i>@member.FirstName @member.LastName
+                                    </label>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted"><i class="bi bi-info-circle me-1"></i>No members available to add</p>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary"
+                            @onclick="() => CloseAddMembersModal(false)">
+                        <i class="bi bi-x-circle me-1"></i>Close
+                    </button>
+                    <button type="button" class="btn btn-primary" @onclick="AddSelectedMembers">
+                        <i class="bi bi-person-plus-fill me-1"></i>Add Members
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (showAssignTaskToMemberModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="assignTaskToMemberModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-person-gear me-2"></i>Manage Tasks for @selectedMemberName
+                    </h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseAssignTaskToMemberModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(assignTaskErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>@assignTaskErrorMessage</span>
+                            <button type="button" class="btn-close"
+                                    @onclick="() => assignTaskErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(assignTaskSuccessMessage))
+                    {
+                        <div class="alert alert-success d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-check-circle-fill me-2"></i>@assignTaskSuccessMessage</span>
+                            <button type="button" class="btn-close"
+                                    @onclick="() => assignTaskSuccessMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0"><i class="bi bi-list-task me-1"></i>Available Tasks</h6>
+                                </div>
+                                <div class="card-body">
+                                    @if (taskList != null && taskList.Any(t => !assignedTasks.Any(at => at.Id == t.Id)))
+                                    {
+                                        <div class="list-group task-list">
+                                            @foreach (var task in taskList.Where(t => !assignedTasks.Any(at => at.Id == t.Id)))
+                                            {
+                                                <div
+                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <strong><i class="bi bi-check2-square me-1"></i>@task.Title
+                                                        </strong>
+                                                        <small class="d-block text-muted">@task.Description</small>
+                                                    </div>
+                                                    <button class="btn btn-sm btn-success"
+                                                            @onclick="() => AssignTaskToMember(task)">
+                                                        <i class="bi bi-plus-circle me-1"></i>Assign
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted text-center py-3"><i class="bi bi-info-circle me-1"></i>No
+                                            tasks available to assign</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0"><i class="bi bi-person-check me-1"></i>Assigned Tasks</h6>
+                                </div>
+                                <div class="card-body">
+                                    @if (assignedTasks != null && assignedTasks.Any())
+                                    {
+                                        <div class="list-group task-list">
+                                            @foreach (var task in assignedTasks)
+                                            {
+                                                <div
+                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <strong><i class="bi bi-check2-square me-1"></i>@task.Title
+                                                        </strong>
+                                                        <small class="d-block text-muted">@task.Description</small>
+                                                    </div>
+                                                    <button class="btn btn-sm btn-danger"
+                                                            @onclick="() => RemoveTaskFromMember(task)">
+                                                        <i class="bi bi-trash-fill me-1"></i>Remove
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted text-center py-3"><i class="bi bi-info-circle me-1"></i>No
+                                            tasks assigned to this member</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary"
+                            @onclick="() => CloseAssignTaskToMemberModal(false)">
+                        <i class="bi bi-x-circle me-1"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (showTaskListModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="taskListModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-list-check me-2"></i>Task List - @selectedProjectName</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseTaskListModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (taskList != null && taskList.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover task-table">
+                                <thead class="table-light">
+                                <tr>
+                                    <th><i class="bi bi-card-heading me-1"></i>Title</th>
+                                    <th><i class="bi bi-card-text me-1"></i>Description</th>
+                                    <th><i class="bi bi-calendar-date me-1"></i>Start Date</th>
+                                    <th><i class="bi bi-clock me-1"></i>Duration</th>
+                                    <th><i class="bi bi-flag me-1"></i>State</th>
+                                    <th><i class="bi bi-gear me-1"></i>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var task in taskList)
+                                {
+                                    <tr>
+                                        <td>@task.Title</td>
+                                        <td>@task.Description</td>
+                                        <td>@task.ExpectedStartDate.ToShortDateString()</td>
+                                        <td>@task.Duration Days</td>
+                                        <td>
+                                            <span class="badge @GetStateClass(task.State)">@task.State</span>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                @if (task.State != StateDTO.DONE)
+                                                {
+                                                    <button class="btn btn-sm btn-primary me-2"
+                                                            @onclick="() => ShowEditTaskModal(task)">
+                                                        <i class="bi bi-pencil-fill me-1"></i>Edit
+                                                    </button>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="bi bi-info-circle text-muted" style="font-size: 3rem;"></i>
+                            <p class="mt-3">No tasks available for this project.</p>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="() => CloseTaskListModal(false)">
+                        <i class="bi bi-x-circle me-1"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (showMemberListModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="memberListModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-people-fill me-2"></i>Member List - @selectedProjectName
+                    </h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseMemberListModal()"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (projectMembers != null && projectMembers.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover member-table">
+                                <thead class="table-light">
+                                <tr>
+                                    <th><i class="bi bi-person me-1"></i>Member</th>
+                                    <th><i class="bi bi-gear me-1"></i>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var member in projectMembers)
+                                {
+                                    <tr class="@(selectedMemberId == member.Email ? "table-primary" : "")">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="member-avatar">
+                                                    <i class="bi bi-person-circle me-2" style="font-size: 1.5rem;"></i>
+                                                </div>
+                                                <div>
+                                                    <strong>@member.FirstName @member.LastName</strong>
+                                                    <small class="d-block text-muted">@member.Email</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-danger me-2"
+                                                        @onclick="() => RemoveMember(member)">
+                                                    <i class="bi bi-person-dash-fill me-1"></i>Remove Member
+                                                </button>
+                                                <button class="btn btn-sm btn-warning"
+                                                        @onclick="() => ShowAssignTaskModal(member)">
+                                                    <i class="bi bi-person-gear me-1"></i>Manage Tasks
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="bi bi-info-circle text-muted" style="font-size: 3rem;"></i>
+                            <p class="mt-3">No members found for this project.</p>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="() => CloseMemberListModal()">
+                        <i class="bi bi-x-circle me-1"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (showExportModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="exportModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-download me-2"></i>Export Projects</h5>
+                    <button type="button" class="btn-close" @onclick="CloseExportModal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(exportErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>@exportErrorMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => exportErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(exportSuccessMessage))
+                    {
+                        <div class="alert alert-success d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-check-circle-fill me-2"></i>@exportSuccessMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => exportSuccessMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <p>Choose the format to export your projects:</p>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" @onclick="ExportAsJSON">
+                            <i class="bi bi-filetype-json me-2"></i>Export as JSON
+                        </button>
+                        <button class="btn btn-secondary" @onclick="ExportAsCSV">
+                            <i class="bi bi-filetype-csv me-2"></i>Export as CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="CloseExportModal">
+                        <i class="bi bi-x-circle me-1"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    private List<ProjectDTO> projects = new();
+    private string selectedProjectName;
+    private List<TaskDTO> taskList = new();
+    private List<UserDTO> membersList = new();
+
+    private bool showCreateTaskModal;
+    private bool showEditTaskModal;
+    private bool showAddMembersModal;
+    private bool showAssignTaskToMemberModal;
+    private bool showTaskListModal;
+    private bool showMemberListModal;
+
+    private string errorMessage = string.Empty;
+    private string editTaskErrorMessage = string.Empty;
+    private string editTaskSuccessMessage = string.Empty;
+    private string memberErrorMessage = string.Empty;
+    private string memberSuccessMessage = string.Empty;
+    private string assignTaskErrorMessage = string.Empty;
+    private string assignTaskSuccessMessage = string.Empty;
+
+    private TaskDTO newTask = new();
+    private readonly HashSet<int?> selectedResourceIds = new();
+    private readonly List<int?> previousTaskIds = new();
+    private readonly List<string> previousTaskDependencies = new();
+    private int? newPreviousTaskId;
+    private string newDependencyType = "FS";
+
+    private TaskDTO selectedTaskToEdit;
+    private readonly HashSet<int?> editSelectedResourceIds = new();
+    private readonly List<int?> editPreviousTaskIds = new();
+    private readonly List<string> editPreviousTaskDependencies = new();
+    private int? editNewPreviousTaskId;
+    private string editNewDependencyType = "FS";
+
+    private readonly HashSet<string> selectedEmails = new();
+
+    private string selectedMemberId;
+    private string selectedMemberName;
+    private List<TaskDTO> assignedTasks = new();
+    private List<UserDTO> projectMembers = new();
+
+    private bool showExportModal;
+    private string exportErrorMessage = string.Empty;
+    private string exportSuccessMessage = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        LoadProjects();
+    }
+
+    private void LoadProjects()
+    {
+        try
+        {
+            projects = _LeaderProjectController.GetAllMyProjects();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading projects: {ex.Message}";
+        }
+    }
+
+    private void LoadTasks()
+    {
+        if (string.IsNullOrEmpty(selectedProjectName))
+        {
+            taskList = new List<TaskDTO>();
+            return;
+        }
+
+        try
+        {
+            taskList = _TaskController.GetAllTasksForAProject(selectedProjectName);
+            if (taskList == null)
+            {
+                taskList = new List<TaskDTO>();
+            }
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading tasks: {ex.Message}";
+            taskList = new List<TaskDTO>();
+        }
+    }
+
+    private void ShowProjectOptions(ProjectDTO project)
+    {
+        selectedProjectName = project.Name;
+        errorMessage = string.Empty;
+        LoadTasks();
+    }
+
+    public string GetButtonClass(ProjectDTO project)
+    {
+        return selectedProjectName == project.Name ? "selected" : "";
+    }
+
+    public string GetStateClass(StateDTO state)
+    {
+        return state switch
+        {
+            StateDTO.TODO => "bg-secondary",
+            StateDTO.DOING => "bg-primary",
+            StateDTO.DONE => "bg-success",
+            _ => "bg-secondary"
+        };
+    }
+
+
+    private void ShowEditTaskModal(TaskDTO task)
+    {
+        showTaskListModal = false;
+
+        selectedTaskToEdit = new TaskDTO
+        {
+            Id = task.Id,
+            Title = task.Title,
+            Description = task.Description,
+            ExpectedStartDate = task.ExpectedStartDate,
+            Duration = task.Duration,
+            State = task.State,
+            PreviousTasks = task.PreviousTasks != null ? new List<TaskDTO>(task.PreviousTasks) : new List<TaskDTO>(),
+            SameTimeTasks = task.SameTimeTasks != null ? new List<TaskDTO>(task.SameTimeTasks) : new List<TaskDTO>(),
+            Resources = task.Resources != null ? new List<ResourceDTO>(task.Resources) : new List<ResourceDTO>()
+        };
+
+        editPreviousTaskIds.Clear();
+        editPreviousTaskDependencies.Clear();
+        editSelectedResourceIds.Clear();
+        editNewPreviousTaskId = null;
+        editNewDependencyType = "FS";
+
+
+        if (selectedTaskToEdit.PreviousTasks != null)
+        {
+            foreach (var prevTask in selectedTaskToEdit.PreviousTasks)
+            {
+                if (prevTask.Id.HasValue)
+                {
+                    editPreviousTaskIds.Add(prevTask.Id);
+                    editPreviousTaskDependencies.Add("FS");
+                }
+            }
+        }
+
+        if (selectedTaskToEdit.SameTimeTasks != null)
+        {
+            foreach (var sameTask in selectedTaskToEdit.SameTimeTasks)
+            {
+                if (sameTask.Id.HasValue)
+                {
+                    editPreviousTaskIds.Add(sameTask.Id);
+                    editPreviousTaskDependencies.Add("SS");
+                }
+            }
+        }
+
+        editTaskErrorMessage = string.Empty;
+        editTaskSuccessMessage = string.Empty;
+        showEditTaskModal = true;
+    }
+
+    private void CloseEditTaskModal(bool refreshData)
+    {
+        showEditTaskModal = false;
+        selectedTaskToEdit = null;
+        if (refreshData)
+        {
+            LoadTasks();
+        }
+    }
+
+    private void AddTaskToEditPreviousTasks()
+    {
+        if (editNewPreviousTaskId.HasValue)
+        {
+            editPreviousTaskIds.Add(editNewPreviousTaskId);
+            editPreviousTaskDependencies.Add(editNewDependencyType);
+
+            editNewPreviousTaskId = null;
+            editNewDependencyType = "FS";
+        }
+        else
+        {
+            editTaskErrorMessage = "Please select a task to add as dependency";
+        }
+    }
+
+    private async Task HandleEditTaskSubmit()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(selectedProjectName))
+            {
+                editTaskErrorMessage = "Project not selected.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(selectedTaskToEdit.Title))
+            {
+                editTaskErrorMessage = "Task title is required.";
+                return;
+            }
+
+            if (selectedTaskToEdit.Duration <= 0)
+            {
+                editTaskErrorMessage = "Duration must be greater than 0.";
+                return;
+            }
+
+            var previousTasksFS = new List<TaskDTO>();
+            var sameTimeTasksSS = new List<TaskDTO>();
+
+            for (var i = 0; i < editPreviousTaskIds.Count; i++)
+            {
+                if (editPreviousTaskIds[i].HasValue)
+                {
+                    var taskId = editPreviousTaskIds[i].Value;
+
+                    var taskDto = new TaskDTO { Id = taskId };
+
+                    if (editPreviousTaskDependencies[i] == "FS")
+                    {
+                        previousTasksFS.Add(taskDto);
+                    }
+                    else if (editPreviousTaskDependencies[i] == "SS")
+                    {
+                        sameTimeTasksSS.Add(taskDto);
+                    }
+                }
+            }
+
+            selectedTaskToEdit.PreviousTasks = previousTasksFS;
+            selectedTaskToEdit.SameTimeTasks = sameTimeTasksSS;
+
+            _TaskController.UpdateTask(selectedProjectName, selectedTaskToEdit.Title, selectedTaskToEdit);
+            editTaskSuccessMessage = "Task updated successfully!";
+            editTaskErrorMessage = string.Empty;
+
+            await Task.Delay(1500);
+            CloseEditTaskModal(true);
+        }
+        catch (Exception ex)
+        {
+            editTaskErrorMessage = $"Error updating task: {ex.Message}";
+            editTaskSuccessMessage = string.Empty;
+        }
+    }
+
+    private void RemoveEditPreviousTask(int index)
+    {
+        if (index >= 0 && index < editPreviousTaskIds.Count)
+        {
+            editPreviousTaskIds.RemoveAt(index);
+            editPreviousTaskDependencies.RemoveAt(index);
+        }
+    }
+
+
+    private void ShowAddMembersModal()
+    {
+        if (!string.IsNullOrEmpty(selectedProjectName))
+        {
+            showAddMembersModal = true;
+            var users = _UserController.GetAllUsers();
+            var Members = new List<UserDTO>();
+            foreach (var user in users)
+            {
+                if (user.Roles.Contains(RolDTO.ProjectMember))
+                {
+                    Members.Add(user);
+                }
+            }
+
+            membersList = Members;
+        }
+        else
+        {
+            errorMessage = "Please select a project to add members.";
+        }
+    }
+
+    private void CloseAddMembersModal(bool refreshData)
+    {
+        showAddMembersModal = false;
+        selectedEmails.Clear();
+    }
+
+    private void ToggleMemberSelection(ChangeEventArgs e, string email)
+    {
+        if (e.Value is bool isSelected)
+        {
+            if (isSelected)
+            {
+                selectedEmails.Add(email);
+            }
+            else
+            {
+                selectedEmails.Remove(email);
+            }
+        }
+    }
+
+    private void AddSelectedMembers()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(selectedProjectName))
+            {
+                memberErrorMessage = "No project selected";
+                return;
+            }
+
+            var selectedMembers = membersList
+                .Where(m => selectedEmails.Contains(m.Email))
+                .DistinctBy(m => m.Email)
+                .ToList();
+
+            if (selectedMembers.Any())
+            {
+                _LeaderProjectController.AssignMembersToProject(selectedProjectName, selectedMembers);
+
+                memberSuccessMessage = "Members added successfully!";
+                memberErrorMessage = string.Empty;
+
+                selectedEmails.Clear();
+
+                LoadProjectMembers();
+            }
+            else
+            {
+                memberErrorMessage = "No members selected.";
+                memberSuccessMessage = string.Empty;
+            }
+        }
+        catch (Exception ex)
+        {
+            memberErrorMessage = $"Error adding members: {ex.Message}";
+            memberSuccessMessage = string.Empty;
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private void ShowTaskListModal()
+    {
+        if (!string.IsNullOrEmpty(selectedProjectName))
+        {
+            LoadTasks();
+            showTaskListModal = true;
+        }
+        else
+        {
+            errorMessage = "Please select a project to view the task list.";
+        }
+    }
+
+    private void CloseTaskListModal(bool refreshData)
+    {
+        showTaskListModal = false;
+        if (refreshData)
+        {
+            LoadTasks();
+        }
+    }
+
+    private void ShowMemberListModal()
+    {
+        LoadProjectMembers();
+        showMemberListModal = true;
+    }
+
+    private void CloseMemberListModal()
+    {
+        showMemberListModal = false;
+    }
+
+    private void LoadProjectMembers()
+    {
+        try
+        {
+            projectMembers = _LeaderProjectController.GetAllMembersOfAProject(selectedProjectName);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading members: {ex.Message}";
+        }
+    }
+
+    private void RemoveMember(UserDTO member)
+    {
+        try
+        {
+            _LeaderProjectController.RemoveMemberFromProject(selectedProjectName, member.Email);
+            projectMembers.Remove(member);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error removing member: {ex.Message}";
+        }
+    }
+
+    private void ShowAssignTaskModal(UserDTO member)
+    {
+        showMemberListModal = false;
+        selectedMemberId = member.Email;
+        selectedMemberName = $"{member.FirstName} {member.LastName}";
+        try
+        {
+            if (string.IsNullOrEmpty(selectedProjectName) || string.IsNullOrEmpty(selectedMemberId))
+                throw new Exception("Project name or member ID is null.");
+
+            LoadTasks();
+            assignedTasks = _LeaderProjectController
+                .GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+            if (assignedTasks == null)
+                assignedTasks = new List<TaskDTO>();
+
+            assignTaskErrorMessage = string.Empty;
+            assignTaskSuccessMessage = string.Empty;
+            showAssignTaskToMemberModal = true;
+        }
+        catch (Exception ex)
+        {
+            assignTaskErrorMessage = $"Error loading tasks: {ex.Message}\n{ex.StackTrace}";
+            showAssignTaskToMemberModal = true;
+        }
+    }
+
+
+    private void CloseAssignTaskToMemberModal(bool refreshData)
+    {
+        showAssignTaskToMemberModal = false;
+        if (refreshData)
+        {
+            LoadProjectMembers();
+        }
+    }
+
+    private void AssignTaskToMember(TaskDTO task)
+    {
+        try
+        {
+            _LeaderProjectController.AddTaskToMember(selectedProjectName, selectedMemberId, task.Title);
+            assignTaskSuccessMessage = $"Task '{task.Title}' assigned successfully";
+            assignTaskErrorMessage = string.Empty;
+
+            assignedTasks = _LeaderProjectController.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+        }
+        catch (Exception ex)
+        {
+            assignTaskErrorMessage = $"Error assigning task: {ex.Message}";
+            assignTaskSuccessMessage = string.Empty;
+        }
+    }
+
+    private void RemoveTaskFromMember(TaskDTO task)
+    {
+        try
+        {
+            _LeaderProjectController.RemoveTaskFromMember(selectedProjectName, selectedMemberId, task.Title);
+            assignTaskSuccessMessage = $"Task '{task.Title}' removed successfully";
+            assignTaskErrorMessage = string.Empty;
+
+            assignedTasks = _LeaderProjectController.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+        }
+        catch (Exception ex)
+        {
+            assignTaskErrorMessage = $"Error removing task: {ex.Message}";
+            assignTaskSuccessMessage = string.Empty;
+        }
+    }
+
+    private void ShowExportModal()
+    {
+        showExportModal = true;
+        exportErrorMessage = string.Empty;
+        exportSuccessMessage = string.Empty;
+    }
+
+    private void CloseExportModal()
+    {
+        showExportModal = false;
+        exportErrorMessage = string.Empty;
+        exportSuccessMessage = string.Empty;
+    }
+
+    private async Task ExportAsJSON()
+    {
+        try
+        {
+            var jsonData = _LeaderProjectController.ExportProjectsAsJSON();
+            await DownloadFile(jsonData, "projects.json", "application/json");
+            exportSuccessMessage = "Projects exported as JSON successfully!";
+            exportErrorMessage = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            exportErrorMessage = $"Error exporting projects as JSON: {ex.Message}";
+            exportSuccessMessage = string.Empty;
+        }
+    }
+
+    private async Task ExportAsCSV()
+    {
+        try
+        {
+            var csvData = _LeaderProjectController.ExportProjectsAsCSV();
+            await DownloadFile(csvData, "projects.csv", "text/csv");
+            exportSuccessMessage = "Projects exported as CSV successfully!";
+            exportErrorMessage = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            exportErrorMessage = $"Error exporting projects as CSV: {ex.Message}";
+            exportSuccessMessage = string.Empty;
+        }
+    }
+
+    private async Task DownloadFile(string content, string fileName, string contentType)
+    {
+        var bytes = Encoding.UTF8.GetBytes(content);
+        var base64 = Convert.ToBase64String(bytes);
+        var dataUrl = $"data:{contentType};base64,{base64}";
+
+        var script = $@"
+        var link = document.createElement('a');
+        link.href = '{dataUrl}';
+        link.download = '{fileName}';
+        link.click();
+        ";
+
+        await JSRuntime.InvokeVoidAsync("eval", script);
+    }
+
+}

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Service.Models;
 
 namespace Service.Test.ModelsTests;
@@ -38,15 +41,21 @@ public class TaskDTOTest
     [TestMethod]
     public void NewTask_WhenPreviousTasksAreAssigned_ThenPreviousTasksAreSet()
     {
-        var previousTasks = new List<TaskDTO>
+        List<TaskDTO> previousTasks = new List<TaskDTO>
         {
             new()
             {
-                Title = "Task 1", Description = "Description 1", ExpectedStartDate = DateTime.Now, Duration = 3
+                Title = "Task 1",
+                Description = "Description 1",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 3
             },
             new()
             {
-                Title = "Task 2", Description = "Description 2", ExpectedStartDate = DateTime.Now, Duration = 5
+                Title = "Task 2",
+                Description = "Description 2",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 5
             }
         };
 
@@ -60,15 +69,21 @@ public class TaskDTOTest
     [TestMethod]
     public void NewTask_WhenSameTimeTasksAreAssigned_ThenSameTimeTasksAreSet()
     {
-        var sameTimeTasks = new List<TaskDTO>
+        List<TaskDTO> sameTimeTasks = new List<TaskDTO>
         {
             new()
             {
-                Title = "Task A", Description = "Description A", ExpectedStartDate = DateTime.Now, Duration = 3
+                Title = "Task A",
+                Description = "Description A",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 3
             },
             new()
             {
-                Title = "Task B", Description = "Description B", ExpectedStartDate = DateTime.Now, Duration = 2
+                Title = "Task B",
+                Description = "Description B",
+                ExpectedStartDate = DateTime.Now,
+                Duration = 2
             }
         };
 
@@ -98,8 +113,9 @@ public class TaskDTOTest
     [TestMethod]
     public void NewTask_WhenIdIsSet_ThenIdIsAssigned()
     {
-        var taskDTO = new TaskDTO { Id = 123 };
-        Assert.AreEqual(123, taskDTO.Id);
+        int? idValue = 123;
+        var taskDTO = new TaskDTO { Id = idValue };
+        Assert.AreEqual(idValue, taskDTO.Id);
     }
 
     [TestMethod]
@@ -112,7 +128,7 @@ public class TaskDTOTest
     [TestMethod]
     public void NewTask_WhenResourcesAreAssigned_ThenResourcesAreSet()
     {
-        var resources = new List<ResourceDTO>
+        List<ResourceDTO> resources = new List<ResourceDTO>
         {
             new() { Name = "Resource 1", Type = "Type 1", Description = "Description of Resource 1" },
             new() { Name = "Resource 2", Type = "Type 2", Description = "Description of Resource 2" }
@@ -195,10 +211,8 @@ public class TaskDTOTest
     [TestMethod]
     public void TaskDTO_DefaultValues_ShouldBeCorrect()
     {
-        // Arrange & Act
         var taskDTO = new TaskDTO();
 
-        // Assert
         Assert.IsFalse(taskDTO.IsCritical, "Default value for IsCritical should be false");
         Assert.AreEqual(default, taskDTO.StartDate, "Default value for StartDate should be default(DateTime)");
         Assert.AreEqual(default, taskDTO.EndDate, "Default value for EndDate should be default(DateTime)");

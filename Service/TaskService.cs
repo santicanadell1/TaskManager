@@ -3,122 +3,167 @@ using DataAccess.Exceptions.ProjectRepositoryExceptions;
 using DataAccess.Exceptions.TaskRepositoryExceptions;
 using Domain;
 using Domain.Exceptions.TaskExceptions;
+using Service.Converter;
+using Service.Exceptions.ResourceServiceExceptions;
+using Service.Interface;
 using Service.Models;
 using Task = Domain.Task;
 
 namespace Service;
 
-public class TaskService
+public class TaskService : ITaskService
 {
     private readonly CpmService _cpmService;
-    private readonly InMemoryDatabase _database;
+    private readonly IRepositoryManager _repositoryManager;
+    private readonly ResourceConverter _resourceConverter;
+    private readonly IResourceService _resourceService;
+    private readonly TaskConverter _taskConverter;
 
-    public TaskService(InMemoryDatabase database, CpmService cpmService)
+    public TaskService(IRepositoryManager repositoryManager, CpmService cpmService)
     {
-        _database = database;
+        _repositoryManager = repositoryManager;
+        _taskConverter = new TaskConverter(_repositoryManager);
+        _resourceConverter = new ResourceConverter(_repositoryManager);
+        _resourceService = new ResourceService(_repositoryManager);
         _cpmService = cpmService;
     }
 
-    public void AddTask(string projectName, TaskDTO taskDTO)
+    public void UpdateTask(TaskDTO taskDTO)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
-        if (project == null) throw new ProjectNotFoundException();
+        var task = _taskConverter.ToEntity(taskDTO);
+        _repositoryManager.TaskRepository.Update(task);
+    }
 
+    public void DeleteTask(TaskDTO taskDTO)
+    {
+        var task = _taskConverter.ToEntity(taskDTO);
+        _repositoryManager.TaskRepository.Delete(task);
+    }
+
+    public TaskDTO GetTask(string title)
+    {
+        var entity = _repositoryManager.TaskRepository.Get(t => t.Title == title);
+        return _taskConverter.FromEntity(entity);
+    }
+
+    public List<TaskDTO> GetTasks()
+    {
+        List<TaskDTO> tasks = new List<TaskDTO>();
+        foreach (var t in _repositoryManager.TaskRepository.GetAll()) tasks.Add(_taskConverter.FromEntity(t));
+        return tasks;
+    }
+
+    public void AddTask(string projectName, TaskDTO taskDTO, bool solve = false)
+    {
+        INotificationService notificationService = new NotificationService(_repositoryManager);
+        IAdminPService projectService = new AdminPService(_repositoryManager);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        if (project == null) throw new ProjectNotFoundException();
         if (taskDTO.ExpectedStartDate.AddDays(1) <= project.StartDate)
             throw new TaskException("The task's start date is before the project's start date.");
-        var previousTasks = new List<Task>();
-        var sameTimeTasks = new List<Task>();
 
-        if (taskDTO.PreviousTasks != null)
-            foreach (var prevTaskDTO in taskDTO.PreviousTasks)
-                if (prevTaskDTO.Id.HasValue)
-                {
-                    var existingTask = project.Tasks.FirstOrDefault(t => t.Id == prevTaskDTO.Id);
-                    if (existingTask != null) previousTasks.Add(existingTask);
-                }
-
-        if (taskDTO.SameTimeTasks != null)
-            foreach (var sameTaskDTO in taskDTO.SameTimeTasks)
-                if (sameTaskDTO.Id.HasValue)
-                {
-                    var existingTask = project.Tasks.FirstOrDefault(t => t.Id == sameTaskDTO.Id);
-                    if (existingTask != null) sameTimeTasks.Add(existingTask);
-                }
-
-        var task = new Task(
-            taskDTO.Title,
-            taskDTO.Description,
+        var startDate = GetNextDateAvailable(
+            solve,
             taskDTO.ExpectedStartDate,
             taskDTO.Duration,
-            previousTasks,
-            sameTimeTasks,
-            ToResourceEntityList(taskDTO.Resources)
+            taskDTO.Resources,
+            taskDTO.Title
         );
+        taskDTO.ExpectedStartDate = startDate;
+        var enrichedDto = _resourceService.updateResourceDependencies(taskDTO, projectName);
+        CreateTask(enrichedDto);
 
-        _database.projects.AddTask(projectName, task);
-
-        RecalculateCriticalPath(projectName);
-    }
-
-    public void DeleteTask(string projectName, int? taskId)
-    {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
-        if (project == null) throw new ProjectNotFoundException();
-
-        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
-        if (task == null) throw new TaskNotFoundException();
-
-        _database.projects.RemoveTask(projectName, task.Id);
-
-        RecalculateCriticalPath(projectName);
-    }
-
-    public void UpdateTask(string projectName, int? taskId, TaskDTO taskDTO)
-    {
-        var _notificationService = new NotificationService(_database);
-        var projectService = new AdminPService(_database);
-        var project = _database.projects.GetProject(p => p.Name == projectName);
-        if (project == null) throw new ProjectNotFoundException();
-
-        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
-        if (task == null) throw new TaskNotFoundException();
-
-        var previousTasks = new List<Task>();
-        if (taskDTO.PreviousTasks != null)
-            foreach (var prevTaskDTO in taskDTO.PreviousTasks)
-                if (prevTaskDTO.Id.HasValue)
-                {
-                    var existingTask = project.Tasks.FirstOrDefault(t => t.Id == prevTaskDTO.Id);
-                    if (existingTask != null && existingTask.Id != taskId) previousTasks.Add(existingTask);
-                }
-
-        var sameTimeTasks = new List<Task>();
-        if (taskDTO.SameTimeTasks != null)
-            foreach (var sameTaskDTO in taskDTO.SameTimeTasks)
-                if (sameTaskDTO.Id.HasValue)
-                {
-                    var existingTask = project.Tasks.FirstOrDefault(t => t.Id == sameTaskDTO.Id);
-                    if (existingTask != null && existingTask.Id != taskId) sameTimeTasks.Add(existingTask);
-                }
-
-        var updatedTask = new Task(
-            taskDTO.Title,
-            taskDTO.Description,
-            taskDTO.ExpectedStartDate,
-            taskDTO.Duration,
-            previousTasks,
-            sameTimeTasks,
-            ToResourceEntityList(taskDTO.Resources)
-        );
-        updatedTask.Id = task.Id;
-
-        updatedTask.State = (State)taskDTO.State;
-
-        _database.projects.UpdateTask(projectName, taskId, updatedTask);
+        var createdTask = _repositoryManager.TaskRepository.Get(t => t.Title == enrichedDto.Title);
+        _repositoryManager.ProjectRepository.AddTask(projectName, createdTask);
 
         RecalculateCriticalPath(projectName);
         var cpmResult = GetCriticalPath(projectName);
-        if (cpmResult.CriticalTaskIds.Any(t => t == taskId))
+        if (cpmResult.CriticalTaskIds.Contains(createdTask.Id))
+        {
+            var notificationDTO = new NotificationDTO
+            {
+                Read = false,
+                Description = $"The task {createdTask.Title} has been created. The critical path has changed.",
+                Project = projectService.GetProjectByName(projectName)
+            };
+            notificationService.CreateNotification(notificationDTO);
+        }
+    }
+
+    public void DeleteTask(string projectName, string title)
+    {
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        if (project == null) throw new ProjectNotFoundException();
+
+        var toDelete = project.Tasks.FirstOrDefault(t => t.Title == title);
+        if (toDelete == null) throw new TaskNotFoundException();
+
+        _repositoryManager.ProjectRepository.RemoveTask(projectName, toDelete.Id);
+        var entity = _repositoryManager.TaskRepository.Get(t => t.Title == title);
+        _repositoryManager.TaskRepository.Delete(entity);
+
+        RecalculateCriticalPath(projectName);
+    }
+
+    public void UpdateTask(string projectName, string title, TaskDTO taskDTO, bool solve = false)
+    {
+        INotificationService notificationService = new NotificationService(_repositoryManager);
+        IAdminPService projectService = new AdminPService(_repositoryManager);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+        if (project == null) throw new ProjectNotFoundException();
+
+        var original = project.Tasks.FirstOrDefault(t => t.Title == title);
+        if (original == null) throw new TaskNotFoundException();
+
+        var startDate = GetNextDateAvailable(
+            solve,
+            taskDTO.ExpectedStartDate,
+            taskDTO.Duration,
+            taskDTO.Resources,
+            taskDTO.Title
+        );
+        taskDTO.ExpectedStartDate = startDate;
+
+        var enrichedDto = _resourceService.updateResourceDependencies(taskDTO, projectName);
+
+        List<Task> previousEntities = new List<Task>();
+        if (enrichedDto.PreviousTasks != null)
+            foreach (var prev in enrichedDto.PreviousTasks)
+                if (prev.Id.HasValue)
+                {
+                    var ent = project.Tasks.FirstOrDefault(t => t.Id == prev.Id.Value);
+                    if (ent != null && ent.Title != title) previousEntities.Add(ent);
+                }
+
+        List<Task> sameTimeEntities = new List<Task>();
+        if (enrichedDto.SameTimeTasks != null)
+            foreach (var same in enrichedDto.SameTimeTasks)
+                if (same.Id.HasValue)
+                {
+                    var ent = project.Tasks.FirstOrDefault(t => t.Id == same.Id.Value);
+                    if (ent != null && ent.Title != title) sameTimeEntities.Add(ent);
+                }
+
+        var updatedTask = new Task(
+            enrichedDto.Title,
+            enrichedDto.Description,
+            enrichedDto.ExpectedStartDate,
+            enrichedDto.Duration,
+            previousEntities,
+            sameTimeEntities,
+            _resourceConverter.ToResourceEntityList(enrichedDto.Resources)
+        )
+        {
+            Id = original.Id,
+            State = (State)enrichedDto.State
+        };
+
+        _repositoryManager.TaskRepository.Update(updatedTask);
+        _repositoryManager.ProjectRepository.UpdateTask(projectName, updatedTask.Id, updatedTask);
+
+        RecalculateCriticalPath(projectName);
+        var cpmResult = GetCriticalPath(projectName);
+        if (cpmResult.CriticalTaskIds.Contains(updatedTask.Id))
         {
             var notificationDTO = new NotificationDTO
             {
@@ -126,129 +171,172 @@ public class TaskService
                 Description = $"The task {updatedTask.Title} has been updated. The critical path has changed.",
                 Project = projectService.GetProjectByName(projectName)
             };
-            _notificationService.CreateNotification(notificationDTO);
+            notificationService.CreateNotification(notificationDTO);
         }
     }
 
     public List<TaskDTO> GetTasks(string projectName)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
-        if (project == null) throw new ProjectNotFoundException();
-
-        var taskDTOs = project.Tasks.Select(t => new TaskDTO
+        try
         {
-            Title = t.Title,
-            Description = t.Description,
-            ExpectedStartDate = t.ExpectedStartDate,
-            Duration = t.Duration,
-            State = (StateDTO)t.State,
-            Resources = FromResourceEntityList(t.Resources),
-            Id = t.Id,
-            IsCritical = t.IsCritical,
-            StartDate = t.StartDate,
-            EndDate = t.EndDate,
-            LatestStart = t.LatestStart,
-            LatestFinish = t.LatestFinish,
-            Slack = t.Slack,
-            PreviousTasks = new List<TaskDTO>(),
-            SameTimeTasks = new List<TaskDTO>()
-        }).ToList();
+            if (string.IsNullOrEmpty(projectName))
+                throw new ArgumentException("Project name cannot be null or empty");
 
-        var taskDict = taskDTOs.ToDictionary(t => t.Id);
+            var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
+            if (project == null) throw new ProjectNotFoundException();
 
-        foreach (var task in project.Tasks)
-        {
-            var taskDto = taskDict[task.Id];
+            if (project.Tasks == null || !project.Tasks.Any())
+                return new List<TaskDTO>();
 
-            foreach (var prevTask in task.PreviousTasks)
-                if (taskDict.ContainsKey(prevTask.Id))
-                    taskDto.PreviousTasks.Add(taskDict[prevTask.Id]);
+            var taskDTOs = project.Tasks
+                .Where(t => t.Id.HasValue)
+                .Select(t => new TaskDTO
+                {
+                    Title = t.Title ?? string.Empty,
+                    Description = t.Description ?? string.Empty,
+                    ExpectedStartDate = t.ExpectedStartDate,
+                    Duration = t.Duration,
+                    State = (StateDTO)t.State,
+                    Resources = _resourceConverter.FromResourceEntityList(t.Resources ?? new List<Resource>()),
+                    Id = t.Id,
+                    IsCritical = t.IsCritical,
+                    StartDate = t.StartDate,
+                    EndDate = t.EndDate,
+                    LatestStart = t.LatestStart,
+                    LatestFinish = t.LatestFinish,
+                    Slack = t.Slack,
+                    PreviousTasks = new List<TaskDTO>(),
+                    SameTimeTasks = new List<TaskDTO>()
+                })
+                .ToList();
 
-            foreach (var sameTask in task.SameTimeTasks)
-                if (taskDict.ContainsKey(sameTask.Id))
-                    taskDto.SameTimeTasks.Add(taskDict[sameTask.Id]);
+            if (!taskDTOs.Any())
+                return new List<TaskDTO>();
+
+            var taskDict = taskDTOs
+                .Where(t => t.Id.HasValue)
+                .ToDictionary(t => t.Id.Value, t => t);
+
+            foreach (var t in project.Tasks.Where(t => t.Id.HasValue))
+            {
+                var dto = taskDict[t.Id.Value];
+
+                if (t.PreviousTasks != null)
+                    foreach (var prev in t.PreviousTasks)
+                        if (prev.Id.HasValue && taskDict.ContainsKey(prev.Id.Value))
+                            dto.PreviousTasks.Add(taskDict[prev.Id.Value]);
+
+                if (t.SameTimeTasks != null)
+                    foreach (var same in t.SameTimeTasks)
+                        if (same.Id.HasValue && taskDict.ContainsKey(same.Id.Value))
+                            dto.SameTimeTasks.Add(taskDict[same.Id.Value]);
+            }
+
+            return taskDTOs;
         }
-
-        return taskDTOs;
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 
-    public TaskDTO GetTask(string projectName, int? taskId)
+    public TaskDTO GetTask(string projectName, string title)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        var task = project.Tasks.FirstOrDefault(t => t.Id == taskId);
+        var task = project.Tasks.FirstOrDefault(t => t.Title == title);
         if (task == null) throw new TaskNotFoundException();
 
-        return FromEntity(task);
+        return _taskConverter.FromEntity(task);
     }
 
     public CpmResultDTO GetCriticalPath(string projectName)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null) throw new ProjectNotFoundException();
 
-        var cpmResult = _cpmService.CalculateCriticalPath(GetTasks(projectName));
-
-        return new CpmResultDTO
+        try
         {
-            ProjectDuration = cpmResult.ProjectDuration,
-            CriticalTaskIds = cpmResult.CriticalTasks.Select(t => t.Id).ToList(),
-            CriticalPathIds = cpmResult.CriticalPath.Select(t => t.Id).ToList(),
-            EarliestStartDate = project.Tasks.Min(t => t.StartDate),
-            LatestFinishDate = project.Tasks.Max(t => t.EndDate)
-        };
+            var cpmResult = _cpmService.CalculateCriticalPath(GetTasks(projectName));
+
+            return new CpmResultDTO
+            {
+                ProjectDuration = cpmResult.ProjectDuration,
+                CriticalTaskIds = cpmResult.CriticalTasks.Select(t => t.Id).ToList(),
+                CriticalPathIds = cpmResult.CriticalPath.Select(t => t.Id).ToList(),
+                EarliestStartDate = project.Tasks.Any() ? project.Tasks.Min(t => t.StartDate) : DateTime.Now,
+                LatestFinishDate = project.Tasks.Any() ? project.Tasks.Max(t => t.EndDate) : DateTime.Now
+            };
+        }
+        catch (Exception)
+        {
+            return new CpmResultDTO
+            {
+                ProjectDuration = 0,
+                CriticalTaskIds = new List<int?>(),
+                CriticalPathIds = new List<int?>(),
+                EarliestStartDate = DateTime.Now,
+                LatestFinishDate = DateTime.Now
+            };
+        }
+    }
+
+    private void CreateTask(TaskDTO taskDTO)
+    {
+        var task = _taskConverter.ToEntity(taskDTO);
+        _repositoryManager.TaskRepository.Add(task);
+    }
+
+    private DateTime GetNextDateAvailable(
+        bool solve,
+        DateTime startDate,
+        int duration,
+        List<ResourceDTO> resources,
+        string taskTitle = ""
+    )
+    {
+        var startDateNext = startDate;
+        foreach (var res in resources)
+        {
+            if (!_resourceService.IsAvailable(res, startDate, duration, taskTitle) && !solve)
+                throw new ResourceNotAvailableException();
+
+            var next = _resourceService.NextDateAvailable(res, startDate, duration, taskTitle);
+            if (next > startDate) startDateNext = next;
+        }
+
+        return startDateNext;
     }
 
     private void RecalculateCriticalPath(string projectName)
     {
-        var project = _database.projects.GetProject(p => p.Name == projectName);
+        var project = _repositoryManager.ProjectRepository.Get(p => p.Name == projectName);
         if (project == null || project.Tasks.Count == 0) return;
 
         try
         {
-            var updatedTasks = _cpmService.CalculateCriticalPath(GetTasks(projectName)).AllTasks;
+            List<TaskDTO> updatedTasks = _cpmService
+                .CalculateCriticalPath(GetTasks(projectName))
+                .AllTasks;
 
-            foreach (var updatedDTO in updatedTasks)
+            foreach (var updatedDto in updatedTasks)
             {
-                var originalTask = project.Tasks.FirstOrDefault(t => t.Id == updatedDTO.Id);
-                if (originalTask != null)
+                var original = project.Tasks.FirstOrDefault(t => t.Id == updatedDto.Id);
+                if (original != null)
                 {
-                    originalTask.IsCritical = updatedDTO.IsCritical;
-                    originalTask.StartDate = updatedDTO.StartDate;
-                    originalTask.EndDate = updatedDTO.EndDate;
-                    originalTask.LatestStart = updatedDTO.LatestStart;
-                    originalTask.LatestFinish = updatedDTO.LatestFinish;
-                    originalTask.Slack = updatedDTO.Slack;
+                    original.IsCritical = updatedDto.IsCritical;
+                    original.StartDate = updatedDto.StartDate;
+                    original.EndDate = updatedDto.EndDate;
+                    original.LatestStart = updatedDto.LatestStart;
+                    original.LatestFinish = updatedDto.LatestFinish;
+                    original.Slack = updatedDto.Slack;
                 }
             }
         }
         catch (Exception)
         {
         }
-    }
-
-
-    private TaskDTO FromEntity(Task task)
-    {
-        return new TaskDTO
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description,
-            ExpectedStartDate = task.ExpectedStartDate,
-            Duration = task.Duration,
-            PreviousTasks = ToMinimalTaskDTOList(task.PreviousTasks),
-            SameTimeTasks = ToMinimalTaskDTOList(task.SameTimeTasks),
-            State = (StateDTO)task.State,
-            Resources = FromResourceEntityList(task.Resources) ?? new List<ResourceDTO>(),
-            IsCritical = task.IsCritical,
-            StartDate = task.StartDate,
-            EndDate = task.EndDate,
-            LatestStart = task.LatestStart,
-            LatestFinish = task.LatestFinish,
-            Slack = task.Slack
-        };
     }
 
     private List<TaskDTO> ToMinimalTaskDTOList(List<Task> tasks)
@@ -260,77 +348,5 @@ public class TaskService
             Id = t.Id,
             Title = t.Title
         }).ToList();
-    }
-
-    private List<TaskDTO> FromEntityList(List<Task> tasks)
-    {
-        if (tasks == null) return new List<TaskDTO>();
-
-        var taskDTOs = new List<TaskDTO>();
-        foreach (var task in tasks)
-            taskDTOs.Add(new TaskDTO
-            {
-                Id = task.Id,
-                Title = task.Title,
-                Description = task.Description,
-                ExpectedStartDate = task.ExpectedStartDate,
-                Duration = task.Duration,
-                State = (StateDTO)task.State,
-                PreviousTasks = new List<TaskDTO>(),
-                SameTimeTasks = new List<TaskDTO>(),
-                Resources = new List<ResourceDTO>()
-            });
-
-        return taskDTOs;
-    }
-
-    private List<ResourceDTO> FromResourceEntityList(List<Resource> resources)
-    {
-        var resourceDTOs = new List<ResourceDTO>();
-        foreach (var resource in resources)
-            resourceDTOs.Add(new ResourceDTO
-            {
-                Name = resource.Name,
-                Type = resource.Type,
-                Description = resource.Description,
-                Id = resource.Id
-            });
-
-        return resourceDTOs;
-    }
-
-    private Task ToEntity(TaskDTO taskDTO)
-    {
-        return new Task(
-            taskDTO.Title,
-            taskDTO.Description,
-            taskDTO.ExpectedStartDate,
-            taskDTO.Duration,
-            ToEntityList(taskDTO.PreviousTasks),
-            ToEntityList(taskDTO.SameTimeTasks),
-            ToResourceEntityList(taskDTO.Resources)
-        );
-    }
-
-    private List<Task> ToEntityList(List<TaskDTO> taskDTOs)
-    {
-        if (taskDTOs == null) return new List<Task>();
-
-        var tasks = new List<Task>();
-        foreach (var taskDTO in taskDTOs) tasks.Add(ToEntity(taskDTO));
-
-        return tasks;
-    }
-
-    private List<Resource> ToResourceEntityList(List<ResourceDTO> resourceDTOs)
-    {
-        if (resourceDTOs == null) return new List<Resource>();
-
-        var resources = new List<Resource>();
-        foreach (var resourceDTO in resourceDTOs)
-            resources.Add(new Resource(resourceDTO.Name, resourceDTO.Type, resourceDTO.Description)
-                { Id = resourceDTO.Id });
-
-        return resources;
     }
 }

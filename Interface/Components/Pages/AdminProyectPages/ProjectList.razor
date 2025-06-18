@@ -1,11 +1,14 @@
 ﻿@page "/project/options"
-@using Service
+@using Controllers
+@using Service.Exceptions.ResourceServiceExceptions
 @using Service.Models
+@inject AdminProjectController _AdminProjectController
+@inject TaskController _TaskController
+@inject ResourceController _ResourceController
+@inject UserController _UserController
 @inject NavigationManager Navigation
-@inject AdminPService AdminPService
-@inject TaskService TaskService
-@inject ResourceService ResourceService
-@inject UserService UserService
+@inject IJSRuntime JS
+
 @rendermode InteractiveServer
 
 <link href="styles/styleProjectList.css" rel="stylesheet"/>
@@ -30,6 +33,12 @@
                                 @onclick="() => ShowProjectOptions(project)">
                             <i class="bi bi-gear-fill me-2"></i>View Options
                         </button>
+
+                        <button class="btn-warning  @GetButtonClass(project)"
+                                @onclick="() => ShowEditProjectModal(project)">
+                            <i class="bi bi-pencil-fill me-2"></i>Edit Project
+                        </button>
+
                         <button class="btn-danger btn-sm" @onclick="() => RemoveProject(project)">
                             <i class="bi bi-trash-fill me-2"></i>Remove Project
                         </button>
@@ -103,6 +112,20 @@
                                     aria-label="Close"></button>
                         </div>
                     }
+                    @if (showForceConfirm)
+                    {
+                        <div class="alert alert-warning d-flex justify-content-between align-items-center" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                The resource is not available for the selected date. Do you want to force creating the task?
+                            </span>
+                            <div>
+                                <button class="btn btn-secondary me-2" @onclick="CancelForce">Cancel</button>
+                                <button class="btn btn-primary" @onclick="ForceCreateTask">Force Creating</button>
+                            </div>
+                        </div>
+                    }
+
+
 
                     <EditForm Model="@newTask" OnValidSubmit="HandleCreateTaskSubmit">
                         <DataAnnotationsValidator/>
@@ -130,7 +153,7 @@
                             <InputNumber id="duration" class="form-control" @bind-Value="newTask.Duration"/>
                         </div>
 
-                        
+
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-tools me-1"></i>Select Resources</label>
                             <div class="resource-container">
@@ -157,7 +180,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-arrow-left me-1"></i>Previous Tasks</label>
                             @if (taskList != null && taskList.Any())
@@ -197,7 +220,7 @@
                                     </div>
                                 </div>
 
-                                
+
                                 @if (previousTaskIds.Any())
                                 {
                                     <div class="mt-3">
@@ -287,6 +310,18 @@
                                     aria-label="Close"></button>
                         </div>
                     }
+                    @if (showEditForceConfirm)
+                    {
+                        <div class="alert alert-warning d-flex justify-content-between align-items-center" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                The resource is not available for the selected date. Do you want to force editing the task?
+                            </span>
+                            <div>
+                                <button class="btn btn-secondary me-2" @onclick="CancelEditForce">Cancel</button>
+                                <button class="btn btn-primary" @onclick="ForceEditTask">Force Updating</button>
+                            </div>
+                        </div>
+                    }
 
                     <EditForm Model="@selectedTaskToEdit" OnValidSubmit="HandleEditTaskSubmit">
                         <DataAnnotationsValidator/>
@@ -296,7 +331,7 @@
                             <label for="editTaskTitle" class="form-label"><i class="bi bi-type me-1"></i>Task
                                 Title</label>
                             <InputText id="editTaskTitle" class="form-control" @bind-Value="selectedTaskToEdit.Title"
-                                       required/>
+                                       readonly required/>
                         </div>
 
                         <div class="mb-3">
@@ -319,7 +354,7 @@
                                          @bind-Value="selectedTaskToEdit.Duration"/>
                         </div>
 
-                        
+
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-tools me-1"></i>Select Resources</label>
                             <div class="resource-container">
@@ -346,7 +381,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="mb-3">
                             <label class="form-label"><i class="bi bi-arrow-left me-1"></i>Previous Tasks</label>
                             @if (taskList != null && taskList.Any())
@@ -387,7 +422,7 @@
                                     </div>
                                 </div>
 
-                                
+
                                 @if (editPreviousTaskIds.Any())
                                 {
                                     <div class="mt-3">
@@ -549,7 +584,7 @@
                     }
 
                     <div class="row">
-                        
+
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header bg-light">
@@ -585,7 +620,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header bg-light">
@@ -785,6 +820,128 @@
         </div>
     </div>
 }
+<!-- Modal para editar el proyecto -->
+@if (showEditProjectModal)
+{
+    <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+         aria-labelledby="editProjectModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Edit Project</h5>
+                    <button type="button" class="btn-close" @onclick="() => CloseEditProjectModal(false)"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(projectErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+                            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>@projectErrorMessage</span>
+                            <button type="button" class="btn-close" @onclick="() => projectErrorMessage = string.Empty"
+                                    aria-label="Close"></button>
+                        </div>
+                    }
+                    <EditForm Model="@selectedProjectToEdit" OnValidSubmit="HandleEditProjectSubmit">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+
+                        <!-- Nombre del Proyecto -->
+                        <div class="mb-3">
+                            <label for="projectName" class="form-label">Project Name</label>
+                            <InputText id="projectName" class="form-control" @bind-Value="selectedProjectToEdit.Name"
+                                       readonly required/>
+                        </div>
+
+                        <!-- Descripción del Proyecto -->
+                        <div class="mb-3">
+                            <label for="projectDescription" class="form-label">Project Description</label>
+                            <InputTextArea id="projectDescription" class="form-control"
+                                           @bind-Value="selectedProjectToEdit.Description"/>
+                        </div>
+
+                        <!-- Sección de Project Leader -->
+                        <div class="mb-3">
+                            <label class="form-label">Project Leader</label>
+
+                            @if (!string.IsNullOrEmpty(currentProjectLeaderEmail))
+                            {
+                                <!-- Mostrar leader actual con botón para remover -->
+                                <div class="card border-primary">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="card-title mb-1">
+                                                    <i class="bi bi-person-badge-fill text-primary me-2"></i>Current
+                                                    Leader
+                                                </h6>
+                                                <p class="card-text mb-0">
+                                                    @GetLeaderDisplayName(currentProjectLeaderEmail)
+                                                </p>
+                                                <small class="text-muted">@currentProjectLeaderEmail</small>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-danger btn-sm"
+                                                    @onclick="RemoveCurrentLeader">
+                                                <i class="bi bi-trash3 me-1"></i>Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <!-- Mostrar lista de leaders disponibles cuando no hay uno asignado -->
+                                <div class="card border-success">
+                                    <div class="card-body p-3">
+                                        <div class="mb-3">
+                                            <h6 class="card-title mb-2">
+                                                <i class="bi bi-person-plus-fill text-success me-2"></i>Assign Project
+                                                Leader
+                                            </h6>
+                                            <select class="form-select" @bind="selectedProjectLeaderEmail">
+                                                <option value="">Select a Leader</option>
+                                                @foreach (var user in projectLeadersUsers)
+                                                {
+                                                    <option value="@user.Email">@user.FirstName @user.LastName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(selectedProjectLeaderEmail))
+                                        {
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <div>
+                                                    <strong>Selected:</strong> @GetLeaderDisplayName(selectedProjectLeaderEmail)
+                                                </div>
+                                                <button type="button" class="btn btn-success btn-sm"
+                                                        @onclick="AssignSelectedLeader">
+                                                    <i class="bi bi-check-circle me-1"></i>Assign Leader
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                @if (projectLeadersUsers == null || !projectLeadersUsers.Any())
+                                {
+                                    <div class="alert alert-warning mt-2">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>No project leaders available.
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i>Save Changes
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
 
 @code {
 
@@ -801,6 +958,8 @@
     private bool showAssignTaskToMemberModal;
     private bool showTaskListModal;
     private bool showMemberListModal;
+    private bool showForceConfirm;
+    private bool showEditForceConfirm;
 
     private string errorMessage = string.Empty;
     private string taskErrorMessage = string.Empty;
@@ -811,8 +970,14 @@
     private string memberSuccessMessage = string.Empty;
     private string assignTaskErrorMessage = string.Empty;
     private string assignTaskSuccessMessage = string.Empty;
+    private string pendingProjectName;
+    private string pendingEditProjectName;
+    private string pendingEditOriginalTitle;
 
     private TaskDTO newTask = new();
+    private TaskDTO pendingTask;
+    private TaskDTO pendingEditTask;
+
     private readonly HashSet<int?> selectedResourceIds = new();
     private readonly List<int?> previousTaskIds = new();
     private readonly List<string> previousTaskDependencies = new();
@@ -833,17 +998,36 @@
     private List<TaskDTO> assignedTasks = new();
     private List<UserDTO> projectMembers = new();
 
-    protected override void OnInitialized()
+    private bool showEditProjectModal;
+    private ProjectDTO selectedProjectToEdit;
+    private string selectedProjectLeaderEmail;
+    private string currentProjectLeaderEmail;
+    private string projectErrorMessage = string.Empty;
+    private List<UserDTO> projectLeadersUsers = new();
+
+
+    protected override async void OnInitialized()
     {
         LoadProjects();
-        LoadResources();
+        LoadUsers();
+
+        if (projects != null && projects.Any())
+        {
+            var savedProjectName = await JS.InvokeAsync<string>("localStorage.getItem", "selectedProject");
+            if (!string.IsNullOrEmpty(savedProjectName) && projects.Any(p => p.Name == savedProjectName))
+            {
+                selectedProjectName = savedProjectName;
+                LoadTasks();
+                LoadResources();
+            }
+        }
     }
 
     private void LoadProjects()
     {
         try
         {
-            projects = AdminPService.GetAllProjects();
+            projects = _AdminProjectController.GetAllProjects();
         }
         catch (Exception ex)
         {
@@ -853,9 +1037,15 @@
 
     private void LoadResources()
     {
+        if (string.IsNullOrWhiteSpace(selectedProjectName))
+        {
+            availableResources = new List<ResourceDTO>();
+            return;
+        }
+
         try
         {
-            availableResources = ResourceService.GetResources();
+            availableResources = _ResourceController.GetAllResourcesForAProject(selectedProjectName);
         }
         catch (Exception ex)
         {
@@ -874,7 +1064,7 @@
 
         try
         {
-            taskList = TaskService.GetTasks(selectedProjectName);
+            taskList = _TaskController.GetAllTasksForAProject(selectedProjectName);
             if (taskList == null)
             {
                 taskList = new List<TaskDTO>();
@@ -889,11 +1079,13 @@
         }
     }
 
-    private void ShowProjectOptions(ProjectDTO project)
+    private async void ShowProjectOptions(ProjectDTO project)
     {
         selectedProjectName = project.Name;
         errorMessage = string.Empty;
+        await JS.InvokeVoidAsync("localStorage.setItem", "selectedProject", project.Name);
         LoadTasks();
+        LoadResources();
     }
 
     public string GetButtonClass(ProjectDTO project)
@@ -916,14 +1108,19 @@
     {
         try
         {
-            AdminPService.RemoveProject(project.Name);
+            _AdminProjectController.RemoveProject(project.Name);
             projects.Remove(project);
 
             if (selectedProjectName == project.Name)
             {
-                selectedProjectName = null;
+                selectedProjectName = string.Empty;
                 taskList.Clear();
             }
+
+            Navigation.NavigateTo(Navigation.Uri, true);
+            JS.InvokeVoidAsync("localStorage.setItem", "selectedProject", null);
+
+            StateHasChanged();
         }
         catch (Exception ex)
         {
@@ -974,6 +1171,7 @@
         if (refreshData)
         {
             LoadTasks();
+            LoadResources();
         }
     }
 
@@ -1024,7 +1222,6 @@
                 {
                     var taskId = previousTaskIds[i].Value;
 
-                    // Create a minimal TaskDTO with just the ID
                     var taskDto = new TaskDTO { Id = taskId };
 
                     if (previousTaskDependencies[i] == "FS")
@@ -1051,17 +1248,51 @@
                 .Where(r => r != null && r.Id.HasValue && selectedResourceIds.Contains(r.Id))
                 .ToList() ?? new List<ResourceDTO>();
 
-            TaskService.AddTask(selectedProjectName, newTask);
+            _TaskController.AddTaskToProject(selectedProjectName, newTask);
             taskSuccessMessage = "Task created successfully!";
             taskErrorMessage = string.Empty;
 
             await Task.Delay(1500);
             CloseCreateTaskModal(true);
+            Navigation.NavigateTo(Navigation.Uri, true);
+        }
+        catch (ResourceNotAvailableException)
+        {
+            pendingTask = newTask;
+            pendingProjectName = selectedProjectName;
+            showForceConfirm = true;
         }
         catch (Exception ex)
         {
             taskErrorMessage = $"Error creating task: {ex.Message}";
             taskSuccessMessage = string.Empty;
+        }
+    }
+
+    private void CancelForce()
+    {
+        showForceConfirm = false;
+        pendingTask = null;
+        pendingProjectName = null;
+        taskErrorMessage = string.Empty;
+    }
+
+    private async Task ForceCreateTask()
+    {
+        try
+        {
+            _TaskController.AddTaskToProject(pendingProjectName, pendingTask, true);
+            taskSuccessMessage = "Task created (forced) successfully!";
+            showForceConfirm = false;
+            taskErrorMessage = string.Empty;
+
+            await Task.Delay(1500);
+            CloseCreateTaskModal(true);
+            Navigation.NavigateTo(Navigation.Uri, true);
+        }
+        catch (Exception ex)
+        {
+            taskErrorMessage = $"Error forcing task: {ex.Message}";
         }
     }
 
@@ -1156,6 +1387,7 @@
         if (refreshData)
         {
             LoadTasks();
+            LoadResources();
         }
     }
 
@@ -1224,18 +1456,58 @@
             selectedTaskToEdit.Resources = availableResources
                 .Where(r => r.Id.HasValue && editSelectedResourceIds.Contains(r.Id))
                 .ToList();
-
-            TaskService.UpdateTask(selectedProjectName, selectedTaskToEdit.Id, selectedTaskToEdit);
+            pendingEditOriginalTitle = selectedTaskToEdit.Title;
+            pendingEditTask = selectedTaskToEdit;
+            _TaskController.UpdateTask(selectedProjectName, selectedTaskToEdit.Title, selectedTaskToEdit);
             editTaskSuccessMessage = "Task updated successfully!";
             editTaskErrorMessage = string.Empty;
 
             await Task.Delay(1500);
             CloseEditTaskModal(true);
+            Navigation.NavigateTo(Navigation.Uri, true);
+        }
+        catch (ResourceNotAvailableException)
+        {
+            pendingEditProjectName = selectedProjectName;
+            showEditForceConfirm = true;
         }
         catch (Exception ex)
         {
             editTaskErrorMessage = $"Error updating task: {ex.Message}";
             editTaskSuccessMessage = string.Empty;
+        }
+    }
+
+    private void CancelEditForce()
+    {
+        showEditForceConfirm = false;
+        pendingEditTask = null;
+        pendingEditProjectName = null;
+        pendingEditOriginalTitle = null;
+        editTaskErrorMessage = string.Empty;
+    }
+
+    private async Task ForceEditTask()
+    {
+        try
+        {
+            _TaskController.UpdateTask(
+                pendingEditProjectName,
+                pendingEditOriginalTitle,
+                pendingEditTask,
+                true
+            );
+            editTaskSuccessMessage = "Task updated (forced) successfully!";
+            showEditForceConfirm = false;
+            taskErrorMessage = string.Empty;
+
+            await Task.Delay(1500);
+            CloseEditTaskModal(true);
+            Navigation.NavigateTo(Navigation.Uri, true);
+        }
+        catch (Exception ex)
+        {
+            editTaskErrorMessage = $"Error forcing update: {ex.Message}";
         }
     }
 
@@ -1267,7 +1539,7 @@
     {
         try
         {
-            TaskService.DeleteTask(selectedProjectName, task.Id);
+            _TaskController.DeleteTask(selectedProjectName, task.Title);
             LoadTasks();
         }
         catch (Exception ex)
@@ -1281,7 +1553,7 @@
         if (!string.IsNullOrEmpty(selectedProjectName))
         {
             showAddMembersModal = true;
-            var users = UserService.GetUsers();
+            var users = _UserController.GetAllUsers();
             var Members = new List<UserDTO>();
             foreach (var user in users)
             {
@@ -1322,28 +1594,43 @@
 
     private void AddSelectedMembers()
     {
-        var selectedMembers = membersList
-            .Where(m => selectedEmails.Contains(m.Email))
-            .DistinctBy(m => m.Email)
-            .ToList();
-        if (selectedMembers.Any())
+        try
         {
-            try
+            if (string.IsNullOrEmpty(selectedProjectName))
             {
-                AdminPService.AssignMembersToProject(selectedProjectName ?? "", selectedMembers);
+                memberErrorMessage = "No project selected";
+                return;
+            }
+
+            var selectedMembers = membersList
+                .Where(m => selectedEmails.Contains(m.Email))
+                .DistinctBy(m => m.Email)
+                .ToList();
+
+            if (selectedMembers.Any())
+            {
+                _AdminProjectController.AssignMembersToProject(selectedProjectName, selectedMembers);
                 memberSuccessMessage = "Members added successfully!";
                 memberErrorMessage = string.Empty;
+
+                selectedEmails.Clear();
+
+                LoadProjectMembers();
             }
-            catch (Exception ex)
+            else
             {
-                memberErrorMessage = $"Error adding members: {ex.Message}";
+                memberErrorMessage = "No members selected.";
                 memberSuccessMessage = string.Empty;
             }
         }
-        else
+        catch (Exception ex)
         {
-            memberErrorMessage = "No members selected.";
+            memberErrorMessage = $"Error adding members: {ex.Message}";
             memberSuccessMessage = string.Empty;
+        }
+        finally
+        {
+            StateHasChanged();
         }
     }
 
@@ -1384,7 +1671,7 @@
     {
         try
         {
-            projectMembers = AdminPService.GetMembers(selectedProjectName);
+            projectMembers = _AdminProjectController.GetAllMembersOfAProject(selectedProjectName);
         }
         catch (Exception ex)
         {
@@ -1396,7 +1683,7 @@
     {
         try
         {
-            AdminPService.RemoveMemberFromProject(selectedProjectName, member.Email);
+            _AdminProjectController.RemoveMemberFromProject(selectedProjectName, member.Email);
             projectMembers.Remove(member);
         }
         catch (Exception ex)
@@ -1416,7 +1703,7 @@
                 throw new Exception("Project name or member ID is null.");
 
             LoadTasks();
-            assignedTasks = AdminPService
+            assignedTasks = _AdminProjectController
                 .GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
             if (assignedTasks == null)
                 assignedTasks = new List<TaskDTO>();
@@ -1446,11 +1733,11 @@
     {
         try
         {
-            AdminPService.AddTaskToMember(selectedProjectName, selectedMemberId, (int)task.Id);
+            _AdminProjectController.AddTaskToMember(selectedProjectName, selectedMemberId, task.Title);
             assignTaskSuccessMessage = $"Task '{task.Title}' assigned successfully";
             assignTaskErrorMessage = string.Empty;
 
-            assignedTasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+            assignedTasks = _AdminProjectController.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
         }
         catch (Exception ex)
         {
@@ -1463,16 +1750,146 @@
     {
         try
         {
-            AdminPService.RemoveTaskFromMember(selectedProjectName, selectedMemberId, (int)task.Id);
+            _AdminProjectController.RemoveTaskFromMember(selectedProjectName, selectedMemberId, task.Title);
             assignTaskSuccessMessage = $"Task '{task.Title}' removed successfully";
             assignTaskErrorMessage = string.Empty;
 
-            assignedTasks = AdminPService.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
+            assignedTasks = _AdminProjectController.GetAllTaskForAMemberInAProject(selectedProjectName, selectedMemberId);
         }
         catch (Exception ex)
         {
             assignTaskErrorMessage = $"Error removing task: {ex.Message}";
             assignTaskSuccessMessage = string.Empty;
+        }
+    }
+
+    private void ShowEditProjectModal(ProjectDTO project)
+    {
+        try
+        {
+            selectedProjectToEdit = new ProjectDTO
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Description = project.Description,
+                StartDate = project.StartDate,
+                ProjectLeader = project.ProjectLeader != null ? _UserController.GetUser(project.ProjectLeader.Email) : null,
+                Members = project.Members,
+                AdminProyect = project.AdminProyect,
+                Tasks = project.Tasks
+            };
+
+            currentProjectLeaderEmail = project.ProjectLeader?.Email ?? string.Empty;
+            selectedProjectLeaderEmail = string.Empty;
+
+            LoadUsers();
+
+            projectErrorMessage = string.Empty;
+            showEditProjectModal = true;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error loading project for editing: {ex.Message}";
+            showEditProjectModal = false;
+        }
+    }
+
+    private void CloseEditProjectModal(bool refreshData)
+    {
+        showEditProjectModal = false;
+        selectedProjectLeaderEmail = string.Empty;
+        if (refreshData)
+        {
+            LoadProjects();
+        }
+    }
+
+    private void RemoveCurrentLeader()
+    {
+        try
+        {
+            _AdminProjectController.RemoveProjectLeaderFromProject(selectedProjectToEdit.Name);
+
+            currentProjectLeaderEmail = string.Empty;
+            selectedProjectLeaderEmail = string.Empty;
+
+            StateHasChanged();
+
+            projectErrorMessage = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error removing project leader: {ex.Message}";
+        }
+    }
+
+    private void AssignSelectedLeader()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(selectedProjectLeaderEmail))
+            {
+                projectErrorMessage = "Please select a project leader.";
+                return;
+            }
+
+            _AdminProjectController.SetProjectLeaderToProject(selectedProjectToEdit.Name, selectedProjectLeaderEmail);
+
+            currentProjectLeaderEmail = selectedProjectLeaderEmail;
+            selectedProjectLeaderEmail = string.Empty;
+
+            StateHasChanged();
+
+            projectErrorMessage = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error assigning project leader: {ex.Message}";
+        }
+    }
+
+    private string GetLeaderDisplayName(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+            return "No leader assigned";
+
+        var user = projectLeadersUsers?.FirstOrDefault(u => u.Email == email);
+        return user != null ? $"{user.FirstName} {user.LastName}" : email;
+    }
+
+    private async Task HandleEditProjectSubmit()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(selectedProjectToEdit.Name))
+            {
+                projectErrorMessage = "Project name is required.";
+                return;
+            }
+
+            _AdminProjectController.UpdateProject(selectedProjectToEdit.Name, selectedProjectToEdit);
+
+            projectErrorMessage = string.Empty;
+            showEditProjectModal = false;
+            LoadProjects();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error updating project: {ex.Message}";
+        }
+    }
+
+    private void LoadUsers()
+    {
+        try
+        {
+            projectLeadersUsers = _AdminProjectController.GetAllProjectLeaderUsers();
+        }
+        catch (Exception ex)
+        {
+            projectErrorMessage = $"Error loading users: {ex.Message}";
         }
     }
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Service.Models;
 
 namespace Service.Test.ModelsTests;
@@ -9,7 +12,6 @@ public class UserDTOTest
     public void NewUser_WhenFirstNameIsNull_ThenUserIsNotCreated()
     {
         var user = new UserDTO { FirstName = null };
-
         Assert.IsNull(user.FirstName);
     }
 
@@ -17,7 +19,6 @@ public class UserDTOTest
     public void NewUser_WhenLastNameIsNull_ThenUserIsNotCreated()
     {
         var user = new UserDTO { LastName = null };
-
         Assert.IsNull(user.LastName);
     }
 
@@ -25,7 +26,6 @@ public class UserDTOTest
     public void NewUser_WhenEmailIsNull_ThenUserIsNotCreated()
     {
         var user = new UserDTO { Email = null };
-
         Assert.IsNull(user.Email);
     }
 
@@ -33,7 +33,6 @@ public class UserDTOTest
     public void NewUser_WhenBirthdayIsDefault_ThenUserIsNotCreated()
     {
         var user = new UserDTO { Birthday = default };
-
         Assert.AreEqual(default, user.Birthday);
     }
 
@@ -41,7 +40,6 @@ public class UserDTOTest
     public void NewUser_WhenPasswordIsNull_ThenUserIsNotCreated()
     {
         var user = new UserDTO { Password = null };
-
         Assert.IsNull(user.Password);
     }
 
@@ -60,8 +58,12 @@ public class UserDTOTest
     [TestMethod]
     public void NewUser_WhenTasksAreAssigned_ThenTasksAreSet()
     {
-        var tasksIds = new List<int> { 1, 2, 3 };
-        var user = new UserDTO { Tasks = tasksIds };
+        List<TaskDTO> tasks = new List<TaskDTO>
+        {
+            new() { Title = "Task1" }
+        };
+        var user = new UserDTO { Tasks = tasks };
+
         Assert.IsNotNull(user.Tasks);
     }
 }

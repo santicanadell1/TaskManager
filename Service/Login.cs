@@ -1,20 +1,24 @@
 ﻿using DataAccess;
 using Domain;
+using Service.Converter;
 using Service.Exceptions.LoginExceptions;
 using Service.Interface;
 using Service.Models;
-using Service.Models.Exceptions;
 
 namespace Service;
 
 public class Login : ILogin
 {
-    private readonly InMemoryDatabase _database;
-    private readonly PasswordManager _passwordManager = new();
+    private readonly IPasswordManager _passwordManager = new PasswordManager();
+    private readonly IRepositoryManager _repositoryManager;
+    private readonly RolConverter _rolConverter;
+    private readonly UserConverter _userConverter;
 
-    public Login(InMemoryDatabase database)
+    public Login(IRepositoryManager repositoryManager)
     {
-        _database = database;
+        _repositoryManager = repositoryManager;
+        _rolConverter = new RolConverter();
+        _userConverter = new UserConverter(_repositoryManager);
     }
 
     public UserDTO GetLoggedUser()
@@ -24,11 +28,11 @@ public class Login : ILogin
 
     public void LoginUser(string email, string password)
     {
-        var user = _database.users.Get(user => user.Email == email);
+        var user = _repositoryManager.UserRepository.Get(user => user.Email == email);
         if (user == null || !_passwordManager.VerifyPassword(password, user.Password))
             throw new InvalidLoginCredentialsException();
 
-        LoggedUser.Current = FromEntity(user);
+        LoggedUser.Current = _userConverter.FromEntity(user);
     }
 
 
@@ -39,68 +43,22 @@ public class Login : ILogin
 
     public bool IsAdminSystem()
     {
-        return LoggedUser.Current?.Roles.Contains(ConvertToDTORole(Rol.AdminSystem)) ?? false;
+        return LoggedUser.Current?.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminSystem)) ?? false;
     }
 
     public bool IsAdminProject()
     {
-        return LoggedUser.Current?.Roles.Contains(ConvertToDTORole(Rol.AdminProject)) ?? false;
+        return LoggedUser.Current?.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.AdminProject)) ?? false;
     }
 
     public bool IsProjectMember()
     {
-        return LoggedUser.Current?.Roles.Contains(ConvertToDTORole(Rol.ProjectMember)) ?? false;
+        return LoggedUser.Current?.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.ProjectMember)) ?? false;
     }
 
-    private static UserDTO FromEntity(User user)
+    public bool IsProjectLeader()
     {
-        return new UserDTO
-        {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Roles = ConvertToDTORoles(user.Roles),
-            Password = user.Password,
-            Birthday = user.Birthday
-        };
-    }
-
-    private RolDTO ConvertToDTORole(Rol role)
-    {
-        switch (role)
-        {
-            case Rol.AdminSystem:
-                return RolDTO.AdminSystem;
-            case Rol.ProjectMember:
-                return RolDTO.ProjectMember;
-            case Rol.AdminProject:
-                return RolDTO.AdminProject;
-            default:
-                throw new ArgumentException("Invalid role");
-        }
-    }
-
-    private static List<RolDTO> ConvertToDTORoles(List<Rol> roles)
-    {
-        var roleDTOs = new List<RolDTO>();
-
-        foreach (var role in roles)
-            switch (role)
-            {
-                case Rol.AdminSystem:
-                    roleDTOs.Add(RolDTO.AdminSystem);
-                    break;
-                case Rol.ProjectMember:
-                    roleDTOs.Add(RolDTO.ProjectMember);
-                    break;
-                case Rol.AdminProject:
-                    roleDTOs.Add(RolDTO.AdminProject);
-                    break;
-                default:
-                    throw new InvalidRolException();
-            }
-
-        return roleDTOs;
+        return LoggedUser.Current?.Roles.Contains(_rolConverter.ConvertToDTORole(Rol.ProjectLeader)) ?? false;
     }
 
     public void UpdateUser(UserDTO userDTO)

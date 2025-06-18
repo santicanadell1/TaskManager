@@ -29,7 +29,7 @@ public class CpmServiceTest
     }
 
     private TaskDTO CreateTask(string title, string description, int duration, int id,
-        List<TaskDTO> previousTasks = null)
+        List<TaskDTO>? previousTasks = null)
     {
         var task = new TaskDTO
         {
@@ -51,7 +51,7 @@ public class CpmServiceTest
     public void CalculateProjectDuration_HandlesEmptyList()
     {
         var taskA = CreateTask("Task A", "Description", 3, 1);
-        var tasks = new List<TaskDTO> { taskA };
+        List<TaskDTO> tasks = new List<TaskDTO> { taskA };
         var result = _cpmService.CalculateCriticalPath(tasks);
 
         Assert.AreEqual(3, result.ProjectDuration);
@@ -65,7 +65,7 @@ public class CpmServiceTest
     [ExpectedException(typeof(NullTaskListException))]
     public void CalculateCriticalPath_ShouldThrowException_WhenTasksListIsNull()
     {
-        _cpmService.CalculateCriticalPath(null);
+        _cpmService.CalculateCriticalPath(null!);
     }
 
     [TestMethod]
@@ -92,7 +92,7 @@ public class CpmServiceTest
     [TestMethod]
     public void CalculateCriticalPath_ShouldReturnValidResult_WhenSingleTaskExists()
     {
-        var singleTask = new List<TaskDTO> { _taskA };
+        List<TaskDTO> singleTask = new List<TaskDTO> { _taskA };
         var result = _cpmService.CalculateCriticalPath(singleTask);
 
         Assert.IsNotNull(result);
@@ -109,7 +109,7 @@ public class CpmServiceTest
     [TestMethod]
     public void CalculateCriticalPath_ShouldCalculateEarlyDates_ForTaskWithoutPredecessors()
     {
-        var singleTask = new List<TaskDTO> { _taskA };
+        List<TaskDTO> singleTask = new List<TaskDTO> { _taskA };
         var result = _cpmService.CalculateCriticalPath(singleTask);
 
         var processedTask = result.AllTasks.First();
@@ -125,7 +125,7 @@ public class CpmServiceTest
     [TestMethod]
     public void CalculateCriticalPath_ShouldCalculateEarlyDates_ForTaskWithPredecessors()
     {
-        var tasks = new List<TaskDTO> { _taskA, _taskB, _taskC, _taskD };
+        List<TaskDTO> tasks = new List<TaskDTO> { _taskA, _taskB, _taskC, _taskD };
         var result = _cpmService.CalculateCriticalPath(tasks);
 
         var taskA = result.AllTasks.First(t => t.Id == 1);
@@ -193,7 +193,7 @@ public class CpmServiceTest
         testTask.StartDate = _defaultStartDate;
         testTask.EndDate = testTask.StartDate.AddDays(testTask.Duration);
 
-        var taskList = new List<TaskDTO> { testTask };
+        List<TaskDTO> taskList = new List<TaskDTO> { testTask };
         var lateStart = _cpmService.CalculateLateStart(testTask, taskList);
 
         Assert.AreEqual(testTask.StartDate, lateStart);
@@ -206,7 +206,7 @@ public class CpmServiceTest
         testTask.StartDate = _defaultStartDate;
         testTask.EndDate = testTask.StartDate.AddDays(testTask.Duration);
 
-        var taskList = new List<TaskDTO> { testTask };
+        List<TaskDTO> taskList = new List<TaskDTO> { testTask };
         var lateFinish = _cpmService.CalculateLateFinish(testTask, taskList);
 
         Assert.AreEqual(testTask.EndDate, lateFinish);
@@ -269,7 +269,7 @@ public class CpmServiceTest
     public void CalculateLateDates_HandlesNoSuccessors()
     {
         var task = CreateTask("Solo Task", "Description", 3, 5);
-        var tasks = new List<TaskDTO> { task };
+        List<TaskDTO> tasks = new List<TaskDTO> { task };
         var result = _cpmService.CalculateCriticalPath(tasks);
 
         Assert.AreEqual(task.EndDate, task.LatestFinish);
@@ -283,7 +283,7 @@ public class CpmServiceTest
     [TestMethod]
     public void CalculateCriticalPath_ShouldIdentifyCriticalPath_WithComplexDependencies()
     {
-        var tasks = new List<TaskDTO> { _taskA, _taskB, _taskC, _taskD };
+        List<TaskDTO> tasks = new List<TaskDTO> { _taskA, _taskB, _taskC, _taskD };
         var result = _cpmService.CalculateCriticalPath(tasks);
 
         Assert.IsTrue(result.CriticalPath.Count > 0);
@@ -308,7 +308,6 @@ public class CpmServiceTest
         _taskA.Slack = TimeSpan.FromDays(2);
         Assert.IsFalse(_cpmService.IsCritical(_taskA));
     }
-
 
     [TestMethod]
     public void CalculateCriticalPath_ShouldHandleParallelTasksWithSameStartEnd()
@@ -349,7 +348,8 @@ public class CpmServiceTest
         VerifyCriticalPathContinuity(result);
         Assert.AreEqual(13, result.ProjectDuration);
 
-        foreach (var criticalTask in result.CriticalTasks) Assert.AreEqual(0, criticalTask.Slack.TotalDays, 0.0001);
+        foreach (var criticalTask in result.CriticalTasks)
+            Assert.AreEqual(0, criticalTask.Slack.TotalDays, 0.0001);
     }
 
     [TestMethod]
@@ -428,11 +428,13 @@ public class CpmServiceTest
 
     private void VerifyCriticalAndNonCriticalTasks(CpmResult result)
     {
-        var nonCriticalTasks = result.AllTasks.Where(t => !t.IsCritical).ToList();
-        foreach (var task in nonCriticalTasks) Assert.IsTrue(task.Slack.TotalDays > 0);
+        List<TaskDTO> nonCriticalTasks = result.AllTasks.Where(t => !t.IsCritical).ToList();
+        foreach (var task in nonCriticalTasks)
+            Assert.IsTrue(task.Slack.TotalDays > 0);
 
-        var criticalTasks = result.AllTasks.Where(t => t.IsCritical).ToList();
-        foreach (var task in criticalTasks) Assert.AreEqual(0, task.Slack.TotalDays, 0.0001);
+        List<TaskDTO> criticalTasks = result.AllTasks.Where(t => t.IsCritical).ToList();
+        foreach (var task in criticalTasks)
+            Assert.AreEqual(0, task.Slack.TotalDays, 0.0001);
     }
 
     private void VerifyCriticalPathOrder(CpmResult result)
@@ -442,9 +444,11 @@ public class CpmServiceTest
             var currentTask = result.CriticalPath[i];
             var nextTask = result.CriticalPath[i + 1];
 
-            Assert.IsTrue(nextTask.PreviousTasks.Contains(currentTask) ||
-                          nextTask.PreviousTasks.Any(p => result.CriticalPath.Contains(p)),
-                $"El camino crítico no está ordenado correctamente: {currentTask.Title} -> {nextTask.Title}");
+            Assert.IsTrue(
+                nextTask.PreviousTasks.Contains(currentTask) ||
+                nextTask.PreviousTasks.Any(p => result.CriticalPath.Contains(p)),
+                $"El camino crítico no está ordenado correctamente: {currentTask.Title} -> {nextTask.Title}"
+            );
         }
     }
 
@@ -460,7 +464,8 @@ public class CpmServiceTest
 
     private void VerifyCriticalPathSequence(CpmResult result, int[] expectedIds)
     {
-        for (var i = 0; i < expectedIds.Length; i++) Assert.AreEqual(expectedIds[i], result.CriticalPath[i].Id);
+        for (var i = 0; i < expectedIds.Length; i++)
+            Assert.AreEqual(expectedIds[i], result.CriticalPath[i].Id);
     }
 
     #endregion

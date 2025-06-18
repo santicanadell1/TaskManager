@@ -31,8 +31,8 @@ public class PasswordMTest
     {
         var passwordManager = new PasswordManager();
         var originalPassword = "FNSabc1?";
-        var wrongPassword = "Incorrect1?"; 
-        var hashedPassword = passwordManager.HashPassword(originalPassword); 
+        var wrongPassword = "Incorrect1?";
+        var hashedPassword = passwordManager.HashPassword(originalPassword);
 
         var isPasswordValid = passwordManager.VerifyPassword(wrongPassword, hashedPassword);
 

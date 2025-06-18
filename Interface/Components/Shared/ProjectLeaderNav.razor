@@ -1,0 +1,51 @@
+﻿@rendermode InteractiveServer
+
+<link href="styles/styleCreateProject.css" rel="stylesheet"/>
+<div class="nav-item px-3">
+
+    <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center"
+            @onclick="ToggleAdminProject">
+        <span>
+            <i class="bi bi-briefcase"></i> Project Leader
+        </span>
+        <i class="bi @(showLeaderProject ? "bi-chevron-down" : "bi-chevron-right")"></i>
+    </button>
+
+    @if (showLeaderProject)
+    {
+        <div class="nav-item mt-1 ms-3">
+            <button class="btn btn-link nav-link text-start w-100 d-flex justify-content-between align-items-center"
+                    @onclick="ToggleProjects">
+                <span>
+                    <i class="bi bi-list"></i> Projects
+                </span>
+                <i class="bi @(showProjects ? "bi-chevron-down" : "bi-chevron-right")"></i>
+            </button>
+            @if (showProjects)
+            {
+                <div class="ms-3">
+                    <NavLink class="nav-link" href="/projectLeader/options">
+                        <i class="bi bi-briefcase"></i> Project Options
+                    </NavLink>
+
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool showLeaderProject;
+    private bool showProjects;
+
+    private void ToggleAdminProject()
+    {
+        showLeaderProject = !showLeaderProject;
+    }
+
+    private void ToggleProjects()
+    {
+        showProjects = !showProjects;
+    }
+
+}

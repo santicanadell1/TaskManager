@@ -4,12 +4,11 @@ namespace Domain;
 
 public class Project
 {
-    private string description;
-    private string name;
-    private DateTime startDate;
-    public List<User> Members { get; set; } = new();
-    public List<Task> Tasks { get; set; } = new();
-    public User AdminProject { get; set; }
+    public string description;
+    public string name;
+    public DateTime startDate;
+
+
     public Project()
     {
     }
@@ -20,6 +19,14 @@ public class Project
         Description = description;
         StartDate = startDate;
     }
+
+    public int? Id { get; set; }
+    public List<User> Members { get; set; } = new();
+    public List<Task> Tasks { get; set; } = new();
+    public int? AdminProjectId { get; set; }
+    public User AdminProject { get; set; }
+    public int? ProjectLeaderId { get; set; }
+    public User ProjectLeader { get; set; }
 
     public string Name
     {
@@ -49,13 +56,10 @@ public class Project
         set
         {
             if (value == default) throw new ProjectStartDateException();
-
-            if (value < DateTime.Today)
-                throw new ProjectException("The Start Date must be greater than the current date");
-
             startDate = value;
         }
     }
+
     public void AddMember(User user)
     {
         Members.Add(user);
@@ -64,5 +68,10 @@ public class Project
     public void AddTask(Task task)
     {
         Tasks.Add(task);
+    }
+
+    public void SetProjectLeader(User user)
+    {
+        ProjectLeader = user;
     }
 }

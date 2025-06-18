@@ -1,13 +1,31 @@
 ﻿@page "/project/create"
+@using Controllers
+@using Domain
 @using Service.Models
 @inject NavigationManager Navigation
-@inject AdminPService AdminPService
+@inject AdminProjectController _AdminProjectController
 @rendermode InteractiveServer
 
 <link href="styles/styleCreateProject.css" rel="stylesheet"/>
 
 <div class="create-project-container">
     <h2 class="create-project-title">Create New Project</h2>
+
+    @if (alertVisible)
+    {
+        <div class="alert alert-danger d-flex justify-content-between" role="alert">
+            <span><i class="bi bi-exclamation-triangle-fill me-2"></i>@alertMessage</span>
+            <button type="button" class="btn-close" @onclick="ToggleAlertVisibility" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (successVisible)
+    {
+        <div class="alert alert-success d-flex justify-content-between" role="alert">
+            <span><i class="bi bi-check-circle-fill me-2"></i>@successMessage</span>
+            <button type="button" class="btn-close" @onclick="ToggleAlertVisibility" aria-label="Close"></button>
+        </div>
+    }
 
     <EditForm Model="@newProjectDTO" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator/>
@@ -29,34 +47,87 @@
             <InputDate id="startDate" class="form-control" @bind-Value="newProjectDTO.StartDate" required/>
         </div>
 
-        <button type="submit" class="btn btn-primary">Create Project</button>
+        <div class="mb-3">
+            <label class="form-label">Project Leader</label>
+
+            @if (string.IsNullOrEmpty(selectedProjectLeaderEmail))
+            {
+                <div class="card border-info">
+                    <div class="card-body p-3">
+                        <div class="mb-3">
+                            <h6 class="card-title mb-2">
+                                <i class="bi bi-person-plus-fill text-info me-2"></i>Assign Project Leader (Optional)
+                            </h6>
+                            <select class="form-select" @bind="projectLeaderEmail">
+                                <option value="">No leader assigned</option>
+                                @foreach (var user in usersList)
+                                {
+                                    <option value="@user.Email">@user.FirstName @user.LastName</option>
+                                }
+                            </select>
+                        </div>
+                        @if (!string.IsNullOrEmpty(projectLeaderEmail))
+                        {
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Selected:</strong> @GetLeaderDisplayName(projectLeaderEmail)
+                                </div>
+                                <button type="button" class="btn btn-info btn-sm"
+                                        @onclick="AssignSelectedLeader">
+                                    <i class="bi bi-check-circle me-1"></i>Confirm Leader
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card border-success">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title mb-1">
+                                    <i class="bi bi-person-badge-fill text-success me-2"></i>Assigned Leader
+                                </h6>
+                                <p class="card-text mb-0">
+                                    @GetLeaderDisplayName(selectedProjectLeaderEmail)
+                                </p>
+                                <small class="text-muted">@selectedProjectLeaderEmail</small>
+                            </div>
+                            <button type="button" class="btn btn-outline-warning btn-sm"
+                                    @onclick="RemoveSelectedLeader">
+                                <i class="bi bi-x-circle me-1"></i>Change
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (usersList == null || !usersList.Any())
+            {
+                <div class="alert alert-warning mt-2">
+                    <i class="bi bi-exclamation-triangle me-2"></i>No project leaders available. You can assign one
+                    later.
+                </div>
+            }
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-circle me-2"></i>Create Project
+            </button>
+        </div>
     </EditForm>
-
-    @if (alertVisible)
-    {
-        <div class="alert alert-danger mt-3">
-            <strong>Error: </strong>@alertMessage
-            <button type="button" class="close" @onclick="ToggleAlertVisibility">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    }
-
-    @if (successVisible)
-    {
-        <div class="alert alert-success mt-3">
-            <strong>Success: </strong>@successMessage
-            <button type="button" class="close" @onclick="ToggleAlertVisibility">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    }
 </div>
 
 @code {
     private ProjectDTO newProjectDTO = new();
+    private List<UserDTO> usersList = new();
     private bool alertVisible;
     private bool successVisible;
+    private string projectLeaderEmail = string.Empty;
+    private string selectedProjectLeaderEmail = string.Empty;
     private string alertMessage = string.Empty;
     private string successMessage = string.Empty;
 
@@ -68,25 +139,115 @@
             Description = "",
             Name = ""
         };
+
+        LoadUsers();
+    }
+
+    private void LoadUsers()
+    {
+        try
+        {
+            usersList = _AdminProjectController.GetAllProjectLeaderUsers();
+        }
+        catch (Exception ex)
+        {
+            alertMessage = $"Error loading users: {ex.Message}";
+            alertVisible = true;
+        }
+    }
+
+    private void AssignSelectedLeader()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(projectLeaderEmail))
+            {
+                alertMessage = "Please select a project leader.";
+                alertVisible = true;
+                return;
+            }
+
+            selectedProjectLeaderEmail = projectLeaderEmail;
+            projectLeaderEmail = string.Empty;
+
+            alertVisible = false;
+            successVisible = false;
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            alertMessage = $"Error selecting project leader: {ex.Message}";
+            alertVisible = true;
+        }
+    }
+
+    private void RemoveSelectedLeader()
+    {
+        selectedProjectLeaderEmail = string.Empty;
+        projectLeaderEmail = string.Empty;
+        alertVisible = false;
+        successVisible = false;
+        StateHasChanged();
+    }
+
+    private string GetLeaderDisplayName(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+            return "No leader assigned";
+
+        var user = usersList?.FirstOrDefault(u => u.Email == email);
+        return user != null ? $"{user.FirstName} {user.LastName}" : email;
     }
 
     private void HandleValidSubmit()
     {
         try
         {
-            AdminPService.CreateProject(newProjectDTO);
+            if (string.IsNullOrWhiteSpace(newProjectDTO.Name))
+            {
+                alertMessage = "Project name is required.";
+                alertVisible = true;
+                return;
+            }
 
-            successMessage = "Project created successfully!";
+            if (string.IsNullOrWhiteSpace(newProjectDTO.Description))
+            {
+                alertMessage = "Project description is required.";
+                alertVisible = true;
+                return;
+            }
+
+            _AdminProjectController.CreateProject(newProjectDTO);
+
+            if (!string.IsNullOrEmpty(selectedProjectLeaderEmail))
+            {
+                _AdminProjectController.SetProjectLeaderToProject(newProjectDTO.Name, selectedProjectLeaderEmail);
+                _AdminProjectController.UpdateProject(newProjectDTO.Name, newProjectDTO);
+                successMessage = $"Project '{newProjectDTO.Name}' created successfully with {GetLeaderDisplayName(selectedProjectLeaderEmail)} as leader!";
+            }
+            else
+            {
+                successMessage = $"Project '{newProjectDTO.Name}' created successfully! You can assign a leader later.";
+            }
+
             successVisible = true;
+            alertVisible = false;
 
-            newProjectDTO = new ProjectDTO();
-
-            Navigation.NavigateTo("/project/options");
+            newProjectDTO = new ProjectDTO
+            {
+                StartDate = DateTime.Now,
+                Description = "",
+                Name = ""
+            };
+            selectedProjectLeaderEmail = string.Empty;
+            projectLeaderEmail = string.Empty;
         }
         catch (Exception ex)
         {
-            alertMessage = $"Error: {ex.Message}";
+            alertMessage = $"Error creating project: {ex.Message}";
             alertVisible = true;
+            successVisible = false;
         }
     }
 

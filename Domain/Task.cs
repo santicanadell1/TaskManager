@@ -4,22 +4,17 @@ namespace Domain;
 
 public class Task
 {
-    private string _description;
-    private int _duration;
-    private List<Task> _previousTasks;
-    private List<Resource> _resources;
-    private List<Task> _sameTimeTasks;
-    private State _state;
-    private string _title;
-    public DateTime ExpectedStartDate { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public DateTime LatestStart { get; set; }
-    public DateTime LatestFinish { get; set; }
-    public TimeSpan Slack { get; set; }
-    public bool IsCritical { get; set; }
-    public State State { get; set; }
-    public int? Id { get; set; }
+    public string _description;
+    public int _duration;
+    public List<Task> _previousTasks;
+    public List<Resource> _resources = new();
+    public List<Task> _sameTimeTasks;
+    public State _state;
+    public string _title;
+
+    public Task()
+    {
+    }
 
     public Task(string title, string description, DateTime startDate, int duration, List<Task> previousTasks,
         List<Task> sameTimeTasks, List<Resource> resources)
@@ -41,6 +36,16 @@ public class Task
         IsCritical = false;
     }
 
+    public int? Id { get; set; }
+    public DateTime ExpectedStartDate { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public DateTime LatestStart { get; set; }
+    public DateTime LatestFinish { get; set; }
+    public TimeSpan Slack { get; set; }
+    public bool IsCritical { get; set; }
+    public State State { get; set; }
+
     public List<Resource> Resources
     {
         get => _resources;
@@ -51,6 +56,7 @@ public class Task
             _resources = value;
         }
     }
+
     public string Title
     {
         get => _title;
@@ -61,6 +67,7 @@ public class Task
             _title = value;
         }
     }
+
     public string Description
     {
         get => _description;
@@ -71,6 +78,7 @@ public class Task
             _description = value;
         }
     }
+
     public int Duration
     {
         get => _duration;
@@ -81,6 +89,7 @@ public class Task
             _duration = value;
         }
     }
+
     public List<Task> PreviousTasks
     {
         get => _previousTasks;
@@ -91,11 +100,13 @@ public class Task
             _previousTasks = value;
         }
     }
+
     public List<Task> SameTimeTasks
     {
         get => _sameTimeTasks;
         set => _sameTimeTasks = value ?? new List<Task>();
     }
+
     public void AddPreviousTask(Task task)
     {
         if (task == null) throw new TaskResourceException("Task cannot be null.");

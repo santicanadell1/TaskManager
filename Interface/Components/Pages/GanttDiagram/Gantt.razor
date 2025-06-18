@@ -1,11 +1,10 @@
 ﻿@page "/gantt"
-@using Service
+@using Controllers
 @using Service.Models
 @inject IJSRuntime JS
-@inject AdminPService AdminPService
-@inject TaskService TaskService
-@inject CpmService CpmService
-@inject GanttService GanttService
+@inject AdminProjectController _AdminProjectController
+@inject TaskController _TaskController
+@inject GanttController _GanttController
 @rendermode InteractiveServer
 
 <link href="/GanttLibrary/codebase/dhtmlxgantt.css" rel="stylesheet"/>
@@ -182,6 +181,23 @@
                 template: function (task) {
                     return task.slack ? task.slack.toFixed(1) : "0";
                 }
+            },
+            {
+                name: "State",
+                label: "State",
+                align: "center",
+                width: 100,
+                resize: false,
+                template: function (task) {
+                    switch (task.progress) {
+                        case 0:
+                            return "To Do"
+                        case 0.5:
+                            return "In Progress"
+                        case 1:
+                            return "Done"
+                    }
+                }
             }
         ];
         gantt.templates.task_class = function (start, end, task) {
@@ -272,7 +288,7 @@
 
     protected override void OnInitialized()
     {
-        projects = AdminPService
+        projects = _AdminProjectController
                        .GetAllProjectsForUser(currentUserEmail)
                    ?? new List<ProjectDTO>();
     }
@@ -290,22 +306,17 @@
     {
         try
         {
-            var tasks = TaskService.GetTasks(selectedProjectName);
-            Console.WriteLine($"Tasks loaded: {tasks?.Count ?? 0}");
-
+            var tasks = _TaskController.GetAllTasksForAProject(selectedProjectName);
             if (tasks == null || !tasks.Any())
             {
-                Console.WriteLine("No tasks found for project: " + selectedProjectName);
                 ganttData = new GanttData { data = new List<GanttTask>(), links = new List<GanttLink>() };
                 showGantt = true;
                 StateHasChanged();
                 return;
             }
 
-            var cpm = CpmService.CalculateCriticalPath(tasks);
-            ganttData = GanttService.Convert(tasks, cpm.CriticalPath);
-
-            Console.WriteLine($"GanttData created - Tasks: {ganttData?.data?.Count ?? 0}, Links: {ganttData?.links?.Count ?? 0}");
+            var cpm = _GanttController.CalculateCriticalPath(tasks);
+            ganttData = _GanttController.GetGanttData(tasks, cpm.CriticalPath);
 
             if (tasks.Any())
             {
@@ -323,8 +334,6 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading gantt data: {ex.Message}");
-            Console.WriteLine($"Stack trace: {ex.StackTrace}");
         }
     }
 
@@ -379,8 +388,6 @@
             var startDate = new DateTime(selectedYear, selectedMonth, 1);
             var endDate = startDate.AddMonths(1).AddDays(-1);
 
-            Console.WriteLine($"OnAfterRenderAsync - firstRender: {firstRender}, showGantt: {showGantt}, tasks: {ganttData.data.Count}");
-
             await JS.InvokeVoidAsync("initGantt",
                 ganttData,
                 startDate.ToString("yyyy-MM-dd"),
@@ -401,6 +408,5 @@
             SelectedTaskSlack = null;
         }
     }
-
 
 }
