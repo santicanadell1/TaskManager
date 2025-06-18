@@ -736,50 +736,7 @@
             _ => "bg-secondary"
         };
     }
-
-
-    private void ShowCreateTaskModal()
-    {
-        if (!string.IsNullOrEmpty(selectedProjectName))
-        {
-            LoadTasks();
-
-            newTask = new TaskDTO
-            {
-                ExpectedStartDate = DateTime.Today,
-                Duration = 1,
-                Title = string.Empty,
-                Description = string.Empty,
-                PreviousTasks = new List<TaskDTO>(),
-                SameTimeTasks = new List<TaskDTO>(),
-                Resources = new List<ResourceDTO>(),
-                State = StateDTO.TODO,
-                Id = null
-            };
-
-            previousTaskIds.Clear();
-            previousTaskDependencies.Clear();
-            selectedResourceIds.Clear();
-            newPreviousTaskId = null;
-            newDependencyType = "FS";
-
-            showCreateTaskModal = true;
-            StateHasChanged();
-        }
-        else
-        {
-            errorMessage = "Please select a project before creating a task.";
-        }
-    }
-
-    private void CloseCreateTaskModal(bool refreshData)
-    {
-        showCreateTaskModal = false;
-        if (refreshData)
-        {
-            LoadTasks();
-        }
-    }
+    
 
     private void ShowEditTaskModal(TaskDTO task)
     {
@@ -979,14 +936,10 @@
     {
         try
         {
-            Console.WriteLine("=== AddSelectedMembers Started ===");
-            Console.WriteLine($"selectedProjectName: '{selectedProjectName}'");
-            Console.WriteLine($"selectedEmails count: {selectedEmails.Count}");
 
             if (string.IsNullOrEmpty(selectedProjectName))
             {
                 memberErrorMessage = "No project selected";
-                Console.WriteLine("No project selected");
                 return;
             }
 
@@ -994,25 +947,16 @@
                 .Where(m => selectedEmails.Contains(m.Email))
                 .DistinctBy(m => m.Email)
                 .ToList();
-
-            Console.WriteLine($"Selected members: {selectedMembers.Count}");
-            foreach (var member in selectedMembers)
-            {
-                Console.WriteLine($"  - {member.FirstName} {member.LastName} ({member.Email})");
-            }
-
+            
             if (selectedMembers.Any())
             {
-                Console.WriteLine("Calling AdminPService.AssignMembersToProject...");
 
                 _LeaderProjectController.AssignMembersToProject(selectedProjectName, selectedMembers);
 
-                Console.WriteLine("AssignMembersToProject completed successfully");
                 memberSuccessMessage = "Members added successfully!";
                 memberErrorMessage = string.Empty;
 
                 selectedEmails.Clear();
-                Console.WriteLine("Selection cleared");
 
                 LoadProjectMembers();
             }
@@ -1020,22 +964,15 @@
             {
                 memberErrorMessage = "No members selected.";
                 memberSuccessMessage = string.Empty;
-                Console.WriteLine("No members were selected");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Exception in AddSelectedMembers:");
-            Console.WriteLine($"Type: {ex.GetType().Name}");
-            Console.WriteLine($"Message: {ex.Message}");
-            Console.WriteLine($"Stack trace: {ex.StackTrace}");
-
             memberErrorMessage = $"Error adding members: {ex.Message}";
             memberSuccessMessage = string.Empty;
         }
         finally
         {
-            Console.WriteLine("=== AddSelectedMembers Finished ===");
             StateHasChanged();
         }
     }
@@ -1077,22 +1014,11 @@
     {
         try
         {
-            Console.WriteLine($"Loading members for project: {selectedProjectName}");
             projectMembers = _LeaderProjectController.GetAllMembersOfAProject(selectedProjectName);
-            Console.WriteLine($"Found {projectMembers?.Count ?? 0} members");
-
-            if (projectMembers != null)
-            {
-                foreach (var member in projectMembers)
-                {
-                    Console.WriteLine($"Member: {member.FirstName}");
-                }
-            }
         }
         catch (Exception ex)
         {
             errorMessage = $"Error loading members: {ex.Message}";
-            Console.WriteLine($"Error: {ex.Message}");
         }
     }
 
