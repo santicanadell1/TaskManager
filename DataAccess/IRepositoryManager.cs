@@ -1,10 +1,13 @@
-﻿namespace DataAccess;
+﻿using Domain;
+using Task = Domain.Task;
+
+namespace DataAccess;
 
 public interface IRepositoryManager
 {
-    UserRepository UserRepository { get; }
-    ProjectRepository ProjectRepository { get; }
-    NotificationRepository NotificationRepository { get; }
-    TaskRepository TaskRepository { get; }
-    ResourceRepository ResourceRepository { get; }
+    IRepository<User>  UserRepository { get; }
+    IProjectRepository ProjectRepository { get; }
+    IRepository<Notification>  NotificationRepository { get; }
+    IRepository<Task> TaskRepository { get; }
+    IRepository<Resource>  ResourceRepository { get; }
 }

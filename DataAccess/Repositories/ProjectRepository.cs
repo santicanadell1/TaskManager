@@ -6,7 +6,7 @@ using TaskRepositoryExceptions = DataAccess.Exceptions.TaskRepositoryExceptions;
 
 namespace DataAccess;
 
-public class ProjectRepository : IRepository<Project>
+public class ProjectRepository : IProjectRepository
 {
     protected readonly AppDbContext _db;
 
