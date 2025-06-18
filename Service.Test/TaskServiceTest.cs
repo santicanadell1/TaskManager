@@ -695,7 +695,6 @@ namespace Service.Test
             Task task1Entity = _repositoryManager.TaskRepository.Get(t => t.Title == "Task 1");
             TaskDTO taskDTO = _taskService.GetTask("Generic Project", task1Entity.Title);
 
-            Console.WriteLine($"Slack value: {taskDTO.Slack}");
             TimeSpan maxSlack = TimeSpan.FromMilliseconds(1);
             Assert.IsTrue(taskDTO.Slack >= TimeSpan.Zero && taskDTO.Slack <= maxSlack,
                 $"El valor de Slack no está dentro del rango esperado: {taskDTO.Slack}");
