@@ -6,6 +6,10 @@ using Newtonsoft.Json;
 using Service.Exceptions.ExporterExeptions;
 using Service.Exceptions.LeaderPServiceException;
 using Service.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Service.Test;
 
@@ -30,7 +34,7 @@ public class LeaderPService_Test
     [TestInitialize]
     public void TestSetUp()
     {
-        var contextFactory = new InMemoryAppContextFactory();
+        InMemoryAppContextFactory contextFactory = new InMemoryAppContextFactory();
         _context = contextFactory.CreateDbContext();
 
         _context.Database.EnsureDeleted();
@@ -79,8 +83,8 @@ public class LeaderPService_Test
         _userService.AddUser(leaderUserDTO);
         _userService.AddUser(normalUserDTO);
 
-        var leaderUser = _repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
-        var adminUser = _repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
+        User leaderUser = _repositoryManager.UserRepository.Get(u => u.Email == "leader.user@example.com");
+        User adminUser = _repositoryManager.UserRepository.Get(u => u.Email == "admin.user@example.com");
 
         project = new Project
         {
@@ -105,7 +109,7 @@ public class LeaderPService_Test
         };
         _taskService.AddTask("Test Project", initialTask);
 
-        var createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
+        Project createdProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
     }
 
     [TestCleanup]
@@ -117,20 +121,15 @@ public class LeaderPService_Test
     [TestMethod]
     public void LeaderPService_ShouldReturnMyProjects_WhenUserIsProjectLeader()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var
-            leaderUser =
-                _userService.GetUser(
-                    "leader.user@example.com");
-        var
-            adminUser = _userService.GetUser(
-                "admin.user@example.com");
+        UserDTO leaderUser = _userService.GetUser("leader.user@example.com");
+        UserDTO adminUser = _userService.GetUser("admin.user@example.com");
 
-        var project = new ProjectDTO
+        ProjectDTO project = new ProjectDTO
         {
             Name = "Test Project Direct",
             Description = "Test project description",
@@ -141,12 +140,12 @@ public class LeaderPService_Test
         _adminService.CreateProject(project);
         _adminService.SetProjectLeader(project.Name, leaderUser.Email);
 
-        var verifyProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project Direct");
+        Project verifyProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project Direct");
         Assert.IsNotNull(verifyProject?.ProjectLeader, "Project leader should not be null after direct creation");
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var projects = _leaderService.GetAllMyProjects();
+        List<ProjectDTO> projects = _leaderService.GetAllMyProjects();
 
         Assert.AreEqual(1, projects.Count);
         Assert.AreEqual("Test Project Direct", projects[0].Name);
@@ -158,7 +157,7 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var taskDTO = new TaskDTO
+        TaskDTO taskDTO = new TaskDTO
         {
             Title = "Test Task",
             Description = "Test task description",
@@ -176,7 +175,7 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var updatedTask = new TaskDTO
+        TaskDTO updatedTask = new TaskDTO
         {
             Title = "Initial Task",
             Description = "Updated description by leader",
@@ -188,7 +187,7 @@ public class LeaderPService_Test
 
         _leaderService.UpdateTask("Test Project", "Initial Task", updatedTask);
 
-        var retrievedTask = _leaderService.GetTask("Test Project", "Initial Task");
+        TaskDTO retrievedTask = _leaderService.GetTask("Test Project", "Initial Task");
         Assert.AreEqual("Updated description by leader", retrievedTask.Description);
         Assert.AreEqual(5, retrievedTask.Duration);
         Assert.AreEqual(StateDTO.DOING, retrievedTask.State);
@@ -200,7 +199,7 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var taskDTO = new TaskDTO
+        TaskDTO taskDTO = new TaskDTO
         {
             Title = "Nonexistent Task",
             Description = "This task doesn't exist",
@@ -218,7 +217,7 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var task2 = new TaskDTO
+        TaskDTO task2 = new TaskDTO
         {
             Title = "Task 2",
             Description = "Second task",
@@ -232,7 +231,7 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var tasks = _leaderService.GetTasks("Test Project");
+        List<TaskDTO> tasks = _leaderService.GetTasks("Test Project");
         Assert.AreEqual(2, tasks.Count);
         Assert.IsTrue(tasks.Any(t => t.Title == "Initial Task"));
         Assert.IsTrue(tasks.Any(t => t.Title == "Task 2"));
@@ -243,7 +242,7 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var retrievedTask = _leaderService.GetTask("Test Project", "Initial Task");
+        TaskDTO retrievedTask = _leaderService.GetTask("Test Project", "Initial Task");
 
         Assert.IsNotNull(retrievedTask);
         Assert.AreEqual("Initial Task", retrievedTask.Title);
@@ -256,7 +255,7 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var anotherLeader = new UserDTO
+        UserDTO anotherLeader = new UserDTO
         {
             FirstName = "Another",
             LastName = "Leader",
@@ -268,7 +267,7 @@ public class LeaderPService_Test
 
         _userService.AddUser(anotherLeader);
 
-        var anotherProject = new ProjectDTO
+        ProjectDTO anotherProject = new ProjectDTO
         {
             Name = "Another Project",
             Description = "Another project description",
@@ -280,7 +279,7 @@ public class LeaderPService_Test
 
         _adminService.CreateProject(anotherProject);
 
-        var taskForAnotherProject = new TaskDTO
+        TaskDTO taskForAnotherProject = new TaskDTO
         {
             Title = "Task in Another Project",
             Description = "Task for unauthorized access test",
@@ -293,7 +292,7 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var taskDTO = new TaskDTO
+        TaskDTO taskDTO = new TaskDTO
         {
             Title = "Task in Another Project",
             Description = "Updated description - this should fail",
@@ -311,7 +310,7 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var projectDTO = _leaderService.GetProject("Test Project");
+        ProjectDTO projectDTO = _leaderService.GetProject("Test Project");
 
         Console.WriteLine($"ProjectDTO: {projectDTO != null}");
         Console.WriteLine($"ProjectDTO.Name: {projectDTO?.Name}");
@@ -325,7 +324,7 @@ public class LeaderPService_Test
 
         if (projectDTO.ProjectLeader == null)
         {
-            var originalProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
+            Project originalProject = _repositoryManager.ProjectRepository.Get(p => p.Name == "Test Project");
             Console.WriteLine($"Original project leader: {originalProject?.ProjectLeader?.Email}");
         }
 
@@ -335,11 +334,11 @@ public class LeaderPService_Test
 
     [TestMethod]
     [ExpectedException(typeof(UnauthorizedLeaderAccessException))]
-    public void LeaderPService_ShouldThrowUnauthorizedAccessException_WhenUserIsNotProjectLeader()
+    public void LeaderPService_ShouldThrowUnathorizedAccessException_WhenUserIsNotProjectLeader()
     {
         _loginService.LoginUser("normal.user@example.com", "Password123@");
 
-        var taskDTO = new TaskDTO
+        TaskDTO taskDTO = new TaskDTO
         {
             Title = "Initial Task",
             Description = "This should fail",
@@ -351,7 +350,6 @@ public class LeaderPService_Test
 
         _leaderService.UpdateTask("Test Project", "Initial Task", taskDTO);
     }
-
 
     [TestMethod]
     [ExpectedException(typeof(ProjectNotFoundException))]
@@ -365,7 +363,7 @@ public class LeaderPService_Test
     [TestMethod]
     public void LeaderPService_ShouldRemoveTempAdminProjectRole_AfterAssigningMembers()
     {
-        var membersToAdd = new List<UserDTO>
+        List<UserDTO> membersToAdd = new List<UserDTO>
         {
             _userService.GetUser(normalUserDTO.Email)
         };
@@ -377,7 +375,7 @@ public class LeaderPService_Test
     [TestMethod]
     public void GetAllMembersOfAProject_ShouldGetMembers_WhenUserIsAdmin()
     {
-        var membersToAdd = new List<UserDTO>
+        List<UserDTO> membersToAdd = new List<UserDTO>
         {
             _userService.GetUser(normalUserDTO.Email)
         };
@@ -386,7 +384,7 @@ public class LeaderPService_Test
 
         _leaderService.AssignMembersToProject(project.Name, membersToAdd);
 
-        var members = _leaderService.GetAllMembersOfAProject(project.Name);
+        List<UserDTO> members = _leaderService.GetAllMembersOfAProject(project.Name);
 
         Assert.IsTrue(members.Exists(m => m.Email == normalUserDTO.Email));
     }
@@ -394,7 +392,7 @@ public class LeaderPService_Test
     [TestMethod]
     public void RemoveMember_ShouldRemoveMember_WhenUserIsAdmin()
     {
-        var membersToAdd = new List<UserDTO>
+        List<UserDTO> membersToAdd = new List<UserDTO>
         {
             _userService.GetUser(normalUserDTO.Email)
         };
@@ -416,7 +414,7 @@ public class LeaderPService_Test
     [TestMethod]
     public void GetAllTaskForAMemberInAProject_ShouldReturnTasks_WhenUserIsAdmin()
     {
-        var membersToAdd = new List<UserDTO>
+        List<UserDTO> membersToAdd = new List<UserDTO>
         {
             _userService.GetUser(normalUserDTO.Email)
         };
@@ -425,7 +423,7 @@ public class LeaderPService_Test
 
         _leaderService.AssignMembersToProject(project.Name, membersToAdd);
 
-        var task1 = new TaskDTO
+        TaskDTO task1 = new TaskDTO
         {
             Title = "Task 1",
             Description = "Task 1 description",
@@ -435,7 +433,7 @@ public class LeaderPService_Test
             Resources = new List<ResourceDTO>()
         };
 
-        var task2 = new TaskDTO
+        TaskDTO task2 = new TaskDTO
         {
             Title = "Task 2",
             Description = "Task 2 description",
@@ -454,7 +452,7 @@ public class LeaderPService_Test
 
         _loginService.LoginUser(leaderUserDTO.Email, leaderUserDTO.Password);
 
-        var tasksForMember = _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
+        List<TaskDTO> tasksForMember = _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
 
         Assert.IsNotNull(tasksForMember);
         Assert.AreEqual(2, tasksForMember.Count);
@@ -465,7 +463,7 @@ public class LeaderPService_Test
     [TestMethod]
     public void AddTaskToMember_ShouldAddTask_WhenUserIsAdmin()
     {
-        var membersToAdd = new List<UserDTO>
+        List<UserDTO> membersToAdd = new List<UserDTO>
         {
             _userService.GetUser(normalUserDTO.Email)
         };
@@ -477,17 +475,16 @@ public class LeaderPService_Test
 
         _leaderService.AddTaskToMember(project.Name, normalUserDTO.Email, initialTask.Title);
 
-        var tasksForMember = _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
+        List<TaskDTO> tasksForMember = _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
         Assert.IsNotNull(tasksForMember);
         Assert.IsTrue(tasksForMember.Any(t => t.Title == initialTask.Title),
             "The task should be added to the member's task list.");
     }
 
-
     [TestMethod]
     public void RemoveTaskFromMember_ShouldRemoveTask_WhenUserIsAdmin()
     {
-        var membersToAdd = new List<UserDTO>
+        List<UserDTO> membersToAdd = new List<UserDTO>
         {
             _userService.GetUser(normalUserDTO.Email)
         };
@@ -496,14 +493,12 @@ public class LeaderPService_Test
         _leaderService.AssignMembersToProject(project.Name, membersToAdd);
         _leaderService.AddTaskToMember(project.Name, normalUserDTO.Email, initialTask.Title);
 
-        var tasksBeforeRemoval =
-            _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
+        List<TaskDTO> tasksBeforeRemoval = _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
         Assert.IsTrue(tasksBeforeRemoval.Any(t => t.Title == initialTask.Title), "Task should exist before removal");
 
         _leaderService.RemoveTaskFromMember(project.Name, normalUserDTO.Email, initialTask.Title);
 
-        var tasksAfterRemoval =
-            _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
+        List<TaskDTO> tasksAfterRemoval = _leaderService.GetAllTaskForAMemberInAProject(project.Name, normalUserDTO.Email);
         Assert.IsFalse(tasksAfterRemoval.Any(t => t.Title == initialTask.Title),
             "Task should be removed from the member's task list.");
     }
@@ -511,14 +506,14 @@ public class LeaderPService_Test
     [TestMethod]
     public void ExportProjects_CSV_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var baseDate = DateTime.Now.AddDays(10);
+        DateTime baseDate = DateTime.Now.AddDays(10);
 
-        var project1 = new ProjectDTO
+        ProjectDTO project1 = new ProjectDTO
         {
             Name = "Proyecto A",
             Description = "Primer proyecto",
@@ -526,7 +521,7 @@ public class LeaderPService_Test
             AdminProyect = _userService.GetUser("admin.user@example.com")
         };
 
-        var project2 = new ProjectDTO
+        ProjectDTO project2 = new ProjectDTO
         {
             Name = "Proyecto B",
             Description = "Segundo proyecto",
@@ -540,8 +535,7 @@ public class LeaderPService_Test
         _adminService.SetProjectLeader("Proyecto A", "leader.user@example.com");
         _adminService.SetProjectLeader("Proyecto B", "leader.user@example.com");
 
-
-        var tarea1_A = new TaskDTO
+        TaskDTO tarea1_A = new TaskDTO
         {
             Title = "Tarea Z",
             Description = "Tercera tarea del proyecto A",
@@ -553,7 +547,7 @@ public class LeaderPService_Test
             Resources = new List<ResourceDTO>()
         };
 
-        var tarea2_A = new TaskDTO
+        TaskDTO tarea2_A = new TaskDTO
         {
             Title = "Alpha",
             Description = "Cuarta tarea del proyecto A",
@@ -565,7 +559,7 @@ public class LeaderPService_Test
             Resources = new List<ResourceDTO>()
         };
 
-        var tarea3_A = new TaskDTO
+        TaskDTO tarea3_A = new TaskDTO
         {
             Title = "Zebra",
             Description = "Primera tarea del proyecto A",
@@ -577,7 +571,7 @@ public class LeaderPService_Test
             Resources = new List<ResourceDTO>()
         };
 
-        var tarea4_A = new TaskDTO
+        TaskDTO tarea4_A = new TaskDTO
         {
             Title = "Medio",
             Description = "Segunda tarea del proyecto A",
@@ -589,7 +583,7 @@ public class LeaderPService_Test
             Resources = new List<ResourceDTO>()
         };
 
-        var tarea1_B = new TaskDTO
+        TaskDTO tarea1_B = new TaskDTO
         {
             Title = "T1",
             Description = "Tarea del proyecto B",
@@ -609,21 +603,21 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+        CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+        LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
-        var csvResult = leaderServiceWithCsv.ExportProjects();
+        string csvResult = leaderServiceWithCsv.ExportProjects();
         Assert.IsNotNull(csvResult);
 
-        var expectedDateA = baseDate.ToString("dd/MM/yyyy");
-        var expectedDateB = baseDate.AddDays(10).ToString("dd/MM/yyyy");
-        var expectedDateT1 = baseDate.AddDays(1).ToString("dd/MM/yyyy");
-        var expectedDateT2 = baseDate.AddDays(3).ToString("dd/MM/yyyy");
-        var expectedDateT3 = baseDate.AddDays(2).ToString("dd/MM/yyyy");
-        var expectedDateT4 = baseDate.AddDays(4).ToString("dd/MM/yyyy");
-        var expectedDateT5 = baseDate.AddDays(11).ToString("dd/MM/yyyy");
+        string expectedDateA = baseDate.ToString("dd/MM/yyyy");
+        string expectedDateB = baseDate.AddDays(10).ToString("dd/MM/yyyy");
+        string expectedDateT1 = baseDate.AddDays(1).ToString("dd/MM/yyyy");
+        string expectedDateT2 = baseDate.AddDays(3).ToString("dd/MM/yyyy");
+        string expectedDateT3 = baseDate.AddDays(2).ToString("dd/MM/yyyy");
+        string expectedDateT4 = baseDate.AddDays(4).ToString("dd/MM/yyyy");
+        string expectedDateT5 = baseDate.AddDays(11).ToString("dd/MM/yyyy");
 
-        var lines = csvResult
+        string[] lines = csvResult
             .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
         Assert.AreEqual($"Proyecto A,{expectedDateA}", lines[0], "La primera línea debe ser 'Proyecto A,fecha'");
@@ -631,32 +625,30 @@ public class LeaderPService_Test
         Assert.AreEqual($"Tarea Z,{expectedDateT1},S", lines[2], "Segunda tarea debe ser Tarea Z con crítico S");
         Assert.AreEqual($"Medio,{expectedDateT4},S", lines[3], "Tercera tarea debe ser Medio con crítico S");
         Assert.AreEqual($"Alpha,{expectedDateT2},S", lines[4], "Cuarta tarea debe ser Alpha con crítico S");
-        var idxB = Array.FindIndex(lines, l => l.StartsWith("Proyecto B,"));
+        int idxB = Array.FindIndex(lines, l => l.StartsWith("Proyecto B,"));
         Assert.IsTrue(idxB > 0, "Debe existir una línea que empiece con 'Proyecto B,'");
         Assert.AreEqual($"Proyecto B,{expectedDateB}", lines[idxB], "Línea de Proyecto B incorrecta");
         Assert.AreEqual($"T1,{expectedDateT5},S", lines[idxB + 1], "Tarea T1 de Proyecto B incorrecta");
     }
 
-
     [TestMethod]
     public void ExportProjects_JSON_ShouldReturnCorrectFormat_WhenUserIsProjectLeader()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var baseDate = DateTime.Now.AddDays(10);
+        DateTime baseDate = DateTime.Now.AddDays(10);
 
-
-        var project1 = new ProjectDTO
+        ProjectDTO project1 = new ProjectDTO
         {
             Name = "Proyecto A",
             Description = "Primer proyecto",
             StartDate = baseDate,
             AdminProyect = _userService.GetUser("admin.user@example.com")
         };
-        var project2 = new ProjectDTO
+        ProjectDTO project2 = new ProjectDTO
         {
             Name = "Proyecto B",
             Description = "Segundo proyecto",
@@ -666,12 +658,10 @@ public class LeaderPService_Test
         _adminService.CreateProject(project1);
         _adminService.CreateProject(project2);
 
-
         _adminService.SetProjectLeader("Proyecto A", "leader.user@example.com");
         _adminService.SetProjectLeader("Proyecto B", "leader.user@example.com");
 
-
-        var tarea1_A = new TaskDTO
+        TaskDTO tarea1_A = new TaskDTO
         {
             Title = "Tarea Z",
             Description = "Tercera tarea del proyecto A",
@@ -682,7 +672,7 @@ public class LeaderPService_Test
             IsCritical = false,
             Resources = new List<ResourceDTO>()
         };
-        var tarea2_A = new TaskDTO
+        TaskDTO tarea2_A = new TaskDTO
         {
             Title = "Alpha",
             Description = "Cuarta tarea del proyecto A",
@@ -693,7 +683,7 @@ public class LeaderPService_Test
             IsCritical = true,
             Resources = new List<ResourceDTO>()
         };
-        var tarea3_A = new TaskDTO
+        TaskDTO tarea3_A = new TaskDTO
         {
             Title = "Zebra",
             Description = "Primera tarea del proyecto A",
@@ -704,7 +694,7 @@ public class LeaderPService_Test
             IsCritical = true,
             Resources = new List<ResourceDTO>()
         };
-        var tarea4_A = new TaskDTO
+        TaskDTO tarea4_A = new TaskDTO
         {
             Title = "Medio",
             Description = "Segunda tarea del proyecto A",
@@ -716,8 +706,7 @@ public class LeaderPService_Test
             Resources = new List<ResourceDTO>()
         };
 
-
-        var tarea1_B = new TaskDTO
+        TaskDTO tarea1_B = new TaskDTO
         {
             Title = "T1",
             Description = "Tarea del proyecto B",
@@ -729,23 +718,19 @@ public class LeaderPService_Test
             Resources = new List<ResourceDTO>()
         };
 
-
         _taskService.AddTask("Proyecto A", tarea1_A);
         _taskService.AddTask("Proyecto A", tarea2_A);
         _taskService.AddTask("Proyecto A", tarea3_A);
         _taskService.AddTask("Proyecto A", tarea4_A);
         _taskService.AddTask("Proyecto B", tarea1_B);
 
-
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var jsonExporter = new JSONExporter(_repositoryManager);
-        var leaderServiceWithJson = new LeaderPService(_repositoryManager, jsonExporter);
+        JSONExporter jsonExporter = new JSONExporter(_repositoryManager);
+        LeaderPService leaderServiceWithJson = new LeaderPService(_repositoryManager, jsonExporter);
 
-
-        var jsonResult = leaderServiceWithJson.ExportProjects();
+        string jsonResult = leaderServiceWithJson.ExportProjects();
         Assert.IsNotNull(jsonResult);
-
 
         Assert.IsTrue(jsonResult.Contains("\"Project\""));
         Assert.IsTrue(jsonResult.Contains("\"StartDate\""));
@@ -755,7 +740,6 @@ public class LeaderPService_Test
         Assert.IsTrue(jsonResult.Contains("\"IsCritical\""));
         Assert.IsTrue(jsonResult.Contains("\"Resources\""));
 
-
         Assert.IsTrue(jsonResult.Contains("\"Proyecto A\""));
         Assert.IsTrue(jsonResult.Contains("\"Proyecto B\""));
         Assert.IsTrue(jsonResult.Contains("\"Zebra\""));
@@ -764,14 +748,13 @@ public class LeaderPService_Test
         Assert.IsTrue(jsonResult.Contains("\"Alpha\""));
         Assert.IsTrue(jsonResult.Contains("\"T1\""));
 
-
-        var dA = baseDate.ToString("dd/MM/yyyy");
-        var dB = baseDate.AddDays(10).ToString("dd/MM/yyyy");
-        var dt1 = baseDate.AddDays(1).ToString("dd/MM/yyyy");
-        var dt2 = baseDate.AddDays(3).ToString("dd/MM/yyyy");
-        var dt3 = baseDate.AddDays(2).ToString("dd/MM/yyyy");
-        var dt4 = baseDate.AddDays(4).ToString("dd/MM/yyyy");
-        var dt5 = baseDate.AddDays(11).ToString("dd/MM/yyyy");
+        string dA = baseDate.ToString("dd/MM/yyyy");
+        string dB = baseDate.AddDays(10).ToString("dd/MM/yyyy");
+        string dt1 = baseDate.AddDays(1).ToString("dd/MM/yyyy");
+        string dt2 = baseDate.AddDays(3).ToString("dd/MM/yyyy");
+        string dt3 = baseDate.AddDays(2).ToString("dd/MM/yyyy");
+        string dt4 = baseDate.AddDays(4).ToString("dd/MM/yyyy");
+        string dt5 = baseDate.AddDays(11).ToString("dd/MM/yyyy");
 
         Assert.IsTrue(jsonResult.Contains($"\"{dA}\""), $"Debe contener la fecha {dA}");
         Assert.IsTrue(jsonResult.Contains($"\"{dB}\""), $"Debe contener la fecha {dB}");
@@ -790,46 +773,44 @@ public class LeaderPService_Test
         Assert.IsTrue(jsonResult.Contains("\"Duration\": 2"));
         Assert.IsTrue(jsonResult.Contains("\"Resources\": []"));
 
-
-        var projects = JsonConvert.DeserializeObject<List<dynamic>>(jsonResult);
+        List<dynamic> projects = JsonConvert.DeserializeObject<List<dynamic>>(jsonResult);
         Assert.AreEqual(2, projects.Count, "Debe haber exactamente 2 proyectos");
 
         Assert.AreEqual("Proyecto A", (string)projects[0].Project);
         Assert.AreEqual("Proyecto B", (string)projects[1].Project);
 
-        var tasksA = projects[0].Tasks;
+        dynamic tasksA = projects[0].Tasks;
         Assert.AreEqual(4, tasksA.Count, "Proyecto A debe tener 4 tareas");
         Assert.AreEqual("Zebra", (string)tasksA[0].Task);
         Assert.AreEqual("Tarea Z", (string)tasksA[1].Task);
         Assert.AreEqual("Medio", (string)tasksA[2].Task);
         Assert.AreEqual("Alpha", (string)tasksA[3].Task);
 
-        var tasksB = projects[1].Tasks;
+        dynamic tasksB = projects[1].Tasks;
         Assert.AreEqual(1, tasksB.Count, "Proyecto B debe tener 1 tarea");
         Assert.AreEqual("T1", (string)tasksB[0].Task);
     }
 
-
     [TestMethod]
     public void ExportProjects_JSON_ShouldReturnEmptyArray_WhenNoProjectsExist()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var jsonExporter = new JSONExporter(_repositoryManager);
-        var leaderServiceWithJson = new LeaderPService(_repositoryManager, jsonExporter);
+        JSONExporter jsonExporter = new JSONExporter(_repositoryManager);
+        LeaderPService leaderServiceWithJson = new LeaderPService(_repositoryManager, jsonExporter);
 
-        var jsonResult = leaderServiceWithJson.ExportProjects();
+        string jsonResult = leaderServiceWithJson.ExportProjects();
 
         Assert.IsNotNull(jsonResult, "El resultado no debe ser null");
 
-        var deserializedResult = JsonConvert.DeserializeObject<List<object>>(jsonResult);
+        List<object> deserializedResult = JsonConvert.DeserializeObject<List<object>>(jsonResult);
         Assert.IsNotNull(deserializedResult, "El resultado deserializado no debe ser null");
         Assert.AreEqual(0, deserializedResult.Count, "El array debe estar vacío cuando no hay proyectos");
 
-        var normalizedJson = jsonResult.Replace(" ", "").Replace("\n", "").Replace("\r", "");
+        string normalizedJson = jsonResult.Replace(" ", "").Replace("\n", "").Replace("\r", "");
         Assert.AreEqual("[]", normalizedJson, "El JSON debe ser un array vacío");
 
         Console.WriteLine("=== RESULTADO JSON SIN PROYECTOS ===");
@@ -839,18 +820,18 @@ public class LeaderPService_Test
     [TestMethod]
     public void ExportProjects_CSV_ShouldReturnEmpty_WhenNoProjectsExist()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
-        var csvResult = leaderServiceWithCsv.ExportProjects();
+        CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+        LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+        string csvResult = leaderServiceWithCsv.ExportProjects();
         Assert.IsNotNull(csvResult, "El resultado no debe ser null");
-        var trimmed = csvResult.Trim();
+        string trimmed = csvResult.Trim();
         Assert.IsTrue(string.IsNullOrEmpty(trimmed),
             "Debe devolver cadena vacía cuando no hay proyectos");
-        var lines = csvResult
+        string[] lines = csvResult
             .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         Assert.AreEqual(0, lines.Length,
             "No debe haber líneas cuando no hay proyectos");
@@ -863,14 +844,14 @@ public class LeaderPService_Test
     [TestMethod]
     public void ExportProjects_CSV_ShouldEscapeFieldsWithCommas()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var baseDate = DateTime.Now.AddDays(10);
+        DateTime baseDate = DateTime.Now.AddDays(10);
 
-        var projectWithCommas = new ProjectDTO
+        ProjectDTO projectWithCommas = new ProjectDTO
         {
             Name = "Proyecto, con comas",
             Description = "Proyecto con comas en el nombre",
@@ -881,7 +862,7 @@ public class LeaderPService_Test
         _adminService.CreateProject(projectWithCommas);
         _adminService.SetProjectLeader("Proyecto, con comas", "leader.user@example.com");
 
-        var taskWithCommas = new TaskDTO
+        TaskDTO taskWithCommas = new TaskDTO
         {
             Title = "Tarea, con comas",
             Description = "Tarea con comas",
@@ -897,10 +878,10 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+        CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+        LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
-        var csvResult = leaderServiceWithCsv.ExportProjects();
+        string csvResult = leaderServiceWithCsv.ExportProjects();
 
         Assert.IsTrue(csvResult.Contains("\"Proyecto, con comas\""));
         Assert.IsTrue(csvResult.Contains("\"Tarea, con comas\""));
@@ -909,14 +890,14 @@ public class LeaderPService_Test
     [TestMethod]
     public void ExportProjects_CSV_ShouldEscapeFieldsWithQuotes()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var baseDate = DateTime.Now.AddDays(10);
+        DateTime baseDate = DateTime.Now.AddDays(10);
 
-        var projectWithQuotes = new ProjectDTO
+        ProjectDTO projectWithQuotes = new ProjectDTO
         {
             Name = "Proyecto \"con comillas\"",
             Description = "Proyecto con comillas",
@@ -927,7 +908,7 @@ public class LeaderPService_Test
         _adminService.CreateProject(projectWithQuotes);
         _adminService.SetProjectLeader("Proyecto \"con comillas\"", "leader.user@example.com");
 
-        var taskWithQuotes = new TaskDTO
+        TaskDTO taskWithQuotes = new TaskDTO
         {
             Title = "Tarea \"con comillas\"",
             Description = "Tarea con comillas",
@@ -943,10 +924,10 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+        CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+        LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
-        var csvResult = leaderServiceWithCsv.ExportProjects();
+        string csvResult = leaderServiceWithCsv.ExportProjects();
 
         Assert.IsTrue(csvResult.Contains("\"Proyecto \"\"con comillas\"\"\""));
         Assert.IsTrue(csvResult.Contains("\"Tarea \"\"con comillas\"\"\""));
@@ -955,14 +936,14 @@ public class LeaderPService_Test
     [TestMethod]
     public void ExportProjects_CSV_ShouldEscapeFieldsWithNewlines()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var baseDate = DateTime.Now.AddDays(10);
+        DateTime baseDate = DateTime.Now.AddDays(10);
 
-        var projectWithNewlines = new ProjectDTO
+        ProjectDTO projectWithNewlines = new ProjectDTO
         {
             Name = "Proyecto\ncon saltos",
             Description = "Proyecto con saltos de línea",
@@ -975,25 +956,24 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+        CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+        LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
-        var csvResult = leaderServiceWithCsv.ExportProjects();
-
+        string csvResult = leaderServiceWithCsv.ExportProjects();
         Assert.IsTrue(csvResult.Contains("\"Proyecto\ncon saltos\""));
     }
 
     [TestMethod]
     public void ExportProjects_CSV_ShouldHandleEmptyFields()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var baseDate = DateTime.Now.AddDays(10);
+        DateTime baseDate = DateTime.Now.AddDays(10);
 
-        var projectWithValid = new ProjectDTO
+        ProjectDTO projectWithValid = new ProjectDTO
         {
             Name = "Proyecto Valido",
             Description = "Proyecto válido para test de campos vacíos",
@@ -1004,7 +984,7 @@ public class LeaderPService_Test
         _adminService.CreateProject(projectWithValid);
         _adminService.SetProjectLeader("Proyecto Valido", "leader.user@example.com");
 
-        var taskWithEmpty = new TaskDTO
+        TaskDTO taskWithEmpty = new TaskDTO
         {
             Title = "Tarea Valida",
             Description = "Tarea válida sin recursos",
@@ -1020,31 +1000,30 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+        CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+        LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
-        var csvResult = leaderServiceWithCsv.ExportProjects();
+        string csvResult = leaderServiceWithCsv.ExportProjects();
 
         Assert.IsNotNull(csvResult);
         Assert.IsTrue(csvResult.Contains("Proyecto Valido"));
         Assert.IsTrue(csvResult.Contains("Tarea Valida"));
 
-        var lines = csvResult.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] lines = csvResult.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         Assert.IsTrue(lines.Length > 0);
     }
 
     [TestMethod]
     public void ExportProjects_CSV_ShouldIncludeResourcesInSeparateLines()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var baseDate = DateTime.Now.AddDays(10);
+        DateTime baseDate = DateTime.Now.AddDays(10);
 
-
-        var project = new ProjectDTO
+        ProjectDTO project = new ProjectDTO
         {
             Name = "Proyecto con Recursos",
             Description = "Proyecto con recursos",
@@ -1055,7 +1034,7 @@ public class LeaderPService_Test
         _adminService.CreateProject(project);
         _adminService.SetProjectLeader("Proyecto con Recursos", "leader.user@example.com");
 
-        var taskWithEmptyResources = new TaskDTO
+        TaskDTO taskWithEmptyResources = new TaskDTO
         {
             Title = "Tarea con Lista Recursos",
             Description = "Tarea para probar lógica de recursos",
@@ -1071,30 +1050,30 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+        CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+        LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
-        var csvResult = leaderServiceWithCsv.ExportProjects();
+        string csvResult = leaderServiceWithCsv.ExportProjects();
 
         Assert.IsNotNull(csvResult);
         Assert.IsTrue(csvResult.Contains("Proyecto con Recursos"));
         Assert.IsTrue(csvResult.Contains("Tarea con Lista Recursos"));
 
-        var lines = csvResult.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] lines = csvResult.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         Assert.IsTrue(lines.Length >= 2);
     }
 
     [TestMethod]
     public void ExportProjects_CSV_ShouldHandleTasksWithoutResources()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var baseDate = DateTime.Now.AddDays(10);
+        DateTime baseDate = DateTime.Now.AddDays(10);
 
-        var project = new ProjectDTO
+        ProjectDTO project = new ProjectDTO
         {
             Name = "Proyecto Sin Recursos",
             Description = "Proyecto sin recursos",
@@ -1105,7 +1084,7 @@ public class LeaderPService_Test
         _adminService.CreateProject(project);
         _adminService.SetProjectLeader("Proyecto Sin Recursos", "leader.user@example.com");
 
-        var taskWithoutResources = new TaskDTO
+        TaskDTO taskWithoutResources = new TaskDTO
         {
             Title = "Tarea Sin Recursos",
             Description = "Tarea sin recursos",
@@ -1121,11 +1100,10 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var csvExporter = new CSVExporter(_repositoryManager);
-        var leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
+        CSVExporter csvExporter = new CSVExporter(_repositoryManager);
+        LeaderPService leaderServiceWithCsv = new LeaderPService(_repositoryManager, csvExporter);
 
-        var csvResult = leaderServiceWithCsv.ExportProjects();
-
+        string csvResult = leaderServiceWithCsv.ExportProjects();
         Assert.IsNotNull(csvResult);
         Assert.IsTrue(csvResult.Contains("Proyecto Sin Recursos"));
         Assert.IsTrue(csvResult.Contains("Tarea Sin Recursos"));
@@ -1135,13 +1113,13 @@ public class LeaderPService_Test
     [ExpectedException(typeof(NullProjectsCanNotBeImported))]
     public void ExportProjects_ShouldThrowNullProjectsCanNotBeImported_WhenProjectsListIsNull()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var testExporter = new TestExporterForNull();
-        var leaderServiceWithTestExporter = new LeaderPService(_repositoryManager, testExporter);
+        TestExporterForNull testExporter = new TestExporterForNull();
+        LeaderPService leaderServiceWithTestExporter = new LeaderPService(_repositoryManager, testExporter);
 
         testExporter.SimulateNullProjects();
     }
@@ -1149,14 +1127,14 @@ public class LeaderPService_Test
     [TestMethod]
     public void ExportProjects_ShouldFilterNullProjects_WhenProjectsListContainsNullElements()
     {
-        var existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
-        foreach (var proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
+        List<Project> existingProjects = _repositoryManager.ProjectRepository.GetAll().ToList();
+        foreach (Project proj in existingProjects) _repositoryManager.ProjectRepository.Delete(proj);
 
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var baseDate = DateTime.Now.AddDays(10);
+        DateTime baseDate = DateTime.Now.AddDays(10);
 
-        var validProject = new ProjectDTO
+        ProjectDTO validProject = new ProjectDTO
         {
             Name = "Valid Project",
             Description = "Valid project for null test",
@@ -1169,10 +1147,10 @@ public class LeaderPService_Test
 
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var testExporter = new TestExporterWithNullElements();
-        var leaderServiceWithTestExporter = new LeaderPService(_repositoryManager, testExporter);
+        TestExporterWithNullElements testExporter = new TestExporterWithNullElements();
+        LeaderPService leaderServiceWithTestExporter = new LeaderPService(_repositoryManager, testExporter);
 
-        var result = leaderServiceWithTestExporter.ExportProjects();
+        string result = leaderServiceWithTestExporter.ExportProjects();
 
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("1 valid project"));
@@ -1184,7 +1162,7 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var projectWithoutLeader = new ProjectDTO
+        ProjectDTO projectWithoutLeader = new ProjectDTO
         {
             Name = "Project Without Leader",
             Description = "Project that has no leader assigned",
@@ -1195,7 +1173,7 @@ public class LeaderPService_Test
 
         _adminService.CreateProject(projectWithoutLeader);
 
-        var testAdminService = new TestAdminPServiceForException(_repositoryManager);
+        TestAdminPServiceForException testAdminService = new TestAdminPServiceForException(_repositoryManager);
         testAdminService.TriggerProjectDoesNotHaveLeaderException("Project Without Leader");
     }
 
@@ -1205,7 +1183,7 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("admin.user@example.com", "AdminPassword123@");
 
-        var projectWithLeader = new ProjectDTO
+        ProjectDTO projectWithLeader = new ProjectDTO
         {
             Name = "Project With Leader",
             Description = "Project that already has a leader",
@@ -1216,7 +1194,7 @@ public class LeaderPService_Test
         _adminService.CreateProject(projectWithLeader);
         _adminService.SetProjectLeader("Project With Leader", "leader.user@example.com");
 
-        var anotherLeader = new UserDTO
+        UserDTO anotherLeader = new UserDTO
         {
             FirstName = "Another",
             LastName = "Leader",
@@ -1237,8 +1215,8 @@ public class LeaderPService_Test
     {
         _loginService.LoginUser("leader.user@example.com", "LeaderPassword123@");
 
-        var failingExporter = new FailingExporter();
-        var leaderServiceWithFailingExporter = new LeaderPService(_repositoryManager, failingExporter);
+        FailingExporter failingExporter = new FailingExporter();
+        LeaderPService leaderServiceWithFailingExporter = new LeaderPService(_repositoryManager, failingExporter);
 
         leaderServiceWithFailingExporter.ExportProjects();
     }
