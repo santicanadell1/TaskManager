@@ -21,7 +21,7 @@
             @if (notifications.Any())
             {
                 <ul>
-                    @foreach (var notification in notifications)
+                    @foreach (NotificationDTO notification in notifications)
                     {
                         <li>
                             <div>
@@ -64,7 +64,7 @@
     {
         try
         {
-            var loggedUser = LoginService.GetLoggedUser();
+            UserDTO loggedUser = LoginService.GetLoggedUser();
             if (loggedUser != null)
             {
                 notifications = NotificationService.GetNotificationsForUser(loggedUser.Email);
@@ -87,7 +87,7 @@
     {
         try
         {
-            var loggedUser = LoginService.GetLoggedUser();
+            UserDTO loggedUser = LoginService.GetLoggedUser();
             if (loggedUser != null)
             {
                 NotificationService.RemoveNotificationFromUser(loggedUser.Email, notificationId);
