@@ -124,6 +124,10 @@ public class AdminSService : IAdminSService
             user.Roles.Remove(role);
             UpdateUserRoles(user);
         }
+        else
+        {
+            throw new AdminSServiceException("The user does not have this role");
+        }
     }
 
     public void ChangeCurrentUserPassword(string email, string oldPassword, string newPassword)
