@@ -4,6 +4,10 @@ Aplicación fullstack de gestión de proyectos y tareas: creación de proyectos,
 
 Este proyecto es el entregable del obligatorio de **Diseño de Aplicaciones 1** (Universidad ORT Uruguay, 2025), desarrollado en dos entregas a lo largo del semestre. La consigna pedía diseñar e implementar un sistema de gestión de proyectos con roles de usuario, control de recursos compartidos y cálculo de camino crítico, aplicando principios de diseño orientado a objetos (SOLID, TDD, arquitectura en capas) de punta a punta.
 
+![Diagrama de Gantt con ruta crítica](Docs/img/gantt-cpm.png)
+
+*Diagrama de Gantt de un proyecto de ejemplo, con la vista de CPM activada. Las tareas en rojo (Task1 → Task2 → Task3) forman la ruta crítica: tienen slack 0, así que cualquier retraso en ellas atrasa el proyecto entero. Task4, en azul, tiene 3 días de holgura.*
+
 ---
 
 ## Qué hace
